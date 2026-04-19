@@ -1,33 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/09 13:17:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/16 10:20:45 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/09 14:50:07 by adouieb           #+#    #+#             */
+/*   Updated: 2026/04/10 19:03:48 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-//#include "minishell.h"
-//#include "libft_types.h"
+# include "prompt_label.h"
+# include "prompt_history.h"
+# include "prompt_display.h"
 
-int	main(void)
-{
-	//t_prompt_input	input;
-
-	/*while (TRUE)
-	{
-		input = add_to_history(display_prompt(prompt_label()));
-		if (input.s != NULL)
-		{
-			printf("You entered: %s\n", input.s);
-			free(input.s);
-		}
-	}*/
-	return (0);
-}
+#endif

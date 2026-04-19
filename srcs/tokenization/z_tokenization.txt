@@ -1,0 +1,158 @@
+tokens = token[]
+token
+{
+	is_literal : bool
+	value	   : string
+}
+
+quote : quote_status = NONE | WEAK | STRONG
+tokenizer_state
+{
+	is_ended : bool
+	index	 : int
+	value	 : tokens 
+	quote	 : quote_status
+}
+
+shell_config_path : string = "~/.bashrc"
+
+blank_separator : string[] = [' ', '\t']
+in_quote_escapables : string[] = ['$', '"', '\', '`', '\n']
+
+command_separator : string[] = [";", "&&", "||", "|"]
+
+operators : string[][] =
+[
+	["&>>", "<<<", "<<-"],
+	[";;", "||", "|&", "&&", "&>", ">>", ">|", ">&", "<<", "<>", "<&"]
+	["\n","(",")",";", "|", "&",">", "<"]
+]
+
+//------------ Tokenizer Utils ------------
+
+fun literal_token(value : string) : token
+	return ({value : value, is_literal : true})
+
+fun special_token(value : string) : token
+	return ({value : value, is_literal : false})
+
+fun	is_blank_separator(value : char) : bool
+	return (value in blank_separator)
+
+fun	is_quote_escapable(value : char) : bool
+	return (value in in_quote_escapables)
+
+fun add_token(&state : tokenizer_state, token : token) : void
+	if (state->value.len == 0 || state->value[state->value.len].len == 0)
+		state->value[state->value.len] = token
+	else
+		if (state->is_ended == true)
+			state->value += token
+			state->is_ended = false
+		else if (token.is_literal == false)
+			state->value += token
+			state->is_ended = true
+		else
+			if (state->value[last].is_literal == true)
+            	state->value[last].value += token.value
+        	else
+            	state->value += token
+
+//------------ Tokenization ------------
+
+//	------ Escape ------
+fun	tokenize_escaped(
+	input  : string,
+	&index : int,
+	&state : tokenizer_state,
+) : void
+	if (input[*index + 1] != '\n')
+		add_token(state, literal_token(input[++(*index)++].toString))
+	else
+		(*index) += 2
+
+fun	tokenize_quoted_escaped(
+	input  : string,
+	&index : int,
+	&state : tokenizer_state,
+) : void
+	if (is_quote_escapable(input[*index + 1]))
+		tokenize_escaped(input, index, state)
+	else
+		add_token(state, literal_token(input[*index++].toString))
+		add_token(state, literal_token(input[*index++].toString))
+
+//	------ Separator ------
+fun	end_token_with_blank(
+	input  : string,
+	&index : int,
+	&state : tokenizer_state,
+) : bool
+	if (is_blank_separator(input[*index]))
+		state->is_ended = true
+	loop input start *index_space while (is_blank_separator(input[*index]))
+		++(*index)
+	return (state->is_ended)
+
+fun	end_token_with_operator(
+	input  : string,
+	&index : int,
+	&state : tokenizer_state,
+) : bool
+	operator_str = ""
+	loop operators[0] with index_operator while (operator_str.len == 0)
+		if (str_ncmp(input + (*index), operators[0][index_operator], 3))
+			operator_str = input[*index] + input[*index + 1] + input[*index + 2]
+	loop operators[1] with index_operator while (operator_str.len == 0)
+		if (str_ncmp(input + (*index), operators[1][index_operator], 2))
+			operator_str = input[*index] + input[*index + 1]
+	loop operators[2] with index_operator while (operator_str.len == 0)
+		if (str_ncmp(input + (*index), operators[2][index_operator], 1))
+			operator_str = input[*index]
+	if (operator_str.len != 0)
+		state->is_ended = true
+		add_token(state, special_token(operator_str))
+		*index += operator_str.len
+	return (state->is_ended)
+
+//	------ Tokenizer ------
+fun	tokenize_standard(
+	input  : string,
+	&index : int,
+	&state : tokenizer_state,
+) : void
+	if (state->quote == STRONG)
+		add_token(state, literal_token(input[(*index)++].toString))
+	else if (state->quote == WEAK)
+		if (input[*index] == '$' || input[*index] == '`')
+			state->is_ended = true
+			add_token(state, special_token(input[(*index)++].toString))
+		else if (input[*index] == '\')
+			tokenize_quoted_escaped(input, index, state)
+		else
+			add_token(state, literal_token(input[(*index)++].toString))
+	else
+		if (!end_token_with_blank(input, index, state))
+			if (!end_token_with_operator(input, index, state))
+				add_token(state, literal_token(input[(*index)++].toString))
+
+fun	tokenize(input : string) : tokens
+	state : tokenizer_state =
+	{
+		index	 : 0,
+		value	 : [],
+		is_ended : false,
+		quote	 : NONE,
+	}
+	loop input with index
+		if (input[index] == '\')
+			tokenize_escaped(input, &index, &state)
+		else if (input[index] == ''' && state.quote != WEAK)
+			state.quote = (state.quote == STRONG) ? NONE : STRONG
+			++index
+		else if (input[index] == '"' && state.quote != STRONG)
+			state.quote = (state.quote == WEAK) ? NONE : WEAK
+			++index
+		else
+			tokenize_standard(input, &index, &state)
+	return (state->value)

@@ -1,0 +1,109 @@
+aliases = alias[]
+alias
+{
+	key   : string
+	value : string
+}
+
+//	------ Alias ------
+fun	get_aliases_list() : string[]
+	fd = open_file(shell_config_path, READ_ONLY)
+	if (fd == -1)
+		return ([])
+	read_line = ""
+	alias_list = []
+	loop read_line(fd, &read_line) 
+		if (read_line.len == 0)
+			break
+		else if (read_line.trimLeading(' ').startWith("alias "))
+			alias_list += read_line
+				.trimLeading(" ")
+				.trimLeading("alias")
+				.trimLeading(" ")
+	close(fd)
+	return (alias_list)
+
+fun	find_alias_match(token : token) : token[]
+	if (token[0].is_literal == false)
+		return ([token])
+	else
+		aliases = get_aliases_list()
+		loop aliases as alias
+			if ()
+
+fun expand_aliases(tokens : token[])
+	loop tokens as token with index
+		if (index == 0 || token[index - 1].value in command_separator)
+
+//------------ Config ------------
+
+- open the minishellrc file
+- read line by line
+- tokenize each line
+- if the first token is alias
+- call buil-in
+
+//------------ Build-In ------------
+
+//	------ Logs ------
+fun	print_alias(alias : alias) : void
+	print("alias %s='%s'\n", alias.key, alias.value)
+
+fun	print_all_aliases(aliases : aliases) : void
+	sorted_aliases = aliases.sort()
+	loop sorted_aliases as alias
+		print_alias(alias)
+
+//	------ Build-In ------
+fun	build_in_alias(&aliases : aliases, command : tokens) : void
+	if (tokens.len == 1)
+		print_all_aliases(*aliases)
+	else
+		loop tokens start 1 as token
+			if ('=' notin token.value)
+				
+
+
+
+
+
+build-in alias function
+	- if there is token(s) after the alias
+		- loop over every tokens after the alias one
+			- if the token contains '='
+				- if '=' is the first token character
+					- print "alias: <key>: not found"
+				- else
+					- split the token with '=' as a separator
+					- if alias key already exist in the alias table
+						- overwrite the value with the new value
+					- else
+						- add the alias in the alias table with first element as key and second as value (nothing after the '=' is considered empty string)
+			- else
+				- if the token is a alias name in the alias table
+					- print the "alias <key>='<value>'"
+				- else
+					- print "alias: <key>: not found"
+	- else
+		- order aliases keys
+		- print all the elements in the alias table "alias <key>='<value>'"
+
+//------------ Expand ------------
+
+alias expansion function
+	- if the first word is not in the alias_protection list
+		- if the first word is a key in the alias key
+			- get alias
+			- if alias value is an empty string
+				- remove the token
+				- move the token arr pointer to one on the right
+				- call alias expansion function with this new token arr pointer
+			- else
+				- add the alias key in alias_protection list
+				- tokenize the value of the alias
+				- replace the token (the key) by the tokenized value of the alias
+				- call alias expansion function with this new token arr pointer
+				- if the raw value of the alias ends with a space
+					- empty the alias_protection list
+					- move the token arr pointer to one on the right
+					- call alias expansion function with this new token arr pointer
