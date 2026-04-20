@@ -1,3 +1,69 @@
+# Token types
+
+```c
+typedef struct s_token
+{
+	t_token_cat		category;
+	t_token_type	type;
+	char			*value;
+}	t_token;
+
+typedef enum e_token_cat
+{
+	TOKEN_CAT_LITERAL,
+	TOKEN_CAT_REDIRECTION,
+	TOKEN_CAT_OPERATOR,
+	TOKEN_CAT_CONTROL,
+	TOKEN_CAT_GROUPING,
+	TOKEN_CAT_END,
+	TOKEN_CAT_ERROR
+}	t_token_cat;
+
+typedef enum e_token_type
+{
+	// Category: Literal
+	TOKEN_WORD,
+	TOKEN_IO_NUMBER,
+
+	// Category: Redirection
+	TOKEN_REDIR_IN,				// <
+	TOKEN_REDIR_OUT,			// >
+	TOKEN_APPEND,				// >>
+	TOKEN_HEREDOC,				// <<
+	TOKEN_REDIR_IN_OUT,			// <>
+	TOKEN_DUP_IN,				// <&
+	TOKEN_DUP_OUT,				// >&
+	TOKEN_CLOBBER,				// >|
+	TOKEN_HERE_STRING,			// <<<
+	TOKEN_HEREDOC_STRIP,		// <<-
+	TOKEN_REDIR_ERR_OUT,		// &>
+	TOKEN_APPEND_ERR_OUT,		// &>>
+
+	// Category: Operator
+	TOKEN_PIPE,					// |
+	TOKEN_PIPE_STDERR,			// |&
+	TOKEN_NEGATION,				// !
+
+	// Category: Control
+	TOKEN_AND,					// &&
+	TOKEN_OR,					// ||
+	TOKEN_BACKGROUND,			// &
+	TOKEN_SEQUENCE,				// ;
+	TOKEN_CASE_BREAK,			// ;;
+	TOKEN_NEWLINE,				// \n
+
+	// Category: Grouping
+	TOKEN_SUBSHELL_START,		// (
+	TOKEN_SUBSHELL_END,			// )
+	TOKEN_BLOCK_START,			// {
+	TOKEN_BLOCK_END,			// }
+
+	// Special
+	TOKEN_EOF,
+	TOKEN_ERROR
+}	t_token_type;
+```
+
 tokens = token[]
 token
 {
@@ -14,14 +80,14 @@ tokenizer_state
 	quote	 : quote_status
 }
 
-shell_config_path : string = "~/.bashrc"
-
-blank_separator : string[] = [' ', '\t']
+## Escapables
+general_escapables : 
 in_quote_escapables : string[] = ['$', '"', '\', '`', '\n']
 
-command_separator : string[] = [";", "&&", "||", "|"]
-
-operators : string[][] =
+## Separators
+blank_separators : string[] = [' ', '\t']
+command_separators : string[] = [";", "&&", "||", "|"]
+operators_separators : string[][] =
 [
 	["&>>", "<<<", "<<-"],
 	[";;", "||", "|&", "&&", "&>", ">>", ">|", ">&", "<<", "<>", "<&"]
