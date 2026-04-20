@@ -132,7 +132,7 @@ typedef struct s_token
 	t_expand_type		expand_type;
 }	t_token;
 
-typedef token*	tokens;
+typedef t_token*	t_tokens;
 ```
 
 tokens = token[]
