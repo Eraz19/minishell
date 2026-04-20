@@ -130,7 +130,7 @@ typedef struct s_token
 	char				*value;
 	t_token_category	category;
 	t_expand_type		expand_type;
-}	t_token;
+}	t_token
 
 typedef token*	tokens;
 ```
