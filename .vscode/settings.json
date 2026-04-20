@@ -1,0 +1,13 @@
+{
+	"clangd.fallbackFlags": [
+		"-x", "c",
+		"-I${workspaceFolder}",
+		"-I${workspaceFolder}/includes",
+		"-I${workspaceFolder}/libft",
+		"-I${workspaceFolder}/libft/buff",
+		"-I${workspaceFolder}/libft/buff/format",
+		"-I${workspaceFolder}/srcs/prompt/display",
+		"-I${workspaceFolder}/srcs/prompt/history",
+		"-I${workspaceFolder}/srcs/prompt/label"
+	]
+}
