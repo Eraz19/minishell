@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/20 20:30:06 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/20 20:31:43 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ EXP_DQUOTED		- Specifically inside double quotes
 */
 typedef enum e_expand_type
 {
-    EXP_NONE,
-    EXP_VAR,
-    EXP_TILDE,
-    EXP_WILDCARD, 
-    EXP_CMD_SUB, 
-    EXP_ARITHMETIC, 
-    EXP_BRACE, 
-    EXP_PARAM, 
-    EXP_QUOTED, 
-    EXP_DQUOTED  
+    EXP_NONE            = 0,
+    EXP_VAR             = 1 << 0,
+    EXP_TILDE           = 1 << 1,
+    EXP_WILDCARD        = 1 << 2, 
+    EXP_CMD_SUB         = 1 << 3, 
+    EXP_ARITHMETIC      = 1 << 4, 
+    EXP_BRACE           = 1 << 5, 
+    EXP_PARAM           = 1 << 6, 
+    EXP_QUOTED          = 1 << 7, 
+    EXP_DQUOTED         = 1 << 8  
 }   t_expand_type;
 
 /*
