@@ -1,6 +1,7 @@
 #ifndef TOKEN_GA_H
 # define TOKEN_GA_H
 
+# include "libft.h"
 # include <stddef.h>
 
 typedef enum e_token_category
@@ -89,5 +90,7 @@ echo \a						=> a
 echo '\a'					=> a
 echo "\a"					=> \a
 **************************************************/
+
+t_list	lex(char *string);
 
 #endif
