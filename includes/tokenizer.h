@@ -6,13 +6,14 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/21 19:44:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/21 19:49:13 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
+#include <stddef.h>
 #include <stdbool.h>
 
 typedef enum e_blank
@@ -57,6 +58,11 @@ typedef struct s_lexer
 	char			*current_token;
 	t_heredoc		*current_heredoc;	// Non-NULL if currently lexing a heredoc delimiter
 }	t_lexer;
+
+typedef enum e_conditional_token_type
+{
+	
+}	t_conditional_token_type;
 
 // ------- Public API of the lexer -------
 
