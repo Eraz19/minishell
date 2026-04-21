@@ -1,10 +1,47 @@
-Token types:
-- Separator:
+- <TOKEN_TYPE>
+	- <TOKEN_ID>
+
+- Control operator (separator)
 	- `\n`
 	- `;`
-	- ``
-- Control operator
-- Redirection operator
+	- `;;`
+	- `;&`
+	- `&`
+	- `&&`
+	- `|`
+	- `||`
+	- `(`
+	- `)`
+	- \<EOF>
+- Redirection operator (separator)
+	- \<IO_NUMBER>
+	- `<`
+	- `>`
+	- `>|`
+	- `<<`
+	- `>>`
+	- `<&`
+	- `>&`
+	- `<<-`
+	- `<>`
 - Reserved words
-- ⚠️ IO_NUMBER
-- ⚠️ WORD, NAME, ASSIGNMENT_WORD
+	- `!`
+	- `{`
+	- `}`
+	- `case`
+	- `do`
+	- `done`
+	- `elif`
+	- `else`
+	- `esac`
+	- `fi`
+	- `for`
+	- `if`
+	- `in`
+	- `then`
+	- `until`
+	- `while`
+- Contextual token types
+	- \<WORD>
+	- \<NAME>
+	- \<ASSIGNMENT_WORD>
