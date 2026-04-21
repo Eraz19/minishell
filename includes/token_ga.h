@@ -7,58 +7,46 @@ typedef enum e_token_category
 {
 	TOKEN_CAT_WORD,			// Program name, arguments, raw numbers for file descriptors...
 	TOKEN_CAT_REDIRECTION,	// Data source / target (files / file descriptors)
-	TOKEN_CAT_OPERATOR,		// Pipes and exit status inversions
-	TOKEN_CAT_CONTROL,		// If or when a command runs
-	TOKEN_CAT_GROUPING,		// Blocks of logic
-	TOKEN_CAT_END,			// End of input / file (TODO: useless ?? => no use case ??)
-	TOKEN_CAT_ERROR			// Unrecognized character / syntax (TODO: useless ?? => immediatly throw error instead ?)
+	TOKEN_CAT_CONTROL		// If / when /how a command runs
 }	t_token_category;
 
 typedef enum e_token_type
 {
 	// Category: TOKEN_CAT_WORD
-	TOKEN_WORD,				//
-	TOKEN_IO_NUMBER,		//
+	TOKEN_WORD,				//		- [POSIX] Standard words (program names, arguments, filenames...)
+	TOKEN_IO_NUMBER,		//		- [POSIX] Digit(s) (file descriptor) optionaly prefixing a redirection (the 2 in 2>)
 	// Category: TOKEN_CAT_REDIRECTION
-	TOKEN_REDIR_IN,			//
-	TOKEN_REDIR_OUT,		//
-	TOKEN_APPEND,			//
-	TOKEN_HEREDOC,			//
-	TOKEN_REDIR_IN_OUT,		//
-	TOKEN_DUP_IN,			//
-	TOKEN_DUP_OUT,			//
-	TOKEN_CLOBBER,			//
-	TOKEN_HERE_STRING,		//
-	TOKEN_HEREDOC_STRIP,	//
-	TOKEN_REDIR_ERR_OUT,	//
-	TOKEN_APPEND_ERR_OUT,	//
-	// Category: TOKEN_CAT_OPERATOR
-	TOKEN_PIPE,				//
-	TOKEN_PIPE_STDERR,		//
-	TOKEN_NEGATION,			//
+	TOKEN_REDIR_IN,			// <	- [POSIX] Redirects file to standard input
+	TOKEN_REDIR_OUT,		// >	- [POSIX] Redirects standard output to a file (truncate)
+	TOKEN_APPEND,			// >>	- [POSIX] Redirects standard output to a file (append)
+	TOKEN_HEREDOC,			// <<	- [POSIX] Reads input until a delimiter string is reached
+	TOKEN_REDIR_IN_OUT,		// <>	- [POSIX] Opens a file for both reading and writing
+	TOKEN_DUP_IN,			// <&	- [POSIX] Duplicates an input file descriptor
+	TOKEN_DUP_OUT,			// >&	- [POSIX] Duplicates an output file descriptor
+	TOKEN_CLOBBER,			// >|	- [POSIX] Overwrites a file even if noclobber is on
+	TOKEN_HEREDOC_STRIP,	// <<-	- [POSIX] Heredoc that strips leading tabs from the input
+	TOKEN_HERE_STRING,		// <<<	- [!BASH] Passes the following word as standard input (⚠️ Le word subit certaines expansions, mais pas le word splitting ni le filename expansion, puis le résultat est fourni comme une seule string sur stdin, avec un `\n` ajouté)
+	TOKEN_REDIR_ERR_OUT,	// &>	- [!BASH] Redirects both stdout and stderr (shorthand)
+	TOKEN_APPEND_ERR_OUT,	// &>>	- [!BASH] Appends both stdout and stderr (shorthand)
+	TOKEN_PIPE,				// |	- [POSIX] Passes standard output of one command to standard input of the next one
+	TOKEN_PIPE_STDERR,		// |&	- [!BASH] Pipes both stdout and stderr to the next command
 	// Category: TOKEN_CAT_CONTROL
-	TOKEN_AND,				//
-	TOKEN_OR,				//
-	TOKEN_BACKGROUND,		//
-	TOKEN_SEQUENCE,			//
-	TOKEN_CASE_BREAK,		//
-	TOKEN_NEWLINE,			//
-	// Category: TOKEN_CAT_GROUPING
-	TOKEN_SUBSHELL_START,	//
-	TOKEN_SUBSHELL_END,		//
-	TOKEN_BLOCK_START,		//
-	TOKEN_BLOCK_END,		//
-	// Category: TOKEN_CAT_END
-	TOKEN_EOF,				//
-	// Category: TOKEN_CAT_ERROR
-	TOKEN_ERROR				//
+	TOKEN_AND,				// &&	- [POSIX] Executes next command only if previous succeeded
+	TOKEN_OR,				// ||	- [POSIX] Executes next command only if previous failed
+	TOKEN_BACKGROUND,		// &	- [POSIX] Runs the command in a background process
+	TOKEN_CASE_BREAK,		// ;;	- [POSIX] Ends a clause in a case conditional block
+	TOKEN_SEQUENCE,			// ;	- [POSIX] Separates commands to run one after another
+	TOKEN_NEWLINE,			// \n	- [POSIX] Acts as a command terminator, similar to ;
+	TOKEN_SUBSHELL_START,	// (	- [POSIX] Opens a subshell environment
+	TOKEN_SUBSHELL_END,		// )	- [POSIX] Closes a subshell environment
 }	t_token_type;
+// TODO: remove BASH specific tokens ? (reward shell POSIX ?)
 
 typedef enum e_expand_type
 {
-	EXP_ALL,				// No quote
-	EXP_VAR,				// Double quotes
-	EXP_NONE				// Single quotes
+	EXPAND_ALL,				// (can be a reserved word)
+	EXPAND_VAR,				// (can NOT be a reserved word)
+	EXPAND_NONE				// (can NOT be a reserved word)
 }	t_expand_type;
 
 typedef struct s_token
@@ -74,13 +62,13 @@ L'objectif est que le lexer n'ait pas à connaitre toutes les expansions gérée
 Ça simplifie son fonctionnement et ça améliore la maintenabilité / l'extensibilité :
 Pour ajouter une expansion il suffit d'update l'expander, pas besoin d'update également le lexer
 ---------
-ESCAPE RULES (POSIX) :
+QUOTE RULES (POSIX) :
 - Simple quote				=> marquer chaque caractère comme EXPAND_NONE
 - Hors quote				=> marquer chaque caractère comme EXPAND_ALL sauf :
-	-> `\` + `newline`		=> supprimer les 2 caractères
+	-> `\` + `\n`			=> supprimer les 2 caractères
 	-> `\` + whatever		=> supprimer `\` et marquer le caractère suivant comme EXPAND_NONE
 - Double quote				=> marquer chaque caractère comme EXPAND_VAR sauf :
-	-> `\` + `newline`		=> supprimer les 2 caractères
+	-> `\` + `\n`			=> supprimer les 2 caractères
 	-> `\` + `$`			=> supprimer `\` et marquer le caractère suivant comme EXPAND_NONE
 	-> `\` + ```			=> supprimer `\` et marquer le caractère suivant comme EXPAND_NONE
 	-> `\` + `"`			=> supprimer `\` et marquer le caractère suivant comme EXPAND_NONE
@@ -88,8 +76,10 @@ ESCAPE RULES (POSIX) :
 	-> `\` + whatever		=> conserver `\` et laisser le caractère suivant comme EXPAND_VAR
 ---------
 N.B. :
+- Le `\` est un "quoting" au sens POSIX
 - Les quotes sont supprimées par le lexer et n'apparaissent donc pas dans les tokens
 - Les extensions bash ajoutent `!` et les quoting ANSI-C ($'...') aux caractères spéciaux, mais on se limite ici à la norme POSIX
+- Les reserved words (`if`, `then`, `fi`, `!`, `{`, `}`, etc sont détectés par le parser, ce sont de simples words pour le lexer)
 ---------
 TEST CASES (VAR="world") :
 echo 'hello $VAR \$42 *'	=> hello $VAR \$42 *
