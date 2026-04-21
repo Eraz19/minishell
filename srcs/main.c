@@ -6,28 +6,22 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 13:17:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/16 10:20:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/21 18:08:48 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/readline.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-//#include "minishell.h"
-//#include "libft_types.h"
-
 int	main(void)
 {
-	//t_prompt_input	input;
-
-	/*while (TRUE)
+	char *input = readline("minishell> ");
+	if (input != NULL)
 	{
-		input = add_to_history(display_prompt(prompt_label()));
-		if (input.s != NULL)
-		{
-			printf("You entered: %s\n", input.s);
-			free(input.s);
-		}
-	}*/
+		printf("You entered: %s\n", input);
+		free(input);
+	}
 	return (0);
 }
+

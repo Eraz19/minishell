@@ -6,144 +6,68 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/20 20:43:33 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/21 19:44:20 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-/*
-EXPAND_NONE
-EXPAND_VAR			- Variable expansion: $VAR or ${VAR}
-EXPAND_TILDE		- Tilde expansion: ~/path
-EXPAND_WILDCARD		- Pathname expansion: *.c, ?, [a-z]
-EXPAND_CMD_SUB		- Command substitution: $(ls) or `ls`
-EXPAND_ARITHMETIC	- Arithmetic: $((1 + 1))
-EXPAND_BRACE		- Brace expansion: {a,b}c -> ac bc
-EXPAND_PARAM		- Parameter expansion: ${VAR:-default}, ${VAR%suffix} etc
-EXPAND_QUOTED		- Indicates the word was inside "" or ''
-EXPAND_DQUOTED		- Specifically inside double quotes
-*/
-typedef enum e_expand_type
-{
-    EXPAND_NONE,
-    EXPAND_VAR,
-    EXPAND_TILDE,
-    EXPAND_WILDCARD,
-    EXPAND_CMD_SUB,
-    EXPAND_ARITHMETIC,
-    EXPAND_BRACE,
-    EXPAND_PARAM,
-    EXPAND_QUOTED,
-    EXPAND_DQUOTED
-}   t_expand_type;
+#include <stdbool.h>
 
-/*
-Tells the parser how to treat it in the grammar
-CATEGORY_LITERAL 		- The "meat" of the command (program names, arguments,
-							or raw numbers for file descriptors)
-CATEGORY_REDIRECTION 	- Tell the shell to move data between files and file
-							descriptors
-CATEGORY_OPERATOR 		- Manipulate the "plumbing" of the command pipeline
-CATEGORY_CONTROL 		- Define the flow of execution—deciding if or when a
-							command runs
-CATEGORY_GROUPING		- Create "blocks" of logic
-CATEGORY_END			- Marks the end of the input or a file
-CATEGORY_ERROR			- Signal that it encountered a character it doesn't
-							recognize or a syntax error
-*/
-typedef enum e_token_category
+typedef enum e_blank
 {
-	CATEGORY_LITERAL,
-	CATEGORY_REDIRECTION,
-	CATEGORY_OPERATOR,
-	CATEGORY_CONTROL,
-	CATEGORY_GROUPING,
-	CATEGORY_END,
-	CATEGORY_ERROR
-}	t_token_category;
+	BLK_TAB = '\t',
+	BLK_SPACE = ' '
+}	t_blank;
 
-/*
-Tells exactly to the parser what the character is
-// Category: Literal
-TOKEN_WORD					- Standard words (ls, -la, filename)
-TOKEN_IO_NUMBER				- Digit(s) prefixing a redirection (the 2 in 2>)
-// Category: Redirection
-TOKEN_REDIR_IN			<	- RedirectS file to standard input
-TOKEN_REDIR_OUT			>	- RedirectS standard output to a file (truncate)
-TOKEN_APPEND			>>	- RedirectS standard output to a file (append)
-TOKEN_HEREDOC			<<	- Reads input until a delimiter string is reached
-TOKEN_REDIR_IN_OUT		<>	- Opens a file for both reading and writing
-TOKEN_DUP_IN			<&	- Duplicates an input file descriptor
-TOKEN_DUP_OUT			>&	- Duplicates an output file descriptor
-TOKEN_CLOBBER			>|	- Overwrites a file even if noclobber is on
-TOKEN_HERE_STRING		<<<	- Passes the following word as standard input
-TOKEN_HEREDOC_STRIP		<<-	- Heredoc that strips leading tabs from the input
-TOKEN_REDIR_ERR_OUT		&>	- Redirects both stdout and stderr (shorthand)
-TOKEN_APPEND_ERR_OUT	&>>	- Appends both stdout and stderr (shorthand)
-// Category: Operator
-TOKEN_PIPE				|	- Passes output of one command to input of next
-TOKEN_PIPE_STDERR		|&	- Pipes both stdout and stderr to the next command
-TOKEN_NEGATION			!	- Inverts the logical exit status of the command
-// Category: Control
-TOKEN_AND				&&	- Executes next command only if previous succeeded
-TOKEN_OR				||	- Executes next command only if previous failed
-TOKEN_BACKGROUND		&	- Runs the command in a background process
-TOKEN_SEQUENCE			;	- Separates commands to run one after another
-TOKEN_CASE_BREAK		;;	- Ends a clause in a case conditional block
-TOKEN_NEWLINE			\n	- Acts as a command terminator, similar to ;
-// Category: Grouping
-TOKEN_SUBSHELL_START	(	- Opens a subshell environment
-TOKEN_SUBSHELL_END		)	- Closes a subshell environment
-TOKEN_BLOCK_START		{	- Starts a command group in the current shell
-TOKEN_BLOCK_END			}	- Ends a command group in the current shell
-// Special
-TOKEN_EOF					- Marks the end of the input or a file
-TOKEN_ERROR					- Signal that it encountered a character it doesn't
-								recognize or a syntax error
-*/
-typedef enum e_token_type
+typedef enum e_lexer_mode
 {
-	TOKEN_WORD,
-	TOKEN_IO_NUMBER,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_REDIR_IN_OUT,
-	TOKEN_DUP_IN,
-	TOKEN_DUP_OUT,
-	TOKEN_CLOBBER,
-	TOKEN_HERE_STRING,
-	TOKEN_HEREDOC_STRIP,
-	TOKEN_REDIR_ERR_OUT,
-	TOKEN_APPEND_ERR_OUT,
-	TOKEN_PIPE,
-	TOKEN_PIPE_STDERR,
-	TOKEN_NEGATION,
-	TOKEN_AND,
-	TOKEN_OR,
-	TOKEN_BACKGROUND,
-	TOKEN_SEQUENCE,
-	TOKEN_CASE_BREAK,
-	TOKEN_NEWLINE,
-	TOKEN_SUBSHELL_START,
-	TOKEN_SUBSHELL_END,
-	TOKEN_BLOCK_START,
-	TOKEN_BLOCK_END,
-	TOKEN_EOF,
-	TOKEN_ERROR
-}	t_token_type;
+	LEXER_MODE_GENERAL,					// Mode de lexing standard, utilisé pour la plupart des commandes
+	LEXER_MODE_HEREDOC,					// Mode de lexing spécifique pour les heredocs, qui traite les expansions différemment (ex: <<- strip les tabs)
+}	t_lexer_mode;
 
-typedef struct s_token
+typedef enum e_quote_mode
 {
-	t_token_category	category;
-	t_token_type		type;
-	t_expand_type		expand_type;
-	char				*value;
-}	t_token;
+	QUOTE_MODE_NONE,					// Not in a quote
+	QUOTE_MODE_SINGLE,					// In a single quote
+	QUOTE_MODE_DOUBLE,					// In a double quote
+}	t_quote_mode;
 
-typedef t_token*	t_tokens;
+typedef struct s_state
+{
+	t_lexer_mode	mode;
+	t_quote_mode	quote_mode;
+	bool			char_escaped;		// Indicates if the next character is escaped (preceded by a backslash)
+}	t_state;
+
+typedef struct s_heredoc
+{
+	char	*delimiter;
+	bool	strip_tabs;					// Indicates if leading tabs should be stripped from the input (for <<-)
+	bool	enable_expansion;
+	int		fd;
+	char	*path;
+}	t_heredoc;
+
+typedef struct s_lexer
+{
+	size_t			index;				// Current position in the input string
+	t_state			state;
+	char			*current_token;
+	t_heredoc		*current_heredoc;	// Non-NULL if currently lexing a heredoc delimiter
+}	t_lexer;
+
+// ------- Public API of the lexer -------
+
+t_token	*get_next_token(t_lexer *lexer);
+
+void	set_lexer_mode(t_lexer *lexer, t_lexer_mode mode);
+
+// ------- Private API of the lexer -------
+
+char	*remove_escapable_newlines(t_lexer *lexer, char *string);
+
+char	*get_raw_token(t_lexer *lexer, char *string);
 
 #endif
