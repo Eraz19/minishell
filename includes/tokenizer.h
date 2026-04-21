@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/20 20:35:15 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/20 20:43:33 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,54 @@
 # define TOKENIZER_H
 
 /*
-EXP_NONE
-EXP_VAR			- Variable expansion: $VAR or ${VAR}
-EXP_TILDE		- Tilde expansion: ~/path
-EXP_WILDCARD	- Pathname expansion: *.c, ?, [a-z]
-EXP_CMD_SUB		- Command substitution: $(ls) or `ls`
-EXP_ARITHMETIC	- Arithmetic: $((1 + 1))
-EXP_BRACE		- Brace expansion: {a,b}c -> ac bc
-EXP_PARAM		- Parameter expansion: ${VAR:-default}, ${VAR%suffix} etc
-EXP_QUOTED		- Indicates the word was inside "" or ''
-EXP_DQUOTED		- Specifically inside double quotes
+EXPAND_NONE
+EXPAND_VAR			- Variable expansion: $VAR or ${VAR}
+EXPAND_TILDE		- Tilde expansion: ~/path
+EXPAND_WILDCARD		- Pathname expansion: *.c, ?, [a-z]
+EXPAND_CMD_SUB		- Command substitution: $(ls) or `ls`
+EXPAND_ARITHMETIC	- Arithmetic: $((1 + 1))
+EXPAND_BRACE		- Brace expansion: {a,b}c -> ac bc
+EXPAND_PARAM		- Parameter expansion: ${VAR:-default}, ${VAR%suffix} etc
+EXPAND_QUOTED		- Indicates the word was inside "" or ''
+EXPAND_DQUOTED		- Specifically inside double quotes
 */
 typedef enum e_expand_type
 {
-    EXP_NONE,
-    EXP_VAR,
-    EXP_TILDE,
-    EXP_WILDCARD, 
-    EXP_CMD_SUB, 
-    EXP_ARITHMETIC, 
-    EXP_BRACE, 
-    EXP_PARAM, 
-    EXP_QUOTED, 
-    EXP_DQUOTED  
+    EXPAND_NONE,
+    EXPAND_VAR,
+    EXPAND_TILDE,
+    EXPAND_WILDCARD,
+    EXPAND_CMD_SUB,
+    EXPAND_ARITHMETIC,
+    EXPAND_BRACE,
+    EXPAND_PARAM,
+    EXPAND_QUOTED,
+    EXPAND_DQUOTED
 }   t_expand_type;
 
 /*
 Tells the parser how to treat it in the grammar
-TOKEN_CAT_LITERAL 		- The "meat" of the command (program names, arguments,
+CATEGORY_LITERAL 		- The "meat" of the command (program names, arguments,
 							or raw numbers for file descriptors)
-TOKEN_CAT_REDIRECTION 	- Tell the shell to move data between files and file
+CATEGORY_REDIRECTION 	- Tell the shell to move data between files and file
 							descriptors
-TOKEN_CAT_OPERATOR 		- Manipulate the "plumbing" of the command pipeline
-TOKEN_CAT_CONTROL 		- Define the flow of execution—deciding if or when a
+CATEGORY_OPERATOR 		- Manipulate the "plumbing" of the command pipeline
+CATEGORY_CONTROL 		- Define the flow of execution—deciding if or when a
 							command runs
-TOKEN_CAT_GROUPING		- Create "blocks" of logic
-TOKEN_CAT_END			- Marks the end of the input or a file
-TOKEN_CAT_ERROR			- Signal that it encountered a character it doesn't
+CATEGORY_GROUPING		- Create "blocks" of logic
+CATEGORY_END			- Marks the end of the input or a file
+CATEGORY_ERROR			- Signal that it encountered a character it doesn't
 							recognize or a syntax error
 */
 typedef enum e_token_category
 {
-	TOKEN_CAT_LITERAL,
-	TOKEN_CAT_REDIRECTION,
-	TOKEN_CAT_OPERATOR,
-	TOKEN_CAT_CONTROL,
-	TOKEN_CAT_GROUPING,
-	TOKEN_CAT_END,
-	TOKEN_CAT_ERROR
+	CATEGORY_LITERAL,
+	CATEGORY_REDIRECTION,
+	CATEGORY_OPERATOR,
+	CATEGORY_CONTROL,
+	CATEGORY_GROUPING,
+	CATEGORY_END,
+	CATEGORY_ERROR
 }	t_token_category;
 
 /*
@@ -138,10 +138,10 @@ typedef enum e_token_type
 
 typedef struct s_token
 {
-	t_token_type		type;
-	char				*value;
 	t_token_category	category;
+	t_token_type		type;
 	t_expand_type		expand_type;
+	char				*value;
 }	t_token;
 
 typedef t_token*	t_tokens;
