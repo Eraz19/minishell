@@ -41,7 +41,6 @@ typedef enum e_token_type
 	TOKEN_SUBSHELL_START,	// (	- [POSIX] Opens a subshell environment
 	TOKEN_SUBSHELL_END,		// )	- [POSIX] Closes a subshell environment
 }	t_token_type;
-// TODO: remove BASH specific tokens ? (reward shell POSIX ?)
 
 typedef enum e_expand_type
 {
@@ -87,7 +86,7 @@ echo 'hello $VAR \$42 *'	=> hello $VAR \$42 *
 echo "hello $VAR \$42 *"	=> hello world $42 *
 echo hello $VAR \$42 *		=> hello world $42 file1 file2 ...
 echo \a						=> a
-echo '\a'					=> a
+echo '\a'					=> \a
 echo "\a"					=> \a
 **************************************************/
 

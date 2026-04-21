@@ -1,0 +1,56 @@
+#ifndef AST_H
+# define AST_H
+
+# include "libft.h"
+
+typedef enum e_expected_token
+{
+
+}	t_expected_token;
+/*
+WARNING: <newline> = 0 ou plusieurs `\n` (=> "optionnel" !)
+*/
+
+typedef enum e_reserved_word
+{
+	RW_BANG,		// !
+	RW_OPEN_BR,		// {
+	RW_CLOSE_BR,	// }
+	RW_IF,			// if
+	RW_THEN,		// then
+	RW_ELSE,		// else
+	RW_ELIF,		// elif
+	RW_FI,			// fi
+	RW_CASE,		// case
+	RW_ESAC,		// esac
+	RW_DO,			// do
+	RW_DONE,		// done
+	RW_WHILE,		// while
+	RW_UNTIL,		// until
+	RW_FOR,			// for
+	RW_IN			// in
+}	t_reserved_word;
+/*
+REQUIREMENTS:
+- Grammatical position:
+	- 1st word of a command
+	- 1st word following a [reserved word which is NOT `case`, `for`, `in`]
+	- 3rd word of a [command starting by `case`] => only for `in`
+	- 3rd word of a [command starting by `for`] => only for `in` and `do`
+- token.type == TOKEN_WORD
+- token.expand_type == EXPAND_ALL for all chars of the token
+- strcmp(token.value, <reserved word>) == 0
+---------
+A COMMAND MUST START:
+- First token
+- After these tokens: `;`, `&`, `|`, `|&`, `&&`, `||`, `(`
+- After these reserved words: `if`, `then`, `elif`, `else`, `do`, `while`, `until`, `!`, `{`
+A COMMAND MAY START (depending on context):
+- After these tokens: `;;`, `\n`, `)`
+*/
+
+// typedef struct s_ast_node
+
+t_btree_node	*parse(t_list tokens);
+
+#endif
