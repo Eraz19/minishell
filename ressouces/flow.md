@@ -1,6 +1,7 @@
 # High level flow
 
-ℹ️ [2.1 Shell Introduction](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_01)
+🎬 [Compiler full course](https://youtube.com/playlist?list=PLiU6EYjTWtuXQ0T2oh7vztsujfubPnk90&si=_OdzPvRRDgDeSH7f)  
+📚 [2.1 Shell Introduction](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_01)
 
 ## Table of contents
 
@@ -9,19 +10,23 @@
 	- [Tokenizer / Lexer](#tokenizer--lexer)
 - [Parser](#parser)
 - [Executor](#executor)
-- [Error Handling](#error-handling)
 
 ## Scanner
+
+📚 [2.2 Quoting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02)  
+📚 [2.3 Token Recognition](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_03)  
+📚 [2.7 Redirection](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07)  
+📚 [2.10 Shell Grammar](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_10)  
 
 ### Reader
 
 > *"The shell reads its input from a file"*
 
 1. **Input Reading**
+	- Input: none (`void`)
 	- Output: line (`char *`)
-	- [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html#) (line by line reading)
-		- Note: *"The shell shall read its input in terms of lines"*
-		- Note: *"Line joining is done before tokenization"* cf [2.2.1 Escape Character (Backslash)](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02_01)
+	- Note: *"The shell shall read its input in terms of lines"* ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html#))
+	- Note: *"Line joining is done before tokenization"* ([2.2.1 Escape Character (Backslash)](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02_01))
 
 ### Tokenizer / Lexer
 
@@ -34,7 +39,7 @@
 		- Special characters to identify: comments -> `#`
 		- Special characters to identify: quotes -> `'`, `"`, `\`
 		- Special characters to identify: expansion / substitution -> ```, `$`, `${`, `$(`, `$((`
-		- ⚠️ Note: *"For "$(" and '`' only, if instances of io_here tokens are found nested within the substitution, they shall be parsed according to the rules of 2.7.4 Here-Document; if the terminating ')' or '`' of the substitution occurs before the NEWLINE token marking the start of the here-document, the behavior is unspecified"*
+		- ⚠️ Note: *"For `$(` and '\`' only, if instances of `io_here` tokens are found nested within the substitution, they shall be parsed according to the rules of [2.7.4 Here-Document](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07_04); if the terminating ')' or '\`' of the substitution occurs before the `NEWLINE` token marking the start of the `here-document`, the behavior is unspecified"*
 		- Note: *The shell shall identify quoting and the start of any candidates for parameter expansion, command substitution or arithmetic expansion*
 		- Note: *"No substitutions shall be actually performed, and the result token shall contain exactly the characters that appear in the input unmodified"*
 		- Note: *"The token shall not be delimited by the end of the quoted field or by the end of the substitution"*
@@ -76,22 +81,38 @@
 
 ## Parser
 
+🎬 [Bottom-up parser `LR(1)`](https://www.youtube.com/watch?v=-262vfWJfAg)  
+📚 [2.9 Shell Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09)  
+📚 [2.10 Shell Grammar](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_10)  
+
 > *"The shell parses the input into simple commands and compound commands"*
 
 6. **AST building**
-	- ℹ️ [2.1 Shell Introduction](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_01)
-	- ℹ️ [2.9 Shell Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09)
-		- ℹ️ [2.9.1 Simple Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01)
-		- ℹ️ [2.9.4 Compound Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_04)
-	- [2.10 Shell Grammar](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_10)
-	- ⚠️ **TODO**
+	- Parsing method: `bottom-up` aka `LR(1)`:
+		- Tokens read from `L`eft
+		- `R`ight-most traversal reverse
+		- `1` token at a time
+	- Loop through `tokens`:
+		- `shift()`: add a `non-terminal token` to the `token stack`
+		- `reduce()`: create a `subtree` by merging `non-terminal tokens` into a higher-level `token` when a `grammatical rule` can be applied
+		- If `terminal token` aka `start symbol` is reached: **execute**
+		- Else if `EOF` is reached: **error**
+	- ⚠️ shift-reduce conflicts
+	- ⚠️ reduce-reduce conflicts
 
 ## Executor
+
+📚 [2.2 Quoting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02)  
+📚 [2.5 Parameters and Variables](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05)  
+📚 [2.6 Word Expansions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06)  
+📚 [2.7 Redirection](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07)  
+📚 [2.8 Exit Status and Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08)  
+📚 [2.9 Shell Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09)  
 
 > *"For each word within a command, the shell processes expansions"*
 
 7. **Word expansion**
-	- [2.6 Word Expansions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06)
+	- 📚 [2.6 Word Expansions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06)
 	1. Prioritary expansions: 
 		- [Tilde Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_01)
 		- [Parameter Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_02)
@@ -99,30 +120,26 @@
 		- [Arithmetic Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_04)
 		- ⚠️ Note: *"beginning to end"*
 		- Note: *"See item 5 in [2.3 Token Recognition](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_03)"*
-	2. Field splitting ([2.6.5 Field Splitting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_05))
-	3. Pathname expansion ([2.6.6 Pathname Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_06))
+	2. [Field Splitting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_05)
+	3. [Pathname Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_06)
 		- Note: unless `set -f` is in effect.
-	4. Quote removal ([2.6.7 Quote Removal](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_07))
+	4. [Quote Removal](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_07)
 		- ⚠️ Note: *"if performed"*
 
 > *"The shell performs redirection and removes redirection operators and their operands from the parameter list"*
 
 8. **Redirection**
-	- [2.7 Redirection](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07)
+	- 📚 [2.7 Redirection](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07)
 	- ⚠️ **TODO**
 
 > *"The shell executes a [function](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_05), [built-in](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_15), executable file, or script."*
 
 9. **Execution**
-	- [2.9.1.4 Command Search and Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_04)
+	- 📚 [2.9 Shell Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09)
 	- ⚠️ **TODO**
 
 > *"The shell optionally waits for the command to complete and collects the [exit status](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_02)"*
 
 10. **Wait and Collect**
-	- [2.8.2 Exit Status for Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_02)
+	- 📚 [2.8 Exit Status and Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_02)
 	- ⚠️ **TODO**
-
-## Error Handling
-
-[2.8 Exit Status and Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_02)
