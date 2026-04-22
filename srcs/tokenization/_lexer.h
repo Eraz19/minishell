@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 17:03:59 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/22 17:22:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/22 20:51:44 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_lexer_token
 {
 	t_lexer_token_type	type;
 	t_token_value		value;
+	t_raw_string_ptr	start;
 }	t_lexer_token;
 
 char	*remove_escapable_newlines(t_lexer *lexer, char *string);

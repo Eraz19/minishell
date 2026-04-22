@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/22 20:32:01 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/22 21:16:26 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,51 +26,51 @@ typedef enum e_default_token_id
 
 typedef enum e_control_token_id
 {
-	NEW_LINE,		// `\n` - command separator
+	NEWLINE,		// `\n` - command separator
 	SCOLON,			// `;`- command separator
-	DSCOLON,		// `;;` - case separator
-	CASEFT,			// `;&` - case fallthrough
-	BACKGROUND,		// `&` - background command separator
-	ANDIF,			// `&&` - logical AND operator
+	DSEMI,			// `;;` - case separator
+	SEMI_AND,		// `;&` - case fallthrough
+	AMPERSAND,		// `&` - background command separator
+	AND_IF,			// `&&` - logical AND operator
 	PIPE,			// `|` - pipeline operator
-	ORIF,			// `||` - logical OR operator
-	OPARENTHESIS,	// `(` - subshell start
-	CPARENTHESIS,	// `)` - subshell end
+	OR_IF,			// `||` - logical OR operator
+	LPARENTHESIS,	// `(` - subshell start
+	RPARENTHESIS,	// `)` - subshell end
 	EOF				// \<EOF> - end of input
 }	t_control_token_id;
 
 typedef enum e_redirection_token_id
 {
 	IO_NUMBER,		// `[0-9]+` - file descriptor for redirection
-	IREDIRECT,		// `<` - input redirection
-	OREDIRECT,		// `>` - output redirection
+	LESS,			// `<` - input redirection
+	GREAT,			// `>` - output redirection
 	CLOBBER,		// `>|` - output redirection with clobbering (force overwrite)
-	HERE_DOC,		// `<<` - here document
-	AREDIRECT,		// `>>` - append redirection
-	IDUP_FD,		// `<&` - duplicate input file descriptor
-	ODUP_FD,		// `>&` - duplicate output file descriptor
-	HERE_DOC_STRIP,	// `<<-` - here document with tab stripping
-	IOREDIRECT		// `<>` - input/output redirection
+	DLESS,			// `<<` - here document
+	DGREAT,			// `>>` - append redirection
+	LESSAND,		// `<&` - duplicate input file descriptor
+	GREATAND,		// `>&` - duplicate output file descriptor
+	DLESSDASH,		// `<<-` - here document with tab stripping
+	LESSGREAT		// `<>` - input/output redirection
 }	t_redirection_token_id;
 
 typedef enum e_reserved_word_token_id
 {
-	NOT,	//- `!` - logical negation operator
-	OBRACE,	//- `{` - group command start
-	CBRACE,	//- `}` - group command end
-	CASE,	//- `case` - case statement start
-	ESAC,	//- `esac` - case statement end
-	DO,		//- `do` - do block start
-	DONE,	//- `done` - do block end
-	IF,		//- `if` - `if` conditional statement start
-	THEN,	//- `then` - `if` conditional statement then block start
-	ELIF,	//- `elif` - `else if` conditional statement start
-	ELSE,	//- `else` - `else` conditional statement start
-	FI,		//- `fi` - `if` conditional statement end
-	FOR,	//- `for` - for loop start
-	IN,		//- `in` - used in for loops and case statements to introduce a list of items
-	UNTIL,	//- `until` - until loop start
-	WHILE	//- `while` - while loop start
+	Bang,	//- `!` - logical negation operator
+	Lbrace,	//- `{` - group command start
+	Rbrace,	//- `}` - group command end
+	Case,	//- `case` - case statement start
+	Esac,	//- `esac` - case statement end
+	Do,		//- `do` - do block start
+	Done,	//- `done` - do block end
+	If,		//- `if` - `if` conditional statement start
+	Then,	//- `then` - `if` conditional statement then block start
+	Elif,	//- `elif` - `else if` conditional statement start
+	Else,	//- `else` - `else` conditional statement start
+	Fi,		//- `fi` - `if` conditional statement end
+	For,	//- `for` - for loop start
+	In,		//- `in` - used in for loops and case statements to introduce a list of items
+	Until,	//- `until` - until loop start
+	While	//- `while` - while loop start
 }	t_reserved_word_token_id;
 
 typedef enum e_contextual_token_id
