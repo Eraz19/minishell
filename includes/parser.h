@@ -1,41 +1,34 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-// # include "libft.h"
-# include <stdbool.h>
+# include "libft.h"
+
+
 
 typedef struct s_ast_ctx
 {
 	// TODO
 }	t_ast_ctx;
 
-bool	could_be_a_command_name(t_ast_ctx *state, char *token);
-
-// typedef enum e_expected_token
-// {
-// 	// TODO
-// }	t_expected_token;
-
-
-// typedef enum e_reserved_word
-// {
-// 	RW_BANG,		// !
-// 	RW_OPEN_BR,		// {
-// 	RW_CLOSE_BR,	// }
-// 	RW_IF,			// if
-// 	RW_THEN,		// then
-// 	RW_ELSE,		// else
-// 	RW_ELIF,		// elif
-// 	RW_FI,			// fi
-// 	RW_CASE,		// case
-// 	RW_ESAC,		// esac
-// 	RW_DO,			// do
-// 	RW_DONE,		// done
-// 	RW_WHILE,		// while
-// 	RW_UNTIL,		// until
-// 	RW_FOR,			// for
-// 	RW_IN			// in
-// }	t_reserved_word;
+typedef enum e_reserved_word
+{
+	RW_BANG,		// !
+	RW_OPEN_BR,		// {
+	RW_CLOSE_BR,	// }
+	RW_IF,			// if
+	RW_THEN,		// then
+	RW_ELSE,		// else
+	RW_ELIF,		// elif
+	RW_FI,			// fi
+	RW_CASE,		// case
+	RW_ESAC,		// esac
+	RW_DO,			// do
+	RW_DONE,		// done
+	RW_WHILE,		// while
+	RW_UNTIL,		// until
+	RW_FOR,			// for
+	RW_IN			// in
+}	t_reserved_word;
 /*
 RESERVED WORDS REQUIREMENTS:
 - Grammatical position:
@@ -55,8 +48,28 @@ A COMMAND MAY START (depending on context):
 - After these tokens: `;;`, `\n`, `)`
 */
 
-// typedef struct s_ast_node
+// TODO: from tokenizer.h
+typedef void	t_token;
 
-// t_btree_node	*parse(t_list tokens);
+typedef struct s_ast_node
+{
+	// TODO
+}	t_ast_node;
+
+typedef struct s_parser_token
+{
+	t_token			*token;
+	t_btree_node	*ast_node;
+	
+}	t_parser_token;
+
+// Public
+bool	could_be_a_command_name(t_ast_ctx *state, char *token);
+void	parse_token(t_ast_ctx *state, t_token *token);
+
+// Private
+void	shift(t_token *token);		// Add a token to the stack
+t_token	*peek(size_t position);		// Get the token at <position> forward
+bool	reduce(t_list tokens);		// Merge tokens into a new, higher-level, one
 
 #endif
