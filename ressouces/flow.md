@@ -1,10 +1,33 @@
-FLOW
-1. **[LEXER] Reading**
+# High level flow
+
+ℹ️ [2.1 Shell Introduction](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_01)
+
+## Table of contents
+
+- [Scanner](#scanner)
+	- [Reader](#reader)
+	- [Tokenizer / Lexer](#tokenizer--lexer)
+- [Parser](#parser)
+- [Executor](#executor)
+- [Error Handling](#error-handling)
+
+## Scanner
+
+### Reader
+
+> *"The shell reads its input from a file"*
+
+1. **Input Reading**
 	- Output: line (`char *`)
 	- [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html#) (line by line reading)
 		- Note: *"The shell shall read its input in terms of lines"*
 		- Note: *"Line joining is done before tokenization"* cf [2.2.1 Escape Character (Backslash)](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02_01)
-2. **[LEXER] Token Recognition**
+
+### Tokenizer / Lexer
+
+> *"The shell breaks the input into tokens: words and operators"*
+
+2. **Token Recognition**
 	- Input:  line (`char *`)
 	- Output: token (`char *`)
 	- [2.3 Token recognition](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_03) (Default mode)
@@ -18,15 +41,16 @@ FLOW
 	- [2.7.4 Here-Document](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07_04) (here-document mode)
 		- Mode is switched after the next `NEWLINE` after a detected `io_here`
 		- Note: *"Any non-NEWLINE tokens (including more io_here tokens) that are recognized while searching for the next NEWLINE token shall be saved for processing after the here-document has been parsed"*
-		- **TODO**
-3. **[LEXER] Immediate Context Classification**
+		- ⚠️ **TODO**
+
+3. **Immediate Context Classification**
 	- Input: token (`char *`)
 	- Output: token identifier (`t_token_id`: operator identifier, `IO_NUMBER`, `TOKEN`)
-	- ⚠️ special separators: `NEWLINE`, `;`, `&`, `|`
 	- [2.10.1 Shell Grammar Lexical Conventions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_10_01)
 	- [XBD 3.85 Control Operators](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap03.html#tag_03_85)
 	- [XBD 3.304 Redirection Operators](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap03.html#tag_03_304)
-4. **[LEXER] Alias Substitution**
+
+4. **Alias Substitution**
 	- Input: token (`char *`) only if
 		- The token has been classified as `TOKEN` at step 3
 		- The token does not contain any quoting characters
@@ -37,8 +61,9 @@ FLOW
 		- Note: *"When a TOKEN is subject to alias substitution, the value of the alias shall be processed as if it had been read from the input"*
 	- Output: token (`char *`)
 	- [2.3.1 Alias Substitution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_03_01)
-5. **[PARSER] Context-dependent Classification**
-	- Input 1: context (**TODO**)
+
+5. **Context-dependent Classification**
+	- Input 1: context (⚠️ **TODO**)
 	- Input 2: token (`char *`) only if
 		- The token has been classified as `TOKEN` at step 3
 	- Output: token identifier (`t_token_id`: reserved word identifier, `WORD`, `NAME`, `ASSIGNMENT_WORD`)
@@ -47,5 +72,57 @@ FLOW
 		- Note: *"The expansions specified in [2.7 Redirection](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07) shall occur"*
 		- Note: *"Quote removal shall be applied to the word to determine the delimiter that is used to find the end of the here-document"*
 	- [2.4 Reserved Words](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_04)
-6. **[PARSER] AST builder**
-	- **TODO**
+		- ⚠️ **TODO**
+
+## Parser
+
+> *"The shell parses the input into simple commands and compound commands"*
+
+6. **AST building**
+	- ℹ️ [2.1 Shell Introduction](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_01)
+	- ℹ️ [2.9 Shell Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09)
+		- ℹ️ [2.9.1 Simple Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01)
+		- ℹ️ [2.9.4 Compound Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_04)
+	- [2.10 Shell Grammar](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_10)
+	- ⚠️ **TODO**
+
+## Executor
+
+> *"For each word within a command, the shell processes expansions"*
+
+7. **Word expansion**
+	- [2.6 Word Expansions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06)
+	1. Prioritary expansions: 
+		- [Tilde Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_01)
+		- [Parameter Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_02)
+		- [Command Substitution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_03)
+		- [Arithmetic Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_04)
+		- ⚠️ Note: *"beginning to end"*
+		- Note: *"See item 5 in [2.3 Token Recognition](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_03)"*
+	2. Field splitting ([2.6.5 Field Splitting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_05))
+	3. Pathname expansion ([2.6.6 Pathname Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_06))
+		- Note: unless `set -f` is in effect.
+	4. Quote removal ([2.6.7 Quote Removal](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_07))
+		- ⚠️ Note: *"if performed"*
+
+> *"The shell performs redirection and removes redirection operators and their operands from the parameter list"*
+
+8. **Redirection**
+	- [2.7 Redirection](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07)
+	- ⚠️ **TODO**
+
+> *"The shell executes a [function](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_05), [built-in](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_15), executable file, or script."*
+
+9. **Execution**
+	- [2.9.1.4 Command Search and Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_04)
+	- ⚠️ **TODO**
+
+> *"The shell optionally waits for the command to complete and collects the [exit status](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_02)"*
+
+10. **Wait and Collect**
+	- [2.8.2 Exit Status for Commands](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_02)
+	- ⚠️ **TODO**
+
+## Error Handling
+
+[2.8 Exit Status and Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_02)

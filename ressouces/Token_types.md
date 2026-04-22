@@ -1,5 +1,5 @@
-- <TOKEN_TYPE>
-	- <TOKEN_ID>
+- \<TOKEN_TYPE>
+	- \<TOKEN_ID>
 
 - Control operator (separator)
 	- `\n`
