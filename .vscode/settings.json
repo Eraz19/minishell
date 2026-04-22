@@ -8,6 +8,8 @@
 		"-I${workspaceFolder}/libft/buff/format",
 		"-I${workspaceFolder}/srcs/prompt/display",
 		"-I${workspaceFolder}/srcs/prompt/history",
-		"-I${workspaceFolder}/srcs/prompt/label"
+		"-I${workspaceFolder}/srcs/prompt/label",
+		"-I${workspaceFolder}/srcs/parser/1_qualifier",
+		"-I${workspaceFolder}/srcs/parser/2_builder"
 	]
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/22 21:16:26 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/22 21:25:37 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,56 +21,56 @@
 
 typedef enum e_default_token_id
 {
-	TOKEN // Non-specific token (WORD, NAME, ASSIGNMENT_WORD) that doesn't fit into other categories
+	TOKEN			//        - Non-specific token (WORD, NAME, ASSIGNMENT_WORD, ...) that doesn't fit into other categories
 }	t_default_token_id;
 
 typedef enum e_control_token_id
 {
-	NEWLINE,		// `\n` - command separator
-	SCOLON,			// `;`- command separator
-	DSEMI,			// `;;` - case separator
-	SEMI_AND,		// `;&` - case fallthrough
-	AMPERSAND,		// `&` - background command separator
-	AND_IF,			// `&&` - logical AND operator
-	PIPE,			// `|` - pipeline operator
-	OR_IF,			// `||` - logical OR operator
-	LPARENTHESIS,	// `(` - subshell start
-	RPARENTHESIS,	// `)` - subshell end
-	EOF				// \<EOF> - end of input
+	NEWLINE,		// \n     - command separator
+	SCOLON,			// ;      - command separator
+	DSEMI,			// ;;     - case separator
+	SEMI_AND,		// ;&     - case fallthrough
+	AMPERSAND,		// &      - background command separator
+	AND_IF,			// &&     - logical AND operator
+	PIPE,			// |      - pipeline operator
+	OR_IF,			// ||     - logical OR operator
+	LPARENTHESIS,	// (      - subshell start
+	RPARENTHESIS,	// )      - subshell end
+	EOF				// <EOF>  - end of input
 }	t_control_token_id;
 
 typedef enum e_redirection_token_id
 {
-	IO_NUMBER,		// `[0-9]+` - file descriptor for redirection
-	LESS,			// `<` - input redirection
-	GREAT,			// `>` - output redirection
-	CLOBBER,		// `>|` - output redirection with clobbering (force overwrite)
-	DLESS,			// `<<` - here document
-	DGREAT,			// `>>` - append redirection
-	LESSAND,		// `<&` - duplicate input file descriptor
-	GREATAND,		// `>&` - duplicate output file descriptor
-	DLESSDASH,		// `<<-` - here document with tab stripping
-	LESSGREAT		// `<>` - input/output redirection
+	IO_NUMBER,		// [0-9]+ - file descriptor for redirection
+	LESS,			// <      - input redirection
+	GREAT,			// >      - output redirection
+	CLOBBER,		// >|     - output redirection with clobbering (force overwrite)
+	DLESS,			// <<     - here document
+	DGREAT,			// >>     - append redirection
+	LESSAND,		// <&     - duplicate input file descriptor
+	GREATAND,		// >&     - duplicate output file descriptor
+	DLESSDASH,		// <<-    - here document with tab stripping
+	LESSGREAT		// <>     - input/output redirection
 }	t_redirection_token_id;
 
 typedef enum e_reserved_word_token_id
 {
-	Bang,	//- `!` - logical negation operator
-	Lbrace,	//- `{` - group command start
-	Rbrace,	//- `}` - group command end
-	Case,	//- `case` - case statement start
-	Esac,	//- `esac` - case statement end
-	Do,		//- `do` - do block start
-	Done,	//- `done` - do block end
-	If,		//- `if` - `if` conditional statement start
-	Then,	//- `then` - `if` conditional statement then block start
-	Elif,	//- `elif` - `else if` conditional statement start
-	Else,	//- `else` - `else` conditional statement start
-	Fi,		//- `fi` - `if` conditional statement end
-	For,	//- `for` - for loop start
-	In,		//- `in` - used in for loops and case statements to introduce a list of items
-	Until,	//- `until` - until loop start
-	While	//- `while` - while loop start
+	Bang,			// !      - logical negation operator
+	Lbrace,			// {      - group command start
+	Rbrace,			// }      - group command end
+	Case,			// case   - case statement start
+	Esac,			// esac   - case statement end
+	Do,				// do     - do block start
+	Done,			// done   - do block end
+	If,				// if     - if conditional statement start
+	Then,			// then   - if conditional statement then block start
+	Elif,			// elif   - else if conditional statement start
+	Else,			// else   - else conditional statement start
+	Fi,				// fi     - if conditional statement end
+	For,			// for    - for loop start
+	In,				// in     - used in for loops and case statements to introduce a list of items
+	Until,			// until  - until loop start
+	While			// while  - while loop start
 }	t_reserved_word_token_id;
 
 typedef enum e_contextual_token_id
