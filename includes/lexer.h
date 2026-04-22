@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/22 20:30:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/22 20:32:01 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void		lex_line(t_lexer *lexer, t_raw_string input);
 t_token		*get_next_token(t_lexer *lexer);
 t_token		*peek_token(t_lexer *lexer, size_t offset);
 
-void		read_heredoc_stack();
+void		read_heredoc_stack(void);
 t_file_path	add_heredoc_to_stack(t_token_value delimiter, bool strip_tabs);
 
 #endif
