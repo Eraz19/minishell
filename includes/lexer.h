@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/22 21:16:26 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/27 15:10:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "libft.h"
+
+// Forwarded types
+typedef struct s_lexer_token t_lexer_token;
 
 // ---------- Token ----------
 
@@ -28,12 +31,12 @@ typedef enum e_control_token_id
 {
 	NEWLINE,		// `\n` - command separator
 	SCOLON,			// `;`- command separator
+	AMPERSAND,		// `&` - background command separator
 	DSEMI,			// `;;` - case separator
 	SEMI_AND,		// `;&` - case fallthrough
-	AMPERSAND,		// `&` - background command separator
 	AND_IF,			// `&&` - logical AND operator
-	PIPE,			// `|` - pipeline operator
 	OR_IF,			// `||` - logical OR operator
+	PIPE,			// `|` - pipeline operator
 	LPARENTHESIS,	// `(` - subshell start
 	RPARENTHESIS,	// `)` - subshell end
 	EOF				// \<EOF> - end of input
@@ -42,15 +45,15 @@ typedef enum e_control_token_id
 typedef enum e_redirection_token_id
 {
 	IO_NUMBER,		// `[0-9]+` - file descriptor for redirection
+	LESSAND,		// `<&` - duplicate input file descriptor
+	GREATAND,		// `>&` - duplicate output file descriptor
 	LESS,			// `<` - input redirection
 	GREAT,			// `>` - output redirection
 	CLOBBER,		// `>|` - output redirection with clobbering (force overwrite)
-	DLESS,			// `<<` - here document
+	LESSGREAT,		// `<>` - input/output redirection
 	DGREAT,			// `>>` - append redirection
-	LESSAND,		// `<&` - duplicate input file descriptor
-	GREATAND,		// `>&` - duplicate output file descriptor
-	DLESSDASH,		// `<<-` - here document with tab stripping
-	LESSGREAT		// `<>` - input/output redirection
+	DLESS,			// `<<` - here document
+	DLESSDASH		// `<<-` - here document with tab stripping
 }	t_redirection_token_id;
 
 typedef enum e_reserved_word_token_id
@@ -80,37 +83,36 @@ typedef enum e_contextual_token_id
 	ASSIGNMENT_WORD	// A word that is part of an assignment (e.g., VAR=value)
 }	t_contextual_token_id;
 
-typedef enum e_token_discriminant
+typedef enum e_token_type
 {
 	DEFAULT,		// A non-specific token that doesn't fit into other categories
 	CONTROL,		// A token that represents a control operator (e.g., `|`, `&&`, `;`)
 	REDIRECTION,	// A token that represents a redirection operator (e.g., `>`, `<`, `>>`)
 	RESERVED_WORD,	// A token that represents a reserved word (e.g., `if`, `for`, `do`)
 	CONTEXTUAL		// A token whose specific type depends on the context (e.g., WORD, NAME, ASSIGNMENT_WORD)
-}	t_token_discriminant;
+}	t_token_type;
 
-typedef union u_token_type
+typedef union u_token_id
 {
-	t_token_discriminant		discriminant;	// Indicates which type of token this is
 	t_default_token_id			default_;		// Valid if discriminant == DEFAULT
 	t_control_token_id			control_;		// Valid if discriminant == CONTROL
 	t_redirection_token_id		redirection_;	// Valid if discriminant == REDIRECTION
 	t_reserved_word_token_id	reserved_word_;	// Valid if discriminant == RESERVED_WORD
 	t_contextual_token_id		contextual_;	// Valid if discriminant == CONTEXTUAL
-}	t_token_type;
+}	t_token_id;
 
-typedef char*	t_raw_string_ptr;
-typedef char*	t_token_value;	// The string value of the token (e.g., the actual word, operator, etc.)
+typedef t_buff	t_token_value;	// The string value of the token (e.g., the actual word, operator, etc.)
 typedef int		t_grammar_rule;
 
 typedef t_list t_tokens;
 typedef t_node t_tokens_item;
 typedef struct s_token
 {
-	t_token_type		type;
-	t_grammar_rule		rule;	// The grammar rule that this token matches (used for parsing)
-	t_raw_string_ptr	start;	// The raw string from the input that corresponds to this token (before any processing)
-	t_token_value		value;
+	t_token_type			type;	// Indicates which type of token this is
+	t_token_id				id;
+	t_grammar_rule			rule;	// The grammar rule that this token matches (used for parsing)
+	size_t					offset;	// The raw string from the input that corresponds to this token (before any processing)
+	t_token_value			value;
 }	t_token;
 
 // ---------- Lexer state ----------
@@ -165,5 +167,7 @@ t_token		*peek_token(t_lexer *lexer, size_t offset);
 
 void		read_heredoc_stack(void);
 t_file_path	add_heredoc_to_stack(t_token_value delimiter, bool strip_tabs);
+
+t_token		*from_lexer_token(t_lexer_token **token_ptr);
 
 #endif
