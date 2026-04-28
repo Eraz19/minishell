@@ -5,13 +5,25 @@
 
 ## Table of contents
 
-- [Scanner](#scanner)
+- [Overview](#overview)
+- [Lexer](#scanner)
 	- [Reader](#reader)
-	- [Tokenizer / Lexer](#tokenizer--lexer)
+	- [Tokenizer](#tokenizer)
 - [Parser](#parser)
 - [Executor](#executor)
 
-## Scanner
+## Overview
+
+| # | Input              | Stage        | Output                                    |
+| - | ------------------ | ------------ | ----------------------------------------- |
+| 1 | `char *`           | **LEXER**    | `tokens`                                  |
+| 2 | `tokens`           | **PARSER**   | `CST`                                     |
+| 3 | `CST`              | **BUILDER**  | `AST`                                     |
+| 4 | `AST`              | **WALKER**   | `command node`                            |
+| 5 | `command node`     | **EXPANDER** | `expanded command`                        |
+| 6 | `expanded command` | **RUNNER**   | `redirections + builtin/fork/exec + wait` |
+
+## Lexer
 
 📚 [2.2 Quoting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02)  
 📚 [2.3 Token Recognition](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_03)  
@@ -28,7 +40,7 @@
 	- Note: *"The shell shall read its input in terms of lines"* ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html#))
 	- Note: *"Line joining is done before tokenization"* ([2.2.1 Escape Character (Backslash)](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02_01))
 
-### Tokenizer / Lexer
+### Tokenizer
 
 > *"The shell breaks the input into tokens: words and operators"*
 
