@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 13:42:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 15:14:59 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,36 @@ typedef struct s_lexer_token t_lexer_token;
 
 typedef enum e_default_token_id
 {
-	TOKEN			//        - Non-specific token (WORD, NAME, ASSIGNMENT_WORD, ...) that doesn't fit into other categories
+	TOKEN = 0			//        - Non-specific token (WORD, NAME, ASSIGNMENT_WORD, ...) that doesn't fit into other categories
 }	t_default_token_id;
 
 typedef enum e_control_token_id
 {
-	NEWLINE,		// `\n` - command separator
-	SCOLON,			// `;`- command separator
-	AMPERSAND,		// `&` - background command separator
-	DSEMI,			// `;;` - case separator
-	SEMI_AND,		// `;&` - case fallthrough
-	AND_IF,			// `&&` - logical AND operator
-	OR_IF,			// `||` - logical OR operator
-	PIPE,			// `|` - pipeline operator
-	LPARENTHESIS,	// `(` - subshell start
-	RPARENTHESIS,	// `)` - subshell end
-	EOF				// \<EOF> - end of input
+	NEWLINE = 1,		// `\n` - command separator
+	SCOLON = 2,			// `;`- command separator
+	AMPERSAND = 3,		// `&` - background command separator
+	DSEMI = 4,			// `;;` - case separator
+	SEMI_AND = 5,		// `;&` - case fallthrough
+	AND_IF = 6,			// `&&` - logical AND operator
+	OR_IF = 7,			// `||` - logical OR operator
+	PIPE = 8,			// `|` - pipeline operator
+	LPARENTHESIS = 9,	// `(` - subshell start
+	RPARENTHESIS = 10,	// `)` - subshell end
+	EOF = 11			// \<EOF> - end of input
 }	t_control_token_id;
 
 typedef enum e_redirection_token_id
 {
-	IO_NUMBER,		// `[0-9]+` - file descriptor for redirection
-	LESSAND,		// `<&` - duplicate input file descriptor
-	GREATAND,		// `>&` - duplicate output file descriptor
-	LESS,			// `<` - input redirection
-	GREAT,			// `>` - output redirection
-	CLOBBER,		// `>|` - output redirection with clobbering (force overwrite)
-	LESSGREAT,		// `<>` - input/output redirection
-	DGREAT,			// `>>` - append redirection
-	DLESS,			// `<<` - here document
-	DLESSDASH		// `<<-` - here document with tab stripping
+	IO_NUMBER = 12,		// `[0-9]+` - file descriptor for redirection
+	LESSAND = 13,		// `<&` - duplicate input file descriptor
+	GREATAND = 14,		// `>&` - duplicate output file descriptor
+	LESS = 15,			// `<` - input redirection
+	GREAT = 16,			// `>` - output redirection
+	CLOBBER = 17,		// `>|` - output redirection with clobbering (force overwrite)
+	LESSGREAT = 18,		// `<>` - input/output redirection
+	DGREAT = 19,			// `>>` - append redirection
+	DLESS = 20,			// `<<` - here document
+	DLESSDASH = 21		// `<<-` - here document with tab stripping
 }	t_redirection_token_id;
 
 typedef enum e_reserved_word_token_id
