@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 17:03:59 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 11:11:30 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 11:19:44 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ bool			is_dgreat(t_raw_string input_ptr);
 // ------------ Utils ------------
 
 bool			create_new_file(t_file_path path);
+
+t_file_path		create_heredoc_tmp_file(void);
+bool			is_heredoc_expansion_enabled(t_token_value delimiter);
 
 // ------------ Lexer ------------
 

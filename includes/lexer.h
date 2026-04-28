@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/27 15:38:19 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 11:23:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_lexer_token t_lexer_token;
 
 typedef enum e_default_token_id
 {
-	TOKEN // Non-specific token (WORD, NAME, ASSIGNMENT_WORD) that doesn't fit into other categories
+	TOKEN			//        - Non-specific token (WORD, NAME, ASSIGNMENT_WORD, ...) that doesn't fit into other categories
 }	t_default_token_id;
 
 typedef enum e_control_token_id
@@ -58,22 +58,22 @@ typedef enum e_redirection_token_id
 
 typedef enum e_reserved_word_token_id
 {
-	Bang,	//- `!` - logical negation operator
-	Lbrace,	//- `{` - group command start
-	Rbrace,	//- `}` - group command end
-	Case,	//- `case` - case statement start
-	Esac,	//- `esac` - case statement end
-	Do,		//- `do` - do block start
-	Done,	//- `done` - do block end
-	If,		//- `if` - `if` conditional statement start
-	Then,	//- `then` - `if` conditional statement then block start
-	Elif,	//- `elif` - `else if` conditional statement start
-	Else,	//- `else` - `else` conditional statement start
-	Fi,		//- `fi` - `if` conditional statement end
-	For,	//- `for` - for loop start
-	In,		//- `in` - used in for loops and case statements to introduce a list of items
-	Until,	//- `until` - until loop start
-	While	//- `while` - while loop start
+	Bang,			// `!`      - logical negation operator
+	Lbrace,			// `{`      - group command start
+	Rbrace,			// `}`      - group command end
+	Case,			// `case`   - case statement start
+	Esac,			// `esac`   - case statement end
+	Do,				// `do`     - do block start
+	Done,			// `done`   - do block end
+	If,				// `if`     - if conditional statement start
+	Then,			// `then`   - if conditional statement then block start
+	Elif,			// `elif`   - else if conditional statement start
+	Else,			// `else`   - else conditional statement start
+	Fi,				// `fi`     - if conditional statement end
+	For,			// `for`    - for loop start
+	In,				// `in`     - used in for loops and case statements to introduce a list of items
+	Until,			// `until`  - until loop start
+	While			// `while`  - while loop start
 }	t_reserved_word_token_id;
 
 typedef enum e_contextual_token_id
@@ -166,8 +166,14 @@ t_token			*get_next_token(t_lexer *lexer);
 t_token			*peek_token(t_lexer *lexer, size_t offset);
 
 void			read_heredoc_stack(void);
-t_file_path		add_heredoc_to_stack(t_lexer *lexer, bool strip_tabs,
-					t_token_value delimiter);
+
+typedef struct s_add_heredoc
+{
+	t_token_value	delimiter;
+	bool			strip_tabs;
+}	t_add_heredoc;
+
+t_file_path		add_heredoc_to_stack(t_lexer *lexer, t_add_heredoc params);
 
 t_lexer_token	*to_lexer_token(t_token **token_ptr);
 t_token			*from_lexer_token(t_lexer_token **token_ptr);
