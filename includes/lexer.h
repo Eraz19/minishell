@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/27 15:10:19 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/27 15:38:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,14 +160,16 @@ typedef struct s_lexer
 	t_heredoc_stack	heredoc_stack;	// Non-NULL if currently lexing a heredoc delimiter
 }	t_lexer;
 
-void		lex_line(t_lexer *lexer, t_raw_string input);
+void			lex_line(t_lexer *lexer, t_raw_string input);
 
-t_token		*get_next_token(t_lexer *lexer);
-t_token		*peek_token(t_lexer *lexer, size_t offset);
+t_token			*get_next_token(t_lexer *lexer);
+t_token			*peek_token(t_lexer *lexer, size_t offset);
 
-void		read_heredoc_stack(void);
-t_file_path	add_heredoc_to_stack(t_token_value delimiter, bool strip_tabs);
+void			read_heredoc_stack(void);
+t_file_path		add_heredoc_to_stack(t_lexer *lexer, bool strip_tabs,
+					t_token_value delimiter);
 
-t_token		*from_lexer_token(t_lexer_token **token_ptr);
+t_lexer_token	*to_lexer_token(t_token **token_ptr);
+t_token			*from_lexer_token(t_lexer_token **token_ptr);
 
 #endif

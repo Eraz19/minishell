@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe.c                                             :+:      :+:    :+:   */
+/*   file_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/22 23:34:32 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 11:10:08 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/27 18:18:15 by adouieb           #+#    #+#             */
+/*   Updated: 2026/04/27 18:34:07 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "../../../_lexer.h"
+#include <fcntl.h>
+#include <unistd.h>
+#include "_lexer.h"
 
-t_lexer_token	*pipe_(size_t offset)
+bool	create_new_file(t_file_path path)
 {
-	t_lexer_token	*res;
+	int	fd;
 
-	res = malloc(sizeof(t_lexer_token));
-	if (res == NULL)
-		return (NULL);
-	res->offset = offset;
-	res->type = CONTROL_;
-	res->id.control_ = PIPE;
-	if (buff_init(&res->value, 0) == false)
-		return (free(res), NULL);
-	return (res);
-}
-
-bool	is_pipe(t_raw_string input_ptr)
-{
-	return (input_ptr[0] == '|');
+	fd = open(path, O_CREAT, 0644);
+	if (fd < 0)
+		return (false);
+	if (close(fd) < 0)
+		return (false);
+	return (true);
 }

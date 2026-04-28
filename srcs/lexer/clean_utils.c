@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   clean_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/27 11:37:31 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/27 15:08:29 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/27 15:22:43 by adouieb           #+#    #+#             */
+/*   Updated: 2026/04/27 15:22:53 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,4 @@ t_raw_string	remove_escapable_newlines(t_raw_string input)
 	}
 	input[j] = '\0';
 	return (input);
-}
-
-
-
-void	lex_line(t_lexer *lexer, t_raw_string input)
-{	
-	lexer->index = 0;
-	lexer->token_stream = NULL;
-	lexer->heredoc_stack = NULL;
-	lexer->state.char_escaped = false;
-	lexer->state.mode = LEXER_MODE_DEFAULT;
-	lexer->state.quote_mode = QUOTE_MODE_NONE;
-	lexer->input = remove_escapable_newlines(input);
 }

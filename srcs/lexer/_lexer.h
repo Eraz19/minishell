@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 17:03:59 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/27 15:08:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 11:11:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define _LEXER_H
 
 #include "lexer.h"
+
+# define MAX_HEREDOCS 		16
+# define HEREDOC_TMP_PATH	"/tmp/minishell_heredoc_"
 
 typedef enum e_lexer_token_type
 {
@@ -45,7 +48,7 @@ t_lexer_token	*dsemi(size_t offset);
 t_lexer_token	*semi_and(size_t offset);
 t_lexer_token	*or_if(size_t offset);
 t_lexer_token	*and_if(size_t offset);
-t_lexer_token	*pipe(size_t offset);
+t_lexer_token	*pipe_(size_t offset);
 t_lexer_token	*lparenthesis(size_t offset);
 t_lexer_token	*rparenthesis(size_t offset);
 
@@ -81,6 +84,12 @@ bool			is_great(t_raw_string input_ptr);
 bool			is_clobber(t_raw_string input_ptr);
 bool			is_lessgreat(t_raw_string input_ptr);
 bool			is_dgreat(t_raw_string input_ptr);
+
+// ------------ Utils ------------
+
+bool			create_new_file(t_file_path path);
+
+// ------------ Lexer ------------
 
 t_raw_string	remove_escapable_newlines(t_raw_string input);
 
