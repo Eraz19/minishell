@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 23:33:14 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/27 15:17:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 13:40:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	convert_lexer_token_content(t_token *res, t_lexer_token *token)
 {
 	res->offset = token->offset;
-	res->value = token->value;
+	buff_dup_n(&res->value, &token->value, token->value.len);
 	if (token->type == DEFAULT_)
 	{
 		res->type = DEFAULT;
@@ -56,7 +56,7 @@ t_token	*from_lexer_token(t_lexer_token **token_ptr)
 static bool	convert_token_content(t_lexer_token *res, t_token *token)
 {
 	res->offset = token->offset;
-	res->value = token->value;
+	buff_dup_n(&res->value, &token->value, token->value.len);
 	if (token->type == DEFAULT)
 	{
 		res->type = DEFAULT_;

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 11:23:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 13:42:44 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,11 @@ typedef t_list t_tokens;
 typedef t_node t_tokens_item;
 typedef struct s_token
 {
-	t_token_type			type;	// Indicates which type of token this is
-	t_token_id				id;
-	t_grammar_rule			rule;	// The grammar rule that this token matches (used for parsing)
-	size_t					offset;	// The raw string from the input that corresponds to this token (before any processing)
-	t_token_value			value;
+	t_token_type	type;	// Indicates which type of token this is
+	t_token_id		id;
+	t_grammar_rule	rule;	// The grammar rule that this token matches (used for parsing)
+	size_t			offset;	// The raw string from the input that corresponds to this token (before any processing)
+	t_token_value	value;
 }	t_token;
 
 // ---------- Lexer state ----------
@@ -153,6 +153,7 @@ typedef struct s_heredoc
 
 typedef struct s_lexer
 {
+	bool			is_eof;			// Indicates if the end of the input has been reached
 	size_t			index;			// Current position in the input string
 	t_raw_string	input;			// The original input string being lexed
 	t_state			state;
@@ -160,12 +161,17 @@ typedef struct s_lexer
 	t_heredoc_stack	heredoc_stack;	// Non-NULL if currently lexing a heredoc delimiter
 }	t_lexer;
 
+// ------------ Utils ------------
+
+t_lexer_token	*to_lexer_token(t_token **token_ptr);
+t_token			*from_lexer_token(t_lexer_token **token_ptr);
+
+// ------------ API ------------
+
 void			lex_line(t_lexer *lexer, t_raw_string input);
 
 t_token			*get_next_token(t_lexer *lexer);
 t_token			*peek_token(t_lexer *lexer, size_t offset);
-
-void			read_heredoc_stack(void);
 
 typedef struct s_add_heredoc
 {
@@ -173,9 +179,7 @@ typedef struct s_add_heredoc
 	bool			strip_tabs;
 }	t_add_heredoc;
 
+void			read_heredoc_stack(void);
 t_file_path		add_heredoc_to_stack(t_lexer *lexer, t_add_heredoc params);
-
-t_lexer_token	*to_lexer_token(t_token **token_ptr);
-t_token			*from_lexer_token(t_lexer_token **token_ptr);
 
 #endif

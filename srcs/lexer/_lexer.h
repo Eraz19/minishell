@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 17:03:59 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 11:19:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 13:22:39 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ bool			is_great(t_raw_string input_ptr);
 bool			is_clobber(t_raw_string input_ptr);
 bool			is_lessgreat(t_raw_string input_ptr);
 bool			is_dgreat(t_raw_string input_ptr);
+
+void			free_lexer_token(void *token_ptr);
 
 // ------------ Utils ------------
 

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:15:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 11:19:14 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/04/28 11:41:11 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ t_file_path	create_heredoc_tmp_file(void)
 
 bool	is_heredoc_expansion_enabled(t_token_value delimiter)
 {
-	if (str_chr(buff_get_string(delimiter), '\'') != NULL)
+	if (str_chr(buff_get_string(&delimiter), '\'') != NULL)
 		return (false);
-	else if (str_chr(buff_get_string(delimiter), '"') != NULL)
+	else if (str_chr(buff_get_string(&delimiter), '"') != NULL)
 		return (false);
-	else if (str_chr(buff_get_string(delimiter), '\\') != NULL)
+	else if (str_chr(buff_get_string(&delimiter), '\\') != NULL)
 		return (false);
 	return (true);
 }
