@@ -16,7 +16,7 @@
 
 | # | Input              | Stage        | Output                                    |
 | - | ------------------ | ------------ | ----------------------------------------- |
-| 1 | `char *`           | **LEXER**    | `tokens`                                  |
+| 1 | `char *`           | **SCANNER**    | `tokens`                                  |
 | 2 | `tokens`           | **PARSER**   | `CST`                                     |
 | 3 | `CST`              | **BUILDER**  | `AST`                                     |
 | 4 | `AST`              | **WALKER**   | `command node`                            |
