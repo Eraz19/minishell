@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "parser_hooks.h"
 
 static void	parser_rules_init_pattern_list_1(t_rule *rules);
 static void	parser_rules_init_pattern_list_2(t_rule *rules);
@@ -23,6 +24,7 @@ static void	parser_rules_init_pattern_list_1(t_rule *rules)
 	rules[RULE_PATTERN_LIST_1].lhs = SYM_pattern_list;
 	rules[RULE_PATTERN_LIST_1].rhs[0] = SYM_WORD;
 	rules[RULE_PATTERN_LIST_1].rhs_len = 1;
+	rules[RULE_PATTERN_LIST_1].hook = hook_4;
 }
 
 // pattern_list -> '(' WORD (do NOT apply rule 4)

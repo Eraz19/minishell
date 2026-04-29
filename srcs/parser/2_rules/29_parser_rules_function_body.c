@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "parser_hooks.h"
 
 static void	parser_rules_init_function_body_1(t_rule *rules);
 static void	parser_rules_init_function_body_2(t_rule *rules);
@@ -20,6 +21,7 @@ static void	parser_rules_init_function_body_1(t_rule *rules)
 	rules[RULE_FUNCTION_BODY_1].lhs = SYM_function_body;
 	rules[RULE_FUNCTION_BODY_1].rhs[0] = SYM_compound_command;
 	rules[RULE_FUNCTION_BODY_1].rhs_len = 1;
+	rules[RULE_FUNCTION_BODY_1].hook = hook_9;
 }
 
 // function_body -> compound_command redirect_list (apply rule 9)
@@ -29,4 +31,5 @@ static void	parser_rules_init_function_body_2(t_rule *rules)
 	rules[RULE_FUNCTION_BODY_2].rhs[0] = SYM_compound_command;
 	rules[RULE_FUNCTION_BODY_2].rhs[1] = SYM_redirect_list;
 	rules[RULE_FUNCTION_BODY_2].rhs_len = 2;
+	rules[RULE_FUNCTION_BODY_2].hook = hook_9;
 }

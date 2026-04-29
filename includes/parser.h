@@ -1,6 +1,8 @@
 #ifndef PARSER_H
 # define PARSER_H
 
+# include "lexer.h"
+# include <stdbool.h>
 # include <stddef.h>
 
 /* ************************************************************************* */
@@ -117,16 +119,48 @@ typedef enum e_symbol_id
 # define SYM_NON_TERMINAL_MAX	SYM_error
 
 /* ************************************************************************* */
+/*                                   CST                                     */
+/* ************************************************************************* */
+
+typedef struct s_cst_node
+{
+	// TODO
+}	t_cst_node;
+
+/* ************************************************************************* */
+/*                                  STACK                                    */
+/* ************************************************************************* */
+
+typedef struct s_stack_item
+{
+	t_token		*token_first;	// borrowed
+	t_token		*token_last;	// borrowed
+	t_symbol_id	symbol;
+	int			state;
+	t_cst_node	*cst_node;		// borrowed
+}	t_stack_item;
+
+typedef struct s_stack
+{
+	t_stack_item	*items;
+	size_t			cap;
+	size_t			len;
+}	t_stack;
+
+/* ************************************************************************* */
 /*                                  RULES                                    */
 /* ************************************************************************* */
 
 # define RULE_RHS_CAP	7
 
+typedef bool	(*t_reduce_hook)(t_stack_item *rhs, size_t rhs_len, void *ctx);
+
 typedef struct s_rule
 {
-	t_symbol_id	lhs;
-	t_symbol_id	rhs[RULE_RHS_CAP];
-	size_t		rhs_len;
+	t_symbol_id		lhs;
+	t_symbol_id		rhs[RULE_RHS_CAP];
+	size_t			rhs_len;
+	t_reduce_hook	hook;
 }	t_rule;
 
 typedef enum e_rule_id
@@ -245,33 +279,6 @@ typedef enum e_rule_id
 	RULE_SEQUENTIAL_SEP_2,			// sequential_sep		-> newline_list
 	RULE_COUNT						// rule_count			-> <sentinel>
 }	t_rule_id;
-
-/* ************************************************************************* */
-/*                                   CST                                     */
-/* ************************************************************************* */
-
-typedef struct s_cst_node
-{
-	// TODO
-}	t_cst_node;
-
-/* ************************************************************************* */
-/*                                  STACK                                    */
-/* ************************************************************************* */
-
-typedef struct s_stack_item
-{
-	t_symbol_id	symbol;
-	int			state;
-	t_cst_node	*cst_node;	// borrowed
-}	t_stack_item;
-
-typedef struct s_stack
-{
-	t_stack_item	*items;
-	size_t			cap;
-	size_t			len;
-}	t_stack;
 
 /* ************************************************************************* */
 /*                                 PARSER                                    */
