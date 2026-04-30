@@ -10,6 +10,7 @@
 		"-I${workspaceFolder}/srcs/prompt/history",
 		"-I${workspaceFolder}/srcs/prompt/label",
 		"-I${workspaceFolder}/srcs/lexer",
+		"-I${workspaceFolder}/srcs/lexer",
 		"-I${workspaceFolder}/srcs/parser/1_qualifier",
 		"-I${workspaceFolder}/srcs/parser/2_builder"
 	]

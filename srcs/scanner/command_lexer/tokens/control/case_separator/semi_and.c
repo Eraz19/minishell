@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   semi_and.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/09 13:17:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 15:31:55 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/27 11:49:08 by adouieb           #+#    #+#             */
+/*   Updated: 2026/04/29 17:57:34 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include "../../../_lexer.h"
 
-int	main(void)
+t_token	*semi_and(size_t offset)
 {
-	char *input = readline("minishell> ");
-	if (input != NULL)
-	{
-		printf("You entered: %s\n", input);
-		free(input);
-	}
-	return (0);
+	t_token	*res;
+
+	res = malloc(sizeof(t_token));
+	if (res == NULL)
+		return (NULL);
+	res->offset = offset;
+	res->type = SEMI_AND;
+	if (buff_init(&res->value, 0) == false)
+		return (free(res), NULL);
+	return (res);
 }
 
+bool	is_semi_and(char *input_ptr)
+{
+	return (input_ptr[0] == ';' && input_ptr[1] == '&');
+}

@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/09 13:17:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 15:31:55 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/29 17:50:14 by adouieb           #+#    #+#             */
+/*   Updated: 2026/04/29 17:51:21 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <stddef.h>
 
-int	main(void)
+char	*remove_escapable_newlines(char *input)
 {
-	char *input = readline("minishell> ");
-	if (input != NULL)
-	{
-		printf("You entered: %s\n", input);
-		free(input);
-	}
-	return (0);
-}
+	size_t	i;
+	size_t	j;
 
+	i = 0;
+	j = 0;
+	while (input[i])
+	{
+		if (input[i] == '\\' && input[i + 1] == '\n')
+		{
+			i += 2;
+			continue ;
+		}
+		input[j++] = input[i++];
+	}
+	input[j] = '\0';
+	return (input);
+}

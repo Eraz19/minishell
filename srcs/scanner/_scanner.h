@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   _scanner.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/09 13:17:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 15:31:55 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/29 17:16:40 by adouieb           #+#    #+#             */
+/*   Updated: 2026/04/29 18:07:53 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef _SCANNER_H
+# define _SCANNER_H
 
-int	main(void)
-{
-	char *input = readline("minishell> ");
-	if (input != NULL)
-	{
-		printf("You entered: %s\n", input);
-		free(input);
-	}
-	return (0);
-}
+#include "scanner.h"
 
+char	*remove_escapable_newlines(char *input);
+
+bool	is_contains_eof(t_lexer *lexer);
+
+#endif

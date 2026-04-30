@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/09 13:17:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/28 15:31:55 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/29 17:20:06 by adouieb           #+#    #+#             */
+/*   Updated: 2026/04/29 17:44:39 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "types.h"
 
-int	main(void)
+bool	create_new_file(t_file_path path)
 {
-	char *input = readline("minishell> ");
-	if (input != NULL)
-	{
-		printf("You entered: %s\n", input);
-		free(input);
-	}
-	return (0);
-}
+	int	fd;
 
+	fd = open(path, O_CREAT, 0644);
+	if (fd < 0)
+		return (false);
+	if (close(fd) < 0)
+		return (false);
+	return (true);
+}
