@@ -72,6 +72,7 @@ typedef enum e_symbol
 	SYM_EOF,
 	// ----------------------------------------------------
 	// NON_TERMINALS (GOTO table entries)
+	SYM_start,
 	SYM_program,
 	SYM_complete_commands,
 	SYM_complete_command,
@@ -125,7 +126,7 @@ typedef enum e_symbol
 }	t_symbol;
 
 # define SYM_TERMINAL_MAX		SYM_EOF
-# define SYM_NON_TERMINAL_MIN	SYM_program
+# define SYM_NON_TERMINAL_MIN	SYM_start
 # define SYM_NON_TERMINAL_MAX	SYM_error
 
 /* ************************************************************************* */
@@ -171,6 +172,7 @@ typedef struct s_rule
 
 typedef enum e_rule_id
 {
+	RULE_START_1,					// start				-> program
 	RULE_PROGRAM_1,					// program				-> linebreak complete_commands linebreak
 	RULE_PROGRAM_2,					// program				-> linebreak
 	RULE_COMPLETE_COMMANDS_1,		// complete_commands	-> complete_commands newline_list complete_command
@@ -340,8 +342,8 @@ typedef struct s_lr_machine
 	t_rule		rules[RULE_COUNT];
 	t_vector	lr_states;				// Each lr_state is a set of rule_states
 	t_vector	transitions;			// lr_state + symbol -> lr_state_id
-	t_vector	actions;				// What to do when peeking a symbol in a given lr_state		(lr_state_id + terminal_symbol		=> shift/reduce/accept/error + lr_state_id)
-	t_vector	gotos;					// What to do when reducing a symbol in a given lr_state	(lr_state_id + non_terminal_symbol	=> lr_state_id)
+	t_action	**actions;				// What to do when peeking a symbol in a given lr_state		(lr_state_id + terminal_symbol		=> shift/reduce/accept/error + lr_state_id)
+	size_t		**gotos;				// What to do when reducing a symbol in a given lr_state	(lr_state_id + non_terminal_symbol	=> lr_state_id)
 }	t_lr_machine;
 
 /* ************************************************************************* */

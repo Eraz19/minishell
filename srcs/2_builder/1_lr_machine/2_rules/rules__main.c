@@ -28,12 +28,12 @@ void	rules_init(t_rule *rules)
 	rules_init_fname(rules);
 	rules_init_for_clause(rules);
 	rules_init_function_body(rules);
+	rules_init_function_definition(rules);
 	init_remaining_rules(rules);
 }
 
 static void	init_remaining_rules(t_rule *rules)
 {
-	rules_init_function_definition(rules);
 	rules_init_here_end(rules);
 	rules_init_if_clause(rules);
 	rules_init_in(rules);
@@ -53,6 +53,7 @@ static void	init_remaining_rules(t_rule *rules)
 	rules_init_separator(rules);
 	rules_init_sequential_sep(rules);
 	rules_init_simple_command(rules);
+	rules_init_start(rules);
 	rules_init_subshell(rules);
 	rules_init_term(rules);
 	rules_init_until_clause(rules);

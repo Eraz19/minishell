@@ -10,9 +10,10 @@
 		"-I${workspaceFolder}/srcs/prompt/history",
 		"-I${workspaceFolder}/srcs/prompt/label",
 		"-I${workspaceFolder}/srcs/lexer",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/1_rules",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/2_hooks",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/1_hooks",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/2_rules",
 		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/3_rule_state",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/4_lr_state"
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/4_lr_state",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/5_build",
 	]
 }

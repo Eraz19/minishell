@@ -45,6 +45,7 @@ void	rules_init_sequential_sep(t_rule *rules);
 void	rules_init_separator(t_rule *rules);
 void	rules_init_separator_op(t_rule *rules);
 void	rules_init_simple_command(t_rule *rules);
+void	rules_init_start(t_rule *rules);
 void	rules_init_subshell(t_rule *rules);
 void	rules_init_term(t_rule *rules);
 void	rules_init_until_clause(t_rule *rules);
