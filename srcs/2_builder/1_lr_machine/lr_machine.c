@@ -17,13 +17,21 @@ void	lr_machine_init(t_lr_machine *machine)
 
 bool	lr_machine_build(t_lr_machine *machine)
 {
+	printf("lr_machine_build: START\n");
 	rules_build(machine->rules);
+	printf("lr_machine_build: rules built\n");
 	if (!transition_build_table(machine))
 		return (false);
-	if (!action_build_table(machine))
-		return (false);
+	printf("lr_machine_build: transitions and lr_states built\n");
+	printf("lr_machine_build: ---> transitions = %zu\n", machine->transitions.len);
+	printf("lr_machine_build: ---> lr_states   = %zu\n", machine->lr_states.len);
 	if (!goto_build_table(machine))
 		return (false);
+	printf("lr_machine_build: goto built\n");
+	if (!action_build_table(machine))
+		return (false);
+	printf("lr_machine_build: actions built\n");
+	printf("lr_machine_build: DONE\n");
 	return (true);
 }
 

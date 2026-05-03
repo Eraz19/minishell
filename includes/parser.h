@@ -1,7 +1,15 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "lexer.h"
+/*------------- TODO: TMP D.EBUG -------------*/
+#include <stdio.h>
+typedef struct s_token
+{
+	// TODO
+}	t_token;
+/*--------------------------------------------*/
+
+# include "libft.h"
 # include <stdbool.h>
 # include <stddef.h>
 
@@ -119,9 +127,9 @@ typedef enum e_symbol
 	SYM_separator_op,
 	SYM_separator,
 	SYM_sequential_sep,
-	SYM_error,
 	// ----------------------------------------------------
-	SYM_COUNT
+	SYM_COUNT,
+	SYM_error
 }	t_symbol;
 
 # define SYM_TERMINAL_MAX		SYM_EOF

@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "lr_machine.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int	main(void)
 {
@@ -8,6 +9,7 @@ int	main(void)
 
 	lr_machine_init(&machine);
 	if (!lr_machine_build(&machine))
-		printf("💥 OOPS, lr_machine_build() failed 🙈\n");
+		return (EXIT_FAILURE);
 	lr_machine_free(&machine);
+	return (EXIT_SUCCESS);
 }

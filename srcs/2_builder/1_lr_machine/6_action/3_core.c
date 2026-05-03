@@ -1,22 +1,28 @@
 #include "parser.h"
 #include "action_priv.h"
 
+// TODO: handle buff_append() errors properly
 static bool	print_conflict(t_action *action, size_t lr_state_id, t_symbol symbol, t_action_type target_type, size_t target_payload)
 {
+	t_buff	buff;
+	char	*format_string;
+
+	buff_init(&buff, 0);
 	if (action->type == ACTION_SHIFT)
-		print_err(false, "SHIFT-");
+		buff_append(&buff, " SHIFT-", -1);
 	else if (action->type == ACTION_REDUCE)
-		print_err(false, "REDUCE-");
+		buff_append(&buff, " REDUCE-", -1);
 	else if (action->type == ACTION_ACCEPT)
-		print_err(false, "ACCEPT-");
+		buff_append(&buff, " ACCEPT-", -1);
 	if (target_type == ACTION_SHIFT)
-		print_err(false, "SHIFT ");
+		buff_append(&buff, "SHIFT", -1);
 	else if (target_type == ACTION_REDUCE)
-		print_err(false, "REDUCE ");
+		buff_append(&buff, "REDUCE", -1);
 	else if (target_type == ACTION_ACCEPT)
-		print_err(false, "ACCEPT ");
-	fprint_err(false, "conflict",
-		" for lr_state %i and symbol %i (current payload = %i vs target = %i)",
+		buff_append(&buff, "ACCEPT", -1);
+	buff_append(&buff, " for lr_state %i and symbol %i (current payload = %i vs target = %i)", -1);
+	format_string = buff_get_string(&buff);
+	fprint_err(false, "⚠️ conflict", format_string,
 		(int)lr_state_id, (int)symbol,
 		(int)action->payload, (int)target_payload);
 	return (false);

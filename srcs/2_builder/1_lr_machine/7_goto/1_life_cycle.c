@@ -9,6 +9,8 @@ void	goto_free(size_t lr_states_count, size_t ***gotos)
 {
 	size_t	i;
 
+	if (!gotos || !*gotos)
+		return ;
 	i = 0;
 	while (i < lr_states_count)
 	{

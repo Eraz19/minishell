@@ -10,6 +10,8 @@ void	action_free(size_t lr_states_count, size_t ***actions)
 {
 	size_t	i;
 
+	if (!actions || !*actions)
+		return ;
 	i = 0;
 	while (i < lr_states_count)
 	{
