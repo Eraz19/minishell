@@ -2,6 +2,9 @@
 # define ACTION_H
 
 # include "parser.h"
+# include "limits.h"
+
+# define ACTION_PAYLOAD_EMPTY	SIZE_T_MAX
 
 void	action_init(t_action ***actions);
 bool	action_build_table(t_lr_machine *machine);

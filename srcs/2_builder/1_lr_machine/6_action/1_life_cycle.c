@@ -6,11 +6,6 @@ void	action_init(t_action ***actions)
 	*actions = NULL;
 }
 
-bool	action_build_table(t_lr_machine *machine)
-{
-	// TODO
-}
-
 void	action_free(size_t lr_states_count, size_t ***actions)
 {
 	size_t	i;

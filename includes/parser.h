@@ -9,10 +9,9 @@
 /*                             NAMING CONVENTION                             */
 /* ************************************************************************* */
 /*
-*	t_rule_state				(local, aka item)
-*	t_rule_state.pos			(aka item.dot)
-*	t_lr_state					(global, aka itemset aka state)
-*	t_stack_item.lr_state_id	(index of an lr_state, aka item.state)
+*	t_rule_state				aka item
+*	t_rule_state.pos			aka item.dot
+*	t_lr_state					aka itemset aka state
 */
 
 /* ************************************************************************* */
@@ -161,7 +160,6 @@ typedef t_vector	t_stack;
 
 typedef bool	(*t_reduce_hook)(t_stack_item *rhs, size_t rhs_len, void *ctx);
 
-// raw grammar rule
 typedef struct s_rule
 {
 	t_symbol		lhs;
@@ -288,7 +286,6 @@ typedef enum e_rule_id
 	RULE_COUNT						// rule_count			-> <sentinel>
 }	t_rule_id;
 
-// State of a given rule (as a cursor: which of the rule's symbols have already been recognized)
 typedef struct s_rule_state
 {
 	size_t	rule_id;
@@ -299,15 +296,13 @@ typedef struct s_rule_state
 /*                                LR_MACHINE                                 */
 /* ************************************************************************* */
 
-// Set of rule_states (represents all of the available rules in the current state and their respective states)
 typedef t_vector	t_lr_state;
 
-// Raw transitions used to build action/goto tables
 typedef struct s_transition
 {
-	size_t		from_lr_state_id;		// When builder is in this lr_state
-	t_symbol	symbol;					// and this symbol is after the pos (aka dot) (no look ahead here)
-	size_t		to_lr_state_id;			// go to this lr_state
+	size_t		from_lr_state_id;
+	t_symbol	symbol;
+	size_t		to_lr_state_id;
 }	t_transition;
 
 typedef enum e_action_type
@@ -315,35 +310,36 @@ typedef enum e_action_type
 	ACTION_SHIFT,
 	ACTION_REDUCE,
 	ACTION_ACCEPT,
-	ACTION_ERROR,
-	ACTION_COUNT
+	ACTION_ERROR
 }	t_action_type;
 
-// lr_state_id + terminal_symbol => shift/reduce/accept/error + lr_state_id
+/*
+action.payload can be:
+- SHIFT: to_lr_state_id
+- REDUCE: rule_id
+- ACCEPT: none (ACTION_PAYLOAD_EMPTY)
+- ERROR: none (ACTION_PAYLOAD_EMPTY)
+*/
 typedef struct s_action
 {
-	size_t			from_lr_state_id;	// When builder is in this lr_state
-	t_symbol		terminal_symbol;	// and this terminal symbol is peeked
-	t_action_type	type;				// do this action
-	t_rule_id		rule_id;			// because of this rule
-	size_t			to_lr_state_id;		// and go to this lr_state
+	t_action_type	type;
+	size_t			payload;
 }	t_action;
 
-// lr_state_id + non_terminal_symbol => lr_state_id
 typedef struct s_goto
 {
-	size_t		from_lr_state_id;		// When builder is in this lr_state
-	t_symbol	symbol;					// and symbols are reduced to this non-terminal symbol
-	size_t		to_lr_state_id;			// go to this lr_state
+	size_t		from_lr_state_id;
+	t_symbol	symbol;
+	size_t		to_lr_state_id;
 }	t_goto;
 
 typedef struct s_lr_machine
 {
 	t_rule		rules[RULE_COUNT];
-	t_vector	lr_states;				// Each lr_state is a set of rule_states
-	t_vector	transitions;			// lr_state + symbol -> lr_state_id
-	t_action	**actions;				// What to do when peeking a symbol in a given lr_state		(lr_state_id + terminal_symbol		=> shift/reduce/accept/error + lr_state_id)
-	size_t		**gotos;				// What to do when reducing a symbol in a given lr_state	(lr_state_id + non_terminal_symbol	=> lr_state_id)
+	t_vector	lr_states;
+	t_vector	transitions;
+	t_action	**actions;
+	size_t		**gotos;
 }	t_lr_machine;
 
 /* ************************************************************************* */
