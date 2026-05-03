@@ -7,12 +7,19 @@ void	goto_init(size_t ***gotos)
 	*gotos = NULL;
 }
 
+static bool	malloc_goto_table(t_lr_machine *machine)
+{
+	// TODO: malloc gotos[lr_states.len][non_terminal_sym_count]
+}
+
 bool	goto_build_table(t_lr_machine *machine)
 {
 	size_t			i;
 	t_transition	transition;
 	t_symbol		symbol;
 
+	if (!malloc_goto_table(machine))
+		return (false);
 	i = 0;
 	while (i < machine->transitions.len)
 	{
