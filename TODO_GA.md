@@ -1,6 +1,5 @@
 # TODO
 
-- Implément `actions`
 - Préciser dans `lr_machine.md` que `ACTION` est complétée étape par étape avec un process et un payload différents pour :
 	- `ERROR`: default
 	- `SHIFT`: `action.payload` = `transition.to_lr_state_id`
@@ -8,6 +7,7 @@
 	- `ACCEPT`: same as `REDUCE` but only if `rule.lhs` = `SYM_start` and for `SYM_EOF`
 - Implement `LR(1)` instead of `LR(0)`
 - Implement `parser hooks`
+- Remove **wildcards** from `libft`'s `Makefile`
 ...
 
 ---
