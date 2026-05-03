@@ -1,21 +1,21 @@
 #include "parser.h"
 
-static void	rules_init_io_here_1(t_rule *rules);
-static void	rules_init_io_here_2(t_rule *rules);
+static void	rules_build_io_here_1(t_rule *rules);
+static void	rules_build_io_here_2(t_rule *rules);
 
 /*
 io_here          : DLESS here_end
                  | DLESSDASH here_end
                  ;
 */
-void	rules_init_io_here(t_rule *rules)
+void	rules_build_io_here(t_rule *rules)
 {
-	rules_init_io_here_1(rules);
-	rules_init_io_here_2(rules);
+	rules_build_io_here_1(rules);
+	rules_build_io_here_2(rules);
 }
 
 // io_here -> DLESS here_end
-static void	rules_init_io_here_1(t_rule *rules)
+static void	rules_build_io_here_1(t_rule *rules)
 {
 	rules[RULE_IO_HERE_1].lhs = SYM_io_here;
 	rules[RULE_IO_HERE_1].rhs[0] = SYM_DLESS;
@@ -24,7 +24,7 @@ static void	rules_init_io_here_1(t_rule *rules)
 }
 
 // io_here -> DLESSDASH here_end
-static void	rules_init_io_here_2(t_rule *rules)
+static void	rules_build_io_here_2(t_rule *rules)
 {
 	rules[RULE_IO_HERE_2].lhs = SYM_io_here;
 	rules[RULE_IO_HERE_2].rhs[0] = SYM_DLESSDASH;

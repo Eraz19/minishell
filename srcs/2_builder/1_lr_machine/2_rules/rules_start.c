@@ -4,7 +4,7 @@
 start            : program
                  ;
 */
-void	rules_init_start(t_rule *rules)
+void	rules_build_start(t_rule *rules)
 {
 	rules[RULE_START_1].lhs = SYM_start;
 	rules[RULE_START_1].rhs[0] = SYM_program;

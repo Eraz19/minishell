@@ -1,22 +1,22 @@
 #include "parser.h"
 #include "hooks.h"
 
-static void	rules_init_function_body_1(t_rule *rules);
-static void	rules_init_function_body_2(t_rule *rules);
+static void	rules_build_function_body_1(t_rule *rules);
+static void	rules_build_function_body_2(t_rule *rules);
 
 /*
 function_body    : compound_command               (apply rule 9)
                  | compound_command redirect_list (apply rule 9)
                  ;
 */
-void	rules_init_function_body(t_rule *rules)
+void	rules_build_function_body(t_rule *rules)
 {
-	rules_init_function_body_1(rules);
-	rules_init_function_body_2(rules);
+	rules_build_function_body_1(rules);
+	rules_build_function_body_2(rules);
 }
 
 // function_body -> compound_command (apply rule 9)
-static void	rules_init_function_body_1(t_rule *rules)
+static void	rules_build_function_body_1(t_rule *rules)
 {
 	rules[RULE_FUNCTION_BODY_1].lhs = SYM_function_body;
 	rules[RULE_FUNCTION_BODY_1].rhs[0] = SYM_compound_command;
@@ -25,7 +25,7 @@ static void	rules_init_function_body_1(t_rule *rules)
 }
 
 // function_body -> compound_command redirect_list (apply rule 9)
-static void	rules_init_function_body_2(t_rule *rules)
+static void	rules_build_function_body_2(t_rule *rules)
 {
 	rules[RULE_FUNCTION_BODY_2].lhs = SYM_function_body;
 	rules[RULE_FUNCTION_BODY_2].rhs[0] = SYM_compound_command;

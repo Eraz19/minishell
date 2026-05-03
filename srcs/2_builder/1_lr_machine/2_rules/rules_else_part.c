@@ -1,8 +1,8 @@
 #include "parser.h"
 
-static void	rules_init_else_part_1(t_rule *rules);
-static void	rules_init_else_part_2(t_rule *rules);
-static void	rules_init_else_part_3(t_rule *rules);
+static void	rules_build_else_part_1(t_rule *rules);
+static void	rules_build_else_part_2(t_rule *rules);
+static void	rules_build_else_part_3(t_rule *rules);
 
 /*
 else_part        : Elif compound_list Then compound_list
@@ -10,15 +10,15 @@ else_part        : Elif compound_list Then compound_list
                  | Else compound_list
                  ;
 */
-void	rules_init_else_part(t_rule *rules)
+void	rules_build_else_part(t_rule *rules)
 {
-	rules_init_else_part_1(rules);
-	rules_init_else_part_2(rules);
-	rules_init_else_part_3(rules);
+	rules_build_else_part_1(rules);
+	rules_build_else_part_2(rules);
+	rules_build_else_part_3(rules);
 }
 
 // else_part -> Elif compound_list Then compound_list
-static void	rules_init_else_part_1(t_rule *rules)
+static void	rules_build_else_part_1(t_rule *rules)
 {
 	rules[RULE_ELSE_PART_1].lhs = SYM_else_part;
 	rules[RULE_ELSE_PART_1].rhs[0] = SYM_Elif;
@@ -29,7 +29,7 @@ static void	rules_init_else_part_1(t_rule *rules)
 }
 
 // else_part -> Elif compound_list Then compound_list else_part
-static void	rules_init_else_part_2(t_rule *rules)
+static void	rules_build_else_part_2(t_rule *rules)
 {
 	rules[RULE_ELSE_PART_2].lhs = SYM_else_part;
 	rules[RULE_ELSE_PART_2].rhs[0] = SYM_Elif;
@@ -41,7 +41,7 @@ static void	rules_init_else_part_2(t_rule *rules)
 }
 
 // else_part -> Else compound_list
-static void	rules_init_else_part_3(t_rule *rules)
+static void	rules_build_else_part_3(t_rule *rules)
 {
 	rules[RULE_ELSE_PART_3].lhs = SYM_else_part;
 	rules[RULE_ELSE_PART_3].rhs[0] = SYM_Else;

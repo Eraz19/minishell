@@ -1,21 +1,21 @@
 #include "parser.h"
 
-static void	rules_init_if_clause_1(t_rule *rules);
-static void	rules_init_if_clause_2(t_rule *rules);
+static void	rules_build_if_clause_1(t_rule *rules);
+static void	rules_build_if_clause_2(t_rule *rules);
 
 /*
 if_clause        : If compound_list Then compound_list else_part Fi
                  | If compound_list Then compound_list           Fi
                  ;
 */
-void	rules_init_if_clause(t_rule *rules)
+void	rules_build_if_clause(t_rule *rules)
 {
-	rules_init_if_clause_1(rules);
-	rules_init_if_clause_2(rules);
+	rules_build_if_clause_1(rules);
+	rules_build_if_clause_2(rules);
 }
 
 // if_clause -> If compound_list Then compound_list else_part Fi
-static void	rules_init_if_clause_1(t_rule *rules)
+static void	rules_build_if_clause_1(t_rule *rules)
 {
 	rules[RULE_IF_CLAUSE_1].lhs = SYM_if_clause;
 	rules[RULE_IF_CLAUSE_1].rhs[0] = SYM_If;
@@ -28,7 +28,7 @@ static void	rules_init_if_clause_1(t_rule *rules)
 }
 
 // if_clause -> If compound_list Then compound_list Fi
-static void	rules_init_if_clause_2(t_rule *rules)
+static void	rules_build_if_clause_2(t_rule *rules)
 {
 	rules[RULE_IF_CLAUSE_2].lhs = SYM_if_clause;
 	rules[RULE_IF_CLAUSE_2].rhs[0] = SYM_If;

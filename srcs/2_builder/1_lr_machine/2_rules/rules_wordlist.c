@@ -1,21 +1,21 @@
 #include "parser.h"
 
-static void	rules_init_wordlist_1(t_rule *rules);
-static void	rules_init_wordlist_2(t_rule *rules);
+static void	rules_build_wordlist_1(t_rule *rules);
+static void	rules_build_wordlist_2(t_rule *rules);
 
 /*
 wordlist         : wordlist WORD
                  |          WORD
                  ;
 */
-void	rules_init_wordlist(t_rule *rules)
+void	rules_build_wordlist(t_rule *rules)
 {
-	rules_init_wordlist_1(rules);
-	rules_init_wordlist_2(rules);
+	rules_build_wordlist_1(rules);
+	rules_build_wordlist_2(rules);
 }
 
 // wordlist -> wordlist WORD
-static void	rules_init_wordlist_1(t_rule *rules)
+static void	rules_build_wordlist_1(t_rule *rules)
 {
 	rules[RULE_WORDLIST_1].lhs = SYM_wordlist;
 	rules[RULE_WORDLIST_1].rhs[0] = SYM_wordlist;
@@ -24,7 +24,7 @@ static void	rules_init_wordlist_1(t_rule *rules)
 }
 
 // wordlist -> WORD
-static void	rules_init_wordlist_2(t_rule *rules)
+static void	rules_build_wordlist_2(t_rule *rules)
 {
 	rules[RULE_WORDLIST_2].lhs = SYM_wordlist;
 	rules[RULE_WORDLIST_2].rhs[0] = SYM_WORD;

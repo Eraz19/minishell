@@ -14,6 +14,8 @@
 		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/2_rules",
 		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/3_rule_state",
 		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/4_lr_state",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/5_build",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/5_transition",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/6_action",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/7_goto"
 	]
 }

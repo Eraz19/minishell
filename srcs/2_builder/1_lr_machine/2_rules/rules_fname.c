@@ -5,7 +5,7 @@
 fname            : NAME (apply rule 8)
                  ;
 */
-void	rules_init_fname(t_rule *rules)
+void	rules_build_fname(t_rule *rules)
 {
 	rules[RULE_FNAME_1].lhs = SYM_fname;
 	rules[RULE_FNAME_1].rhs[0] = SYM_NAME;

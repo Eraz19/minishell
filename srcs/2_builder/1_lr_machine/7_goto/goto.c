@@ -1,16 +1,13 @@
-#include "lr_machine_build.h"
-#include "lr_state.h"
+#include "parser.h"
 #include <limits.h>
+#include <stdlib.h>
 
-
-/*---------------- TODO ----------------*/
-
-bool	actions_build(t_lr_machine *machine)
+void	goto_init(size_t ***gotos)
 {
-	// TODO
+	*gotos = NULL;
 }
 
-bool	gotos_build(t_lr_machine *machine)
+bool	goto_build_table(t_lr_machine *machine)
 {
 	size_t			i;
 	t_transition	transition;
@@ -23,21 +20,35 @@ bool	gotos_build(t_lr_machine *machine)
 		symbol = transition.symbol;
 		if (symbol >= SYM_NON_TERMINAL_MIN)
 		{
-			
+			// TODO
 		}
 		i++;
 	}
 }
 
-bool	go_to(t_lr_machine *machine, size_t current_lr_state_id, t_symbol symbol, size_t *new_lr_state_id)
+bool	go_to(size_t **gotos, size_t current_lr_state_id, t_symbol symbol, size_t *new_lr_state_id)
 {
 	size_t	symbol_offset;
 	size_t	tmp_lr_state_id;
 
 	symbol_offset = symbol - SYM_NON_TERMINAL_MIN;
-	tmp_lr_state_id = machine->gotos[current_lr_state_id][symbol_offset];
+	tmp_lr_state_id = gotos[current_lr_state_id][symbol_offset];
 	if (tmp_lr_state_id == SIZE_T_MAX)
 		return (false);
 	*new_lr_state_id = tmp_lr_state_id;
 	return (true);
+}
+
+void	goto_free(size_t lr_states_count, size_t ***gotos)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < lr_states_count)
+	{
+		free((*gotos)[i]);
+		i++;
+	}
+	free(*gotos);
+	*gotos = NULL;
 }

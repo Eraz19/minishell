@@ -1,8 +1,8 @@
 #include "parser.h"
 
-static void	rules_init_case_clause_1(t_rule *rules);
-static void	rules_init_case_clause_2(t_rule *rules);
-static void	rules_init_case_clause_3(t_rule *rules);
+static void	rules_build_case_clause_1(t_rule *rules);
+static void	rules_build_case_clause_2(t_rule *rules);
+static void	rules_build_case_clause_3(t_rule *rules);
 
 /*
 case_clause      : Case WORD linebreak in linebreak case_list    Esac
@@ -10,15 +10,15 @@ case_clause      : Case WORD linebreak in linebreak case_list    Esac
                  | Case WORD linebreak in linebreak              Esac
                  ;
 */
-void	rules_init_case_clause(t_rule *rules)
+void	rules_build_case_clause(t_rule *rules)
 {
-	rules_init_case_clause_1(rules);
-	rules_init_case_clause_2(rules);
-	rules_init_case_clause_3(rules);
+	rules_build_case_clause_1(rules);
+	rules_build_case_clause_2(rules);
+	rules_build_case_clause_3(rules);
 }
 
 // case_clause -> Case WORD linebreak in linebreak case_list Esac
-static void	rules_init_case_clause_1(t_rule *rules)
+static void	rules_build_case_clause_1(t_rule *rules)
 {
 	rules[RULE_CASE_CLAUSE_1].lhs = SYM_case_clause;
 	rules[RULE_CASE_CLAUSE_1].rhs[0] = SYM_Case;
@@ -32,7 +32,7 @@ static void	rules_init_case_clause_1(t_rule *rules)
 }
 
 // case_clause -> Case WORD linebreak in linebreak case_list_ns Esac
-static void	rules_init_case_clause_2(t_rule *rules)
+static void	rules_build_case_clause_2(t_rule *rules)
 {
 	rules[RULE_CASE_CLAUSE_2].lhs = SYM_case_clause;
 	rules[RULE_CASE_CLAUSE_2].rhs[0] = SYM_Case;
@@ -46,7 +46,7 @@ static void	rules_init_case_clause_2(t_rule *rules)
 }
 
 // case_clause -> Case WORD linebreak in linebreak Esac
-static void	rules_init_case_clause_3(t_rule *rules)
+static void	rules_build_case_clause_3(t_rule *rules)
 {
 	rules[RULE_CASE_CLAUSE_3].lhs = SYM_case_clause;
 	rules[RULE_CASE_CLAUSE_3].rhs[0] = SYM_Case;

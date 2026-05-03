@@ -5,7 +5,7 @@
 filename         : WORD (apply rule 2)
                  ;
 */
-void	rules_init_filename(t_rule *rules)
+void	rules_build_filename(t_rule *rules)
 {
 	rules[RULE_FILENAME_1].lhs = SYM_filename;
 	rules[RULE_FILENAME_1].rhs[0] = SYM_WORD;

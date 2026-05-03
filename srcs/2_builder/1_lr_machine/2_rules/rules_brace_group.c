@@ -4,7 +4,7 @@
 brace_group      : Lbrace compound_list Rbrace
                  ;
 */
-void	rules_init_brace_group(t_rule *rules)
+void	rules_build_brace_group(t_rule *rules)
 {
 	rules[RULE_BRACE_GROUP_1].lhs = SYM_brace_group;
 	rules[RULE_BRACE_GROUP_1].rhs[0] = SYM_Lbrace;

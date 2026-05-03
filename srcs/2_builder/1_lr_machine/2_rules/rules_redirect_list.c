@@ -1,21 +1,21 @@
 #include "parser.h"
 
-static void	rules_init_redirect_list_1(t_rule *rules);
-static void	rules_init_redirect_list_2(t_rule *rules);
+static void	rules_build_redirect_list_1(t_rule *rules);
+static void	rules_build_redirect_list_2(t_rule *rules);
 
 /*
 redirect_list    :               io_redirect
                  | redirect_list io_redirect
                  ;
 */
-void	rules_init_redirect_list(t_rule *rules)
+void	rules_build_redirect_list(t_rule *rules)
 {
-	rules_init_redirect_list_1(rules);
-	rules_init_redirect_list_2(rules);
+	rules_build_redirect_list_1(rules);
+	rules_build_redirect_list_2(rules);
 }
 
 // redirect_list -> io_redirect
-static void	rules_init_redirect_list_1(t_rule *rules)
+static void	rules_build_redirect_list_1(t_rule *rules)
 {
 	rules[RULE_REDIRECT_LIST_1].lhs = SYM_redirect_list;
 	rules[RULE_REDIRECT_LIST_1].rhs[0] = SYM_io_redirect;
@@ -23,7 +23,7 @@ static void	rules_init_redirect_list_1(t_rule *rules)
 }
 
 // redirect_list -> redirect_list io_redirect
-static void	rules_init_redirect_list_2(t_rule *rules)
+static void	rules_build_redirect_list_2(t_rule *rules)
 {
 	rules[RULE_REDIRECT_LIST_2].lhs = SYM_redirect_list;
 	rules[RULE_REDIRECT_LIST_2].rhs[0] = SYM_redirect_list;

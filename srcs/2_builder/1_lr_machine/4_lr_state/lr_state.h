@@ -8,7 +8,9 @@
 /* ************************************************************************* */
 
 void	lr_state_init(t_lr_state *lr_state);
+void	lr_state_table_init(t_lr_state *lr_states);
 void	lr_state_free(t_lr_state *lr_state);
+void	lr_state_table_free(t_lr_state *lr_states);
 
 /* ************************************************************************* */
 /*                                  HELPERS                                  */

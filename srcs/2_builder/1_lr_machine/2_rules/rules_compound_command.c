@@ -1,9 +1,9 @@
 #include "parser.h"
 
-static void	rules_init_compound_command_1(t_rule *rules);
-static void	rules_init_compound_command_2(t_rule *rules);
-static void	rules_init_compound_command_3(t_rule *rules);
-static void	rules_init_compound_command_4(t_rule *rules);
+static void	rules_build_compound_command_1(t_rule *rules);
+static void	rules_build_compound_command_2(t_rule *rules);
+static void	rules_build_compound_command_3(t_rule *rules);
+static void	rules_build_compound_command_4(t_rule *rules);
 
 /*
 compound_command : brace_group
@@ -15,16 +15,16 @@ compound_command : brace_group
                  | until_clause
                  ;
 */
-void	rules_init_compound_command(t_rule *rules)
+void	rules_build_compound_command(t_rule *rules)
 {
-	rules_init_compound_command_1(rules);
-	rules_init_compound_command_2(rules);
-	rules_init_compound_command_3(rules);
-	rules_init_compound_command_4(rules);
+	rules_build_compound_command_1(rules);
+	rules_build_compound_command_2(rules);
+	rules_build_compound_command_3(rules);
+	rules_build_compound_command_4(rules);
 }
 
 // compound_command -> brace_group
-static void	rules_init_compound_command_1(t_rule *rules)
+static void	rules_build_compound_command_1(t_rule *rules)
 {
 	rules[RULE_COMPOUND_COMMAND_1].lhs = SYM_compound_command;
 	rules[RULE_COMPOUND_COMMAND_1].rhs[0] = SYM_brace_group;
@@ -32,7 +32,7 @@ static void	rules_init_compound_command_1(t_rule *rules)
 }
 
 // compound_command -> subshell
-static void	rules_init_compound_command_2(t_rule *rules)
+static void	rules_build_compound_command_2(t_rule *rules)
 {
 	rules[RULE_COMPOUND_COMMAND_2].lhs = SYM_compound_command;
 	rules[RULE_COMPOUND_COMMAND_2].rhs[0] = SYM_subshell;
@@ -41,7 +41,7 @@ static void	rules_init_compound_command_2(t_rule *rules)
 
 // compound_command -> for_clause
 // compound_command -> case_clause
-static void	rules_init_compound_command_3(t_rule *rules)
+static void	rules_build_compound_command_3(t_rule *rules)
 {
 	rules[RULE_COMPOUND_COMMAND_3].lhs = SYM_compound_command;
 	rules[RULE_COMPOUND_COMMAND_3].rhs[0] = SYM_for_clause;
@@ -54,7 +54,7 @@ static void	rules_init_compound_command_3(t_rule *rules)
 // compound_command -> if_clause
 // compound_command -> while_clause
 // compound_command -> until_clause
-static void	rules_init_compound_command_4(t_rule *rules)
+static void	rules_build_compound_command_4(t_rule *rules)
 {
 	rules[RULE_COMPOUND_COMMAND_5].lhs = SYM_compound_command;
 	rules[RULE_COMPOUND_COMMAND_5].rhs[0] = SYM_if_clause;
