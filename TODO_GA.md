@@ -1,8 +1,8 @@
 # TODO
 
-- Move `lr_stateS` helpers from `transition` module to `lr_state` module
-- Avoid passing `t_lr_machine` when unecessary
-- Implément `lr_machine`
+- Implément `gotos`
+- Implément `actions`
+- Implement `LR(1)` instead of `LR(0)`
 - Implement `parser hooks`
 ...
 

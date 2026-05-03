@@ -2,6 +2,9 @@
 # define GOTO_H
 
 # include "parser.h"
+# include <limits.h>
+
+# define GOTO_EMPTY	SIZE_T_MAX
 
 void	goto_init(size_t ***gotos);
 bool	goto_build_table(t_lr_machine *machine);

@@ -20,7 +20,7 @@ Then the `parser` will use them at ***runtime*** to build the `AST` by performin
 - ***reduce***: merge `symbols` together
 - eventually ***accept*** or ***reject*** the `input`
 
-> 💡 The following examples use a very simple grammar for pedagogical purpose.  
+> 💡 The following examples use a very simple grammar for pedagogical purposes.  
 > Examples show a `LR(0)` implementation, which can **NOT** resolve ***shift-reduce*** / ***reduce-reduce*** conflicts.  
 > The specificity of `LR(1)` parsers (`lookahead`) will be discussed in the last section to explain how these conflicts can be resolved.
 
