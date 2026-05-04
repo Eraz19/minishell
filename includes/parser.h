@@ -132,7 +132,6 @@ typedef enum e_symbol
 	SYM_error
 }	t_symbol;
 
-# define SYM_TERMINAL_MIN		SYM_TOKEN
 # define SYM_TERMINAL_MAX		SYM_EOF
 # define SYM_NON_TERMINAL_MIN	SYM_start
 # define SYM_NON_TERMINAL_MAX	SYM_error
@@ -345,8 +344,9 @@ typedef struct s_goto
 
 typedef struct s_lr_machine
 {
-	bool		nullable_symbols[SYM_COUNT];
 	t_rule		rules[RULE_COUNT];
+	bool		nullable_symbols[SYM_COUNT];
+	bool		first[SYM_COUNT][SYM_TERMINAL_MAX + 1];
 	t_vector	lr_states;
 	t_vector	transitions;
 	t_action	**actions;
