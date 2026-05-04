@@ -2,7 +2,13 @@
 
 bool	rule_state_equal(t_rule_state a, t_rule_state b)
 {
-	return (a.rule_id == b.rule_id && a.pos == b.pos);
+	if (a.rule_id != b.rule_id)
+		return (false);
+	if (a.pos != b.pos)
+		return (false);
+	if (a.lookahead != b.lookahead)
+		return (false);
+	return (true);
 }
 
 bool	rule_state_is_complete(t_rule *rules, t_rule_state rule_state)

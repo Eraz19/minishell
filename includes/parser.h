@@ -296,8 +296,9 @@ typedef enum e_rule_id
 
 typedef struct s_rule_state
 {
-	size_t	rule_id;
-	size_t	pos;
+	size_t		rule_id;
+	size_t		pos;
+	t_symbol	lookahead;
 }	t_rule_state;
 
 /* ************************************************************************* */
