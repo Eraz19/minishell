@@ -1,0 +1,1680 @@
+http://david.tribble.com/text/lrk_parsing.html
+ 
+Practical LR(k) Parser Construction
+By David R. Tribble
+Revision 1.0, 2004-12-12
+ 
+ 	
+In many of the more relaxed civilizations on the Outer Eastern Rim of the Galaxy, it has long supplanted the great Encyclopedia Galactica as the standard repository of all knowledge and wisdom, for though it has many omissions and contains much that is apochryphal, or a least wildly inaccurate, it scores over the older, more pedestrian work in two important respects. First, it is slightly cheaper, and secondly it has the words DON'T PANIC written in large friendly letters on the cover.
+
+-- from The Restaurant at the End of the Universe,
+the second book of the five-book trilogy
+The Hitchhiker's Guide to the Galaxy,
+by Douglas Adams, 1980
+
+LR(k) Parsing Theory
+Background
+The following is a simplified explanation of LR(k) bottom-up parsing theory. Some of the concepts and terminology are presented in simplified form so that it is more easily understood by novices. In particular, the academic approach of using arcane terminology and Greek symbols is not used here, but instead the topic is approached using a less formal but more English-like terminology and presentation. Consequently, some of the descriptions might not be purely accurate or correct when viewed from a formal academic perspective.
+Language parsing is generally divided into two categories: top-down parsing and bottom-up parsing. Top-down parsing generally refers to the parsing and recognition of LL(k) grammars, and such parsers are typically implemented using a technique known as recursive-descent parsing. This kind of parsing is only mentioned in passing, and is not covered in this discussion.
+
+Bottom-Up Parsing
+The theory behind bottom-up LR(k) parsers, also called shift-reduce parsers, was invented in 1965 by Donald Knuth (author of the famed The Art of Programming books). He devised the formal symbolic mathematics behind the operation of a deterministic finite automaton, or DFA, operating as a parsing machine that reads lexical symbols from a source sentence provided as its input, and proceeds to recognize productions comprising a particular grammar.
+
+In other words, a table-driven algorithm, known as an automaton (pronounced ah-TOM-e-tohn), can be produced for any given grammar (such as a computer programming language) which parses and recognizes valid sentences of the grammar.
+
+The term LR(k) means a parse using a Left-to-right scan with Right-most derivation requiring k symbols of look-ahead. (This will all be explained later.)
+
+Practically all computer languages are LR(1) grammars or simpler. LR(1) grammars require one look-ahead symbol as they are parsed. The most common programming languages are LALR(1) grammars, which are a proper subset of LR(1) grammars.
+
+Grammars
+A grammar is simply a set of symbols and rules that define a particular language. More precisely, the symbols and rules define valid sentences of the grammar. A particular sequences of symbols from the grammar form a sentence, and if that sequence obeys the rules of the grammar, that sentence is said to be a valid sentence with respect to the grammar.
+
+If a sequence of symbols from a grammar is fed into a machine that implements a parser for that grammar, the machine can determine whether or not the input symbols form a valid sentence of the grammar. If the sequence is valid, the parser accepts the input sentence without error, otherwise the parser may detect one or more syntax errors in the input sequence.
+
+For most of the discussion that follows, the following sample grammar will be used:
+
+Example 1 - A Simple Grammar
+Terminal Symbols
+t1. num
+t2. '('
+t3. ')'
+t4. '+'
+
+Rules
+r1. Expr :   Factor
+r2. Expr :   '(' Expr ')'
+r3. Factor : num
+r4. Factor : '+' Factor
+r5. Factor : Factor '+' num
+
+Nonterminal Symbols
+n1. Expr
+n2. Factor 
+This grammar is composed of four terminal symbols, two nonterminal symbols, and five production rules. The Expr symbol is the goal symbol for the grammar.
+
+Symbols
+A grammar is composed of one or more symbols, which define the various words and punctuation allowed by the grammar.
+
+The symbols of a grammar come in two flavors: terminal symbols and nonterminal symbols.
+
+Terminal symbols are the primitive words and punctuation defined by the grammar. They are used to construct sentences of the grammar. Sequences of symbols given as input to a parser are composed entirely of terminal symbols from the grammar. Terminal symbols are also called lexical tokens (which will be explained in more detail below).
+
+The grammar of Example 1 contains the following terminal symbols:
+
+Example 2A - Simple Grammar Terminal Symbols
+t1. num
+t2. '('
+t3. ')'
+t4. '+' 
+This is a very simple example - real programming languages typically have a few dozen terminal symbols, including punctuation symbols and reserved keyword symbols. The Java language, for instance, has about twenty or so keywords, such as 'if', 'public', 'boolean', 'this', and so forth.
+
+Nonterminal symbols are the symbols defined by the grammar rules themselves and are composed of sequences of zero or more terminal and nonterminal symbols. All of the nonterminal symbols in a grammar are defined by one or more rules, and occur as the left-hand-side (LHS) symbol of these rules. Nonterminal symbols do not comprise input to a parser but are only used internally by the parser to represent the progress of a parse.
+
+The grammar of Example 1 contains the following nonterminal symbols:
+
+Example 2B - Simple Grammar Nonterminal Symbols
+n1. Expr
+n2. Factor 
+Programmers never see or use these nonterminal symbols directly, but they are used internally by the parser. For example, whenever an Expr is recognized by the parser, the Expr nonterminal symbol is used to represent that recognition internally within the parser's state tables.
+
+Production Rules
+A grammar is also composed of rules (also known as syntax rules), which define how sequences of symbols can be strung together to form valid sentences.
+
+The grammar of Example 1 contains the following rules:
+
+Example 3 - Simple Grammar Rules
+r1. Expr :   Factor
+r2. Expr :   '(' Expr ')'
+r3. Factor : num
+r4. Factor : '+' Factor
+r5. Factor : Factor '+' num 
+These rules specify, for instance, the sequence of symbols that constitute an Expr, which is either a Factor or another Expr enclosed within '(' and ')' symbols. A Factor, in turn, is defined as being composed of three different forms of symbol sequences.
+
+The symbol on the left-hand side of a rule (to the left of the ':' mark) is called the left-hand side or LHS symbol. Similarly, the symbols that appear on the right-hand side of the rule (to the right of the ':' mark) are called the right-hand or RHS symbols. A LHS symbol is, by definition, always a nonterminal symbol. This is because the rules in which a particular symbol appears in the LHS define that symbol as a nonterminal symbol. Terminal symbols, in constrast, never appear as LHS symbols.
+
+As the rules for Expr and Factor above (rules r2, r4, and r5) illustrate, a given LHS symbol can appear as a RHS symbol in one or more of its own definitions. These are called a recursive production rules.
+
+Rule r5 above illustrates that the LHS symbol can occur as the left-most symbol in the RHS of a rule, which is known as a left-recursive production rule. Similarly, rule r4 illustrates that the LHS symbol can occur as the right-most symbol in a rule, which is known as a right-recursive production. Rule r2 is also recursive because the LHS symbol appears in the RHS, but the LHS symbol is neither the left-most nor the right-most RHS symbol, and this kind of recursion has no special name. LR(k) grammars can handle all of these forms of recursive rules.
+
+The only limitation on recursive productions for LR(k) grammars is that for a given rule in which the LHS symbol appears in the RHS, there must be more than one symbol in the RHS. This means that the following hypothetical rule is ill-formed:
+
+r8. Foo : Foo 
+Such a rule is meaningless, because it does not define any way of progressing from the start of the rule to the end, i.e., there is no way to recognize the RHS of this production rule and proceed with the parse. (In terms that will be defined later below, there is no way to make a transition or a reduction action in this rule.) Such a rule is called degenerate, and is considered erroneous.
+
+It is also possible for rules to be specified that have no RHS symbols at all. These are called empty (or epsilon) productions. For example:
+
+r10. List :            (empty)
+r11. List : '=' Items 
+These rules define the nonterminal symbol List as being composed of either nothing or of a '/' symbol followed by an Items symbol. Rule r10 is an empty production since it has no symbols in its right-hand side.
+
+Another type of production rule of special significance is a rule having only one RHS symbol. For example:
+
+r1. Expr : Factor 
+Such rules are called single productions, since they define a production with only a single RHS symbol.
+
+Lexical Analysis
+The parser reads streams of symbols and acts on them, recognizing grammatical constructs defined by the rules of the grammar. This is the fundamental operation of syntactic analysis.
+
+But programs are composed of simpler elements than symbols. Generally, a sequence of input symbols is fed into a parser as a stream of characters, usually stored in a simple text file.
+
+Lexical analysis is the process of reading an input character stream and separating and grouping the characters together into distinct lexical units. These lexical units (also known as lexemes) are the terminal symbols defined by the grammar.
+
+These symbols, also known as lexical tokens (or just tokens), are passed to the parser. The parser, in turn, performs syntactic analysis on the stream of input tokens.
+
+For example, consider the following stream of characters from a sample Java program. Each character is visually separated from the next to make them more obvious, and SP and NL represent space and newline characters, respectively.
+
+i f SP ( c h SP > = SP ' a ' ) NL r e t u r n SP - 1 ; NL
+These characters comprise the following Java lexical tokens:
+
+if        reserved keyword
+(         punctuation operator
+ch        identifier
+>=        punctuation operator
+'a'       character constant
+)         punctuation operator
+return    reserved keyword
+- - -         punctuation operator
+1         integer constant
+;         punctuation
+Deterministic Finite Automata (DFA) Parsers
+It was mentioned above that a parser for a grammar can be implemented as a deterministic finite automaton (DFA). An automaton is simply a machine embodying a set of states and which reads input symbols and acts on them.
+
+Simply stated, a finite automaton is a machine having a finite number of possible states, and a deterministic automaton is a machine that always progresses towards an end goal, consuming input as it goes. The automaton starts in a specific state (the initial state) and makes transitions from one state to another, depending on its current state and the next few input symbols. Which state it transitions to depends on the rules embodied by the machine, which are derived from the grammar rules and symbols. Thus a deterministic finite automaton (DFA) comprises a fixed number of states and transition rules for those states.
+
+(There also exist non-deterministic automatons (NFAs), which are different in that they may have transitions from one state to another without regard to the current input symbol, called epsilon transitions. These kinds of state machines are not discussed here.)
+
+Each transition from one state to the next depends on the transition rules established for that state and the particular input symbols that the parser sees as the next few input tokens. This is what is meant by the k in the term LR(k) parser - the next k input symbols are used as look-ahead symbols for each state, and these k symbols determine the next state to transition to. The L of LR(k) means that the input is scanned in left-to-right order, which simply means that the tokens are scanned by the parser in the same first-to-last order that they are read from the input source stream.
+
+Thus an LR(1) parser uses one symbol of look-ahead, which means that the parser keeps track of, or looks ahead at, one token read by the lexer at any point during a parse. An LR(2) parser uses two look-ahead symbols, and so forth for all useful values of k. Some languages (such as C++) have no finite number of look-ahead symbols and thus are not LR(k) grammars, but most programming languages are LR(1) grammars (or simpler, e.g., LALR(1)) and require at most only one token of look-ahead.
+
+In addition to states and transition rules, the DFAs used for parsing LR(k) grammars also make use of a symbol stack, which is a first-in / last-out (FILO) list of symbols. Initially, the stack is empty when the DFA starts in its initial state. As the parser consumes input symbols (tokens) and makes transitions from state to state, it pushes and pops symbols onto its stack. At any point during the parsing operation, the contents of the stack reflect the input symbols that have been consumed and recognized so far. Eventually, the parser consumes all of the input tokens, and the stack is empty, at which point the parser accepts the input sequence of tokens as a valid sentence.
+
+Parsing
+Let's look now at an actual example of how a bottom-up LR(k) parser works. Using the partial grammar shown in Example 3, it is fed an input stream composed of the following terminal symbols:
+
+( + num + num ) 
+The parse proceeds as follows, showing each step in the parsing process:
+
+
+Example 4A - Parsing Actions
+Step 	Input	Stack	Action	Rule
+0.	(	empty	shift (	
+1.	+	(	shift +	
+2.	num	( +	shift num	
+3.	+	( + num	reduce Factor	r3
+4.	+	( + Factor	reduce Factor	r4
+5.	+	( Factor	shift +	
+6.	num	( Factor +	shift num	
+7.	)	( Factor + num	reduce Factor	r5
+8.	)	( Factor	reduce Expr	r1
+9.	)	( Expr	shift )	
+10.	$end	( Expr )	reduce Expr	r2
+11.	$end	Expr	accept	r0
+
+(Note that $end is a special symbol denoting the end of the input stream.)
+
+These parsing steps and production rules trace out the following derivation tree (also called a parse tree):
+
+Example 4B - Parse Derivation Tree
+       Expr        (r0)
+        |
+    +---+----+
+    |   |    |
+    (  Expr  )     (r2)
+        |
+       Factor      (r1)
+        |
+ +------+---+
+ |      |   |
+Factor  +  num     (r5)
+ |
+ +---+
+ |   |
+ +  Factor         (r4)
+     |
+    num            (r3) 
+This diagram shows the derivation of each nonterminal symbol encountered in the parse of the input tokens. The terminal symbols are underlined, which graphically illustrates why they are called terminal symbols - they occur at the terminal leaf nodes of the derivation tree. Nonterminal symbols, in contrast, are always derived from zero or more other symbols and never appear as leaves in a derivation tree.
+
+Also note that the production rules appear in the reverse order that they occur during the parsing actions above.
+
+At this point in the discussion, the details about how the parser knows when to push a symbol and when to reduce a production rule have not been explained.
+
++INCOMPLETE
+
+Syntactic and Semantic Analysis
+A parser for a grammar parses an input stream of tokens (terminal symbols), attempting to recognize syntactic constructs defined by the grammar. Each time that it finds a sequence of symbols matching one of the grammar rules, it is said to recognize a production rule of the grammar.
+
+Each time that the parser recognizes a production rule, it may perform some kind of reduction action associated with the specific rule that it matches. An action can be something like adding a new identifier to the compiler's symbol table, setting an attribute of an identifier, generating intermediate code, issuing an error message, and so forth.
+
+Actions generally perform some kind of semantic analysis, which involves checking that the input stream of tokens makes sense. The very fact that the parser matches a portion of the input token stream to a particular production rule only means that the token sequence is syntactically well-formed. It takes more involved checking to determine if the token sequence makes sense at a higher, semantic level.
+
+To illustrate, consider the following sequence of Java tokens:
+
+size = table.length + "hello" - 2.0; 
+While this particular sequence of tokens is syntactically correct (forming a Java expression), it is semantically incorrect because the types of the operands do not match the operators. Things like data type, data length, access modifiers, identifier scope, etc., are all semantic concepts, and must be handled in the parser actions. The parser machine (DFA) deals only with syntactic elements and has no knowledge of such higher-level concepts.
+
++INCOMPLETE
+
+
+LR(k) Parser Construction
++INCOMPLETE, need into paragraphs
+
+Preliminary Concepts
+The construction of a parser for an LR(k) grammar involves generating transition tables for a DFA. Each row in the table represents a state within the DFA that implements the parsing machine for the grammar. These states are constructed from item sets, which are in turn derived from the grammar itself.
+
+Items
+The process of constructing parser states for a grammar involves the construction of item sets, which are simply sets of items. The item sets constructed from the rules of a grammar represent the states in a DFA state machine that recognizes that grammar.
+
+An item represents one of the steps in the recognition of a particular rule of a grammar. An item consists of the following components:
+
+          +-----+----+-- RHS symbols
+          |     |    |
+          |     |    |                +- action
+          :     :    :                :
+
+[Expr -> '(' . Expr ')',  '+']*  (Expr, i7)
+
+  :   :      :             :  :    :    :
+  |   |      |             |  |    |    |
+  |   |      +- marker     |  |    |    +- transition item set
+  |   |                    |  |    +- transition symbol
+  |   +- LHS/RHS separator |  +- kernel indicator
+  +- LHS symbol            +- look-ahead symbol 
+To illustrate the construction of items, consider the following grammar rule:
+
+r2. Expr : '(' Expr ')' 
+- - From this rule, the following LR(0) items can be constructed:
+
+Example 5A - LR(0) Items
+1 [Expr -> . '('   Expr   ')'  ]
+2 [Expr ->   '(' . Expr   ')'  ]
+3 [Expr ->   '('   Expr . ')'  ]
+4 [Expr ->   '('   Expr   ')' .] 
+The items resemble the rule from which they are constructed, with a few additions. The ':' has been replaced with an arrow '->', and a position marker (or simply marker), shown as a '.', has been inserted between symbols in the right hand side (RHS) of the rule.
+
+The marker for each item represents the progress of the parse, i.e., the RHS symbols that have been recognized by the parser up to that point. As shown in item 1, the marker initially is placed to the left of all of the symbols on the right hand side (RHS) of the rule (i.e., the symbols to the right of the arrow '->'), thus representing a point where none of the symbols have yet been recognized by the parse. Item 2 is the next progression, moving the marker to the right of the first symbol ('('), representing a point where the first symbol has been successfully recognized by the parse. Similarly, items 3 and 4 are the next stages in the recognition of the grammar rule by the parse, moving the marker over the next symbols in the RHS of the rule, left to right, one at a time.
+
+Item 4 places the marker to the right of all of the RHS symbols of the rule, representing a point where all of the symbols of the rule have been recognized, and thus that the entire rule has been recognized (matched) by the parser. When the parser reaches this particular point during a parse, it has successfully recognized the rule from which the item was generated (rule r2 in this case).
+
++MOVE THIS PARA
+
+At this point, the parser reduces the rule, replacing the symbols on the parser stack representing the three RHS symbols of the rule ('(', Expr, and ')') with the single LHS symbol of the rule (Expr). This is what reduce literally means - to reduce the number of items on the parser stack.
+
++MOVE THIS PARA
+
+When a reduce occurs, a reduction action can be performed for the rule as well. Such an action is usually a small block of code executed by the parser just before the RHS symbols are replaced by the LHS symbol. The code typically performs some kind of semantic action on the RHS symbols, accessing them from the parser's internal symbol stack.
+
+LR(1) items are constructed from grammar rules in a similar fashion to the way LR(0) are constructed, except that they also have one look-ahead symbol. For example:
+
+Example 5B - LR(1) Item
+[Expr -> '(' . Expr ')',  '+'] 
+The addition of the look-ahead symbol (i.e., the '+' symbol in the items above) represents the fact that at the point in the parse represented by an item, the current input symbol is expected to be that particular look-ahead symbol.
+
+Similarly, LR(2) items can be generated, each having two look-ahead symbols, as in:
+
+Example 5C - LR(2) Item
+[Expr -> '(' . Expr ')',  '+' num] 
+Thus an LR(k) item has k look-ahead symbols. The most common LR(k) parser implementations usually have k = 1, i.e., one look-ahead symbol, implementing LR(1) parsers.
+
+Item Sets
+As was stated above, the construction of parser states for a grammar involves first constructing LR(k) item sets from the grammar, and then converting these sets into parser states.
+
++INCOMPLETE
+
+First Sets
+In order to construct item sets for a grammar, it is necessary to generate all of the closure items for a given set (see below). The procedure for doing this requires knowing the first symbols for all of the nonterminal symbols in the grammar.
+
+Simply stated, the first set for a given nonterminal symbol is the set of terminal symbols that that nonterminal (LHS) symbol can begin with in all possible derivations within the grammar.
+
+For example, consider the nonterminal symbol Factor from the grammar in example 1 above. Examining the grammar rules makes it fairly obvious that the first terminal symbols that any derivation of Factor can possibly start with are the following terminals:
+
+num    from r3
+'+'    from r4 
+Similarly, the first symbol set for nonterminal Expr contains the symbol '(' (from rule r2) and all of the first symbols for nonterminal Factor as well (from rule r1). This gives the following set of terminal symbols:
+
+'('    from r2
+num    from Factor
+'+'    from Factor 
++INCOMPLETE
+
+First Set Generation Algorithm
+The look-ahead symbols for LR(k) items are generated from first sets generated from the symbols of the grammar. An LR(k) parser with k-symbol look-ahead requires firstk symbol sets. (First sets are explained in more detail below.)
+
+The following pseudo-code is an algorithm for constructing the first symbol sets for all of the nonterminals in an LR(1) grammar.
+
+// LR(1) First Set Generation Algorithm
+begin
+    // Initialize
+    step 1.
+    Add all of the nonterminals of the grammar to the nonterminals queue;
+
+    loop:
+    while queue is not empty,
+        Step 2.
+        Pop nonterminal X from the head of the queue;
+
+        Step 3.
+        // Compute a partial first(X) set for X
+        For rules with X as a LHS symbol, 'X : epsilon'
+        (i.e., rules for X with no RHS terminal symbols),
+            add epsilon to first(X);
+
+        Step 4.
+        For all rules with X as LHS symbols, of the form 'X : t B ...',
+        with terminal symbol t as the leftmost RHS symbol
+        (where t is not epsilon),
+            add symbol t to first(X);
+
+        Step 5.
+        For all rules with X as LHS symbol, of the form 'X : P B ...'
+        with nonterminal symbol P as the leftmost RHS symbol,
+        and where P is not X,
+            add to first(X) all terminal symbols other than epsilon
+            that are currently in first(P);
+
+        (first(P) may still be incomplete at this point.)
+
+        Step 6.
+        For all rules with X as LHS symbol, of the form 'X : P B ...',
+            if first(P) contains epsilon,
+                repeat steps (3) through (6) with nonterminal B
+                (which can be epsilon) in place of P.
+
+        Step 7.
+        If any terminals were added to first(X) in steps (3) through (6)
+        that were not already members of first(X),
+        or if first(X) is still empty,
+            append nonterminal X to the tail of the queue
+            (which causes it to undergo another iteration);
+        otherwise
+            first(X) is complete
+            (and nonterminal X is no longer in the queue);
+    end loop;
+end. 
+Note that this algorithm works even with nonterminals having mutually recursive first symbol sets.
+
+
+Closures
+Once the kernel items of an item set have been constructed, the next step is to construct the closure of the set.
+
++INCOMPLETE
+
+Take, for example, the first item constructed above in Example 5:
+
+Example 6A - Closure Generation
+  1 [Expr -> '(' . Expr ')', $end]* 
+The first group of closure items (which are not kernel items) to be generated from this item are:
+
+  First(Expr ')' $end) = { num, '+', '(' }
+
+  2 [Expr -> . Factor, num]
+  3 [Expr -> . Factor, '+']
+  4 [Expr -> . Factor, '('] 
+The next set of closure items are generated from item 2:
+
+  5 [Factor -> . num,            num]
+  6 [Factor -> . '+' Factor,     num]
+  7 [Factor -> . Factor '+' num, num] 
+The next set of closure items are generated from item 3:
+
+  8 [Factor -> . num,            '+']
+  9 [Factor -> . '+' Factor,     '+']
+ 10 [Factor -> . Factor '+' num, '+'] 
+The next set of closure items are generated from item 4:
+
+ 11 [Factor -> . num,            '(']
+ 12 [Factor -> . '+' Factor,     '(']
+ 13 [Factor -> . Factor '+' num, '('] 
+No closure items can be generated from items 5 or 6.
+
+At this point, the next closure item is generated from item 7, but it is already present in the item set, so it is not added again:
+
+  First('+' num num) = { '+' }
+
+  3' [Expr -> . Factor, '+'] 
+Likewise, no closure items can be generated from items 8, 9, 11, or 12.
+
+Items 10 and 13 generate the following closure items, but they too are already present in the item set:
+
+  First('+' num '+') = { '+' }
+
+  3' [Expr -> . Factor, '+']
+
+  First('+' num '(') = { '+' }
+
+  3' [Expr -> . Factor, '+'] 
+The resulting item set with all of its closure items, after rearranging the items for easier reading, looks like this:
+
+Example 6B - Generated Closure Items
+  1 [Expr   -> '(' . Expr ')',   $end]*
+  2 [Expr   -> . Factor,         num ]
+  3 [Expr   -> . Factor,         '+' ]
+  4 [Expr   -> . Factor,         '(' ]
+  5 [Factor -> . num,            num ]
+  8 [Factor -> . num,            '+' ]
+ 11 [Factor -> . num,            '(' ]
+  6 [Factor -> . '+' Factor,     num ]
+  9 [Factor -> . '+' Factor,     '+' ]
+ 12 [Factor -> . '+' Factor,     '(' ]
+  7 [Factor -> . Factor '+' num, num ]
+ 10 [Factor -> . Factor '+' num, '+' ]
+ 13 [Factor -> . Factor '+' num, '(' ] 
+Most of these items are redundant (which will be explained below) and will be eliminated from the set at a later point in the parser construction process.
+
++INCOMPLETE
+
+Transitions and Gotos
+Once the closure of an item set has been constructed, the next step is to generate transitions for the items of the set.
+
+A transition is the progression of the parsing operation that occurs when the parser recognizes the next input symbol and shifts (or pushes) it onto its internal symbol stack. The shifting action consumes the input symbol (i.e., the look-ahead symbol) and moves the parser from its current state into another state. The symbol being shifted governs which state the parser makes a transition to, based on rules of the grammar.
+
+When an item set (representing a parsing state) makes a transition to another item set, ...
+
++INCOMPLETE
+
+To illustrate, consider the following item set:
+
+Example 7A - Transition Item Generation
+i2.
+  1 [Expr -> Factor . '+' num,  '+']
+  2 [Expr -> Factor . '+' num,  ')'] 
+This item set was reached by shifting a Factor symbol, as indicated by the marker being positioned to the right of that symbol in each of the items in the set. Similarly, there are items sets reached from this set by shifting a '+' symbol. These items are part of a transition set which is generated from the set currently under consideration. In this newly generated item set, the marker is advanced over the '+' symbol to create the following new items:
+
+Example 7B - Generated Transition Item Set
+i6. goto('+') from i2
+  1 [Expr -> Factor '+' . num,  '+']
+  2 [Expr -> Factor '+' . num,  ')'] 
+Item 1 from set i2 above (item i2.1) generates the new item 1 in the new set i6 (item i6.1), and similarly, item i2.2 generates the new item i6.2. Both items are generated by shifting a '+' symbol, causing a transition from item set i2 to i6. A transition item inherits the same look-ahead symbol from the item that generates it. Thus item i6.1 has the same look-ahead symbol ('+') as item i2.1 from which it was generated, and the same relationship holds for items i6.2 and i2.2.
+
+The transitions (or gotos) from set i2 are marked accordingly, so that the set now looks like this:
+
+Example 7C - Transition Item Generation
+i2.
+  1 [Expr -> Factor . '+' num,  '+']  ('+', i6)
+  2 [Expr -> Factor . '+' num,  ')']  ('+', i6) 
+Sometimes in the course of generating a new transition item set T by shifting symbol s from set G, the new set T will have an identical set of items as another set P which has already been generated. When this happens, instead of creating a duplicate item set T, the transitions from items in set G that shift s are changed to make their transitions to set P instead of to T, and the duplicate set T is discarded.
+
+For example, consider another item set:
+
+Example 8A - Another Transition Generating Item Set
+i4.
+  1 [Expr   -> Factor . '+' num,  '+']  ('+', i9)
+  2 [Expr   -> Factor . '+' num,  ')']  ('+', i9)
+  3 [Factor -> . num,             '+']
+  4 [Factor -> . num,             ')'] 
+Items 1 and 2 of this set produce the following new transition set by shifting symbol '+':
+
+Example 8B - New Transition Item Set
+i9. goto('+') from i4
+  1 [Expr ->   Factor '+' . num,  '+']
+  2 [Expr ->   Factor '+' . num,  ')'] 
+But set i9 is identical to the previously generated set i6. That being the case, i9 is discarded and all of the transitions out of set i4 going to i9 are changed to go to i6 instead:
+
+Example 8C - Modified Transition Generating Item Set
+i4.
+  1 [Expr   -> Factor . '+' num,  '+']  ('+', i9 i6)
+  2 [Expr   -> Factor . '+' num,  ')']  ('+', i9 i6)
+  3 [Factor -> . num,             '+']
+  4 [Factor -> . num,             ')'] 
+Initial Item Set
+Recall that for a given grammar, there is always one goal symbol (also called the start symbol). For instance, in the grammar shown in Example 1, the goal symbol is Expr. All of the other nonterminal (LHS) symbols are derived from this symbol.
+
+For a given grammar, an augmented grammar is created from the goal symbol, which is made by adding a single new rule to the grammar:
+
+$accept : Goal 
+This rule defines a special nonterminal symbol $accept to represent the entire grammar. Once this symbol is recognized by the parser, an input sequence of tokens is recognized as being a valid sentence built from the entire grammar.
+
+- - From this augmented grammar rule, an initial item is constructed, which is the first item to be added to the initial item set (which is named i0):
+
+i0.
+  [$accept -> . Goal, $end]* 
+The initial item represents the progress of the parse at the very start of reading an stream of input symbols (tokens). The look-ahead symbol is the special symbol $end, which designates the end of the input stream. This means that the parser expects to see no more input tokens once the goal symbol has been recognized. The item is marked with a '*' to indicate that it is a kernel item, which is a special kind of item that is directly generated from a transition (which will be explained in more detail below).
+
+The initial item set (i0) is further constructed by adding all of the closure items to it. Closure items are generated from the items that already exist in the set which have their marker to the left of all of their RHS symbols. The initial kernel item that was generated from the augmented grammar is clearly this kind of item, so it is from it that the remaining closure items of the set are generated.
+
++INCOMPLETE
+
+Item Set Merging
+During the process of connstructing item sets for a grammar, transition item sets are generated (as discussed above). Recall that a transition item set is constructed by generating one or more new transition kernel items, by shifting the same symbol from one or more items in the generating set.
+
+As shown in Example 8 above, sometimes the resulting new transition set is identical to an item set that was already generated in a previous pass of the LR(k) item set construction algorithm. Item sets are identical if they contain the same kernel items. If this occurs, the algorithm discards the newly generated transition set and uses the previously existing set in its place.
+
+Sometimes the newly generated transition set is almost identical to another existing item set, but contains kernel items with different look-ahead symbols. Item set like this which are almost identical are candidates for merging.
+
+Two item sets can be merged if they have identical LR(0) item cores. The LR(0) core of an item is the item without its look-ahead symbol. (Such items are generated during the course of constructing item sets for an LR(0) parser for a given grammar, which is a parser that makes its state transitions without using any look-ahead symbols.)
+
+To illustrate, assume, as in Example 7, that the following item set has already been generated for a grammar:
+
+Example 9A - Generated Transition Item Set
+i6. goto('+') from i2
+  1 [Expr  -> Factor '+' . num,  $end]*
+  2 [Expr  -> Factor '+' . num,  '+' ]*
+  3 [Parms -> .,                 ',' ] 
+Also assume that other item set is generated during the course of constructing the item sets for the grammar:
+
+Example 9B - Another Generated Transition Item Set
+i11. goto('+') from i4
+  1 [Expr  -> Factor '+' . num,  '+']*
+  2 [Expr  -> Factor '+' . num,  ')']*
+  3 [Parms -> .,                 ','] 
+The newly generated transition set i11 is similar to, but not exactly the same, as the previously generated set i9. Since the sets are not identical, set i9 cannot simply be used in place of i11. However, the two item sets may be similar enough that they can be merged into a single set. This is determined by comparing their item cores, which are:
+
+Example 9B - Item Cores
+i6. cores:
+  [Expr  -> Factor '+' . num]*
+  [Parms -> .               ]
+
+i11. cores:
+  [Expr  -> Factor '+' . num]*
+  [Parms -> .               ]
+(Items having the same rule and marker position but with different look-ahead symbols have the same core, only one of which needs to be considered.)
+
+As can be seen above, item sets i6 and i11 have identical item cores.
+
+The second criteria for merging two item sets is that the result of merging them cannot result in any reduce/reduce conflicts. The reduction items in example sets i6 and i11 are identical and thus do not cause a conflict. Note that reduction items are not necessarily kernel items. They may be (non-kernel) closure items generated from the kernel items in the set if they are epsilon productions, i.e., if they have no RHS symbols. (A closure item has its marker positioned to the left of all of its RHS symbols, and if it has no RHS symbols, it will therefore be a reduction item.)
+
+By merging the two sets, all of the items in both sets are combined into a single set. For convenience, the items in the newer set (i11) are added to the older set (i6), resulting in the following combined item set:
+
+Example 9C - Merged Item Set
+i6. goto('+') from i2,i4
+  1 [Expr  -> Factor '+' . num,  $end]*
+  2 [Expr  -> Factor '+' . num,  '+' ]*
+  3 [Expr  -> Factor '+' . num,  ')' ]*
+  4 [Parms -> .,                 ',' ] 
+Note that some of the merged items from the new set are exactly the same as items in the old set, so they are simply discarded (instead of being added as duplicate items).
+
+Note also that the resulting merged set has been labeled as being a transition from both set i2 and set i4, since set i2 generated i6 and set i4 generated i9. This means that the items in set i4 that formerly transitioned to i9 have to be updated to transition instead to i6 (in the same way that was done in Example 8C above):
+
+Example 9C - Modified Transition Generating Item Set
+i4.
+  1 [Expr -> Factor . '+' num,  '+']  ('+', i9 i6)
+  2 [Expr -> Factor . '+' num,  ')']  ('+', i9 i6)
+  ... 
+It must be noted that when comparing the cores of two item sets, it is necessary to compare only the cores of kernel items, and non-kernel items can be safely ignored. This is sufficient because all of the non-kernel items were closure items generated from the kernel items, and thus do not provide any unique information about the item set that could not already be determined from the kernel items alone.
+
+In other words, if one or more kernel items in an old set have the same core as one or more kernel items in another new set, then the closure items generated from these kernel items will all have the same cores as well. This is because the set of generated closure items generated from the kernel items will be identical, except that they may have different look-ahead symbols, but the look-ahead symbols are ignored when comparing item cores so the closure item cores in boths sets are, by definition, identical.
+
+So when two item sets are compared because they may be possible candidates for merging, it is necessary and sufficient to compare the cores of just their kernel items. This simple optimization can speed up the merging algorithm by an order of magnitude or so.
+
+Consider, for example, the following item set, which contains one kernel item and several non-kernel closure items:
+
+Example 10A - Item Set
+  1 [Expr   -> '(' . Expr ')',    $end]*
+  2 [Expr   -> . Factor,          num ]
+  3 [Expr   -> . Factor,          '+' ]
+  4 [Expr   -> . Factor,          '(' ]
+  5 [Factor -> . num,             num ]
+  6 [Factor -> . num,             '+' ]
+  7 [Factor -> . num,             '(' ]
+  8 [Factor -> . '+' Factor,      num ]
+  9 [Factor -> . '+' Factor,      '+' ]
+ 10 [Factor -> . '+' Factor,      '(' ]
+ 11 [Factor -> . Factor '+' num,  num ]
+ 12 [Factor -> . Factor '+' num,  '+' ]
+ 13 [Factor -> . Factor '+' num,  '(' ] 
+The non-kernel closure items of this set can be ignored for the purposes of examining the kernel item core of the set, which is simply:
+
+Example 10B - Item Set Kernel Core
+  1 [Expr -> '(' . Expr ')']* 
+Impossible Item Set Merges
+There are situations in which two item sets have identical kernel item cores but still cannot be merged, because merging items from both sets would produce reduce/reduce conflicts. This occurs in grammars that are LR(k) but which are not simpler, i.e., grammars that are not SLR(0), LALR(k), or LR(0).
+
+Consider the hypothetical grammar:
+
+Example 11A - A Simple LR(1) Grammar
+r1. S : a A d
+r2. S : a B e
+r3. S : b A e
+r4. S : b B d
+r5. A : c
+r6. B : c 
+In the process of constructing item sets for this grammar, the following two sets are generated:
+
+Example 11B - LR(1) Item Sets
+i8.
+  [A -> c .,  d]*  (d, r5)
+  [B -> c .,  e]*  (e, r6)
+
+i9.
+  [A -> c .,  e]*  (e, r5)
+  [B -> c .,  d]*  (d, r6) 
+These two item sets have identical kernel item cores, which are:
+
+Example 11C - LR(1) Kernel Item Cores
+i8. cores:
+  [A -> c .]*
+  [B -> c .]*
+
+i9. cores:
+  [A -> c .]*
+  [B -> c .]* 
+However, merging these two sets would result in the following combined set:
+
+Example 11D - Merged LR(1) Item Sets
+i8.
+  [A -> c .,  d]*  (d, r5)
+  [A -> c .,  e]*  (e, r5)
+  [B -> c .,  e]*  (e, r6)
+  [B -> c .,  d]*  (d, r6) 
+This item set causes a reduce/reduce conflict when it is converted into a parser state, because a reduction by rule 5 is called for on a look-ahead symbol of d and e in the first two items, but a reduction by rule 6 is called for on the same look-ahead symbols in the last two items. Therefore, these two item sets cannot be safely merged and still produce a usable LR(1) parser state.
+
+A detailed look at the grammar reveals that this occurs when an A or B symbol has been recognized in any of the first four rules, and with a d or e as the next look-ahead symbol. An LALR(1) parser does not carry along enough information about how it arrived at the merged state i8+i9, so it cannot decide whether to reduce an A or a B LHS symbol. A canonical LR(1) parser, on the other hand, carries along enough information because it will enter either state i8 or i9 depending on the previous input symbols, and can therefore safely decide whether to reduce an A or a B.
+
+When the merging algorithm encounters this kind of situation, it chooses not the merge the two states, but to leave them separate and unchanged. When this situation occurs, it is an indication that the grammar is full-blown LR(1), because two or more states could not be combined, as would be the case if the grammar was LALR(1) or simpler.
+
+This also means that the number of LR(1) parser states for this grammar is greater than the number of states that would be produced for an LALR(1) parser for the grammar (assuming that this could be done). In this particular example, there is exactly one more state generated for the LR(1) parser than would be generated for an LALR(1) parser.
+
+Another observation to be made about merging item sets is the case in which the existing old set has been marked as complete, i.e., transition (goto) sets have already been generated for the shift items in the set. In this situation, it is not necessary to merge in all of the items from the new set into the old, but only the kernel and reduction items. This is true because all of the remaining items from the new set are non-kernel shift (closure) items that do not add any useful information to the merged set. Reduction items always need to be added to the merged set because they are used to convert the item set into a parser state. Kernel items always need to be added as well because they may be used at a later time when comparing the kernel LR(0) item cores to determine if the set can be merged with yet another new set.
+
+On the other hand, if the old item set has not been marked as complete yet, all of the items from the new set must be merged into it, including all closure (non-kernel shift) items. This is necessary because when it comes time to generate transition sets from the items in the merged set, all of the closure items must be present within the set in order to properly generate the kernels of the newly generated transition sets, especially if any of the kernels are reduction items (i.e., epsilon production items).
+
+Item Set Compression
+LR(k) item sets generally contain a lot of redundant items, which are items that do not contribute any additional information about the set that is not already contributed by other items in the set.
+
++INCOMPLETE
+
+Reduction items are never redundant because they and their look-ahead symbols are used to determine whether or not to reduce on that symbol when converting the item set into a parser state.
+
+Kernel items are not considered redundant.
+
+For a group of items having the same rule and marker position, and differing only by their look-ahead symbols, all but one of the items is redundant. Thus all but one of the items can be eliminated from the set without removing any useful information from the set. The one item of the group that is not removed is chosen arbitrarily.
+
++INCOMPLETE
+
+Example XX? - Redundant Items
+  1 [Expr   -> '(' . Expr ')',   $end]*  (Expr,   -)
+  2 [Expr   -> . Factor,         num ]   (Factor, -)
+  3 [Expr   -> . Factor,         '+' ]   (Factor, -)  R
+  4 [Expr   -> . Factor,         '(' ]   (Factor, -)  R
+  5 [Factor -> . num,            num ]   (num,    -)
+  6 [Factor -> . num,            '+' ]   (num,    -)  R
+  7 [Factor -> . num,            '(' ]   (num,    -)  R
+  8 [Factor -> . '+' Factor,     num ]   ('+',    -)
+  9 [Factor -> . '+' Factor,     '+' ]   ('+',    -)  R
+ 10 [Factor -> . '+' Factor,     '(' ]   ('+',    -)  R
+ 11 [Factor -> . Factor '+' num, num ]   (Factor, -)  R
+ 12 [Factor -> . Factor '+' num, '+' ]   (Factor, -)  R
+ 13 [Factor -> . Factor '+' num, '(' ]   (Factor, -)  R 
+Items marked with an R are redundant, and can be removed from the item set without affecting subsequent merge operations. The resulting set after redundant item elimination look like this:
+
+Example XX? - Redundant Items Eliminated
+  1 [Expr   -> '(' . Expr ')',   $end]*  (Expr,   -)
+  2 [Expr   -> . Factor,         #   ]   (Factor, -)
+  5 [Factor -> . num,            #   ]   (num,    -)
+  8 [Factor -> . '+' Factor,     #   ]   ('+',    -) 
+The non-redundant shift items that have not been eliminated have their look-ahead symbols replaced with a '#' mark to indicate that they are no longer needed at this point in the parser construction process. (They are still needed in the reduction items, however.)
+
++INCOMPLETE
+
+It is important to note that redundant items can only be removed from item sets that have been marked as completed. Removing redundant items from an incomplete item set destroys useful information about the set that is required for later merging operations.
+
+For example, ...
+
++INCOMPLETE
+
+Extra Whatever??
++MOVE
+Each terminal symbol has a precedence associated with it, which is its rank relative to the other terminal symbols, and is used to resolve any syntactic conflicts in the grammar. In YACC/M syntax, the tokens defined first have the highest precedence, and those defined last have the lowest.
+
++MOVE
+Note that multiple rules having the same LHS symbol can be combined into a single definition, but this is not required. The first two production rules could just have easily been defined like this:
+
+Expr
+    : Factor
+    | '(' Expr ')'
+    ; 
+which is equivalent to defining two separate rules:
+Expr : Factor ;
+Expr : '(' Expr ')' ; 
+Note also that whitespace characters (spaces and tabs) and newlines are mostly irrelevant, and only serve to separate the characters of each symbol and punctuation mark. These should be used to make the grammar definition easier for humans to read.
+
++INCOMPLETE
+
+
+Merged LR(k) Item Set Generation
+The Honalee Algorithm
+The Honalee algorithm produces all of the item sets for an LR(k) grammar, starting with an initial item set containing an item representing an augmented grammar production. The resulting item sets are then converted into states for a deterministic finite state automaton (DFA) that implements a bottom-up shift-reduce LR(k) parser for the grammar. All grammars that are SLR, LALR(k), or LR(k) are handled by the algorithm.
+
+This algorithm differs from the classical LR(k) parser generation algorithm by Knuth. Rather than producing the entire set of canonical LR(k) states (which would number in the hundreds or even thousands for typical programming language grammars), the algorithm merges similar LR(k) states, resulting in a much smaller total number of states (typically by an order of magnitude or so). The algorithm performs the merging as it goes, producing the same collection of states that would result if the entire canonical LR(k) item sets were generated and then a final pass was made to merge all similar states. This "merge as you go" approach uses much less memory than the canonical algorithm, and is also much faster.
+
+The algorithm also differs from the classical LALR(k) parser generation algorithm by Aho and Ullman, because it is not limited to LALR(k) grammars but is capable of handling the complete universe of LR(k) grammars. Rather than synthesizing the look-ahead symbols for a given item, each item and its specific look-ahead symbol are processed together, providing the same capabilities of a canonical LR(k) parser generator.
+
+If the given grammar is LALR(k), the total number of states resulting from the Honalee algorithm is exactly the same number as those resulting from the classical LALR(k) algorithm. If the grammar is LR(k) but not LALR(k), the total number of states is slightly more than the number of pure LALR(k) states, differing by exactly the number of states that cannot be merged, which make the grammar more complex than LALR(k).
+
+
+The following pseudo-code is the Honalee Algorithm for constructing item sets for an LR(k) grammar.
+
+// The Honalee Algorithm - LR(k) Item Set Construction (summarized)
+toDoList = empty;
+doneList = empty;
+incList =  empty;
+comeFrom = null;
+
+create initial item set i0;
+append i0 to end of toDoList;
+
+mainLoop:
+while (toDoList not empty) or (incList not empty),
+    phase1:
+    while toDoList not empty,
+        set = pop next (incomplete) set from toDoList;
+
+        generate all closure items for set;
+        mark all reduce actions in set;
+
+        if set can be merged with existing gSet in doneList,
+            merge set into gSet;
+            change all goto(T,set) transitions in comeFrom
+                to goto(T,gSet);
+        else
+            append (still incomplete) set to incList;
+    end phase1;
+
+    phase2:
+    comeFrom = null;
+    if incList not empty,
+        set = first (incomplete) set in incList;
+        incList++;
+
+        transitionLoop:
+        for each item in set,
+            if item.action is not set,
+                S = shifted symbol S in [A -> B . S C, t];
+                newSet = create new transition item set;
+
+                for each shItem in set,
+                    if shItem shifts S in [X -> H . S J, u],
+                        k = create new kernel item, [X -> H S . J, u]*;
+                        add k to newSet;
+                        shItem.action = goto(S,newSet);
+                end for;
+
+                append newSet to toDoList;
+                comeFrom = set;
+            end if;
+        end for;
+
+        set.complete = true;
+        append (completed) set to doneList;
+    end if;
+end mainLoop; 
++INCOMPLETE
+
+// The Honalee Algorithm - LR(k) Item Set Construction
+
+// Initialize
+doneList = empty;
+incList =  empty;
+toDoList = empty;
+comeFrom = null;
+nStates =  0;
+
+// Create the initial item set (i0)
+set = create initial item set i0;
+set.complete = false;
+item = create kernel item from augmented grammar production,
+    [$accept -> . Goal, $end]* ;
+add item to set;
+append set i0 to end of toDoList;
+
+// Main loop
+// Generate all item sets for the grammar from the initial set
+mainLoop:
+while (toDoList not empty) or (incList not empty),
+    // Phase 1
+    // Process item sets on the to-do list, merging them with existing
+    //  sets or moving them to the incomplete list
+    phase1:
+    while toDoList not empty,
+        set = pop next (incomplete) set from toDoList;
+
+        generate all closure items for set;                [Note A]
+        mark all reduce actions in the set;                [Note B]
+
+        // Attempt to merge the new item set with an existing set
+        mergeLoop:
+        for each gSet in doneList,                         [Note I]
+            if set and gSet can be merged,                 [Note C]
+            (set and gSet have identical kernel item cores and
+            there are no reduce/reduce conflicts between them),
+                merge set into gSet,                       [Note D]
+                if gSet.complete,
+                    only kernel and reduce items from set need to be
+                    merged into gSet;
+                else
+                    all non-duplicate items from set need to be
+                    merged into gSet;                            
+                (optional) set any shift/goto actions on symbol s
+                to the same gotos existing in gSet items;
+
+                // Fix previous transitions to the merged set
+                for each shItem in comeFrom,               [Note F]
+                    if shItem.action is goto(T, set),
+                        shItem.action = goto(T, gSet);
+                end for;
+
+                // Discard the new set, replace with merged gSet
+                set = null;
+                break mergeLoop;
+            else
+                mark the grammar as not LALR;              [Note E]
+            end if;
+        end for;
+
+        // Move the new (still incomplete) set to the incomplete list
+        if set not null (was not merged or a duplicate),
+            set.stateNumber = nStates++;
+            append set to end of doneList;                 [Note I]
+            if incList is empty,
+                incList = set;
+        end if;
+    end phase1;
+
+    // Phase 2
+    // Process the next incomplete item set in the done list
+    comeFrom = null;
+    if incList not empty,
+        set = first (incomplete) set in incList;
+
+        // Generate new transition sets for all shift items in set
+        transitionLoop:
+        for each item in set,
+            if item.action not null,
+                skip item, continue transitionLoop;
+
+            // Create a new transition item set
+            S = marked symbol S in item, [A -> B . S C, t];
+            newSet = create new item set;
+            newSet.complete = false;
+
+            // Create new transition items for all items shifting S
+            for each shItem in set,
+                if marked symbol in shItem is S, [X -> H . S J, u],
+                    k = create new kernel item, [X -> H S . J, u]*;
+                    add k to newSet;
+                    shItem.action = goto(S, newSet);
+                end if;
+            end for;
+                                                       [Note G]
+            // Add the new transition set to the to-do list
+            append newSet to end of toDoList;
+            comeFrom = set;
+        end transitionLoop;
+
+        // Add the (completed) set to the done list
+        set.complete = true;
+        compress set;                                  [Note H]
+        incList = set.next;
+    end if;
+end mainLoop; 
+
+After the algorithm completes, the done list contains all of the item sets generated for the grammar. These item sets can then be transformed into states for the DFA parser engine. This algorithm works for any LR(k) grammar, for any k, i.e., it works for any fixed size set of look-ahead symbols.
+
+Note A.
+Closure items are generated for a given set initially from the kernel items, and then from any newly generated closure items themselves, repeatedly until no more (non-duplicate) closure items can be added to the item set.
+
+Note B.
+All reduction items are marked by setting their actions to the appropriate grammar reduce rule and look-ahead symbol. Doing this insures that any possible reduce/reduce conflicts will be detected when attempting to merge the item set with another existing (complete) item set.
+
+Note C.
+Two item sets can be merged if they have the same item cores. Since all of the items in a set are generated from its kernel items, this means that two sets have the same item cores if they have the same kernel item cores; this implies that it is not necessary to compare all of the items in each of the sets, but only the cores of the kernel items.
+Note that if two item sets have identical kernel items (not just the same kernel item cores), then they are identical sets and thus one of them is completely redundant, i.e., a duplicate of the other. In this case the merging operation effectively replaces one set entirely with the other. (See also Note G below.)
+
+
+Note D.
+Merging an item set into an existing item set involves moving all of the items from the new set into the existing set, discarding any duplicate items. Reduction items will already have their actions set, but shift items from the new set must have their actions set to be the same as corresponding shift items in the existing set which shift the same symbol.
+If the existing set has been marked as complete, only kernel and reduction items from the new set need to be merged into the existing set.
+
+It is possible that a new item set will be merged into an incomplete existing item set, in which case none of the shift items will have their actions established yet. Eventually, when the merged item set is processed in Phase 2, it will have the actions of all of its shift items established.
+
+
+Note E.
+When a new item set has the same kernel item cores as an existing set but merging the two sets would result in a reduce/reduce conflict, then the two item sets are not LALR(k) sets but are LR(k) sets, and the grammar is not LALR(k) but is LR(k).
+
+Note F.
+After merging a new transition item set with an existing set, the shift (goto) actions that transitioned from the previously completed set must be changed to transition instead to the merged set. Once this is done, the new transition item set can be discarded, and the merged set is used in its place.
+
+Note G.
+At this point, an earlier version of this algorithm looked for an existing item set in the done list having the same kernel items as the newly generated transition set; if such a set was found, the transition set was discarded and the transitions (gotos) from the generating set were fixed to transition to the existing set.
+This step is not necessary, however, because an attempt to merge the newly generated item set will eventually be made in phase 1, at which point any existing set having the same kernel items will be found and the two sets will be merged; the found set is the same duplicate set that would have been found by the earlier algorithm. (See also Note C above.)
+
+
+Note H.
+After an item set is complete (i.e., after all of its reduction items have been marked and all of its shift items have gotos assigned to them), it can be compressed, which removes redundant items from it. An item set cannot be compressed until after all transition sets (gotos) have been generated from its shift items (even if they are redundant). Redundant items are those that do not contribute any useful distinguishing information about the item set that is not already known from other items in the set.
+Briefly, items which are needed to determine whether an item set can be merged with (or is identical to) another item set are the items that are not redundant; items that generate unique transition kernel items are also not redundant; all other items can be safely removed from the set without affecting the item set generation algorithm. The result is more efficient use of memory space and faster item set comparisons during phase 1.
+
+An item set does not need to be compressed after it has been merged with another set, because no new redundant items are added during merging.
+
+
+Note I.
+Once an item set can be moved from the to-do list to the incomplete/done list, it is a permanent set of the grammar. The algorithm spends the majority of its time in the mergeLoop searching for an existing item set that can be merged with a newly created transition item set. To speed things up, the permanent item sets can be kept in a hash table, where each hash table entry is a list of item sets having the same hash value, which in turn is computed from their kernel LR(0) item cores. Each list contains all of the sets with identical kernel cores (as well as other sets that happen to have the same hash value), which is much quicker to search for a merging set than the entire done list.
+Note that shift/reduce and reduce/reduce conflicts are not detected or resolved while the algorithm runs, since this is done during the next phase that transforms item sets into parser states.
+
+
+Example
+To illustrate, consider the following sample grammar:
+
+Example 1 - A Simple Grammar
+r1. Expr   : Factor
+r2. Expr   : '(' Expr ')'
+r3. Factor : num
+r4. Factor : '+' Factor
+r5. Factor : Factor '+' num 
+An augmented production rule is created for this grammar:
+
+r0. $accept : Expr 
+- - From this augmented grammar rule, the initial item set is constructed with a single kernel item representing the augmented grammar rule:
+
+i0. initial item set
+  1 [$accept -> . Expr, $end]* 
+This item set is added to the to-do list, and the main loop is started.
+
+In phase 1 of the main loop, the first item set is popped off the front of the to-do list, which is the initial item set i0 just created. Closure items are then generated for the set.
+
+The first group of closure items are generated from kernel item 1:
+
+  First($epsilon $end) = { $end }
+
+  2 [Expr -> . Factor,       $end]
+  3 [Expr -> . '(' Expr ')', $end] 
+Item 2 generates the following closure items:
+
+  First($epsilon $end) = { $end }
+
+  4 [Factor -> . num,            $end]
+  5 [Factor -> . '+' Factor,     $end]
+  6 [Factor -> . Factor '+' num, $end] 
+Item 6 generates the following closure items:
+
+  First('+' $end) = { '+' }
+
+  7 [Factor -> . num,            '+']
+  8 [Factor -> . '+' Factor,     '+']
+  9 [Factor -> . Factor '+' num, '+'] 
+Item 9 generates the following closure items:
+
+  First('+' '+') = { '+' }
+
+  10 [Factor -> . num,            '+']
+  11 [Factor -> . '+' Factor,     '+']
+  12 [Factor -> . Factor '+' num, '+'] 
+These closure items are identical to items 7, 8, and 9, which are already present in the set, so they are not added to the set.
+
+At this point, all of the closure items have been generated and added to the initial item set, which now looks like this:
+
+i0. initial item set
+  1 [$accept -> . Expr,           $end]*
+  2 [Expr    -> . Factor,         $end]
+  3 [Expr    -> . '(' Expr ')',   $end]
+  4 [Factor  -> . num,            $end]
+  7 [Factor  -> . num,            '+' ]
+  5 [Factor  -> . '+' Factor,     $end]
+  8 [Factor  -> . '+' Factor,     '+' ]
+  6 [Factor  -> . Factor '+' num, $end]
+  9 [Factor  -> . Factor '+' num, '+' ] 
+The next step in phase 1 is to mark all of the reduction items in the set. Set i0 has no reduction items, so nothing is done.
+
+The next step in phase 1 is to compare the item set with all of the existing item sets in the done list, looking for a set that can be merged with the current set. The done list is currently empty, so there are no other items sets that could be merged with the current one.
+
+The final step of phase 1 is to move the current item set to the end of the done list. Since the done list is empty, the initial item set i0 becomes the first item set in the done list, and it also becomes the first incomplete item set in the list.
+
+Phase 2 now begins, which examines the first incomplete item set in the done list, which is the initial item set i0 that was just put into the list. Transition item sets are now generated for all of the shift items in the set. Since there are no reduction items in the set, all of the items are shift items and they all generate transition sets.
+
+Item 1 shifts symbol Expr, so a new transition item set i1 is created.
+
+  1  [$accept -> . Expr, $end]*  (Expr, i1)
+All of the items in set i0 that shift symbol Expr are marked, which in this case is just item 1. New kernel items are generated in the new transition set:
+
+i1. goto(Expr) from i0
+  1 [$accept -> Expr ., $end]* 
+This new item set (i1) is then moved to the end of the to-do list.
+
+The same process of creating transition item sets and kernel items is performed for all of the items in the current set. All of the new transition item sets that are generated from item set i0 are:
+
+i1. goto(Expr) from i0
+  1 [$accept -> Expr .,           $end]*
+
+i2. goto(Factor) from i0
+  1 [Expr    -> Factor .,         $end]*
+  2 [Factor  -> Factor . '+' num, $end]*
+  3 [Factor  -> Factor . '+' num, '+' ]*
+
+i3. goto('(') from i0
+  1 [Expr    -> '(' . Expr ')',   $end]*
+
+i4. goto(num) from i0
+  4 [Factor  -> num .,            $end]*
+  7 [Factor  -> num .,            '+' ]*
+
+i5. goto('+') from i0
+  5 [Factor  -> '+' . Factor,     $end]*
+  8 [Factor  -> '+' . Factor,     '+' ]* 
+All of these new incomplete transition sets are appended to the to-do list, which now contains these item sets:
+
+to-do list:
+  i1 i2 i3 i4 i5 
+Item set i0 now has all of its reduction and shift actions filled in, and is marked complete:
+
+Completed Item Set - i0
+i0. initial item set
+  1 [$accept -> . Expr,           $end]*  (Expr,   i1)
+  2 [Expr    -> . Factor,         $end]   (Factor, i2)
+  3 [Expr    -> . '(' Expr ')',   $end]   ('(',    i3)
+  4 [Factor  -> . num,            $end]   (num,    i4)
+  7 [Factor  -> . num,            '+' ]   (num,    i4)
+  5 [Factor  -> . '+' Factor,     $end]   ('+',    i5)
+  8 [Factor  -> . '+' Factor,     '+' ]   ('+',    i5)
+  6 [Factor  -> . Factor '+' num, $end]   (Factor, i2)
+  9 [Factor  -> . Factor '+' num, '+' ]   (Factor, i2) 
+Phase 2 of the first iteration of the main loop is complete, and the next iteration begins. The main loop repeats as long as there are transition item sets in the to-do list or there are incomplete sets in the done list.
+
+The Phase 1 processing of item sets i1, i2, i3, i4, and i5 result in these sets, still incomplete, being moved to the done list, which now contains these item sets (completed item sets are marked with a 'c' subscript):
+
+done list:
+  i0c i1 i2 i3 i4 i5 
+Phase 2 of the algorithm picks up the next incomplete item set from the done list, which is i1:
+
+i1. goto(Expr) from i0
+  [$accept -> Expr ., $end]*  ($end, r0/accept) 
+Note that the only item in i1 is a reduction item, which Phase 1 marked with the appropriate reduce action (rule r0, which is $accept). No new transition sets can be generated from this set because it does not contain any shift items.
+
+
++INCOMPLETE
+
++REDO
+The processing of every item set is not shown, but there are two item sets that should be noted: item sets i??? and i???.
+
+Picking up the action in phase 2 of the loop that pops i3 from the done list, this item set looks like this:
+
+i3. goto('(') from i0
+  1 [Expr    -> '(' . Expr ')',   $end]*
+  2 [Expr    -> . Factor,         ')' ]  <<
+  3 [Expr    -> . '(' Expr ')',   ')' ]
+  4 [Factor  -> . num,            ')' ]
+  5 [Factor  -> . num,            '+' ]
+  6 [Factor  -> . '+' Factor,     ')' ]
+  7 [Factor  -> . '+' Factor,     '+' ]
+  8 [Factor  -> . Factor '+' num, ')' ]  <<
+  9 [Factor  -> . Factor '+' num, '+' ]  << 
+A new transition item set is generated from items 2, 8, and 9:
+
+  2 [Expr    -> . Factor,         ')' ]  (Factor, i8)
+  8 [Expr    -> . Factor '+' num, ')' ]  (Factor, i8)
+  9 [Expr    -> . Factor '+' num, '+' ]  (Factor, i8) 
+The new transition set i8 looks like this:
+
+i8. goto(Factor) from i3
+  1 [Expr    -> Factor .,         ')' ]*
+  2 [Expr    -> Factor . '+' num, ')' ]*
+  3 [Expr    -> Factor . '+' num, '+' ]* 
+This new transition set gets put on the to-do list, and eventually is popped off the list in phase 1 of a subsequent iteration of the main loop. Closure items are generated (none), and all reduce actions are marked, at which point the item set now looks like this:
+
+i8. goto(Factor) from i3
+  1 [Expr    -> Factor .,         ')' ]* (')', r1)
+  2 [Expr    -> Factor . '+' num, ')' ]*
+  3 [Expr    -> Factor . '+' num, '+' ]* 
+The item sets in the done list are then compared to this item set for possible merging. This set has the same kernel item cores as item set i2, which are:
+
+  [Expr    -> Factor .,         -   ]*
+  [Factor  -> Factor . '+' num, -   ]* 
+Since there are no reduce/reduce conflicts between item sets i2 and i8, the two sets can be merged. The merge operation yields the following new item set:
+
+i2. goto(Factor) from i0, i3
+  [Expr    -> Factor .,         $end]* ($end, r1)
+  [Expr    -> Factor .,         ')' ]* ($end, r1)
+  [Factor  -> Factor . '+' num, $end]* ('+', i6)
+  [Factor  -> Factor . '+' num, '+' ]* ('+', i6)
+  [Factor  -> Factor . '+' num, ')' ]* 
+Some of the items being merged already existed in the set.
+
+Since item set i8 was merged into set i2, all of the transitions (gotos) to set i8 must be fixed to make transitions to i2 instead. The set from which the transition set i8 was generated is set i3, so all items with a goto(i8) in i3 are changed to goto(i2). This change affects these items:
+
+i3. goto('(') from i0
+  ...
+  2 [Expr    -> . Factor,         ')' ]  (Factor, i8 i2)
+  ...
+  8 [Expr    -> . Factor '+' num, ')' ]  (Factor, i8 i2)
+  9 [Expr    -> . Factor '+' num, '+' ]  (Factor, i8 i2)
+  ... 
+A similar thing happens to item set i9, i10, i11, and i17, which are merged into sets i3, i4, i5, and i6, respectively.
+
+At the end of the algorithm, the to-do list is empty, all item sets have been marked as complete, and the done list contains the following item sets:
+
+Generated LR(1) Item Sets
+i0. initial item set
+  [$accept -> . Expr,           $end]*  (Expr,   i1)
+  [Expr    -> . Factor,         $end]   (Factor, i2)
+  [Expr    -> . '(' Expr ')',   $end]   ('(',    i3)
+  [Factor  -> . num,            $end]   (num,    i4)
+  [Factor  -> . num,            '+' ]   (num,    i4)
+  [Factor  -> . '+' Factor,     $end]   ('+',    i5)
+  [Factor  -> . '+' Factor,     '+' ]   ('+',    i5)
+  [Factor  -> . Factor '+' num, $end]   (Factor, i2)
+  [Factor  -> . Factor '+' num, '+' ]   (Factor, i2)
+
+i1. goto(Expr) from i0
+  [$accept -> Expr .,           $end]*  ($end, accept)
+
+i2. goto(Factor) from i0,i3
+  [Expr    -> Factor .,         $end]*  ($end, r1)
+  [Expr    -> Factor .,         ')' ]*  (')',  r1)  M:x8
+  [Factor  -> Factor . '+' num, $end]*  ('+',  i6)
+  [Factor  -> Factor . '+' num, '+' ]*  ('+',  i6)
+  [Factor  -> Factor . '+' num, ')' ]*  (-,    - )  M:x8
+
+i3. goto('(') from i0,i3
+  [Expr    -> '(' . Expr ')',   $end]*  (Expr,   i7)
+  [Expr    -> '(' . Expr ')',   ')' ]*  (-,      - )  M:x9
+  [Expr    -> . Factor,         ')' ]   (Factor, x8 i2)
+  [Expr    -> . '(' Expr ')',   ')' ]   ('(',    x9 i3)
+  [Factor  -> . num,            ')' ]   (num,    x10 i4)
+  [Factor  -> . num,            '+' ]   (num,    x10 i4)
+  [Factor  -> . '+' Factor,     ')' ]   ('+',    x11 i5)
+  [Factor  -> . '+' Factor,     '+' ]   ('+',    x11 i5)
+  [Factor  -> . Factor '+' num, ')' ]   (Factor, x8 i2)
+  [Factor  -> . Factor '+' num, '+' ]   (Factor, x8 i2)
+
+i4. goto(num) from i0,i3,i5
+  [Factor  -> num .,            $end]*  ($end, r3)
+  [Factor  -> num .,            ')' ]   (')',  r3)  M:x10
+  [Factor  -> num .,            '+' ]*  ('+',  r3)
+
+i5. goto('+') from i0,i5
+  [Factor  -> '+' . Factor,     $end]*  (Factor, i8)
+  [Factor  -> '+' . Factor,     ')' ]*  (Factor, i8)  M:x11
+  [Factor  -> '+' . Factor,     '+' ]*  (Factor, i8)
+  [Factor  -> . num,            $end]   (num,    x13 i4)
+  [Factor  -> . num,            ')' ]   (num,    x13 i4)  M:x11
+  [Factor  -> . num,            '+' ]   (num,    x13 i4)
+  [Factor  -> . '+' Factor,     $end]   ('+',    x14 i5)
+  [Factor  -> . '+' Factor,     ')' ]   ('+',    x14 i5)  M:x11
+  [Factor  -> . '+' Factor,     '+' ]   ('+',    x14 i5)
+  [Factor  -> . Factor '+' num, $end]   (Factor, i8)
+  [Factor  -> . Factor '+' num, ')' ]   (Factor, i8)  M:x11
+  [Factor  -> . Factor '+' num, '+' ]   (Factor, i8)
+
+i6. goto('+'), from i2,i8
+  [Factor  -> Factor '+' . num, $end]*  (num, x9)
+  [Factor  -> Factor '+' . num, ')' ]*  (-,   - ) M:x17
+  [Factor  -> Factor '+' . num, '+' ]*  (num, x9)
+
+i7. goto(Expr), from i3
+  [Expr    -> '(' Expr . ')',   $end]*  (')', i10)
+
+x8. goto(Factor) from i3  => merged into i2
+  [Expr    -> Factor .,         ')' ]*  (')', r1) merged
+  [Factor  -> Factor . '+' num, ')' ]*  (-,   - ) merged
+  [Factor  -> Factor . '+' num, '+' ]*  (-,   - )
+
+x9. goto('(') from i3     => merged into i3
+  [Expr    -> '(' . Expr ')',   ')' ]*  (-, -) merged
+  [Expr    -> . Factor,         ')' ]   (-, -)
+  [Expr    -> . '(' Expr ')',   ')' ]   (-, -)
+  [Factor  -> . num,            ')' ]   (-, -)
+  [Factor  -> . num,            '+' ]   (-, -)
+  [Factor  -> . '+' Factor,     ')' ]   (-, -)
+  [Factor  -> . '+' Factor,     '+' ]   (-, -)
+  [Factor  -> . Factor '+' num, ')' ]   (-, -)
+  [Factor  -> . Factor '+' num, '+' ]   (-, -)
+
+x10. goto(num) from i3    => merged into i4
+  [Factor  -> num .,            ')' ]   (')', r3) merged
+  [Factor  -> num .,            '+' ]   ('+', r3)
+
+x11. goto('+') from i3    => merged into i5
+  [Factor  -> '+' . Factor,     ')' ]*  (-, -) merged
+  [Factor  -> '+' . Factor,     '+' ]*  (-, -)
+  [Factor  -> . num,            ')' ]   (-, -) merged
+  [Factor  -> . num,            '+' ]   (-, -)
+  [Factor  -> . '+' Factor,     ')' ]   (-, -) merged
+  [Factor  -> . '+' Factor,     '+' ]   (-, -)
+  [Factor  -> . Factor '+' num, ')' ]   (-, -) merged
+  [Factor  -> . Factor '+' num, '+' ]   (-, -)
+
+i8. x12. goto(Factor) from i5
+  [Factor  -> '+' Factor .,     $end]*  ($end, r4)
+  [Factor  -> '+' Factor .,     '+' ]*  ('+',  r4)
+  [Factor  -> '+' Factor .,     ')' ]*  (')',  r4)
+  [Factor  -> Factor . '+' num, $end]*  ('+',  x17 i6)
+  [Factor  -> Factor . '+' num, ')' ]*  ('+',  x17 i6)
+  [Factor  -> Factor . '+' num, '+' ]*  ('+',  x17 i6)
+
+x13. goto(num) from i5    => same as i4
+  [Factor  -> num .,            $end]*  (-, -)
+  [Factor  -> num .,            ')' ]*  (-, -)
+  [Factor  -> num .,            '+' ]*  (-, -)
+
+x14. goto('+') from i5    => same as i5
+  [Factor  -> '+' . Factor,     $end]*  (-, -)
+  [Factor  -> '+' . Factor,     ')' ]*  (-, -)
+  [Factor  -> '+' . Factor,     '+' ]*  (-, -)
+
+i9. x15. goto(num) from i6
+  [Factor  -> Factor '+' num ., $end]*  ($end, r5)
+  [Factor  -> Factor '+' num ., '+' ]*  ('+',  r5)
+
+i10. x16. goto(')') from i7
+  [Expr    -> '(' Expr ')' .,   $end]*  ($end, r2)
+
+x17. goto('+') from i8    => merge into i6
+  [Factor  -> Factor '+' . num, $end]*  (-, -)
+  [Factor  -> Factor '+' . num, ')' ]*  (-, -) merged
+  [Factor  -> Factor '+' . num, '+' ]*  (-, -) 
+Item sets with names like 'x10' are sets that were created as transition sets but which were merged into other existing sets.
+
+These item sets can be compressed, eliminating items that do not contribute to the uniqueness of the set. The resulting LR(1) item sets are:
+
++INCOMPLETE
+
+
+Converting Item Sets into Parser States
+Once the LR(k) item sets for a grammar have been constructed, the next step is to convert them into parser states. There is a direct one-to-one mapping between item sets and parser states.
+
+Consider item set i0 that was generated above:
+
+i0. initial item set
+  1 [$accept -> . Expr,            $end]*  (Expr,   i1)
+  2 [Expr    -> . Factor,          $end]   (Factor, i2)
+  3 [Expr    -> . '(' Expr ')',    $end]   ('(',    i3)
+  4 [Factor  -> . num,             $end]   (num,    i4)
+  5 [Factor  -> . num,             '+' ]   (num,    i4)
+  6 [Factor  -> . '+' Factor,      $end]   ('+',    i5)
+  7 [Factor  -> . '+' Factor,      '+' ]   ('+',    i5)
+  8 [Factor  -> . Factor '+' num,  $end]   (Factor, i2)
+  9 [Factor  -> . Factor '+' num,  '+' ]   (Factor, i2) 
+One possibility when displaying this as a state is to list only the item cores of the set. This means that the cores of items 4 and 5, and items 6 and 7, and items 8 and 9 would be combined and shown on a single line:
+
+State 0
+    $accept -> . Expr
+    Expr    -> . Factor
+    Expr    -> . '(' Expr ')'
+    Factor  -> . num
+    Factor  -> . '+' Factor
+    Factor  -> . Factor '+' num 
+In practice, it makes for shorter and less confusing listings if only the kernel item cores are shown. This is done in order to simplify the summary listing, since for a given item set in which the marker is positioned to the left of a nonterminal symbol and that symbol appears as the LHS in many rules results in the item set having many non-kernel items with the marker positioned to the left of all of the RHS symbols. Such non-kernel items really do not contribute much to the understanding of the state, especially if there are large numbers of them, and they tend to clutter the listing with a lot of redundant items. Limiting the displayed items to just the kernel cores eliminates these extra but useless items. This means that in practice only the core of item 1 is actually displayed:
+
+state 0
+    $accept -> . Expr 
+The items that shift the same symbol are combined into a single parser table entry. Item 1 shifts symbol Expr, items 2, 8, and 9 shift Factor, item 3 shifts '(', items 4 and 5 shift num, and items 6 and 7 shift '+'.
+
+When these shift items are displayed in the summary listing, the items shifting terminal symbols are shown first, since these are the actual shift actions for the state. The items shifting nonterminal symbols are shown next, since these comprise the goto transitions for the state. The resulting actions are therefore displayed as:
+
+    '('     shift 3
+    num     shift 4
+    '+'     shift 5
+
+    Expr    goto 1
+    Factor  goto 2 
+If the parser enters state 0 with a look-ahead symbol other than one of those matching any of the shift items, the parser declares a syntax error. This is represented with a special $other action:
+
+    $other  error 
+If the current look-ahead symbol does not match any of the shift symbols in the current parser state, this means that the terminal symbol that was most recently read from the input token stream is not expected in the current state of the parse, resulting in a syntax error. If this happens, the parser issues an appropriate error message and may optionally perform some kind of error recovery action.
+
+Combining all of the pieces above that are displayed for the conversion of item set i0 into a complete parser state yields the following output, which neatly summarizes the shift, goto, and error actions for the state:
+
+state 0
+    $accept -> . Expr
+
+    '('     shift 3
+    num     shift 4
+    '+'     shift 5
+    $other  error
+
+    Expr    goto 1
+    Factor  goto 2 
+Converting Reduction Actions
+States with reduce actions are converted into states in a slightly different manner.
+
+Consider item set i2 that was generated above, which contains reduce actions:
+
+i2. goto(Factor) from i0,i3
+  1 [Expr    -> Factor .,          $end]*  ($end, r1)
+  2 [Expr    -> Factor .,          ')' ]*  (')',  r1)  M:x8
+  3 [Factor  -> Factor . '+' num,  $end]*  ('+',  i6)
+  4 [Factor  -> Factor . '+' num,  '+' ]*  ('+',  i6)
+  5 [Factor  -> Factor . '+' num,  ')' ]*  (-,    - )  M:x8 
+When displaying this as a state, only the item cores are shown. This means that the core of items 1 and 2 is displayed as one line, and the core of items 3, 4, and 5 is displayed in another line. Reduction items are shown with their rule number:
+
+state 2
+    Expr -> Factor .          (r1)
+    Expr -> Factor . '+' num 
+The items that shift the same symbol are combined into a single parser table entry. Items 3, 4, and 5 all shift the same symbol '+', thus producing the following parser action:
+
+    '+'  shift 6 
+Each reduction item produces a parser table entry, reducing a particular rule on a particular look-ahead symbol. Items 1 and 2 produce the following parser actions:
+
+    $end  reduce 1
+    ')'   reduce 1 
+To simplify the parsing tables, multiple actions that reduce the same rule can be combined into a single default action. This is represented by the special $any symbol, indicating that any look-ahead symbol matches the action by default. The default reduce action is selected by the parser if no other entry matching the current look-ahead symbol is found in the state. Thus the reduction items 1 and 2 above can be combined to produce a single parser table entry:
+
+    $any  reduce 1 
+For item sets having reduction items that reduce more than one rule, the rule that is reduced in the most number of items can be chosen as the default reduction action. If more than one rule are reduced an equal number of times, one of them is chosen arbitrarily (a good choice is the rule with the highest precedence).
+
+The end result of converting item set i2 into a parser state results in the following output:
+
+state 2
+    Expr -> Factor .          (r1)
+    Expr -> Factor . '+' num
+
+    '+'   shift 6
+    $any  reduce 1 
+Default Reduction Actions
+Combining multiple reduce actions into a single default action has the benefit of reducing the size of the parser tables, allowing the parser to select the default reduction action if no shift actions are found that match the current look-ahead symbol.
+
+The drawback to this approach is that a reduction action might be chosen when in fact an error condition exists. Assume, for example, that the parser enters state 2 above with a look-ahead symbol of '('. The parser will not find a shift action for symbol '(', so it selects the default action, which is to reduce by rule 1. In point of fact, the parser should have detected an error condition at this point because there is no valid action to take for a look-ahead symbol of '('.
+
+However, allowing the reduce to occur is allowable behavior because the symbols recognized by the parser up this point do in fact result in a valid reduction by the default rule. In the example, the current parser stack contains a Factor symbol (because state 2 is entered by shifting a Factor symbol), which does indeed match LHS symbol Expr by rule 1. So choosing to reduce by rule 1 as a default action is a valid operation, even though it is not exactly correct based on the current (but erroneous) look-ahead symbol.
+
+Eventually, though, the error will be detected by the parser. The parser may perform other reduction actions, but eventually it will reach a state requiring a shift action. It is in this eventual state that no shift action for the current (erroneous) look-ahead symbol will be found and the parser will declare a syntax error. So even though one or more reduction actions may be performed when an unexpected symbol is read from the input stream, the error will be caught before any more shift actions take place.
+
+Ambiguous Grammars
+Most typical programming languages use grammars that are ambiguous. This means that they when they are implemented as pure LR(k) parsers, they contain grammar conflicts. Such conflicts come in two varieties: shift/reduce conflicts and reduce/reduce conflicts.
+
+Shift/Reduce Conflicts
+Shift/reduce conflicts are the most commonly encountered type of grammatical ambiguity, and are generally easily solved. For example, the common if-then-else programming construct is, in fact, a classic example of a shift/reduce conflict:
+
+r24. Stmt -> IF Expr THEN Stmt
+r25. Stmt -> IF Expr THEN Stmt ELSE Stmt 
+These two rules result in an item set with the following two items:
+
+i37.
+  [Stmt -> IF Expr THEN Stmt .,           ELSE]*  (ELSE, r24)
+  [Stmt -> IF Expr THEN Stmt . ELSE Stmt, #   ]*  (ELSE, i38)
+  ... 
+This item set in then converted into a parser state:
+
+State 37
+    Stmt -> IF Expr THEN Stmt .
+    Stmt -> IF Expr THEN Stmt . ELSE Stmt
+
+    ELSE  shift 38
+    ELSE  reduce 24
+    ...
+
+    shift(s38)/reduce(r24) conflict on ELSE 
+A conflict exists because the state calls for both a shift and a reduce action for a look-ahead symbol of ELSE. This situation arises within the item set because such a grammar allows nested if statements. This means that it is possible for an ELSE keyword symbol to follow a THEN Stmt sequence, as shown in the following example:
+
+IF flag1 THEN           // statement 1
+    IF flag2 THEN       // statement 2
+        statementA
+    ELSE
+        statementB
+ELSE                    // ELSE appearing after a Stmt
+    statementC 
+Upon reading the second ELSE above, the parser enters state 37 with a look-ahead symbol of ELSE. The actions defined by the state call for both a shift and a reduce for a look-ahead of ELSE. This is why this situation is called a shift/reduce conflict - because either action is possible, thus causing a conflict. Without any way of resolving the conflict, the parser cannot decide whether to shift the ELSE symbol and proceed to state 38, or to reduce by rule 24 when it sees the ELSE look-ahead symbol. This means that the grammar is ambiguous, and thus is not a pure LR(k) grammar.
+
+Fortunately, shift/reduce conflicts like this are solved fairly easily. Note that the parser should, in fact, prefer to shift the ELSE symbol instead of reducing by rule 24. This is the most general solution to shift/reduce conflicts, to prefer shifting over reducing.
+
++INCOMPLETE
+
+Reduce/Reduce Conflicts
+Reduce/reduce conflicts are more difficult to resolve. These conflicts occur within states that have two different reduction actions for the same look-ahead symbol.
+
++INCOMPLETE
+
+Resulting Parser States
+Converting all of the item sets of the example grammar produces the following parser states:
+
+
+Example ?? - Parser States
+state 0
+    $accept -> . Expr
+
+    num     shift 4
+    '+'     shift 5
+    '('     shift 3
+    $other  error
+
+    Expr    goto 1
+    Factor  goto 2
+
+state 1
+    $accept -> Expr .    (accept)
+
+    $end    accept
+    $other  error
+
+state 2
+    Expr   -> Factor .         (r1)
+    Factor -> Factor . '+' num
+
+    shift/reduce conflict on '+':
+        favor shift('+') over reduce(r1)
+
+    '+'     shift 6
+    $other  reduce 1
+
+state 3
+    Expr -> '(' . Expr ')'
+
+    num     shift 4
+    '+'     shift 5
+    '('     shift 3
+    $other  error
+
+    Expr    goto 7
+    Factor  goto 2
+
+state 4
+    Factor -> num .     (r3)
+
+    $any  reduce 3
+
+state 5
+    Factor -> '+' . Factor
+
+    num     shift 4
+    '+'     shift 5
+    $other  error
+
+    Factor  goto 8
+
+state 6
+    Factor -> Factor '+' . num
+
+    num     shift 9
+    $other  error
+
+state 7
+    Expr -> '(' Expr . ')'
+
+    ')'     shift 10
+    $other  error
+
+state 8
+    Factor -> '+' Factor .      (r4)
+    Factor -> Factor . '+' num
+
+    shift/reduce conflict on '+':
+        favor shift('+') over reduce(r4)
+
+    '+'     shift 6
+    $other  reduce 4
+
+state 9
+    Factor -> Factor '+' num .    (r5)
+
+    $any  reduce 5
+
+state 10
+    Expr -> '(' Expr ')' .  (r2)
+
+    $any   reduce 2 
++INCOMPLETE
+
+
+LR(k) Parsing Algorithm
+The following pseudo-code is the fundamental LR(k) parser algorithm. It assumes the existence of a parser state stack capable of holding state numbers, as well as a value stack capable of holding parsing symbols. It also assumes the existence of the following parsing tables:
+
+RHS length table
+    Contains the number of symbols in the RHS of each rule;
+    indexed by rule number
+Action look-up table
+    Contains an action, either a shift/goto state, or a reduction rule;
+    indexed by state number and look-ahead symbol
+Goto transition table
+    Contains transition (goto) state numbers;
+    indexed by state numbers and nonterminal symbol 
+begin
+    // Initialize
+    stateStack = empty;
+    termStack = empty;
+    nontermStack = empty;
+    laSym = null;
+    state = 0;
+
+    // Main parsing loop
+    mainLoop:
+    while stateStack not empty,
+        // Insure that there is a look-ahead symbol
+        if laSym is null,
+            laSym = read next input symbol (token),
+                (which is $end on end of input);
+
+        // Look up the next parsing action,
+        //  based on the current state and look-ahead symbol
+        action = ACTION[state][laSym];
+
+        if action is SHIFT,
+            // Shift the current look-ahead terminal symbol
+            push laSym onto parser termStack;
+            push state 0 onto stateStack;
+            laSym = null;
+            // Transition (shift) to the next state
+            state = action.goto;
+        else if action is REDUCE,
+            // Perform the parser action for the rule
+            rule = action.rule;
+            tLen = rule.rhsTermLength;
+            nLen = rule.rhsNontermLength;
+            action = rule number;
+            if action is ACCEPT (r0),
+                if laSym is $end,
+                    // Accept
+                    break mainLoop;
+                else
+                    // Unexpected extraneous look-ahead symbol
+                    invoke parser error handler;
++INCOMPLETE
+                    ...;
+                end if;
+            else
+                invoke parser action for rule,
+                    passing it the top-most tLen symbols on termStack
+                    and the top-most nLen symbols on nontermStack;
+                // Reduce the RHS symbols, replacing them with the LHS symbol
+                pop tLen symbols from termStack;
+                pop nLen symbols from nontermStack;
+                push rule.LHS nonterminal symbol onto nontermStack;
+                pop tLen+nLen states from stateStack;
+                // Do a Goto transition on the nonterminal LHS symbol
+                state = last state popped from stateStack;
+                state = GOTO[state][rule.LHS];
+            end if;
+        else
+            // No action was found for unexpected look-ahead symbol
+            invoke parser error handler;
+            // Begin error recovery
+            push error symbol onto valueStack;
+            look for a transition on 'error' in the current state;
++INCOMPLETE
+            ...;
+        end if;
+    end mainLoop;
+
+    // Clean up
+    laSym = null;
+    valueStack = empty;
+end. 
++INCOMPLETE
+
+Practical LR(k) Parsing
+The classic LR(k) parsing algorithm describes the configuration of a parser at any given moment during a parse. This is a tuple of two parts, one being the current contents of the parser stack and the other part being the current input symbol stream. It can look something like this, for example:
+
+{ s0 '(' s2 num s7, '+' num ')' } 
+This configuration shows that states s0 and s2 have been visited and shifted onto the stack, along with their corresponding symbols '(', num, and '+', respectively. The current state is the right-most element of the parser stack, which in this example is state s7. The list of terminal symbols remaining in the input stream are '+', num, and ')'. The left-most k symbols of this list are the current look-ahead symbols for the LR(k) parser. In this example, the current look-ahead symbol for an LR(1) parser is the one symbol '+'.
+
+As the parse proceeds, the configuration changes as new look-ahead symbols are read from the input stream, as symbols and goto states are shifted (pushed) onto the stack, and as states and symbols are reduced (popped) from the stack. Eventually the configuration indicates that the parser has reached the state with an accept action and with no more look-ahead input symbols, signaling the end of a successful parse:
+
+{ s1 Goal, $end } 
+State and Symbol Stacks
+The original theory assumes, in a typically mathematical fashion, that the state numbers, terminal symbols, and nonterminal symbols shifted onto the stack can assume any type or value within the confines of the given grammar.
+
+In reality, the state numbers are almost always simple integer values, and symbols are some kind of structure or object type. So in actual practice, the parser stack is usually implemented as two separate stacks, one for state numbers and the other for symbols. Classic YACC, for instance, implements the parser stack in this fashion.
+
+Terminal Stack
+Splitting the parser configuration stack into a separate state stack and symbol stack is a useful implementation as far as it goes, but even this improvement to the original theory poses problems, especially when the parsing algorithm is implemented in an object-oriented programming language.
+
+Specifically, there is the problem of how to deal with the type of terminal symbols versus the type of nonterminal symbols. For an implementation that uses only one stack for both kinds of symbols, this means that both terminals and nonterminals must be represented by the same structure or object data type.
+
+A lexical analyzer typically reads tokens from the source input stream being parsed, returning the tokens as integer values representing the terminal symbols as they are read. (These integer values correspond to the %token definitions in the grammar specification, which define the terminal symbols of the grammar.) The special $end symbol is usually returned as a zero or negative value, indicating that no more input tokens remain in the input stream.
+
+In addition, the lexer typically encodes other information about each token, such as the textual content of the token, the token type (which is the same as the terminal symbol number), and the source line where the token was read from the input stream. There may be other attributes of the token as well, such as the source filename from which it was read (if the lexer can read from multiple source files, such as the #include preprocessing capability of C and C++), a symbol table entry that corresponds to an identifier token, a numeric value corresponding to a numeric literal token, etc. Tyically the more complex the language being parsed, the more complex the information needed for its lexical tokens.
+
+The parser uses only the terminal symbol number of a token, which does not need to be anything more complicated than a simple integer value. However, any user-defined semantic actions taken by the parser usually need more information about each token, hence the need to allow terminal symbols to be represented by user-defined structures or object types.
+
+Classic YACC invokes its lexer through a simple function, yylex(), which returns an integer value encoding the terminal symbol value. It also allows the contents of the token to be stored in a variable, yylval. By default, this token variable is just an integer (of type int), but YACC allows the type to be any user-defined type, which is specified using the %union directive. YACC/M takes a different approach by requiring all of the terminal symbols and lexical tokens to have an object class type that implements the interface type TokenI, which is provided in the YACC/M runtime library.
+
+This solves the problem of representing terminal symbols (lexical tokens) as arbitrarily complex data types, but there is another related problem concerning nonterminal symbols.
+
+Nonterminal Stack
+Nonterminal symbols represent production rules of the grammar matching sequences of zero or more input tokens. The most typical approach uses nonterminal symbols as nodes in a parse tree, which is built bottom-up as the parser recognizes and reduces production rules.
+
+For example, consider the following rule:
+
+Expr : Expr '+' Factor 
+When reduced by the parser, the semantic action associated with this rule can create a parse tree to embody the expression, such as:
+
+      Expr2
+       |
+ +-----+----+
+ |     |    |
+Expr  '+'  Factor
+ |          |
+Factor     num (42)
+ |
+num (69) 
+Since a YACC-like parser employs a single stack for symbols, this implies that terminal symbols (tokens) and nonterminal (LHS) symbols must be represented by the same object type. Indeed, this is a common approach when writing parsers in classic YACC, using the %union directive to define a symbol stack type capable of encoding information about both token objects and nonterminal parse tree nodes. This in turn implies that tokens are the same type as (or a derived subtype of) parse tree nodes. This constraint does not always lead to a satisfactory implementation solution.
+
+The approach taken by YACC/M is to split the parser symbol stack into two separate stacks, one for terminal symbols (tokens) and another for nonterminal (LHS) symbols. The terminal stack is implemented as an array of objects of type TokenI, which is a generic interface type provided with the YACC/M runtime library. Programmers provide their own implementation class for lexer token objects which implement this interface, or they can use the TokenAdapter class that is also provided with the YACC/M runtime library (which provides basic functionality for implementing simple lexical token objects). Programmers can also specify a different type for the terminal symbols using the %tokentype directive.
+
+YACC/M also allows the programmer to specify a class type for the nonterminal stack, which is implemented as an array of objects of the type specified by the %stacktype directive. If this directive is not given, the default type is simply Object.
+
+YACC/M allows semantic actions to be associated with grammar rules, just like classic YACC. These actions are blocks of Java code enclosed within braces ({ and }), which are invoked whenever the grammar rule is matched by the parser and just before the RHS symbols are reduced to the LHS symbol. The action code blocks can contain symbol operands in the form $$, representing the result value of the LHS symbol (i.e., the result of the reduction action), and $N (for a given integer N), representing the value of the Nth RHS symbol of the rule. If the $N operand designates a terminal RHS symbol, its value will reference an object of type Token. Similarly, if the operand designates a nonterminal RHS symbol, its value will reference an object of the type specified by the %stacktype directive. This is possible because for every grammar rule, the type of each of its RHS symbol is known, whether it is a terminal or nonterminal.
+
+This is applied to the example grammar rule shown above by adding a semantic action:
+
+Expr
+    : Expr '+' Factor
+        { $$ = doExpr($1, $2, $3); }
+    ; 
+In this hypothetical example, method doExpr(), a member function of the parser class generated from the grammar, is invoked whenever this particular grammar rule is reduced, passing it the RHS symbols as arguments $1 (a nonterminal symbol), $2 (a terminal symbol), and $3 (a nonterminal). These operands are translated into method calls to retrieve values from the terminal and nonterminal parser stacks.
+
+The method returns a nonterminal value representing the result of the semantic action, which is assigned to $$. The $$ operand is translated into a nonterminal parser variable, which is subsequently pushed onto the nonterminal stack to represent the LHS symbol Expr, the result of the reduction.
+
+Programmers must supply a lexical analyzer class that implements the Lexer YACC/M library class. The crucial method is getToken(), which is responsible for reading the next token from the input stream and returning an integer token code or zero if no more tokens are available.
+
+Similarly, programmers must provide semantic action code blocks that assign $$ with objects of the type specified in the %stacktype directive. Rules having no semantic actions are assigned a default action that assigns $1 to $$, provided that there is at least one RHS symbol in the rule. This is usually the most reasonable action to take for single productions.
+
++INCOMPLETE
+
+Comments
+The Honalee algorithm works by merging item sets (states) as they are constructed, whereas the canonical LR(k) construction algorithm works by constructing all of the item sets (states) first and then merging those that can be merged afterwards. The crux of the Honalee algorithm is the assumption that these two approaches result in exactly the same set of item sets (states). This assumption must now be demonstrated to be true with some degree of analytical rigor.
+
+Assuming ...
+
++INCOMPLETE
+
+Loose Ends
+The Honalee Algorithm, as far as the author knows, is the first LR(k) parser construction algorithm of its kind. It makes possible practical implementations of LR(k) parser generators.
+
+Oh, and one last thing, concerning the name of the algorithm (with apologies to Peter Yarrow and Leonard Tipton):
+
+        Puff, The Merging Dragon
+Puff, the merging dragon lived by the sea
+And frolicked in the item mist in a land called Honalee.
+Little Jackie Parser loved that rascal Puff
+And brough him strings and token streams and other lexer stuff.
+Together they would travel on a boat with shifting stacks
+Jackie kept a look-ahead for Puff's reduction acts.
+Noble scripts and programs would bow when 'ere they ran
+And semantic acts would set their flags when Puff derived his scan.
+Oh, Puff, the merging dragon lived by the sea
+And frolicked in the item mist in a land called Honalee.
+
+(This may have added meaning to those familiar with the Red Dragon book, or its older edition, the Green Dragon book. Okay, so it's not great poetry - the author admits that his expertise lies in the area of programming and not in the more sublime area of poetastry.)
+
+References
+
+[1] Compilers: Principles, Techniques, and Tools
+(a.k.a. the Red Dragon Book)
+Aho, Sethi, and Ullman
+Addison-Wesley, 1986, ISBN 0-201-10088-6.
+section 4.5, "Bottom-Up Parsing", pp. 195-215;
+section 4.7, "LR Parsers", pp. 215-247;
+section 4.8, "Using Ambiguous Grammars", pp. 247-257;
+section 4.9, "Parser Generators", pp. 257-266;
+section 5.1, "Syntax-Directed Definitions", pp.280-281;
+section 5.3, "Bottom-Up Evaluation of S-Attributed Definitions", pp.293-296;
+section 5.6, "Bottom-Up Evaluation of Inherited Attributes", pp.308-309;
+
+Some other interesting articles on LR(k) parsing theory:
+
+www.ashland.edu/~sgray/compilers/ch4-2.html.
+
++REDO
+A Quick Review of LR and LALR Parsing Theory, by Sean Erik O'Connor.
+
+Archive article, 1992-08-119, a letter on comp.compilers by Andrew Bromage.
+
+Revision History
+
+1.0, 2004-12-12
+First revision.
+Copyright ©2004 by David R. Tribble, all rights reserved.
+References and links to this document may be created without permission from the author. Portions of this document may be used or quoted without permission from the author provided that appropriate credit is given to the author. This document may be printed and distributed without permission from the author on the condition that the authorship and copyright notices remain visible and unaltered.
+
+This document: http://david.tribble.com/lrk_parsing.html
+
+The author can be contacted by email at: david@tribble.com.
+The author's web home page is at: http://david.tribble.com.
