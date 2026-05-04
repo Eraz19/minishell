@@ -11,12 +11,13 @@
 		"-I${workspaceFolder}/srcs/prompt/label",
 		"-I${workspaceFolder}/srcs/lexer",
 		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/1_hooks",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/2_rules",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/3_rule_state",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/4_lr_state",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/5_transition",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/6_goto",
-		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/7_action"
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/1_symbols",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/2_hooks",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/3_rules",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/4_rule_state",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/5_lr_state",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/6_transition",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/7_goto",
+		"-I${workspaceFolder}/srcs/2_builder/1_lr_machine/8_action"
 	]
 }

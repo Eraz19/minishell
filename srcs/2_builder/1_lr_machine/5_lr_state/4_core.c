@@ -1,10 +1,6 @@
 #include "lr_state.h"
 #include "rule_state.h"
-
-static bool	symbol_is_non_terminal(t_symbol symbol)
-{
-	return (symbol >= SYM_NON_TERMINAL_MIN && symbol < SYM_NON_TERMINAL_MAX);
-}
+#include "symbols.h"
 
 static bool	add_rules(t_rule *rules, t_lr_state *lr_state, t_symbol symbol, bool *did_add)
 {

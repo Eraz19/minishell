@@ -13,12 +13,17 @@ void	lr_state_free(t_lr_state *lr_state);
 void	lr_state_table_free(t_lr_state *lr_states);
 
 /* ************************************************************************* */
-/*                                  HELPERS                                  */
+/*                                    OPS                                    */
 /* ************************************************************************* */
 
 bool	lr_state_equal(t_lr_state *a, t_lr_state *b);
 // did_add can be NULL, if not, it must already be initialized by caller
 bool	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state, bool *did_add);
+
+/* ************************************************************************* */
+/*                                  REGISTRY                                 */
+/* ************************************************************************* */
+
 bool	lr_state_find_id(t_vector *lr_states, t_lr_state *lr_state, size_t *id);
 bool	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add);
 
