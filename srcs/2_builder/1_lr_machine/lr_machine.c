@@ -1,5 +1,7 @@
 #include "parser.h"
 #include "rules__pub.h"
+#include "symbols.h"
+#include "first.h"
 #include "lr_state.h"
 #include "transition.h"
 #include "action.h"
@@ -19,18 +21,21 @@ bool	lr_machine_build(t_lr_machine *machine)
 {
 	printf("lr_machine_build: START\n");
 	rules_build(machine->rules);
-	printf("lr_machine_build: rules built\n");
+	printf("lr_machine_build: rules table built            (%i entries)\n", RULE_COUNT);
+	symbols_build_nullables_table(machine);
+	printf("lr_machine_build: nullable symbols table built (%i entries)\n", SYM_COUNT);
+	first_build_table(machine);
+	printf("lr_machine_build: first table built            (%i entries)\n", SYM_COUNT * (SYM_TERMINAL_MAX + 1));
 	if (!transition_build_table(machine))
 		return (false);
-	printf("lr_machine_build: transitions and lr_states built\n");
-	printf("lr_machine_build: ---> transitions = %zu\n", machine->transitions.len);
-	printf("lr_machine_build: ---> lr_states   = %zu\n", machine->lr_states.len);
+	printf("lr_machine_build: transitions table built      (%zu entries)\n", machine->transitions.len);
+	printf("lr_machine_build: lr_states table built        (%zu entries)\n", machine->lr_states.len);
 	if (!goto_build_table(machine))
 		return (false);
-	printf("lr_machine_build: goto built\n");
+	printf("lr_machine_build: gotos table built            (%zu entries)\n", machine->lr_states.len * (SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1));
 	if (!action_build_table(machine))
 		return (false);
-	printf("lr_machine_build: actions built\n");
+	printf("lr_machine_build: actions table built          (%zu entries)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
 	printf("lr_machine_build: DONE\n");
 	return (true);
 }

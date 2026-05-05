@@ -349,8 +349,8 @@ typedef struct s_lr_machine
 	bool		first[SYM_COUNT][SYM_TERMINAL_MAX + 1];
 	t_vector	lr_states;
 	t_vector	transitions;
-	t_action	**actions;
-	size_t		**gotos;
+	size_t		**gotos;	// [lr_state][non-terminal_symbol]
+	t_action	**actions;	// [lr_state][terminal_symbol]
 }	t_lr_machine;
 
 /* ************************************************************************* */
