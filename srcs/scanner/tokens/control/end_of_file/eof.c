@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _scanner.h                                         :+:      :+:    :+:   */
+/*   eof.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/29 17:16:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/05 12:45:25 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/23 00:38:21 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/04 17:36:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _SCANNER_H
-# define _SCANNER_H
+#include <stdlib.h>
+#include "../../../_lexer.h"
 
-#include "scanner.h"
+t_token	*eof(char *input_ptr)
+{
+	t_token	*res;
 
-char	*remove_escapable_newlines(char *input);
-
-void	lexer_init(t_lexer *lexer);
-void	free_lexer(t_lexer **lexer_ptr);
-bool	add_new_token(t_lexer *lexer, t_token *token);
-
-#endif
+	res = malloc(sizeof(t_token));
+	if (res == NULL)
+		return (NULL);
+	res->type = EOF;
+	res->input = input_ptr;
+	if (buff_init(&res->value, 0) == false)
+		return (free(res), NULL);
+	return (res);
+}

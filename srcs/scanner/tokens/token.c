@@ -5,22 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/29 17:49:34 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/30 12:20:30 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/04 15:24:48 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/04 15:50:49 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "scanner.h"
 
-void	free_token(void *token_ptr)
+t_token	*token_(char *input_ptr, size_t len)
 {
-	t_token	*token;
+	char	*str;
+	t_token	*res;
 
-	if (token_ptr == NULL)
-		return ;
-	token = (t_token *)token_ptr;
-	buff_free(&token->value);
-	*token = (t_token){0};
-	free(token);
+	res = malloc(sizeof(t_token));
+	if (res == NULL)
+		return (NULL);
+	res->type = TOKEN;
+	res->input = input_ptr;
+	if (buff_init(&res->value, 0) == false)
+		return (free(res), NULL);
+	str = str_sub(input_ptr, 0, len);
+	if (str == NULL)
+		return (free(res), NULL);
+	if (buff_append(&res->value, str, (long)len) == false)
+		return (free(res), NULL);
+	return (res);
 }

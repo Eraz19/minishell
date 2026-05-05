@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _scanner.h                                         :+:      :+:    :+:   */
+/*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/29 17:16:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/05 12:45:25 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/29 17:52:47 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/04 17:42:56 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _SCANNER_H
-# define _SCANNER_H
+#include <readline/readline.h>
 
-#include "scanner.h"
+char	*read_line(void)
+{
+	char	*line;
 
-char	*remove_escapable_newlines(char *input);
+	line = readline("minishell> ");
+	return (line);
+}
 
-void	lexer_init(t_lexer *lexer);
-void	free_lexer(t_lexer **lexer_ptr);
-bool	add_new_token(t_lexer *lexer, t_token *token);
+char	*read_line_continuation(void)
+{
+	char	*line;
 
-#endif
+	line = readline("> ");
+	return (line);
+}
+
+char	*read_line_heredoc(void)
+{
+	char	*line;
+
+	line = readline("heredoc> ");
+	return (line);
+}

@@ -10,8 +10,12 @@
 		"-I${workspaceFolder}/srcs/prompt/history",
 		"-I${workspaceFolder}/srcs/prompt/label",
 		"-I${workspaceFolder}/srcs/lexer",
+		"-I${workspaceFolder}/srcs/parser/1_stack",
+		"-I${workspaceFolder}/srcs/parser/2_rules",
+		"-I${workspaceFolder}/srcs/parser/3_hooks",
 		"-I${workspaceFolder}/srcs/lexer",
 		"-I${workspaceFolder}/srcs/parser/1_qualifier",
-		"-I${workspaceFolder}/srcs/parser/2_builder"
+		"-I${workspaceFolder}/srcs/parser/2_builder",
+		"-I${workspaceFolder}/srcs/scanner/command_lexer"
 	]
 }

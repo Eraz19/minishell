@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   dlessdash.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/29 17:49:34 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/30 12:20:30 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/27 12:15:21 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/04 17:37:17 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "scanner.h"
+#include "../../../_lexer.h"
 
-void	free_token(void *token_ptr)
+t_token	*dlessdash(char *input_ptr)
 {
-	t_token	*token;
+	t_token	*res;
 
-	if (token_ptr == NULL)
-		return ;
-	token = (t_token *)token_ptr;
-	buff_free(&token->value);
-	*token = (t_token){0};
-	free(token);
+	res = malloc(sizeof(t_token));
+	if (res == NULL)
+		return (NULL);
+	res->type = DLESSDASH;
+	res->input = input_ptr;
+	if (buff_init(&res->value, 0) == false)
+		return (free(res), NULL);
+	return (res);
+}
+
+bool	is_dlessdash(char *input_ptr)
+{
+	return (input_ptr[0] == '<' && input_ptr[1] == '<' && input_ptr[2] == '-');
 }
