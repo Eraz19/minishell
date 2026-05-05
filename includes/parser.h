@@ -134,7 +134,7 @@ typedef enum e_symbol
 
 # define SYM_TERMINAL_MAX		SYM_EOF
 # define SYM_NON_TERMINAL_MIN	SYM_start
-# define SYM_NON_TERMINAL_MAX	SYM_error
+# define SYM_NON_TERMINAL_MAX	SYM_sequential_sep
 
 /* ************************************************************************* */
 /*                                   CST                                     */

@@ -56,21 +56,17 @@ static bool	add_shifts(t_lr_machine *machine)
 	return (true);
 }
 
-static bool	add_reduces_to_all_sym(t_lr_machine *machine, size_t lr_state_id, size_t rule_id)
+static bool	add_reduces(t_lr_machine *machine, size_t lr_state_id, t_rule_state rule_state)
 {
 	t_symbol	symbol;
 	t_action	*action;
 
-	symbol = 0;
-	while (symbol <= SYM_TERMINAL_MAX)
-	{
-		action = &machine->actions[lr_state_id][symbol];
-		if (action->type != ACTION_ERROR)
-			return (print_conflict(action, lr_state_id, symbol, ACTION_REDUCE, rule_id));
-		action->type = ACTION_REDUCE;
-		action->payload = rule_id;
-		symbol++;
-	}
+	symbol = rule_state.lookahead;
+	action = &machine->actions[lr_state_id][symbol];
+	if (action->type != ACTION_ERROR)
+		return (print_conflict(action, lr_state_id, symbol, ACTION_REDUCE, rule_state.rule_id));
+	action->type = ACTION_REDUCE;
+	action->payload = rule_state.rule_id;
 	return (true);
 }
 
@@ -82,7 +78,7 @@ static bool	add_reduces_and_accept(t_lr_machine *machine, size_t lr_state_id, t_
 	rule = machine->rules[rule_state.rule_id];
 	if (rule_state.pos < rule.rhs_len)
 		return (true);
-	if (rule_state.rule_id == RULE_START_1)
+	if (rule_state.rule_id == RULE_START_1 && rule_state.lookahead == SYM_EOF)
 	{
 		action = &machine->actions[lr_state_id][SYM_EOF];
 		if (action->type != ACTION_ERROR)
@@ -91,7 +87,7 @@ static bool	add_reduces_and_accept(t_lr_machine *machine, size_t lr_state_id, t_
 		action->payload = rule_state.rule_id;
 		return (true);
 	}
-	return (add_reduces_to_all_sym(machine, lr_state_id, rule_state.rule_id));
+	return (add_reduces(machine, lr_state_id, rule_state));
 }
 
 bool	action_build_table(t_lr_machine *machine)

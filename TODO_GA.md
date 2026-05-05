@@ -5,7 +5,6 @@
 	- `SHIFT`: `action.payload` = `transition.to_lr_state_id`
 	- `REDUCE`: `action.payload` = `lr_state[i].rule_state.rule_id` (only for `rules` with `pos` >= `rhs_len`)
 	- `ACCEPT`: same as `REDUCE` but only if `rule.lhs` = `SYM_start` and for `SYM_EOF`
-- Implement `LR(1)` instead of `LR(0)`
 - Implement `parser hooks`
 - Remove **wildcards** from `libft`'s `Makefile`
 ...
