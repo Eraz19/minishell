@@ -17,6 +17,17 @@ static bool	lr_state_contains_rule_state(t_lr_state *lr_state, t_rule_state rule
 	return (false);
 }
 
+bool	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state, bool *did_add)
+{
+	if (lr_state_contains_rule_state(lr_state, rule_state))
+		return (true);
+	if (!vector_push(lr_state, &rule_state))
+		return (false);
+	if (did_add)
+		*did_add = true;
+	return (true);
+}
+
 bool	lr_state_equal(t_lr_state *a, t_lr_state *b)
 {
 	size_t			i;
@@ -32,16 +43,5 @@ bool	lr_state_equal(t_lr_state *a, t_lr_state *b)
 			return (false);
 		i++;
 	}
-	return (true);
-}
-
-bool	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state, bool *did_add)
-{
-	if (lr_state_contains_rule_state(lr_state, rule_state))
-		return (true);
-	if (!vector_push(lr_state, &rule_state))
-		return (false);
-	if (did_add)
-		*did_add = true;
 	return (true);
 }

@@ -32,8 +32,8 @@ bool	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add);
 /* ************************************************************************* */
 
 // Completes an lr_state by adding all implied rule_states (aka closure() in LR parsing theory)
-bool	lr_state_complete(t_rule *rules, t_lr_state *lr_state);
+bool	lr_state_complete(t_lr_machine *machine, t_lr_state *lr_state);
 // Computes the next lr_state reached from `src` by consuming `symbol` (aka goto_set() in LR parsing theory)
-bool	lr_state_next(t_rule *rules, t_lr_state *dst, t_lr_state *src, t_symbol symbol);
+bool	lr_state_next(t_lr_machine *machine, t_lr_state *dst, t_lr_state *src, t_symbol symbol);
 
 #endif
