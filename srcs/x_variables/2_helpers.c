@@ -2,12 +2,6 @@
 #include "variable.h"
 #include <stdlib.h>
 
-/* ************************************************************************* */
-/*                                  PRIVATE                                  */
-/* ************************************************************************* */
-
-// ⚠️ POSIX: names shall be checked depending on current locale at shell startup.
-// ⚠️ POSIX: modifying the locale while shell is running should not affect variables name validation of current shell.
 bool	var_name_is_valid(const char *name)
 {
 	size_t	i;
@@ -49,10 +43,6 @@ bool	var_find(t_var_list *variables, const char *var_name, size_t *res)
 	return (false);
 }
 
-/* ************************************************************************* */
-/*                                  PUBLIC                                   */
-/* ************************************************************************* */
-
 t_error	var_split(const char *src, char **dst_name, char **dst_value)
 {
 	size_t	len;
@@ -78,5 +68,17 @@ t_error	var_split(const char *src, char **dst_name, char **dst_value)
 	if (!*dst_value)
 		return (free(*dst_name), *dst_name = NULL, ERR_OUT_OF_MEMORY);
 	str_lcpy(*dst_value, src, len + 1);
+	return (ERR_NO);
+}
+
+t_error	var_update_value(t_var *var, const char *value)
+{
+	char	*new_value;
+
+	new_value = str_dup(value);
+	if (!new_value)
+		return (ERR_OUT_OF_MEMORY);
+	free(var->value);
+	var->value = new_value;
 	return (ERR_NO);
 }
