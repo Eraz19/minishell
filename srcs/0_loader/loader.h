@@ -73,6 +73,8 @@ typedef struct s_shell
 	- PS2 = "> " if absent
 	- PS4 = "+ " if absent
 
+[END OF VARIABLE MODULE RESPONSABILLITY]
+
 4. Initialize shell state parameters
 	- $- = current option flags		(state.options)
 		- i from isatty()

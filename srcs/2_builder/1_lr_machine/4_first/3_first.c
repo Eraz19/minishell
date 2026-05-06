@@ -26,7 +26,7 @@ void	first(t_lr_machine *machine, t_first_param *param)
 			param->result[symbol] = true;
 			return ;
 		}
-		add_first_list(
+		first_add_list(
 			param->result,
 			machine->first[symbol],
 			NULL);

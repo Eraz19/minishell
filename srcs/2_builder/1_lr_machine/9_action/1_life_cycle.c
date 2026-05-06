@@ -6,7 +6,7 @@ void	action_init(t_action ***actions)
 	*actions = NULL;
 }
 
-void	action_free(size_t lr_states_count, size_t ***actions)
+void	action_free(size_t lr_states_count, t_action ***actions)
 {
 	size_t	i;
 

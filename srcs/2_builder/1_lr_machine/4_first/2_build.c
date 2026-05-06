@@ -32,10 +32,10 @@ static void	first_build_from_rule(t_lr_machine *machine, t_rule rule, bool *did_
 		symbol = rule.rhs[pos++];
 		if (symbol_is_terminal(symbol))
 		{
-			add_first(&machine->first[rule.lhs][symbol], did_add);
+			first_add(&machine->first[rule.lhs][symbol], did_add);
 			return ;
 		}
-		add_first_list(
+		first_add_list(
 			machine->first[rule.lhs],
 			machine->first[symbol],
 			did_add);

@@ -19,8 +19,15 @@
 
 # TO OPTI
 
-- Switch `action` and `goto` tables from **2D** to **1D** arrays ?
+## LR_MACHINE
+
+- Switch from `LR(1)` to `LRAR(1)` or `mini LR(1)` ?
+- Switch `action` and `goto` tables from **2D** to **1D** arrays / **hash tables** ?
 - Merge `to_lr_state_id` and `rule_id` in `t_action` into a unique `payload` field (one is used by `SHIFT` actions, the other one by `REDUCE` action so they are never useful at the same time)
+
+## VARIABLES
+
+- Switch from `t_vector` to **hash table** ?
 
 ---
 
