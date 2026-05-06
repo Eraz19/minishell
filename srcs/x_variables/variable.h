@@ -59,14 +59,13 @@ typedef t_vector	t_var_list;
  * @brief Releases all variables stored in the list and frees the list storage.
  *
  * Calls @ref var_free on each stored @ref t_var, then releases the underlying
- * vector storage with `vector_free()`.
+ * vector storage with @ref vector_free.
  *
  * @note This function clears every variable currently stored in @p variables.
- * @note After this call, `variables->data == NULL`, `variables->len == 0` and
- *       `variables->cap == 0`.
+ * @note After this call, @p variables owns no storage and contains no items.
  *
  * @warning @p variables must NOT be NULL.
- * @warning @p variables must be an initialized @ref t_var_list.
+ * @warning @p variables must have been initialized with @ref var_init.
  *
  * @param variables Variable list to clear and release (borrowed, must NOT be
  *                  NULL).
@@ -83,22 +82,22 @@ void	var_free_all(t_var_list *variables);
  * @note The returned pointer is borrowed from @p variables.
  * @note Ownership remains with the @ref t_var_list; caller must NOT free the
  *       returned @ref t_var, nor its `name` or `value` fields.
- * @note On failure, `*dst_var` is left unmodified.
+ * @note On failure, the object pointed to by @p dst_var is left unmodified.
  *
  * @warning @p variables, @p var_name and @p dst_var must NOT be NULL.
  * @warning The returned pointer becomes potentially invalid after any mutation
  *          of the underlying vector, including @ref var_set,
  *          @ref var_unset, @ref var_set_export, @ref var_set_readonly, or any
  *          other operation on the same @ref t_var_list that can reorder items,
- *          remove items, or reallocate/move `variables->data`.
+ *          remove items, or reallocate/move the storage owned by @p variables.
  *
  * @param variables Variable list to search (borrowed, must NOT be NULL).
  * @param var_name Variable name to look up (borrowed, must NOT be NULL).
  * @param dst_var Output pointer receiving the matching variable
  *                (borrowed from @p variables, must NOT be NULL).
- * @retval ERR_NO Variable was found and `*dst_var` was set.
- * @retval ERR_INVALID_POINTER @p variables, @p var_name or @p dst_var is NULL.
- * @retval ERR_VAR_NOT_FOUND No variable named @p var_name exists in the list.
+ * @retval @ref ERR_NO Variable was found and `*dst_var` was set.
+ * @retval @ref ERR_INVALID_POINTER @p variables, @p var_name or @p dst_var is NULL.
+ * @retval @ref ERR_VAR_NOT_FOUND No variable named @p var_name exists in the list.
  */
 t_error	var_get(t_var_list *variables, const char *var_name, t_var **dst_var);
 
@@ -110,9 +109,9 @@ t_error	var_get(t_var_list *variables, const char *var_name, t_var **dst_var);
  * capacity.
  *
  * @note This function cannot fail with the current implementation because it
- *       delegates to `vector_init(..., 0)`.
+ *       delegates to @ref vector_init with a zero initial capacity.
  *
- * @warning variables must NOT be NULL.
+ * @warning @p variables must NOT be NULL.
  * @warning @p variables must NOT already own allocated storage. Free it first
  *          with @ref var_free_all before reinitializing it.
  *
@@ -122,7 +121,7 @@ void	var_init(t_var_list *variables);
 
 /**
  * @ingroup var_pub
- * @brief Loads environment variables from a NULL-terminated envp array.
+ * @brief Loads environment variables from a NULL-terminated @p envp array.
  *
  * Each entry is split at the first `=` using @ref var_split. When the split
  * succeeds and the extracted name is valid according to
@@ -135,7 +134,7 @@ void	var_init(t_var_list *variables);
  *       @ref ERR_NO.
  * @note Variables loaded from @p envp are marked as exported.
  *
- * @warning When @p envp is not NULL, variables must NOT be NULL.
+ * @warning When @p envp is not NULL, @p variables must NOT be NULL.
  * @warning @p envp must be a valid NULL-terminated array of valid string
  *          pointers.
  * @warning On failure, variables successfully loaded before the error remain
@@ -145,12 +144,12 @@ void	var_init(t_var_list *variables);
  * @param variables Variable list to populate (borrowed, must NOT be NULL when
  *                  @p envp is not NULL).
  * @param envp Environment array to import (borrowed, can be NULL).
- * @retval ERR_NO Environment was loaded successfully, or @p envp was NULL.
- * @retval ERR_INVALID_POINTER A NULL pointer was encountered in a required
- *                             internal call.
- * @retval ERR_OUT_OF_MEMORY Memory allocation failed while importing an entry.
- * @retval ERR_VAR_INVALID_NAME Propagated from an internal call.
- * @retval ERR_VAR_READ_ONLY Propagated from an internal call.
+ * @retval @ref ERR_NO Environment was loaded successfully, or @p envp was NULL.
+ * @retval @ref ERR_INVALID_POINTER A NULL pointer was encountered in a required
+ *                                  internal call.
+ * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while importing an entry.
+ * @retval @ref ERR_VAR_INVALID_NAME Propagated from an internal call.
+ * @retval @ref ERR_VAR_READ_ONLY Propagated from an internal call.
  */
 t_error	var_load_env(t_var_list *variables, const char **envp);
 
@@ -174,11 +173,11 @@ t_error	var_load_env(t_var_list *variables, const char **envp);
  * @param variables Variable list to mutate (borrowed, must NOT be NULL).
  * @param name Variable name (borrowed, must NOT be NULL).
  * @param value New variable value (borrowed, must NOT be NULL).
- * @retval ERR_NO Variable was created or updated successfully.
- * @retval ERR_INVALID_POINTER variables, name or value is NULL.
- * @retval ERR_VAR_INVALID_NAME name is not a valid variable name.
- * @retval ERR_VAR_READ_ONLY An existing variable with that name is read-only.
- * @retval ERR_OUT_OF_MEMORY Memory allocation failed.
+ * @retval @ref ERR_NO Variable was created or updated successfully.
+ * @retval @ref ERR_INVALID_POINTER @p variables, @p name or @p value is NULL.
+ * @retval @ref ERR_VAR_INVALID_NAME @p name is not a valid variable name.
+ * @retval @ref ERR_VAR_READ_ONLY An existing variable with that name is read-only.
+ * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed.
  */
 t_error	var_set(t_var_list *variables, const char *name, const char *value);
 
@@ -204,13 +203,13 @@ t_error	var_set(t_var_list *variables, const char *name, const char *value);
  * @param variables Variable list to mutate (borrowed, must NOT be NULL).
  * @param name Variable name (borrowed, must NOT be NULL).
  * @param export New export flag value.
- * @retval ERR_NO Export flag was updated successfully.
- * @retval ERR_INVALID_POINTER variables or name is NULL.
- * @retval ERR_VAR_INVALID_NAME name is not a valid variable name.
- * @retval ERR_VAR_NOT_FOUND No variable named @p name exists and @p export is
- *                           false.
- * @retval ERR_OUT_OF_MEMORY Memory allocation failed while creating a missing
- *                           variable.
+ * @retval @ref ERR_NO Export flag was updated successfully.
+ * @retval @ref ERR_INVALID_POINTER @p variables or @p name is NULL.
+ * @retval @ref ERR_VAR_INVALID_NAME @p name is not a valid variable name.
+ * @retval @ref ERR_VAR_NOT_FOUND No variable named @p name exists and @p export is
+ *                                false.
+ * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while creating a missing
+ *                                variable.
  */
 t_error	var_set_export(t_var_list *variables, const char *name, bool export);
 
@@ -233,11 +232,11 @@ t_error	var_set_export(t_var_list *variables, const char *name, bool export);
  *
  * @param variables Variable list to mutate (borrowed, must NOT be NULL).
  * @param name Variable name (borrowed, must NOT be NULL).
- * @retval ERR_NO Variable is now read-only.
- * @retval ERR_INVALID_POINTER @p variables or @p name is NULL.
- * @retval ERR_VAR_INVALID_NAME @p name is not a valid variable name.
- * @retval ERR_OUT_OF_MEMORY Memory allocation failed while creating a missing
- *                           variable.
+ * @retval @ref ERR_NO Variable is now read-only.
+ * @retval @ref ERR_INVALID_POINTER @p variables or @p name is NULL.
+ * @retval @ref ERR_VAR_INVALID_NAME @p name is not a valid variable name.
+ * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while creating a missing
+ *                                variable.
  */
 t_error	var_set_readonly(t_var_list *variables, const char *name);
 
@@ -245,15 +244,16 @@ t_error	var_set_readonly(t_var_list *variables, const char *name);
  * @ingroup var_pub
  * @brief Splits an assignment string into a newly allocated name/value pair.
  *
- * Splits @p src at the first `'='` character. The left part becomes
- * `*dst_name`, and the right part becomes `*dst_value`.
+ * Splits @p src at the first `'='` character. The left part becomes the newly
+ * allocated name string stored through @p dst_name, and the right part becomes
+ * the newly allocated value string stored through @p dst_value.
  *
  * @note Either resulting part may be empty.
  * @note This function does NOT validate the extracted variable name.
- * @note On entry validation failure, `*dst_name` and `*dst_value` are not
+ * @note On entry validation failure, @p dst_name and @p dst_value are not
  *       accessed.
- * @note After parameter validation succeeds, both outputs are first set to
- *       NULL.
+ * @note After parameter validation succeeds, the objects pointed to by
+ *       @p dst_name and @p dst_value are first set to NULL.
  *
  * @warning @p src, @p dst_name and @p dst_value must NOT be NULL.
  *
@@ -262,11 +262,13 @@ t_error	var_set_readonly(t_var_list *variables, const char *name);
  *                 (owned by caller on success, must be freed with free()).
  * @param dst_value Output pointer receiving the newly allocated value string
  *                  (owned by caller on success, must be freed with free()).
- * @retval ERR_NO Split succeeded.
- * @retval ERR_INVALID_POINTER @p src, @p dst_name or @p dst_value is NULL.
- * @retval ERR_VAR_MISSING_EQUAL src does not contain `'='`.
- * @retval ERR_OUT_OF_MEMORY Memory allocation failed. On failure,
- *                           `*dst_name == NULL` and `*dst_value == NULL`.
+ * @retval @ref ERR_NO Split succeeded.
+ * @retval @ref ERR_INVALID_POINTER @p src, @p dst_name or @p dst_value is NULL.
+ * @retval @ref ERR_VAR_MISSING_EQUAL @p src does not contain `'='`.
+ * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed. On failure after
+ *                                parameter validation succeeds, the objects
+ *                                pointed to by @p dst_name and @p dst_value
+ *                                are left as NULL.
  */
 t_error	var_split(const char *src, char **dst_name, char **dst_value);
 
@@ -280,16 +282,16 @@ t_error	var_split(const char *src, char **dst_name, char **dst_value);
  * @note If no variable named @p var_name exists, this function returns
  *       @ref ERR_NO.
  *
- * @warning variables and var_name must NOT be NULL.
+ * @warning @p variables and @p var_name must NOT be NULL.
  * @warning Removing an item shifts subsequent items left and may invalidate
  *          borrowed pointers into the list.
  *
  * @param variables Variable list to mutate (borrowed, must NOT be NULL).
  * @param var_name Variable name to remove (borrowed, must NOT be NULL).
- * @retval ERR_NO Variable was removed, or no such variable existed.
- * @retval ERR_INVALID_POINTER variables or var_name is NULL.
- * @retval ERR_VAR_READ_ONLY The matching variable is read-only.
- * @retval ERR_INDEX_OUT_OF_BOUND Internal removal from the vector failed.
+ * @retval @ref ERR_NO Variable was removed, or no such variable existed.
+ * @retval @ref ERR_INVALID_POINTER @p variables or @p var_name is NULL.
+ * @retval @ref ERR_VAR_READ_ONLY The matching variable is read-only.
+ * @retval @ref ERR_INDEX_OUT_OF_BOUND Internal removal from the vector failed.
  */
 t_error	var_unset(t_var_list *variables, const char *var_name);
 

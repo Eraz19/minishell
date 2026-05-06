@@ -22,13 +22,14 @@
  * @brief Searches a variable by exact name match and returns its index.
  *
  * Comparison is performed against the full null-terminated @p var_name.
- * Search proceeds from index 0 to `variables->len - 1` and stops at the first
- * match.
+ * Search proceeds from index 0 to the last valid index currently stored in
+ * @p variables and stops at the first match.
  *
- * @note On success, `*res` receives the matching index.
- * @note On failure, `*res` is left unmodified.
+ * @note On success, the object pointed to by @p res receives the matching
+ *       index.
+ * @note On failure, the object pointed to by @p res is left unmodified.
  *
- * @warning variables, var_name and res must NOT be NULL.
+ * @warning @p variables, @p var_name and @p res must NOT be NULL.
  *
  * @param variables Variable list to search (borrowed, must NOT be NULL).
  * @param var_name Variable name to look up (borrowed, must NOT be NULL).
@@ -42,13 +43,14 @@ bool	var_find(t_var_list *variables, const char *var_name, size_t *res);
  * @ingroup var_priv
  * @brief Releases the dynamic resources owned by an initialized variable.
  *
- * Frees `var->name` and `var->value` when they are non-NULL, then sets both
- * pointers to NULL and resets `export` and `readonly` to false.
+ * Frees the strings owned through the `name` and `value` fields of @p var when
+ * they are non-NULL, then sets these pointers to NULL and resets `export` and
+ * `readonly` to false.
  *
- * @warning var must NOT be NULL.
- * @warning var must have been initialized before calling this function:
- *          `var->name` and `var->value` must each be either NULL or a valid
- *          owned pointer.
+ * @warning @p var must NOT be NULL.
+ * @warning @p var must have been initialized before calling this function: its
+ *          `name` and `value` fields must each be either NULL or a valid owned
+ *          pointer.
  * @warning This function does NOT free the @ref t_var object itself.
  *
  * @param var Variable to clear in place (borrowed, must NOT be NULL).
@@ -60,7 +62,7 @@ void	var_free(t_var *var);
  * @brief Checks whether a string is a valid variable name.
  *
  * The current implementation accepts names matching the pattern
- * `[A-Za-z_][A-Za-z0-9_]*`, using `ft_isalpha()` and `ft_isalnum()`.
+ * `[A-Za-z_][A-Za-z0-9_]*`, using @ref ft_isalpha and @ref ft_isalnum.
  *
  * @note Returns false when @p name is NULL or empty.
  * @warning ⚠️ POSIX shell rules require name classification to depend on the
@@ -82,11 +84,11 @@ bool	var_name_is_valid(const char *name);
  * This helper duplicates @p name and @p value and returns the resulting
  * structure by value.
  *
- * @note The returned `t_var` owns any non-NULL `name` and `value` fields.
+ * @note The returned @ref t_var owns any non-NULL `name` and `value` fields.
  * @note The returned variable can be safely cleaned up with @ref var_free,
  *       including after partial allocation failure.
  *
- * @warning name and value must NOT be NULL.
+ * @warning @p name and @p value must NOT be NULL.
  * @warning Caller must detect allocation failure by checking both returned
  *          var.name and var.value pointers individually.
  *
@@ -103,18 +105,18 @@ t_var	var_new(const char *name, const char *value, bool export, bool ronly);
  * @ingroup var_priv
  * @brief Replaces the value string owned by a variable.
  *
- * Allocates a duplicate of @p value first, then frees the previous
- * `var->value` only after allocation succeeds.
+ * Allocates a duplicate of @p value first, then frees the previous value
+ * string owned by @p var only after allocation succeeds.
  *
  * @note On failure, the previous value is left unchanged.
  *
- * @warning var and value must NOT be NULL.
+ * @warning @p var and @p value must NOT be NULL.
  *
  * @param var Variable to update in place (borrowed, must NOT be NULL).
  * @param value New value to duplicate and assign (borrowed, must NOT be NULL).
- * @retval ERR_NO Value was updated successfully.
- * @retval ERR_OUT_OF_MEMORY Memory allocation failed and the variable was left
- *                           unchanged.
+ * @retval @ref ERR_NO Value was updated successfully.
+ * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed and the variable was
+ *                                left unchanged.
  */
 t_error	var_update_value(t_var *var, const char *value);
 
