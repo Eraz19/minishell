@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "builder.h"
 
 static void	rules_build_cmd_suffix_1(t_rule *rules);
 static void	rules_build_cmd_suffix_2(t_rule *rules);

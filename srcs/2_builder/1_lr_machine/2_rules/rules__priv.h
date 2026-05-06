@@ -1,7 +1,7 @@
 #ifndef RULES__PRIV_H
 # define RULES__PRIV_H
 
-# include "parser.h"
+# include "builder.h"
 
 void	rules_build_and_or(t_rule *rules);
 void	rules_build_brace_group(t_rule *rules);

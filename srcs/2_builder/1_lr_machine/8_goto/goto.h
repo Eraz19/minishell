@@ -1,7 +1,7 @@
 #ifndef GOTO_H
 # define GOTO_H
 
-# include "parser.h"
+# include "builder.h"
 # include <limits.h>
 
 # define GOTO_EMPTY	SIZE_T_MAX

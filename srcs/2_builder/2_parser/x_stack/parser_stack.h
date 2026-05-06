@@ -1,7 +1,7 @@
 #ifndef PARSER_STACK_H
 # define PARSER_STACK_H
 
-# include "parser.h"
+# include "builder.h"
 # include <stdbool.h>
 
 # define STACK_INITIAL_CAP	16

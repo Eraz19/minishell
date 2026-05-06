@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "builder.h"
 
 static void	rules_build_sequential_sep_1(t_rule *rules);
 static void	rules_build_sequential_sep_2(t_rule *rules);

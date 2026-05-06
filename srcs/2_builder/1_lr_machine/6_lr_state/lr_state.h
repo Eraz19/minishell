@@ -1,7 +1,7 @@
 #ifndef LR_STATE_H
 # define LR_STATE_H
 
-# include "parser.h"
+# include "builder.h"
 
 /* ************************************************************************* */
 /*                                LIFE CYCLE                                 */
