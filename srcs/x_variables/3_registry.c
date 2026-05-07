@@ -27,32 +27,6 @@ t_error	var_set(t_var_list *variables, const char *name, const char *value)
 	return (ERR_NO);
 }
 
-t_error	var_set_export(t_var_list *variables, const char *name, bool export)
-{
-	size_t	var_index;
-	t_var	new_var;
-	t_var	*current_var;
-
-	if (!variables || !name)
-		return (ERR_INVALID_POINTER);
-	if (!var_name_is_valid(name))
-		return (ERR_VAR_INVALID_NAME);
-	if (!var_find(variables, name, &var_index))
-	{
-		if (!export)
-			return (ERR_VAR_NOT_FOUND);
-		new_var = var_new(name, "", export, false);
-		if (!new_var.name || !new_var.value)
-			return (free(new_var.name), free(new_var.value), ERR_OUT_OF_MEMORY);
-		if (!vector_push(variables, &new_var))
-			return (free(new_var.name), free(new_var.value), ERR_OUT_OF_MEMORY);
-		return (ERR_NO);
-	}
-	current_var = &((t_var *)variables->data)[var_index];
-	current_var->export = export;
-	return (ERR_NO);
-}
-
 t_error	var_set_readonly(t_var_list *variables, const char *name)
 {
 	size_t	var_index;
@@ -77,15 +51,21 @@ t_error	var_set_readonly(t_var_list *variables, const char *name)
 	return (ERR_NO);
 }
 
-t_error	var_get(t_var_list *variables, const char *var_name, t_var **dst_var)
+t_error	var_get(const t_var_list *variables, const char *var_name, char **dst_value)
 {
 	size_t	var_index;
+	t_var	*var;
+	char	*res;
 
-	if (!variables || !var_name || !dst_var)
+	if (!variables || !var_name || !dst_value)
 		return (ERR_INVALID_POINTER);
 	if (!var_find(variables, var_name, &var_index))
 		return (ERR_VAR_NOT_FOUND);
-	*dst_var = &((t_var *)variables->data)[var_index];
+	var = &((t_var *)variables->data)[var_index];
+	res = str_dup(var->value);
+	if (!res)
+		return (ERR_OUT_OF_MEMORY);
+	*dst_value = res;
 	return (ERR_NO);
 }
 

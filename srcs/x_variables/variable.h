@@ -42,6 +42,11 @@ typedef struct s_var
  */
 typedef t_vector	t_var_list;
 
+/* ---------- TODO: add documentation ---------- */
+
+t_error	var_load(t_var_list *variables, const char **envp);
+t_error	var_export(t_var_list *variables, const char *name);
+
 /* ************************************************************************* */
 /*                                   GROUPS                                  */
 /* ************************************************************************* */
@@ -73,33 +78,35 @@ typedef t_vector	t_var_list;
 void	var_free_all(t_var_list *variables);
 
 /**
- * @ingroup var_pub
- * @brief Retrieves a borrowed pointer to a variable stored in the list.
+ * @ingroup var_priv
+ * @brief Retrieves an owned copy of a variable value stored in the list.
  *
- * On success, `*dst_var` points directly to the matching @ref t_var stored
- * inside the contiguous storage owned by @p variables.
+ * On success, `*dst_value` receives a newly allocated copy of the value of the
+ * variable named @p var_name.
  *
- * @note The returned pointer is borrowed from @p variables.
- * @note Ownership remains with the @ref t_var_list; caller must NOT free the
- *       returned @ref t_var, nor its `name` or `value` fields.
- * @note On failure, the object pointed to by @p dst_var is left unmodified.
+ * @note The string returned through @p dst_value is owned by the caller on
+ *       success.
+ * @note The returned string is independent from @p variables and remains valid
+ *       even if the underlying @ref t_var_list is later modified or destroyed.
+ * @note On failure, the object pointed to by @p dst_value is left unmodified.
  *
- * @warning @p variables, @p var_name and @p dst_var must NOT be NULL.
- * @warning The returned pointer becomes potentially invalid after any mutation
- *          of the underlying vector, including @ref var_set,
- *          @ref var_unset, @ref var_set_export, @ref var_set_readonly, or any
- *          other operation on the same @ref t_var_list that can reorder items,
- *          remove items, or reallocate/move the storage owned by @p variables.
+ * @warning @p variables, @p var_name and @p dst_value must NOT be NULL.
  *
  * @param variables Variable list to search (borrowed, must NOT be NULL).
  * @param var_name Variable name to look up (borrowed, must NOT be NULL).
- * @param dst_var Output pointer receiving the matching variable
- *                (borrowed from @p variables, must NOT be NULL).
- * @retval @ref ERR_NO Variable was found and `*dst_var` was set.
- * @retval @ref ERR_INVALID_POINTER @p variables, @p var_name or @p dst_var is NULL.
- * @retval @ref ERR_VAR_NOT_FOUND No variable named @p var_name exists in the list.
+ * @param dst_value Output pointer receiving an owned copy of the matching
+ *                  variable value (owned by caller on success, must NOT be
+ *                  NULL).
+ * @retval @ref ERR_NO Variable was found and the object pointed to by
+ *         @p dst_value was set to a newly allocated copy of its value.
+ * @retval @ref ERR_INVALID_POINTER @p variables, @p var_name or @p dst_value
+ *         is NULL.
+ * @retval @ref ERR_VAR_NOT_FOUND No variable named @p var_name exists in the
+ *         list.
+ * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while duplicating the
+ *         variable value.
  */
-t_error	var_get(t_var_list *variables, const char *var_name, t_var **dst_var);
+t_error	var_get(const t_var_list *variables, const char *var_name, char **dst_value);
 
 /**
  * @ingroup var_pub
@@ -121,37 +128,18 @@ void	var_init(t_var_list *variables);
 
 /**
  * @ingroup var_pub
- * @brief Loads environment variables from a NULL-terminated @p envp array.
+ * @brief Checks whether a string is a valid variable name.
  *
- * Each entry is split at the first `=` using @ref var_split. When the split
- * succeeds and the extracted name is valid according to
- * @ref var_name_is_valid, the variable is inserted with @ref var_set and then
- * marked as exported with @ref var_set_export.
+ * The current implementation accepts names matching the pattern
+ * `[A-Za-z_][A-Za-z0-9_]*`, using @ref ft_isalpha and @ref ft_isalnum.
  *
- * @note Invalid environment entries are skipped when splitting fails with
- *       @ref ERR_VAR_MISSING_EQUAL or when the extracted name is invalid.
- * @note If @p envp is NULL, this function does nothing and returns
- *       @ref ERR_NO.
- * @note Variables loaded from @p envp are marked as exported.
+ * @note Returns false when @p name is NULL or empty.
  *
- * @warning When @p envp is not NULL, @p variables must NOT be NULL.
- * @warning @p envp must be a valid NULL-terminated array of valid string
- *          pointers.
- * @warning On failure, variables successfully loaded before the error remain
- *          stored in @p variables; this function does NOT roll back partial
- *          progress.
- *
- * @param variables Variable list to populate (borrowed, must NOT be NULL when
- *                  @p envp is not NULL).
- * @param envp Environment array to import (borrowed, can be NULL).
- * @retval @ref ERR_NO Environment was loaded successfully, or @p envp was NULL.
- * @retval @ref ERR_INVALID_POINTER A NULL pointer was encountered in a required
- *                                  internal call.
- * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while importing an entry.
- * @retval @ref ERR_VAR_INVALID_NAME Propagated from an internal call.
- * @retval @ref ERR_VAR_READ_ONLY Propagated from an internal call.
+ * @param name Variable name to validate (borrowed, can be NULL).
+ * @return true if @p name is valid according to the current implementation,
+ *         false otherwise.
  */
-t_error	var_load_env(t_var_list *variables, const char **envp);
+bool	var_name_is_valid(const char *name);
 
 /**
  * @ingroup var_pub
@@ -180,38 +168,6 @@ t_error	var_load_env(t_var_list *variables, const char **envp);
  * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed.
  */
 t_error	var_set(t_var_list *variables, const char *name, const char *value);
-
-/**
- * @ingroup var_pub
- * @brief Sets or clears the export flag of a variable.
- *
- * If the variable already exists, only its `export` flag is updated.
- * If the variable does not exist and @p export is true, a new variable is
- * created with an empty value (`""`), `export == true`, and
- * `readonly == false`.
- *
- * @note The contents of @p name are duplicated internally only when a new
- *       variable must be created; caller retains ownership of the input
- *       string.
- * @note This function may modify the export flag of an existing read-only
- *       variable, because read-only only protects value removal/update.
- *
- * @warning @p variables and @p name must NOT be NULL.
- * @warning Any successful insertion may reallocate the underlying vector
- *          storage and invalidate borrowed pointers into the list.
- *
- * @param variables Variable list to mutate (borrowed, must NOT be NULL).
- * @param name Variable name (borrowed, must NOT be NULL).
- * @param export New export flag value.
- * @retval @ref ERR_NO Export flag was updated successfully.
- * @retval @ref ERR_INVALID_POINTER @p variables or @p name is NULL.
- * @retval @ref ERR_VAR_INVALID_NAME @p name is not a valid variable name.
- * @retval @ref ERR_VAR_NOT_FOUND No variable named @p name exists and @p export is
- *                                false.
- * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while creating a missing
- *                                variable.
- */
-t_error	var_set_export(t_var_list *variables, const char *name, bool export);
 
 /**
  * @ingroup var_pub

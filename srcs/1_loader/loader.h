@@ -1,9 +1,8 @@
 #ifndef LOADER_H
 # define LOADER_H
 
-# include "libft.h"
 # include "builder.h"
-# include <stdbool.h>
+# include "variable.h"
 # include <stdint.h>
 
 /* ************************************************************************* */
@@ -38,7 +37,7 @@ typedef struct s_param
 
 typedef struct s_state
 {
-	t_vector	variables;
+	t_var_list	variables;
 	uint32_t	options;
 	t_param		params;
 }	t_state;

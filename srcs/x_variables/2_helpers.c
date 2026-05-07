@@ -20,7 +20,7 @@ bool	var_name_is_valid(const char *name)
 	return (true);
 }
 
-bool	var_find(t_var_list *variables, const char *var_name, size_t *res)
+bool	var_find(const t_var_list *variables, const char *var_name, size_t *res)
 {
 	size_t	i;
 	size_t	len;

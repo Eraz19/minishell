@@ -4,6 +4,7 @@
 typedef enum e_error
 {
 	ERR_NO,
+	ERR_LIBC,	// see errno
 	ERR_INDEX_OUT_OF_BOUND,
 	ERR_INVALID_POINTER,
 	ERR_OUT_OF_MEMORY,
