@@ -1,6 +1,8 @@
 # TODO
 
+- replace `ERR_OUT_OF_MEMORY` by `ERR_LIBC`
 - add `const` everywhere it's needed
+- remove pointers check in `variable` module (yolo)
 - `var_get()` should be private (returns a pointer to the real var)
 - `var_get_value()` should be public (returns a malloc'd copy of var->value)
 - Préciser dans `lr_machine.md` que `ACTION` est complétée étape par étape avec un process et un payload différents pour :
@@ -59,4 +61,6 @@ POSIX requirements which current implementation can't reproduce because of 42 al
 	- `PPID` variable: "Set by the shell to the decimal value of its parent process ID during initialization of the shell"
 		- **forbiden** functions: `getppid()`
 		- **Linux** workaround: read `PPid` from `/proc/self/stat` or `/proc/self/status`
-		- **MacOS** workaround: NONE
+		- **MacOS** workaround: asm stub
+		- **FreeBSD** workaround: read [...]
+		- **OpenBSD** workaround: ***NONE***
