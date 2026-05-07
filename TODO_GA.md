@@ -1,5 +1,6 @@
 # TODO
 
+- uniformiser l'interface des builtins au format (int builtin(int argc, char **argv, char **envp, t_shell *shell))
 - replace `ERR_OUT_OF_MEMORY` by `ERR_LIBC`
 - add `const` everywhere it's needed
 - remove pointers check in `variable` module (yolo)

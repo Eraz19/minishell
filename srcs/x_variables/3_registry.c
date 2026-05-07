@@ -28,38 +28,20 @@ t_error	var_set(t_var_list *variables, const char *name, const char *value)
 	return (ERR_NO);
 }
 
-t_error	var_get(const t_var_list *variables, const char *var_name, char **dst_value)
+t_error	var_get(const t_var_list *variables, const char *name, char **dst_val)
 {
 	size_t	var_index;
 	t_var	*var;
 	char	*res;
 
-	if (!variables || !var_name || !dst_value)
+	if (!variables || !name || !dst_val)
 		return (ERR_INVALID_POINTER);
-	if (!var_find(variables, var_name, &var_index))
+	if (!var_find(variables, name, &var_index))
 		return (ERR_VAR_NOT_FOUND);
 	var = &((t_var *)variables->data)[var_index];
 	res = str_dup(var->value);
 	if (!res)
 		return (ERR_OUT_OF_MEMORY);
-	*dst_value = res;
-	return (ERR_NO);
-}
-
-t_error	var_unset(t_var_list *variables, const char *var_name)
-{
-	size_t	var_index;
-	t_var	*var;
-
-	if (!variables || !var_name)
-		return (ERR_INVALID_POINTER);
-	if (!var_find(variables, var_name, &var_index))
-		return (ERR_NO);
-	var = &((t_var *)variables->data)[var_index];
-	if (var->readonly)
-		return (ERR_VAR_READ_ONLY);
-	var_free(var);
-	if (!vector_remove(variables, var_index, NULL))
-		return (ERR_INDEX_OUT_OF_BOUND);
+	*dst_val = res;
 	return (ERR_NO);
 }

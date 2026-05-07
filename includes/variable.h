@@ -148,7 +148,7 @@ void	var_free_all(t_var_list *variables);
  * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while duplicating the
  *         variable value.
  */
-t_error	var_get(const t_var_list *variables, const char *var_name, char **dst_value);
+t_error	var_get(const t_var_list *variables, const char *name, char **dst_val);
 
 /**
  * @ingroup var_pub
@@ -241,28 +241,5 @@ t_error	var_set_readonly(t_var_list *variables, const char *name);
  *                                are left as NULL.
  */
 t_error	var_split(const char *src, char **dst_name, char **dst_value);
-
-/**
- * @ingroup var_pub
- * @brief Removes a variable from the list unless it is read-only.
- *
- * If the variable exists and is not read-only, its owned strings are freed
- * first, then the entry is removed from the vector.
- *
- * @note If no variable named @p var_name exists, this function returns
- *       @ref ERR_NO.
- *
- * @warning @p variables and @p var_name must NOT be NULL.
- * @warning Removing an item shifts subsequent items left and may invalidate
- *          borrowed pointers into the list.
- *
- * @param variables Variable list to mutate (borrowed, must NOT be NULL).
- * @param var_name Variable name to remove (borrowed, must NOT be NULL).
- * @retval @ref ERR_NO Variable was removed, or no such variable existed.
- * @retval @ref ERR_INVALID_POINTER @p variables or @p var_name is NULL.
- * @retval @ref ERR_VAR_READ_ONLY The matching variable is read-only.
- * @retval @ref ERR_INDEX_OUT_OF_BOUND Internal removal from the vector failed.
- */
-t_error	var_unset(t_var_list *variables, const char *var_name);
 
 #endif
