@@ -1,15 +1,32 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "lexer.h"
+/*------------- TODO: TMP D.EBUG -------------*/
+#include <stdio.h>
+typedef struct s_token
+{
+	// TODO
+}	t_token;
+/*--------------------------------------------*/
+
+# include "libft.h"
 # include <stdbool.h>
 # include <stddef.h>
+
+/* ************************************************************************* */
+/*                             NAMING CONVENTION                             */
+/* ************************************************************************* */
+/*
+*	t_rule_state				aka item
+*	t_rule_state.pos			aka item.dot
+*	t_lr_state					aka itemset aka state
+*/
 
 /* ************************************************************************* */
 /*                                  SYMBOLS                                  */
 /* ************************************************************************* */
 
-typedef enum e_symbol_id
+typedef enum e_symbol
 {
 	//	TERMINALS (ACTION table entries)
 	//		- Unclassified
@@ -62,6 +79,7 @@ typedef enum e_symbol_id
 	SYM_EOF,
 	// ----------------------------------------------------
 	// NON_TERMINALS (GOTO table entries)
+	SYM_start,
 	SYM_program,
 	SYM_complete_commands,
 	SYM_complete_command,
@@ -109,14 +127,14 @@ typedef enum e_symbol_id
 	SYM_separator_op,
 	SYM_separator,
 	SYM_sequential_sep,
-	SYM_error,
 	// ----------------------------------------------------
-	SYM_COUNT
-}	t_symbol_id;
+	SYM_COUNT,
+	SYM_error
+}	t_symbol;
 
 # define SYM_TERMINAL_MAX		SYM_EOF
-# define SYM_NON_TERMINAL_MIN	SYM_program
-# define SYM_NON_TERMINAL_MAX	SYM_error
+# define SYM_NON_TERMINAL_MIN	SYM_start
+# define SYM_NON_TERMINAL_MAX	SYM_sequential_sep
 
 /* ************************************************************************* */
 /*                                   CST                                     */
@@ -135,17 +153,12 @@ typedef struct s_stack_item
 {
 	t_token		*token_first;	// borrowed
 	t_token		*token_last;	// borrowed
-	t_symbol_id	symbol;
-	int			state;
+	t_symbol	symbol;
+	size_t		lr_state_id;
 	t_cst_node	*cst_node;		// borrowed
 }	t_stack_item;
 
-typedef struct s_stack
-{
-	t_stack_item	*items;
-	size_t			cap;
-	size_t			len;
-}	t_stack;
+typedef t_vector	t_stack;
 
 /* ************************************************************************* */
 /*                                  RULES                                    */
@@ -157,14 +170,15 @@ typedef bool	(*t_reduce_hook)(t_stack_item *rhs, size_t rhs_len, void *ctx);
 
 typedef struct s_rule
 {
-	t_symbol_id		lhs;
-	t_symbol_id		rhs[RULE_RHS_CAP];
+	t_symbol		lhs;
+	t_symbol		rhs[RULE_RHS_CAP];
 	size_t			rhs_len;
 	t_reduce_hook	hook;
 }	t_rule;
 
 typedef enum e_rule_id
 {
+	RULE_START_1,					// start				-> program
 	RULE_PROGRAM_1,					// program				-> linebreak complete_commands linebreak
 	RULE_PROGRAM_2,					// program				-> linebreak
 	RULE_COMPLETE_COMMANDS_1,		// complete_commands	-> complete_commands newline_list complete_command
@@ -280,16 +294,93 @@ typedef enum e_rule_id
 	RULE_COUNT						// rule_count			-> <sentinel>
 }	t_rule_id;
 
+typedef struct s_rule_state
+{
+	size_t		rule_id;
+	size_t		pos;
+	t_symbol	lookahead;
+}	t_rule_state;
+
 /* ************************************************************************* */
-/*                                 PARSER                                    */
+/*                                LR_MACHINE                                 */
+/* ************************************************************************* */
+
+typedef t_vector	t_lr_state;
+
+typedef struct s_transition
+{
+	size_t		from_lr_state_id;
+	t_symbol	symbol;
+	size_t		to_lr_state_id;
+}	t_transition;
+
+typedef enum e_action_type
+{
+	ACTION_SHIFT,
+	ACTION_REDUCE,
+	ACTION_ACCEPT,
+	ACTION_ERROR
+}	t_action_type;
+
+/*
+action.payload can be:
+- SHIFT: to_lr_state_id
+- REDUCE: rule_id
+- ACCEPT: none (ACTION_PAYLOAD_EMPTY)
+- ERROR: none (ACTION_PAYLOAD_EMPTY)
+*/
+typedef struct s_action
+{
+	t_action_type	type;
+	size_t			payload;
+}	t_action;
+
+typedef struct s_goto
+{
+	size_t		from_lr_state_id;
+	t_symbol	symbol;
+	size_t		to_lr_state_id;
+}	t_goto;
+
+typedef struct s_lr_machine
+{
+	t_rule		rules[RULE_COUNT];
+	bool		nullable_symbols[SYM_COUNT];
+	bool		first[SYM_COUNT][SYM_TERMINAL_MAX + 1];
+	t_vector	lr_states;
+	t_vector	transitions;
+	size_t		**gotos;	// [lr_state][non-terminal_symbol]
+	t_action	**actions;	// [lr_state][terminal_symbol]
+}	t_lr_machine;
+
+/* ************************************************************************* */
+/*                                  PARSER                                   */
 /* ************************************************************************* */
 
 typedef struct s_parser
 {
 	t_stack	stack;
-	t_rule	rules[RULE_COUNT];
 	// TODO: CST
-	// TODO: AST
 }	t_parser;
+
+/* ************************************************************************* */
+/*                                 CONVERTER                                 */
+/* ************************************************************************* */
+
+typedef struct s_converter
+{
+	// TODO: AST
+}	t_converter;
+
+/* ************************************************************************* */
+/*                                  BUILDER                                  */
+/* ************************************************************************* */
+
+typedef struct s_builder
+{
+	t_lr_machine	lr_machine;
+	t_parser		parser;
+	t_converter		converter;
+}	t_builder;
 
 #endif
