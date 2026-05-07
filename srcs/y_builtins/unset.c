@@ -3,20 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-/* ---------- TODO: make it a builtin general public helper ---------- */
-
-void	builtin_print_usage(const char *name, const char *usage)
-{
-	static const char	prefix[] = ": usage: ";
-
-	(void)posix_write(STDERR_FILENO, name, str_len(name));
-	(void)posix_write(STDERR_FILENO, prefix, str_len(prefix));
-	(void)posix_write(STDERR_FILENO, name, str_len(name));
-	(void)posix_write(STDERR_FILENO, usage, str_len(usage));
-}
-
-/* ------------------------------------------------------------------- */
-
 // TODO: add type to functions argument
 static int	unset_fun(void *functions, const char *name)
 {

@@ -1,5 +1,6 @@
 # TODO
 
+- ⚠️ `export`, `readonly` and `unset` are [2.15 **Special Built-In Utilities**] !!! => Cehck additional rules to follow !!
 - uniformiser l'interface des builtins au format (int builtin(int argc, char **argv, char **envp, t_shell *shell))
 - replace `ERR_OUT_OF_MEMORY` by `ERR_LIBC`
 - add `const` everywhere it's needed
