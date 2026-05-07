@@ -1,4 +1,4 @@
-#include "variable_priv.h"
+#include "variable.h"
 #include <stdlib.h>
 
 t_var	var_new(const char *name, const char *value, bool export, bool ronly)

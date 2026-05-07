@@ -20,20 +20,20 @@ bool	var_name_is_valid(const char *name)
 	return (true);
 }
 
-bool	var_find(const t_var_list *variables, const char *var_name, size_t *res)
+bool	var_find(const t_var_list *variables, const char *name, size_t *res)
 {
 	size_t	i;
 	size_t	len;
 	t_var	*curr;
 
 	len = 0;
-	while (var_name[len] != '\0')
+	while (name[len] != '\0')
 		len++;
 	i = 0;
 	while (i < variables->len)
 	{
 		curr = &((t_var *)variables->data)[i];
-		if (str_ncmp(var_name, curr->name, len + 1) == 0)
+		if (str_ncmp(name, curr->name, len + 1) == 0)
 		{
 			*res = i;
 			return (true);
@@ -75,6 +75,8 @@ t_error	var_update_value(t_var *var, const char *value)
 {
 	char	*new_value;
 
+	if (!value)
+		return (ERR_NO);
 	new_value = str_dup(value);
 	if (!new_value)
 		return (ERR_OUT_OF_MEMORY);

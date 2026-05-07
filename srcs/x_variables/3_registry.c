@@ -2,13 +2,14 @@
 #include "variable_priv.h"
 #include <stdlib.h>
 
+// value can be NULL
 t_error	var_set(t_var_list *variables, const char *name, const char *value)
 {
 	size_t	var_index;
 	t_var	*current_var;
 	t_var	new_var;
 
-	if (!variables || !name || !value)
+	if (!variables || !name)
 		return (ERR_INVALID_POINTER);
 	if (!var_name_is_valid(name))
 		return (ERR_VAR_INVALID_NAME);
@@ -20,34 +21,10 @@ t_error	var_set(t_var_list *variables, const char *name, const char *value)
 		return (var_update_value(current_var, value));
 	}
 	new_var = var_new(name, value, false, false);
-	if (!new_var.name || !new_var.value)
-		return (free(new_var.name), free(new_var.value), ERR_OUT_OF_MEMORY);
+	if (!new_var.name || (value && !new_var.value))
+		return (var_free(&new_var), ERR_OUT_OF_MEMORY);
 	if (!vector_push(variables, &new_var))
-		return (free(new_var.name), free(new_var.value), ERR_OUT_OF_MEMORY);
-	return (ERR_NO);
-}
-
-t_error	var_set_readonly(t_var_list *variables, const char *name)
-{
-	size_t	var_index;
-	t_var	new_var;
-	t_var	*current_var;
-
-	if (!variables || !name)
-		return (ERR_INVALID_POINTER);
-	if (!var_name_is_valid(name))
-		return (ERR_VAR_INVALID_NAME);
-	if (!var_find(variables, name, &var_index))
-	{
-		new_var = var_new(name, "", false, true);
-		if (!new_var.name || !new_var.value)
-			return (free(new_var.name), free(new_var.value), ERR_OUT_OF_MEMORY);
-		if (!vector_push(variables, &new_var))
-			return (free(new_var.name), free(new_var.value), ERR_OUT_OF_MEMORY);
-		return (ERR_NO);
-	}
-	current_var = &((t_var *)variables->data)[var_index];
-	current_var->readonly = true;
+		return (var_free(&new_var), ERR_OUT_OF_MEMORY);
 	return (ERR_NO);
 }
 
