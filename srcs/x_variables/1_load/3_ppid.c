@@ -13,7 +13,7 @@ t_error	var_set_ppid(t_var_list *variables)
 
 	ppid = ft_ltoa((long)ft_getppid());
 	if (!ppid)
-		return (ERR_OUT_OF_MEMORY);
+		return (ERR_LIBC);
 	error = var_set(variables, "PPID", ppid);
 	if (error != ERR_NO)
 		return (error);

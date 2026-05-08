@@ -58,7 +58,7 @@ t_error	var_split(const char *src, char **dst_name, char **dst_value)
 		return (ERR_VAR_MISSING_EQUAL);
 	*dst_name = malloc(len + 1);
 	if (!*dst_name)
-		return (ERR_OUT_OF_MEMORY);
+		return (ERR_LIBC);
 	str_lcpy(*dst_name, src, len + 1);
 	src += len + 1;
 	len = 0;
@@ -66,7 +66,7 @@ t_error	var_split(const char *src, char **dst_name, char **dst_value)
 		len ++;
 	*dst_value = malloc(len + 1);
 	if (!*dst_value)
-		return (free(*dst_name), *dst_name = NULL, ERR_OUT_OF_MEMORY);
+		return (free(*dst_name), *dst_name = NULL, ERR_LIBC);
 	str_lcpy(*dst_value, src, len + 1);
 	return (ERR_NO);
 }
@@ -79,7 +79,7 @@ t_error	var_update_value(t_var *var, const char *value)
 		return (ERR_NO);
 	new_value = str_dup(value);
 	if (!new_value)
-		return (ERR_OUT_OF_MEMORY);
+		return (ERR_LIBC);
 	free(var->value);
 	var->value = new_value;
 	return (ERR_NO);

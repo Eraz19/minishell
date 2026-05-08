@@ -145,7 +145,7 @@ void	var_free_all(t_var_list *variables);
  *         is NULL.
  * @retval @ref ERR_VAR_NOT_FOUND No variable named @p var_name exists in the
  *         list.
- * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while duplicating the
+ * @retval @ref ERR_LIBC Memory allocation failed while duplicating the
  *         variable value.
  */
 t_error	var_get(const t_var_list *variables, const char *name, char **dst_val);
@@ -205,7 +205,7 @@ bool	var_name_is_valid(const char *name);
  * @retval @ref ERR_NO Variable is now read-only.
  * @retval @ref ERR_INVALID_POINTER @p variables or @p name is NULL.
  * @retval @ref ERR_VAR_INVALID_NAME @p name is not a valid variable name.
- * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed while creating a missing
+ * @retval @ref ERR_LIBC Memory allocation failed while creating a missing
  *                                variable.
  */
 t_error	var_set_readonly(t_var_list *variables, const char *name);
@@ -235,7 +235,7 @@ t_error	var_set_readonly(t_var_list *variables, const char *name);
  * @retval @ref ERR_NO Split succeeded.
  * @retval @ref ERR_INVALID_POINTER @p src, @p dst_name or @p dst_value is NULL.
  * @retval @ref ERR_VAR_MISSING_EQUAL @p src does not contain `'='`.
- * @retval @ref ERR_OUT_OF_MEMORY Memory allocation failed. On failure after
+ * @retval @ref ERR_LIBC Memory allocation failed. On failure after
  *                                parameter validation succeeds, the objects
  *                                pointed to by @p dst_name and @p dst_value
  *                                are left as NULL.

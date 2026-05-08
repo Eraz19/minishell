@@ -1,7 +1,8 @@
-#include "variable.h"
+#include "builtin_error.h"
 #include <stdlib.h>
 
 // value can be NULL
+// errors can be ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	export_add_one(
 	t_var_list *variables,
 	const char *name,
@@ -34,18 +35,28 @@ static t_error	export_add_one(
 	return (ERR_NO);
 }
 
-t_error	export_add(t_var_list *variables, const char *string)
+t_error	export_add(
+	t_shell *shell,
+	const char *builtin,
+	const char *string)
 {
 	char	*name;
 	char	*value;
 	t_error	error;
 
 	if (str_chr(string, '=') == NULL)
-		return (export_add_one(variables, name, NULL));
+	{
+		error = export_add_one(&shell->variables, name, NULL);
+		if (error != ERR_NO)
+			return (builtin_print_custom(shell, builtin, string, error));
+		return (ERR_NO);
+	}
 	error = var_split(string, &name, &value);
 	if (error != ERR_NO)
-		return (error);
-	error = export_add_one(variables, name, value);
+		return (builtin_print_custom(shell, builtin, string, error));
+	error = export_add_one(&shell->variables, name, value);
+	if (error != ERR_NO)
+		(void)builtin_print_custom(shell, builtin, name, error);
 	free(name);
 	free(value);
 	return (error);

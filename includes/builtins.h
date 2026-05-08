@@ -8,6 +8,7 @@
 typedef struct s_shell
 {
 	t_var_list	variables;
+	void		*functions;	// TODO
 }	t_shell;
 
 /* ------------------------- */

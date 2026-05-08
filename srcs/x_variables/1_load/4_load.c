@@ -32,7 +32,7 @@ static t_error	var_parse_envp(t_var_list *variables, const char **envp)
 				return (error);
 			printf("+ '%s' = '%s']\n", name, value);
 		}
-		else if (error == ERR_INVALID_POINTER || error == ERR_OUT_OF_MEMORY)
+		else if (error == ERR_INVALID_POINTER || error == ERR_LIBC)
 			return (error);
 		i++;
 	}
