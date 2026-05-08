@@ -28,7 +28,7 @@ static t_error	var_init_target_up(
 	- PS2 = "> " if absent
 	- PS4 = "+ " if absent
 */
-t_error	var_init_up(t_var_list *variables)
+t_error	var_load_up(t_var_list *variables)
 {
 	t_error	error;
 

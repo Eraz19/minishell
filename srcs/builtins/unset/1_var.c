@@ -11,16 +11,16 @@ static t_error	unset_var_one(
 	t_var				*var;
 
 	if (!var_name_is_valid(name))
-		return (builtin_print_custom(
+		return (builtin_error_custom(
 			shell, builtin, name, ERR_VAR_INVALID_NAME));
 	if (!var_find(&shell->variables, name, &var_index))
 		return (ERR_NO);
 	var = &((t_var *)shell->variables.data)[var_index];
 	if (var->readonly)
-		return (builtin_print_custom(shell, builtin, name, ERR_VAR_READ_ONLY));
+		return (builtin_error_custom(shell, builtin, name, ERR_VAR_READ_ONLY));
 	var_free(var);
 	if (!vector_remove(&shell->variables, var_index, NULL))
-		return (builtin_print_custom(
+		return (builtin_error_custom(
 			shell, builtin, name, ERR_INDEX_OUT_OF_BOUND));
 	return (ERR_NO);
 }

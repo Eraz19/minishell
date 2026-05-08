@@ -4,18 +4,18 @@
 #include "error.h"
 #include "shell.h"
 
-t_error	builtin_print_usage(
+t_error	builtin_error_usage(
 	const t_shell *shell,
 	const char *builtin,
 	const char *usage);
 
-t_error	builtin_print_flag(
+t_error	builtin_error_flag(
 	const t_shell *shell,
 	const char *builtin,
 	const char *flag);
 
 // prefix can be NULL
-t_error	builtin_print_custom(
+t_error	builtin_error_custom(
 	const t_shell *shell,
 	const char *builtin,
 	const char *prefix,

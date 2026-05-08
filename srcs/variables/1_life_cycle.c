@@ -45,11 +45,11 @@ t_error	var_load_all(t_var_list *variables, char **envp)
 	if (error != ERR_NO)
 		return (error);
 	printf("var_load_env: envp parsed                      (entries: %'6zu)\n", variables->len);
-	error = var_init_mandatory(variables);
+	error = var_load_mandatory(variables);
 	if (error != ERR_NO)
 		return (error);
 	printf("var_load_env: mandatory variables initialized  (entries: %'6zu)\n", variables->len);
-	error = var_init_up(variables);
+	error = var_load_up(variables);
 	if (error != ERR_NO)
 		return (error);
 	printf("var_load_env: up variables initialized         (entries: %'6zu)\n", variables->len);

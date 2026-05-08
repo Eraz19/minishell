@@ -1,4 +1,4 @@
-#include "variable_priv.h"
+#include "variable.h"
 #include <stdlib.h>
 # include <stdio.h>	// TODO: tmp debug
 
@@ -19,7 +19,7 @@ t_error	var_set_ppid(t_var_list *variables)
 	error = var_set(variables, "PPID", ppid);
 	if (error != ERR_NO)
 		return (error);
+	printf("-> 'PPID' has been set to '%s'\n", ppid);
 	free(ppid);
-	printf("-> 'IFS' has been set to '%s'\n", ppid);
 	return (ERR_NO);
 }

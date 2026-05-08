@@ -17,7 +17,7 @@ t_error	readonly_print(const t_shell *shell, const char *builtin)
 			continue ;
 		error = var_print("readonly ", var);
 		if (error != ERR_NO)
-			return (builtin_print_custom(shell, builtin, NULL, error));
+			return (builtin_error_custom(shell, builtin, NULL, error));
 	}
 	return (ERR_NO);
 }

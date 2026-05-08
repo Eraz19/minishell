@@ -45,15 +45,15 @@ t_error	export_add(t_shell *shell, const char *builtin, const char *string)
 	{
 		error = export_add_one(&shell->variables, name, NULL);
 		if (error != ERR_NO)
-			return (builtin_print_custom(shell, builtin, string, error));
+			return (builtin_error_custom(shell, builtin, string, error));
 		return (ERR_NO);
 	}
 	error = var_split(string, &name, &value);
 	if (error != ERR_NO)
-		return (builtin_print_custom(shell, builtin, string, error));
+		return (builtin_error_custom(shell, builtin, string, error));
 	error = export_add_one(&shell->variables, name, value);
 	if (error != ERR_NO)
-		(void)builtin_print_custom(shell, builtin, name, error);
+		(void)builtin_error_custom(shell, builtin, name, error);
 	free(name);
 	free(value);
 	return (error);

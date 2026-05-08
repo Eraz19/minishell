@@ -11,7 +11,7 @@ int	readonly(int argc, char **argv, char **envp, t_shell *shell)
 
 	(void)envp;
 	if (argc > 1 && (argv[1][0] == '-' && argv[1][0] != 'p'))
-		return ((int)builtin_print_usage(shell, argv[0], usage));
+		return ((int)builtin_error_usage(shell, argv[0], usage));
 	if (argc == 2 && str_ncmp(argv[1], "-p", 3) == 0)
 		return ((int)readonly_print(shell, argv[0]));
 	exit_code = EXIT_SUCCESS;

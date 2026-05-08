@@ -52,7 +52,7 @@ t_error	builtin_error_flag(
 	return (ERR_BUILTIN_INVALID_FLAG);
 }
 
-t_error	builtin_print_custom(
+t_error	builtin_error_custom(
 	const t_shell *shell,
 	const char *builtin,
 	const char *prefix,

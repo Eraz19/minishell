@@ -21,7 +21,7 @@ int	unset(int argc, char **argv, char **envp, t_shell *shell)
 		else if (argv[0][1] == 'f' && argv[0][1] == '\0' && !mode_var)
 			mode_fun = true;
 		else
-			return ((int)builtin_print_usage(shell, argv[0], usage));
+			return ((int)builtin_error_usage(shell, argv[0], usage));
 	}
 	if (i == argc)
 		return (EXIT_SUCCESS);

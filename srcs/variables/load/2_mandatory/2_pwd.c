@@ -84,8 +84,10 @@ t_error	var_set_pwd(t_var_list *variables)
 	{
 		error = var_pwd_is_valid(pwd, &is_valid);
 		free(pwd);
-		if (error != ERR_NO || is_valid)
+		if (error != ERR_NO)
 			return (error);
+		if (is_valid)
+			return (printf("-> 'PWD' is already valid\n"), ERR_NO);
 	}
 	pwd = getcwd(NULL, MAXPATHLEN);
 	if (!pwd)
