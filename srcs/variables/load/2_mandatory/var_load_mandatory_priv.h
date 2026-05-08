@@ -5,9 +5,12 @@
 
 // Errors can be ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 t_error	var_set_ifs(t_var_list *variables);
+
 // Errors can be ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 t_error	var_set_pwd(t_var_list *variables);
+
+// parent_shell_ppid can be NULL (if it is not a subshell)
 // Errors can be ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
-t_error	var_set_ppid(t_var_list *variables);
+t_error	var_set_ppid(t_var_list *variables, char *parent_shell_ppid);
 
 #endif

@@ -8,14 +8,19 @@
 cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05_03)
 	- Set by the shell to the decimal value of its parent process ID during initialization of the shell
 */
-t_error	var_set_ppid(t_var_list *variables)
+t_error	var_set_ppid(t_var_list *variables, char *parent_shell_ppid)
 {
 	char	*ppid;
 	t_error	error;
 
-	ppid = ft_ltoa((long)ft_getppid());
-	if (!ppid)
-		return (ERR_LIBC);
+	if (!parent_shell_ppid)
+	{
+		ppid = ft_ltoa((long)ft_getppid());
+		if (!ppid)
+			return (ERR_LIBC);
+	}
+	else
+		ppid = parent_shell_ppid;
 	error = var_set(variables, "PPID", ppid);
 	if (error != ERR_NO)
 		return (error);
