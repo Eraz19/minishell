@@ -1,6 +1,9 @@
 # TODO
 
-- ⚠️ `export`, `readonly` and `unset` are [2.15 **Special Built-In Utilities**] !!! => Cehck additional rules to follow !!
+- `load` module shall handle variables `expansion` and/or specific values depending on context (e.g. `PPID` in `subshells`)
+- `Makefile`
+- comment all functions with list of possible error types they can return
+- ⚠️ `export`, `readonly` and `unset` are [2.15 **Special Built-In Utilities**] !!! => Check additional rules to follow !!
 - uniformiser l'interface des builtins au format (int builtin(int argc, char **argv, char **envp, t_shell *shell))
 - replace `ERR_LIBC` by `ERR_LIBC`
 - add `const` everywhere it's needed

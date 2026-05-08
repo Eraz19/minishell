@@ -8,6 +8,7 @@
 #include "goto.h"
 #include <stdlib.h>
 #include <locale.h>
+# include <stdio.h>	// TODO: tmp debug
 
 void	lr_machine_init(t_lr_machine *machine)
 {

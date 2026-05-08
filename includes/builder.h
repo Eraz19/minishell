@@ -1,15 +1,9 @@
 #ifndef BUILDER_H
 # define BUILDER_H
 
-/*------------- TODO: TMP D.EBUG -------------*/
-#include <stdio.h>
-typedef struct s_token
-{
-	// TODO
-}	t_token;
-/*--------------------------------------------*/
-
 # include "libft.h"
+# include "error.h"
+# include "lexer.h"
 # include <stdbool.h>
 # include <stddef.h>
 
@@ -382,5 +376,9 @@ typedef struct s_builder
 	t_parser		parser;
 	t_converter		converter;
 }	t_builder;
+
+void	builder_init(t_builder *builder);
+t_error	builder_load(t_builder *builder);
+void	builder_free(t_builder *builder);
 
 #endif

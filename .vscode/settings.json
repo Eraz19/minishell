@@ -20,7 +20,12 @@
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/7_transition",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/8_goto",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/9_action",
-		"-I${workspaceFolder}/srcs/x_variables",
-		"-I${workspaceFolder}/srcs/y_builtins"
+		"-I${workspaceFolder}/srcs/variables",
+		"-I${workspaceFolder}/srcs/variables/load",
+		"-I${workspaceFolder}/srcs/variables/load/1_envp",
+		"-I${workspaceFolder}/srcs/variables/load/2_mandatory",
+		"-I${workspaceFolder}/srcs/variables/load/2_mandatory/ft_getppid",
+		"-I${workspaceFolder}/srcs/variables/load/3_up",
+		"-I${workspaceFolder}/srcs/builtins"
 	]
 }

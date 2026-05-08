@@ -1,25 +1,18 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "variable.h"
-
-/* ---------- TMP ---------- */
-
-typedef struct s_shell
-{
-	t_var_list	variables;
-	void		*functions;	// TODO
-}	t_shell;
-
-/* ------------------------- */
+# include "shell.h"
 
 /* ************************************************************************* */
 /*                              SPECIAL BUILTINS                             */
 /* ************************************************************************* */
 
-int		export(int argc, char **argv, char **envp, t_shell *shell);
+// Errors can be ERR_LIBC
 t_error	export_build_envp(const t_shell *shell, char ***dst_envp);
+int		export(int argc, char **argv, char **envp, t_shell *shell);
+
 int		readonly(int argc, char **argv, char **envp, t_shell *shell);
+
 int		unset(int argc, char **argv, char **envp, t_shell *shell);
 
 #endif
