@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dlessdash.c                                        :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/27 12:15:21 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/27 12:17:59 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/07 15:59:23 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/07 16:37:41 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../../_lexer.h"
+#include "../../_scanner.h"
 
-t_lexer_token	*dlessdash(size_t offset)
+void	free_token(t_token **token_ptr)
 {
-	t_lexer_token	*res;
-
-	res = malloc(sizeof(t_lexer_token));
-	if (res == NULL)
-		return (NULL);
-	res->offset = offset;
-	res->type = REDIRECTION_;
-	res->id.redirection_ = DLESSDASH;
-	if (buff_init(&res->value, 0) == false)
-		return (free(res), NULL);
-	return (res);
+	if (token_ptr == NULL)
+		return ;
+	buff_free(&(*token_ptr)->value);
+	**token_ptr = (t_token){0};
+	free(*token_ptr);
+	*token_ptr = NULL;
 }
 
-bool	is_dlessdash(t_raw_string input_ptr)
+t_token	*create_token(char *content, size_t offset, t_token_type type)
 {
-	return (input_ptr[0] == '<' && input_ptr[1] == '<' && input_ptr[2] == '-');
+	t_token	*res;
+
+	res = malloc(sizeof(t_token));
+	if (res == NULL)
+		return (NULL);
+	res->type = type;
+	res->offset = offset;
+	if (buff_init(&res->value, 0) == false)
+		return (free(res), NULL);
+	if (content != NULL)
+		buff_append(&res->value, content, (long)str_len(content));
+	return (res);
 }

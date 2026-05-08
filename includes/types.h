@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   end_of_file.c                                      :+:      :+:    :+:   */
+/*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/23 00:38:21 by adouieb           #+#    #+#             */
-/*   Updated: 2026/04/27 11:58:55 by adouieb          ###   ########.fr       */
+/*   Created: 2026/04/29 17:20:58 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/04 21:43:07 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "../../../_lexer.h"
+#ifndef TYPES_H
+# define TYPES_H
 
-t_lexer_token	*eof(size_t offset)
+# include <stdbool.h>
+# include <sys/stat.h>
+
+typedef const char	*t_file_path;
+
+typedef union u_const_cast
 {
-	t_lexer_token	*res;
+	const char	*const_input;
+	char		*input;
+}	t_const_cast;
 
-	res = malloc(sizeof(t_lexer_token));
-	if (res == NULL)
-		return (NULL);
-	res->offset = offset;
-	res->type = CONTROL_;
-	res->id.control_ = EOF;
-	if (buff_init(&res->value, 0) == false)
-		return (free(res), NULL);
-	return (res);
-}
+typedef struct stat	__stat_;
+
+#endif

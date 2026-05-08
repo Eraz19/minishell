@@ -17,5 +17,6 @@ typedef enum e_error
 }	t_error;
 
 const char	*error_to_string(t_error error);
+// TODO: error_print()
 
 #endif

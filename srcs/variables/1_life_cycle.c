@@ -36,7 +36,10 @@ void	var_init_all(t_var_list *variables)
 	vector_init(variables, sizeof(t_var), 0);
 }
 
-t_error	var_load_all(t_var_list *variables, char **envp)
+t_error	var_load_all(
+	t_var_list *variables,
+	char **envp,
+	char *parent_shell_ppid)
 {
 	t_error	error;
 
@@ -45,7 +48,7 @@ t_error	var_load_all(t_var_list *variables, char **envp)
 	if (error != ERR_NO)
 		return (error);
 	printf("var_load_env: envp parsed                      (entries: %'6zu)\n", variables->len);
-	error = var_load_mandatory(variables);
+	error = var_load_mandatory(variables, parent_shell_ppid);
 	if (error != ERR_NO)
 		return (error);
 	printf("var_load_env: mandatory variables initialized  (entries: %'6zu)\n", variables->len);

@@ -33,8 +33,12 @@ void	var_free(t_var *var);
 
 void	var_init_all(t_var_list *variables);
 
+// parent_shell_ppid can be NULL (if it is not a subshell).
 // ERR_VAR_INVALID_NAME / ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
-t_error	var_load_all(t_var_list *variables, char **envp);
+t_error	var_load_all(
+	t_var_list *variables,
+	char **envp,
+	char *parent_shell_ppid);
 
 void	var_free_all(t_var_list *variables);
 

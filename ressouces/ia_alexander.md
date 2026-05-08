@@ -6,13 +6,11 @@
 >
 > For every section below, provide **exhaustive answers** that include:
 > - A conceptual explanation grounded in the POSIX specification.
-> - A precise, step-by-step algorithm description.
 > - All relevant **edge cases and pitfalls**.
 > - The exact POSIX section that governs the behaviour.
 >
 > The goal is to implement a **standards-conforming POSIX shell lexer** from scratch in C.
-> Assume no third-party libraries except the C standard library and GNU readline for interactive
-> input. All data structures used in examples should be practical C structs, not pseudocode.
+> Assume no third-party libraries except the C standard library and GNU readline for interactive input.
 
 ---
 

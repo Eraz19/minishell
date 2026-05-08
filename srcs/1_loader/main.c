@@ -21,10 +21,12 @@ static void	shell_init(t_shell *shell)
 	// TODO: runner_init(&shell->runner);
 }
 
-static t_error	shell_load(t_shell *shell, char **envp)
+// parent_shell_ppid can be NULL (if it is not a subshell).
+static t_error	shell_load(t_shell *shell, char **envp, char *parent_shell_ppid)
 {
 	t_error	error;
-	error = var_load_all(&shell->variables, envp);
+
+	error = var_load_all(&shell->variables, envp, parent_shell_ppid);
 	if (error != ERR_NO)
 		return (error);
 	error = builder_load(&shell->builder);
@@ -62,6 +64,7 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent_shell)
 {
 	t_shell	*shell;
 	t_error	error;
+	char	*parent_shell_ppid;
 
 	(void)argc;
 	(void)argv;
@@ -74,7 +77,14 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent_shell)
 	}
 	shell_get(shell);
 	shell_init(shell);
-	error = shell_load(shell, envp);
+	parent_shell_ppid = NULL;
+	if (parent_shell)
+	{
+		error = var_get(&parent_shell->variables, "PPID", &parent_shell_ppid);
+		if (error != ERR_NO)
+			return (error);
+	}
+	error = shell_load(shell, envp, parent_shell_ppid);
 	if (error != ERR_NO)
 	{
 		// TODO: print error message

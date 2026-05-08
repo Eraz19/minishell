@@ -3,7 +3,7 @@
 
 # include "libft.h"
 # include "error.h"
-# include "lexer.h"
+# include "scanner.h"
 # include <stdbool.h>
 # include <stddef.h>
 

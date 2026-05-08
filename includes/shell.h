@@ -3,7 +3,7 @@
 
 # include "builder.h"
 # include "function.h"
-# include "lexer.h"
+# include "scanner.h"
 # include "params.h"
 # include "runner.h"
 # include "variable.h"
