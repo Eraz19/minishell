@@ -10,7 +10,7 @@
 
 typedef struct s_params
 {
-	bool		is_subshell;			// (internal)
+	void		*parent_shell;			// (internal)
 	const char	*name;					// (internal)
 	t_var_list	variables;				// $<var_name>
 	t_option	options;				// $-
@@ -21,6 +21,10 @@ typedef struct s_params
 	pid_t		last_bg_pid;			// $!
 	int			last_status;			// $?
 }	t_params;
+
+void	params_init(t_params *params);
+t_error	params_load(t_params *params, int argc, char **argv, char **envp);
+void	params_free(t_params *params);
 
 /*
 INIT FLOW:

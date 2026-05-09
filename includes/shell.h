@@ -10,11 +10,11 @@
 
 typedef struct s_shell
 {
-	t_params	params;
-	t_fun_list	functions;
-	t_lexer		lexer;
-	t_builder	builder;
-	t_runner	runner;
+	t_params		params;
+	t_fun_list		functions;
+	t_lexer			lexer;
+	t_builder		builder;
+	t_runner		runner;
 }	t_shell;
 
 void		shell_set(t_shell *addr);

@@ -39,7 +39,7 @@ void	var_init_all(t_var_list *variables)
 t_error	var_load_all(
 	t_var_list *variables,
 	char **envp,
-	char *parent_shell_ppid)
+	const char *parent_shell_ppid)
 {
 	t_error	error;
 

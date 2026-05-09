@@ -8,17 +8,17 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 SRCS		:= \
 	$(wildcard srcs/*.c) \
 	$(wildcard srcs/0_posix_helpers/*.c) \
-	$(wildcard srcs/1_loader/*.c) \
+	$(wildcard srcs/1_shell/*.c) \
 	$(wildcard srcs/3_builder/*.c) \
-	$(wildcard srcs/3_builder/1_lr_machine/*.c) \
-	$(wildcard srcs/3_builder/1_lr_machine/*/*.c) \
+	$(wildcard srcs/3_builder/*/*.c) \
+	$(wildcard srcs/3_builder/*/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/builtins/*/*.c) \
-	$(wildcard srcs/variables/*.c) \
-	$(wildcard srcs/variables/load/1_envp/*.c) \
-	$(wildcard srcs/variables/load/2_mandatory/*.c) \
-	$(wildcard srcs/variables/load/2_mandatory/ft_getppid/*.c) \
-	$(wildcard srcs/variables/load/3_up/*.c)
+	$(wildcard srcs/params/*.c) \
+	$(wildcard srcs/params/*/*.c) \
+	$(wildcard srcs/params/*/*/*.c) \
+	$(wildcard srcs/params/*/*/*/*.c) \
+	$(wildcard srcs/params/*/*/*/*/*.c)
 
 INCLUDES	:= \
 	-Ilibft \
@@ -37,11 +37,13 @@ INCLUDES	:= \
 	-Isrcs/builtins/export \
 	-Isrcs/builtins/readonly \
 	-Isrcs/builtins/unset \
-	-Isrcs/variables/load \
-	-Isrcs/variables/load/1_envp \
-	-Isrcs/variables/load/2_mandatory \
-	-Isrcs/variables/load/2_mandatory/ft_getppid \
-	-Isrcs/variables/load/3_up
+	-Isrcs/params/1_variables \
+	-Isrcs/params/1_variables/load \
+	-Isrcs/params/1_variables/load/1_envp \
+	-Isrcs/params/1_variables/load/2_mandatory \
+	-Isrcs/params/1_variables/load/2_mandatory/ft_getppid \
+	-Isrcs/params/1_variables/load/3_up \
+	-Isrcs/params/2_options
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

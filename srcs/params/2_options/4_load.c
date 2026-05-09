@@ -34,16 +34,16 @@ static inline bool	options_load_one(
 
 static void	options_finalize(t_option *options, int argc, bool explicit_plus_m)
 {
-	if (!option_is_active(OPT_CMD_STRING) && argc == 0)
+	if (!option_is_active(*options, OPT_CMD_STRING) && argc == 0)
 		option_set(options, OPT_STDIN_INPUT, true);
-	if (option_is_active(OPT_STDIN_INPUT)
+	if (option_is_active(*options, OPT_STDIN_INPUT)
 		&& isatty(STDIN_FILENO) && isatty(STDERR_FILENO))
 		option_set(options, OPT_INTERACTIVE, true);
-	if (option_is_active(OPT_INTERACTIVE) && !explicit_plus_m)
+	if (option_is_active(*options, OPT_INTERACTIVE) && !explicit_plus_m)
 		option_set(options, OPT_MONITOR, true);
 }
 
-t_error	options_load(int argc, char **argv, t_option *options, size_t *count)
+t_error	options_load(t_option *options, int argc, char **argv, size_t *count)
 {
 	int			i;
 	bool		explicit_plus_m;

@@ -1,11 +1,13 @@
-#include "shell.h"
+#include "options.h"
 
-bool	option_is_active(t_option option)
+void	options_init(t_option *options)
 {
-	t_shell	*shell;
+	*options = 0u;
+}
 
-	shell = shell_get();
-	return ((shell->params.options & option) != 0);
+bool	option_is_active(t_option options, t_option option)
+{
+	return ((options & option) != 0);
 }
 
 void	option_set(t_option *options, t_option option, bool on)
@@ -14,4 +16,10 @@ void	option_set(t_option *options, t_option option, bool on)
 		*options |= option;
 	else
 		*options &= ~option;
+}
+
+void	options_free(t_option *options)
+{
+	(void)options;
+	return ;
 }

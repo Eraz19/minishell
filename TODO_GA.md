@@ -20,7 +20,7 @@
 
 ## READER
 
-- Catch `ctrl + D` on empty line and `exit` if `option_is_active(OPT_IGNOREEOF)` == `false`
+- Catch `ctrl + D` on empty line and `exit` if `option_is_active(options, OPT_IGNOREEOF)` == `false`
 
 ---
 

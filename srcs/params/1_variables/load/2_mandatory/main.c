@@ -7,7 +7,7 @@
 	- PWD = current working directory (from env or self initialized)
 	- PPID = parent process id
 */
-t_error	var_load_mandatory(t_var_list *variables, char *parent_shell_ppid)
+t_error	var_load_mandatory(t_var_list *variables, const char *parent_shell_ppid)
 {
 	t_error	error;
 
