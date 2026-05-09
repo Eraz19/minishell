@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:11:57 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/09 14:30:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/09 16:15:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		free_token(t_token **token_ptr);
 t_token		*create_token(char *content, size_t offset, t_token_type type);
 
 bool		is_blank_end_token(char *input_ptr);
-t_token		*end_token_by_blank(char *input_ptr, size_t i);
+t_token		*end_token_by_blank(char *input_ptr, size_t start, size_t i);
 t_token		*end_token_by_operator(t_token_type type, int io_number, size_t i);
 
 bool		update_ctx_in_param(t_ctx_stack *ctx, char *input_ptr, size_t *i);

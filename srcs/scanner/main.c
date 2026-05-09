@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 10:13:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/09 14:47:59 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/09 16:30:50 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	main(void)
 	while (res == NULL || res->type != EOF)
 	{
 		res = get_next_token(&lexer);
-		ft_printf("RES = %p\n", res);
+		//ft_printf("RES = %p\n", res);
 		print_token(res);
 		print_lexer_state(&lexer);
 	}
