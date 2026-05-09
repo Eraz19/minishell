@@ -17,6 +17,11 @@ typedef enum e_error
 }	t_error;
 
 const char	*error_to_string(t_error error);
-// TODO: error_print()
+
+// prefix and error_type can be NULL.
+// prints	"shell_name: [prefix:] [error_type:] error_details".
+// e.g. 1:	"minishell: reader: unable to read: out of memory".
+// e.g. 2:	"minishell: unset: my_var: readonly variable".
+t_error	error_print(const char *prefix, const char *error_type, t_error error);
 
 #endif

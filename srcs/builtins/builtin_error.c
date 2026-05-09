@@ -5,22 +5,14 @@
 
 #define SEPARATOR	": "
 
-void	print_shell_name(const t_shell *shell)
+t_error	builtin_error_usage(const char *builtin, const char *usage)
 {
-	// TODO
-	(void)shell;
-	(void)posix_write(STDERR_FILENO, "minishell", str_len("minishell"));
-}
-
-t_error	builtin_error_usage(
-	const t_shell *shell,
-	const char *builtin,
-	const char *usage)
-{
+	const char	*shell_name;
 	const char	*prefix;
 
 	prefix = error_to_string(ERR_BUILTIN_INVALID_USAGE);
-	print_shell_name(shell);
+	shell_name = shell_get_name();
+	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));
 	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
 	(void)posix_write(STDERR_FILENO, builtin, str_len(builtin));
 	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
@@ -32,15 +24,14 @@ t_error	builtin_error_usage(
 	return (ERR_BUILTIN_INVALID_USAGE);
 }
 
-t_error	builtin_error_flag(
-	const t_shell *shell,
-	const char *builtin,
-	const char *flag)
+t_error	builtin_error_flag(const char *builtin, const char *flag)
 {
+	const char	*shell_name;
 	const char	*prefix;
 
 	prefix = error_to_string(ERR_BUILTIN_INVALID_FLAG);
-	print_shell_name(shell);
+	shell_name = shell_get_name();
+	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));
 	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
 	(void)posix_write(STDERR_FILENO, builtin, str_len(builtin));
 	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
@@ -50,33 +41,4 @@ t_error	builtin_error_flag(
 	(void)posix_write(STDERR_FILENO, flag, str_len(flag));
 	(void)posix_write(STDERR_FILENO, "\n", str_len("\n"));
 	return (ERR_BUILTIN_INVALID_FLAG);
-}
-
-t_error	builtin_error_custom(
-	const t_shell *shell,
-	const char *builtin,
-	const char *prefix,
-	t_error error)
-{
-	const char	*message;
-
-	message = error_to_string(error);
-	print_shell_name(shell);
-	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
-	(void)posix_write(STDERR_FILENO, builtin, str_len(builtin));
-	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
-	if (prefix)
-	{
-		(void)posix_write(STDERR_FILENO, prefix, str_len(prefix));
-		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
-	}
-	(void)posix_write(STDERR_FILENO, builtin, str_len(builtin));
-	if (error == ERR_LIBC)
-	{
-		(void)posix_write(STDERR_FILENO, "libc", str_len("libc"));
-		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
-	}
-	(void)posix_write(STDERR_FILENO, message, str_len(message));
-	(void)posix_write(STDERR_FILENO, "\n", str_len("\n"));
-	return (error);
 }

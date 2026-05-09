@@ -1,5 +1,6 @@
 # TODO
 
+- `?` doit être initialisée à `0`
 - `load` module shall handle variables `expansion` and/or specific values depending on context (e.g. `PPID` in `subshells`)
 - `Makefile`
 - comment all functions with list of possible error types they can return

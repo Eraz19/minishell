@@ -1,15 +1,9 @@
 #include "shell.h"
+#include "posix_helpers.h"
+#include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-
-static t_shell	*shell_get(t_shell *addr)
-{
-	static t_shell	*shell = NULL;
-
-	if (addr)
-		shell = addr;
-	return (shell);
-}
 
 static void	shell_init(t_shell *shell)
 {
@@ -21,14 +15,24 @@ static void	shell_init(t_shell *shell)
 	// TODO: runner_init(&shell->runner);
 }
 
-// parent_shell_ppid can be NULL (if it is not a subshell).
-static t_error	shell_load(t_shell *shell, char **envp, char *parent_shell_ppid)
+// parent_shell can be NULL.
+static t_error	shell_load(t_shell *shell, char **envp, t_shell *parent_shell)
 {
 	t_error	error;
+	char	*parent_shell_ppid;
 
+	parent_shell_ppid = NULL;
+	if (parent_shell)
+	{
+		error = var_get(&parent_shell->variables, "PPID", &parent_shell_ppid);
+		if (error != ERR_NO)
+			return (error);
+	}
 	error = var_load_all(&shell->variables, envp, parent_shell_ppid);
 	if (error != ERR_NO)
 		return (error);
+	// TODO: expand variables (inside variable module which should call expander module to perform expansions ??)
+	// TODO: shell_state_load(&shell->state, argc, argv, envp);
 	error = builder_load(&shell->builder);
 	if (error != ERR_NO)
 		return (error);
@@ -38,8 +42,8 @@ static t_error	shell_load(t_shell *shell, char **envp, char *parent_shell_ppid)
 
 static void	shell_free(t_shell *shell)
 {
-	// TODO: shell_state_free(&shell->state);
 	var_free_all(&shell->variables);
+	// TODO: shell_state_free(&shell->state);
 	// TODO: fun_free(&shell->functions);
 	// TODO: lexer_free(&shell->lexer);
 	builder_free(&shell->builder);
@@ -59,40 +63,33 @@ static void	shell_free(t_shell *shell)
 	- expand ENV
 	- read/tokenize/parse/execute that file before interactive commands
 */
-
-t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent_shell)
+t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 {
+	static const char	message[] = ": unable to malloc shell data struct: ";
+	const char			*details;
 	t_shell	*shell;
 	t_error	error;
-	char	*parent_shell_ppid;
 
 	(void)argc;
 	(void)argv;
-	(void)parent_shell;
 	shell = malloc(sizeof(*shell));
 	if (!shell)
 	{
-		// TODO: error message
+		details = strerror(errno);
+		(void)posix_write(STDERR_FILENO, argv[0], str_len(argv[0]));
+		(void)posix_write(STDERR_FILENO, message, str_len(message));
+		(void)posix_write(STDERR_FILENO, details, str_len(details));
 		return (ERR_LIBC);
 	}
-	shell_get(shell);
 	shell_init(shell);
-	parent_shell_ppid = NULL;
-	if (parent_shell)
-	{
-		error = var_get(&parent_shell->variables, "PPID", &parent_shell_ppid);
-		if (error != ERR_NO)
-			return (error);
-	}
-	error = shell_load(shell, envp, parent_shell_ppid);
+	shell_set(shell);
+	error = shell_load(shell, envp, parent);
 	if (error != ERR_NO)
 	{
 		// TODO: print error message
 		shell_free(shell);
 		return (error);
 	}
-	// TODO: if subshell => set PPID at same value than parent shell (or give is_subshell as arg to var_load_all())
-	// TODO: shell_state_load(&shell->state, argc, argv, envp);
 	// if interactive => Process ENV
 	// Process input
 	shell_free(shell);

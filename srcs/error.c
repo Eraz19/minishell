@@ -1,6 +1,11 @@
 #include "error.h"
+#include "posix_helpers.h"
+#include "shell.h"
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
+
+#define SEPARATOR		": "
 
 const char	*error_to_string(t_error error)
 {
@@ -25,4 +30,28 @@ const char	*error_to_string(t_error error)
 	else if (error == ERR_VAR_READ_ONLY)
 		return ("readonly variable");
 	return ("unknown");
+}
+
+t_error	error_print(const char *prefix, const char *error_type, t_error error)
+{
+	const char	*name;
+	const char	*error_details;
+
+	name = shell_get_name();
+	error_details = error_to_string(error);
+	(void)posix_write(STDERR_FILENO, name, str_len(name));
+	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
+	if (prefix)
+	{
+		(void)posix_write(STDERR_FILENO, prefix, str_len(prefix));
+		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
+	}
+	if (error_type)
+	{
+		(void)posix_write(STDERR_FILENO, error_type, str_len(error_type));
+		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
+	}
+	(void)posix_write(STDERR_FILENO, error_details, str_len(error_details));
+	(void)posix_write(STDERR_FILENO, "\n", str_len("\n"));
+	return (ERR_BUILTIN_INVALID_USAGE);
 }

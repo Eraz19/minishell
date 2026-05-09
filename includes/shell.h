@@ -11,15 +11,21 @@
 
 typedef struct s_shell
 {
-	t_shell_params	params;
 	t_var_list		variables;
+	t_shell_params	params;
 	t_fun_list		functions;
 	t_lexer			lexer;
 	t_builder		builder;
 	t_runner		runner;
 }	t_shell;
 
-// parent_shell can be NULL
-t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent_shell);
+void		shell_set(t_shell *addr);
+
+t_shell		*shell_get(void);
+
+const char	*shell_get_name(void);
+
+// parent can be NULL
+t_error		shell_start(int argc, char **argv, char **envp, t_shell *parent);
 
 #endif

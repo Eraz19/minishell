@@ -1,4 +1,4 @@
-#include "builtin_error.h"
+#include "shell.h"
 #include <stdlib.h>
 
 t_error	export_print(const t_shell *shell, const char *builtin)
@@ -17,7 +17,7 @@ t_error	export_print(const t_shell *shell, const char *builtin)
 			continue ;
 		error = var_print("export ", var);
 		if (error != ERR_NO)
-			return (builtin_error_custom(shell, builtin, NULL, error));
+			return (error_print(builtin, NULL, error));
 	}
 	return (ERR_NO);
 }
