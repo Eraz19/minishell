@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:05:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/07 16:38:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/08 10:31:34 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ void	free_ctx_stack(t_ctx_stack **stack)
 	(*stack)->size = 0;
 	(*stack)->data = NULL;
 }
+
+bool	ctx_update_nesting(t_ctx_stack *stack, int value)
+{
+	if (stack->data[stack->len - 1].nesting_depth + value < 0)
+		return (false);
+	return (stack->data[stack->len - 1].nesting_depth += value, true);
+}	
 
 bool	ctx_push(t_ctx_stack *stack, t_lexer_ctx_type ctx)
 {

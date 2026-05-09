@@ -6,22 +6,24 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:27:11 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/07 16:31:41 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/09 16:08:01 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "../_scanner.h"
 
-static bool	escape_character(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+static bool	escape_character(t_lexer *lexer, size_t *i)
 {
+	char		*input_ptr;
 	t_lexer_ctx	current_ctx;
 	
+	input_ptr = lexer->input + *i;
 	if (input_ptr[0] == '\\')
 	{
 		if (input_ptr[1] != '\0')
 			return ((*i)++, true);
-		current_ctx = ctx_view(ctx);
+		current_ctx = ctx_view(&lexer->ctx);
 		if (current_ctx.type == NONE)
 			return (escape_char_in_no_ctx(input_ptr, i));
 		else if (current_ctx.type == SQUOTE)
@@ -38,98 +40,116 @@ static bool	escape_character(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 	return (false);
 }
 
-static bool	update_ctx(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+static bool	update_ctx(t_lexer *lexer, size_t *i)
 {
+	char		*input_ptr;
 	t_lexer_ctx	current_ctx;
 
-	if (input_ptr == NULL || ctx == NULL || i == NULL)
-		return (false);
-	current_ctx = ctx_view(ctx);
+	input_ptr = lexer->input + *i;
+	current_ctx = ctx_view(&lexer->ctx);
 	if (current_ctx.type == NONE)
-		return (update_ctx_in_no_ctx(ctx, input_ptr, i));
+		return (update_ctx_in_no_ctx(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == SQUOTE)
-		return (update_ctx_in_squote(ctx, input_ptr, i));
+		return (update_ctx_in_squote(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == DQUOTE)
-		return (update_ctx_in_dquote(ctx, input_ptr, i));
+		return (update_ctx_in_dquote(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == BACKTICK)
-		return (update_ctx_in_backtick(ctx, input_ptr, i));
+		return (update_ctx_in_backtick(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == ARITH)
-		return (update_ctx_in_arithm(ctx, input_ptr, i));
+		return (update_ctx_in_arithm(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == PARAM)
-		return (update_ctx_in_param(ctx, input_ptr, i));
+		return (update_ctx_in_param(&lexer->ctx, input_ptr, i));
 	return (true);
 }
 
-static bool	end_token(
-	t_token **res,
-	t_ctx_stack *ctx,
-	char *input_ptr,
-	size_t *i)
+static bool	eof(t_token **res, t_lexer *lexer, size_t i)
+{
+	t_lexer_ctx		current_ctx;
+
+	ft_printf("ENTER EOF\n");	
+	current_ctx = ctx_view(&lexer->ctx);
+	if (current_ctx.type == NONE)
+	{
+		ft_printf("IS IN NONE_CONTEXT\n");
+		*res = create_token(NULL, i, EOF);
+		if (*res == NULL)
+			return (ft_printf("LEAVE ERROR EOF\n"), false);
+		free(lexer->input);
+		lexer->input = NULL;
+		lexer->i = 0;
+	}
+	return (ft_printf("LEAVE EOF\n"), true);
+}
+
+static bool	end_token(t_token **res, t_lexer *lexer, size_t *i)
 {
 	t_token_type	type;
 	int				io_number;
+	char			*input_ptr;
 	t_lexer_ctx		current_ctx;
 
-	current_ctx = ctx_view(ctx);
+	input_ptr = lexer->input + *i;
+	current_ctx = ctx_view(&lexer->ctx);
 	if (current_ctx.type == NONE)
 	{
-		if (is_operator(&type, &io_number, input_ptr))
+		if (input_ptr[0] == '\0')
+			return (eof(res, lexer, *i), true);
+		else if (is_operator(&type, &io_number, input_ptr))
 		{
-			*res = end_token_by_operator(type, io_number, i);
+			ft_printf("END TOKEN WITH OPERATOR\n");
+			*res = end_token_by_operator(type, io_number, lexer->i);
+			ft_printf("BEFORE LEXER INDEX = %d\n", (int)lexer->i);
+			lexer->i = *i + 1;
+			ft_printf("AFTER LEXER INDEX = %d\n", (int)lexer->i);
 			return (*res != NULL);
 		}
 		else if (is_blank_end_token(input_ptr))
 		{
-			*res = end_token_by_blank(input_ptr, i);
-			return (*res != NULL);
+			if (*i == lexer->i)
+			{
+				ft_printf("INCREMENT LEXER->I\n");
+				return (++lexer->i, ++i, true);
+			}
+			else
+			{
+				ft_printf("END TOKEN WITH BLANK\n");
+				*res = end_token_by_blank(input_ptr, lexer->i);
+				lexer->i = *i + 1;
+				return (*res != NULL);
+			}
 		}
 	}
 	return (true);
 }
 
-static bool	eof(
-	t_token **res,
-	t_ctx_stack *ctx,
-	char **input_ptr,
-	size_t *start)
-{
-	t_lexer_ctx		current_ctx;
-
-	current_ctx = ctx_view(ctx);
-	if (current_ctx.type == NONE)
-	{
-		*res = create_token(NULL, *start, EOF);
-		if (*res == NULL)
-			return (false);
-		free(*input_ptr);
-		*input_ptr = NULL;
-		*start = 0;
-	}
-	return (true);
-}
-
-bool	lex_line(t_token **res, t_ctx_stack *ctx, char **input, size_t *start)
+bool	lex_line(t_token **res, t_lexer *lexer)
 {
 	size_t	i;
 
-	if (input == NULL || start == NULL || ctx == NULL)
-		return (false);
-	i = *start;
+	ft_printf("ENTER LEX_LINE\n");
+	ft_printf("LEXER = %p | INPUT = %p\n", lexer, lexer->input);
+	if (lexer == NULL || lexer->input == NULL)
+		return (ft_printf("LEAVE ERROR INPUT LEX_LINE\n"), false);
+	i = lexer->i;
 	*res = NULL;
-	if ((*input)[i] == '\0')
-		eof(res, ctx, input, start);
-	while ((*input)[i] != '\0')
+	if ((lexer->input)[i] == '\0')
+		return (eof(res, lexer, i), true);
+	while ((lexer->input)[i] != '\0')
 	{
-		if (!escape_character(ctx, (*input) + i, &i))
+		if (!escape_character(lexer, &i))
 		{
-			if (!update_ctx(ctx, (*input) + i, &i))
-				return (false);
-			if (!end_token(res, ctx, (*input) + i, &i))
-				return (false);
+			if (!update_ctx(lexer, &i))
+				return (ft_printf("LEAVE ERROR UPDATE_CTX LEX_LINE\n"), false);
+			if (!end_token(res, lexer, &i))
+				return (ft_printf("LEAVE ERROR END_TOKEN LEX_LINE\n"), false);
 			if (*res != NULL)
-				return (*start = i, true);
+				return (ft_printf("LEAVE LEX_TOKEN\n"), true);
 			++i;
 		}
 	}
-	return (true);
+	if (i == lexer->i)
+		return (eof(res, lexer, i), true);
+	return (ft_printf("LEAVE NO_TOKEN LEX_LINE\n"), true);
 }
+ 
+ 

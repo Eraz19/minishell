@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:06:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/07 16:38:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/08 10:33:11 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@ bool	update_ctx_in_arithm(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 	nesting_depth = ctx_view(ctx).nesting_depth;
 	if (input_ptr[0] == ')' && input_ptr[1] == ')' && nesting_depth == 0)
 		return ((*i) += 2, ctx_pop(ctx), true);
+	else if (input_ptr[0] == '(')
+		ctx_update_nesting(ctx, 1);
+	else if (input_ptr[0] == ')')
+		ctx_update_nesting(ctx, -1);
 	else if (is_ctx_opener(&new_ctx, input_ptr))
 	{
 		if (new_ctx == CMD_SUB)
