@@ -1,4 +1,4 @@
-#include "variable.h"
+#include "variables.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/param.h>

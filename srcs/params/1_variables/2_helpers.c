@@ -1,5 +1,5 @@
 #include "libft.h"
-#include "variable.h"
+#include "variables.h"
 #include <stdlib.h>
 
 bool	var_name_is_valid(const char *name)

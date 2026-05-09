@@ -6,17 +6,15 @@
 # include "scanner.h"
 # include "params.h"
 # include "runner.h"
-# include "variable.h"
 # include <stdint.h>
 
 typedef struct s_shell
 {
-	t_var_list		variables;
-	t_shell_params	params;
-	t_fun_list		functions;
-	t_lexer			lexer;
-	t_builder		builder;
-	t_runner		runner;
+	t_params	params;
+	t_fun_list	functions;
+	t_lexer		lexer;
+	t_builder	builder;
+	t_runner	runner;
 }	t_shell;
 
 void		shell_set(t_shell *addr);

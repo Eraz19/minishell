@@ -20,12 +20,13 @@
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/9_action",
 		"-I${workspaceFolder}/srcs/3_builder/2_parser",
 		"-I${workspaceFolder}/srcs/3_builder/2_parser/x_stack",
-		"-I${workspaceFolder}/srcs/variables",
-		"-I${workspaceFolder}/srcs/variables/load",
-		"-I${workspaceFolder}/srcs/variables/load/1_envp",
-		"-I${workspaceFolder}/srcs/variables/load/2_mandatory",
-		"-I${workspaceFolder}/srcs/variables/load/2_mandatory/ft_getppid",
-		"-I${workspaceFolder}/srcs/variables/load/3_up",
+		"-I${workspaceFolder}/srcs/params/1_variables",
+		"-I${workspaceFolder}/srcs/params/1_variables/load",
+		"-I${workspaceFolder}/srcs/params/1_variables/load/1_envp",
+		"-I${workspaceFolder}/srcs/params/1_variables/load/2_mandatory",
+		"-I${workspaceFolder}/srcs/params/1_variables/load/2_mandatory/ft_getppid",
+		"-I${workspaceFolder}/srcs/params/1_variables/load/3_up",
+		"-I${workspaceFolder}/srcs/params/2_options",
 		"-I${workspaceFolder}/srcs/builtins"
 	]
 }

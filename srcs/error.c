@@ -17,10 +17,10 @@ const char	*error_to_string(t_error error)
 		return ("invalid option");
 	else if (error == ERR_INDEX_OUT_OF_BOUND)
 		return ("index out of bound");
-	else if (error == ERR_INVALID_POINTER)
-		return ("invalid pointer");
 	else if (error == ERR_LIBC)
 		return (strerror(errno));
+	else if (error == ERR_OPTION_INVALID)
+		return ("invalid option");
 	else if (error == ERR_VAR_INVALID_NAME)
 		return ("invalid variable name");
 	else if (error == ERR_VAR_MISSING_EQUAL)

@@ -28,9 +28,7 @@ const char	*shell_get_name(void)
 	shell = shell_get();
 	if (!shell)
 		return (DEFAULT_NAME);
-	if (shell->params.script_name)
-		return (shell->params.script_name);
-	return (shell->params.shell_name);
+	return (shell->params.name);
 }
 
 int	main(int argc, char **argv, char **envp)

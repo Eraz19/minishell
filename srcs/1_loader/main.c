@@ -8,7 +8,7 @@
 static void	shell_init(t_shell *shell)
 {
 	// TODO: shell_state_init(&shell->state);
-	var_init_all(&shell->variables);
+	var_init_all(&shell->params.variables);
 	// TODO: fun_init(&shell->functions);
 	// TODO: lexer_init(&shell->lexer);
 	builder_init(&shell->builder);
@@ -24,13 +24,21 @@ static t_error	shell_load(t_shell *shell, char **envp, t_shell *parent_shell)
 	parent_shell_ppid = NULL;
 	if (parent_shell)
 	{
-		error = var_get(&parent_shell->variables, "PPID", &parent_shell_ppid);
+		error = var_get(&parent_shell->params.variables, "PPID", &parent_shell_ppid);
 		if (error != ERR_NO)
+		{
+			// TODO: print error
 			return (error);
+		}
 	}
-	error = var_load_all(&shell->variables, envp, parent_shell_ppid);
+	error = var_load_all(&shell->params.variables, envp, parent_shell_ppid);
 	if (error != ERR_NO)
 		return (error);
+	// TODO: load options
+	params->positional_params = (argv += opt_count);
+	params->positional_count = (size_t)(argc -= opt_count);
+	// TODO: si stdin de sh est un FIFO ou un terminal configuré en non-blocking, sh doit le remettre en blocking mode, et cet état doit rester en vigueur quand la commande se termine.
+	// TODO: load parameters
 	// TODO: expand variables (inside variable module which should call expander module to perform expansions ??)
 	// TODO: shell_state_load(&shell->state, argc, argv, envp);
 	error = builder_load(&shell->builder);
@@ -42,7 +50,7 @@ static t_error	shell_load(t_shell *shell, char **envp, t_shell *parent_shell)
 
 static void	shell_free(t_shell *shell)
 {
-	var_free_all(&shell->variables);
+	var_free_all(&shell->params.variables);
 	// TODO: shell_state_free(&shell->state);
 	// TODO: fun_free(&shell->functions);
 	// TODO: lexer_free(&shell->lexer);

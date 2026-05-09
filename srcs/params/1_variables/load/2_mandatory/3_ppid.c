@@ -1,4 +1,4 @@
-#include "variable.h"
+#include "variables.h"
 #include <stdlib.h>
 # include <stdio.h>	// TODO: tmp debug
 

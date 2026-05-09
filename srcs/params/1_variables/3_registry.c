@@ -1,5 +1,6 @@
 #include "libft.h"
-#include "variable.h"
+#include "variables.h"
+#include "options.h"
 #include <stdlib.h>
 
 static t_error	var_update_value(t_var *var, const char *value)
@@ -31,7 +32,7 @@ t_error	var_set(t_var_list *variables, const char *name, const char *value)
 			return (ERR_VAR_READ_ONLY);
 		return (var_update_value(current_var, value));
 	}
-	new_var = var_new(name, value, false, false);
+	new_var = var_new(name, value, option_is_active(OPT_EXPORT_ALL), false);
 	if (!new_var.name || (value && !new_var.value))
 		return (var_free(&new_var), ERR_LIBC);
 	if (!vector_push(variables, &new_var))

@@ -8,7 +8,7 @@ t_error	readonly_print(const t_shell *shell, const char *builtin)
 	t_var				*var;
 	t_error				error;
 
-	variables = &shell->variables;
+	variables = &shell->params.variables;
 	i = 0;
 	while (i < variables->len)
 	{

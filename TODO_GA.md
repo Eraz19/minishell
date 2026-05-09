@@ -1,16 +1,13 @@
 # TODO
 
-- `?` doit être initialisée à `0`
-- `load` module shall handle variables `expansion` and/or specific values depending on context (e.g. `PPID` in `subshells`)
-- `Makefile`
-- comment all functions with list of possible error types they can return
-- ⚠️ `export`, `readonly` and `unset` are [2.15 **Special Built-In Utilities**] !!! => Check additional rules to follow !!
-- uniformiser l'interface des builtins au format (int builtin(int argc, char **argv, char **envp, t_shell *shell))
-- replace `ERR_LIBC` by `ERR_LIBC`
+- `-o` ou `+o` sans argument => UB => **LA TETE A XAV** !!
+- `options_load()` si (`-` && `--`) || (opérandes devant `-`) => UB => **LA TETE A XAV**
+- ⚠️ `export`, `readonly` and `unset`: `--` is the end of options (`-` also ?)
+- ⚠️ `export`, `readonly` and `unset`: Check additional [2.15 **Special Built-In Utilities**] rules to follow
+- implement `set` builtin
+- `load` module shall handle variables `expansion` ?!
+- comment all functions with list of possible `t_error` types they can return
 - add `const` everywhere it's needed
-- remove pointers check in `variable` module (yolo)
-- `var_get()` should be private (returns a pointer to the real var)
-- `var_get_value()` should be public (returns a malloc'd copy of var->value)
 - Préciser dans `lr_machine.md` que `ACTION` est complétée étape par étape avec un process et un payload différents pour :
 	- `ERROR`: default
 	- `SHIFT`: `action.payload` = `transition.to_lr_state_id`
@@ -21,11 +18,34 @@
 - ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
 ...
 
+## READER
+
+- Catch `ctrl + D` on empty line and `exit` if `option_is_active(OPT_IGNOREEOF)` == `false`
+
 ---
 
 # TO CHECK
 
 - `ft_getppid()` on **Linux**, **Mac_x86**, and **FreeBSD**
+- Options:
+```bash
+bash --posix +i -c 'printf "%s\n" "$-"'
+bash --posix -i -c 'printf "%s\n" "$-"'
+bash --posix -i +i -c 'printf "%s\n" "$-"'
+bash --posix +i -i -c 'printf "%s\n" "$-"'
+# Expected output
+hBc
+himBHc
+hBc
+himBHc
+```
+- Special parameters :
+```bash
+bash --posix -c 'printf "<%s>\n" "$0"'
+bash --posix -c 'printf "<%s>\n" "$0"' my0
+printf '%s\n' 'printf "<%s>\n" "$0"' | bash --posix
+./test.sh   # avec à l’intérieur: printf '<%s>\n' "$0"
+```
 
 ---
 

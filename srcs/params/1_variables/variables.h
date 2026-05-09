@@ -1,5 +1,5 @@
-#ifndef VARIABLE_H
-# define VARIABLE_H
+#ifndef VARIABLES_H
+# define VARIABLES_H
 
 # include "libft.h"
 # include "error.h"

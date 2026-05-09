@@ -36,7 +36,7 @@ t_error	export_build_envp(const t_shell *shell, char ***dst_envp)
 	t_error				error;
 	const t_var_list	*variables;
 
-	variables = &shell->variables;
+	variables = &shell->params.variables;
 	*dst_envp = malloc((variables->len + 1) * sizeof(**dst_envp));
 	if (!*dst_envp)
 		return (ERR_LIBC);
@@ -45,7 +45,7 @@ t_error	export_build_envp(const t_shell *shell, char ***dst_envp)
 	while (var_i < variables->len)
 	{
 		var = &((t_var *)variables->data)[var_i++];
-		if (!var->export || !var->value)
+		if (!var->value || !var->export)
 			continue ;
 		error = export_build_entry(var->name, var->value, &(*dst_envp)[envp_i]);
 		if (error != ERR_NO)

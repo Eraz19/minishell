@@ -43,7 +43,7 @@ t_error	readonly_add(t_shell *shell, const char *builtin, const char *string)
 
 	if (str_chr(string, '=') == NULL)
 	{
-		error = readonly_add_one(&shell->variables, name, NULL);
+		error = readonly_add_one(&shell->params.variables, name, NULL);
 		if (error != ERR_NO)
 			return (error_print(builtin, string, error));
 		return (ERR_NO);
@@ -51,7 +51,7 @@ t_error	readonly_add(t_shell *shell, const char *builtin, const char *string)
 	error = var_split(string, &name, &value);
 	if (error != ERR_NO)
 		return (error_print(builtin, string, error));
-	error = readonly_add_one(&shell->variables, name, value);
+	error = readonly_add_one(&shell->params.variables, name, value);
 	if (error != ERR_NO)
 		(void)error_print(builtin, name, error);
 	free(name);
