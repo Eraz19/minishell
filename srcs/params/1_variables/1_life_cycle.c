@@ -43,20 +43,25 @@ t_error	var_load_all(
 {
 	t_error	error;
 
-	printf("var_load_env: START\n");
+	printf("-------------------------------------\n");
+	printf("===> [var_load_envp]\n");
 	error = var_load_envp(variables, envp);
 	if (error != ERR_NO)
 		return (error);
-	printf("var_load_env: envp parsed                      (entries: %'6zu)\n", variables->len);
+	printf("===> [var_load_envp]            => (entries: %'6zu)\n", variables->len);
+	printf("-------------------------------------\n");
+	printf("===> [var_load_mandatory]\n");
 	error = var_load_mandatory(variables, parent_shell_ppid);
 	if (error != ERR_NO)
 		return (error);
-	printf("var_load_env: mandatory variables initialized  (entries: %'6zu)\n", variables->len);
+	printf("===> [var_load_mandatory]       => (entries: %'6zu)\n", variables->len);
+	printf("-------------------------------------\n");
+	printf("===> [var_load_up]\n");
 	error = var_load_up(variables);
 	if (error != ERR_NO)
 		return (error);
-	printf("var_load_env: up variables initialized         (entries: %'6zu)\n", variables->len);
-	printf("var_load_env: DONE\n");
+	printf("===> [var_load_up]              => (entries: %'6zu)\n", variables->len);
+	printf("-------------------------------------\n\n");
 	return (ERR_NO);
 }
 

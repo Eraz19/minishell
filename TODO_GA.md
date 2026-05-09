@@ -1,5 +1,6 @@
 # TODO
 
+- add `param_get()` API to allow to get `$0` (etc) as `$VAR`
 - `-o` ou `+o` sans argument => UB => **LA TETE A XAV** !!
 - `options_load()` si (`-` && `--`) || (opérandes devant `-`) => UB => **LA TETE A XAV**
 - ⚠️ `export`, `readonly` and `unset`: `--` is the end of options (`-` also ?)

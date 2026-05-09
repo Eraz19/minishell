@@ -1,5 +1,6 @@
 #include "options_priv.h"
 #include <unistd.h>
+# include <stdio.h>	// TODO: tmp debug
 
 static inline bool	options_is_delimiter(const char *arg)
 {
@@ -48,6 +49,8 @@ t_error	options_load(t_option *options, int argc, char **argv, size_t *count)
 	int			i;
 	bool		explicit_plus_m;
 
+	printf("-------------------------------------\n");
+	printf("===> [options_load]\n");
 	*options = 0u;
 	explicit_plus_m = false;
 	i = 1;
@@ -61,7 +64,12 @@ t_error	options_load(t_option *options, int argc, char **argv, size_t *count)
 		if (!options_load_one(&i, argv, options, &explicit_plus_m))
 			return (ERR_OPTION_INVALID);
 	}
+	printf("===> [options_load]\n");
+	printf("-------------------------------------\n");
+	printf("===> [options_finalize]\n");
 	options_finalize(options, argc - i, explicit_plus_m);
 	*count = (size_t)i;
+	printf("===> [options_finalize]\n");
+	printf("-------------------------------------\n\n");
 	return (ERR_NO);
 }
