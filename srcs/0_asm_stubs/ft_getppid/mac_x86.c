@@ -1,5 +1,6 @@
 #if defined(__APPLE__) && defined(__x86_64__)
 # include <sys/syscall.h>
+# include <unistd.h>
 
 /*
 GLOBAL FLOW:
@@ -46,7 +47,7 @@ volatile
 => memory => [GCC/Clang] this asm may affect memory-observable state, so the
             compiler must not make normal assumptions around memory here.
 */
-int	ft_getppid(void)
+pid_t	ft_getppid(void)
 {
 	long	ret;
 
@@ -56,7 +57,7 @@ int	ft_getppid(void)
 		: "a"(0x2000000L | (long)SYS_getppid)
 		: "rcx", "r11", "memory"
 	);
-	return ((int)ret);
+	return ((pid_t)ret);
 }
 
 #endif

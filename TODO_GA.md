@@ -19,34 +19,11 @@
 - ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
 ...
 
-## READER
-
-- Catch `ctrl + D` on empty line and `exit` if `option_is_active(options, OPT_IGNOREEOF)` == `false`
-
 ---
 
 # TO CHECK
 
-- `ft_getppid()` on **Linux**, **Mac_x86**, and **FreeBSD**
-- Options:
-```bash
-bash --posix +i -c 'printf "%s\n" "$-"'
-bash --posix -i -c 'printf "%s\n" "$-"'
-bash --posix -i +i -c 'printf "%s\n" "$-"'
-bash --posix +i -i -c 'printf "%s\n" "$-"'
-# Expected output
-hBc
-himBHc
-hBc
-himBHc
-```
-- Special parameters :
-```bash
-bash --posix -c 'printf "<%s>\n" "$0"'
-bash --posix -c 'printf "<%s>\n" "$0"' my0
-printf '%s\n' 'printf "<%s>\n" "$0"' | bash --posix
-./test.sh   # avec à l’intérieur: printf '<%s>\n' "$0"
-```
+- `ft_getppid()` + `ft_getpid()` on **Linux**, **Mac_x86**, and **FreeBSD**
 
 ---
 

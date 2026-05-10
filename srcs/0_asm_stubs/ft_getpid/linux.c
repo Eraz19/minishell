@@ -3,35 +3,34 @@
 # include <fcntl.h>
 # include <unistd.h>
 
-static pid_t	ft_parse_ppid(const char *s)
+static pid_t	ft_parse_pid(const char *string)
 {
 	int		i;
-	pid_t	ppid;
+	pid_t	pid;
 
 	i = 0;
-	while (s[i])
+	while (string[i])
 	{
-		if (s[i] == 'P' && s[i + 1] == 'P' && s[i + 2] == 'i'
-			&& s[i + 3] == 'd' && s[i + 4] == ':')
+		if (string[i] == 'P' && string[i + 1] == 'i'
+			&& string[i + 2] == 'd' && string[i + 3] == ':')
 		{
-			i += 5;
-			while (s[i] == ' ' || s[i] == '\t')
+			i += 4;
+			while (string[i] == ' ' || string[i] == '\t')
 				i++;
-			ppid = 0;
-			while (s[i] >= '0' && s[i] <= '9')
-				ppid = (ppid * 10) + (s[i++] - '0');
-			return (ppid);
+			pid = 0;
+			while (string[i] >= '0' && string[i] <= '9')
+				pid = (pid * 10) + (string[i++] - '0');
+			return (pid);
 		}
 		i++;
 	}
 	return ((pid_t)-1);
 }
 
-pid_t	ft_getppid(void)
+pid_t	ft_getpid(void)
 {
 	char	buf[512];
 	int		fd;
-	pid_t	ppid;
 	ssize_t	nread;
 
 	fd = open("/proc/self/status", O_RDONLY);
@@ -42,8 +41,7 @@ pid_t	ft_getppid(void)
 	if (nread <= 0)
 		return ((pid_t)-1);
 	buf[nread] = '\0';
-	ppid = ft_parse_ppid(buf);
-	return (ppid);
+	return (ft_parse_pid(buf));
 }
 
 #endif

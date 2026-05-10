@@ -8,6 +8,7 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 SRCS		:= \
 	$(wildcard srcs/*.c) \
 	$(wildcard srcs/0_posix_helpers/*.c) \
+	$(wildcard srcs/0_asm_stubs/*/*.c) \
 	$(wildcard srcs/1_shell/*.c) \
 	$(wildcard srcs/3_builder/*.c) \
 	$(wildcard srcs/3_builder/*/*.c) \
@@ -43,7 +44,9 @@ INCLUDES	:= \
 	-Isrcs/params/1_variables/load/2_mandatory \
 	-Isrcs/params/1_variables/load/2_mandatory/ft_getppid \
 	-Isrcs/params/1_variables/load/3_up \
-	-Isrcs/params/2_options
+	-Isrcs/params/2_options \
+	-Isrcs/params/3_specials \
+	-Isrcs/params/4_functions
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
