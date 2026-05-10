@@ -1,4 +1,5 @@
 #include "variables.h"
+#include <stdlib.h>
 # include <stdio.h>	// TODO: tmp debug
 
 // Errors can be ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
@@ -46,6 +47,8 @@ t_error	var_load_envp(t_var_list *variables, char **envp)
 		if (error != ERR_NO)
 			return (error);
 		error = process_variable(variables, name, value);
+		free(name);
+		free(value);
 		if (error != ERR_NO)
 			return (error);
 	}

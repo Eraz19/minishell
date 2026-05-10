@@ -1,5 +1,5 @@
-#ifndef VAR_LOAD_MANDATORY_H
-# define VAR_LOAD_MANDATORY_H
+#ifndef VAR_LOAD_MANDATORY_PRIV_H
+# define VAR_LOAD_MANDATORY_PRIV_H
 
 # include "variables.h"
 

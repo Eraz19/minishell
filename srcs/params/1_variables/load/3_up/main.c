@@ -14,7 +14,10 @@ static t_error	var_init_target_up(
 
 	error = var_get(variables, name, &current_value);
 	if (error == ERR_NO)
+	{
+		free(current_value);
 		return (ERR_NO);
+	}
 	if (error == ERR_VAR_NOT_FOUND)
 		error = var_set(variables, name, value);
 	if (error == ERR_NO)

@@ -24,4 +24,6 @@ const char	*shell_get_name(void);
 // parent MUST be NULL if not a subshell
 t_error		shell_start(int argc, char **argv, char **envp, t_shell *parent);
 
+void	shell_exit(t_error error);
+
 #endif

@@ -21,10 +21,11 @@ t_error	var_set_ppid(t_var_list *variables, const char *parent_shell_ppid)
 	}
 	else
 		error = var_set(variables, "PPID", parent_shell_ppid);
-	if (error != ERR_NO)
-		return (error);
-	printf("-> 'PPID' has been set to '%s'\n", ppid);
+	if (error == ERR_NO && !parent_shell_ppid)
+		printf("-> 'PPID' has been set to '%s'\n", ppid);
+	else if (error == ERR_NO)
+		printf("-> 'PPID' has been set to '%s'\n", parent_shell_ppid);
 	if (!parent_shell_ppid)
 		free(ppid);
-	return (ERR_NO);
+	return (error);
 }

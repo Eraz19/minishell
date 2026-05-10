@@ -40,6 +40,16 @@ static void	shell_free(t_shell *shell)
 	// TODO: runner_free(&shell->runner);
 }
 
+void	shell_exit(t_error error)
+{
+	t_shell	*shell;
+
+	shell = shell_get();
+	if (shell)
+		shell_free(shell);
+	exit((int)error);
+}
+
 /*
 4. Initialize shell state parameters
 	- $? = 0						(state.params.last_status)

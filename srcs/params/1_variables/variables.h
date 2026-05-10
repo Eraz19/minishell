@@ -48,6 +48,7 @@ void	var_free_all(t_var_list *variables);
 
 bool	var_find(const t_var_list *variables, const char *name, size_t *res);
 
+// @warning: *dst_val can be NULL if var->value == NULL (error will be ERR_NO)
 // Errors can be ERR_VAR_NOT_FOUND / ERR_LIBC.
 t_error	var_get(const t_var_list *variables, const char *name, char **dst_val);
 

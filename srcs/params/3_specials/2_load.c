@@ -37,10 +37,10 @@ static t_error	specials_load_source_and_zero(
 	options = shell->params.options;
 	specials->source = NULL;
 	specials->zero = argv[0];
-	if (option_is_active(options, OPT_STDIN_INPUT))
-		return (ERR_NO);
-	else if (option_is_active(options, OPT_CMD_STRING))
+	if (option_is_active(options, OPT_CMD_STRING))
 		return (specials_load_cmd_string(specials, argc, argv, operand_index));
+	else if (option_is_active(options, OPT_STDIN_INPUT))
+		return (ERR_NO);
 	else if ((size_t)argc >= *operand_index + 1)
 	{
 		specials->source = argv[(*operand_index)++];

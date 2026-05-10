@@ -68,7 +68,7 @@ t_error	options_load(t_option *options, int argc, char **argv, size_t *count)
 	printf("-------------------------------------\n");
 	printf("===> [options_finalize]\n");
 	options_finalize(options, argc - i, explicit_plus_m);
-	*count = (size_t)i;
+	*count = (size_t)i - 1;
 	printf("===> [options_finalize]\n");
 	printf("-------------------------------------\n\n");
 	return (ERR_NO);

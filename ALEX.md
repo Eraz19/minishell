@@ -1,16 +1,17 @@
 # READER
 
 - Choix de la source de lecture :
-	- `shell` = `shell_get()`:
-		- SHOULD not fail (but if `NULL` => you should return `ERR_SHELL_NOT_FOUND`)
-		- Or `is_option_valid(<OPTION>)` get the `shell` itself ? (seems we NEVER need to check parent `shell` options...)
-		- Or all functions take directly the entire `shell` struct ?? (don't like that...)
-	- `options` = `shell->params.options`
-	- `is_option_valid(options, OPT_TODO) == true`	=> `STDIN_FILENO`
-	- `is_option_valid(options, OPT_TODO) == true`	=> shell->params.source (string)
-	- `is_option_valid(options, OPT_TODO) == true`	=> shell->params.source (fichier à open et read)
-- `exit()` **if** `readline() == NULL` **&&** `is_option_active() == true` **&&** `is_option_active() == false`
+	- **if** `is_option_valid(OPT_STDIN_INPUT) == true`		=> read from `STDIN_FILENO`
+	- **else if** `is_option_valid(OPT_CMD_STRING) == true`	=> read from `shell->params.source` (string)
+	- **else**												=> read from `shell->params.source` (fichier à open et read)
+- **if** `readline() == NULL && is_option_active(OPT_INTERACTIVE) == true && is_option_active(OPT_IGNOREEOF) == false` => `exit()`:
+	- You can store `is_option_active(OPT_INTERACTIVE) && is_option_active(OPT_IGNOREEOF)` as `scanner.should_exit_on_eof` when `scanner_load()` is executed because these options cannot be modified after `shell` invocation.
 
-## 
+# GENERAL
+
+- **USE** `void	undefined_behaviour(void)` => Pour l'instant simple message de troll mais soon Xavier en ASCII art
+- **USE** `void shell_exit(t_error error)` => Free le `shell` et `exit` (ne print aucun log!)
+
+# TESTS
 
 - Check `asm_stubs` on `Linux`

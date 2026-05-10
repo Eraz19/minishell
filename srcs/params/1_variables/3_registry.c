@@ -49,10 +49,14 @@ t_error	var_get(const t_var_list *variables, const char *name, char **dst_val)
 
 	if (!var_find(variables, name, &var_index))
 		return (ERR_VAR_NOT_FOUND);
+	res = NULL;
 	var = &((t_var *)variables->data)[var_index];
-	res = str_dup(var->value);
-	if (!res)
-		return (ERR_LIBC);
+	if (var->value)
+	{
+		res = str_dup(var->value);
+		if (!res)
+			return (ERR_LIBC);
+	}
 	*dst_val = res;
 	return (ERR_NO);
 }
