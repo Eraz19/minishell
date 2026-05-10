@@ -2,9 +2,9 @@
 # define GOTO_H
 
 # include "builder.h"
-# include <limits.h>
+# include <stdint.h>
 
-# define GOTO_EMPTY	SIZE_T_MAX
+# define GOTO_EMPTY	SIZE_MAX
 
 /* ************************************************************************* */
 /*                                   GROUPS                                  */

@@ -2,9 +2,9 @@
 # define ACTION_H
 
 # include "builder.h"
-# include "limits.h"
+# include "stdint.h"
 
-# define ACTION_PAYLOAD_EMPTY	SIZE_T_MAX
+# define ACTION_PAYLOAD_EMPTY	SIZE_MAX
 
 /* ************************************************************************* */
 /*                                   GROUPS                                  */
@@ -33,7 +33,7 @@
  * @note The default ACTION table initialization uses this value for
  *       @ref ACTION_ERROR entries.
  */
-# define ACTION_PAYLOAD_EMPTY	SIZE_T_MAX
+# define ACTION_PAYLOAD_EMPTY	SIZE_MAX
 
 /* ************************************************************************* */
 /*                                ACTION (PUB)                               */

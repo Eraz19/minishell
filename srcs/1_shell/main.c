@@ -75,7 +75,7 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 	error = shell_load(shell, argc, argv, envp);
 	if (error != ERR_NO)
 		return (shell_free(shell), error);
-	if (option_is_active(shell->params.options, OPT_INTERACTIVE))
+	if (option_is_active_in(shell->params.options, OPT_INTERACTIVE))
 	{
 		// TODO: if interactive => Expand ENV => Process ENV
 	}
