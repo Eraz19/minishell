@@ -5,7 +5,7 @@ void	params_init(t_params *params)
 {
 	var_init_all(&params->variables);
 	options_init(&params->options);
-	// TODO: init special params
+	specials_init(&params->specials);
 }
 
 static t_error	params_load_var(t_params *params, char **envp)
@@ -36,21 +36,19 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	t_error	error;
 	size_t	options_count;
 	
+	params->name = argv[0];
 	error = params_load_var(params, envp);
 	if (error != ERR_NO)
 		return (error);
 	error = options_load(&params->options, argc, argv, &options_count);
 	if (error != ERR_NO)
 		return (error);
-	params->positional_params = (argv += options_count);
-	params->positional_count = (size_t)(argc -= options_count);
-	// TODO: load special params
-	return (ERR_NO);
+	return (specials_load(&params->specials, argc, argv, options_count));
 }
 
 void	params_free(t_params *params)
 {
 	var_free_all(&params->variables);
 	options_free(&params->options);
-	// TODO: free special params
+	specials_free(&params->specials);
 }

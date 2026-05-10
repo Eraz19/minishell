@@ -7,7 +7,6 @@
 		"-I${workspaceFolder}/libft/buff",
 		"-I${workspaceFolder}/libft/buff/format",
 		"-I${workspaceFolder}/srcs/scanner",
-		"-I${workspaceFolder}/srcs/1_loader",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/1_hooks",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/2_rules",
@@ -27,6 +26,8 @@
 		"-I${workspaceFolder}/srcs/params/1_variables/load/2_mandatory/ft_getppid",
 		"-I${workspaceFolder}/srcs/params/1_variables/load/3_up",
 		"-I${workspaceFolder}/srcs/params/2_options",
+		"-I${workspaceFolder}/srcs/params/3_specials",
+		"-I${workspaceFolder}/srcs/params/4_functions",
 		"-I${workspaceFolder}/srcs/builtins"
 	]
 }

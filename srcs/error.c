@@ -21,6 +21,8 @@ const char	*error_to_string(t_error error)
 		return (strerror(errno));
 	else if (error == ERR_OPTION_INVALID)
 		return ("invalid option");
+	else if (error == ERR_SHELL_NOT_FOUND)
+		return ("shell data not found");
 	else if (error == ERR_VAR_INVALID_NAME)
 		return ("invalid variable name");
 	else if (error == ERR_VAR_MISSING_EQUAL)
