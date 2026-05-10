@@ -1,9 +1,8 @@
 # TODO
 
-## OPTIONS MODULE
+## SHELL MODULE
 
-- revert to `bool option_is_active(option)` bc we never need to check other shell options
-- add logs
+- Do all the `// TODO ⚠️` points
 
 ## PARAMS MODULE
 

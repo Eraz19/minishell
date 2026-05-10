@@ -15,4 +15,6 @@
 
 # TESTS
 
-- Check `asm_stubs` on `Linux`
+- Check `asm_stubs` on `linux` (works on `Docker` container)
+- **20 sec** sur `mac` à cause de `-fsanitize` !! (**2 sec** sans ✌️ mais **4 min** avec `valgrind` 🙈)
+- Utiliser `assert()` from `assert.h` pour tester direct grâce au compilo !

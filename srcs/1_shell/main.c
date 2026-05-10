@@ -20,18 +20,18 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	error = params_load(&shell->params, argc, argv, envp);
 	if (error != ERR_NO)
 		return (error);
-	// TODO: prepare STDIN (si stdin est un FIFO ou un terminal configuré en non-blocking, sh doit le remettre en blocking mode, et cet état doit rester en vigueur quand la commande se termine.)
-	// TODO: load functions module
-	// TODO: load lexer module
+	// TODO: ⚠️ prepare STDIN (si stdin est un FIFO ou un terminal configuré en non-blocking, sh doit le remettre en blocking mode, et cet état doit rester en vigueur quand la commande se termine.)
+	// TODO: fun_load(&shell->functions);
+	// TODO: lexer_load(&shell->lexer);
 	error = builder_load(&shell->builder);
 	if (error != ERR_NO)
 		return (error);
-	// TODO: load runner module
-	// TODO: expand variables (inside variable module which should call expander module to perform expansions ??)
+	// TODO: runner_load(&shell->runner);
+	// TODO: ⚠️ expand variables ?? (inside variable module which should call expander module to perform expansions ??)
 	return (ERR_NO);
 }
 
-static void	shell_free(t_shell *shell)
+void	shell_free(t_shell *shell)
 {
 	params_free(&shell->params);
 	// TODO: fun_free(&shell->functions);
@@ -47,19 +47,10 @@ void	shell_exit(t_error error)
 	shell = shell_get();
 	if (shell)
 		shell_free(shell);
+	free(shell);
 	exit((int)error);
 }
 
-/*
-4. Initialize shell state parameters
-	- $? = 0						(state.params.last_status)
-	- $$ = pid of invoked shell		(state.params.shell_pid)
-	- $0 = shell/script name		(????)
-
-5. If interactive and ENV is set
-	- expand ENV
-	- read/tokenize/parse/execute that file before interactive commands
-*/
 t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 {
 	static const char	message[] = ": unable to malloc shell data struct: ";
@@ -77,9 +68,9 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 		return (shell_free(shell), error);
 	if (option_is_active_in(shell->params.options, OPT_INTERACTIVE))
 	{
-		// TODO: if interactive => Expand ENV => Process ENV
+		// TODO: ⚠️ if interactive && ENV is set => Expand ENV => Process ENV
 	}
-	// TODO: Process input
-	shell_free(shell);
+	// TODO: runner_run(t_shell *shell);
+	shell_exit(error);
 	return (error);
 }

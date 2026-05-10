@@ -26,4 +26,6 @@ t_error		shell_start(int argc, char **argv, char **envp, t_shell *parent);
 
 void	shell_exit(t_error error);
 
+void	shell_free(t_shell *shell);
+
 #endif

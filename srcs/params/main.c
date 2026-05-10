@@ -48,6 +48,11 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 
 void	params_free(t_params *params)
 {
+	if (params->parent_shell)
+	{
+		shell_free(params->parent_shell);
+		free(params->parent_shell);
+	}
 	var_free_all(&params->variables);
 	options_free(&params->options);
 	specials_free(&params->specials);
