@@ -1,5 +1,10 @@
+# EXCALIDRAW
+
+- J'ai broken le partage en sauvegardant un backup ?
+
 # READER
 
+- Tokenize one token at a time ?? (cf `could_be_a_command_name()` in excalidraw)
 - Choix de la source de lecture :
 	- **if** `is_option_valid(OPT_STDIN_INPUT) == true`		=> read from `STDIN_FILENO`
 	- **else if** `is_option_valid(OPT_CMD_STRING) == true`	=> read from `shell->params.source` (string)

@@ -19,6 +19,12 @@ void	lr_machine_init(t_lr_machine *machine)
 	goto_init(&machine->gotos);
 }
 
+static t_error	lr_machine_error(t_error error)
+{
+	error_print(NULL, "unable to build parsing tables", error);
+	return (error);
+}
+
 // TODO: ERR_NO / ERR_LR_STATE_NOT_FOUND / ERR_LIBC [TODO...]
 t_error	lr_machine_build(t_lr_machine *machine)
 {
@@ -35,18 +41,20 @@ t_error	lr_machine_build(t_lr_machine *machine)
 	printf("-> first table built            (entries: %'6i)\n", SYM_COUNT * (SYM_TERMINAL_MAX + 1));
 	error = transition_build_table(machine);
 	if (error != ERR_NO)
-		return (error);
+		return (lr_machine_error(error));
 	printf("-> transitions table built      (entries: %'6zu)\n", machine->transitions.len);
 	printf("-> lr_states table built        (entries: %'6zu)\n", machine->lr_states.len);
 	error = goto_build_table(machine);
 	if (error != ERR_NO)
-		return (error);
+		return (lr_machine_error(error));
 	printf("-> gotos table built            (entries: %'6zu)\n", machine->lr_states.len * (SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1));
 	error = action_build_table(machine);
+	if (error != ERR_NO)
+		return (lr_machine_error(error));
 	printf("-> actions table built          (entries: %'6zu)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
 	printf("===> [lr_machine_build]\n");
 	printf("-------------------------------------\n\n");
-	return (setlocale(LC_NUMERIC, ""), error);
+	return (setlocale(LC_NUMERIC, ""), ERR_NO);
 }
 
 void	lr_machine_free(t_lr_machine *machine)

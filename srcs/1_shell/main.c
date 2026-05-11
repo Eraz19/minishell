@@ -22,6 +22,7 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	if (error != ERR_NO)
 		return (error);
 	// TODO: ⚠️ prepare STDIN (si stdin est un FIFO ou un terminal configuré en non-blocking, sh doit le remettre en blocking mode, et cet état doit rester en vigueur quand la commande se termine.)
+	// TODO: history_load();
 	// TODO: fun_load(&shell->functions);
 	// TODO: lexer_load(&shell->lexer);
 	error = builder_load(&shell->builder);
@@ -46,6 +47,7 @@ void	shell_exit(t_error error)
 	t_shell	*shell;
 
 	shell = shell_get();
+	// TODO: history_save();
 	if (shell)
 		shell_free(shell);
 	free(shell);
