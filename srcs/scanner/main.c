@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 10:13:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 13:59:48 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 14:27:40 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,8 @@ int	main(void)
 		"'a''b'",
 		"'a'b'c'",
 		"'a' 'b'",
-		"'a\nb'",
-		"a\\nb",
+		"'a\\nb'",
+		"'a\\\nb'",
 		"'$HOME'",
 		"'a\"b'",
 		NULL,
@@ -180,7 +180,7 @@ int	main(void)
 	t_buff b_; buff_init(&b_, 0); buff_append(&b_, "'b'", 3);
 	t_buff _a_b; buff_init(&_a_b, 0); buff_append(&_a_b, "'a''b'", 6);
 	t_buff _a_b_c; buff_init(&_a_b_c, 0); buff_append(&_a_b_c, "'a'b'c'", 7);
-	t_buff _a_n_b; buff_init(&_a_n_b, 0); buff_append(&_a_n_b, "'a\\nb'", 6);
+	t_buff _a_n_b; buff_init(&_a_n_b, 0); buff_append(&_a_n_b, "'a\\\nb'", 6);
 	t_buff _a_n_b_; buff_init(&_a_n_b_, 0); buff_append(&_a_n_b_, "'a\\\nb'", 6);
 	t_buff home; buff_init(&home, 0); buff_append(&home, "'$HOME'", 7);
 	t_buff a__b; buff_init(&a__b, 0); buff_append(&a__b, "'a\"b'", 6);
@@ -462,7 +462,7 @@ int	main(void)
 		},
 		{
 			(t_token){.type = TOKEN, .offset = 0, .value = _a_n_b},
-			(t_token){.type = EOF, .offset = 6, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+			(t_token){.type = EOF, .offset = 5, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
 		},
 		{
 			(t_token){.type = TOKEN, .offset = 0, .value = _a_n_b_},
