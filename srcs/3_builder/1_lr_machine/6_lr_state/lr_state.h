@@ -58,9 +58,9 @@
  *                 NOT be NULL).
  * @param did_add Optional flag set to true when a new state is inserted
  *                (borrowed, can be NULL).
- * @return true on success, false if appending the state failed.
+ * @return ERR_NO / ERR_LIBC
  */
-bool	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add);
+t_error	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add);
 
 /**
  * @ingroup lr_state_pub
@@ -86,9 +86,9 @@ bool	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add);
  * @param rule_state Rule state to insert if absent.
  * @param did_add Optional flag set to true when @p rule_state is newly added
  *                (borrowed, can be NULL).
- * @return true on success, false if appending the rule state failed.
+ * @return ERR_NO / ERR_LIBC.
  */
-bool	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state,
+t_error	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state,
 			bool *did_add);
 
 /**
@@ -122,9 +122,9 @@ bool	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state,
  * @param machine LR machine providing grammar, nullable-symbol and FIRST data
  *                (borrowed, must NOT be NULL).
  * @param lr_state LR state to complete in place (borrowed, must NOT be NULL).
- * @return true if closure computation succeeded, false on allocation failure.
+ * @return ERR_NO / ERR_LIBC.
  */
-bool	lr_state_complete(t_lr_machine *machine, t_lr_state *lr_state);
+t_error	lr_state_complete(t_lr_machine *machine, t_lr_state *lr_state);
 
 /**
  * @ingroup lr_state_pub
@@ -239,10 +239,9 @@ void	lr_state_init(t_lr_state *lr_state);
  *            success, must NOT be NULL).
  * @param src Source LR state to advance (borrowed, must NOT be NULL).
  * @param symbol Consumed grammar symbol.
- * @return true if the next LR state was computed successfully, false on
- *         allocation failure.
+ * @return ERR_NO / ERR_LIBC
  */
-bool	lr_state_next(t_lr_machine *machine, t_lr_state *dst, t_lr_state *src,
+t_error	lr_state_next(t_lr_machine *machine, t_lr_state *dst, t_lr_state *src,
 			t_symbol symbol);
 
 /**

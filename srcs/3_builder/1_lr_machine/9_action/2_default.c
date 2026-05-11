@@ -2,7 +2,8 @@
 #include "action.h"
 #include <stdlib.h>
 
-static bool	malloc_action_table(t_lr_machine *machine)
+// ERR_NO / ERR_LIBC
+static t_error	malloc_action_table(t_lr_machine *machine)
 {
 	size_t	rows;
 	size_t	cols;
@@ -13,7 +14,7 @@ static bool	malloc_action_table(t_lr_machine *machine)
 	cols = SYM_TERMINAL_MAX + 1;
 	machine->actions = malloc(rows * sizeof(*machine->actions));
 	if (!machine->actions)
-		return (false);
+		return (ERR_LIBC);
 	i = 0;
 	while (i < rows)
 	{
@@ -24,11 +25,11 @@ static bool	malloc_action_table(t_lr_machine *machine)
 			while (j < i)
 				free(machine->actions[j++]);
 			free(machine->actions);
-			return (machine->actions = NULL, false);
+			return (machine->actions = NULL, ERR_LIBC);
 		}
 		i++;
 	}
-	return (true);
+	return (ERR_NO);
 }
 
 static void	action_set_error(t_lr_machine *machine)
@@ -54,10 +55,13 @@ static void	action_set_error(t_lr_machine *machine)
 	}
 }
 
-bool	action_build_default_table(t_lr_machine *machine)
+t_error	action_build_default_table(t_lr_machine *machine)
 {
-	if (!malloc_action_table(machine))
-		return (false);
+	t_error	error;
+
+	error = malloc_action_table(machine);
+	if (error != ERR_NO)
+		return (error);
 	action_set_error(machine);
-	return (true);
+	return (ERR_NO);
 }

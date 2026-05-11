@@ -62,9 +62,9 @@ bool	option_is_active_in(t_option options, t_option option)
 void	option_set(t_option *options, t_option option, bool on)
 {
 	if (on)
-		printf("Setting ON  option %s\n", option_to_string(option));
+		printf("-> Setting ON  option %s\n", option_to_string(option));
 	else
-		printf("Setting OFF option %s\n", option_to_string(option));
+		printf("-> Setting OFF option %s\n", option_to_string(option));
 	if (on)
 		*options |= option;
 	else

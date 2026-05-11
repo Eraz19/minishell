@@ -2,7 +2,8 @@
 #include "goto.h"
 #include <stdlib.h>
 
-static bool	malloc_goto_table(t_lr_machine *machine)
+// ERR_NO / ERR_LIBC
+static t_error	malloc_goto_table(t_lr_machine *machine)
 {
 	size_t	rows;
 	size_t	cols;
@@ -13,7 +14,7 @@ static bool	malloc_goto_table(t_lr_machine *machine)
 	cols = SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1;
 	machine->gotos = malloc(rows * sizeof(*machine->gotos));
 	if (!machine->gotos)
-		return (false);
+		return (ERR_LIBC);
 	i = 0;
 	while (i < rows)
 	{
@@ -24,11 +25,11 @@ static bool	malloc_goto_table(t_lr_machine *machine)
 			while (j < i)
 				free(machine->gotos[j++]);
 			free(machine->gotos);
-			return (machine->gotos = NULL, false);
+			return (machine->gotos = NULL, ERR_LIBC);
 		}
 		i++;
 	}
-	return (true);
+	return (ERR_NO);
 }
 
 static void	goto_set_empty(t_lr_machine *machine)
@@ -59,8 +60,8 @@ bool	goto_build_table(t_lr_machine *machine)
 	size_t			row;
 	size_t			col;
 
-	if (!malloc_goto_table(machine))
-		return (false);
+	if (malloc_goto_table(machine) != ERR_NO)
+		return (ERR_LIBC);
 	goto_set_empty(machine);
 	i = 0;
 	while (i < machine->transitions.len)
@@ -75,10 +76,14 @@ bool	goto_build_table(t_lr_machine *machine)
 		}
 		i++;
 	}
-	return (true);
+	return (ERR_NO);
 }
 
-bool	go_to(size_t **gotos, size_t current_lr_state_id, t_symbol symbol, size_t *new_lr_state_id)
+bool	go_to(
+	size_t **gotos,
+	size_t current_lr_state_id,
+	t_symbol symbol,
+	size_t *new_lr_state_id)
 {
 	size_t	symbol_offset;
 	size_t	tmp_lr_state_id;

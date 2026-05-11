@@ -71,10 +71,9 @@
  *
  * @param machine LR machine whose ACTION table must be allocated and
  *                populated (borrowed, must NOT be NULL).
- * @return true if the ACTION table was built successfully, false on allocation
- *         failure or parsing-table conflict.
+ * @return ERR_NO / ERR_LR_CONFLICT / ERR_LIBC
  */
-bool	action_build_table(t_lr_machine *machine);
+t_error	action_build_table(t_lr_machine *machine);
 
 /**
  * @ingroup action_pub

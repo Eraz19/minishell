@@ -7,6 +7,7 @@
 
 #define SEPARATOR		": "
 
+// TODO: split in 2 functions
 const char	*error_to_string(t_error error)
 {
 	if (error == ERR_NO)
@@ -19,6 +20,10 @@ const char	*error_to_string(t_error error)
 		return ("index out of bound");
 	else if (error == ERR_LIBC)
 		return (strerror(errno));
+	else if (error == ERR_LR_CONFLICT)
+		return ("LR conflict");
+	else if (error == ERR_LR_STATE_NOT_FOUND)
+		return ("LR state not found");
 	else if (error == ERR_OPTION_INVALID)
 		return ("invalid option");
 	else if (error == ERR_SHELL_NOT_FOUND)

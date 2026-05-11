@@ -60,10 +60,9 @@
  *
  * @param machine LR machine whose LR-state registry and transition table must
  *                be built (borrowed, must NOT be NULL).
- * @return true if the transition table was built successfully, false on
- *         allocation failure or internal inconsistency.
+ * @return ERR_NO / ERR_LR_STATE_NOT_FOUND / ERR_LIBC
  */
-bool	transition_build_table(t_lr_machine *machine);
+t_error	transition_build_table(t_lr_machine *machine);
 
 /**
  * @ingroup transition_pub

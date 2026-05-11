@@ -20,13 +20,13 @@ bool	lr_state_find_id(t_vector *lr_states, t_lr_state *lr_state, size_t *id)
 	return (false);
 }
 
-bool	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add)
+t_error	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add)
 {
 	if (lr_state_find_id(lr_states, lr_state, NULL))
-		return (true);
+		return (ERR_NO);
 	if (!vector_push(lr_states, lr_state))
-		return (false);
+		return (ERR_LIBC);
 	if (did_add)
 		*did_add = true;
-	return (true);
+	return (ERR_NO);
 }

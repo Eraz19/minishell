@@ -87,8 +87,7 @@ bool	go_to(size_t **gotos, size_t current_lr_state_id, t_symbol symbol,
  *
  * @param machine LR machine whose GOTO table must be allocated and populated
  *                (borrowed, must NOT be NULL).
- * @return true if the table was built successfully, false on allocation
- *         failure.
+ * @return ERR_NO / ERR_LIBC.
  */
 bool	goto_build_table(t_lr_machine *machine);
 

@@ -42,8 +42,7 @@
  *
  * @param machine LR machine whose ACTION table must be allocated and
  *                initialized (borrowed, must NOT be NULL).
- * @return true if the default table was built successfully, false on
- *         allocation failure.
+ * @return ERR_NO / ERR_LIBC
  */
 bool	action_build_default_table(t_lr_machine *machine);
 

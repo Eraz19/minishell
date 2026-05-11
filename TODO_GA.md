@@ -1,7 +1,13 @@
 # TODO
 
+## LR_MACHINE MODULE
+
+- Update doc for new `t_error` return values (and make it less verbose !!)
+- Add error messages to all possible failures
+
 ## SHELL MODULE
 
+- wtf exit code != 0 ???!!!
 - Do all the `// TODO ⚠️` points
 
 ## PARAMS MODULE
@@ -26,6 +32,7 @@
 
 - Remove **wildcards** from `libft`'s `Makefile`
 - ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
+- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!)
 
 ## OTHERS
 

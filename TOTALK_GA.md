@@ -9,6 +9,8 @@
 
 # GENERAL
 
+- **USE** `t_error` because ULTRA CHIANT à implémenter à postériori (je l'ai fait pour `lr_machine` => INSUP'):
+	- user `error_print()` (POSIX impose des logs de diagnostique d'erreur sur `stderr`)
 - **USE** `t_shell *shell_get(void)` if you need main `shell` data struct
 - **USE** `void	undefined_behaviour(void)` => Pour l'instant simple message de troll mais soon Xavier en ASCII art
 - **USE** `void shell_exit(t_error error)` => Free all the `t_shell` struct and `exit` (this do **NOT** print any log!)

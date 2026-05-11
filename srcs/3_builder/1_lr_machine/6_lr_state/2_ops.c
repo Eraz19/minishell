@@ -1,7 +1,9 @@
 #include "lr_state.h"
 #include "rule_state.h"
 
-static bool	lr_state_contains_rule_state(t_lr_state *lr_state, t_rule_state rule_state)
+static bool	lr_state_contains_rule_state(
+	t_lr_state *lr_state,
+	t_rule_state rule_state)
 {
 	size_t			i;
 	t_rule_state	*items;
@@ -17,15 +19,18 @@ static bool	lr_state_contains_rule_state(t_lr_state *lr_state, t_rule_state rule
 	return (false);
 }
 
-bool	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state, bool *did_add)
+t_error	lr_state_add_rule_state(
+	t_lr_state *lr_state,
+	t_rule_state rule_state,
+	bool *did_add)
 {
 	if (lr_state_contains_rule_state(lr_state, rule_state))
-		return (true);
+		return (ERR_NO);
 	if (!vector_push(lr_state, &rule_state))
-		return (false);
+		return (ERR_LIBC);
 	if (did_add)
 		*did_add = true;
-	return (true);
+	return (ERR_NO);
 }
 
 bool	lr_state_equal(t_lr_state *a, t_lr_state *b)

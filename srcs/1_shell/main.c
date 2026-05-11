@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+# include <stdio.h>	// TODO: tmp debug
 
 static void	shell_init(t_shell *shell)
 {
@@ -65,7 +66,7 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 	shell->params.parent_shell = parent;
 	error = shell_load(shell, argc, argv, envp);
 	if (error != ERR_NO)
-		return (shell_free(shell), error);
+		return (shell_free(shell), free(shell), error);
 	if (option_is_active_in(shell->params.options, OPT_INTERACTIVE))
 	{
 		// TODO: ⚠️ if interactive && ENV is set => Expand ENV => Process ENV
