@@ -6,12 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 15:59:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/08 10:43:25 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/10 14:55:37 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../_scanner.h"
+#include "../_scanner.h"
 
 void	free_token(t_token **token_ptr)
 {
@@ -48,6 +48,39 @@ char	*DEBUG_token_type_stringify(t_token_type type)
 	if (type == DLESS       ) return (str_join("", "DLESS"			));
 	if (type == DLESSDASH   ) return (str_join("", "DLESSDASH"		));
 	return (NULL);
+}
+
+bool	is_blank(t_lexer *lexer, size_t i)
+{
+	char	*input_ptr;
+
+	input_ptr = lexer->input + i;
+	return (input_ptr[0] == ' ' || input_ptr[0] == '\t');
+}
+
+t_token	*create_operator_token(t_operator_args args, size_t i)
+{
+	char *io_number_str;
+	
+	if (args.type != IO_NUMBER)
+		return (create_token(NULL, i, args.type));
+	else
+	{
+		io_number_str = ft_itoa(args.value);
+		if (io_number_str == NULL)
+			return (NULL);
+		return (create_token(io_number_str, i, args.type));
+	}
+}
+
+t_token	*create_word_token(t_lexer *lexer, size_t i)
+{
+	char	*token_value;
+
+	token_value = str_sub(lexer->input, (uint)lexer->i, i - lexer->i);
+	if (token_value == NULL)
+		return (NULL);
+	return (create_token(token_value, lexer->i, TOKEN));
 }
 
 t_token	*create_token(char *content, size_t offset, t_token_type type)

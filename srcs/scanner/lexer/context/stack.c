@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:05:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/08 10:31:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 10:46:03 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,14 @@ bool	ctx_push(t_ctx_stack *stack, t_lexer_ctx_type ctx)
 	if (stack == NULL)
 		return (false);
 	tmp = NULL;
-	if (stack->len + 1 > stack->size)
+	if (stack->size == 0)
+	{
+		stack->data = malloc(sizeof(t_lexer_ctx) * 1);
+		if (stack->data == NULL)
+			return (false);
+		stack->size = 1;
+	}
+	else if (stack->len + 1 > stack->size)
 	{
 		tmp = malloc(sizeof(t_lexer_ctx) * (stack->size * 2));
 		if (tmp == NULL)
@@ -45,9 +52,7 @@ bool	ctx_push(t_ctx_stack *stack, t_lexer_ctx_type ctx)
 		stack->data = tmp;
 		stack->size *= 2;
 	}
-	stack->data[stack->len++] = (t_lexer_ctx){
-		.type = ctx,
-		.nesting_depth = 0};
+	stack->data[stack->len++] = (t_lexer_ctx){.type = ctx, .nesting_depth = 0};
 	return (true);
 }
 

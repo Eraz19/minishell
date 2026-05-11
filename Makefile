@@ -6,7 +6,7 @@
 #    By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/17 18:30:00 by adouieb           #+#    #+#              #
-#    Updated: 2026/05/08 11:35:46 by adouieb          ###   ########.fr        #
+#    Updated: 2026/05/09 22:08:31 by adouieb          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,8 +48,7 @@ SCANNER_SRCS=${SCANNER_DIR}/lexer/context/stack.c	\
 	${SCANNER_DIR}/lexer/operator/control.c			\
 	${SCANNER_DIR}/lexer/operator/operator.c		\
 	${SCANNER_DIR}/lexer/operator/redirection.c		\
-	${SCANNER_DIR}/lexer/token/end.c				\
-	${SCANNER_DIR}/lexer/token/token.c				\
+	${SCANNER_DIR}/lexer/token.c					\
 	${SCANNER_DIR}/lexer/escape.c					\
 	${SCANNER_DIR}/lexer/lexer.c					\
 	${SCANNER_DIR}/reader/reader.c					\
