@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/07 16:35:27 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/08 10:58:35 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SCANNER_H
 
 # include "libft.h"
+# include "types.h" 
 
 // ---------- Token ----------
 
@@ -56,13 +57,6 @@ typedef struct s_token
 
 // ---------- Lexer state ----------
 
-typedef enum e_quote_mode
-{
-	NONE_,		// Not in a quote
-	SINGLE_,	// In a single quote
-	DOUBLE_,	// In a double quote
-}	t_quote_mode;
-
 typedef enum e_lexer_ctx
 {
 	NONE,
@@ -97,8 +91,10 @@ typedef struct s_lexer
 
 // ------------ Scanner API ------------
 
-void	free_token(t_token **token_ptr);
+void		free_token(t_token **token_ptr);
 
-t_token	*get_next_token(t_lexer *lexer);
+t_token		*get_next_token(t_lexer *lexer);
+
+t_file_path	get_heredoc_body(t_lexer *lexer);
 
 #endif

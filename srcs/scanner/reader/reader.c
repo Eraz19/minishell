@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 15:55:11 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/07 16:39:13 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/09 16:30:35 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,11 @@ char	*read_tty(void)
 {
 	char	*res;
 
+	//ft_printf("ENTER READ_TTY\n");
 	res = read_display("minishell> ");
 	if (res == NULL)
-		return (NULL);
+		return (/*ft_printf("LEAVE ERROR READ_TTY\n"),*/ NULL);
+	//ft_printf("LEAVE READ_TTY\n");
+	//ft_printf("RES = '%s'\n", res);
 	return (res);
 }
