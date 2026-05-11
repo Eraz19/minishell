@@ -6,12 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:01:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/10 15:12:06 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:20:21 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../_scanner.h"
+#include "_operator.h"
 
 bool	is_less(t_lexer *lexer, t_operator_args *args, size_t i)
 {
@@ -56,9 +56,9 @@ bool	is_great(t_lexer *lexer, t_operator_args *args, size_t i)
 bool	is_io_number(t_lexer *lexer, t_operator_args *args, size_t i)
 {
 	size_t	j;
-	int		number;
+	int		nbr;
+	char	*nbr_str;
 	char	*input_ptr;
-	char	*number_str;
 
 	j = 0;
 	input_ptr = lexer->input + i;
@@ -68,15 +68,16 @@ bool	is_io_number(t_lexer *lexer, t_operator_args *args, size_t i)
 		j++;
 	if (j == 0)
 		return (false);
-	number_str = str_sub(input_ptr, 0, j);
-	if (number_str == NULL)
+	nbr_str = str_sub(input_ptr, 0, j);
+	if (nbr_str == NULL)
 		return (false);
-	if (parse_int(number_str, &number) == false)
-		return (free(number_str), false);
-	free(number_str);
-	if (is_less(lexer, args, i + j))
-		return (args->type = IO_NUMBER, args->value = number, args->len = (int)j, true);	
-	else if (is_great(lexer, args, i + j))
-		return (args->type = IO_NUMBER, args->value = number, args->len = (int)j, true);
+	if (parse_int(nbr_str, &nbr) == false)
+		return (free(nbr_str), false);
+	free(nbr_str);
+	if (is_less(lexer, args, i + j) || is_great(lexer, args, i + j))
+	{
+		*args = (t_operator_args){.type = IO_NUMBER, .value = nbr, .len = j};
+		return (true);
+	}
 	return (false);
 }

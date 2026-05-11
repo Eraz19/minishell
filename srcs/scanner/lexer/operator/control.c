@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:02:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/10 14:42:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:07:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../_scanner.h"
+#include "_operator.h"
 
 bool	is_semi(t_lexer *lexer, t_operator_args *args, size_t i)
 {

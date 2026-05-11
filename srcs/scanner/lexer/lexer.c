@@ -6,12 +6,16 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:27:11 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 14:07:47 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:58:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../_scanner.h"
+#include "_lexer.h"
+#include "./token/_token.h"
+#include "./escape/_escape.h"
+#include "./context/_context.h"
+#include "./operator/_operator.h"
 
 static bool	escape_character(t_lexer *lexer, size_t *i)
 {
@@ -51,17 +55,17 @@ static int	update_ctx(t_lexer *lexer, size_t *i)
 	input_ptr = lexer->input + *i;
 	current_ctx = ctx_view(&lexer->ctx);
 	if (current_ctx.type == NONE)
-		return (/*ft_printf("UPDATE_CTX_IN_NO_CTX\n"), */update_ctx_in_no_ctx(&lexer->ctx, input_ptr, i));
+		return (/*ft_printf("UPDATE_CTX_IN_NO_CTX\n"), */update_ctx_none(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == SQUOTE)
-		return (/*ft_printf("UPDATE_CTX_IN_SQUOTE\n"), */update_ctx_in_squote(&lexer->ctx, input_ptr, i));
+		return (/*ft_printf("UPDATE_CTX_IN_SQUOTE\n"), */update_ctx_squote(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == DQUOTE)
-		return (/*ft_printf("UPDATE_CTX_IN_DQUOTE\n"), */update_ctx_in_dquote(&lexer->ctx, input_ptr, i));
+		return (/*ft_printf("UPDATE_CTX_IN_DQUOTE\n"), */update_ctx_dquote(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == BACKTICK)
-		return (/*ft_printf("UPDATE_CTX_IN_BACKTICK\n"), */update_ctx_in_backtick(&lexer->ctx, input_ptr, i));
+		return (/*ft_printf("UPDATE_CTX_IN_BACKTICK\n"), */update_ctx_backtick(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == ARITH)
-		return (/*ft_printf("UPDATE_CTX_IN_ARITHM\n"), */update_ctx_in_arithm(&lexer->ctx, input_ptr, i));
+		return (/*ft_printf("UPDATE_CTX_IN_ARITHM\n"), */update_ctx_arithm(&lexer->ctx, input_ptr, i));
 	else if (current_ctx.type == PARAM)
-		return (/*ft_printf("UPDATE_CTX_IN_PARAM\n"), */update_ctx_in_param(&lexer->ctx, input_ptr, i));
+		return (/*ft_printf("UPDATE_CTX_IN_PARAM\n"), */update_ctx_param(&lexer->ctx, input_ptr, i));
 	return (true);
 }
 
@@ -83,7 +87,7 @@ bool	on_input_operator(t_token **res, t_lexer *lexer, t_operator_args args, size
 	//ft_printf("ON INPUT OPERATOR\n");
 	if (lexer->i == i)
 	{
-		*res = create_operator_token(args, lexer->i);
+		*res = create_operator_token(&args, lexer->i);
 		lexer->i += (size_t)args.len;
 	}
 	else
@@ -123,7 +127,7 @@ bool	on_input_end(t_token **res, t_lexer *lexer, size_t i)
 		if (lexer->i == i)
 		{
 			args = (t_operator_args){.type = EOF, .value = 0, .len = 0};
-			*res = create_operator_token(args, lexer->i);
+			*res = create_operator_token(&args, lexer->i);
 		}
 		else
 		{

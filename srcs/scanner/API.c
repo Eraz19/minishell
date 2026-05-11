@@ -6,11 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 11:37:31 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 13:57:52 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 17:00:43 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_scanner.h"
+#include "./lexer/_lexer.h"
+#include "./reader/_reader.h"
 
 static t_token	*get_next_token_tty(t_lexer *lexer)
 {
@@ -46,11 +47,10 @@ static t_token	*get_next_token_non_tty(t_lexer *lexer)
 	return (res);
 }
 
-t_token	*get_next_token(t_lexer *lexer)
+t_token	*scanner_get_next_token(t_lexer *lexer)
 {
 	t_token *res;
 
-	//ft_printf("GET_NEXT_TOKEN\n");
 	if (lexer->script_path == NULL)
 	{
 		res = get_next_token_tty(lexer);

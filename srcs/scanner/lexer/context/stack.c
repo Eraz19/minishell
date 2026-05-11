@@ -6,12 +6,13 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:05:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 10:46:03 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:42:43 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../_scanner.h"
+#include "libft.h"
+#include "_context.h"
 
 void	free_ctx_stack(t_ctx_stack **stack)
 {

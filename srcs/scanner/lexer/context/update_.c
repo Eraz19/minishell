@@ -6,13 +6,13 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:08:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 13:56:48 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:05:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../_scanner.h"
+#include "_context.h"
 
-int	update_ctx_in_backtick(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+int	update_ctx_backtick(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 {
 	if (input_ptr[0] == '`')
 		return ((*i)++, ctx_pop(ctx), 1);
@@ -21,7 +21,7 @@ int	update_ctx_in_backtick(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 	return (-1);
 }
 
-int	update_ctx_in_squote(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+int	update_ctx_squote(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 {
 	if (input_ptr[0] == '\'')
 		return ((*i)++, ctx_pop(ctx), 1);

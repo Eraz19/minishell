@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:04:00 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/10 14:41:52 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:07:35 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../_scanner.h"
+#include "_operator.h"
 
 bool	is_operator(t_lexer *lexer, t_operator_args *args, size_t i)
 {

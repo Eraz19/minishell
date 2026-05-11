@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:06:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 13:56:54 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:05:52 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../_scanner.h"
+#include "_context.h"
 
 static bool	is_ctx_opener(t_lexer_ctx_type *ctx, char *input_ptr)
 {
@@ -34,7 +34,7 @@ static bool	is_ctx_opener(t_lexer_ctx_type *ctx, char *input_ptr)
 	return (false);
 }
 
-int	update_ctx_in_param(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+int	update_ctx_param(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 {
 	t_lexer_ctx_type	new_ctx;
 
@@ -54,7 +54,7 @@ int	update_ctx_in_param(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 	return (-1);
 }
 
-int	update_ctx_in_arithm(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+int	update_ctx_arithm(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 {
 	t_lexer_ctx_type	new_ctx;
 	int					nesting_depth;
@@ -74,7 +74,7 @@ int	update_ctx_in_arithm(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 	return (-1);
 }
 
-int	update_ctx_in_dquote(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+int	update_ctx_dquote(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 {
 	t_lexer_ctx_type	new_ctx;
 
@@ -92,7 +92,7 @@ int	update_ctx_in_dquote(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 	return (-1);
 }
 
-int	update_ctx_in_no_ctx(t_ctx_stack *ctx, char *input_ptr, size_t *i)
+int	update_ctx_none(t_ctx_stack *ctx, char *input_ptr, size_t *i)
 {
 	t_lexer_ctx_type	new_ctx;
 
