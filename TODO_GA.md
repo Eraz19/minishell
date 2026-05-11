@@ -1,23 +1,18 @@
 # TODO
 
-## LR_MACHINE MODULE
+## PARAMS MODULE
 
-- Implement `parser hooks`
-- add `const` everywhere it's missing
-- Make doc less verbose
+- add `param_get()` API to allow to get `$0` (etc) as `$VAR`
 
 ## SHELL MODULE
 
 - Do all the `// TODO ⚠️` points
 
-## PARAMS MODULE
+## LR_MACHINE MODULE
 
-- add `param_get()` API to allow to get `$0` (etc) as `$VAR`
-
-## UNDEFINED BEHAVIOR TROLLING
-
-- `-o` ou `+o` sans argument => `undefined_behaviour()`
-- `options_load()` si (`-` && `--`) || (opérandes devant `-`) `undefined_behaviour()`
+- Implement `parser hooks`
+- add `const` everywhere it's missing
+- Make doc less verbose
 
 ## BUILTINS
 
@@ -27,6 +22,11 @@
 	- Make the full list of special builtins
 - ⚠️ `export`, `readonly` and `unset`: `--` is the end of options (`-` also ?)
 - implement `set` builtin
+
+## UNDEFINED BEHAVIOR TROLLING
+
+- `-o` ou `+o` sans argument => `undefined_behaviour()`
+- `options_load()` si (`-` && `--`) || (opérandes devant `-`) `undefined_behaviour()`
 
 ## LIBFT
 
