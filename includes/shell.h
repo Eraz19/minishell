@@ -20,5 +20,6 @@ t_error		shell_start(int argc, char **argv, char **envp, t_shell *parent);
 t_shell		*shell_get(void);
 const char	*shell_get_name(void);
 void		shell_exit(t_error error);
+void		shell_exit_on_veof(void);
 
 #endif

@@ -1,13 +1,11 @@
 #include "shell_priv.h"
-#include <errno.h>
 #include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 # include <stdio.h>	// TODO: tmp debug
 
-// TODO: in which module ? (executor will need it!)
+// TODO: move to runner/executor (because it will use it after each command execution)
+// ERR_NO / ERR_LIBC
 t_error	shell_set_stdin_to_blocking(void)
 {
 	int			enabled;
@@ -16,12 +14,20 @@ t_error	shell_set_stdin_to_blocking(void)
 	bool		is_fifo;
 	
 	is_a_terminal = isatty(STDIN_FILENO);
-	is_fifo = fstat(STDIN_FILENO, &stat_buff) == 0 && S_ISFIFO(stat_buff.st_mode);
+	if (fstat(STDIN_FILENO, &stat_buff) != 0)
+	{
+		error_print(NULL, "unable to check if stdin is FIFO", ERR_LIBC);
+		return (ERR_LIBC);
+	}
+	is_fifo = S_ISFIFO(stat_buff.st_mode);
 	if (!is_a_terminal && !is_fifo)
 		return (ERR_NO);
 	enabled = 0;
 	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
-		return (error_print(NULL, NULL, ERR_UNABLE_TO_BLOCK_STDIN));
+	{
+		error_print(NULL, "Unable to set stdin to blocking mode", ERR_LIBC);
+		return (ERR_LIBC);
+	}
 	return (ERR_NO);
 }
 
@@ -34,7 +40,7 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 		return (error);
 	// TODO: history_load();
 	// TODO: fun_load(&shell->functions);
-	// TODO: lexer_load(&shell->lexer);
+	// TODO: scanner_load(&shell->lexer);
 	error = builder_load(&shell->builder);
 	if (error != ERR_NO)
 		return (error);
@@ -44,11 +50,13 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 
 static t_error	shell_exec_env(t_shell *shell)
 {
+	t_error	error;
 	char	*raw_env;
 
 	if (!option_is_active_in(shell->params.options, OPT_INTERACTIVE))
 		return (ERR_NO);
-	raw_env = param_get("ENV");
+	error = param_get("ENV", &raw_env);
+	if (error == )
 	if (!raw_env)
 		return (ERR_NO);
 	if (raw_env[0] == '\0')

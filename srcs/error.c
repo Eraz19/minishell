@@ -28,8 +28,6 @@ const char	*error_to_string(t_error error)
 		return ("invalid option");
 	else if (error == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
-	else if (error == ERR_UNABLE_TO_BLOCK_STDIN)
-		return ("unable to set stdin to blocking mode");
 	else if (error == ERR_UNDEFINED_BEHAVIOUR)
 		return ("undefined behaviour 🤪");
 	else if (error == ERR_VAR_INVALID_NAME)
