@@ -48,20 +48,20 @@ void	var_free_all(t_var_list *variables);
 
 bool	var_find(const t_var_list *variables, const char *name, size_t *res);
 
-// @warning: *dst_val can be NULL if var->value == NULL (error will be ERR_NO)
-// Errors can be ERR_VAR_NOT_FOUND / ERR_LIBC.
+// @warning: *dst_val can be NULL if var->value == NULL (error will be ERR_NO).
+// @ret ERR_VAR_NOT_FOUND / ERR_LIBC.
 t_error	var_get(const t_var_list *variables, const char *name, char **dst_val);
 
 bool	var_name_is_valid(const char *name);
 
-// Errors can be ERR_LIBC
+// @ret ERR_LIBC
 t_error	var_print(const char *prefix, const t_var *var);
 
 // value can be NULL.
-// Errors can be ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
+// @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 t_error	var_set(t_var_list *variables, const char *name, const char *value);
 
-// Errors can be ERR_VAR_MISSING_EQUAL / ERR_LIBC
+// @ret ERR_VAR_MISSING_EQUAL / ERR_LIBC
 t_error	var_split(const char *src, char **dst_name, char **dst_value);
 
 #endif

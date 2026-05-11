@@ -32,7 +32,7 @@ static bool pwd_has_no_dot_components(const char *pwd)
 cf [POSIX.1-2024, Base Definitions, header <sys/stat.h>](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/sys_stat.h.html)
 	- "A file identity is uniquely determined by the combination of st_dev and st_ino"
 */
-// Errors can be ERR_LIBC.
+// @ret ERR_LIBC.
 static t_error	pwd_is_the_current_working_dir(const char *pwd, bool *res)
 {
 	struct stat	current;
@@ -55,7 +55,7 @@ cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/util
 	- "the value does not contain any components that are dot or dot-dot"
 	- "the value is [...] the current working directory"
 */
-// Errors can be ERR_LIBC.
+// @ret ERR_LIBC.
 static t_error	var_pwd_is_valid(const char *pwd, bool *res)
 {
 	*res = false;

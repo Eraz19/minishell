@@ -5,7 +5,7 @@
 # include <stdio.h>	// TODO: tmp debug
 # include <inttypes.h>	// TODO: tmp debug
 
-// Errors can be ERR_OPTION_INVALID
+// @ret ERR_OPTION_INVALID
 static t_error	specials_load_cmd_string(
 	t_specials *specials,
 	int argc,
@@ -24,7 +24,7 @@ static t_error	specials_load_cmd_string(
 	return (ERR_NO);
 }
 
-// Errors can be ERR_SHELL_NOT_FOUND / ERR_OPTION_INVALID
+// @ret ERR_SHELL_NOT_FOUND / ERR_OPTION_INVALID
 static t_error	specials_load_source_and_zero(
 	t_specials *specials,
 	int argc,

@@ -7,7 +7,7 @@
 /*                              SPECIAL BUILTINS                             */
 /* ************************************************************************* */
 
-// Errors can be ERR_LIBC
+// @ret ERR_LIBC
 t_error	export_build_envp(const t_shell *shell, char ***dst_envp);
 int		export(int argc, char **argv, char **envp, t_shell *shell);
 

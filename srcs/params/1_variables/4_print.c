@@ -2,7 +2,7 @@
 #include "posix_helpers.h"
 #include <unistd.h>
 
-// Errors can be ERR_LIBC
+// @ret ERR_LIBC
 static t_error	var_print_escaped_value(const char *value)
 {
 	t_error	error;

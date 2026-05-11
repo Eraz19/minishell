@@ -3,7 +3,7 @@
 #include <unistd.h>
 # include <stdio.h>	// TODO: tmp debug
 
-// Errors can be ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
+// @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	var_init_target_up(
 	t_var_list *variables,
 	const char *name,

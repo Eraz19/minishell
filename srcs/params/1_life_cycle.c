@@ -8,7 +8,7 @@ void	params_init(t_params *params)
 	specials_init(&params->specials);
 }
 
-static t_error	params_load_var(t_params *params, char **envp)
+static t_error	params_load_variables(t_params *params, char **envp)
 {
 	t_shell	*parent;
 	char	*parent_ppid;
@@ -37,7 +37,7 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	size_t	options_count;
 	
 	params->name = argv[0];
-	error = params_load_var(params, envp);
+	error = params_load_variables(params, envp);
 	if (error != ERR_NO)
 		return (error);
 	error = options_load(&params->options, argc, argv, &options_count);

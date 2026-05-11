@@ -14,14 +14,17 @@ t_error	shell_set_stdin_to_blocking(void)
 	bool		is_fifo;
 	
 	is_a_terminal = isatty(STDIN_FILENO);
-	if (fstat(STDIN_FILENO, &stat_buff) != 0)
+	if (!is_a_terminal)
 	{
-		error_print(NULL, "unable to check if stdin is FIFO", ERR_LIBC);
-		return (ERR_LIBC);
+		if (fstat(STDIN_FILENO, &stat_buff) != 0)
+		{
+			error_print(NULL, "unable to check if stdin is FIFO", ERR_LIBC);
+			return (ERR_LIBC);
+		}
+		is_fifo = S_ISFIFO(stat_buff.st_mode);
+		if (!is_fifo)
+			return (ERR_NO);
 	}
-	is_fifo = S_ISFIFO(stat_buff.st_mode);
-	if (!is_a_terminal && !is_fifo)
-		return (ERR_NO);
 	enabled = 0;
 	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
 	{

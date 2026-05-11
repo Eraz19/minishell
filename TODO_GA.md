@@ -2,7 +2,9 @@
 
 ## PARAMS MODULE
 
-- add `param_get()` API to allow to get `$0` (etc) as `$VAR`
+- implement `positionals` module (cf `speacials.h`)
+- finalize `specials` module with new `positionals` implementation
+- finalize `params` module (cf `speacials.h`)
 
 ## SHELL MODULE
 

@@ -21,5 +21,7 @@ t_shell		*shell_get(void);
 const char	*shell_get_name(void);
 void		shell_exit(t_error error);
 void		shell_exit_on_veof(void);
+// is public for params module to use it
+void		shell_free(t_shell **shell);
 
 #endif

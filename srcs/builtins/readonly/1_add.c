@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 // value can be NULL.
-// Errors can be ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
+// @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	readonly_add_one(
 	t_var_list *variables,
 	const char *name,
