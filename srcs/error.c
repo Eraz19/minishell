@@ -28,6 +28,8 @@ const char	*error_to_string(t_error error)
 		return ("invalid option");
 	else if (error == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
+	else if (error == ERR_UNABLE_TO_BLOCK_STDIN)
+		return ("unable to set stdin to blocking mode");
 	else if (error == ERR_UNDEFINED_BEHAVIOUR)
 		return ("undefined behaviour 🤪");
 	else if (error == ERR_VAR_INVALID_NAME)
@@ -62,5 +64,5 @@ t_error	error_print(const char *prefix, const char *error_type, t_error error)
 	}
 	(void)posix_write(STDERR_FILENO, error_details, str_len(error_details));
 	(void)posix_write(STDERR_FILENO, "\n", str_len("\n"));
-	return (ERR_BUILTIN_INVALID_USAGE);
+	return (error);
 }

@@ -48,7 +48,7 @@
 
 - `sh` parsing (`variables` + `options` + `operands` + `arguments`)
 - `builtins` parsing
-- `ft_getppid()` + `ft_getpid()` on **Linux**, **Mac_x86**, and **FreeBSD**
+- `ft_getppid()` + `ft_getpid()` on **Linux**, **Mac_x86**, and **freeBSD**
 
 ---
 
@@ -67,6 +67,23 @@
 ---
 
 # TO DOCUMENT
+
+## POSIX limitations due to 42 functions whitelist
+
+- Workarounds and/or asm stubs have been done to emulate the following functions which are not allowed by the official 42 subject:
+	- `getpid()` -> `ft_getpid()`: get current process id for `$$` initialization:
+		- `macOS` / ARM: asm stub
+		- `macOS` / x86: asm stub
+		- `linux`/ all: workaround via `/proc/self/status`
+		- `freeBSD` / all (all archs): workaround via `/proc/curproc/status` / `/proc/self/status`
+	- `getppid()` -> `ft_getppid()`: get parent process id for `$PPID` initialization
+		- `macOS` / ARM: asm stub
+		- `macOS` / x86: asm stub
+		- `linux`/ all: workaround via `/proc/self/status`
+		- `freeBSD` / all (all archs): workaround via `/proc/curproc/status` / `/proc/self/status`
+	- `fcntl()` -> `ioctl()`: set `stdin` to blocking mode for `stdin` management
+		- all OS and archs: via `ioctl()` (non-POSIX function) instead of `fcntl()`
+- ⚠️ as `OpenBSD` sends `SIGABRT` when `syscalls` are sent from unauthorized memory addresses, this `shell` is not fully POSIX compliant on this Operating System. A next version of this program may use all the real `libc` functions to enable full POSIX compliance.
 
 ## What I learned
 

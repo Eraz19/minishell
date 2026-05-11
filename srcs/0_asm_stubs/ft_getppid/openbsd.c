@@ -5,4 +5,5 @@ pid_t	ft_getppid(void)
 {
 	return ((pid_t)-1);
 }
+
 #endif

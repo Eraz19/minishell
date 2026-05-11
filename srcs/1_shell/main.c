@@ -1,17 +1,28 @@
-#include "shell.h"
+#include "shell_priv.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 # include <stdio.h>	// TODO: tmp debug
 
-static void	shell_init(t_shell *shell)
+// TODO: in which module ? (executor will need it!)
+t_error	shell_set_stdin_to_blocking(void)
 {
-	params_init(&shell->params);
-	// TODO: fun_init(&shell->functions);
-	// TODO: lexer_init(&shell->lexer);
-	builder_init(&shell->builder);
-	// TODO: runner_init(&shell->runner);
+	int			enabled;
+	struct stat	stat_buff;
+	bool		is_a_terminal;
+	bool		is_fifo;
+	
+	is_a_terminal = isatty(STDIN_FILENO);
+	is_fifo = fstat(STDIN_FILENO, &stat_buff) == 0 && S_ISFIFO(stat_buff.st_mode);
+	if (!is_a_terminal && !is_fifo)
+		return (ERR_NO);
+	enabled = 0;
+	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
+		return (error_print(NULL, NULL, ERR_UNABLE_TO_BLOCK_STDIN));
+	return (ERR_NO);
 }
 
 static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
@@ -21,7 +32,6 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	error = params_load(&shell->params, argc, argv, envp);
 	if (error != ERR_NO)
 		return (error);
-	// TODO: ⚠️ prepare STDIN (si stdin est un FIFO ou un terminal configuré en non-blocking, sh doit le remettre en blocking mode, et cet état doit rester en vigueur quand la commande se termine.)
 	// TODO: history_load();
 	// TODO: fun_load(&shell->functions);
 	// TODO: lexer_load(&shell->lexer);
@@ -29,29 +39,25 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	if (error != ERR_NO)
 		return (error);
 	// TODO: runner_load(&shell->runner);
-	// TODO: ⚠️ expand variables ?? (inside variable module which should call expander module to perform expansions ??)
+	return (shell_set_stdin_to_blocking());
+}
+
+static t_error	shell_exec_env(t_shell *shell)
+{
+	char	*raw_env;
+
+	if (!option_is_active_in(shell->params.options, OPT_INTERACTIVE))
+		return (ERR_NO);
+	raw_env = param_get("ENV");
+	if (!raw_env)
+		return (ERR_NO);
+	if (raw_env[0] == '\0')
+	{
+		free(raw_env);
+		return (ERR_NO);
+	}
+	// TODO: ⚠️ if interactive && ENV is set => Expand ENV => Process ENV
 	return (ERR_NO);
-}
-
-void	shell_free(t_shell *shell)
-{
-	params_free(&shell->params);
-	// TODO: fun_free(&shell->functions);
-	// TODO: lexer_free(&shell->lexer);
-	builder_free(&shell->builder);
-	// TODO: runner_free(&shell->runner);
-}
-
-void	shell_exit(t_error error)
-{
-	t_shell	*shell;
-
-	shell = shell_get();
-	// TODO: history_save();
-	if (shell)
-		shell_free(shell);
-	free(shell);
-	exit((int)error);
 }
 
 t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
@@ -68,11 +74,8 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 	shell->params.parent_shell = parent;
 	error = shell_load(shell, argc, argv, envp);
 	if (error != ERR_NO)
-		return (shell_free(shell), free(shell), error);
-	if (option_is_active_in(shell->params.options, OPT_INTERACTIVE))
-	{
-		// TODO: ⚠️ if interactive && ENV is set => Expand ENV => Process ENV
-	}
+		shell_exit(error);
+
 	// TODO: runner_run(t_shell *shell);
 	shell_exit(error);
 	return (error);
