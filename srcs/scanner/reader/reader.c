@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 15:55:11 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/09 16:30:35 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/12 10:27:23 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*read_script(t_file_path script)
 	if (script == NULL || access(script, F_OK) != 0)
 		return (NULL);
 	script_fd = open(script, O_RDONLY);
-	if (script_fd < 0 || !buff_init(&buffer, 0))
+	if (script_fd < 0 || !buff_init(&buffer, 0, NULL, 0))
 		return (NULL);
 	if (!buff_read_all(&buffer, script_fd))
 		return (buff_free(&buffer), close(script_fd), NULL);

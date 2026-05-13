@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 16:23:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 16:54:16 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/13 13:03:49 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,13 @@ typedef struct s_token
 
 void	free_token(t_token **token_ptr);
 t_token	*create_word_token(t_lexer *lexer, size_t i);
-t_token	*create_operator_token(t_operator_args *args, size_t i);
+t_token	*create_operator_token(t_lexer *lexer, t_operator_args *args);
 t_token	*create_token(char *content, size_t offset, t_token_type type);
 
-bool	is_blank(t_lexer *lexer, size_t i);
+// For testing purposes
 
+void	DEBUG_print_token(t_token *token);
 char	*DEBUG_token_type_stringify(t_token_type type);
+bool	DEBUG_is_token_equal(t_token token1, t_token token2);
 
 #endif

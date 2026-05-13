@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _escape.h                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/11 16:21:05 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/13 15:30:23 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/12 17:26:00 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/12 17:26:36 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _ESCAPE_H
-# define _ESCAPE_H
+#include "_lexer.h"
 
-# include <stddef.h>
-# include "../_lexer.h"
+bool	is_comment(t_lexer *lexer, size_t i)
+{
+	char	*input_ptr;
 
-bool	escape_char_in_backtick(t_lexer *lexer, size_t *i);
-bool	escape_char_in_param(t_lexer *lexer, size_t *i);
-bool	escape_char_in_arithm(t_lexer *lexer, size_t *i);
-bool	escape_char_in_no_ctx(t_lexer *lexer, size_t *i);
-bool	escape_char_in_dquote(t_lexer *lexer, size_t *i);
+	input_ptr = lexer->input + i;
+	return (lexer->i == i && input_ptr[0] == '#');
+}
 
-#endif
+bool	is_blank(t_lexer *lexer, size_t i)
+{
+	char	*input_ptr;
+
+	input_ptr = lexer->input + i;
+	return (input_ptr[0] == ' ' || input_ptr[0] == '\t');
+}

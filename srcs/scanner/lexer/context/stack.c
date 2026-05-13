@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 16:05:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 16:42:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/13 15:38:57 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include "libft.h"
 #include "_context.h"
 
-void	free_ctx_stack(t_ctx_stack **stack)
+void	free_ctx_stack(t_ctx_stack *stack)
 {
-	free((*stack)->data);
-	(*stack)->len = 0;
-	(*stack)->size = 0;
-	(*stack)->data = NULL;
+	free(stack->data);
+	stack->len = 0;
+	stack->size = 0;
+	stack->data = NULL;
 }
 
 bool	ctx_update_nesting(t_ctx_stack *stack, int value)
@@ -48,7 +48,7 @@ bool	ctx_push(t_ctx_stack *stack, t_lexer_ctx_type ctx)
 		tmp = malloc(sizeof(t_lexer_ctx) * (stack->size * 2));
 		if (tmp == NULL)
 			return (false);
-		tmp = ft_memcpy(stack->data, tmp, stack->len);
+		tmp = ft_memcpy(tmp, stack->data, stack->len * sizeof(t_lexer_ctx));
 		free(stack->data);
 		stack->data = tmp;
 		stack->size *= 2;
