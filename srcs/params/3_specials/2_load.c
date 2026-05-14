@@ -51,16 +51,18 @@ static t_error	specials_load_source_and_zero(
 	return (ERR_NO);
 }
 
-t_error	specials_load(t_specials *specials, int argc, char **argv, size_t options_count)
+t_error	specials_load(
+	t_specials *specials,
+	int argc,
+	char **argv,
+	size_t *start_index)
 {
-	size_t	operand_index;
 	t_shell	*shell;
 	t_error	error;
 
 	printf("-------------------------------------\n");
 	printf("===> [specials_load]\n");
-	operand_index = options_count + 1;
-	error = specials_load_source_and_zero(specials, argc, argv, &operand_index);
+	error = specials_load_source_and_zero(specials, argc, argv, start_index);
 	if (error != ERR_NO)
 		return (error);
 	specials->last_bg_pid = -1;

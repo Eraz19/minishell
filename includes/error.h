@@ -29,4 +29,7 @@ const char	*error_to_string(t_error error);
 // Always returns error
 t_error	error_print(const char *prefix, const char *error_type, t_error error);
 
+// Prints "la tête à Xavier"
+void	undefined_behaviour(void);
+
 #endif

@@ -34,16 +34,20 @@ static t_error	params_load_variables(t_params *params, char **envp)
 t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 {
 	t_error	error;
-	size_t	options_count;
+	size_t	start_index;
 	
 	params->name = argv[0];
 	error = params_load_variables(params, envp);
 	if (error != ERR_NO)
 		return (error);
-	error = options_load(&params->options, argc, argv, &options_count);
+	start_index = 1;
+	error = options_load(&params->options, argc, argv, &start_index);
 	if (error != ERR_NO)
 		return (error);
-	return (specials_load(&params->specials, argc, argv, options_count));
+	error = specials_load(&params->specials, argc, argv, &start_index);
+	if (error != ERR_NO)
+		return (error);
+	return (positionals_load(&params->positionals, argc, argv, start_index));
 }
 
 void	params_free(t_params *params)

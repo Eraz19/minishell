@@ -7,7 +7,11 @@ void	positionals_init(t_positionals_stack *stack)
 	vector_init(stack, sizeof(t_positionals), 0);
 }
 
-t_error	positionals_load(t_positionals_stack *stack, int argc, char **argv, size_t start_index)
+t_error	positionals_load(
+	t_positionals_stack *stack,
+	int argc,
+	char **argv,
+	size_t start_index)
 {
 	t_positionals	positionals;
 

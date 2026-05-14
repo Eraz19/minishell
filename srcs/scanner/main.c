@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 10:13:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/11 13:59:48 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/14 20:52:06 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,33 +157,33 @@ int	main(void)
 		2, 2, 2, 2, 2, 3, 2, 2, 2, 2,
 	};
 
-	t_buff echo; buff_init(&echo, 0); buff_append(&echo, "echo", 4);
-	t_buff hello; buff_init(&hello, 0); buff_append(&hello, "hello", 5);
-	t_buff abc; buff_init(&abc, 0); buff_append(&abc, "abc", 3);	
-	t_buff a; buff_init(&a, 0); buff_append(&a, "a", 1);
-	t_buff b; buff_init(&b, 0); buff_append(&b, "b", 1);
-	t_buff c; buff_init(&c, 0); buff_append(&c, "c", 1);
-	t_buff d; buff_init(&d, 0); buff_append(&d, "d", 1);
-	t_buff e; buff_init(&e, 0); buff_append(&e, "e", 1);
-	t_buff cat; buff_init(&cat, 0); buff_append(&cat, "cat", 3);
-	t_buff file; buff_init(&file, 0); buff_append(&file, "file", 4);
-	t_buff out; buff_init(&out, 0); buff_append(&out, "out", 3);
-	t_buff ls; buff_init(&ls, 0); buff_append(&ls, "ls", 2);
-	t_buff _2; buff_init(&_2, 0); buff_append(&_2, "2", 1);
-	t_buff _10; buff_init(&_10, 0); buff_append(&_10, "10", 2);
-	t_buff a2; buff_init(&a2, 0); buff_append(&a2, "a2", 2);
+	t_buff echo; buff_init(&echo, 0, NULL, -1); buff_append(&echo, "echo", 4);
+	t_buff hello; buff_init(&hello, 0, NULL, -1); buff_append(&hello, "hello", 5);
+	t_buff abc; buff_init(&abc, 0, NULL, -1); buff_append(&abc, "abc", 3);	
+	t_buff a; buff_init(&a, 0, NULL, -1); buff_append(&a, "a", 1);
+	t_buff b; buff_init(&b, 0, NULL, -1); buff_append(&b, "b", 1);
+	t_buff c; buff_init(&c, 0, NULL, -1); buff_append(&c, "c", 1);
+	t_buff d; buff_init(&d, 0, NULL, -1); buff_append(&d, "d", 1);
+	t_buff e; buff_init(&e, 0, NULL, -1); buff_append(&e, "e", 1);
+	t_buff cat; buff_init(&cat, 0, NULL, -1); buff_append(&cat, "cat", 3);
+	t_buff file; buff_init(&file, 0, NULL, -1); buff_append(&file, "file", 4);
+	t_buff out; buff_init(&out, 0, NULL, -1); buff_append(&out, "out", 3);
+	t_buff ls; buff_init(&ls, 0, NULL, -1); buff_append(&ls, "ls", 2);
+	t_buff _2; buff_init(&_2, 0, NULL, -1); buff_append(&_2, "2", 1);
+	t_buff _10; buff_init(&_10, 0, NULL, -1); buff_append(&_10, "10", 2);
+	t_buff a2; buff_init(&a2, 0, NULL, -1); buff_append(&a2, "a2", 2);
 	
-	t_buff hello_; buff_init(&hello_, 0); buff_append(&hello_, "'hello'", 7);
-	t_buff hello_world; buff_init(&hello_world, 0); buff_append(&hello_world, "'hello world'", 13);
-	t_buff empty; buff_init(&empty, 0); buff_append(&empty, "''", 2);
-	t_buff a_; buff_init(&a_, 0); buff_append(&a_, "'a'", 3);
-	t_buff b_; buff_init(&b_, 0); buff_append(&b_, "'b'", 3);
-	t_buff _a_b; buff_init(&_a_b, 0); buff_append(&_a_b, "'a''b'", 6);
-	t_buff _a_b_c; buff_init(&_a_b_c, 0); buff_append(&_a_b_c, "'a'b'c'", 7);
-	t_buff _a_n_b; buff_init(&_a_n_b, 0); buff_append(&_a_n_b, "'a\\nb'", 6);
-	t_buff _a_n_b_; buff_init(&_a_n_b_, 0); buff_append(&_a_n_b_, "'a\\\nb'", 6);
-	t_buff home; buff_init(&home, 0); buff_append(&home, "'$HOME'", 7);
-	t_buff a__b; buff_init(&a__b, 0); buff_append(&a__b, "'a\"b'", 6);
+	t_buff hello_; buff_init(&hello_, 0, NULL, -1); buff_append(&hello_, "'hello'", 7);
+	t_buff hello_world; buff_init(&hello_world, 0, NULL, -1); buff_append(&hello_world, "'hello world'", 13);
+	t_buff empty; buff_init(&empty, 0, NULL, -1); buff_append(&empty, "''", 2);
+	t_buff a_; buff_init(&a_, 0, NULL, -1); buff_append(&a_, "'a'", 3);
+	t_buff b_; buff_init(&b_, 0, NULL, -1); buff_append(&b_, "'b'", 3);
+	t_buff _a_b; buff_init(&_a_b, 0, NULL, -1); buff_append(&_a_b, "'a''b'", 6);
+	t_buff _a_b_c; buff_init(&_a_b_c, 0, NULL, -1); buff_append(&_a_b_c, "'a'b'c'", 7);
+	t_buff _a_n_b; buff_init(&_a_n_b, 0, NULL, -1); buff_append(&_a_n_b, "'a\\nb'", 6);
+	t_buff _a_n_b_; buff_init(&_a_n_b_, 0, NULL, -1); buff_append(&_a_n_b_, "'a\\\nb'", 6);
+	t_buff home; buff_init(&home, 0, NULL, -1); buff_append(&home, "'$HOME'", 7);
+	t_buff a__b; buff_init(&a__b, 0, NULL, -1); buff_append(&a__b, "'a\"b'", 6);
 	
 	
 

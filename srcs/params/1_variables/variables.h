@@ -43,7 +43,7 @@ t_error	var_load_all(
 void	var_free_all(t_var_list *variables);
 
 /* ************************************************************************* */
-/*                                   CORE                                    */
+/*                                    OPS                                    */
 /* ************************************************************************* */
 
 bool	var_find(const t_var_list *variables, const char *name, size_t *res);

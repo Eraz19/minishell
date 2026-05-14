@@ -14,6 +14,10 @@ typedef struct s_specials
 	int					last_status;	// $?
 }	t_specials;
 
+/* ************************************************************************* */
+/*                                LIFE CYCLE                                 */
+/* ************************************************************************* */
+
 void	specials_init(t_specials *specials);
 
 // @ret ERR_SHELL_NOT_FOUND / ERR_OPTION_INVALID
@@ -21,7 +25,7 @@ t_error	specials_load(
 	t_specials *specials,
 	int argc,
 	char **argv,
-	size_t options_count);
+	size_t *start_index);
 	
 void	specials_free(t_specials *specials);
 

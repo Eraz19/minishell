@@ -28,9 +28,21 @@
 
 typedef uint32_t	t_option;
 
+/* ************************************************************************* */
+/*                                LIFE CYCLE                                 */
+/* ************************************************************************* */
+
 void	options_init(t_option *options);
-t_error	options_load(t_option *options, int argc, char **argv, size_t *count);
+t_error	options_load(
+	t_option *options,
+	int argc,
+	char **argv,
+	size_t *start_index);
 void	options_free(t_option *options);
+
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
 
 void	option_set(t_option *options, t_option option, bool on);
 bool	option_is_active(t_option option);

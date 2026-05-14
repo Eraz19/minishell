@@ -12,7 +12,7 @@ static inline bool	options_is_delimiter(const char *arg)
 }
 
 static inline bool	options_load_one(
-	int *i,
+	size_t *i,
 	char **argv,
 	t_option *options,
 	bool *explicit_plus_m)
@@ -33,9 +33,12 @@ static inline bool	options_load_one(
 	return (true);
 }
 
-static void	options_finalize(t_option *options, int argc, bool explicit_plus_m)
+static void	options_finalize(
+	t_option *options,
+	size_t remaining_args,
+	bool explicit_plus_m)
 {
-	if (!option_is_active_in(*options, OPT_CMD_STRING) && argc == 0)
+	if (!option_is_active_in(*options, OPT_CMD_STRING) && remaining_args == 0)
 		option_set(options, OPT_STDIN_INPUT, true);
 	if (option_is_active_in(*options, OPT_STDIN_INPUT)
 		&& isatty(STDIN_FILENO) && isatty(STDERR_FILENO))
@@ -44,31 +47,39 @@ static void	options_finalize(t_option *options, int argc, bool explicit_plus_m)
 		option_set(options, OPT_MONITOR, true);
 }
 
-t_error	options_load(t_option *options, int argc, char **argv, size_t *count)
+t_error	options_load(
+	t_option *options,
+	int argc,
+	char **argv,
+	size_t *start_index)
 {
-	int			i;
-	bool		explicit_plus_m;
+	bool	explicit_plus_m;
+	size_t	remaining_args;
 
 	printf("-------------------------------------\n");
 	printf("===> [options_load]\n");
 	*options = 0u;
 	explicit_plus_m = false;
-	i = 1;
-	while (i < argc && (argv[i][0] == '-' || argv[i][0] == '+'))
+	while (*start_index < (size_t)argc)
 	{
-		if (options_is_delimiter(argv[i]))
+		if (argv[*start_index][0] != '-' && argv[*start_index][0] != '+')
+			break ;
+		if (options_is_delimiter(argv[*start_index]))
 		{
-			i++;
+			(*start_index)++;
 			break ;
 		}
-		if (!options_load_one(&i, argv, options, &explicit_plus_m))
+		if (!options_load_one(start_index, argv, options, &explicit_plus_m))
 			return (ERR_OPTION_INVALID);
 	}
 	printf("===> [options_load]\n");
 	printf("-------------------------------------\n");
 	printf("===> [options_finalize]\n");
-	options_finalize(options, argc - i, explicit_plus_m);
-	*count = (size_t)i - 1;
+	if (*start_index >= (size_t)argc)
+		remaining_args = 0;
+	else
+		remaining_args = (size_t)argc - *start_index;
+	options_finalize(options, remaining_args, explicit_plus_m);
 	printf("===> [options_finalize]\n");
 	printf("-------------------------------------\n\n");
 	return (ERR_NO);

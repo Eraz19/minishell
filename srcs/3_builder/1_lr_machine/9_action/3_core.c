@@ -7,7 +7,7 @@ static t_error	print_conflict(t_action *action, size_t lr_state_id, t_symbol sym
 	t_buff	buff;
 	char	*format_string;
 
-	buff_init(&buff, 0);
+	buff_init(&buff, 0, NULL, -1);
 	if (action->type == ACTION_SHIFT)
 		buff_append(&buff, " SHIFT-", -1);
 	else if (action->type == ACTION_REDUCE)

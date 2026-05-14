@@ -2,13 +2,12 @@
 
 ## PARAMS MODULE
 
-- implement `positionals` module (cf `speacials.h`)
-- finalize `specials` module with new `positionals` implementation
-- finalize `params` module (cf `speacials.h`)
+- finalize `params` **getters** and **setters** (cf `params.h`)
 
 ## SHELL MODULE
 
 - Do all the `// TODO ⚠️` points
+- Implement `shell_get_*()` to expose each top_level module data struct
 
 ## LR_MACHINE MODULE
 
@@ -24,7 +23,7 @@
 - ⚠️ `special builtins`: ensure to follow [2.15 Special Built-In Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_15)
 	- Make the full list of special builtins
 - ⚠️ `export`, `readonly` and `unset`: `--` is the end of options (`-` also ?)
-- implement `set` builtin
+- implement `set` builtin (to edit `positionals`)
 
 ## UNDEFINED BEHAVIOR TROLLING
 
