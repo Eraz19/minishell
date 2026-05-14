@@ -24,5 +24,5 @@ bool	stack_pop(t_stack *stack, t_stack_item *dst)
 
 void	stack_free(t_stack *stack)
 {
-	vector_free(stack);
+	vector_free(stack, NULL);
 }

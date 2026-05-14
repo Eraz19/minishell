@@ -76,12 +76,6 @@ t_error	specials_load(t_specials *specials, int argc, char **argv, size_t option
 	else
 		specials->pid = ft_getpid();
 	printf("-> pid set to               %jd\n", (intmax_t)specials->pid);
-	specials->positional_params = NULL;
-	specials->positional_count = (size_t)argc - operand_index;
-	if (specials->positional_count > 0)
-		specials->positional_params = argv + operand_index;
-	printf("-> positional_params set to %p\n", specials->positional_params);
-	printf("-> positional_count  set to %zu\n", specials->positional_count);
 	printf("===> [specials_load]\n");
 	printf("-------------------------------------\n\n");
 	return (ERR_NO);

@@ -186,7 +186,7 @@ bool	lr_state_find_id(t_vector *lr_states, t_lr_state *lr_state, size_t *id);
  *
  * @param lr_state LR state to release (borrowed, must NOT be NULL).
  */
-void	lr_state_free(t_lr_state *lr_state);
+void	lr_state_free(void *lr_state);
 
 /**
  * @ingroup lr_state_pub

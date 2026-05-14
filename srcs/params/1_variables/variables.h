@@ -25,7 +25,7 @@ typedef t_vector	t_var_list;
 // @warning: can fail (ERR_LIBC), caller must check name is not NULL
 t_var	var_new(const char *name, const char *value, bool export, bool ronly);
 
-void	var_free(t_var *var);
+void	var_free(void *var);
 
 /* ************************************************************************* */
 /*                         LIFE CYCLE (variable list)                        */

@@ -27,7 +27,8 @@
 		"-I${workspaceFolder}/srcs/params/1_variables/load/3_up",
 		"-I${workspaceFolder}/srcs/params/2_options",
 		"-I${workspaceFolder}/srcs/params/3_specials",
-		"-I${workspaceFolder}/srcs/params/4_functions",
+		"-I${workspaceFolder}/srcs/params/4_positionals",
+		"-I${workspaceFolder}/srcs/params/5_functions",
 		"-I${workspaceFolder}/srcs/builtins"
 	]
 }

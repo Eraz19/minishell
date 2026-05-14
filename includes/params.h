@@ -4,16 +4,18 @@
 # include "variables.h"
 # include "options.h"
 # include "specials.h"
+# include "positionals.h"
 # include "functions.h"
 
 typedef struct s_params
 {
-	void		*parent_shell;	// (internal)
-	const char	*name;			// (internal)
-	t_var_list	variables;		// $<var_name>
-	t_option	options;		// $-
-	t_specials	specials;		// $0 $@ $* $# $$ $! $?
-	t_fun_list	functions;	// (internal)
+	void				*parent_shell;	// (internal)
+	const char			*name;			// (internal)
+	t_var_list			variables;		// $<var_name>
+	t_option			options;		// $-
+	t_specials			specials;		// $0 $$ $! $?
+	t_positionals_stack	positionals;	// $@ $* $# $<n>
+	t_fun_list			functions;		// (internal)
 }	t_params;
 
 void	params_init(t_params *params);
