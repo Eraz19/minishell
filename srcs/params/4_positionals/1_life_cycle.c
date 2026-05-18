@@ -1,6 +1,6 @@
 #include "positionals.h"
 #include <stdlib.h>
-# include <stdio.h>	// TODO: tmp debug
+# include "logs.h"	// TODO: tmp debug
 
 void	positionals_init(t_positionals_stack *stack)
 {
@@ -26,8 +26,7 @@ t_error	positionals_load(
 {
 	t_positionals	positionals;
 
-	printf("-------------------------------------\n");
-	printf("===> [positionals_load]\n");
+	print_title("positionals_load()");
 	positionals.params = NULL;
 	positionals.count = 0;
 	if (start_index < (size_t)argc)
@@ -43,13 +42,12 @@ t_error	positionals_load(
 		if (!positionals.params[positionals.count])
 			return (positionals_free_partial(&positionals), ERR_LIBC);
 		positionals.count++;
-		printf("-> $%zu = '%s'\n", positionals.count, argv[start_index]);
+		print_pass("$%zu = '%s'\n", positionals.count, argv[start_index]);
 		start_index++;
 	}
 	if (!vector_push(stack, &positionals))
 		return (positionals_free_partial(&positionals), ERR_LIBC);
-	printf("===> [positionals_load]\n");
-	printf("-------------------------------------\n\n");
+	print_result("positionals_load()");
 	return (ERR_NO);
 }
 

@@ -29,6 +29,7 @@
 		"-I${workspaceFolder}/srcs/params/3_specials",
 		"-I${workspaceFolder}/srcs/params/4_positionals",
 		"-I${workspaceFolder}/srcs/params/5_functions",
-		"-I${workspaceFolder}/srcs/builtins"
+		"-I${workspaceFolder}/srcs/builtins",
+		"-I${workspaceFolder}/logs"
 	]
 }

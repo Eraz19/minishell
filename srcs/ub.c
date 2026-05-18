@@ -5,7 +5,7 @@
 
 void	undefined_behaviour(const char *message)
 {
-	static const char	mess1[] = " 🤪\n";
+	static const char	mess1[] = "\" 🤪\n";
 	static const char	mess2[] = "POSIX says it's undefined or unspecified...\n";
 	static const char	mess3[] = "So... Why shouldn't we troll you? 😈\n";
 	static const char	mess4[] = "Byyye! 👋\n";
@@ -61,6 +61,7 @@ void	undefined_behaviour(const char *message)
 	
 // 	posix_write(STDERR_FILENO, ascii, str_len(ascii));
 
+	(void)posix_write(STDOUT_FILENO, "\"", 1);
 	(void)posix_write(STDOUT_FILENO, message, str_len(message));
 	(void)posix_write(STDOUT_FILENO, mess1, str_len(mess1));
 	(void)posix_write(STDOUT_FILENO, mess2, str_len(mess2));

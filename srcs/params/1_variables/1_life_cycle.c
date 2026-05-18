@@ -3,7 +3,7 @@
 #include "var_load_mandatory.h"
 #include "var_load_up.h"
 #include <stdlib.h>
-# include <stdio.h>	// TODO: tmp debug
+# include "logs.h"	// TODO: tmp debug
 
 t_var	var_new(const char *name, const char *value, bool export, bool ronly)
 {
@@ -46,25 +46,21 @@ t_error	var_load_all(
 {
 	t_error	error;
 
-	printf("-------------------------------------\n");
-	printf("===> [var_load_envp]\n");
+	print_title("var_load_envp()");
 	error = var_load_envp(variables, envp);
 	if (error != ERR_NO)
 		return (error);
-	printf("===> [var_load_envp]            => (entries: %'6zu)\n", variables->len);
-	printf("-------------------------------------\n");
-	printf("===> [var_load_mandatory]\n");
+	print_result("var_load_envp()            => (entries: %'6zu)", variables->len);
+	print_title("var_load_mandatory");
 	error = var_load_mandatory(variables, parent_shell_ppid);
 	if (error != ERR_NO)
 		return (error);
-	printf("===> [var_load_mandatory]       => (entries: %'6zu)\n", variables->len);
-	printf("-------------------------------------\n");
-	printf("===> [var_load_up]\n");
+	print_result("var_load_mandatory()       => (entries: %'6zu)", variables->len);
+	print_title("var_load_up()");
 	error = var_load_up(variables);
 	if (error != ERR_NO)
 		return (error);
-	printf("===> [var_load_up]              => (entries: %'6zu)\n", variables->len);
-	printf("-------------------------------------\n\n");
+	print_result("var_load_up()              => (entries: %'6zu)", variables->len);
 	return (ERR_NO);
 }
 

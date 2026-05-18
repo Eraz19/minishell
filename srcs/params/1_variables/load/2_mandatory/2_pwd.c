@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-# include <stdio.h>	// TODO: tmp debug
+# include "logs.h"	// TODO: tmp debug
 
 static bool pwd_has_no_dot_components(const char *pwd)
 {
@@ -87,14 +87,14 @@ t_error	var_set_pwd(t_var_list *variables)
 		if (error != ERR_NO)
 			return (error);
 		if (is_valid)
-			return (printf("-> 'PWD' is already valid\n"), ERR_NO);
+			return (print_pass("'PWD' is already valid\n"), ERR_NO);
 	}
 	pwd = getcwd(NULL, MAXPATHLEN);
 	if (!pwd)
 		return (ERR_LIBC);
 	error = var_set(variables, "PWD", pwd);
 	if (error == ERR_NO)
-		printf("-> 'PWD' has been set to '%s'\n", pwd);
+		print_pass("'PWD' has been set to '%s'\n", pwd);
 	free(pwd);
 	return (error);
 }

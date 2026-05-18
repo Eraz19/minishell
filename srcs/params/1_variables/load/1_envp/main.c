@@ -1,6 +1,6 @@
 #include "variables.h"
 #include <stdlib.h>
-# include <stdio.h>	// TODO: tmp debug
+# include "logs.h"	// TODO: tmp debug
 
 // @ret ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	process_variable(
@@ -19,7 +19,7 @@ static t_error	process_variable(
 	if (!var_find(variables, name, &var_index))
 		return (ERR_VAR_NOT_FOUND);
 	((t_var *)variables->data)[var_index].export = true;
-	printf("+ '%s' = '%s'\n", name, value);
+	print_pass("'%s' = '%s'\n", name, value);
 	return (ERR_NO);
 }
 

@@ -1,7 +1,7 @@
 #include "variables.h"
 #include <stdlib.h>
 #include <unistd.h>
-# include <stdio.h>	// TODO: tmp debug
+# include "logs.h"	// TODO: tmp debug
 
 // @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	var_init_target_up(
@@ -21,7 +21,7 @@ static t_error	var_init_target_up(
 	if (error == ERR_VAR_NOT_FOUND)
 		error = var_set(variables, name, value);
 	if (error == ERR_NO)
-		printf("-> '%s' has been set to '%s'\n", name, value);
+		print_pass("'%s' has been set to '%s'\n", name, value);
 	return (error);
 }
 

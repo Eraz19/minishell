@@ -1,5 +1,5 @@
 #include "variables.h"
-# include <stdio.h>	// TODO: tmp debug
+# include "logs.h"	// TODO: tmp debug
 
 /*
 cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05_03)
@@ -17,6 +17,6 @@ t_error	var_set_ifs(t_var_list *variables)
 	error = var_set(variables, "IFS", ifs_value);
 	if (error != ERR_NO)
 		return (error);
-	printf("-> 'IFS' has been set to '%s'\n", ifs_value);
+	print_pass("'IFS' has been set to '%s'\n", ifs_value);
 	return (ERR_NO);
 }

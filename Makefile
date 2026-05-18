@@ -5,6 +5,11 @@ CFLAGS		= -Wall -Wextra -Werror -O2 # -DNDEBUG # -g3 -fsanitize=address,undefine
 LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
+# DEBUG SECTION (START)
+DEBUG_SRCS		:= $(wildcard logs/*.c)
+DEBUG_INCLUDES	:= -Ilogs
+# DEBUG SECTION (END)
+
 SRCS		:= \
 	$(wildcard srcs/*.c) \
 	$(wildcard srcs/0_posix_helpers/*.c) \
@@ -19,7 +24,8 @@ SRCS		:= \
 	$(wildcard srcs/params/*/*.c) \
 	$(wildcard srcs/params/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*.c) \
-	$(wildcard srcs/params/*/*/*/*/*.c)
+	$(wildcard srcs/params/*/*/*/*/*.c) \
+	$(DEBUG_SRCS)
 
 INCLUDES	:= \
 	-Ilibft \
@@ -46,7 +52,8 @@ INCLUDES	:= \
 	-Isrcs/params/1_variables/load/3_up \
 	-Isrcs/params/2_options \
 	-Isrcs/params/3_specials \
-	-Isrcs/params/4_positionals
+	-Isrcs/params/4_positionals \
+	$(DEBUG_INCLUDES)
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
