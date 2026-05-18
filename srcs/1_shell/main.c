@@ -23,7 +23,10 @@ t_error	shell_set_stdin_to_blocking(void)
 		}
 		is_fifo = S_ISFIFO(stat_buff.st_mode);
 		if (!is_fifo)
+		{
+			printf("-> stdin is not a fifo: did not set it to blocking mode\n");
 			return (ERR_NO);
+		}
 	}
 	enabled = 0;
 	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
@@ -31,6 +34,7 @@ t_error	shell_set_stdin_to_blocking(void)
 		error_print(NULL, "Unable to set stdin to blocking mode", ERR_LIBC);
 		return (ERR_LIBC);
 	}
+	printf("-> stdin has been set to blocking mode\n");
 	return (ERR_NO);
 }
 
@@ -42,15 +46,20 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	if (error != ERR_NO)
 		return (error);
 	// TODO: history_load();
+	printf("👉 History not implemented yet             => skipping loading\n");
 	// TODO: fun_load(&shell->functions);
+	printf("👉 Functions not implemented yet           => skipping loading\n");
 	// TODO: scanner_load(&shell->lexer);
+	printf("👉 Scanner not implemented yet             => skipping loading\n");
 	error = builder_load(&shell->builder);
 	if (error != ERR_NO)
 		return (error);
 	// TODO: runner_load(&shell->runner);
+	printf("👉 Runner not implemented yet              => skipping loading\n");
 	return (shell_set_stdin_to_blocking());
 }
 
+// @ret ERR_NO / ERR_LIBC.
 static t_error	shell_exec_env(t_shell *shell)
 {
 	t_error	error;
@@ -58,16 +67,17 @@ static t_error	shell_exec_env(t_shell *shell)
 
 	if (!option_is_active_in(shell->params.options, OPT_INTERACTIVE))
 		return (ERR_NO);
-	error = param_get("ENV", &raw_env);
-	if (error == )
+	error = params_get("ENV", &raw_env);
+	if (error == ERR_LIBC)
+		return (error);
 	if (!raw_env)
 		return (ERR_NO);
-	if (raw_env[0] == '\0')
+	if (option_is_active(OPT_STDIN_INPUT))
 	{
-		free(raw_env);
-		return (ERR_NO);
+		printf("👉 Expander and Runner not implemented yet => skipping ENV execution\n");
+		// TODO: expand ENV
+		// TODO: exec ENV
 	}
-	// TODO: ⚠️ if interactive && ENV is set => Expand ENV => Process ENV
 	return (ERR_NO);
 }
 
@@ -86,8 +96,12 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 	error = shell_load(shell, argc, argv, envp);
 	if (error != ERR_NO)
 		shell_exit(error);
-
+	error = shell_exec_env(shell);
+	if (error != ERR_NO)
+		return (error);
 	// TODO: runner_run(t_shell *shell);
+	printf("👉 Runner not implemented yet => skipping execution loop\n");
+	printf("⚠️ Exiting\n");
 	shell_exit(error);
 	return (error);
 }

@@ -48,6 +48,8 @@ t_error	var_get(const t_var_list *variables, const char *name, char **dst_val)
 	t_var	*var;
 	char	*res;
 
+	if (!var_name_is_valid(name))
+		return (ERR_VAR_INVALID_NAME);
 	if (!var_find(variables, name, &var_index))
 		return (ERR_VAR_NOT_FOUND);
 	res = NULL;

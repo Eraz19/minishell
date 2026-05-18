@@ -47,7 +47,9 @@ void	options_free(t_option *options);
 void	option_set(t_option *options, t_option option, bool on);
 bool	option_is_active(t_option option);
 bool	option_is_active_in(t_option options, t_option option);
-t_error	options_to_string(t_option options, char **dst);
+
+// @ret ERR_NO / ERR_LIBC
+t_error	options_get(t_option options, char **dst);
 
 const char	*option_to_string(t_option option);	// TODO: tmp debug
 

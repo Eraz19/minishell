@@ -1,20 +1,5 @@
 # TODO
 
-## PARAMS MODULE
-
-- finalize `params` **getters** and **setters** (cf `params.h`)
-
-## SHELL MODULE
-
-- Do all the `// TODO ⚠️` points
-- Implement `shell_get_*()` to expose each top_level module data struct
-
-## LR_MACHINE MODULE
-
-- Implement `parser hooks`
-- add `const` everywhere it's missing
-- Make doc less verbose
-
 ## BUILTINS
 
 - Remove `t_shell *shell` from args: same signature as classic `main()`
@@ -24,11 +9,13 @@
 	- Make the full list of special builtins
 - ⚠️ `export`, `readonly` and `unset`: `--` is the end of options (`-` also ?)
 - implement `set` builtin (to edit `positionals`)
+- implement `shift` builtin (to edit `positionals`)
 
-## UNDEFINED BEHAVIOR TROLLING
+## LR_MACHINE MODULE
 
-- `-o` ou `+o` sans argument => `undefined_behaviour()`
-- `options_load()` si (`-` && `--`) || (opérandes devant `-`) `undefined_behaviour()`
+- Implement `parser hooks`
+- add `const` everywhere it's missing
+- Make doc less verbose
 
 ## LIBFT
 

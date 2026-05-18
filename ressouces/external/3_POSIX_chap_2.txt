@@ -1,5 +1,9 @@
 https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html
 
+The Open Group Base Specifications Issue 8
+IEEE Std 1003.1-2024
+Copyright © 2001-2024 The IEEE and The Open Group
+
 2. Shell Command Language
 This chapter contains the definition of the Shell Command Language.
 
@@ -1775,3 +1779,1815 @@ As described in 2.9.1 Simple Commands, variable assignments preceding the invoca
 The special built-in utilities in this section need not be provided in a manner accessible via the exec family of functions defined in the System Interfaces volume of POSIX.1-2024.
 
 Some of the special built-ins are described as conforming to XBD 12.2 Utility Syntax Guidelines. For those that are not, the requirement in 1.4 Utility Description Defaults that "--" be recognized as a first argument to be discarded does not apply and a conforming application shall not use that argument.
+
+<<< Previous	Home	Next >>>
+ 
+
+return to top of page
+UNIX® is a registered Trademark of The Open Group.
+POSIX™ is a Trademark of The IEEE.
+Copyright © 2001-2024 The IEEE and The Open Group, All Rights Reserved
+[ Main Index | XBD | XSH | XCU | XRAT ]
+NAME
+break — exit from for, while, or until loop
+SYNOPSIS
+break [n]
+
+DESCRIPTION
+If n is specified, the break utility shall exit from the nth enclosing for, while, or until loop. If n is not specified, break shall behave as if n was specified as 1. Execution shall continue with the command immediately following the exited loop. The application shall ensure that the value of n is a positive decimal integer. If n is greater than the number of enclosing loops, the outermost enclosing loop shall be exited. If there is no enclosing loop, the behavior is unspecified.
+
+A loop shall enclose a break or continue command if the loop lexically encloses the command. A loop lexically encloses a break or continue command if the command is:
+
+Executing in the same execution environment (see 2.13 Shell Execution Environment) as the compound-list of the loop's do-group (see 2.10.2 Shell Grammar Rules), and
+Contained in a compound-list associated with the loop (either in the compound-list of the loop's do-group or, if the loop is a while or until loop, in the compound-list following the while or until reserved word), and
+Not in the body of a function whose function definition command (see 2.9.5 Function Definition Command) is contained in a compound-list associated with the loop.
+If n is greater than the number of lexically enclosing loops and there is a non-lexically enclosing loop in progress in the same execution environment as the break or continue command, it is unspecified whether that loop encloses the command.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+ 0
+Successful completion.
+>0
+The n value was not an unsigned decimal integer greater than or equal to 1.
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+for i in *
+do
+    if test -d "$i"
+    then break
+    fi
+done
+The results of running the following example are unspecified: there are two loops in progress when the break command is executed, and they are in the same execution environment, but neither loop is lexically enclosing the break command. (There are no loops lexically enclosing the continue commands, either.)
+
+foo() {
+    for j in 1 2; do
+        echo 'break 2' >/tmp/do_break
+        echo "  sourcing /tmp/do_break ($j)..."
+        # the behavior of the break from running the following command
+        # results in unspecified behavior:
+        . /tmp/do_break
+
+
+        do_continue() { continue 2; }
+        echo "  running do_continue ($j)..."
+        # the behavior of the continue in the following function call
+        # results in unspecified behavior (if execution reaches this
+        # point):
+        do_continue
+
+
+        trap 'continue 2' USR1
+        echo "  sending SIGUSR1 to self ($j)..."
+        # the behavior of the continue in the trap invoked from the
+        # following signal results in unspecified behavior (if
+        # execution reaches this point):
+        kill -s USR1 $$
+        sleep 1
+    done
+}
+for i in 1 2; do
+    echo "running foo ($i)..."
+    foo
+done
+RATIONALE
+In early proposals, consideration was given to expanding the syntax of break and continue to refer to a label associated with the appropriate loop as a preferable alternative to the n method. However, this volume of POSIX.1-2024 does reserve the name space of command names ending with a <colon>. It is anticipated that a future implementation could take advantage of this and provide something like:
+
+outofloop: for i in a b c d e
+do
+    for j in 0 1 2 3 4 5 6 7 8 9
+    do
+        if test -r "${i}${j}"
+        then break outofloop
+        fi
+    done
+done
+and that this might be standardized after implementation experience is achieved.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0046 [842] is applied.
+
+Issue 8
+Austin Group Defect 1058 is applied, clarifying that the requirement for n to be a positive decimal integer is a requirement on the application.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+colon — null utility
+SYNOPSIS
+: [argument...]
+
+DESCRIPTION
+This utility shall do nothing except return a 0 exit status. It is used when a command is needed, as in the then condition of an if command, but nothing is to be done by the command.
+
+OPTIONS
+This utility shall not recognize the "--" argument in the manner specified by Guideline 10 of XBD 12.2 Utility Syntax Guidelines.
+
+Implementations shall not support any options.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+Not used.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+Zero.
+
+CONSEQUENCES OF ERRORS
+None.
+
+The following sections are informative.
+APPLICATION USAGE
+See the APPLICATION USAGE for true.
+
+EXAMPLES
+: "${X=abc}"
+if     false
+then   :
+else   printf '%s\n' "$X"
+fi
+
+abc
+
+As with any of the special built-ins, the null utility can also have variable assignments and redirections associated with it, such as:
+
+x=y : > z
+which sets variable x to the value y (so that it persists after the null utility completes) and creates or truncates file z; if the file cannot be created or truncated, a non-interactive shell exits (see 2.8.1 Consequences of Shell Errors).
+
+RATIONALE
+None.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities, true
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+SD5-XCU-ERN-97 is applied, updating the SYNOPSIS.
+
+Issue 8
+Austin Group Defect 1272 is applied, clarifying that the null utility does not process its arguments, does not recognize the "--" end-of-options delimiter, does not support any options, and does not write to standard error.
+
+Austin Group Defect 1640 is applied, changing the APPLICATION USAGE section.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+continue — continue for, while, or until loop
+SYNOPSIS
+continue [n]
+
+DESCRIPTION
+If n is specified, the continue utility shall return to the top of the nth enclosing for, while, or until loop. If n is not specified, continue shall behave as if n was specified as 1. Returning to the top of the loop involves repeating the condition list of a while or until loop or performing the next assignment of a for loop, and re-executing the loop if appropriate.
+
+The application shall ensure that the value of n is a positive decimal integer. If n is greater than the number of enclosing loops, the outermost enclosing loop shall be used. If there is no enclosing loop, the behavior is unspecified.
+
+The meaning of "enclosing" shall be as specified in the description of the break utility.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+ 0
+Successful completion.
+>0
+The n value was not an unsigned decimal integer greater than or equal to 1.
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+for i in *
+do
+    if test -d "$i"
+    then continue
+    fi
+    printf '"%s" is not a directory.\n' "$i"
+done
+RATIONALE
+None.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+The example is changed to use the printf utility rather than echo.
+
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0046 [842] is applied.
+
+Issue 8
+Austin Group Defect 1058 is applied, clarifying that the requirement for n to be a positive decimal integer is a requirement on the application.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+dot — execute commands in the current environment
+SYNOPSIS
+. file
+
+DESCRIPTION
+The shell shall tokenize (see 2.3 Token Recognition) the contents of the file, parse the tokens (see 2.10 Shell Grammar), and execute the resulting commands in the current environment. It is unspecified whether the commands are parsed and executed as a program (as for a shell script) or are parsed as a single compound_list that is executed after the entire file has been parsed.
+
+If file does not contain a <slash>, the shell shall use the search path specified by PATH to find the directory containing file. Unlike normal command search, however, the file searched for by the dot utility need not be executable. If no readable file is found, a non-interactive shell shall abort; an interactive shell shall write a diagnostic message to standard error.
+
+The dot special built-in shall support XBD 12.2 Utility Syntax Guidelines, except for Guidelines 1 and 2.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+See the DESCRIPTION.
+
+ENVIRONMENT VARIABLES
+See the DESCRIPTION.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+If no readable file was found or if the commands in the file could not be parsed, and the shell is interactive (and therefore does not abort; see 2.8.1 Consequences of Shell Errors), the exit status shall be non-zero. Otherwise, return the value of the last command executed, or a zero exit status if no command is executed.
+
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+cat foobar
+
+foo=hello bar=world
+
+. ./foobar
+echo $foo $bar
+
+hello world
+
+RATIONALE
+Some older implementations searched the current directory for the file, even if the value of PATH disallowed it. This behavior was omitted from this volume of POSIX.1-2024 due to concerns about introducing the susceptibility to trojan horses that the user might be trying to avoid by leaving dot out of PATH .
+
+The KornShell version of dot takes optional arguments that are set to the positional parameters. This is a valid extension that allows a dot script to behave identically to a function.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities, return
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+SD5-XCU-ERN-164 is applied.
+
+POSIX.1-2008, Technical Corrigendum 1, XCU/TC1-2008/0038 [114] and XCU/TC1-2008/0039 [214] are applied.
+
+Issue 8
+Austin Group Defect 252 is applied, adding a requirement for dot to support XBD 12.2 Utility Syntax Guidelines (except for Guidelines 1 and 2, since the utility's name is '.').
+
+Austin Group Defect 953 is applied, clarifying how the commands in the file are parsed.
+
+Austin Group Defect 1265 is applied, updating the DESCRIPTION to align with the changes made to 2.8.1 Consequences of Shell Errors between Issue 6 and Issue 7.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+eval — construct command by concatenating arguments
+SYNOPSIS
+eval [argument...]
+
+DESCRIPTION
+The eval utility shall construct a command string by concatenating arguments together, separating each with a <space> character. The constructed command string shall be tokenized (see 2.3 Token Recognition), parsed (see 2.10 Shell Grammar), and executed by the shell in the current environment. It is unspecified whether the commands are parsed and executed as a program (as for a shell script) or are parsed as a single compound_list that is executed after the entire constructed command string has been parsed.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+If there are no arguments, or only null arguments, eval shall return a zero exit status; otherwise, it shall return the exit status of the command defined by the string of concatenated arguments separated by <space> characters, or a non-zero exit status if the concatenation could not be parsed as a command and the shell is interactive (and therefore did not abort).
+
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+Since eval is not required to recognize the "--" end of options delimiter, in cases where the argument(s) to eval might begin with '-' it is recommended that the first argument is prefixed by a string that will not alter the commands to be executed, such as a <space> character:
+
+eval " $commands"
+or:
+
+eval " $(some_command)"
+EXAMPLES
+foo=10 x=foo
+y='$'$x
+echo $y
+
+$foo
+
+eval y='$'$x
+echo $y
+
+10
+
+RATIONALE
+This standard allows, but does not require, eval to recognize "--". Although this means applications cannot use "--" to protect against options supported as an extension (or errors reported for unsupported options), the nature of the eval utility is such that other means can be used to provide this protection (see APPLICATION USAGE above).
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+SD5-XCU-ERN-97 is applied, updating the SYNOPSIS.
+
+POSIX.1-2008, Technical Corrigendum 1, XCU/TC1-2008/0040 [114], XCU/TC1-2008/0041 [163], and XCU/TC1-2008/0042 [163] are applied.
+
+Issue 8
+Austin Group Defect 953 is applied, clarifying how the commands in the constructed command string are parsed.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+exec — perform redirections in the current shell or execute a utility
+SYNOPSIS
+exec [utility [argument...]]
+
+DESCRIPTION
+If exec is specified with no operands, any redirections associated with the exec command shall be made in the current shell execution environment. If any file descriptors with numbers greater than 2 are opened by those redirections, it is unspecified whether those file descriptors remain open when the shell invokes another utility. Scripts concerned that child shells could misuse open file descriptors can always close them explicitly, as shown in one of the following examples. If the result of the redirections would be that file descriptor 0, 1, or 2 is closed, implementations may open the file descriptor to an unspecified file.
+
+If exec is specified with a utility operand, the shell shall execute a non-built-in utility as described in 2.9.1.6 Non-built-in Utility Execution with utility as the command name and the argument operands (if any) as the command arguments.
+
+If the exec command fails, a non-interactive shell shall exit from the current shell execution environment; [UP] [Option Start]  an interactive shell may exit from a subshell environment but shall not exit if the current shell environment is not a subshell environment.
+
+If the exec command fails and the shell does not exit, any redirections associated with the exec command that were successfully made shall take effect in the current shell execution environment. [Option End]
+
+The exec special built-in shall support XBD 12.2 Utility Syntax Guidelines.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+The following environment variable shall affect the execution of exec:
+
+PATH
+Determine the search path when looking for the utility given as the utility operand; see XBD 8.3 Other Environment Variables.
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+If utility is specified and is executed, exec shall not return to the shell; rather, the exit status of the current shell execution environment shall be the exit status of utility. If utility is specified and an attempt to execute it as a non-built-in utility fails, the exit status shall be as described in 2.9.1.6 Non-built-in Utility Execution. If a redirection error occurs (see 2.8.1 Consequences of Shell Errors), the exit status shall be a value in the range 1-125. Otherwise, exec shall return a zero exit status.
+
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+Open readfile as file descriptor 3 for reading:
+
+exec 3< readfile
+Open writefile as file descriptor 4 for writing:
+
+exec 4> writefile
+Make file descriptor 5 a copy of file descriptor 0:
+
+exec 5<&0
+Close file descriptor 3:
+
+exec 3<&-
+Cat the file maggie by replacing the current shell with the cat utility:
+
+exec cat maggie
+An application that is not concerned with strict conformance can make use of optional %g support known to be present in the implementation's printf utility by ensuring that any shell built-in version is not executed instead, and using a subshell so that the shell continues afterwards:
+
+(exec printf '%g\n' "$float_value")
+RATIONALE
+Most historical implementations were not conformant in that:
+
+foo=bar exec cmd
+did not pass foo to cmd.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+SD5-XCU-ERN-97 is applied, updating the SYNOPSIS.
+
+Issue 8
+Austin Group Defect 252 is applied, adding a requirement for exec to support XBD 12.2 Utility Syntax Guidelines.
+
+Austin Group Defect 1157 is applied, clarifying the execution of non-built-in utilities.
+
+Austin Group Defect 1587 is applied, changing the ENVIRONMENT VARIABLES section.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+exit — cause the shell to exit
+SYNOPSIS
+exit [n]
+
+DESCRIPTION
+The exit utility shall cause the shell to exit from its current execution environment. If the current execution environment is a subshell environment, the shell shall exit from the subshell environment and continue in the environment from which that subshell environment was invoked; otherwise, the shell utility shall terminate. The wait status of the shell or subshell shall be determined by the unsigned decimal integer n, if specified.
+
+If n is specified and has a value between 0 and 255 inclusive, the wait status of the shell or subshell shall indicate that it exited with exit status n. If n is specified and has a value greater than 256 that corresponds to an exit status the shell assigns to commands terminated by a valid signal (see 2.8.2 Exit Status for Commands), the wait status of the shell or subshell shall indicate that it was terminated by that signal. No other actions associated with the signal, such as execution of trap actions or creation of a core image, shall be performed by the shell.
+
+If n is specified and is not an unsigned decimal integer, or has a value of 256, or has a value greater than 256 but not corresponding to an exit status the shell assigns to commands terminated by a valid signal, the wait status of the shell or subshell is unspecified.
+
+If n is not specified, the result shall be as if n were specified with the current value of the special parameter '?' (see 2.5.2 Special Parameters), except that if the exit command would cause the end of execution of a trap action, the value for the special parameter '?' that is considered "current" shall be the value it had immediately preceding the trap action.
+
+A trap action on EXIT shall be executed before the shell terminates, except when the exit utility is invoked in that trap action itself, in which case the shell shall exit immediately. It is unspecified whether setting a new trap action on EXIT during execution of a trap action on EXIT will cause the new trap action to be executed before the shell terminates.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+The exit utility causes the shell to exit from its current execution environment, and therefore does not itself return an exit status.
+
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+As explained in other sections, certain exit status values have been reserved for special uses and should be used by applications only for those purposes:
+
+ 126
+A file to be executed was found, but it was not an executable utility.
+ 127
+A utility to be executed was not found.
+ 128
+An unrecoverable read error was detected by the shell while reading commands, except from the file operand of the dot special built-in.
+>128
+A command was interrupted by a signal.
+EXAMPLES
+Exit with a true value:
+
+exit 0
+Exit with a false value:
+
+exit 1
+Propagate error handling from within a subshell:
+
+(
+    command1 || exit 1
+    command2 || exit 1
+    exec command3
+) > outputfile || exit 1
+echo "outputfile created successfully"
+RATIONALE
+The behavior of exit when given an invalid argument or unknown option is unspecified, because of differing practices in the various historical implementations. A value larger than 255 might be truncated by the shell, and be unavailable even to a parent process that uses waitid() to get the full exit value. It is recommended that implementations that detect any usage error should cause a non-zero exit status (or, if the shell is interactive and the error does not cause the shell to abort, store a non-zero value in "$?"), but even this was not done historically in all shells.
+
+See also C.2.8.2 Exit Status for Commands.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0047 [717], XCU/TC2-2008/0048 [960], XCU/TC2-2008/0049 [717], and XCU/TC2-2008/0050 [960] are applied.
+
+Issue 8
+Austin Group Defect 51 is applied, specifying the behavior when n has a value greater than 256 that corresponds to an exit status the shell assigns to commands terminated by a valid signal.
+
+Austin Group Defect 1029 is applied, changing "trap" to "trap action" in the DESCRIPTION section.
+
+Austin Group Defect 1309 is applied, changing the EXIT STATUS section.
+
+Austin Group Defect 1425 is applied, clarifying the requirements for a trap action on EXIT.
+
+Austin Group Defect 1602 is applied, clarifying the behavior of exit in a trap action.
+
+Austin Group Defect 1629 is applied, adding exit status 128 to the APPLICATION USAGE section.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+export — set the export attribute for variables
+SYNOPSIS
+export name[=word]...
+ 
+export -p
+
+DESCRIPTION
+The shell shall give the export attribute to the variables corresponding to the specified names, which shall cause them to be in the environment of subsequently executed commands. If the name of a variable is followed by =word, then the value of that variable shall be set to word.
+
+The export special built-in shall be a declaration utility. Therefore, if export is recognized as the command name of a simple command, then subsequent words of the form name=word shall be expanded in an assignment context. See 2.9.1.1 Order of Processing.
+
+The export special built-in shall support XBD 12.2 Utility Syntax Guidelines.
+
+When -p is specified, export shall write to the standard output the names and values of all exported variables, in the following format:
+
+"export %s=%s\n", <name>, <value>
+if name is set, and:
+
+"export %s\n", <name>
+if name is unset.
+
+The shell shall format the output, including the proper use of quoting, so that it is suitable for reinput to the shell as commands that achieve the same exporting results, except:
+
+Read-only variables with values cannot be reset.
+Variables that were unset at the time they were output need not be reset to the unset state if a value is assigned to the variable between the time the state was saved and the time at which the saved output is reinput to the shell.
+When no arguments are given, the results are unspecified.
+
+OPTIONS
+See the DESCRIPTION.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+See the DESCRIPTION.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+ 0
+Successful completion.
+>0
+At least one operand could not be processed as requested, such as a name operand that could not be exported or an attempt to modify a readonly variable using a name=word operand, or the -p option was specified and a write error occurred.
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+Note that, unless X was previously marked readonly, the value of "$?" after:
+
+export X=$(false)
+will be 0 (because export successfully set X to the empty string) and that execution continues, even if set -e is in effect. In order to detect command substitution failures, a user must separate the assignment from the export, as in:
+
+X=$(false)
+export X
+In shells that support extended assignment syntax, for example to allow an array to be populated with a single assignment, such extensions can typically only be used in assignments specified as arguments to export if the command word is literally export, and not if it is some other word that expands to export. For example:
+
+# Shells that support array assignment as an extension generally
+# support this:
+export x=(1 2 3); echo ${x[0]}  # outputs 1
+# But generally do not support this:
+e=export; $e x=(1 2 3); echo ${x[0]}  # syntax error
+EXAMPLES
+Export PWD and HOME variables:
+
+export PWD HOME
+Set and export the PATH variable:
+
+export PATH="/local/bin:$PATH"
+Save and restore all exported variables:
+
+export -p > temp-file
+unset a lot of variables
+
+... processing
+
+. ./temp-file
+Note:
+If LANG, LC_CTYPE or LC_ALL are left altered or unset in the above example prior to sourcing temp-file, the results may be undefined.
+RATIONALE
+Some historical shells use the no-argument case as the functional equivalent of what is required here with -p. This feature was left unspecified because it is not historical practice in all shells, and some scripts may rely on the now-unspecified results on their implementations. Attempts to specify the -p output as the default case were unsuccessful in achieving consensus. The -p option was added to allow portable access to the values that can be saved and then later restored using; for example, a dot script.
+
+Some implementations extend the shell's assignment syntax, for example to allow an array to be populated with a single assignment, and in order for such an extension to be usable in assignments specified as arguments to export these shells have export as a separate token in their grammar. This standard only permits an extension of this nature when the input to the shell would contain a syntax error according to the standard grammar. Note that although export can be a separate token in the shell's grammar, it cannot be a reserved word since export is a candidate for alias substitution whereas reserved words are not (see 2.3.1 Alias Substitution).
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.9.1.1 Order of Processing, 2.15 Special Built-In Utilities
+
+XBD 12.2 Utility Syntax Guidelines
+
+CHANGE HISTORY
+Issue 6
+IEEE PASC Interpretation 1003.2 #203 is applied, clarifying the format when a variable is unset.
+
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/6 is applied, adding the following text to the end of the first paragraph of the DESCRIPTION: "If the name of a variable is followed by =word, then the value of that variable shall be set to word.". The reason for this change is that the SYNOPSIS for export includes:
+
+export name[=word]...
+but the meaning of the optional "=word" is never explained in the text.
+
+Issue 7
+POSIX.1-2008, Technical Corrigendum 1, XCU/TC1-2008/0043 [352] is applied.
+
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0051 [654] and XCU/TC2-2008/0052 [960] are applied.
+
+Issue 8
+Austin Group Defect 351 is applied, requiring export to be a declaration utility.
+
+Austin Group Defect 367 is applied, changing the EXIT STATUS section.
+
+Austin Group Defect 1258 is applied, changing the EXAMPLES section.
+
+Austin Group Defect 1393 is applied, changing the APPLICATION USAGE and RATIONALE sections.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+readonly — set the readonly attribute for variables
+SYNOPSIS
+readonly name[=word]...
+ 
+readonly -p
+
+DESCRIPTION
+The variables whose names are specified shall be given the readonly attribute. The values of variables with the readonly attribute cannot be changed by subsequent assignment or use of the export, getopts, readonly, or read utilities, nor can those variables be unset by the unset utility. As described in XBD 8.1 Environment Variable Definition, conforming applications shall not request to mark a variable as readonly if it is documented as being manipulated by a shell built-in utility, as it may render those utilities unable to complete successfully. If the name of a variable is followed by =word, then the value of that variable shall be set to word.
+
+The readonly special built-in shall be a declaration utility. Therefore, if readonly is recognized as the command name of a simple command, then subsequent words of the form name=word shall be expanded in an assignment context. See 2.9.1.1 Order of Processing.
+
+The readonly special built-in shall support XBD 12.2 Utility Syntax Guidelines.
+
+When -p is specified, readonly writes to the standard output the names and values of all read-only variables, in the following format:
+
+"readonly %s=%s\n", <name>, <value>
+if name is set, and
+
+"readonly %s\n", <name>
+if name is unset.
+
+The shell shall format the output, including the proper use of quoting, so that it is suitable for reinput to the shell as commands that achieve the same value and readonly attribute-setting results in a shell execution environment in which:
+
+Variables with values at the time they were output do not have the readonly attribute set.
+Variables that were unset at the time they were output do not have a value at the time at which the saved output is reinput to the shell.
+When no arguments are given, the results are unspecified.
+
+OPTIONS
+See the DESCRIPTION.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+See the DESCRIPTION.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+ 0
+Successful completion.
+>0
+At least one operand could not be processed as requested, such as a name operand that could not be marked readonly or an attempt to modify an already readonly variable using a name=word operand, or the -p option was specified and a write error occurred.
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+In shells that support extended assignment syntax, for example to allow an array to be populated with a single assignment, such extensions can typically only be used in assignments specified as arguments to readonly if the command word is literally readonly, and not if it is some other word that expands to readonly. For example:
+
+# Shells that support array assignment as an extension generally
+# support this:
+readonly x=(1 2 3); echo ${x[0]}  # outputs 1
+# But generally do not support this:
+r=readonly; $r x=(1 2 3); echo ${x[0]}  # syntax error
+EXAMPLES
+readonly HOME
+RATIONALE
+Some historical shells preserve the readonly attribute across separate invocations. This volume of POSIX.1-2024 allows this behavior, but does not require it.
+
+The -p option allows portable access to the values that can be saved and then later restored using, for example, a dot script. Also see the RATIONALE for export for a description of the no-argument and -p output cases and a related example.
+
+Read-only functions were considered, but they were omitted as not being historical practice or particularly useful. Furthermore, functions must not be read-only across invocations to preclude "spoofing" (spoofing is the term for the practice of creating a program that acts like a well-known utility with the intent of subverting the real intent of the user) of administrative or security-relevant (or security-conscious) shell scripts.
+
+Attempts to set the readonly attribute on certain variables, such as PWD , may have surprising results. Either readonly will reject the attempt, or the attempt will succeed but the shell will continue to alter the contents of PWD during the cd utility, or the attempt will succeed and render the cd utility inoperative (since it must not change directories if it cannot also update PWD ).
+
+Some implementations extend the shell's assignment syntax, for example to allow an array to be populated with a single assignment, and in order for such an extension to be usable in assignments specified as arguments to readonly these shells have readonly as a separate token in their grammar. This standard only permits an extension of this nature when the input to the shell would contain a syntax error according to the standard grammar. Note that although readonly can be a separate token in the shell's grammar, it cannot be a reserved word since readonly is a candidate for alias substitution whereas reserved words are not (see 2.3.1 Alias Substitution).
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.9.1.1 Order of Processing, 2.15 Special Built-In Utilities
+
+XBD 12.2 Utility Syntax Guidelines
+
+CHANGE HISTORY
+Issue 6
+IEEE PASC Interpretation 1003.2 #203 is applied, clarifying the format when a variable is unset.
+
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/7 is applied, adding the following text to the end of the first paragraph of the DESCRIPTION: "If the name of a variable is followed by =word, then the value of that variable shall be set to word.". The reason for this change is that the SYNOPSIS for readonly includes:
+
+readonly name[=word]...
+but the meaning of the optional "=word" is never explained in the text.
+
+Issue 7
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0052 [960] is applied.
+
+Issue 8
+Austin Group Defect 351 is applied, requiring readonly to be a declaration utility.
+
+Austin Group Defect 367 is applied, clarifying that the values of readonly variables cannot be changed by subsequent use of the export, getopts, readonly, or read utilities, and changing the EXIT STATUS, EXAMPLES and RATIONALE sections.
+
+Austin Group Defect 1393 is applied, changing the APPLICATION USAGE and RATIONALE sections.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+return — return from a function or dot script
+SYNOPSIS
+return [n]
+
+DESCRIPTION
+The return utility shall cause the shell to stop executing the current function or dot script. If the shell is not currently executing a function or dot script, the results are unspecified.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+The exit status shall be n, if specified, except that the behavior is unspecified if n is not an unsigned decimal integer or is greater than 255. If n is not specified, the result shall be as if n were specified with the current value of the special parameter '?' (see 2.5.2 Special Parameters), except that if the return command would cause the end of execution of a trap action, the value for the special parameter '?' that is considered "current" shall be the value it had immediately preceding the trap action.
+
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+None.
+
+RATIONALE
+The behavior of return when not in a function or dot script differs between the System V shell and the KornShell. In the System V shell this is an error, whereas in the KornShell, the effect is the same as exit.
+
+The results of returning a number greater than 255 are undefined because of differing practices in the various historical implementations. Some shells AND out all but the low-order 8 bits; others allow larger values, but not of unlimited size.
+
+See the discussion of appropriate exit status values under exit.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.9.5 Function Definition Command, 2.15 Special Built-In Utilities, dot
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+POSIX.1-2008, Technical Corrigendum 1, XCU/TC1-2008/0044 [214] and XCU/TC1-2008/0045 [214] are applied.
+
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0052 [960] is applied.
+
+Issue 8
+Austin Group Defect 1309 is applied, changing the EXIT STATUS section.
+
+Austin Group Defect 1602 is applied, clarifying the behavior of return in a trap action.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+set — set or unset options and positional parameters
+SYNOPSIS
+set [-abCefhmnuvx] [-o option] [argument...]
+ 
+set [+abCefhmnuvx] [+o option] [argument...]
+ 
+set -- [argument...]
+ 
+set -o
+ 
+set +o
+
+DESCRIPTION
+If no options or arguments are specified, set shall write the names and values of all shell variables in the collation sequence of the current locale. Each name shall start on a separate line, using the format:
+
+"%s=%s\n", <name>, <value>
+The value string shall be written with appropriate quoting; see the description of shell quoting in 2.2 Quoting. The output shall be suitable for reinput to the shell, setting or resetting, as far as possible, the variables that are currently set; read-only variables cannot be reset.
+
+When options are specified, they shall set or unset attributes of the shell, as described below. When arguments are specified, they cause positional parameters to be set or unset, as described below. Setting or unsetting attributes and positional parameters are not necessarily related actions, but they can be combined in a single invocation of set.
+
+The set special built-in shall support XBD 12.2 Utility Syntax Guidelines except that options can be specified with either a leading <hyphen-minus> (meaning enable the option) or <plus-sign> (meaning disable it) unless otherwise specified.
+
+Implementations shall support the options in the following list in both their <hyphen-minus> and <plus-sign> forms. These options can also be specified as options to sh.
+
+-a
+Set the export attribute for all variable assignments. When this option is on, whenever a value is assigned to a variable in the current shell execution environment, the export attribute shall be set for the variable. This applies to all forms of assignment, including those made as a side-effect of variable expansions or arithmetic expansions, and those made as a result of the operation of the cd, getopts, or read utilities.
+Note:
+As discussed in 2.9.1 Simple Commands, not all variable assignments happen in the current execution environment. When an assignment happens in a separate execution environment the export attribute is still set for the variable, but that does not affect the current execution environment.
+-b
+This option shall be supported if the implementation supports the User Portability Utilities option. When job control and -b are both enabled, the shell shall write asynchronous notifications of background job completions (including termination by a signal), and may write asynchronous notifications of background job suspensions. See 2.11 Job Control for details. When job control is disabled, the -b option shall have no effect. Asynchronous notification shall not be enabled by default.
+-C
+(Uppercase C.) Prevent existing regular files from being overwritten by the shell's '>' redirection operator (see 2.7.2 Redirecting Output); the ">|" redirection operator shall override this noclobber option for an individual file.
+-e
+When this option is on, when any command fails (for any of the reasons listed in 2.8.1 Consequences of Shell Errors or by returning an exit status greater than zero), the shell immediately shall exit, as if by executing the exit special built-in utility with no arguments, with the following exceptions:
+The failure of any individual command in a multi-command pipeline, or of any subshell environments in which command substitution was performed during word expansion, shall not cause the shell to exit. Only the failure of the pipeline itself shall be considered.
+The -e setting shall be ignored when executing the compound list following the while, until, if, or elif reserved word, a pipeline beginning with the ! reserved word, or any command of an AND-OR list other than the last.
+If the exit status of a compound command other than a subshell command was the result of a failure while -e was being ignored, then -e shall not apply to this command.
+This requirement applies to the shell environment and each subshell environment separately. For example, in:
+
+set -e; (false; echo one) | cat; echo two
+the false command causes the subshell to exit without executing echo one; however, echo two is executed because the exit status of the pipeline (false; echo one) | cat is zero.
+
+In
+
+set -e; echo $(false; echo one) two
+the false command causes the subshell in which the command substitution is performed to exit without executing echo one; the exit status of the subshell is ignored and the shell then executes the word-expanded command echo two.
+
+-f
+The shell shall disable pathname expansion.
+-h
+[OB] [Option Start] Setting this option may speed up PATH searches (see XBD 8. Environment Variables). This option may be enabled by default. [Option End]
+-m
+This option shall be supported if the implementation supports the User Portability Utilities option. When this option is enabled, the shell shall perform job control actions as described in 2.11 Job Control. This option shall be enabled by default for interactive shells.
+-n
+The shell shall read commands but does not execute them; this can be used to check for shell script syntax errors. Interactive shells and subshells of interactive shells, recursively, may ignore this option.
+-o
+Write the current settings of the options to standard output in an unspecified format.
++o
+Write the current option settings to standard output in a format that is suitable for reinput to the shell as commands that achieve the same options settings.
+-o option
+
+Set various options, many of which shall be equivalent to the single option letters. The following values of option shall be supported:
+allexport
+Equivalent to -a.
+errexit
+Equivalent to -e.
+ignoreeof
+Prevent an interactive shell from exiting on end-of-file. This setting prevents accidental logouts when <control>-D is entered. A user shall explicitly exit to leave the interactive shell. This option shall be supported if the system supports the User Portability Utilities option.
+monitor
+Equivalent to -m. This option shall be supported if the system supports the User Portability Utilities option.
+noclobber
+Equivalent to -C (uppercase C).
+noglob
+Equivalent to -f.
+noexec
+Equivalent to -n.
+nolog
+[OB] [Option Start] Prevent the entry of function definitions into the command history; see Command History List. This option may have no effect; it is kept for compatibility with previous versions of the standard. This option shall be supported if the system supports the User Portability Utilities option. [Option End]
+notify
+Equivalent to -b.
+nounset
+Equivalent to -u.
+pipefail
+Derive the exit status of a pipeline from the exit statuses of all of the commands in the pipeline, not just the last (rightmost) command, as described in 2.9.2 Pipelines.
+verbose
+Equivalent to -v.
+vi
+Allow shell command line editing using the built-in vi editor. Enabling vi mode shall disable any other command line editing mode provided as an implementation extension. This option shall be supported if the system supports the User Portability Utilities option.
+It need not be possible to set vi mode on for certain block-mode terminals.
+
+xtrace
+Equivalent to -x.
+-u
+When the shell tries to expand, in a parameter expansion or an arithmetic expansion, an unset parameter other than the '@' and '*' special parameters, it shall write a message to standard error and the expansion shall fail with the consequences specified in 2.8.1 Consequences of Shell Errors.
+-v
+The shell shall write its input to standard error as it is read.
+-x
+The shell shall write to standard error a trace for each command after it expands the command and before it executes it. It is unspecified whether the command that turns tracing off is traced.
+The default for all these options shall be off (unset) unless stated otherwise in the description of the option or unless the shell was invoked with them on; see sh.
+
+The remaining arguments shall be assigned in order to the positional parameters. The special parameter '#' shall be set to reflect the number of positional parameters. All positional parameters shall be unset before any new values are assigned.
+
+If the first argument is '-', the results are unspecified.
+
+The special argument "--" immediately following the set command name can be used to delimit the arguments if the first argument begins with '+' or '-', or to prevent inadvertent listing of all shell variables when there are no arguments. The command set -- without argument shall unset all positional parameters and set the special parameter '#' to zero.
+
+OPTIONS
+See the DESCRIPTION.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+See the DESCRIPTION.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+ 0
+Successful completion.
+>0
+An invalid option was specified, or an error occurred.
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+Application writers should avoid relying on set -e within functions. For example, in the following script:
+
+set -e
+start() {
+    some_server
+    echo some_server started successfully
+}
+start || echo >&2 some_server failed
+the -e setting is ignored within the function body (because the function is a command in an AND-OR list other than the last). Therefore, if some_server fails, the function carries on to echo "some_server started successfully", and the exit status of the function is zero (which means "some_server failed" is not output).
+
+Use of set -n causes the shell to parse the rest of the script without executing any commands, meaning that set +n cannot be used to undo the effect. Syntax checking is more commonly done via sh -n script_name.
+
+EXAMPLES
+Write out all variables and their values:
+
+set
+Set $1, $2, and $3 and set "$#" to 3:
+
+set c a b
+Turn on the -x and -v options:
+
+set -xv
+Unset all positional parameters:
+
+set --
+Set $1 to the value of x, even if it begins with '-' or '+':
+
+set -- "$x"
+Set the positional parameters to the expansion of x, even if x expands with a leading '-' or '+':
+
+set -- $x
+RATIONALE
+The set -- form is listed specifically in the SYNOPSIS even though this usage is implied by the Utility Syntax Guidelines. The explanation of this feature removes any ambiguity about whether the set -- form might be misinterpreted as being equivalent to set without any options or arguments. The functionality of this form has been adopted from the KornShell. In System V, set -- only unsets parameters if there is at least one argument; the only way to unset all parameters is to use shift. Using the KornShell version should not affect System V scripts because there should be no reason to issue it without arguments deliberately; if it were issued as, for example:
+
+set -- "$@"
+and there were in fact no arguments resulting from "$@", unsetting the parameters would have no result.
+
+The set + form in early proposals was omitted as being an unnecessary duplication of set alone and not widespread historical practice.
+
+The noclobber option was changed to allow set -C as well as the set -o noclobber option. The single-letter version was added so that the historical "$-" paradigm would not be broken; see 2.5.2 Special Parameters.
+
+The description of the -e option is intended to match the behavior of the 1988 version of the KornShell.
+
+The -h option is related to command name hashing. See hash. The normative description is deliberately vague because the way this option works varies between shell implementations.
+
+Earlier versions of this standard specified -h as a way to locate and remember utilities to be invoked by functions as those functions are defined (the utilities are normally located when the function is executed). However, this did not match existing practice in most shells.
+
+The following set options were omitted intentionally with the following rationale:
+
+-k
+The -k option was originally added by the author of the Bourne shell to make it easier for users of pre-release versions of the shell. In early versions of the Bourne shell the construct set name=value had to be used to assign values to shell variables. The problem with -k is that the behavior affects parsing, virtually precluding writing any compilers. To explain the behavior of -k, it is necessary to describe the parsing algorithm, which is implementation-defined. For example:
+set -k; echo name=value
+and:
+
+set -k
+echo name=value
+behave differently. The interaction with functions is even more complex. What is more, the -k option is never needed, since the command line could have been reordered.
+
+-t
+The -t option is hard to specify and almost never used. The only known use could be done with here-documents. Moreover, the behavior with ksh and sh differs. The reference page says that it exits after reading and executing one command. What is one command? If the input is date;date, sh executes both date commands while ksh does only the first.
+Consideration was given to rewriting set to simplify its confusing syntax. A specific suggestion was that the unset utility should be used to unset options instead of using the non-getopt()-able +option syntax. However, the conclusion was reached that the historical practice of using +option was satisfactory and that there was no compelling reason to modify such widespread historical practice.
+
+The -o option was adopted from the KornShell to address user needs. In addition to its generally friendly interface, -o is needed to provide the vi command line editing mode, for which historical practice yields no single-letter option name. (Although it might have been possible to invent such a letter, it was recognized that other editing modes would be developed and -o provides ample name space for describing such extensions.)
+
+Historical implementations are inconsistent in the format used for -o option status reporting. The +o format without an option-argument was added to allow portable access to the options that can be saved and then later restored using, for instance, a dot script.
+
+Historically, sh did trace the command set +x, but ksh did not.
+
+The ignoreeof setting prevents accidental logouts when the end-of-file character (typically <control>-D) is entered. A user shall explicitly exit to leave the interactive shell.
+
+The set -m option was added to apply only to the UPE because it applies primarily to interactive use, not shell script applications.
+
+The ability to do asynchronous notification became available in the 1988 version of the KornShell. To have it occur, the user had to issue the command:
+
+trap "jobs -n" CLD
+The C shell provides two different levels of an asynchronous notification capability. The environment variable notify is analogous to what is done in set -b or set -o notify. When set, it notifies the user immediately of background job completions. When unset, this capability is turned off.
+
+The other notification ability comes through the built-in utility notify. The syntax is:
+
+notify [%job ... ]
+By issuing notify with no operands, it causes the C shell to notify the user asynchronously when the state of the current job changes. If given operands, notify asynchronously informs the user of changes in the states of the specified jobs.
+
+To add asynchronous notification to the POSIX shell, neither the KornShell extensions to trap, nor the C shell notify environment variable seemed appropriate (notify is not a proper POSIX environment variable name).
+
+The set -b option was selected as a compromise.
+
+The notify built-in was considered to have more functionality than was required for simple asynchronous notification.
+
+Historically, some shells applied the -u option to all parameters including $@ and $*. The standard developers felt that this was a misfeature since it is normal and common for $@ and $* to be used in shell scripts regardless of whether they were passed any arguments. Treating these uses as an error when no arguments are passed reduces the value of -u for its intended purpose of finding spelling mistakes in variable names and uses of unset positional parameters.
+
+FUTURE DIRECTIONS
+A future version of this standard may remove the -o nolog option.
+
+SEE ALSO
+2.15 Special Built-In Utilities, hash
+
+XBD 4.26 Variable Assignment, 12.2 Utility Syntax Guidelines
+
+CHANGE HISTORY
+Issue 6
+The obsolescent set command name followed by '-' has been removed.
+
+The following new requirements on POSIX implementations derive from alignment with the Single UNIX Specification:
+
+The nolog option is added to set -o.
+IEEE PASC Interpretation 1003.2 #167 is applied, clarifying that the options default also takes into account the description of the option.
+
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/8 is applied, changing the square brackets in the example in RATIONALE to be in bold, which is the typeface used for optional items.
+
+Issue 7
+Austin Group Interpretation 1003.1-2001 #027 is applied, clarifying the behavior if the first argument is '-'.
+
+SD5-XCU-ERN-97 is applied, updating the SYNOPSIS.
+
+XSI shading is removed from the -h functionality.
+
+POSIX.1-2008, Technical Corrigendum 1, XCU/TC1-2008/0046 [52], XCU/TC1-2008/0047 [155,280], XCU/TC1-2008/0048 [52], XCU/TC1-2008/0049 [52], and XCU/TC1-2008/0050 [155,430] are applied.
+
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0053 [584], XCU/TC2-2008/0054 [717], XCU/TC2-2008/0055 [717], and XCU/TC2-2008/0056 [960] are applied.
+
+Issue 8
+Austin Group Defect 559 is applied, changing the description of the -u option.
+
+Austin Group Defect 789 is applied, adding -o pipefail.
+
+Austin Group Defect 981 is applied, changing the description of the -o nolog option and the FUTURE DIRECTIONS section.
+
+Austin Group Defects 1009 and 1555 are applied, changing the description of the -a option.
+
+Austin Group Defect 1016 is applied, changing the description of the -C option.
+
+Austin Group Defect 1055 is applied, adding a paragraph about the -n option to the APPLICATION USAGE section.
+
+Austin Group Defect 1063 is applied, changing the description of the -h option.
+
+Austin Group Defect 1150 is applied, changing the description of the -e option.
+
+Austin Group Defect 1207 is applied, clarifying which option-arguments of the -o option are related to the User Portability Utilities option.
+
+Austin Group Defect 1254 is applied, changing the descriptions of the -b and -m options.
+
+Austin Group Defect 1384 is applied, allowing subshells of interactive shells to ignore the -n option.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+shift — shift positional parameters
+SYNOPSIS
+shift [n]
+
+DESCRIPTION
+The positional parameters shall be shifted. Positional parameter 1 shall be assigned the value of parameter (1+n), parameter 2 shall be assigned the value of parameter (2+n), and so on. The parameters represented by the numbers "$#" down to "$#-n+1" shall be unset, and the parameter '#' is updated to reflect the new number of positional parameters.
+
+The value n shall be an unsigned decimal integer less than or equal to the value of the special parameter '#'. If n is not given, it shall be assumed to be 1. If n is 0, the positional and special parameters are not changed.
+
+OPTIONS
+None.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages and the warning message specified in EXIT STATUS.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+If the n operand is invalid or is greater than "$#", this may be treated as an error and a non-interactive shell may exit; if the shell does not exit in this case, a non-zero exit status shall be returned and a warning message shall be written to standard error. Otherwise, zero shall be returned.
+
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+
+$
+ set a b c d e
+
+$
+ shift 2
+
+$
+ echo $*
+
+c d e
+
+RATIONALE
+None.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+POSIX.1-2008, Technical Corrigendum 1, XCU/TC1-2008/0051 [459] is applied.
+
+Issue 8
+Austin Group Defect 1265 is applied, updating the EXIT STATUS and STDERR sections to align with the changes made to 2.8.1 Consequences of Shell Errors between Issue 6 and Issue 7.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+times — write process times
+SYNOPSIS
+times
+
+DESCRIPTION
+The times utility shall write the accumulated user and system times for the shell and for all of its child processes, in the following POSIX locale format:
+
+"%dm%fs %dm%fs\n%dm%fs %dm%fs\n", <shell user minutes>,
+    <shell user seconds>, <shell system minutes>,
+    <shell system seconds>, <children user minutes>,
+    <children user seconds>, <children system minutes>,
+    <children system seconds>
+The four pairs of times shall correspond to the members of the <sys/times.h> tms structure (defined in XBD 14. Headers) as returned by times(): tms_utime, tms_stime, tms_cutime, and tms_cstime, respectively.
+
+OPTIONS
+None.
+
+OPERANDS
+None.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+See the DESCRIPTION.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+ 0
+Successful completion.
+>0
+An error occurred.
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+
+$
+ times
+
+0m0.43s 0m1.11s
+8m44.18s 1m43.23s
+
+RATIONALE
+The times special built-in from the Single UNIX Specification is now required for all conforming shells.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+XBD <sys/times.h>
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/9 is applied, changing text in the DESCRIPTION from: "Write the accumulated user and system times for the shell and for all of its child processes ..." to: "The times utility shall write the accumulated user and system times for the shell and for all of its child processes ...".
+
+Issue 7
+POSIX.1-2008, Technical Corrigendum 2, XCU/TC2-2008/0056 [960] is applied.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+trap — trap signals
+SYNOPSIS
+trap n [condition...]
+ 
+trap -p [condition...]
+ 
+trap [action condition...]
+
+DESCRIPTION
+If the -p option is not specified and the first operand is an unsigned decimal integer, the shell shall treat all operands as conditions, and shall reset each condition to the default value. Otherwise, if the -p option is not specified and there are operands, the first operand shall be treated as an action and the remaining as conditions.
+
+If action is '-', the shell shall reset each condition to the default value. If action is null (""), the shell shall ignore each specified condition if it arises. Otherwise, the argument action shall be read and executed by the shell when one of the corresponding conditions arises. The action of trap shall override a previous action (either default action or one explicitly set). The value of "$?" after the trap action completes shall be the value it had before the trap action was executed.
+
+The condition can be EXIT, 0 (equivalent to EXIT), or a signal specified using a symbolic name, without the SIG prefix, as listed in the tables of signal names in the <signal.h> header defined in XBD 14. Headers; for example, HUP, INT, QUIT, TERM. Implementations may permit names with the SIG prefix or ignore case in signal names as an extension. Setting a trap for SIGKILL or SIGSTOP produces undefined results.
+
+The EXIT condition shall occur when the shell terminates normally (exits), and may occur when the shell terminates abnormally as a result of delivery of a signal (other than SIGKILL) whose trap action is the default.
+
+The environment in which the shell executes a trap action on EXIT shall be identical to the environment immediately after the last command executed before the trap action on EXIT was executed.
+
+If action is neither '-' nor the empty string, then each time a matching condition arises, the action shall be executed in a manner equivalent to:
+
+eval action
+Signals that were ignored on entry to a non-interactive shell cannot be trapped or reset, although no error need be reported when attempting to do so. An interactive shell may reset or catch signals ignored on entry. Traps shall remain in place for a given shell until explicitly changed with another trap command.
+
+When a subshell is entered, traps that are not being ignored shall be set to the default actions, except in the case of a command substitution containing only a single trap command, when the traps need not be altered. Implementations may check for this case using only lexical analysis; for example, if `trap` and $( trap -- ) do not alter the traps in the subshell, cases such as assigning var=trap and then using $($var) may still alter them. This does not imply that the trap command cannot be used within the subshell to set new traps.
+
+The trap command with no operands shall write to standard output a list of commands associated with each of a set of conditions; if the -p option is not specified, this set shall contain only the conditions that are not in the default state (including signals that were ignored on entry to a non-interactive shell); if the -p option is specified, the set shall contain all conditions, except that it is unspecified whether conditions corresponding to the SIGKILL and SIGSTOP signals are included in the set. If the command is executed in a subshell, the implementation does not perform the optional check described above for a command substitution containing only a single trap command, and no trap commands with operands have been executed since entry to the subshell, the list shall contain the commands that were associated with each condition immediately before the subshell environment was entered. Otherwise, the list shall contain the commands currently associated with each condition. The format shall be:
+
+"trap -- %s %s ...\n", <action>, <condition> ...
+The shell shall format the output, including the proper use of quoting, so that it is suitable for reinput to the shell as commands that achieve the same trapping results for the set of conditions included in the output, except for signals that were ignored on entry to the shell as described above. If this set includes conditions corresponding to the SIGKILL and SIGSTOP signals, the shell shall accept them when the output is reinput to the shell (where accepting them means they do not cause a non-zero exit status, a diagnostic message, or undefined behavior). For example:
+
+save_traps=$(trap -p)
+
+
+...
+eval "$save_traps"
+or:
+
+save_traps=$(trap -p INT QUIT)
+trap "some command" INT QUIT
+
+
+...
+
+
+eval "$save_traps"
+[XSI] [Option Start] XSI-conformant systems also allow numeric signal numbers for the conditions corresponding to the following signal names:
+
+1
+SIGHUP
+2
+SIGINT
+3
+SIGQUIT
+6
+SIGABRT
+9
+SIGKILL
+14
+SIGALRM
+15
+SIGTERM
+[Option End]
+If an invalid signal name [XSI] [Option Start]  or number [Option End] is specified, the trap utility shall write a warning message to standard error.
+
+The trap special built-in shall conform to XBD 12.2 Utility Syntax Guidelines.
+
+OPTIONS
+The following option shall be supported:
+
+-p
+Write to standard output a list of commands associated with each condition operand. The behavior when there are no operands is specified in the DESCRIPTION section.
+The shell shall format the output, including the proper use of quoting, so that it is suitable for reinput to the shell as commands that achieve the same trapping results for the specified set of conditions. If a condition operand is a condition corresponding to the SIGKILL or SIGSTOP signal, and trap -p without any operands would not include it in the set of conditions for which it writes output, the behavior is undefined if the output is reinput to the shell.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+See the DESCRIPTION.
+
+STDERR
+The standard error shall be used only for diagnostic messages and warning messages about invalid signal names [XSI] [Option Start]  or numbers. [Option End]
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+If the trap name [XSI] [Option Start]  or number [Option End] is invalid, a non-zero exit status shall be returned; otherwise, zero shall be returned. For both interactive and non-interactive shells, invalid signal names [XSI] [Option Start]  or numbers [Option End] shall not be considered an error and shall not cause the shell to abort.
+
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+When the -p option is not used, since trap with no operands does not output commands to restore traps that are currently set to default, these need to be restored separately. The RATIONALE section shows examples and describes their drawbacks.
+
+EXAMPLES
+Write out a list of all traps and actions:
+
+trap
+Set a trap so the logout utility in the directory referred to by the HOME environment variable executes when the shell terminates:
+
+trap '"$HOME"/logout' EXIT
+or:
+
+trap '"$HOME"/logout' 0
+Unset traps on INT, QUIT, TERM, and EXIT:
+
+trap - INT QUIT TERM EXIT
+RATIONALE
+Implementations may permit lowercase signal names as an extension. Implementations may also accept the names with the SIG prefix; no known historical shell does so. The trap and kill utilities in this volume of POSIX.1-2024 are now consistent in their omission of the SIG prefix for signal names. Some kill implementations do not allow the prefix, and kill -l lists the signals without prefixes.
+
+Trapping SIGKILL or SIGSTOP is syntactically accepted by some historical implementations, but it has no effect. Portable POSIX applications cannot attempt to trap these signals.
+
+The output format is not historical practice. Since the output of historical trap commands is not portable (because numeric signal values are not portable) and had to change to become so, an opportunity was taken to format the output in a way that a shell script could use to save and then later reuse a trap if it wanted.
+
+The KornShell uses an ERR trap that is triggered whenever set -e would cause an exit. This is allowable as an extension, but was not mandated, as other shells have not used it.
+
+The text about the environment for the EXIT trap invalidates the behavior of some historical versions of interactive shells which, for example, close the standard input before executing a trap on 0. For example, in some historical interactive shell sessions the following trap on 0 would always print "--":
+
+trap 'read foo; echo "-$foo-"' 0
+The command:
+
+trap 'eval " $cmd"' 0
+causes the contents of the shell variable cmd to be executed as a command when the shell exits. Using:
+
+trap '$cmd' 0
+does not work correctly if cmd contains any special characters such as quoting or redirections. Using:
+
+trap " $cmd" 0
+also works (the leading <space> character protects against unlikely cases where cmd is a decimal integer or begins with '-'), but it expands the cmd variable when the trap command is executed, not when the exit action is executed.
+
+The -p option was added because without it the method used to restore traps needs to include special handling of traps that are set to default when trap with no operands is used to save the current traps. One example is:
+
+save_traps=$(trap)
+trap "some command" INT QUIT
+save_traps="trap - INT QUIT; $save_traps"
+
+
+...
+
+
+eval "$save_traps"
+but this method relies on hard-coding the commands to reset the traps that are being set. It also has a race condition if INT or QUIT was not set to default when saved, since it first sets them to default and then restores the saved traps. A more general approach would be:
+
+save_traps=$(trap)
+...
+for sig in EXIT $( kill -l )
+do
+    case "$sig" in
+    SIGKILL | KILL | sigkill | kill | SIGSTOP | STOP | sigstop | stop)
+    ;;
+    *) trap - $sig
+    ;;
+    esac
+done
+eval "$save_traps"
+This has the same race condition since it first sets all traps (that can be set) to default and then restores those that were not previously set to default.
+
+Historically, some shells behaved the same with and without -p when there are no operands. This standard requires that the set of conditions differs between the two cases: with -p it is all conditions (except possibly SIGKILL and SIGSTOP); without -p it is only the conditions that are not in the default state.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+XBD 12.2 Utility Syntax Guidelines, <signal.h>
+
+CHANGE HISTORY
+Issue 6
+XSI-conforming implementations provide the mapping of signal names to numbers given above (previously this had been marked obsolescent). Other implementations need not provide this optional mapping.
+
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+SD5-XCU-ERN-97 is applied, updating the SYNOPSIS.
+
+Austin Group Interpretation 1003.1-2001 #116 is applied.
+
+POSIX.1-2008, Technical Corrigendum 1, XCU/TC1-2008/0052 [53,268,440], XCU/TC1-2008/0053 [53,268,440], XCU/TC1-2008/0054 [163], XCU/TC1-2008/0055 [163], and XCU/TC1-2008/0056 [163] are applied.
+
+Issue 8
+Austin Group Defect 621 is applied, clarifying when the EXIT condition occurs.
+
+Austin Group Defect 1029 is applied, clarifying the execution of trap actions.
+
+Austin Group Defects 1211 and 1212 are applied, adding the -p option and clarifying that, when -p is not specified, the output of trap with no operands does not list conditions that are in the default state.
+
+Austin Group Defect 1265 is applied, updating the DESCRIPTION, STDERR and EXIT STATUS sections to align with the changes made to 2.8.1 Consequences of Shell Errors between Issue 6 and Issue 7.
+
+Austin Group Defect 1285 is applied, inserting a blank line between the two SYNOPSIS lines.
+
+End of informative text.
+<<< Previous	Home	Next >>>
+NAME
+unset — unset values and attributes of variables and functions
+SYNOPSIS
+unset [-fv] name...
+
+DESCRIPTION
+The unset utility shall unset each variable or function definition specified by name that does not have the readonly attribute and remove any attributes other than readonly that have been given to name (see 2.15 Special Built-In Utilities export and readonly).
+
+If -v is specified, name refers to a variable name and the shell shall unset it and remove it from the environment. Read-only variables cannot be unset.
+
+If -f is specified, name refers to a function and the shell shall unset the function definition.
+
+If neither -f nor -v is specified, name refers to a variable; if a variable by that name does not exist, it is unspecified whether a function by that name, if any, shall be unset.
+
+Unsetting a variable or function that was not previously set shall not be considered an error and does not cause the shell to abort.
+
+The unset special built-in shall support XBD 12.2 Utility Syntax Guidelines.
+
+Note that:
+
+VARIABLE=
+is not equivalent to an unset of VARIABLE; in the example, VARIABLE is set to "". Also, the variables that can be unset should not be misinterpreted to include the special parameters (see 2.5.2 Special Parameters).
+
+OPTIONS
+See the DESCRIPTION.
+
+OPERANDS
+See the DESCRIPTION.
+
+STDIN
+Not used.
+
+INPUT FILES
+None.
+
+ENVIRONMENT VARIABLES
+None.
+
+ASYNCHRONOUS EVENTS
+Default.
+
+STDOUT
+Not used.
+
+STDERR
+The standard error shall be used only for diagnostic messages.
+
+OUTPUT FILES
+None.
+
+EXTENDED DESCRIPTION
+None.
+
+EXIT STATUS
+ 0
+All name operands were successfully unset.
+>0
+At least one name could not be unset.
+CONSEQUENCES OF ERRORS
+Default.
+
+The following sections are informative.
+APPLICATION USAGE
+None.
+
+EXAMPLES
+Unset VISUAL variable:
+
+unset -v VISUAL
+Unset the functions foo and bar:
+
+unset -f foo bar
+RATIONALE
+Consideration was given to omitting the -f option in favor of an unfunction utility, but the standard developers decided to retain historical practice.
+
+The -v option was introduced because System V historically used one name space for both variables and functions. When unset is used without options, System V historically unset either a function or a variable, and there was no confusion about which one was intended. A portable POSIX application can use unset without an option to unset a variable, but not a function; the -f option must be used.
+
+FUTURE DIRECTIONS
+None.
+
+SEE ALSO
+2.15 Special Built-In Utilities
+
+XBD 12.2 Utility Syntax Guidelines
+
+CHANGE HISTORY
+Issue 6
+IEEE Std 1003.1-2001/Cor 1-2002, item XCU/TC1/D6/5 is applied so that the reference page sections use terms as described in the Utility Description Defaults ( 1.4 Utility Description Defaults). No change in behavior is intended.
+
+Issue 7
+SD5-XCU-ERN-97 is applied, updating the SYNOPSIS.
+
+Issue 8
+Austin Group Defect 1075 is applied, clarifying that unset removes attributes, other than readonly, from the variables it unsets.
+
+End of informative text.

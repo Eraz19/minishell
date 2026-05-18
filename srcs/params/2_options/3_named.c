@@ -77,7 +77,8 @@ bool	options_process_name(
 	if (!arg)
 	{
 		error_print("-o / +o", "needs an argument", ERR_OPTION_INVALID);
-		undefined_behaviour();
+		undefined_behaviour("If the -o or +o option is specified without an "
+			"option-argument, the behavior is unspecified");
 		return (false);
 	}
 	if (options_process_name1(options, arg, on, explicit_plus_m))

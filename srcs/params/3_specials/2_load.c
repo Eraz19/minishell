@@ -21,6 +21,8 @@ static t_error	specials_load_cmd_string(
 	if ((size_t)argc >= *operand_index + 1)
 		specials->zero = argv[(*operand_index)++];
 	printf("-> command_string (-c) mode initialized\n");
+	printf("-> zero set to              '%s'\n", specials->zero);
+	printf("-> source set to            '%s'\n", specials->source);
 	return (ERR_NO);
 }
 
@@ -38,7 +40,7 @@ static t_error	specials_load_source_and_zero(
 	else if (option_is_active(OPT_STDIN_INPUT))
 	{
 		printf("-> standard_input (-s) mode initialized\n");
-		return (ERR_NO);
+		// return (ERR_NO);
 	}
 	else if ((size_t)argc >= *operand_index + 1)
 	{
@@ -68,7 +70,7 @@ t_error	specials_load(
 	specials->last_bg_pid = -1;
 	printf("-> last_bg_pid set to       %jd\n", (intmax_t)specials->last_bg_pid);
 	specials->last_status = EXIT_SUCCESS;
-	printf("-> last_status set to       %i\n", specials->last_status);
+	printf("-> last_status set to       %ld\n", specials->last_status);
 	shell = shell_get();
 	if (!shell)
 		return (ERR_SHELL_NOT_FOUND);

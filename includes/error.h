@@ -12,6 +12,7 @@ typedef enum e_error
 	ERR_LR_STATE_NOT_FOUND,
 	ERR_OPTION_INVALID,
 	ERR_SHELL_NOT_FOUND,
+	ERR_SHIFT_INVALID_VALUE,
 	ERR_UNDEFINED_BEHAVIOUR,
 	ERR_VAR_INVALID_NAME,
 	ERR_VAR_MISSING_EQUAL,
@@ -29,7 +30,7 @@ const char	*error_to_string(t_error error);
 // Always returns error
 t_error	error_print(const char *prefix, const char *error_type, t_error error);
 
-// Prints "la tête à Xavier"
-void	undefined_behaviour(void);
+// Prints "you did: " + message + "la tête à Xavier"
+void	undefined_behaviour(const char *message);
 
 #endif

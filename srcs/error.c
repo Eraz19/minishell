@@ -28,6 +28,8 @@ const char	*error_to_string(t_error error)
 		return ("invalid option");
 	else if (error == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
+	else if (error == ERR_SHIFT_INVALID_VALUE)
+		return ("shift value is out of range");
 	else if (error == ERR_UNDEFINED_BEHAVIOUR)
 		return ("undefined behaviour 🤪");
 	else if (error == ERR_VAR_INVALID_NAME)

@@ -93,7 +93,7 @@ static void	options_add_to_string(t_option options, char **dst, size_t *i_ptr)
 	*i_ptr = i;
 }
 
-t_error	options_to_string(t_option options, char **dst)
+t_error	options_get(t_option options, char **dst)
 {
 	size_t	i;
 

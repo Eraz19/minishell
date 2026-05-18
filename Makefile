@@ -46,7 +46,7 @@ INCLUDES	:= \
 	-Isrcs/params/1_variables/load/3_up \
 	-Isrcs/params/2_options \
 	-Isrcs/params/3_specials \
-	-Isrcs/params/4_functions
+	-Isrcs/params/4_positionals
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
