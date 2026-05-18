@@ -85,3 +85,11 @@
 	- **git issues**
 	- **github actions** (`CI/CD`)
 	- **discord hooks**
+
+---
+
+# TO REMOVE BEFORE SUBMIT
+
+- delete `logs` lib and all calls to it
+- delete `*_dump.c` files and `*_dump()` functions
+- delete `debug.h` and `debug.c`

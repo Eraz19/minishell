@@ -7,8 +7,8 @@
 
 typedef struct s_specials
 {
-	char				*zero;			// $0 (NOT editable after instanciation)
 	char				*source;		// (internal, can be NULL)
+	char				*zero;			// $0 (NOT editable after instanciation)
 	pid_t				pid;			// $$ (NOT editable after instanciation)
 	pid_t				last_bg_pid;	// $!
 	long				last_status;	// $?
@@ -40,5 +40,11 @@ t_error	specials_get(const t_specials *specials, char name, char **dst);
 // @note: only available for '!' and '?'.
 // @ret ERR_NO / ERR_VAR_NOT_FOUND.
 t_error	specials_set(t_specials *specials, char name, long value);
+
+/* ************************************************************************* */
+/*                                   DEBUG                                   */
+/* ************************************************************************* */
+
+void	specials_dump_all(void);
 
 #endif

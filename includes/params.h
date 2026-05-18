@@ -63,4 +63,10 @@ t_error	params_replace_positionals(t_positionals *src);
 // @ret ERR_NO / ERR_SHELL_NOT_FOUND / ERR_LIBC.
 t_error	params_pop_positionals(void);
 
+/* ************************************************************************* */
+/*                                   DEBUG                                   */
+/* ************************************************************************* */
+
+void	params_dump_all(void);
+
 #endif

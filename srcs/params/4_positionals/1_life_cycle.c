@@ -47,6 +47,7 @@ t_error	positionals_load(
 	}
 	if (!vector_push(stack, &positionals))
 		return (positionals_free_partial(&positionals), ERR_LIBC);
+	print_pass("$# = %zu\n", positionals.count);
 	print_result("positionals_load()");
 	return (ERR_NO);
 }

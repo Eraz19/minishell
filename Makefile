@@ -8,6 +8,8 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 # DEBUG SECTION (START)
 DEBUG_SRCS		:= $(wildcard logs/*.c)
 DEBUG_INCLUDES	:= -Ilogs
+
+TESTER			:= ./tests/test_init.zsh
 # DEBUG SECTION (END)
 
 SRCS		:= \
@@ -71,6 +73,9 @@ $(OBJ_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 bonus: all
+
+test: all
+	@$(TESTER)
 
 clean:
 	rm -rf $(OBJ_DIR)

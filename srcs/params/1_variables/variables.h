@@ -64,4 +64,11 @@ t_error	var_set(t_var_list *variables, const char *name, const char *value);
 // @ret ERR_VAR_MISSING_EQUAL / ERR_LIBC
 t_error	var_split(const char *src, char **dst_name, char **dst_value);
 
+/* ************************************************************************* */
+/*                                   DEBUG                                   */
+/* ************************************************************************* */
+
+void	var_dump_all(void);
+void	var_dump(t_var *var);
+
 #endif

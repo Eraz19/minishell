@@ -77,5 +77,15 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	error = specials_load(&params->specials, argc, argv, &start_index);
 	if (error != ERR_NO)
 		return (error);
-	return (positionals_load(&params->positionals, argc, argv, start_index));
+	error = positionals_load(&params->positionals, argc, argv, start_index);
+	if (error != ERR_NO)
+		return (error);
+	/* ---------- TODO: tmp debug: START ---------- */
+	var_dump_all();
+	options_dump_all();
+	specials_dump_all();
+	positionals_dump_all();
+	params_dump_all();
+	/* ---------- TODO: tmp debug: END ---------- */
+	return (ERR_NO);
 }
