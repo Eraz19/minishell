@@ -39,11 +39,11 @@ t_error	params_get_positionals(t_positionals *dst);
 // / ERR_LIBC.
 t_error	params_set_variable(const char *name, const char *value);
 
-// @ret ERR_NO / ERR_SHELL_NOT_FOUND / ERR_VAR_NOT_FOUND.
+// @ret ERR_NO / ERR_SHELL_NOT_FOUND.
 t_error	params_set_last_bg_pid(pid_t value);
 
-// @ret ERR_NO / ERR_SHELL_NOT_FOUND / ERR_VAR_NOT_FOUND.
-t_error	params_set_last_status(long value);
+// @ret ERR_NO / ERR_SHELL_NOT_FOUND.
+t_error	params_set_last_status(int value);
 
 // @ret ERR_NO / ERR_SHELL_NOT_FOUND.
 t_error	params_set_option(t_option option, bool on);

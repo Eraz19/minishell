@@ -1,15 +1,5 @@
 # TODO
 
-## Makefile
-
-- Découvrir automatiquement les testeurs dans tests/ et les exécuter.
-
-## PARAMS
-
-- ⚠️ `-a` s'applique aussi aux `variables` par défaut ?
-	- Si oui : il faut parse les `options` avant les `variables` (pour que IFS, PWD, PS1 etc soient en export=true si `-a` présent)
-- ⚠️ `pid_t` utiliser des variantes de `atoi` / `itoa` adaptées !
-
 ## BUILTINS
 
 - Remove `t_shell *shell` from args: same signature as classic `main()`

@@ -7,11 +7,11 @@
 
 typedef struct s_specials
 {
-	char				*source;		// (internal, can be NULL)
-	char				*zero;			// $0 (NOT editable after instanciation)
-	pid_t				pid;			// $$ (NOT editable after instanciation)
-	pid_t				last_bg_pid;	// $!
-	long				last_status;	// $?
+	char	*source;		// (internal, can be NULL)
+	char	*zero;			// $0 (NOT editable after instanciation)
+	pid_t	pid;			// $$ (NOT editable after instanciation)
+	pid_t	last_bg_pid;	// $!
+	int		last_status;	// $?
 }	t_specials;
 
 /* ************************************************************************* */
@@ -36,10 +36,8 @@ void	specials_free(t_specials *specials);
 // @warning: *dst is owned by caller, he must free it.
 // @ret ERR_NO / ERR_VAR_NOT_FOUND / ERR_LIBC.
 t_error	specials_get(const t_specials *specials, char name, char **dst);
-
-// @note: only available for '!' and '?'.
-// @ret ERR_NO / ERR_VAR_NOT_FOUND.
-t_error	specials_set(t_specials *specials, char name, long value);
+void	specials_set_last_bg_pid(t_specials *specials, pid_t value);
+void	specials_set_last_status(t_specials *specials, int value);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */

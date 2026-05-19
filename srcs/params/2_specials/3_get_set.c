@@ -12,7 +12,7 @@ t_error	specials_get(const t_specials *specials, char name, char **dst)
 	{
 		if (specials->last_bg_pid == -1)
 			return (ERR_NO);
-		*dst = ft_ltoa((long)specials->last_bg_pid);
+		*dst = ft_pidtoa(specials->last_bg_pid);
 	}
 	else if (name == '?')
 		*dst = ft_ltoa(specials->last_status);
@@ -23,13 +23,12 @@ t_error	specials_get(const t_specials *specials, char name, char **dst)
 	return (ERR_NO);
 }
 
-t_error	specials_set(t_specials *specials, char name, long value)
+void	specials_set_last_bg_pid(t_specials *specials, pid_t value)
 {
-	if (name == '!')
-		specials->last_bg_pid = (pid_t)value;
-	else if (name == '?')
-		specials->last_status = value;
-	else
-		return (ERR_VAR_NOT_FOUND);
-	return (ERR_NO);
+	specials->last_bg_pid = value;
+}
+
+void	specials_set_last_status(t_specials *specials, int value)
+{
+	specials->last_bg_pid = value;
 }
