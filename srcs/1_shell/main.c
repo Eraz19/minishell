@@ -4,7 +4,7 @@
 #include <unistd.h>
 # include "logs.h"	// TODO: tmp debug
 
-// TODO: move to runner/executor (because it will use it after each command execution)
+// ⚠️ TODO: move to runner/executor (because it will use it after each command execution)
 // ERR_NO / ERR_LIBC
 t_error	shell_set_stdin_to_blocking(void)
 {
@@ -94,7 +94,7 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 	t_shell				*shell;
 	t_error				error;
 
-	print_start(99, "shell_start()");
+	// print_start(99, "shell_start()");
 	shell = malloc(sizeof(*shell));
 	if (!shell)
 		return (error_print(NULL, message, ERR_LIBC), ERR_LIBC);

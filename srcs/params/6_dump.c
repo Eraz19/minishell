@@ -79,7 +79,7 @@ static void	params_dump_positionals(void)
 	count = ft_atozu(count_s);
 	free(count_s);
 	i = 1;
-	while (i < count)
+	while (i <= count)
 	{
 		name = ft_zutoa(i);
 		if (!name)

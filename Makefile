@@ -9,7 +9,10 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 DEBUG_SRCS		:= $(wildcard logs/*.c)
 DEBUG_INCLUDES	:= -Ilogs
 
-TESTER			:= ./tests/test_init.zsh
+TEST_DIR		:= ./tests
+TESTERS			:= $(wildcard $(TEST_DIR)/*.zsh)
+FIXTURES_DIR	:= $(TEST_DIR)/fixtures
+LOGS_DIR		:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
 
 SRCS		:= \
@@ -46,15 +49,15 @@ INCLUDES	:= \
 	-Isrcs/builtins/export \
 	-Isrcs/builtins/readonly \
 	-Isrcs/builtins/unset \
-	-Isrcs/params/1_variables \
-	-Isrcs/params/1_variables/load \
-	-Isrcs/params/1_variables/load/1_envp \
-	-Isrcs/params/1_variables/load/2_mandatory \
-	-Isrcs/params/1_variables/load/2_mandatory/ft_getppid \
-	-Isrcs/params/1_variables/load/3_up \
-	-Isrcs/params/2_options \
-	-Isrcs/params/3_specials \
-	-Isrcs/params/4_positionals \
+	-Isrcs/params/1_options \
+	-Isrcs/params/2_specials \
+	-Isrcs/params/3_positionals \
+	-Isrcs/params/4_variables \
+	-Isrcs/params/4_variables/load \
+	-Isrcs/params/4_variables/load/1_envp \
+	-Isrcs/params/4_variables/load/2_mandatory \
+	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
+	-Isrcs/params/4_variables/load/3_up \
 	$(DEBUG_INCLUDES)
 
 OBJ_DIR		:= obj
@@ -75,10 +78,13 @@ $(OBJ_DIR)/%.o : %.c
 bonus: all
 
 test: all
-	@$(TESTER)
+	@for tester in $(TESTERS); do \
+		echo "Running $$tester"; \
+		zsh "$$tester"; \
+	done
 
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -rf $(OBJ_DIR) $(FIXTURES_DIR) $(LOGS_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
@@ -87,4 +93,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all bonus test clean fclean re

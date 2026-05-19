@@ -66,9 +66,6 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	
 	params_catch_undefined_1(argc, argv);
 	params->name = argv[0];
-	error = params_load_variables(params, envp);
-	if (error != ERR_NO)
-		return (error);
 	start_index = 1;
 	error = options_load(&params->options, argc, argv, &start_index);
 	if (error != ERR_NO)
@@ -78,6 +75,9 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	if (error != ERR_NO)
 		return (error);
 	error = positionals_load(&params->positionals, argc, argv, start_index);
+	if (error != ERR_NO)
+		return (error);
+	error = params_load_variables(params, envp);
 	if (error != ERR_NO)
 		return (error);
 	/* ---------- TODO: tmp debug: START ---------- */
