@@ -5,7 +5,7 @@
 # include "logs.h"	// TODO: tmp debug
 # include <inttypes.h>	// TODO: tmp debug
 
-// @ret ERR_OPTION_INVALID
+// @ret ERR_OPT_INVALID
 static t_error	specials_load_cmd_string(
 	t_specials *specials,
 	int argc,
@@ -14,8 +14,8 @@ static t_error	specials_load_cmd_string(
 {
 	if ((size_t)argc < *operand_index + 1)
 	{
-		error_print(NULL, "-c needs an argument", ERR_OPTION_INVALID);
-		return (ERR_OPTION_INVALID);
+		error_print(NULL, "-c needs an argument", ERR_OPT_INVALID);
+		return (ERR_OPT_INVALID);
 	}
 	specials->source = argv[(*operand_index)++];
 	if ((size_t)argc >= *operand_index + 1)
@@ -26,7 +26,7 @@ static t_error	specials_load_cmd_string(
 	return (ERR_NO);
 }
 
-// @ret ERR_SHELL_NOT_FOUND / ERR_OPTION_INVALID
+// @ret ERR_SHELL_NOT_FOUND / ERR_OPT_INVALID
 static t_error	specials_load_source_and_zero(
 	t_specials *specials,
 	int argc,

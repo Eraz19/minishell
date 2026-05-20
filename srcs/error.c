@@ -26,8 +26,12 @@ const char	*error_to_string(t_error error)
 		return ("LR conflict");
 	else if (error == ERR_LR_STATE_NOT_FOUND)
 		return ("LR state not found");
-	else if (error == ERR_OPTION_INVALID)
+	else if (error == ERR_OPT_INVALID)
 		return ("invalid option");
+	else if (error == ERR_OPT_INVALID_ARG)
+		return ("invalid option argument");
+	else if (error == ERR_OPT_MISSING_ARG)
+		return ("missing option argument");
 	else if (error == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
 	else if (error == ERR_SHIFT_INVALID_VALUE)

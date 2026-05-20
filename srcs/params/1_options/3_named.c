@@ -76,8 +76,9 @@ bool	options_process_name(
 {
 	if (!arg)
 	{
-		error_print("-o / +o", "needs an argument", ERR_OPTION_INVALID);
-		undefined_behaviour("If the -o or +o option is specified without an "
+		error_print("-o / +o", "needs an argument", ERR_OPT_INVALID);
+		undefined_behaviour("POSIX: sh: OPTIONS: "
+			"If the -o or +o option is specified without an "
 			"option-argument, the behavior is unspecified");
 		return (false);
 	}
@@ -85,6 +86,6 @@ bool	options_process_name(
 		return (true);
 	if (options_process_name2(options, arg, on))
 		return (true);
-	error_print(NULL, arg, ERR_OPTION_INVALID);
+	error_print(NULL, arg, ERR_OPT_INVALID);
 	return (false);
 }

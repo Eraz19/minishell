@@ -20,7 +20,7 @@ typedef struct s_specials
 
 void	specials_init(t_specials *specials);
 
-// @ret ERR_NO / ERR_SHELL_NOT_FOUND / ERR_OPTION_INVALID.
+// @ret ERR_NO / ERR_SHELL_NOT_FOUND / ERR_OPT_INVALID.
 t_error	specials_load(
 	t_specials *specials,
 	int argc,

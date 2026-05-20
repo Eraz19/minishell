@@ -71,7 +71,7 @@ bool	options_process_flags(
 			i++;
 		else
 		{
-			error_print(NULL, &arg[i], ERR_OPTION_INVALID);
+			error_print(NULL, &arg[i], ERR_OPT_INVALID);
 			return (false);
 		}
 	}

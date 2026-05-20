@@ -69,7 +69,7 @@ t_error	options_load(
 			break ;
 		}
 		if (!options_load_one(start_index, argv, options, &explicit_plus_m))
-			return (ERR_OPTION_INVALID);
+			return (ERR_OPT_INVALID);
 	}
 	print_result("options_load()");
 	print_title("options_finalize()");

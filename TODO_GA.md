@@ -1,6 +1,6 @@
 # TODO
 
-- remove all parent shell references because subshell is just a fork of current shell
+- test `ft_getopt()`
 - `variables`:
 	- rename functions from `var_*_all()` to `variables_*()` (if needed resolve conflicts by renaming private ones into `variables_*_one()`)
 - rename all `*_dump_all()` into `*_dump()`
