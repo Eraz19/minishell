@@ -1,0 +1,202 @@
+https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_04
+
+1.4 Utility Description Defaults
+This section describes all of the subsections used within the utility descriptions, including:
+
+Intended usage of the section
+Global defaults that affect all the standard utilities
+The meanings of notations used in this volume of POSIX.1-2024 that are specific to individual utility sections
+NAME
+
+This section gives the name or names of the utility and briefly states its purpose.
+SYNOPSIS
+
+The SYNOPSIS section summarizes the syntax of the calling sequence for the utility, including options, option-arguments, and operands. Standards for utility naming are described in XBD 12.2 Utility Syntax Guidelines; for describing the utility's arguments in XBD 12.1 Utility Argument Syntax.
+DESCRIPTION
+
+The DESCRIPTION section describes the actions of the utility. If the utility has a very complex set of subcommands or its own procedural language, an EXTENDED DESCRIPTION section is also provided. Most explanations of optional functionality are omitted here, as they are usually explained in the OPTIONS section.
+As stated in 1.1.1.11 Actions Equivalent to Functions, some functions are described in terms of equivalent functionality. When specific functions are cited, the implementation shall provide equivalent functionality including side-effects associated with successful execution of the function. The treatment of errors and intermediate results from the individual functions cited is generally not specified by this volume of POSIX.1-2024. See the utility's EXIT STATUS and CONSEQUENCES OF ERRORS sections for all actions associated with errors encountered by the utility.
+
+A standard utility shall not be treated as a declaration utility unless explicitly stated in this section.
+
+OPTIONS
+
+The OPTIONS section describes the utility options and option-arguments, and how they modify the actions of the utility. Standard utilities that have options either fully comply with XBD 12.2 Utility Syntax Guidelines or describe all deviations. Apparent disagreements between functionality descriptions in the OPTIONS and DESCRIPTION (or EXTENDED DESCRIPTION) sections are always resolved in favor of the OPTIONS section.
+Each OPTIONS section that uses the phrase "The ... utility shall conform to the Utility Syntax Guidelines ..." refers only to the use of the utility as specified by this volume of POSIX.1-2024; implementation extensions should also conform to the guidelines, but may allow exceptions for historical practice.
+
+Unless otherwise stated in the utility description, when given an option unrecognized by the implementation, or when a required option-argument is not provided, standard utilities shall issue a diagnostic message to standard error and exit with an exit status that indicates an error occurred.
+
+All utilities in this volume of POSIX.1-2024 shall be capable of processing arguments using eight-bit transparency.
+
+Default Behavior: When this section is listed as "None.", it means that the implementation need not support any options. Standard utilities that do not accept options, but that do accept operands, shall recognize "--" as a first argument to be discarded.
+
+The requirement for recognizing "--" is because conforming applications need a way to shield their operands from any arbitrary options that the implementation may provide as an extension. For example, if the standard utility foo is listed as taking no options, and the application needed to give it a pathname with a leading <hyphen-minus>, it could safely do it as:
+
+foo -- -myfile
+and avoid any problems with -m used as an extension.
+
+OPERANDS
+
+The OPERANDS section describes the utility operands, and how they affect the actions of the utility. Apparent disagreements between functionality descriptions in the OPERANDS and DESCRIPTION (or EXTENDED DESCRIPTION) sections shall be resolved in favor of the OPERANDS section.
+If an operand naming a file can be specified as '-', which means to use the standard input instead of a named file, this is explicitly stated in this section. Unless otherwise stated, the use of multiple instances of '-' to mean standard input in a single command produces unspecified results.
+
+Unless otherwise stated, the standard utilities that accept operands shall process those operands in the order specified in the command line.
+
+Default Behavior: When this section is listed as "None.", it means that the implementation need not support any operands.
+
+STDIN
+
+The STDIN section describes the standard input of the utility. This section is frequently merely a reference to the following section, as many utilities treat standard input and input files in the same manner. Unless otherwise stated, all restrictions described in the INPUT FILES section shall apply to this section as well.
+Use of a terminal for standard input can cause any of the standard utilities that read standard input to stop when used in the background. For this reason, applications should not use interactive features in scripts to be placed in the background.
+
+The specified standard input format of the standard utilities shall not depend on the existence or value of the environment variables defined in this volume of POSIX.1-2024, except as provided by this volume of POSIX.1-2024.
+
+Default Behavior: When this section is listed as "Not used.", it means that the standard input shall not be read when the utility is used as described by this volume of POSIX.1-2024.
+
+INPUT FILES
+
+The INPUT FILES section describes the files, other than the standard input, used as input by the utility. It includes files named as operands and option-arguments as well as other files that are referred to, such as start-up and initialization files, databases, and so on. Commonly-used files are generally described in one place and cross-referenced by other utilities.
+All utilities in this volume of POSIX.1-2024 shall be capable of processing input files using eight-bit transparency.
+
+When a standard utility reads a seekable input file and terminates without an error before it reaches end-of-file, the utility shall ensure that the file offset in the open file description is properly positioned just past the last byte processed by the utility. For files that are not seekable, the state of the file offset in the open file description for that file is unspecified. A conforming application shall not assume that the following three commands are equivalent:
+
+tail -n +2 file
+(sed -n 1q; cat) < file
+cat file | (sed -n 1q; cat)
+The second command is equivalent to the first only when the file is seekable. The third command leaves the file offset in the open file description in an unspecified state. Other utilities, such as head, read, and sh, have similar properties.
+
+Some of the standard utilities, such as filters, process input files a line or a block at a time and have no restrictions on the maximum input file size. Some utilities may have size limitations that are not as obvious as file space or memory limitations. Such limitations should reflect resource limitations of some sort, not arbitrary limits set by implementors. Implementations shall document those utilities that are limited by constraints other than file system space, available memory, and other limits specifically cited by this volume of POSIX.1-2024, and identify what the constraint is and indicate a way of estimating when the constraint would be reached. Similarly, some utilities descend the directory tree (recursively). Implementations shall also document any limits that they may have in descending the directory tree that are beyond limits cited by this volume of POSIX.1-2024.
+
+When an input file is described as a "text file", the utility produces undefined results if given input that is not from a text file, unless otherwise stated. Some utilities (for example, make, read, sh) allow for continued input lines using an escaped <newline> convention; unless otherwise stated, the utility need not be able to accumulate more than {LINE_MAX} bytes from a set of multiple, continued input lines. Thus, for a conforming application the total of all the continued lines in a set cannot exceed {LINE_MAX}. If a utility using the escaped <newline> convention detects an end-of-file condition immediately after an escaped <newline>, the results are unspecified.
+
+Record formats are described in a notation similar to that used by the C-language function, printf(). See XBD 5. File Format Notation for a description of this notation. The format description is intended to be sufficiently rigorous to allow other applications to generate these input files. However, since <blank>s can legitimately be included in some of the fields described by the standard utilities, particularly in locales other than the POSIX locale, this intent is not always realized.
+
+Default Behavior: When this section is listed as "None.", it means that no input files are required to be supplied when the utility is used as described by this volume of POSIX.1-2024.
+
+ENVIRONMENT VARIABLES
+
+The ENVIRONMENT VARIABLES section lists what variables affect the utility's execution.
+The entire manner in which environment variables described in this volume of POSIX.1-2024 affect the behavior of each utility is described in the ENVIRONMENT VARIABLES section for that utility, in conjunction with the global effects of the LANG , LC_ALL , and [XSI] [Option Start] NLSPATH [Option End] environment variables described in XBD 8. Environment Variables. The existence or value of environment variables described in this volume of POSIX.1-2024 shall not otherwise affect the specified behavior of the standard utilities. Any effects of the existence or value of environment variables not described by this volume of POSIX.1-2024 upon the standard utilities are unspecified.
+
+For those standard utilities that use environment variables as a means for selecting a utility to execute (such as CC in make), the string provided to the utility is subjected to the path search described for PATH in XBD 8. Environment Variables.
+
+All utilities in this volume of POSIX.1-2024 shall be capable of processing environment variable names and values using eight-bit transparency.
+
+Default Behavior: When this section is listed as "None.", it means that the behavior of the utility is not directly affected by environment variables described by this volume of POSIX.1-2024 when the utility is used as described by this volume of POSIX.1-2024.
+
+ASYNCHRONOUS EVENTS
+
+The ASYNCHRONOUS EVENTS section lists how the utility reacts to such events as signals and what signals are caught.
+Default Behavior: When this section is listed as "Default.", or it refers to "the standard action" for any signal, it means that the action taken as a result of the signal shall be as follows:
+
+If the action inherited from the invoking process, according to the rules of inheritance of signal actions defined in the System Interfaces volume of POSIX.1-2024, is for the signal to be ignored, the utility shall ignore the signal.
+If the action inherited from the invoking process, according to the rules of inheritance of signal actions defined in System Interfaces volume of POSIX.1-2024, is the default signal action, the result of the utility's execution shall be as if the default signal action had been taken.
+When the required action is for the signal to terminate the utility, the utility may catch the signal, perform some additional processing (such as deleting temporary files), restore the default signal action, and resignal itself.
+
+STDOUT
+
+The STDOUT section completely describes the standard output of the utility. This section is frequently merely a reference to the following section, OUTPUT FILES, because many utilities treat standard output and output files in the same manner.
+Use of a terminal for standard output may cause any of the standard utilities that write standard output to stop when used in the background. For this reason, applications should not use interactive features in scripts to be placed in the background.
+
+Record formats are described in a notation similar to that used by the C-language function, printf(). See XBD 5. File Format Notation for a description of this notation.
+
+The specified standard output of the standard utilities shall not depend on the existence or value of the environment variables defined in this volume of POSIX.1-2024, except as provided by this volume of POSIX.1-2024.
+
+Some of the standard utilities describe their output using the verb display, defined in XBD 3.107 Display. Output described in the STDOUT sections of such utilities may be produced using means other than standard output. When standard output is directed to a terminal, the output described shall be written directly to the terminal. Otherwise, the results are undefined.
+
+Default Behavior: When this section is listed as "Not used.", it means that the standard output shall not be written when the utility is used as described by this volume of POSIX.1-2024.
+
+STDERR
+
+The STDERR section describes the standard error output of the utility. Only those messages that are purposely sent by the utility are described.
+Use of a terminal for standard error may cause any of the standard utilities that write standard error output to stop when used in the background. For this reason, applications should not use interactive features in scripts to be placed in the background.
+
+The format of diagnostic messages for most utilities is unspecified, but the language and cultural conventions of diagnostic and informative messages whose format is unspecified by this volume of POSIX.1-2024 should be affected by the setting of LC_MESSAGES and [XSI] [Option Start] NLSPATH . [Option End]
+
+The specified standard error output of standard utilities shall not depend on the existence or value of the environment variables defined in this volume of POSIX.1-2024, except as provided by this volume of POSIX.1-2024.
+
+Default Behavior: When this section is listed as "The standard error shall be used only for diagnostic messages.", it means that, unless otherwise stated, the diagnostic messages shall be sent to the standard error only when the exit status indicates that an error occurred and the utility is used as described by this volume of POSIX.1-2024.
+
+When this section is listed as "Not used.", it means that the standard error shall not be used when the utility is used as described in this volume of POSIX.1-2024.
+
+OUTPUT FILES
+
+The OUTPUT FILES section completely describes the files created or modified by the utility. Temporary or system files that are created for internal usage by this utility or other parts of the implementation (for example, spool, log, and audit files) are not described in this, or any, section. The utilities creating such files and the names of such files are unspecified. If applications are written to use temporary or intermediate files, they should use the TMPDIR environment variable, if it is set and represents an accessible directory, to select the location of temporary files.
+Implementations shall ensure that temporary files, when used by the standard utilities, are named so that different utilities or multiple instances of the same utility can operate simultaneously without regard to their working directories, or any other process characteristic other than process ID. There are two exceptions to this rule:
+
+Resources for temporary files other than the name space (for example, disk space, available directory entries, or number of processes allowed) are not guaranteed.
+Certain standard utilities generate output files that are intended as input for other utilities (for example, lex generates lex.yy.c), and these cannot have unique names. These cases are explicitly identified in the descriptions of the respective utilities.
+Any temporary file created by the implementation shall be removed by the implementation upon a utility's successful exit, exit because of errors, or before termination by any of the SIGHUP, SIGINT, or SIGTERM signals, unless specified otherwise by the utility description.
+
+Receipt of the SIGQUIT signal should generally cause termination (unless in some debugging mode) that would bypass any attempted recovery actions.
+
+Record formats are described in a notation similar to that used by the C-language function, printf(); see XBD 5. File Format Notation for a description of this notation.
+
+Default Behavior: When this section is listed as "None.", it means that no files are created or modified as a consequence of direct action on the part of the utility when the utility is used as described by this volume of POSIX.1-2024. However, the utility may create or modify system files, such as log files, that are outside the utility's normal execution environment.
+
+EXTENDED DESCRIPTION
+
+The EXTENDED DESCRIPTION section provides a place for describing the actions of very complicated utilities, such as text editors or language processors, which typically have elaborate command languages.
+Default Behavior: When this section is listed as "None.", no further description is necessary.
+
+EXIT STATUS
+
+The EXIT STATUS section describes the values the utility shall return to the calling program, or shell, and the conditions that cause these values to be returned. Usually, utilities return zero for successful completion and values greater than zero for various error conditions. If specific numeric values are listed in this section, the system shall use those values for the errors described. In some cases, status values are listed more loosely, such as >0. A strictly conforming application shall not rely on any specific value in the range shown and shall be prepared to receive any value in the range.
+For example, a utility may list zero as a successful return, 1 as a failure for a specific reason, and >1 as "an error occurred". In this case, unspecified conditions may cause a 2 or 3, or other value, to be returned. A conforming application should be written so that it tests for successful exit status values (zero in this case), rather than relying upon the single specific error value listed in this volume of POSIX.1-2024. In that way, it has maximum portability, even on implementations with extensions.
+
+Unspecified error conditions may be represented by specific values not listed in this volume of POSIX.1-2024.
+
+Default Behavior: When the description of exit status 0 is "Successful completion", it means that exit status 0 shall indicate that all of the actions the utility is required to perform were completed successfully.
+
+CONSEQUENCES OF ERRORS
+
+The CONSEQUENCES OF ERRORS section describes the effects on the environment, file systems, process state, and so on, when error conditions occur. It does not describe error messages produced or exit status values used.
+The many reasons for failure of a utility are generally not specified by the utility descriptions. Utilities may terminate prematurely if they encounter: invalid usage of options, arguments, or environment variables; invalid usage of the complex syntaxes expressed in EXTENDED DESCRIPTION sections; resource exhaustion; difficulties accessing, creating, reading, or writing files; or difficulties associated with the privileges of the process.
+
+The following shall apply to each utility, unless otherwise stated:
+
+If the requested action cannot be performed on an operand representing a file, directory, user, process, and so on, the utility shall issue a diagnostic message to standard error and continue processing the next operand in sequence, but the final exit status shall be one that indicates an error occurred.
+For a utility that recursively traverses a file hierarchy (such as find or chown -R), if the requested action cannot be performed on a file or directory encountered in the hierarchy, the utility shall issue a diagnostic message to standard error and continue processing the remaining files in the hierarchy, but the final exit status shall be one that indicates an error occurred.
+
+Note:
+If the requested action is to write one or more pathnames in a format that has <newline> as a terminator or separator, and a pathname to be written contains any bytes that have the encoded value of a <newline> character, this should be treated as an action that cannot be performed. A future version of this standard may require that utilities treat this as an error.
+If the requested action characterized by an option or option-argument cannot be performed, the utility shall issue a diagnostic message to standard error and the exit status returned shall be one that indicates an error occurred.
+When an unrecoverable error condition is encountered, the utility shall exit with an exit status that indicates an error occurred.
+A diagnostic message shall be written to standard error whenever an error condition occurs.
+When a utility encounters an error condition several actions are possible, depending on the severity of the error and the state of the utility. Included in the possible actions of various utilities are: deletion of temporary or intermediate work files; deletion of incomplete files; validity checking of the file system or directory.
+
+Default Behavior: When this section is listed as "Default.", it means that any changes to the environment, file systems, process state, and so on are unspecified.
+
+APPLICATION USAGE
+
+This section is informative.
+The APPLICATION USAGE section gives advice to the application programmer or user about the way the utility should be used.
+
+EXAMPLES
+
+This section is informative.
+The EXAMPLES section gives one or more examples of usage, where appropriate. In the event of conflict between an example and a normative part of the specification, the normative material is to be taken as correct.
+
+In all examples, quoting has been used, showing how sample commands (utility names combined with arguments) could be passed correctly to a shell (see sh) or as a string to the system() function defined in the System Interfaces volume of POSIX.1-2024. Such quoting would not be used if the utility is invoked using one of the exec functions defined in the System Interfaces volume of POSIX.1-2024.
+
+RATIONALE
+
+This section is informative.
+This section contains historical information concerning the contents of this volume of POSIX.1-2024 and why features were included or discarded by the standard developers.
+
+FUTURE DIRECTIONS
+
+This section is informative.
+The FUTURE DIRECTIONS section should be used as a guide to current thinking; there is not necessarily a commitment to implement all of these future directions in their entirety.
+
+SEE ALSO
+
+This section is informative.
+The SEE ALSO section lists related entries.
+
+CHANGE HISTORY
+
+This section is informative.
+This section shows the derivation of the entry and any significant changes that have been made to it.
+
+Certain of the standard utilities describe how they can invoke other utilities or applications, such as by passing a command string to the command interpreter. The external influences (STDIN, ENVIRONMENT VARIABLES, and so on) and external effects (STDOUT, CONSEQUENCES OF ERRORS, and so on) of such invoked utilities are not described in the section concerning the standard utility that invokes them.

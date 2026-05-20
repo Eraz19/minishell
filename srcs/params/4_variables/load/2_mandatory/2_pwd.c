@@ -71,13 +71,13 @@ cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/util
 	a) "If a value for PWD is passed to the shell in the environment when it is executed, the value is an absolute pathname of the current working directory [...optional...] and the value does not contain any components that are dot or dot-dot, then the shell shall set PWD to the value from the environment"
 	b) "Otherwise, the sh utility sets PWD to the pathname that would be output by pwd -P" (= getcwd())
 */
-t_error	var_set_pwd(t_var_list *variables)
+t_error	var_set_pwd(void)
 {
 	char	*pwd;
 	t_error	error;
 	bool	is_valid;
 
-	error = var_get(variables, "PWD", &pwd);
+	error = var_get("PWD", &pwd);
 	if (error != ERR_NO && error != ERR_VAR_NOT_FOUND)
 		return (error);
 	if (error == ERR_NO)
@@ -92,7 +92,7 @@ t_error	var_set_pwd(t_var_list *variables)
 	pwd = getcwd(NULL, MAXPATHLEN);
 	if (!pwd)
 		return (ERR_LIBC);
-	error = var_set(variables, "PWD", pwd);
+	error = var_set("PWD", pwd, false, false);
 	if (error == ERR_NO)
 		print_pass("'PWD' has been set to '%s'\n", pwd);
 	free(pwd);

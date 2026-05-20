@@ -43,7 +43,7 @@ const char	*option_to_string(t_option option)
 	return ("unknown");
 }
 
-void	options_dump_all(void)
+void	options_dump(void)
 {
 	unsigned int	option;
 	const char		*name;

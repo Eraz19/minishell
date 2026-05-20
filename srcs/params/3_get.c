@@ -28,7 +28,7 @@ t_error	params_get(const char *name, char **dst)
 		return (specials_get(&params->specials, name[0], dst));
 	if (ft_isdigit(name[0]))
 		return (positionals_get_one(&params->positionals, name, dst));
-	return (var_get(&params->variables, name, dst));
+	return (var_get(name, dst));
 }
 
 t_error	params_get_positionals(t_positionals *dst)

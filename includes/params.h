@@ -67,6 +67,6 @@ t_error	params_pop_positionals(void);
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
-void	params_dump_all(void);
+void	params_dump(void);
 
 #endif

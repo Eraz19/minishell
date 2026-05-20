@@ -1,0 +1,12 @@
+https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_15
+
+2.15 Special Built-In Utilities
+The following "special built-in" utilities shall be supported in the shell command language. The output of each command, if any, shall be written to standard output, subject to the normal redirection and piping possible with all commands.
+
+The term "built-in" implies that there is no need to execute a separate executable file because the utility is implemented in the shell itself. An implementation may choose to make any utility a built-in; however, the special built-in utilities described here differ from regular built-in utilities in two respects:
+
+An error in a special built-in utility may cause a shell executing that utility to abort, while an error in a regular built-in utility shall not cause a shell executing that utility to abort. (See 2.8.1 Consequences of Shell Errors for the consequences of errors on interactive and non-interactive shells.) If a special built-in utility encountering an error does not abort the shell, its exit value shall be non-zero.
+As described in 2.9.1 Simple Commands, variable assignments preceding the invocation of a special built-in utility affect the current execution environment; this shall not be the case with a regular built-in or other utility.
+The special built-in utilities in this section need not be provided in a manner accessible via the exec family of functions defined in the System Interfaces volume of POSIX.1-2024.
+
+Some of the special built-ins are described as conforming to XBD 12.2 Utility Syntax Guidelines. For those that are not, the requirement in 1.4 Utility Description Defaults that "--" be recognized as a first argument to be discarded does not apply and a conforming application shall not use that argument.

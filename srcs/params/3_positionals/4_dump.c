@@ -18,7 +18,7 @@ static void	positionals_dump_depth(t_positionals_stack *stack, size_t depth)
 	printf("POSITIONALS #=%zu\n", count);
 }
 
-void	positionals_dump_all(void)
+void	positionals_dump(void)
 {
 	t_shell 			*shell;
 	t_positionals_stack	*stack;
@@ -28,7 +28,7 @@ void	positionals_dump_all(void)
 	printf("\nDUMP POSITIONALS\n");
 	shell = shell_get();
 	if (!shell)
-		error_print(NULL, "positionals_dump_all()", ERR_SHELL_NOT_FOUND);
+		error_print(NULL, "positionals_dump()", ERR_SHELL_NOT_FOUND);
 	stack = &shell->params.positionals;
 	count = stack->len;
 	i = 0;

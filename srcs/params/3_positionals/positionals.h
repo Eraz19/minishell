@@ -65,6 +65,6 @@ t_error	positionals_get_one(
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
-void	positionals_dump_all(void);
+void	positionals_dump(void);
 
 #endif

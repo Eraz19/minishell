@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "variables_priv.h"
 #include <stdlib.h>
 # include <stdio.h>
 
@@ -94,7 +95,7 @@ static void	params_dump_positionals(void)
 	params_dump_scalar("#");
 }
 
-void	params_dump_all(void)
+void	params_dump(void)
 {
 	printf("\nDUMP PARAMS\n");
 	params_dump_variables();

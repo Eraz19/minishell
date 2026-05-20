@@ -11,14 +11,14 @@ static t_error	params_load_variables(t_params *params, char **envp)
 	parent_ppid = NULL;
 	if (parent)
 	{
-		error = var_get(&parent->params.variables, "PPID", &parent_ppid);
+		error = var_get("PPID", &parent_ppid);
 		if (error != ERR_NO)
 		{
 			error_print(NULL, "unable to get PPID from parent shell", error);
 			return (error);
 		}
 	}
-	error = var_load_all(&params->variables, envp, parent_ppid);
+	error = var_load(&params->variables, envp, parent_ppid);
 	if (parent)
 		free(parent_ppid);
 	return (error);
@@ -81,11 +81,11 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	if (error != ERR_NO)
 		return (error);
 	/* ---------- TODO: tmp debug: START ---------- */
-	var_dump_all();
-	options_dump_all();
-	specials_dump_all();
-	positionals_dump_all();
-	params_dump_all();
+	var_dump();
+	options_dump();
+	specials_dump();
+	positionals_dump();
+	params_dump();
 	/* ---------- TODO: tmp debug: END ---------- */
 	return (ERR_NO);
 }

@@ -55,7 +55,7 @@ t_error	options_get(t_option options, char **dst);
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
-void		options_dump_all(void);
+void		options_dump(void);
 const char	*option_to_string(t_option option);
 
 #endif

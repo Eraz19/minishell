@@ -1,0 +1,62 @@
+https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_05
+
+1.5 Considerations for Utilities in Support of Files of Arbitrary Size
+The following utilities support files of any size up to the maximum that can be created by the implementation. This support includes correct writing of file size-related values (such as file sizes and offsets, line numbers, and block counts) and correct interpretation of command line arguments that contain such values.
+
+basename
+Return non-directory portion of pathname.
+cat
+Concatenate and print files.
+cd
+Change working directory.
+chgrp
+Change file group ownership.
+chmod
+Change file modes.
+chown
+Change file ownership.
+cksum
+Write file checksums and sizes.
+cmp
+Compare two files.
+cp
+Copy files.
+dd
+Convert and copy a file.
+df
+Report free disk space.
+dirname
+Return directory portion of pathname.
+du
+Estimate file space usage.
+find
+Find files.
+ln
+Link files.
+ls
+List directory contents.
+mkdir
+Make directories.
+mv
+Move files.
+pathchk
+Check pathnames.
+pwd
+Return working directory name.
+rm
+Remove directory entries.
+rmdir
+Remove directories.
+sh
+Shell, the standard command language interpreter.
+test
+Evaluate expression.
+touch
+Change file access and modification times.
+ulimit
+Set or report file size limit.
+
+Exceptions to the requirement that utilities support files of any size up to the maximum are as follows:
+
+Uses of files as command scripts, or for configuration or control, are exempt. For example, it is not required that sh be able to read an arbitrarily large .profile.
+Shell input and output redirection are exempt. For example, it is not required that the redirections sum < file or echo foo > file succeed for an arbitrarily large existing file.

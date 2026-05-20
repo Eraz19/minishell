@@ -19,9 +19,9 @@ static t_error	export_add_one(
 	{
 		new_var = var_new(name, value, true, false);
 		if (!new_var.name || (value && !new_var.value))
-			return (var_free(&new_var), ERR_LIBC);
+			return (var_free_one(&new_var), ERR_LIBC);
 		if (!vector_push(variables, &new_var))
-			return (var_free(&new_var), ERR_LIBC);
+			return (var_free_one(&new_var), ERR_LIBC);
 		return (ERR_NO);
 	}
 	if (value)

@@ -1,4 +1,4 @@
-#include "variables.h"
+#include "error.h"
 #include "var_load_mandatory_priv.h"
 
 /*
@@ -7,15 +7,15 @@
 	- PWD = current working directory (from env or self initialized)
 	- PPID = parent process id
 */
-t_error	var_load_mandatory(t_var_list *variables, const char *parent_shell_ppid)
+t_error	var_load_mandatory(const char *parent_shell_ppid)
 {
 	t_error	error;
 
-	error = var_set_ifs(variables);
+	error = var_set_ifs();
 	if (error != ERR_NO)
 		return (error);
-	error = var_set_pwd(variables);
+	error = var_set_pwd();
 	if (error != ERR_NO)
 		return (error);
-	return (var_set_ppid(variables, parent_shell_ppid));
+	return (var_set_ppid(parent_shell_ppid));
 }

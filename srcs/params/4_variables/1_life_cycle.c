@@ -1,4 +1,5 @@
 #include "variables.h"
+#include "variables_priv.h"
 #include "var_load_envp.h"
 #include "var_load_mandatory.h"
 #include "var_load_up.h"
@@ -19,7 +20,7 @@ t_var	var_new(const char *name, const char *value, bool export, bool ronly)
 	return (res);
 }
 
-void	var_free(void *var)
+void	var_free_one(void *var)
 {
 	t_var	*var_casted;
 
@@ -34,12 +35,12 @@ void	var_free(void *var)
 	var_casted->readonly = false;
 }
 
-void	var_init_all(t_var_list *variables)
+void	var_init(t_var_list *variables)
 {
 	vector_init(variables, sizeof(t_var), 0);
 }
 
-t_error	var_load_all(
+t_error	var_load(
 	t_var_list *variables,
 	char **envp,
 	const char *parent_shell_ppid)
@@ -47,24 +48,24 @@ t_error	var_load_all(
 	t_error	error;
 
 	print_title("var_load_envp()");
-	error = var_load_envp(variables, envp);
+	error = var_load_envp(envp);
 	if (error != ERR_NO)
 		return (error);
 	print_result("var_load_envp()            => (entries: %'6zu)", variables->len);
 	print_title("var_load_mandatory");
-	error = var_load_mandatory(variables, parent_shell_ppid);
+	error = var_load_mandatory(parent_shell_ppid);
 	if (error != ERR_NO)
 		return (error);
 	print_result("var_load_mandatory()       => (entries: %'6zu)", variables->len);
 	print_title("var_load_up()");
-	error = var_load_up(variables);
+	error = var_load_up();
 	if (error != ERR_NO)
 		return (error);
 	print_result("var_load_up()              => (entries: %'6zu)", variables->len);
 	return (ERR_NO);
 }
 
-void	var_free_all(t_var_list *variables)
+void	var_free(t_var_list *variables)
 {
 	vector_free(variables, var_free);
 }

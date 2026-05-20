@@ -43,6 +43,6 @@ void	specials_set_last_status(t_specials *specials, int value);
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
-void	specials_dump_all(void);
+void	specials_dump(void);
 
 #endif

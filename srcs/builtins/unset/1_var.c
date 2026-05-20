@@ -17,7 +17,7 @@ static t_error	unset_var_one(
 	var = &((t_var *)shell->params.variables.data)[var_index];
 	if (var->readonly)
 		return (error_print(builtin, name, ERR_VAR_READ_ONLY));
-	var_free(var);
+	var_free_one(var);
 	if (!vector_remove(&shell->params.variables, var_index, NULL))
 		return (error_print(builtin, name, ERR_INDEX_OUT_OF_BOUND));
 	return (ERR_NO);

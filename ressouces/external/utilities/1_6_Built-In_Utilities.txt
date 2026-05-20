@@ -1,0 +1,10 @@
+https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_06
+
+1.6 Built-In Utilities
+Any of the standard utilities may be implemented as regular built-in utilities within the command language interpreter. This is usually done to increase the performance of frequently used utilities or to achieve functionality that would be more difficult in a separate environment. The intrinsic utilities described in 1.7 Intrinsic Utilities below are frequently provided as regular built-ins.
+
+However, all of the standard utilities other than:
+
+The special built-ins described in 2.15 Special Built-In Utilities
+The intrinsic utilities named in Intrinsic Utilities, except for kill
+shall be implemented, regardless of whether they are also implemented as regular built-ins, in a manner so that they can be accessed via the exec family of functions as defined in the System Interfaces volume of POSIX.1-2024 and can be invoked directly by those standard utilities that require it (env, find, nice, nohup, time, xargs).

@@ -69,7 +69,7 @@ t_error	specials_load(
 	specials->last_bg_pid = -1;
 	print_pass("last_bg_pid set to       %jd\n", (intmax_t)specials->last_bg_pid);
 	specials->last_status = EXIT_SUCCESS;
-	print_pass("last_status set to       %ld\n", specials->last_status);
+	print_pass("last_status set to       %i\n", specials->last_status);
 	shell = shell_get();
 	if (!shell)
 		return (ERR_SHELL_NOT_FOUND);

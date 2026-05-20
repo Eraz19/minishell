@@ -7,7 +7,7 @@ t_error	params_set_variable(const char *name, const char *value)
 	shell = shell_get();
 	if (!shell)
 		return (ERR_SHELL_NOT_FOUND);
-	return (var_set(&shell->params.variables, name, value));
+	return (var_set(name, value, false, false));
 }
 
 t_error	params_set_last_bg_pid(pid_t value)

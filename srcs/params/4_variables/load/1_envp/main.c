@@ -1,26 +1,20 @@
-#include "variables.h"
+#include "variables_priv.h"
 #include <stdlib.h>
 # include "logs.h"	// TODO: tmp debug
 
 // @ret ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	process_variable(
-	t_var_list	*variables,
 	const char *name,
 	const char *value)
 {
 	t_error	error;
-	size_t	var_index;
 
-	error = var_set(variables, name, value);
+	error = var_set(name, value, true, false);
 	if (error == ERR_VAR_INVALID_NAME)
 		return (ERR_NO);
-	else if (error != ERR_NO)
-		return (error);
-	if (!var_find(variables, name, &var_index))
-		return (ERR_VAR_NOT_FOUND);
-	((t_var *)variables->data)[var_index].export = true;
-	print_pass("'%s' = '%s'\n", name, value);
-	return (ERR_NO);
+	if (error == ERR_NO)
+		print_pass("'%s' = '%s'\n", name, value);
+	return (error);
 }
 
 /*
@@ -29,7 +23,7 @@ static t_error	process_variable(
 	- readonly = false
 	- invalid names: do not initialize shell variables from them
 */
-t_error	var_load_envp(t_var_list *variables, char **envp)
+t_error	var_load_envp(char **envp)
 {
 	size_t	i;
 	char	*name;
@@ -46,7 +40,7 @@ t_error	var_load_envp(t_var_list *variables, char **envp)
 			continue ;
 		if (error != ERR_NO)
 			return (error);
-		error = process_variable(variables, name, value);
+		error = process_variable(name, value);
 		free(name);
 		free(value);
 		if (error != ERR_NO)
