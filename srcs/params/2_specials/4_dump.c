@@ -19,7 +19,7 @@ void	specials_dump(void)
 		printf("SPECIAL 0='%s'\n", specials->zero);
 	else
 		printf("SPECIAL 0=NULL\n");
-	printf("SPECIAL $=%ld\n", (long)specials->pid);
-	printf("SPECIAL !=%ld\n", (long)specials->last_bg_pid);
+	printf("SPECIAL $=%jd\n", (intmax_t)specials->pid);
+	printf("SPECIAL !=%jd\n", (intmax_t)specials->last_bg_pid);
 	printf("SPECIAL ?=%i\n", specials->last_status);
 }

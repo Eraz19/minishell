@@ -1,9 +1,8 @@
-#include "shell.h"
+#include "params.h"
 #include <stdlib.h>
 
 void	params_init(t_params *params)
 {
-	params->parent_shell = NULL;
 	params->name = NULL;
 	var_init(&params->variables);
 	options_init(&params->options);
@@ -13,12 +12,6 @@ void	params_init(t_params *params)
 
 void	params_free(t_params *params)
 {
-	if (params->parent_shell)
-	{
-		shell_free(params->parent_shell);
-		free(params->parent_shell);
-		params->parent_shell = NULL;
-	}
 	params->name = NULL;
 	var_free(&params->variables);
 	options_free(&params->options);

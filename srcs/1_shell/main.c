@@ -88,7 +88,7 @@ static t_error	shell_exec_env(t_shell *shell)
 	return (ERR_NO);
 }
 
-t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
+t_error	shell_start(int argc, char **argv, char **envp)
 {
 	static const char	message[] = ": unable to malloc shell data struct: ";
 	t_shell				*shell;
@@ -102,7 +102,6 @@ t_error	shell_start(int argc, char **argv, char **envp, t_shell *parent)
 	shell_init(shell);
 	print_result("shell_init()");
 	shell_set(shell);
-	shell->params.parent_shell = parent;
 	error = shell_load(shell, argc, argv, envp);
 	if (error != ERR_NO)
 		shell_exit(error);

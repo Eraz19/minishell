@@ -28,7 +28,10 @@ void	var_dump(void)
 	printf("\nDUMP VARIABLES\n");
 	shell = shell_get();
 	if (!shell)
+	{
 		error_print(NULL, "var_dump()", ERR_SHELL_NOT_FOUND);
+		return ;
+	}
 	var_list = &shell->params.variables;
 	i = 0;
 	while (i < var_list->len)

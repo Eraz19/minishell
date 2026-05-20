@@ -1,5 +1,6 @@
 # TODO
 
+- remove all parent shell references because subshell is just a fork of current shell
 - `variables`:
 	- rename functions from `var_*_all()` to `variables_*()` (if needed resolve conflicts by renaming private ones into `variables_*_one()`)
 - rename all `*_dump_all()` into `*_dump()`
@@ -62,7 +63,7 @@
 
 - Remove **wildcards** from `libft`'s `Makefile`
 - ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
-- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!)
+- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
 
 ---
 

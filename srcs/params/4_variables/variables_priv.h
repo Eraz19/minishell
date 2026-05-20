@@ -3,6 +3,7 @@
 
 # include "variables.h"
 # include "error.h"
+# include <stddef.h>
 
 /* ************************************************************************* */
 /*                                   TYPES                                   */

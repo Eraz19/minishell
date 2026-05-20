@@ -4,6 +4,7 @@
 #include "options.h"
 #include <stdlib.h>
 
+// @ret ERR_VAR_READ_ONLY / ERR_LIBC
 static t_error	var_update_value(
 	t_var *var,
 	const char *value,
@@ -14,17 +15,18 @@ static t_error	var_update_value(
 
 	if (var->readonly)
 		return (ERR_VAR_READ_ONLY);
+	if (value)
+	{
+		new_value = str_dup(value);
+		if (!new_value)
+			return (ERR_LIBC);
+		free(var->value);
+		var->value = new_value;
+	}
 	if (export)
 		var->export = true;
 	if (readonly)
 		var->readonly = true;
-	if (!value)
-		return (ERR_NO);
-	new_value = str_dup(value);
-	if (!new_value)
-		return (ERR_LIBC);
-	free(var->value);
-	var->value = new_value;
 	return (ERR_NO);
 }
 
@@ -49,7 +51,7 @@ t_error	var_set(const char *name, const char *value, bool export, bool readonly)
 	}
 	if (option_is_active(OPT_EXPORT_ALL))
 		export = true;
-	new_var = var_new(name, value, export, false);
+	new_var = var_new(name, value, export, readonly);
 	if (!new_var.name || (value && !new_var.value))
 		return (var_free_one(&new_var), ERR_LIBC);
 	if (!vector_push(list, &new_var))

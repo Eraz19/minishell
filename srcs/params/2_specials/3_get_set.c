@@ -7,7 +7,7 @@ t_error	specials_get(const t_specials *specials, char name, char **dst)
 	if (name == '0')
 		*dst = str_dup(specials->zero);
 	else if (name == '$')
-		*dst = ft_ltoa((long)specials->pid);
+		*dst = ft_pidtoa(specials->pid);
 	else if (name == '!')
 	{
 		if (specials->last_bg_pid == -1)
@@ -30,5 +30,5 @@ void	specials_set_last_bg_pid(t_specials *specials, pid_t value)
 
 void	specials_set_last_status(t_specials *specials, int value)
 {
-	specials->last_bg_pid = value;
+	specials->last_status = value;
 }

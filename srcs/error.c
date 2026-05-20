@@ -12,6 +12,8 @@ const char	*error_to_string(t_error error)
 {
 	if (error == ERR_NO)
 		return ("success");
+	else if (error == ERR_SIZE_MAX_REACHED)
+		return ("SIZE_MAX has been reached");
 	else if (error == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
 	else if (error == ERR_BUILTIN_INVALID_FLAG)

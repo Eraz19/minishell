@@ -40,10 +40,7 @@ void	var_init(t_var_list *variables)
 	vector_init(variables, sizeof(t_var), 0);
 }
 
-t_error	var_load(
-	t_var_list *variables,
-	char **envp,
-	const char *parent_shell_ppid)
+t_error	var_load(t_var_list *variables, char **envp)
 {
 	t_error	error;
 
@@ -53,7 +50,7 @@ t_error	var_load(
 		return (error);
 	print_result("var_load_envp()            => (entries: %'6zu)", variables->len);
 	print_title("var_load_mandatory");
-	error = var_load_mandatory(parent_shell_ppid);
+	error = var_load_mandatory();
 	if (error != ERR_NO)
 		return (error);
 	print_result("var_load_mandatory()       => (entries: %'6zu)", variables->len);
@@ -67,5 +64,5 @@ t_error	var_load(
 
 void	var_free(t_var_list *variables)
 {
-	vector_free(variables, var_free);
+	vector_free(variables, var_free_one);
 }

@@ -1,4 +1,6 @@
 #include "variables.h"
+#include "posix_helpers.h"
+#include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/param.h>
@@ -38,15 +40,22 @@ static t_error	pwd_is_the_current_working_dir(const char *pwd, bool *res)
 	struct stat	current;
 	struct stat	from_pwd;
 
+	*res = false;
 	if (stat(".", &current) == -1)
 		return (ERR_LIBC);
 	if (stat(pwd, &from_pwd) == -1)
+	{
+		if (errno == ENOENT || errno == ENOTDIR || errno == ELOOP
+			|| errno == ENAMETOOLONG)
+			return (ERR_NO);
 		return (ERR_LIBC);
+	}
 	if (current.st_dev != from_pwd.st_dev)
-		return (*res = false, ERR_NO);
+		return (ERR_NO);
 	if (current.st_ino != from_pwd.st_ino)
-		return (*res = false, ERR_NO);
-	return (*res = true, ERR_NO);
+		return (ERR_NO);
+	*res = true;
+	return (ERR_NO);
 }
 
 /*
@@ -59,6 +68,8 @@ cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/util
 static t_error	var_pwd_is_valid(const char *pwd, bool *res)
 {
 	*res = false;
+	if (!pwd)
+		return (ERR_NO);
 	if (pwd[0] != '/')
 		return (ERR_NO);
 	if (!pwd_has_no_dot_components(pwd))
@@ -89,9 +100,9 @@ t_error	var_set_pwd(void)
 		if (is_valid)
 			return (print_pass("'PWD' is already valid\n"), ERR_NO);
 	}
-	pwd = getcwd(NULL, MAXPATHLEN);
-	if (!pwd)
-		return (ERR_LIBC);
+	error = posix_getcwd(&pwd);
+	if (error != ERR_NO)
+		return (error);
 	error = var_set("PWD", pwd, false, false);
 	if (error == ERR_NO)
 		print_pass("'PWD' has been set to '%s'\n", pwd);

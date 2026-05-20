@@ -1,28 +1,5 @@
-#include "shell.h"
+#include "params.h"
 #include <stdlib.h>
-
-static t_error	params_load_variables(t_params *params, char **envp)
-{
-	t_shell	*parent;
-	char	*parent_ppid;
-	t_error	error;
-
-	parent = (t_shell *)params->parent_shell;
-	parent_ppid = NULL;
-	if (parent)
-	{
-		error = var_get("PPID", &parent_ppid);
-		if (error != ERR_NO)
-		{
-			error_print(NULL, "unable to get PPID from parent shell", error);
-			return (error);
-		}
-	}
-	error = var_load(&params->variables, envp, parent_ppid);
-	if (parent)
-		free(parent_ppid);
-	return (error);
-}
 
 static void	params_catch_undefined_1(int argc, char **argv)
 {
@@ -77,7 +54,7 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	error = positionals_load(&params->positionals, argc, argv, start_index);
 	if (error != ERR_NO)
 		return (error);
-	error = params_load_variables(params, envp);
+	error = var_load(&params->variables, envp);
 	if (error != ERR_NO)
 		return (error);
 	/* ---------- TODO: tmp debug: START ---------- */

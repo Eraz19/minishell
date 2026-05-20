@@ -3,6 +3,7 @@
 
 # include "libft.h"
 # include "error.h"
+# include <stdbool.h>
 
 /* ************************************************************************* */
 /*                                   TYPES                                   */
@@ -22,12 +23,8 @@ typedef enum e_var_print_mode
 
 void	var_init(t_var_list *variables);
 
-// parent_shell_ppid can be NULL (if it is not a subshell).
 // ERR_VAR_INVALID_NAME / ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
-t_error	var_load(
-	t_var_list *variables,
-	char **envp,
-	const char *parent_shell_ppid);
+t_error	var_load(t_var_list *variables, char **envp);
 
 void	var_free(t_var_list *variables);
 

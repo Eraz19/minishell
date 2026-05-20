@@ -2,7 +2,7 @@
 #include <stdlib.h>
 # include "logs.h"	// TODO: tmp debug
 
-// @ret ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
+// @ret ERR_SHELL_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	process_variable(
 	const char *name,
 	const char *value)

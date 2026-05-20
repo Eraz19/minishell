@@ -1,6 +1,6 @@
-#include "shell.h"
-#include "specials.h"
 #include "asm_stubs.h"
+#include "options.h"
+#include "specials.h"
 #include <stdlib.h>
 # include "logs.h"	// TODO: tmp debug
 # include <inttypes.h>	// TODO: tmp debug
@@ -59,7 +59,6 @@ t_error	specials_load(
 	char **argv,
 	size_t *start_index)
 {
-	t_shell	*shell;
 	t_error	error;
 
 	print_title("specials_load()");
@@ -70,14 +69,7 @@ t_error	specials_load(
 	print_pass("last_bg_pid set to       %jd\n", (intmax_t)specials->last_bg_pid);
 	specials->last_status = EXIT_SUCCESS;
 	print_pass("last_status set to       %i\n", specials->last_status);
-	shell = shell_get();
-	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
-	if (shell->params.parent_shell)
-		specials->pid =
-			((t_shell *)shell->params.parent_shell)->params.specials.pid;
-	else
-		specials->pid = ft_getpid();
+	specials->pid = ft_getpid();
 	print_pass("pid set to               %jd\n", (intmax_t)specials->pid);
 	print_result("specials_load()");
 	return (ERR_NO);

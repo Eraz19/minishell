@@ -8,7 +8,6 @@
 
 typedef struct s_params
 {
-	void				*parent_shell;	// (internal)
 	const char			*name;			// (internal)
 	t_var_list			variables;		// $<var_name>
 	t_option			options;		// $-
