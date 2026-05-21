@@ -14,10 +14,10 @@
 
 typedef struct s_option_with_arg
 {
+	char		sign;								// '+' / '-'
 	char		flag;
 	const char	**arguments_valids;					// NULL-terminated
 	bool		arguments_are_optional;
-	char		sign;								// '+' / '-'
 }	t_getopt_flag_with_arg;
 
 typedef struct s_getopt_in
@@ -53,5 +53,13 @@ typedef struct s_getopt_out
 /* ************************************************************************* */
 
 t_error	ft_getopt(int argc, char **argv, t_getopt_in *input, t_getopt_out *out);
+
+/* ************************************************************************* */
+/*                                    DEBUG                                  */
+/* ************************************************************************* */
+
+void	getopt_dump_in(t_getopt_in *in);
+void	getopt_dump_out(t_getopt_out *out);
+void	getopt_dump_all(t_getopt_in *in, t_getopt_out *out);
 
 #endif

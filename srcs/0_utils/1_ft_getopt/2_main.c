@@ -1,25 +1,5 @@
 #include "ft_getopt_priv.h"
 
-/*
-TESTS: [-a] [–b] [-c arg] [-d[arg]]
-OK:
-	"-a" "-b" "-d" "-c" "arg"
-	"-ab"
-	"-abc" "arg"
-	"-abd"
-	"-abd" "arg"
-	"-abdarg"
-ERROR:
-	"-azb"
-	"-adb"
-	"-acb" "arg"
-	"-adc" "arg"
-	"-abc"
-	"-abzd"
-	"-abzdarg"
-	"-abzc" "arg"
-*/
-
 static bool	getopt_is_delimiter(t_getopt_state *state)
 {
 	const char	*arg;
@@ -78,7 +58,7 @@ static void	getopt_catch_ub(t_getopt_out *out)
 			if (b->argument)
 				continue ;
 			if (a->sign == b->sign && a->flag == b->flag)
-				undefined_behaviour("POSIX: XBD 12.1-3:"
+				undefined_behaviour("POSIX (XBD 12.1-3): "
 					"If an option that does not have option-arguments is "
 					"repeated, the results are undefined");
 		}
