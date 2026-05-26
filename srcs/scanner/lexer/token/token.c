@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 15:59:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/12 17:26:10 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:31:06 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,20 @@ void	free_token(t_token **token_ptr)
 	*token_ptr = NULL;
 }
 
-t_token	*create_operator_token(t_lexer *lexer, t_operator_args *args)
+t_token	*create_operator_token(t_lexer *lexer, t_operator_args args)
 {
 	size_t	offset;
 	char 	*io_number_str;
 	
 	offset = lexer->i + lexer->total_removed_count;
-	if (args->type != IO_NUMBER)
-		return (create_token(NULL, offset, args->type));
+	if (args.type != IO_NUMBER)
+		return (create_token(NULL, offset, args.type));
 	else
 	{
-		io_number_str = ft_itoa(args->value);
+		io_number_str = ft_itoa(args.value);
 		if (io_number_str == NULL)
 			return (NULL);
-		return (create_token(io_number_str, offset, args->type));
+		return (create_token(io_number_str, offset, args.type));
 	}
 }
 

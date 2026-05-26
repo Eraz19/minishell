@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 10:13:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/13 19:03:31 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/15 12:52:15 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "_lexer.h"
 #include "./token/_token.h"
 
-#define  TEST_COUNT 150
+#define  TEST_COUNT 160
 
 typedef enum e_test_type
 {
@@ -48,14 +48,13 @@ typedef struct s_test_result_with_continuation
 typedef struct s_test_with_continuation_chunk
 {
 	const char			*input;
-	bool				emit_token;
+	size_t				token_count;
+	t_token				result_token[7];
 	t_lexer_snapshot	lexer_snapshot;
 }	t_test_with_continuation_chunk;
 typedef struct s_test_with_continuation
 {
 	t_test_result_with_continuation	result;
-	size_t							token_count;
-	t_token							result_token[7];
 	t_test_with_continuation_chunk	continuation[7];
 	size_t							continuation_count;
 }	t_test_with_continuation;
@@ -75,6 +74,7 @@ typedef struct s_lexer_test
 }	t_lexer_test;
 
 
+
 t_buff	buff_init_unsafe(const char *str)
 {
 	t_buff res;
@@ -85,68 +85,133 @@ t_buff	buff_init_unsafe(const char *str)
 
 void	test_without_continuation(t_lexer *lexer, t_lexer_test *test)
 {
-	size_t	i;
-	t_token	*res;
-
-	while ()
-	{
-		
-	}
-	
-	lexer.input = str_dup(tests[i].input);
+	size_t						i;
+	t_token						*res;
+	t_test_without_continuation	*test_;
 
 	i = 0;
 	res = NULL;
-	while (i < test->token_count)
+	test_ = &test->test.without;
+	lexer->input = str_dup(test_->input);
+	while (i < test_->token_count)
 	{
 		lex_line(&res, lexer);
 		if (res == NULL)
 		{
-			test->result.failing_token = res;
-			test->result.is_token_success = false;
-			return ;		
+			test_->result.is_token_success = false;
+			return (free_lexer(lexer));
+		}
+		if (DEBUG_is_token_equal(*res, test_->result_token[i]))
+		{
+			ft_printf("%s ", DEBUG_token_type_stringify(res->type));
+			++test_->result.success_token_count;
+			free_token(&res);
 		}
 		else
 		{
-			if (DEBUG_is_token_equal(*res, test->result_token[i]))
-				++test->result.success_token_count;
-			else
-			{
-				test->result.failing_token = res;
-				test->result.is_token_success = false;
-				return ;
-			}
+			test_->result.failing_token = res;
+			test_->result.is_token_success = false;
+			return (free_lexer(lexer));
 		}
 		++i;
 	}
-	
 }
 
 void	test_with_continuation(t_lexer *lexer, t_lexer_test *test)
 {
-	//size_t	i;
-	t_token	*res;
+	size_t						i;
+	size_t						j;
+	t_token						*res;
+	t_test_with_continuation	*test_;
+	size_t						total_token_count;
+	char						*old_input;
 
-	//i = 0;
-
-	lexer.input = str_dup(tests[i].input);
+	test_ = &test->test.with;
+	if (test_->continuation_count == 0)
+		return ;
+	i = 0;
 	res = NULL;
-	if (test->token_count == 0)
+	lexer->input = str_dup(test_->continuation[0].input);
+	while (i < test_->continuation_count)
 	{
+		if (i > 0)
+		{
+			old_input = lexer->input;
+			lexer->input = str_join(old_input, test_->continuation[i].input);
+			free(old_input);
+		}
 		lex_line(&res, lexer);
-		if (res == NULL && DEBUG_lexer_equal(lexer, &test->continuation_lexer_snapshot))
-			++test->result.success_lexer_count;
+		DEBUG_print_lexer_state(lexer);
+		if (test_->continuation[i].token_count > 0)
+		{
+			if (res == NULL)
+			{
+				test_->result.base.is_token_success = false;
+				break ;
+			}
+			if (!DEBUG_lexer_equal(lexer, &test_->continuation[i].lexer_snapshot))
+			{
+				test_->result.failing_lexer = *lexer;
+				test_->result.is_lexer_success = false;
+				break ;
+			}
+			++test_->result.success_lexer_count;
+			j = 0;
+			while (res != NULL)
+			{
+				if (j >= test_->continuation[i].token_count)
+				{
+					test_->result.base.failing_token = res;
+					test_->result.base.is_token_success = false;
+					break ;
+				}
+				if (DEBUG_is_token_equal(*res, test_->continuation[i].result_token[j]))
+					++test_->result.base.success_token_count;
+				else
+				{
+					test_->result.base.failing_token = res;
+					test_->result.base.is_token_success = false;
+					break ;
+				}
+				free_token(&res);
+				++j;
+				lex_line(&res, lexer);
+			}
+			if (!test_->result.base.is_token_success)
+				break ;
+			if (j != test_->continuation[i].token_count)
+			{
+				test_->result.base.is_token_success = false;
+				break ;
+			}
+		}
 		else
 		{
-			test->result.failing_lexer = *lexer; 
-			test->result.is_lexer_success = false;
-			return ;
+			if (res != NULL)
+			{
+				test_->result.base.failing_token = res;
+				test_->result.base.is_token_success = false;
+				break ;
+			}
+			if (DEBUG_lexer_equal(lexer, &test_->continuation[i].lexer_snapshot))
+				++test_->result.success_lexer_count;
+			else
+			{
+				test_->result.failing_lexer = *lexer;
+				test_->result.is_lexer_success = false;
+				break ;
+			}
 		}
+		++i;
 	}
-	else
-	{
-		ft_printf("TODO\n");
-	}
+	free_lexer(lexer);
+	total_token_count = 0;
+	i = 0;
+	while (i < test_->continuation_count)
+		total_token_count += test_->continuation[i++].token_count;
+	if (test_->result.base.is_token_success
+		&& test_->result.base.success_token_count != total_token_count)
+		test_->result.base.is_token_success = false;
 }
 
 void	test_lexer(t_lexer_test *tests)
@@ -160,6 +225,8 @@ void	test_lexer(t_lexer_test *tests)
 		.ctx.data = NULL,
 		.input = NULL,
 		.script_path = NULL,
+		.is_completed = true,
+		.continuation_i = -1,
 		.total_removed_count = 0,
 		.current_removed_count = 0,
 	};
@@ -174,26 +241,36 @@ void	test_lexer(t_lexer_test *tests)
 			test_with_continuation(&lexer, &tests[i]);
 		else
 			test_without_continuation(&lexer, &tests[i]);
-		ft_printf("++++++++++++++++++++++++++++++++++++++++\n");
-		if (tests[i].should_continue && !tests[i].result.is_lexer_success)
+		ft_printf("\n++++++++++++++++++++++++++++++++++++++++\n");
+		if (tests[i].type == TEST_WITH_CONTINUATION)
 		{
-			ft_printf("FAILED to exit lexer with correct state\n");
-			DEBUG_print_lexer_state(&tests[i].result.failing_lexer);
-			ft_printf("========================================\n");
-			break;
-		}
-		
-		if (!tests[i].result.is_token_success)
-		{
-			ft_printf("FAILED to tokenize at %d\n", (int)tests[i].result.success_token_count);
-			DEBUG_print_token(tests[i].result.failing_token);
-			ft_printf("========================================\n");
-			break;
+			if (!tests[i].test.with.result.is_lexer_success)
+			{
+				ft_printf("FAILED to exit lexer with correct state\n");
+				ft_printf("========================================\n");
+				break;
+			}
+			if (!tests[i].test.with.result.base.is_token_success)
+			{
+				ft_printf("FAILED to tokenize at %d\n",
+					(int)tests[i].test.with.result.base.success_token_count);
+				DEBUG_print_token(tests[i].test.with.result.base.failing_token);
+				ft_printf("========================================\n");
+				break;
+			}
 		}
 		else
-			ft_printf("SUCCESS\n");
-		if (tests[i].should_continue && tests[i].token_count == 0)
-			free_lexer(&lexer);
+		{
+			if (!tests[i].test.without.result.is_token_success)
+			{
+				ft_printf("FAILED to tokenize at %d\n",
+					(int)tests[i].test.without.result.success_token_count);
+				DEBUG_print_token(tests[i].test.without.result.failing_token);
+				ft_printf("========================================\n");
+				break;
+			}
+		}
+		ft_printf("SUCCESS\n");
 		ft_printf("========================================\n");
 		++i;
 	}
@@ -2540,6 +2617,70 @@ int	main(void)
 				}
 			},
 		},
+		// 13b. Arithmetic expansion — parenthesis nesting
+		{
+			.id = "108b",
+			.name = "$((1+(2*3)))",
+			.type = TEST_WITHOUT_CONTINUATION,
+			.test.without =
+			{
+				.input = "$((1+(2*3)))",
+				.token_count = 2,
+				.result =
+				{
+					.is_token_success = true,
+					.success_token_count = 0,
+					.failing_token = NULL,
+				},
+				.result_token =
+				{
+					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$((1+(2*3)))")},
+					(t_token){.type = EOF, .offset = 12, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+				}
+			},
+		},
+		{
+			.id = "108c",
+			.name = "$((1+(2+(3))))",
+			.type = TEST_WITHOUT_CONTINUATION,
+			.test.without =
+			{
+				.input = "$((1+(2+(3))))",
+				.token_count = 2,
+				.result =
+				{
+					.is_token_success = true,
+					.success_token_count = 0,
+					.failing_token = NULL,
+				},
+				.result_token =
+				{
+					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$((1+(2+(3))))")},
+					(t_token){.type = EOF, .offset = 14, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+				}
+			},
+		},
+		{
+			.id = "108d",
+			.name = "$(((1+2)*3))",
+			.type = TEST_WITHOUT_CONTINUATION,
+			.test.without =
+			{
+				.input = "$(((1+2)*3))",
+				.token_count = 2,
+				.result =
+				{
+					.is_token_success = true,
+					.success_token_count = 0,
+					.failing_token = NULL,
+				},
+				.result_token =
+				{
+					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$(((1+2)*3))")},
+					(t_token){.type = EOF, .offset = 12, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+				}
+			},
+		},
 		// 14. Comments
 		{
 			.id = "109",
@@ -3049,6 +3190,7 @@ int	main(void)
 		// 18. Unterminated / incomplete inputs
 		{
 			.id = "131",
+			.name = "'hello",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3064,17 +3206,18 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 0,
-				.result_token = {},
-				.continuation_count = 0,
+				.continuation_count = 1,
 				.continuation =
 				{
 					{
 						.input = "'hello",
-						.emit_token = false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 5,
+							.i                     = 0,
+							.is_completed 	       = false,
+							.continuation_i        = 6,
 							.ctx.len               = 1,
 							.ctx.data[0] 	       = {.type = SQUOTE, .nesting_depth = 0},
 							.input				   = "'hello",
@@ -3087,6 +3230,7 @@ int	main(void)
 		},
 		{
 			.id = "132",
+			.name = "\"hello",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3102,18 +3246,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 0,
-				.result_token = {},
-				.continuation_count = 0,
+				.continuation_count = 1,
 				.continuation =
 				{
 					{
 						.input = "\"hello",
-						.emit_token = false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 5,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 6,
 							.ctx.data[0]           = {.type = DQUOTE, .nesting_depth = 0},
 							.input                 = "\"hello",
 							.total_removed_count   = 0,
@@ -3124,7 +3269,8 @@ int	main(void)
 			}
 		},
 		{
-			.id = "133",		
+			.id = "133",
+			.name = "`hello",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3140,18 +3286,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 0,
-				.result_token = {},
-				.continuation_count = 0,
+				.continuation_count = 1,
 				.continuation =
 				{
 					{
 						.input = "`hello",
-						.emit_token = false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 5,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 6,
 							.ctx.data[0]           = {.type = BACKTICK, .nesting_depth = 0},
 							.input                 = "`hello",
 							.total_removed_count   = 0,
@@ -3203,6 +3350,7 @@ int	main(void)
 		},*/
 		{
 			.id = "135",
+			.name = "${var",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3218,18 +3366,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 0,
-				.result_token = {},
-				.continuation_count = 0,
+				.continuation_count = 1,
 				.continuation =
 				{
 					{
 						.input = "${var",
-						.emit_token	= false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 4,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 5,
 							.ctx.data[0]           = {.type = PARAM, .nesting_depth = 0},
 							.input                 = "${var",
 							.total_removed_count   = 0,
@@ -3241,6 +3390,7 @@ int	main(void)
 		},
 		{
 			.id = "136",
+			.name = "$((1+2)",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3256,18 +3406,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 0,
-				.result_token = {},
-				.continuation_count = 0,
+				.continuation_count = 1,
 				.continuation =
 				{
 					{
 						.input = "$((1+2)",
-						.emit_token	= false,					
+						.token_count = 0,
+						.result_token = {},				
 						.lexer_snapshot =
 						{
-							.i                     = 6,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 6,
 							.ctx.data[0]           = {.type = ARITH, .nesting_depth = 0},
 							.input                 = "$((1+2)",
 							.total_removed_count   = 0,
@@ -3278,7 +3429,8 @@ int	main(void)
 			}
 		},
 		{
-			.id = "137",		
+			.id = "137",
+			.name = "\\",		
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3294,18 +3446,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 0,
-				.result_token = {},
-				.continuation_count = 0,
+				.continuation_count = 1,
 				.continuation =
 				{
 					{
 						.input = "\\",
-						.emit_token	= false,					
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
 							.i                     = 0,
 							.ctx.len               = 0,
+							.is_completed 	       = false,
+							.continuation_i        = 0,
 							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
 							.input                 = "\\",
 							.total_removed_count   = 0,
@@ -3356,7 +3509,8 @@ int	main(void)
 			},
 		},*/
 		{
-			.id = "131",
+			.id = "146",
+			.name = "'ab'",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3372,22 +3526,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 2,
-				.result_token =
-				{
-					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("'ab'")},
-					(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
-				},
-				.continuation_count = 1,
+				.continuation_count = 2,
 				.continuation =
 				{
 					{
 						.input = "'a",
-						.emit_token	= false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 1,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 2,
 							.ctx.data[0]           = {.type = SQUOTE, .nesting_depth = 0},
 							.input                 = "'a",
 							.total_removed_count   = 0,
@@ -3396,11 +3547,18 @@ int	main(void)
 					},
 					{
 						.input = "b'",
-						.emit_token = true,
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("'ab'")},
+							(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
 						.lexer_snapshot =
 						{
-							.i                     = 3,
+							.i                     = 4,
 							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
 							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
 							.input                 = "'ab'",
 							.total_removed_count   = 0,
@@ -3411,7 +3569,8 @@ int	main(void)
 			}
 		},
 		{
-			.id = "131",
+			.id = "147",
+			.name = "\"a$b\"",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3427,22 +3586,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 2,
-				.result_token =
-				{
-					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("\"a$b\"")},
-					(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
-				},
-				.continuation_count = 1,
+				.continuation_count = 2,
 				.continuation =
 				{
 					{
-						.input = "'a",
-						.emit_token	= false,
+						.input = "\"a",
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 1,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 2,
 							.ctx.data[0]           = {.type = DQUOTE, .nesting_depth = 0},
 							.input                 = "\"a",
 							.total_removed_count   = 0,
@@ -3451,11 +3607,18 @@ int	main(void)
 					},
 					{
 						.input = "$b\"",
-						.emit_token = true,
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("\"a$b\"")},
+							(t_token){.type = EOF, .offset = 5, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
 						.lexer_snapshot =
 						{
-							.i                     = 4,
+							.i                     = 5,
 							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
 							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
 							.input                 = "\"a$b\"",
 							.total_removed_count   = 0,
@@ -3466,7 +3629,8 @@ int	main(void)
 			}
 		},
 		{
-			.id = "131",
+			.id = "148",
+			.name = "`echo hi`",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3482,22 +3646,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 2,
-				.result_token =
-				{
-					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("`echo hi`")},
-					(t_token){.type = EOF, .offset = 9, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
-				},
-				.continuation_count = 1,
+				.continuation_count = 2,
 				.continuation =
 				{
 					{
 						.input = "`echo ",
-						.emit_token	= false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 5,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 6,
 							.ctx.data[0]           = {.type = BACKTICK, .nesting_depth = 0},
 							.input                 = "`echo ",
 							.total_removed_count   = 0,
@@ -3506,11 +3667,18 @@ int	main(void)
 					},
 					{
 						.input = "hi`",
-						.emit_token = true,
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("`echo hi`")},
+							(t_token){.type = EOF, .offset = 9, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
 						.lexer_snapshot =
 						{
-							.i                     = 8,
+							.i                     = 9,
 							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
 							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
 							.input                 = "`echo hi`",
 							.total_removed_count   = 0,
@@ -3576,7 +3744,8 @@ int	main(void)
 			}
 		},*/
 		{
-			.id = "131",
+			.id = "149",
+			.name = "${var:-def}",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3592,22 +3761,20 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 2,
-				.result_token =
-				{
-					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("${var:-def}")},
-					(t_token){.type = EOF, .offset = 11, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
-				},
-				.continuation_count = 1,
+
+				.continuation_count = 2,
 				.continuation =
 				{
 					{
 						.input = "${var",
-						.emit_token	= false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 4,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 5,
 							.ctx.data[0]           = {.type = PARAM, .nesting_depth = 0},
 							.input                 = "${var",
 							.total_removed_count   = 0,
@@ -3616,11 +3783,18 @@ int	main(void)
 					},
 					{
 						.input = ":-def}",
-						.emit_token = true,
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("${var:-def}")},
+							(t_token){.type = EOF, .offset = 11, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
 						.lexer_snapshot =
 						{
-							.i                     = 10,
+							.i                     = 11,
 							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
 							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
 							.input                 = "${var:-def}",
 							.total_removed_count   = 0,
@@ -3631,7 +3805,8 @@ int	main(void)
 			}
 		},
 		{
-			.id = "131",
+			.id = "150",
+			.name = "$((1+2))",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3647,22 +3822,19 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 2,
-				.result_token =
-				{
-					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$((1+2))")},
-					(t_token){.type = EOF, .offset = 8, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
-				},
-				.continuation_count = 1,
+				.continuation_count = 2,
 				.continuation =
 				{
 					{
 						.input = "$((1+2",
-						.emit_token	= false,
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 5,
+							.i                     = 0,
 							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 6,
 							.ctx.data[0]           = {.type = ARITH, .nesting_depth = 0},
 							.input                 = "$((1+2",
 							.total_removed_count   = 0,
@@ -3671,11 +3843,18 @@ int	main(void)
 					},
 					{
 						.input = "))",
-						.emit_token = true,
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$((1+2))")},
+							(t_token){.type = EOF, .offset = 8, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
 						.lexer_snapshot =
 						{
-							.i                     = 7,
+							.i                     = 8,
 							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
 							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
 							.input                 = "$((1+2))",
 							.total_removed_count   = 0,
@@ -3686,7 +3865,8 @@ int	main(void)
 			}
 		},
 		{
-			.id = "131",
+			.id = "151",
+			.name = "$((1+2))",
 			.type = TEST_WITH_CONTINUATION,
 			.test.with =
 			{
@@ -3702,35 +3882,79 @@ int	main(void)
 						.failing_token = NULL,
 					},
 				},
-				.token_count = 2,
-				.result_token =
-				{
-					(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("'ab'")},
-					(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
-				},
 				.continuation_count = 2,
 				.continuation =
 				{
 					{
-						.input = "'a",
-						.emit_token	= false,
+						.input = "$((1+2)",
+						.token_count = 0,
+						.result_token = {},
 						.lexer_snapshot =
 						{
-							.i                     = 1,
+							.i                     = 0,
 							.ctx.len               = 1,
-							.ctx.data[0]           = {.type = SQUOTE, .nesting_depth = 0},
-							.input                 = "'a",
+							.is_completed 	       = false,
+							.continuation_i        = 6,
+							.ctx.data[0]           = {.type = ARITH, .nesting_depth = 0},
+							.input                 = "$((1+2)",
 							.total_removed_count   = 0,
 							.current_removed_count = 0,
 						}
 					},
 					{
-						.input = "b",
-						.emit_token = false,
+						.input = ")",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$((1+2))")},
+							(t_token){.type = EOF, .offset = 8, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
 						.lexer_snapshot =
 						{
-							.i                     = 2,
+							.i                     = 8,
 							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "$((1+2))",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}	
+				}
+			}
+		},
+		{
+			.id = "152",
+			.name = "'ab'",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0},
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 2,
+				.continuation =
+				{
+					{
+						.input = "'ab",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed          = false,
+							.continuation_i        = 3,
 							.ctx.data[0]           = {.type = SQUOTE, .nesting_depth = 0},
 							.input                 = "'ab",
 							.total_removed_count   = 0,
@@ -3739,17 +3963,731 @@ int	main(void)
 					},
 					{
 						.input = "'",
-						.emit_token = true,
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("'ab'")},
+							(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
 						.lexer_snapshot =
 						{
-							.i                     = 3,
+							.i                     = 4,
 							.ctx.len               = 0,
+							.is_completed          = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "'ab'",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "153",
+			.name = "\"ab\"",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0},
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 2,
+				.continuation =
+				{
+					{
+						.input = "\"ab",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed          = false,
+							.continuation_i        = 3,
+							.ctx.data[0]           = {.type = DQUOTE, .nesting_depth = 0},
+							.input                 = "\"ab",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "\"",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("\"ab\"")},
+							(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 4,
+							.ctx.len               = 0,
+							.is_completed          = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "\"ab\"",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "154",
+			.name = "`ab`",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0},
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 2,
+				.continuation =
+				{
+					{
+						.input = "`ab",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed          = false,
+							.continuation_i        = 3,
+							.ctx.data[0]           = {.type = BACKTICK, .nesting_depth = 0},
+							.input                 = "`ab",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "`",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("`ab`")},
+							(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 4,
+							.ctx.len               = 0,
+							.is_completed          = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "`ab`",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "155",
+			.name = "${ab}",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0},
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 2,
+				.continuation =
+				{
+					{
+						.input = "${ab",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed          = false,
+							.continuation_i        = 4,
+							.ctx.data[0]           = {.type = PARAM, .nesting_depth = 0},
+							.input                 = "${ab",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "}",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("${ab}")},
+							(t_token){.type = EOF, .offset = 5, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 5,
+							.ctx.len               = 0,
+							.is_completed          = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "${ab}",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "156",
+			.name = "$((1+(2*3)))",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0},
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+
+				.continuation_count = 2,
+				.continuation =
+				{
+					{
+						.input = "$((1+(2",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed          = false,
+							.continuation_i        = 7,
+							.ctx.data[0]           = {.type = ARITH, .nesting_depth = 1},
+							.input                 = "$((1+(2",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "*3)))",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$((1+(2*3)))")},
+							(t_token){.type = EOF, .offset = 12, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 12,
+							.ctx.len               = 0,
+							.is_completed          = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "$((1+(2*3)))",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "157",
+			.name = "$((1+(2*3)))",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0},
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 2,
+				.continuation =
+				{
+					{
+						.input = "$((1+(2*3)",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed          = false,
+							.continuation_i        = 9,
+							.ctx.data[0]           = {.type = ARITH, .nesting_depth = 1},
+							.input                 = "$((1+(2*3)",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "))",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("$((1+(2*3)))")},
+							(t_token){.type = EOF, .offset = 12, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 12,
+							.ctx.len               = 0,
+							.is_completed          = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "$((1+(2*3)))",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "158",
+			.name = "'ab'",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0}, 
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 3,
+				.continuation =
+				{
+					{
+						.input = "'a",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed	       = false,
+							.continuation_i        = 2,
+							.ctx.data[0]           = {.type = SQUOTE, .nesting_depth = 0},
+							.input                 = "'a",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "b",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 3,
+							.ctx.data[0]           = {.type = SQUOTE, .nesting_depth = 0},
+							.input                 = "'ab",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "'",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("'ab'")},
+							(t_token){.type = EOF, .offset = 4, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 4,
+							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
 							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
 							.input                 = "'ab'",
 							.total_removed_count   = 0,
 							.current_removed_count = 0,
 						}
 					}	
+				}
+			}
+		},
+		{
+			.id = "159",
+			.name = "\"abc\"",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0}, 
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 3,
+				.continuation =
+				{
+					{
+						.input = "\"abc",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed	       = false,
+							.continuation_i        = 4,
+							.ctx.data[0]           = {.type = DQUOTE, .nesting_depth = 0},
+							.input                 = "\"abc",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed 	       = false,
+							.continuation_i        = 4,
+							.ctx.data[0]           = {.type = DQUOTE, .nesting_depth = 0},
+							.input                 = "\"abc",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "\"",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("\"abc\"")},
+							(t_token){.type = EOF, .offset = 5, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 5,
+							.ctx.len               = 0,
+							.is_completed 	       = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "\"abc\"",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}	
+				}
+			}
+		},
+		{
+			.id = "160",
+			.name = "${var:-\"abc",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0}, 
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 1,
+				.continuation =
+				{
+					{
+						.input = "${var:-\"abc",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 2,
+							.is_completed	       = false,
+							.continuation_i        = 11,
+							.ctx.data[0]           = {.type = PARAM, .nesting_depth = 0},
+							.ctx.data[1]           = {.type = DQUOTE, .nesting_depth = 0},
+							.input                 = "${var:-\"abc",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "161",
+			.name = "$(((1+2",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0}, 
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 1,
+				.continuation =
+				{
+					{
+						.input = "$(((1+2",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 0,
+							.ctx.len               = 1,
+							.is_completed	       = false,
+							.continuation_i        = 7,
+							.ctx.data[0]           = {.type = ARITH, .nesting_depth = 1},
+							.input                 = "$(((1+2",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "162",
+			.name = "echo \\\nhi",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0}, 
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 3,
+				.continuation =
+				{
+					{
+						.input = "echo \\",
+						.token_count = 1,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("echo")},	
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 4,
+							.ctx.len               = 0,
+							.is_completed	       = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "echo \\",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 5,
+							.ctx.len               = 0,
+							.is_completed	       = false,
+							.continuation_i        = 5,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "echo \\",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "\nhi",
+						.token_count = 2,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 7, .value = buff_init_unsafe("hi")},
+							(t_token){.type = EOF, .offset = 9, .value = (t_buff){.cap = 0, .len = 0, .data = NULL}},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 7,
+							.ctx.len               = 0,
+							.is_completed	       = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "echo hi",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
+				}
+			}
+		},
+		{
+			.id = "163",
+			.name = "echo \\\nhi\\more",
+			.type = TEST_WITH_CONTINUATION,
+			.test.with =
+			{
+				.result =
+				{
+					.failing_lexer = {0}, 
+					.is_lexer_success = true,
+					.success_lexer_count = 0,
+					.base =
+					{
+						.is_token_success = true,
+						.success_token_count = 0,
+						.failing_token = NULL,
+					},
+				},
+				.continuation_count = 3,
+				.continuation =
+				{
+					{
+						.input = "echo \\",
+						.token_count = 1,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 0, .value = buff_init_unsafe("echo")},	
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 4,
+							.ctx.len               = 0,
+							.is_completed	       = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "echo \\",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 5,
+							.ctx.len               = 0,
+							.is_completed	       = false,
+							.continuation_i        = 5,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "echo \\",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "\nhi\\",
+						.token_count = 0,
+						.result_token = {},
+						.lexer_snapshot =
+						{
+							.i                     = 5,
+							.ctx.len               = 0,
+							.is_completed	       = false,
+							.continuation_i        = 7,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "echo hi\\",
+							.total_removed_count   = 2,
+							.current_removed_count = 0,
+						}
+					},
+					{
+						.input = "more",
+						.token_count = 1,
+						.result_token =
+						{
+							(t_token){.type = TOKEN, .offset = 7, .value = buff_init_unsafe("hi\\more")},
+						},
+						.lexer_snapshot =
+						{
+							.i                     = 13,
+							.ctx.len               = 0,
+							.is_completed	       = true,
+							.continuation_i        = -1,
+							.ctx.data[0]           = {.type = NONE, .nesting_depth = 0},
+							.input                 = "echo hi\\more",
+							.total_removed_count   = 0,
+							.current_removed_count = 0,
+						}
+					}
 				}
 			}
 		},

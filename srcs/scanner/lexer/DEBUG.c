@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:41:45 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/13 15:38:13 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/14 16:47:31 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ bool	DEBUG_lexer_equal(t_lexer *lexer1, t_lexer_snapshot *lexer2)
 
 	i = 0;
 	if (lexer1->i != lexer2->i)
+		return (false);
+	if (lexer1->is_completed != lexer2->is_completed)
+		return (false);
+	if (lexer1->continuation_i != lexer2->continuation_i)
 		return (false);
 	if (lexer1->ctx.len != lexer2->ctx.len)
 		return (false);
@@ -49,6 +53,8 @@ void	DEBUG_print_lexer_state(t_lexer *lexer)
 	i = 0;
 	ft_printf("\n- LEXER_STATE ----------------------\n");
 	ft_printf("INDEX = %d\n", (int)lexer->i);
+	ft_printf("IS_COMPLETED = %s\n", lexer->is_completed ? "true" : "false");
+	ft_printf("CONTINUATION_INDEX = %d\n", (int)lexer->continuation_i);
 	ft_printf("CTX_STACK_LEN = %d\n", (int)lexer->ctx.len);
 	if (lexer->ctx.len > 0)
 	{

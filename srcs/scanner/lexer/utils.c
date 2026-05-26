@@ -5,25 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/12 17:26:00 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/12 17:26:36 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/18 12:23:46 by adouieb           #+#    #+#             */
+/*   Updated: 2026/05/18 17:24:18 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "_lexer.h"
 
-bool	is_comment(t_lexer *lexer, size_t i)
+void	advance(t_lexer *lexer, size_t offset)
 {
-	char	*input_ptr;
-
-	input_ptr = lexer->input + i;
-	return (lexer->i == i && input_ptr[0] == '#');
-}
-
-bool	is_blank(t_lexer *lexer, size_t i)
-{
-	char	*input_ptr;
-
-	input_ptr = lexer->input + i;
-	return (input_ptr[0] == ' ' || input_ptr[0] == '\t');
+	if (lexer->input[lexer->i + 1] == '\0')
+		lexer->i += 1;
+	else
+		lexer->i += offset;
 }

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 16:23:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/13 13:03:49 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:31:47 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ typedef struct s_token
 {
 	t_token_type	type;	// Indicates which type of token this is
 	t_token_value	value;
-	size_t			offset;	// Offset of the token start in the original input (for error output)
+	char			*input_ptr;
 }	t_token;
 
 void	free_token(t_token **token_ptr);
 t_token	*create_word_token(t_lexer *lexer, size_t i);
-t_token	*create_operator_token(t_lexer *lexer, t_operator_args *args);
+t_token	*create_operator_token(t_lexer *lexer, );
 t_token	*create_token(char *content, size_t offset, t_token_type type);
 
 // For testing purposes

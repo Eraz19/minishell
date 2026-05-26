@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 16:01:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/13 13:21:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/05/19 10:23:51 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,64 @@
 # include <stdbool.h>
 # include "../_lexer.h"
 
-t_lexer_ctx	ctx_pop(t_ctx_stack *stack);
-t_lexer_ctx	ctx_view(t_ctx_stack *stack);
-void		free_ctx_stack(t_ctx_stack *stack);
-bool		ctx_update_nesting(t_ctx_stack *stack, int value);
-bool		ctx_push(t_ctx_stack *stack, t_lexer_ctx_type ctx);
+typedef struct s_ctx_update_maybe
+{
+	t_error	err;
+	bool	res;
+}	t_ctx_update_maybe;
 
-int			update_ctx_none(t_ctx_stack *ctx, char *input_ptr, size_t *i);
-int			update_ctx_param(t_ctx_stack *ctx, char *input_ptr, size_t *i);
-int			update_ctx_arithm(t_ctx_stack *ctx, char *input_ptr, size_t *i);
-int			update_ctx_dquote(t_ctx_stack *ctx, char *input_ptr, size_t *i);
-int			update_ctx_squote(t_ctx_stack *ctx, char *input_ptr, size_t *i);
-int			update_ctx_backtick(t_ctx_stack *ctx, char *input_ptr, size_t *i);
+bool	on_ctx_update_failure(t_ctx_update_maybe *res, t_error err);
+bool	on_ctx_update_success(t_ctx_update_maybe *res, bool is_updated);
 
-char 		*DEBUG_ctx_type_stringify(t_lexer_ctx_type type);
+bool	is_squote_start(t_lexer *lexer);
+bool	squote(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	squote_end(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	squote_body(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	squote_start(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backslash_in_squote(t_ctx_update_maybe *res, t_lexer *lexer);
+
+bool	is_dquote_start(t_lexer *lexer);
+bool	dquote(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	dquote_end(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	dquote_body(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	dquote_start(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backslash_in_dquote(t_ctx_update_maybe *res, t_lexer *lexer);
+
+bool	is_cmd_sub_start(t_lexer *lexer);
+bool	cmd_sub(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	cmd_sub_end(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	cmd_sub_body(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	cmd_sub_start(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backslash_in_cmd_sub(t_ctx_update_maybe *res, t_lexer *lexer);
+
+bool	is_param_start(t_lexer *lexer);
+bool	param(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	param_end(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	param_body(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	param_start(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backslash_in_param(t_ctx_update_maybe *res, t_lexer *lexer);
+
+bool	is_arith_start(t_lexer *lexer);
+bool	arith(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	arith_end(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	arith_body(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	arith_start(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backslash_in_arith(t_ctx_update_maybe *res, t_lexer *lexer);
+
+bool	is_backtick_start(t_lexer *lexer);
+bool	backtick(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backtick_end(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backtick_body(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backtick_start(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backslash_in_backtick(t_ctx_update_maybe *res, t_lexer *lexer);
+
+bool	is_comment_start(t_lexer *lexer);
+bool	comment(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	comment_end(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	comment_body(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	comment_start(t_ctx_update_maybe *res, t_lexer *lexer);
+bool	backslash_in_comment(t_ctx_update_maybe *res, t_lexer *lexer);
+
+char	*DEBUG_ctx_type_stringify(t_lexer_ctx_type type);
 
 #endif
