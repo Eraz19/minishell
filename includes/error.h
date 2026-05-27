@@ -26,6 +26,8 @@ typedef enum e_error
 	ERR_VEOF,
 	ERR_EMPTY_CONTINUATION,
 	ERR_INVALID_ARGS,
+	ERR_FILE_STAT,
+	ERR_OPEN_FILE,
 
 	ERR_COUNT
 }	t_error;
