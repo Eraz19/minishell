@@ -4,14 +4,18 @@
 typedef enum e_error
 {
 	ERR_NO,
+	ERR_SIZE_MAX_REACHED,
 	ERR_BUILTIN_INVALID_USAGE,
 	ERR_BUILTIN_INVALID_FLAG,
 	ERR_INDEX_OUT_OF_BOUND,
 	ERR_LIBC,
 	ERR_LR_CONFLICT,
 	ERR_LR_STATE_NOT_FOUND,
-	ERR_OPTION_INVALID,
+	ERR_OPT_INVALID,
+	ERR_OPT_INVALID_ARG,
+	ERR_OPT_MISSING_ARG,
 	ERR_SHELL_NOT_FOUND,
+	ERR_SHIFT_INVALID_VALUE,
 	ERR_UNDEFINED_BEHAVIOUR,
 	ERR_VAR_INVALID_NAME,
 	ERR_VAR_MISSING_EQUAL,
@@ -45,5 +49,8 @@ const char	*error_to_string(t_error error);
 // e.g. 2:	"minishell: unset: my_var: readonly variable".
 // Always returns error
 t_error	error_print(const char *prefix, const char *error_type, t_error error);
+
+// Prints "you did: " + message + "la tête à Xavier"
+void	undefined_behaviour(const char *message);
 
 #endif

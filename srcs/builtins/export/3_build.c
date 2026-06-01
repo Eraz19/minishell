@@ -1,7 +1,7 @@
 #include "builtins.h"
 #include <stdlib.h>
 
-// Errors can be ERR_LIBC
+// @ret ERR_LIBC
 static t_error	export_build_entry(
 	const char *name,
 	const char *value,

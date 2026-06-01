@@ -11,20 +11,12 @@ void	lr_state_table_init(t_lr_state *lr_states)
 	vector_init(lr_states, sizeof(t_lr_state), 0);
 }
 
-void	lr_state_free(t_lr_state *lr_state)
+void	lr_state_free(void *lr_state)
 {
-	vector_free(lr_state);
+	vector_free((t_lr_state *)lr_state, NULL);
 }
 
 void	lr_state_table_free(t_lr_state *lr_states)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < lr_states->len)
-	{
-		lr_state_free(&((t_lr_state *)lr_states->data)[i]);
-		i++;
-	}
-	vector_free(lr_states);
+	vector_free(lr_states, lr_state_free);
 }

@@ -1,5 +1,9 @@
 https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html
 
+The Open Group Base Specifications Issue 8
+IEEE Std 1003.1-2024
+Copyright © 2001-2024 The IEEE and The Open Group
+
 1. Introduction
 The Shell and Utilities volume of POSIX.1-2024 describes the commands and utilities offered to application programs by POSIX-conformant systems.
 

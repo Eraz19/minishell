@@ -8,7 +8,7 @@
 #include "goto.h"
 #include <stdlib.h>
 # include <locale.h>	// TODO: tmp debug
-# include <stdio.h>		// TODO: tmp debug
+# include "logs.h"		// TODO: tmp debug
 
 void	lr_machine_init(t_lr_machine *machine)
 {
@@ -31,29 +31,27 @@ t_error	lr_machine_build(t_lr_machine *machine)
 	t_error	error;
 
 	setlocale(LC_NUMERIC, "de_DE");
-	printf("-------------------------------------\n");
-	printf("===> [lr_machine_build]\n");
+	print_title("lr_machine_build");
 	rules_build(machine->rules);
-	printf("-> rules table built            (entries: %'6i)\n", RULE_COUNT);
+	print_pass("rules table built            (entries: %'6i)\n", RULE_COUNT);
 	symbols_build_nullables_table(machine);
-	printf("-> nullable symbols table built (entries: %'6i)\n", SYM_COUNT);
+	print_pass("nullable symbols table built (entries: %'6i)\n", SYM_COUNT);
 	first_build_table(machine);
-	printf("-> first table built            (entries: %'6i)\n", SYM_COUNT * (SYM_TERMINAL_MAX + 1));
+	print_pass("first table built            (entries: %'6i)\n", SYM_COUNT * (SYM_TERMINAL_MAX + 1));
 	error = transition_build_table(machine);
 	if (error != ERR_NO)
 		return (lr_machine_error(error));
-	printf("-> transitions table built      (entries: %'6zu)\n", machine->transitions.len);
-	printf("-> lr_states table built        (entries: %'6zu)\n", machine->lr_states.len);
+	print_pass("transitions table built      (entries: %'6zu)\n", machine->transitions.len);
+	print_pass("lr_states table built        (entries: %'6zu)\n", machine->lr_states.len);
 	error = goto_build_table(machine);
 	if (error != ERR_NO)
 		return (lr_machine_error(error));
-	printf("-> gotos table built            (entries: %'6zu)\n", machine->lr_states.len * (SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1));
+	print_pass("gotos table built            (entries: %'6zu)\n", machine->lr_states.len * (SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1));
 	error = action_build_table(machine);
 	if (error != ERR_NO)
 		return (lr_machine_error(error));
-	printf("-> actions table built          (entries: %'6zu)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
-	printf("===> [lr_machine_build]\n");
-	printf("-------------------------------------\n\n");
+	print_pass("actions table built          (entries: %'6zu)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
+	print_result("===> [lr_machine_build]");
 	return (setlocale(LC_NUMERIC, ""), ERR_NO);
 }
 

@@ -15,8 +15,7 @@ typedef struct s_shell
 	t_runner		runner;
 }	t_shell;
 
-// parent MUST be NULL if not a subshell
-t_error		shell_start(int argc, char **argv, char **envp, t_shell *parent);
+t_error		shell_start(int argc, char **argv, char **envp);
 t_shell		*shell_get(void);
 const char	*shell_get_name(void);
 void		shell_exit(t_error error);

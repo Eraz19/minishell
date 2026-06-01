@@ -7,5 +7,5 @@ void	transition_init(t_vector *transitions)
 
 void	transition_free(t_vector *transitions)
 {
-	vector_free(transitions);
+	vector_free(transitions, NULL);
 }

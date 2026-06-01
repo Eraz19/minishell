@@ -3,11 +3,9 @@
 #include "shell.h"
 #include <unistd.h>
 
-void	undefined_behaviour(void)
+void	undefined_behaviour(const char *message)
 {
-	static const char	mess1[] = "POSIX says it's Undefined Behaviour 🤪...\n";
-	static const char	mess2[] = "So... Why shouldn't we troll you? 😈\n";
-	static const char	mess3[] = "Byyye! 👋\n";
+	static const char	suffix[] = "\" 🤪\n ╰──▶ Byyye! 👋\n";
 // 	const char	ascii[] = "                                              =..==-==                                              \n
 //                                          -=-=-======-=+---                                          \n
 //                                      -=======++++++--:.::-=::                                       \n
@@ -60,8 +58,8 @@ void	undefined_behaviour(void)
 	
 // 	posix_write(STDERR_FILENO, ascii, str_len(ascii));
 
-	(void)posix_write(STDOUT_FILENO, mess1, str_len(mess1));
-	(void)posix_write(STDOUT_FILENO, mess2, str_len(mess2));
-	(void)posix_write(STDOUT_FILENO, mess3, str_len(mess3));
+	(void)posix_write(STDOUT_FILENO, "\"", 1);
+	(void)posix_write(STDOUT_FILENO, message, str_len(message));
+	(void)posix_write(STDOUT_FILENO, suffix, str_len(suffix));
 	shell_exit(ERR_UNDEFINED_BEHAVIOUR);
 }

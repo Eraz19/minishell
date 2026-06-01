@@ -12,6 +12,8 @@ const char	*error_to_string(t_error error)
 {
 	if (error == ERR_NO)
 		return ("success");
+	else if (error == ERR_SIZE_MAX_REACHED)
+		return ("SIZE_MAX has been reached");
 	else if (error == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
 	else if (error == ERR_BUILTIN_INVALID_FLAG)
@@ -24,10 +26,16 @@ const char	*error_to_string(t_error error)
 		return ("LR conflict");
 	else if (error == ERR_LR_STATE_NOT_FOUND)
 		return ("LR state not found");
-	else if (error == ERR_OPTION_INVALID)
+	else if (error == ERR_OPT_INVALID)
 		return ("invalid option");
+	else if (error == ERR_OPT_INVALID_ARG)
+		return ("invalid option argument");
+	else if (error == ERR_OPT_MISSING_ARG)
+		return ("missing option argument");
 	else if (error == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
+	else if (error == ERR_SHIFT_INVALID_VALUE)
+		return ("shift value is out of range");
 	else if (error == ERR_UNDEFINED_BEHAVIOUR)
 		return ("undefined behaviour 🤪");
 	else if (error == ERR_VAR_INVALID_NAME)

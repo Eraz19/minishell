@@ -2,14 +2,10 @@
 
 ## READER
 
-- [**YES**] Tokenize one token at a time ?? (cf `could_be_a_command_name()` in excalidraw)
-- [**YES**] Choix de la source de lecture :
+- `t_error scanner_load(t_read_mode mode, const char *source)` :
 	- **if** `is_option_valid(OPT_STDIN_INPUT) == true`		=> read from `STDIN_FILENO`
 	- **else if** `is_option_valid(OPT_CMD_STRING) == true`	=> read from `shell->params.source` (string)
 	- **else**												=> read from `shell->params.source` (fichier à open et read)
-	- `t_error scanner_load(t_read_mode mode, const char *source)`
-- [**YES**] **if** `readline() == NULL && is_option_active(OPT_INTERACTIVE) == true && is_option_active(OPT_IGNOREEOF) == false` => `exit()`:
-	- You can store `is_option_active(OPT_INTERACTIVE) && is_option_active(OPT_IGNOREEOF)` as `scanner.should_exit_on_eof` when `scanner_load()` is executed because these options cannot be modified after `shell` invocation.
 
 ## GENERAL
 

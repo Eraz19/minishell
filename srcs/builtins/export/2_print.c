@@ -15,7 +15,7 @@ t_error	export_print(const t_shell *shell, const char *builtin)
 		var = &((t_var *)variables->data)[i++];
 		if (!var->export)
 			continue ;
-		error = var_print("export ", var);
+		error = var_print_one("export ", var);
 		if (error != ERR_NO)
 			return (error_print(builtin, NULL, error));
 	}
