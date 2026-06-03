@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:14:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/29 15:20:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:17:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@
 // Forward types
 typedef struct s_here_queue_item	t_here_queue_item;
 
-typedef char		*t_file_path;
-typedef t_vector	t_here_queue;
-typedef t_buff		t_heredoc_delim;
+typedef t_vector					t_here_queue;
+typedef t_buff						t_heredoc_delim;
 
 void	here_queue_init(t_here_queue *queue);
 void	here_queue_free(t_here_queue *queue);
 
 void	here_queue_clean(t_here_queue *queue);
 t_error	here_queue_push(t_here_queue *queue, t_here_queue_item item);
-t_error	here_queue_get(t_here_queue_item *res, t_here_queue *queue, size_t i);
+t_error	here_queue_get(t_here_queue *queue, t_here_queue_item *item, size_t i);
 
 #endif

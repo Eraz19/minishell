@@ -86,5 +86,5 @@ bool	ctx_arith(t_lexer *state)
 	lexer_consume(state, state->token.type, 1);
 	if (state->err)
 		return (true);
-	return (state->err = ctx_stack_pop(state->ctx), true);
+	return (state->err = ctx_stack_pop(&state->ctx), true);
 }

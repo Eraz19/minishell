@@ -6,12 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:19:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/29 15:21:53 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:13:24 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../_heredoc.h"
+#include "_heredoc.h"
 
 void	here_queue_init(t_here_queue *queue)
 {

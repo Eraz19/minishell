@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
+/*   history.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 14:21:32 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/01 13:04:12 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/01 14:19:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_ctx_stack.h"
+#ifndef HISTORY_H
+# define HISTORY_H
 
-void	ctx_stack_init(t_scanner_ctx_stack *stack)
-{
-	if (stack == NULL)
-		return ;
-	*stack = (t_scanner_ctx_stack){0};
-	vector_init(stack, sizeof(t_scanner_ctx), 0);
-}
+# include "error.h"
+# include "../srcs/history/_history.h"
 
-void	ctx_stack_free(t_scanner_ctx_stack *stack)
-{
-	if (stack == NULL)
-		return ;
-	vector_free(stack);
-	*stack = (t_scanner_ctx_stack){0};
-}
+void	history_init(t_history *state);
+void	history_free(t_history *state);
+t_error	history_load(t_history *state, const char *path);
+
+t_error	history_save_entry(void);
+t_error	history_save_in_file(void);
+t_error	history_append_to_entry(char *entry);
+
+#endif

@@ -6,8 +6,11 @@
 		"-I${workspaceFolder}/libft",
 		"-I${workspaceFolder}/libft/buff",
 		"-I${workspaceFolder}/libft/buff/format",
-		"-I${workspaceFolder}/srcs/scanner",
 		"-I${workspaceFolder}/srcs/1_shell",
+
+		"-I${workspaceFolder}/srcs/2_scanner",
+		"-I${workspaceFolder}/srcs/2_scanner/lexer",
+		
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/1_hooks",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/2_rules",

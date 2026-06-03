@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 15:45:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/29 16:41:32 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:12:24 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ t_error	token_reset(t_token *res, size_t len)
 		return (ERR_NULL_ARGS);
 	token_free(res);
 	if (!buff_init(&res->value, len, NULL, 0))
-        return (ERR_LIBC);
+        return (ERR_TOKEN_INIT);
 	return (ERR_NO);
 }

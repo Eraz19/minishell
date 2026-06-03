@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
+/*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 14:21:32 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/01 14:42:56 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/01 16:50:36 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_ctx_stack.h"
+#include <time.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
-void	ctx_stack_init(t_scanner_ctx_stack *stack)
+time_t	get_now_unix_seconds(void)
 {
-	if (stack == NULL)
-		return ;
-	*stack = (t_scanner_ctx_stack){0};
-	vector_init(stack, sizeof(t_scanner_ctx), 0);
-}
+	struct stat	stat;
+	int			fds[2];
 
-void	ctx_stack_free(t_scanner_ctx_stack *stack)
-{
-	if (stack == NULL)
-		return ;
-	vector_free(stack);
-	*stack = (t_scanner_ctx_stack){0};
+	if (pipe(fds) == -1)
+		return (-1);
+	if (fstat(fds[0], &stat) == -1)
+		return (close(fds[0]), close(fds[1]), -1);
+	return (close(fds[0]), close(fds[1]), stat.st_mtim.tv_sec);
 }

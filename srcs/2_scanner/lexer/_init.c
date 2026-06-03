@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:28:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/29 17:55:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:08:55 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	lexer_init(t_lexer *state)
 		return ;
 	*state = (t_lexer){0};
 	token_init(&state->token);
-	ctx_stack_init(state->ctx);
-	here_queue_init(state->queue);
+	ctx_stack_init(&state->ctx);
+	here_queue_init(&state->queue);
 }
 
 void	lexer_free(t_lexer *state)
@@ -28,8 +28,8 @@ void	lexer_free(t_lexer *state)
 	if (state == NULL)
 		return ;
 	token_free(&state->token);
-	ctx_stack_free(state->ctx);
-	here_queue_free(state->queue);
+	ctx_stack_free(&state->ctx);
+	here_queue_free(&state->queue);
 	*state = (t_lexer){0};
 }
 

@@ -6,24 +6,33 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 14:21:32 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/02 17:05:17 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_ctx_stack.h"
+#include <stdlib.h>
+#include "_history_list.h"
 
-void	ctx_stack_init(t_scanner_ctx_stack *stack)
+void	history_list_init(t_history_list *list)
 {
-	if (stack == NULL)
+	if (list == NULL)
 		return ;
-	*stack = (t_scanner_ctx_stack){0};
-	vector_init(stack, sizeof(t_scanner_ctx), 0);
+	*list = (t_history_list){0};
+	vector_init(list, sizeof(char *), 0);
 }
 
-void	ctx_stack_free(t_scanner_ctx_stack *stack)
+void	history_list_free(t_history_list *list)
 {
-	if (stack == NULL)
+	size_t	i;
+
+	i = 0;
+	if (list == NULL)
 		return ;
-	vector_free(stack);
-	*stack = (t_scanner_ctx_stack){0};
+	while (i < list->len)
+	{
+		free(((char **)list->data)[i]);
+		((char **)list->data)[i++] = NULL;
+	}
+	vector_free(list);
+	*list = (t_history_list){0};
 }

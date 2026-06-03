@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:24:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 09:46:15 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 14:53:13 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,13 @@ typedef struct s_lexer
 {
 	size_t				i;
 	t_error				err;
-	t_scanner_ctx_stack	*ctx;
+	t_scanner_ctx_stack	ctx;
 	t_token				token;
 	char				*input;
 	bool				is_tty;
-	t_here_queue		*queue;
+	t_here_queue		queue;
 	bool				reached_EOI;
 	bool				emited_token;
-	bool				reached_here_end;
 }	t_lexer;
 
 void			lexer_free(t_lexer *state);
@@ -92,6 +91,6 @@ t_lexer_backup	lexer_backup(t_lexer *state);
 void			lexer_advance(t_lexer *state, size_t offset);
 void			lexer_delimit_token(t_token *res, t_lexer *state);
 void			lexer_restore(t_lexer *state, t_lexer_backup backup);
-void			lexer_consume(t_lexer *state, t_token_type type, size_t iter);
+t_error			lexer_consume(t_lexer *state, t_token_type type, size_t iter);
 
 #endif

@@ -6,115 +6,98 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 19:21:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 10:56:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/02 16:26:31 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "expander.h"
-#include "../_lexer.h"
 #include "../../_scanner.h"
 
-static bool	heredoc_add_line_to_content(t_heredoc_body *body, t_lexer *state)
-{
-	char	*delim;
-	size_t	line_len;
-
-	line_len = str_len(body->last_line);
-	delim = buff_get_string(&body->delim);
-	if (delim == NULL)
-		return (heredoc_body_free(body), true);
-	if (!str_ncmp(body->last_line, delim, str_len(delim)))
-	{
-		state->reached_here_end = true;
-		write(body->fd, body->content.data, body->content.len);
-		return (heredoc_body_free(body), true);
-	}
-	else if (!buff_append(&body->content, body->last_line, (long)line_len))
-		return (state->err = ERR_LIBC, heredoc_body_free(body), true);
-	return (free(body->last_line), true);
-}
-
-static bool	heredoc_format_line(t_heredoc_body *body, t_lexer *state)
-{
-	char	*line;
-
-	if (body->mode == TAB_STRIP)
-	{
-		line = str_trim_leading(body->last_line, " \t");
-		if (line == NULL)
-			return (state->err = ERR_LIBC, true);
-		return (free(body->last_line), body->last_line = line, false);
-	}
-	return (true);
-}
-
-static bool	heredoc_get_line(char **res, t_lexer *state)
+static t_error	heredoc_get_body_not_tty(t_lexer *state, t_heredoc_body *body)
 {
 	size_t	line_len;
-	char	*input_ptr;
-	char	*newline_ptr;
+	char	*cursor;
+	char	*match_eol;
 
-	if (state->is_tty)
-		return (state->err = reader_heredoc(res), true);
+	while (!body->reached_here_end)
+	{
+		cursor = state->input + state->i + body->i;
+		match_eol = str_chr(cursor, '\n');
+		if (match_eol == NULL)
+			return (state->err = ERR_NO_DELIM, state->err);
+		line_len = (size_t)(match_eol - cursor) + 1;
+		body->line = str_sub(cursor, 0, line_len);
+		if (body->line == NULL)
+			return (state->err = ERR_LIBC, state->err);
+		if (heredoc_consume_line(state, body))
+			return (state->err);
+		heredoc_advance(body, line_len);
+		free(body->line);
+		body->line = NULL;
+	}
+	return (state->err);
+}
+
+static t_error	heredoc_tty_next_line(t_heredoc_body *body, size_t *line_len)
+{
+	char	*match_eol;
+
+	body->line = body->input + body->i;
+	match_eol = str_chr(body->line, '\n');
+	if (match_eol == NULL)
+	{
+		*line_len = str_len(body->line);
+		body->line = str_dup(body->line);
+		if (body->line == NULL)
+			return (ERR_LIBC);
+		body->reached_end_of_input = true;
+	}
 	else
 	{
-		input_ptr = state->input + state->i;
-		newline_ptr = str_chr(input_ptr, '\n');
-		if (newline_ptr == NULL)
-		{
-			*res = str_dup(input_ptr);
-			return (state->i += str_len(input_ptr), true);
-		}
-		else
-		{
-			line_len = (size_t)(newline_ptr - input_ptr + 1);
-			*res = str_sub(input_ptr, 0, line_len);
-			return (state->i += line_len, true);
-		}
+		*line_len = (size_t)(match_eol - body->line) + 1;
+		body->line = str_sub(body->line, 0, *line_len);
 	}
+	if (body->line == NULL)
+		return (ERR_LIBC);
+	return (ERR_NO);
 }
 
-static t_error	heredoc_build_delimiter(t_buff *res, t_here_queue_item *item)
+static t_error	heredoc_get_body_tty(t_lexer *state, t_heredoc_body *body)
 {
-	t_error	err;
-	t_buff	delim;
+	size_t	line_len;
 
-	if (!buff_init(&delim, 0, NULL, 0))
-		return (ERR_LIBC);
-	if (!buff_dup_n(&delim, &item->delim, item->delim.len))
-		return (ERR_LIBC);
-	if (!buff_append(&delim, "\n", 1))
-		return (ERR_LIBC);
-	err = expander_quote_removal(res, &delim);
-	return (buff_free(&delim), err);
+	while (!body->reached_here_end)
+	{
+		if (body->input == NULL && heredoc_read_tty_line(state, body))
+			return (state->err);
+		state->err = heredoc_tty_next_line(body, &line_len);
+		if (state->err)
+			return (state->err);
+		if (heredoc_consume_line(state, body))
+			return (state->err);
+		heredoc_advance(body, line_len);
+	}
+	return (state->err);
 }
 
 bool	heredoc_get_body(t_lexer *state, t_here_queue_item *item)
 {
 	t_heredoc_body	body;
 
-	state->reached_here_end = false;
-	state->err = heredoc_build_delimiter(&body.delim, item);
-	if (state->err)
-		return (true);
 	heredoc_body_init(&body);
 	state->err = heredoc_body_load(&body, item);
 	if (state->err)
 		return (heredoc_body_free(&body), true);
-	while (!state->reached_here_end)
-	{
-		if (state->err)
-			return (heredoc_body_free(&body), true);
-		else if (state->input[state->i] == '\0')
-			return (heredoc_body_free(&body), state->err = ERR_NO_DELIM, true);
-		else if (heredoc_get_line(&body.last_line, state) && state->err)
-			return (heredoc_body_free(&body), true);
-		else if (heredoc_format_line(&body, state) && state->err)
-			return (heredoc_body_free(&body), true);
-		else if (heredoc_add_line_to_content(&body, state) && state->err)
-			return (heredoc_body_free(&body), true);
-	}
-	return (true);
+	if (heredoc_build_delimiter(state, &body))
+		return (heredoc_body_free(&body), true);
+	else if (state->is_tty && heredoc_get_body_tty(state, &body))
+		return (heredoc_body_free(&body), true);
+	else if (!state->is_tty && heredoc_get_body_not_tty(state, &body))
+		return (heredoc_body_free(&body), true);
+	if (!state->is_tty)
+		state->i += body.i;
+	if (write(body.fd, body.content.data, body.content.len) == -1)
+		state->err = ERR_LIBC;
+	return (heredoc_body_free(&body), true);
 }

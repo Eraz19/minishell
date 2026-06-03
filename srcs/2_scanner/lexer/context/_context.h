@@ -6,14 +6,14 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:49:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 11:13:47 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:27:02 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _CONTEXT_H
 # define _CONTEXT_H
 
-# include "../_lexer.h"
+# include "_lexer.h"
 
 typedef struct s_escape_handler
 {
@@ -22,7 +22,7 @@ typedef struct s_escape_handler
 	bool	(*is_in_special_whitelist)(char);
 	bool	(*is_in_special_context)(t_lexer *);
 }	t_escape_handler;
-
+	
 typedef struct s_unescape_handler
 {
 	void	*special_args;

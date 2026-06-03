@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:00:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/05/29 17:57:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:07:51 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,23 @@ void	scanner_free(t_scanner *state)
 {
 	if (state == NULL)
 		return ;
-	if (state->origin.command)
-		free(state->origin.command);
+	if (state->arg.command)
+		free(state->arg.command);
 	lexer_free(&state->lexer);
 	reader_free(&state->reader);
 	*state = (t_scanner){0};
 }
 
-t_error	scanner_load(
-	t_scanner *state,
-	t_scanner_mode mode,
-	t_scanner_origin origin)
+t_error	scanner_load(t_scanner *state, t_scanner_mode mode, t_scanner_arg arg)
 {
+	if (state == NULL)
+		return (ERR_NULL_ARGS);
 	state->mode = mode;
-	reader_load(&state->reader, state->lexer.ctx);
+	reader_load(&state->reader, &state->lexer.ctx);
 	lexer_load(&state->lexer, mode == SCAN_MODE_STDIN);
 	if (mode == SCAN_MODE_STRING)
-		return (state->origin.command = origin.command, ERR_NO);
+		return (state->arg.command = arg.command, state->err);
 	else if (mode == SCAN_MODE_FILE)
-		return (state->origin.path = origin.path, ERR_NO);
-	return (ERR_NO);
+		return (state->arg.path = arg.path, state->err);
+	return (state->err);
 }

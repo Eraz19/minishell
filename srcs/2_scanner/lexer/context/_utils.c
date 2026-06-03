@@ -6,21 +6,21 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:13:58 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 11:13:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:26:32 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_context.h"
-#include "../../_scanner.h"
+#include "_scanner.h"
 
 bool	ctx_start(t_lexer *state, t_scanner_ctx ctx, size_t len)
 {
 	if (state->token.type == NONE)
 		state->token.type = TOKEN;
-	state->err = ctx_stack_push(state->ctx, ctx);
+	state->err = ctx_stack_push(&state->ctx, ctx);
 	if (state->err)
 		return (true);
-	return (lexer_consume(state, state->token.type, len), true);
+	return (lexer_consume(state, state->token.type, len));
 }
 
 bool	ctx_unescape(t_lexer *state, t_unescape_handler args)
@@ -28,14 +28,15 @@ bool	ctx_unescape(t_lexer *state, t_unescape_handler args)
 	if (state->input[state->i] == '\0')
 	{
 		if (state->is_tty)
-			return (state->err = reader_continuation(&state->input), true);
+			state->err = reader_continuation(&state->input);
 		else
-			return (state->err = ERR_UNEXPECTED_EOI, true);
+			state->err = ERR_UNEXPECTED_EOI;
+		return (true);
 	}
 	else if (args.special_handler != NULL)
 		return (args.special_handler(state, args.special_args));
 	else
-		return (lexer_consume(state, state->token.type, 1), true);
+		return (lexer_consume(state, state->token.type, 1));
 }
 
 void	ctx_escape_next_char(t_lexer *state, t_escape_handler args)
@@ -102,7 +103,7 @@ bool	ctx_handle(t_lexer *state, t_ctx_handler args)
 			lexer_consume(state, state->token.type, 1);
 			if (state->err)
 				return (true);
-			return (state->err = ctx_stack_pop(state->ctx), true);
+			return (state->err = ctx_stack_pop(&state->ctx), true);
 		}
 		else if (state->input[state->i] == '\\' && args.escape(state))
 			continue ;

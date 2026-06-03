@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
+/*   ft_time.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 14:21:32 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/01 14:45:44 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/01 16:50:21 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_ctx_stack.h"
+#ifndef FT_TIME_H
+# define FT_TIME_H
 
-void	ctx_stack_init(t_scanner_ctx_stack *stack)
-{
-	if (stack == NULL)
-		return ;
-	*stack = (t_scanner_ctx_stack){0};
-	vector_init(stack, sizeof(t_scanner_ctx), 0);
-}
+#include <time.h>
 
-void	ctx_stack_free(t_scanner_ctx_stack *stack)
-{
-	if (stack == NULL)
-		return ;
-	vector_free(stack);
-	*stack = (t_scanner_ctx_stack){0};
-}
+time_t    get_now_unix_seconds(void);
+
+#endif

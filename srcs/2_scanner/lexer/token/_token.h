@@ -6,14 +6,14 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:32:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 09:52:42 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:09:22 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef _TOKEN_H
 # define _TOKEN_H
 
-# include "../_lexer.h"
+# include "_lexer.h"
 
 void	token_init(t_token *token);
 void	token_free(t_token *token);

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 17:59:16 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 11:25:54 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:30:33 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_error	lexer_heredoc_create_tmp_file(t_file_path *res)
 		err = heredoc_build_tmp_path(i, path, &tmp_path);
 		if (err != ERR_NO)
 			return (buff_free(&path), err);
-		if (!access(buff_get_string(&tmp_path), F_OK))
+		if (access(buff_get_string(&tmp_path), F_OK))
 		{
 			heredoc_create_file(buff_get_string(&tmp_path));
 			return (*res = buff_get_string(&tmp_path), buff_free(&path), err);
@@ -72,19 +72,18 @@ t_error	lexer_heredoc_create_tmp_file(t_file_path *res)
 
 bool	lexer_heredoc_queue_consume(t_lexer *state)
 {
-	size_t 				i;
-	t_here_queue_item	*item;
+	size_t				i;
+	t_here_queue_item	item;
 
 	i = 0;
-	item = NULL;
-	while (i < state->queue->len)
+	while (i < state->queue.len)
 	{
-		state->err = here_queue_get(item, state->queue, i);
+		state->err = here_queue_get(&state->queue, &item, i);
 		if (state->err)
 			return (true);
-		if (heredoc_get_body(state, item) && state->err)
+		if (heredoc_get_body(state, &item) && state->err)
 			return (true);
 		i++;
 	}
-	return (here_queue_clean(state->queue), true);
+	return (here_queue_clean(&state->queue), true);
 }

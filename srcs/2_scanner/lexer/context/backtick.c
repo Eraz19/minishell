@@ -18,10 +18,10 @@ static bool	is_backtick_squote_surrounded(t_lexer *state)
 	t_scanner_ctx	*ctx;
 	t_scanner_ctx	surrounding_ctx;
 
-    if (state->ctx->len < 2)
+    if (state->ctx.len < 2)
         return (false);
-    ctx = (t_scanner_ctx *)state->ctx->data;
-	surrounding_ctx = ctx[state->ctx->len - 2];
+    ctx = (t_scanner_ctx *)state->ctx.data;
+	surrounding_ctx = ctx[state->ctx.len - 2];
     return (surrounding_ctx == DQUOTE || surrounding_ctx == ARITH);
 }
 

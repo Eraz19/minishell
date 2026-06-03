@@ -6,40 +6,40 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:05:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 09:46:27 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/03 15:29:55 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_scanner.h"
 #include "./lexer/context/_context.h"
 
-t_error	scanner_next_token(t_token *res)
+t_error	scanner_next_token(t_token *token)
 {
 	t_error		err;
-	t_scanner	scanner;
+	t_scanner	*state;
 
-	if (res == NULL)
+	if (token == NULL)
 		return (ERR_NULL_ARGS);
 	err = ERR_NO;
-	scanner = shell_get_scanner();
-	if (scanner.mode == SCAN_MODE_FILE)
-		err = reader_file_input(&scanner.lexer.input, scanner.origin.path);
-	else if (scanner.mode == SCAN_MODE_STRING)
-		scanner.lexer.input = scanner.origin.command;
-	else if (scanner.lexer.input == NULL)
-		err = reader_new_input(&scanner.lexer.input);
+	state = shell_get_scanner();
+	if (state->mode == SCAN_MODE_FILE && state->lexer.input == NULL)
+		err = reader_file_input(&state->lexer.input, state->arg.path);
+	else if (state->mode == SCAN_MODE_STRING && state->lexer.input == NULL)
+		state->lexer.input = state->arg.command;
+	else if (state->lexer.input == NULL)
+		err = reader_new_input(&state->lexer.input);
 	if (err != ERR_NO)
 		return (err);
-	return (lexer_next_token(res, &scanner.lexer));
+	return (lexer_next_token(token, &state->lexer));
 }
 
 t_error	scanner_report_io_here(char **res, t_buff delim, t_heredoc_mode mode)
 {
 	t_error				err;
 	t_here_queue_item	item;
-	t_scanner			scanner;
+	t_scanner			*state;
 
-	scanner = shell_get_scanner();
+	state = shell_get_scanner();
 	err = lexer_heredoc_create_tmp_file(res);
 	if (err != ERR_NO)
 		return (err);
@@ -47,7 +47,7 @@ t_error	scanner_report_io_here(char **res, t_buff delim, t_heredoc_mode mode)
 		.path = *res,
 		.mode = mode,
 		.delim = delim};
-	return (here_queue_push(scanner.lexer.queue, item));
+	return (here_queue_push(&state->lexer.queue, item));
 }
 
 bool	scanner_is_in_quoting_whitelist(char c, t_scanner_ctx ctx)

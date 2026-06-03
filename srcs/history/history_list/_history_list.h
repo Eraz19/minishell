@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.h                                         :+:      :+:    :+:   */
+/*   _history_list.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 12:32:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 19:33:52 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/28 15:19:15 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/02 19:45:27 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXPANDER_H
-# define EXPANDER_H
+#ifndef _HISTORY_LIST_H
+# define _HISTORY_LIST_H
 
 # include "error.h"
-# include "../srcs/expander/quoting/_quote_remove.h"
+# include "libft.h"
 
-t_error	expander_quote_remove(t_buff *res, t_buff *input);
+typedef t_vector	t_history_list;
+
+void	history_list_init(t_history_list *list);
+void	history_list_free(t_history_list *list);
+
+t_error	history_list_push(t_history_list *list, char *item);
+t_error	history_list_get(char **item, size_t i, t_history_list *list);
+t_error	history_list_insert(t_history_list *list, size_t index, char *item);
 
 #endif
