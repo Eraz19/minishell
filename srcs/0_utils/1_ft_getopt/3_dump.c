@@ -2,7 +2,7 @@
 # include "debug.h"
 # include <stdio.h>
 
-static void	getopt_dump_flag_with_arg(t_getopt_flag_with_arg *flag)
+static void	ft_getopt_dump_flag_with_arg(t_getopt_flag_with_arg *flag)
 {
 	size_t	i;
 
@@ -24,7 +24,7 @@ static void	getopt_dump_flag_with_arg(t_getopt_flag_with_arg *flag)
 	printf("]\n");
 }
 
-void	getopt_dump_in(t_getopt_in *in)
+void	ft_getopt_dump_in(t_getopt_in *in)
 {
 	size_t	i;
 
@@ -35,7 +35,7 @@ void	getopt_dump_in(t_getopt_in *in)
 	i = 0;
 	while (i < in->options_with_arg_count)
 	{
-		getopt_dump_flag_with_arg(&in->options_with_arg[i]);
+		ft_getopt_dump_flag_with_arg(&in->options_with_arg[i]);
 		i++;
 	}
 	printf("options_with_arg_count=%zu\n", in->options_with_arg_count);
@@ -43,7 +43,7 @@ void	getopt_dump_in(t_getopt_in *in)
 	printf("ub_on_repeated_flags=%s\n", bool_to_string(in->ub_on_repeated_flags));
 }
 
-void	getopt_dump_out(t_getopt_out *out)
+void	ft_getopt_dump_out(t_getopt_out *out)
 {
 	size_t			i;
 	t_getopt_option	*option;
@@ -62,8 +62,8 @@ void	getopt_dump_out(t_getopt_out *out)
 	printf("first_operand_index=%zu\n", out->first_operand_index);
 }
 
-void	getopt_dump_all(t_getopt_in *in, t_getopt_out *out)
+void	ft_getopt_dump_all(t_getopt_in *in, t_getopt_out *out)
 {
-	getopt_dump_in(in);
-	getopt_dump_out(out);
+	ft_getopt_dump_in(in);
+	ft_getopt_dump_out(out);
 }

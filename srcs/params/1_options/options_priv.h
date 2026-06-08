@@ -3,15 +3,18 @@
 
 # include "options.h"
 
-bool	options_process_name(
+// @ret ERR_OPT_INVALID
+t_error	options_process_flag(
 	t_option *options,
-	const char *arg,
+	char flag,
 	bool on,
 	bool *explicit_plus_m);
 
-bool	options_process_flags(
+// @ret ERR_OPT_INVALID_ARG
+t_error	options_process_name(
 	t_option *options,
 	const char *arg,
+	bool on,
 	bool *explicit_plus_m);
 
 #endif

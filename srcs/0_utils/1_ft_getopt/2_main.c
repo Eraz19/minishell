@@ -21,6 +21,7 @@ static bool	getopt_is_delimiter(t_getopt_state *state)
 	return (false);
 }
 
+// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG / ERR_LIBC
 static t_error	getopt_process(t_getopt_state *state)
 {
 	t_error		error;
@@ -80,7 +81,10 @@ t_error	ft_getopt(int argc, char **argv, t_getopt_in *in, t_getopt_out *out)
 	out->first_operand_index = 1;
 	error = getopt_process(&state);
 	if (error != ERR_NO)
+	{
+		vector_free(&out->options, NULL);
 		return (error);
+	}
 	if (in->ub_on_repeated_flags)
 		getopt_catch_ub(out);
 	return (ERR_NO);

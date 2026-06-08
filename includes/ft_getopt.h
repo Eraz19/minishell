@@ -6,7 +6,13 @@
 # include <stdbool.h>
 # include <stddef.h>
 
-// ⚠️ TODO: in each builtin (if doc doesn't specifiy anything else): call undefined_behaviour() when "use of conflicting mutually-exclusive arguments" cf 12.1:8.
+/*
+⚠️ TODO: in each builtin (if doc doesn't specifiy anything else): call undefined_behaviour() when "use of conflicting mutually-exclusive arguments" cf 12.1:8.
+---
+⚠️ XBD 12.2:
+	- Guideline 7
+	- Guideline 8
+*/
 
 /* ************************************************************************* */
 /*                                   INPUT                                   */
@@ -52,14 +58,16 @@ typedef struct s_getopt_out
 /*                                  FUNCTION                                 */
 /* ************************************************************************* */
 
+// @warning: caller must free out->options with vector_free()
+// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG / ERR_LIBC
 t_error	ft_getopt(int argc, char **argv, t_getopt_in *input, t_getopt_out *out);
 
 /* ************************************************************************* */
 /*                                    DEBUG                                  */
 /* ************************************************************************* */
 
-void	getopt_dump_in(t_getopt_in *in);
-void	getopt_dump_out(t_getopt_out *out);
-void	getopt_dump_all(t_getopt_in *in, t_getopt_out *out);
+void	ft_getopt_dump_in(t_getopt_in *in);
+void	ft_getopt_dump_out(t_getopt_out *out);
+void	ft_getopt_dump_all(t_getopt_in *in, t_getopt_out *out);
 
 #endif
