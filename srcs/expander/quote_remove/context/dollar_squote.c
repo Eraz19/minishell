@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_squote.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:53:21 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 10:54:42 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:55:28 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static t_context_args	context_dollar_squote_rules(void)
 	return (args);
 }
 
-t_error	context_dollar_squote(t_quote_remove *state)
+t_error	expander_context_dollar_squote(t_quote_remove *state)
 {	
 	quote_remove_advance(state, 2);
-	return (context_scan(state, context_dollar_squote_rules()));
+	return (expander_context_scan(state, context_dollar_squote_rules()));
 }

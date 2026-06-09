@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   __lexer_context.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:49:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 10:30:39 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,15 @@ typedef struct s_context_args
 	bool			(*is_expansion)(char *, t_context *);
 }	t_context_args;
 
-t_error	context_scan(t_lexer *state, t_context_args args);
-t_error	context_escape(t_lexer *state, t_escape_args args);
-t_error	context_unescape(t_lexer *state, t_unescape_args args);
+t_error	lexer_context_scan(t_lexer *state, t_context_args args);
+t_error	lexer_context_escape(t_lexer *state, t_escape_args args);
+t_error	lexer_context_unescape(t_lexer *state, t_unescape_args args);
 
-t_error	context_param(t_lexer *state);
-t_error	context_arith(t_lexer *state);
-t_error	context_dquote(t_lexer *state);
-t_error	context_squote(t_lexer *state);
-t_error	context_backtick(t_lexer *state);
-t_error	context_dollar_squote(t_lexer *state);
+t_error	lexer_context_param(t_lexer *state);
+t_error	lexer_context_arith(t_lexer *state);
+t_error	lexer_context_dquote(t_lexer *state);
+t_error	lexer_context_backtick(t_lexer *state);
+t_error	lexer_context_squote(t_lexer *state);
+t_error	lexer_context_dollar_squote(t_lexer *state);
 
 #endif

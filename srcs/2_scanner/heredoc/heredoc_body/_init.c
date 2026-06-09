@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 09:13:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:34:15 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:41:16 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static t_error	heredoc_build_delimiter(t_heredoc_body *state, t_buff *delim)
 {
 	t_buff	delim_no_quoting;
 
-	expander_quote_remove(&delim_no_quoting, delim);
+	quote_remove(&delim_no_quoting, delim);
 	if (state->err)
 		return (state->err);
 	if (!buff_append(&delim_no_quoting, "\n", 1))

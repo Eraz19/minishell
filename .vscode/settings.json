@@ -3,14 +3,31 @@
 		"-x", "c",
 		"-I${workspaceFolder}",
 		"-I${workspaceFolder}/includes",
+		"-I${workspaceFolder}/logs",
 		"-I${workspaceFolder}/libft",
 		"-I${workspaceFolder}/libft/buff",
 		"-I${workspaceFolder}/libft/buff/format",
 		"-I${workspaceFolder}/srcs/1_shell",
-
 		"-I${workspaceFolder}/srcs/2_scanner",
 		"-I${workspaceFolder}/srcs/2_scanner/lexer",
-		
+		"-I${workspaceFolder}/srcs/2_scanner/reader",
+		"-I${workspaceFolder}/srcs/2_scanner/lexer/rules",
+		"-I${workspaceFolder}/srcs/2_scanner/lexer/token",
+		"-I${workspaceFolder}/srcs/2_scanner/lexer/context",
+		"-I${workspaceFolder}/srcs/2_scanner/lexer/operator",
+		"-I${workspaceFolder}/srcs/2_scanner/lexer/context/context_stack",
+		"-I${workspaceFolder}/srcs/2_scanner/heredoc",
+		"-I${workspaceFolder}/srcs/2_scanner/heredoc/here_queue",
+		"-I${workspaceFolder}/srcs/2_scanner/heredoc/heredoc_body",
+		"-I${workspaceFolder}/srcs/2_scanner/alias",
+		"-I${workspaceFolder}/srcs/2_scanner/alias/alias_stack",			
+		"-I${workspaceFolder}/srcs/expander/quote_remove",
+		"-I${workspaceFolder}/srcs/expander/quote_remove/rules",
+		"-I${workspaceFolder}/srcs/expander/quote_remove/context",			
+		"-I${workspaceFolder}/srcs/history",
+		"-I${workspaceFolder}/srcs/history/history_rl",
+		"-I${workspaceFolder}/srcs/history/history_list",
+		"-I${workspaceFolder}/srcs/history/history_file",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/1_hooks",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/2_rules",
@@ -32,7 +49,6 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up",
-		"-I${workspaceFolder}/srcs/builtins",
-		"-I${workspaceFolder}/logs"
+		"-I${workspaceFolder}/srcs/builtins"
 	]
 }

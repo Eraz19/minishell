@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:00:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 15:03:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 17:37:18 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "__scanner.h"
+#include "scanner.h"
 
 void	scanner_init(t_scanner *state)
 {
@@ -31,14 +31,14 @@ void	scanner_free(t_scanner *state)
 	*state = (t_scanner){0};
 }
 
-t_error	scanner_load(t_scanner *state, t_scanner_mode mode, t_scanner_arg arg)
+t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *arg)
 {
 	state->mode = mode;
 	lexer_load(&state->lexer, mode == SCAN_MODE_STDIN);
 	heredoc_load(&state->heredoc, mode == SCAN_MODE_STDIN);
 	if (mode == SCAN_MODE_STRING)
-		return (state->arg.command = arg.command, state->err);
+		return (state->arg.command = arg, state->err);
 	else if (mode == SCAN_MODE_FILE)
-		return (state->arg.path = arg.path, state->err);
+		return (state->arg.path = arg, state->err);
 	return (state->err);
 }

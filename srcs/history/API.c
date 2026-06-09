@@ -1,18 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   API.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/01 13:20:55 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 11:27:46 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
+#include "shell.h"
 #include <stdlib.h>
 #include "error.h"
-#include "__history.h"
+#include "history.h"
 
 t_error	history_save_entry(void)
 {
@@ -20,6 +9,8 @@ t_error	history_save_entry(void)
 	t_history	*state;
 	
 	state = shell_get_history();
+	if (state == NULL)
+		return (ERR_SHELL_NOT_FOUND);
 	entry = buff_get_string(&state->current_input);
 	if (entry == NULL)
 		return (state->err = ERR_LIBC, state->err);
@@ -38,6 +29,8 @@ t_error	history_append_to_entry(char *entry)
 	t_history	*state;
 
 	state = shell_get_history();
+	if (state == NULL)
+		return (ERR_SHELL_NOT_FOUND);
 	if (!buff_append(&state->current_input, entry, (long)str_len(entry)))
 		return (state->err = ERR_LIBC, state->err);
 	return (state->err);
@@ -51,6 +44,8 @@ t_error	history_save(void)
 	char 		*content_str;
 
 	state = shell_get_history();
+	if (state == NULL)
+		return (ERR_SHELL_NOT_FOUND);
 	buff_init(&content, 0, NULL, 0);
 	i = state->file.loaded_list.len;
 	state->err = history_list_to_file(&state->list, i, &content);

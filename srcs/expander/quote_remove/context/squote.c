@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   squote.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 16:54:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 10:59:15 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:55:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "__quote_remove_context.h"
+#include "context.h"
 
 static t_context_args	context_squote_rules(void)
 {
@@ -21,8 +22,8 @@ static t_context_args	context_squote_rules(void)
 	return (args);
 }
 
-t_error	context_squote(t_quote_remove *state)
+t_error	expander_context_squote(t_quote_remove *state)
 {
 	quote_remove_advance(state, 1);
-	return (context_scan(state, context_squote_rules()));
+	return (expander_context_scan(state, context_squote_rules()));
 }

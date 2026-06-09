@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   __heredoc_body.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:41:25 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:33:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:18:55 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __HEREDOC_BODY_H
 # define __HEREDOC_BODY_H
 
-# include "__heredoc.h"
+# include "__here_queue.h"
 
 typedef struct s_heredoc_body_load_args
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:40:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:21:15 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:53:30 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_error	context_top_level_escape(t_lexer *state)
 	args.is_in_special_whitelist = NULL;
 	args.enable_line_continuation = true;
 	args.is_in_whitelist = is_in_context_none_whitelist;
-	return (context_escape(state, args));
+	return (lexer_context_escape(state, args));
 }
 
 bool	is_in_middle_of_word(t_lexer *state)

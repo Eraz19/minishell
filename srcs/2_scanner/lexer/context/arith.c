@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arith.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:11:19 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_error	context_arith_escape(t_lexer *state)
 	args.is_in_special_whitelist = NULL;
 	args.enable_line_continuation = true;
 	args.is_in_whitelist = is_in_context_dquote_whitelist;
-	return (context_escape(state, args));
+	return (lexer_context_escape(state, args));
 }
 
 static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
@@ -49,7 +49,7 @@ static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
 	
 	args.special_args = nesting_depth;
 	args.special_handler = context_arith_unescape_;
-	return (context_unescape(state, args));
+	return (lexer_context_unescape(state, args));
 }
 
 static t_context_args	context_arith_rules(size_t *nesting_depth)
@@ -69,14 +69,14 @@ static t_context_args	context_arith_rules(size_t *nesting_depth)
 	return (res);
 }
 
-t_error	context_arith(t_lexer *state)
+t_error	lexer_context_arith(t_lexer *state)
 {
 	t_lexer_backup	backup;
 	size_t			nesting_depth;
 
 	nesting_depth = 0;
 	backup = lexer_backup(state);
-	if (context_scan(state, context_arith_rules(&nesting_depth)))
+	if (lexer_context_scan(state, context_arith_rules(&nesting_depth)))
 		return (state->err);
 	if (state->input[state->i] != ')')
 	{

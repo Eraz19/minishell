@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   __history_rl.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 15:17:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 12:07:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:24:19 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define __HISTORY_RL_H
 
 # include "error.h"
-# include "libft.h"
 # include "__history_list.h"
 
 typedef struct s_history_rl

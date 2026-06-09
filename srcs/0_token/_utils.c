@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_time.h                                          :+:      :+:    :+:   */
+/*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/01 14:45:44 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 16:50:21 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/29 15:35:39 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/09 16:06:12 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_TIME_H
-# define FT_TIME_H
+#include "token.h"
 
-#include <time.h>
-
-time_t    get_now_unix_seconds(void);
-
-#endif
+t_error	token_dup(t_token *dst, t_token *src)
+{
+	if (!buff_dup_n(&dst->value, &src->value, src->value.len))
+		return (ERR_LIBC);
+	return (dst->type = src->type, ERR_NO);
+}

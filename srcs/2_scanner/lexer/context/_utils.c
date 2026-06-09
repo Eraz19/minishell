@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:48:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:16:55 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_error	context_EOI(t_lexer *state)
 	return (state->err);
 }
 
-t_error	context_unescape(t_lexer *state, t_unescape_args args)
+t_error	lexer_context_unescape(t_lexer *state, t_unescape_args args)
 {
 	if (state->input[state->i] == '\0')
 		return (context_EOI(state));
@@ -54,7 +54,7 @@ static t_error	context_escape_next_char(t_lexer *state, t_escape_args args)
 	return (state->err);
 }
 
-t_error	context_escape(t_lexer *state, t_escape_args args)
+t_error	lexer_context_escape(t_lexer *state, t_escape_args args)
 {
 	if (args.enable_line_continuation && state->input[state->i + 1] == '\n')
 	{
@@ -74,7 +74,7 @@ t_error	context_escape(t_lexer *state, t_escape_args args)
 	return (state->err);
 }
 
-t_error	context_scan(t_lexer *state, t_context_args args)
+t_error	lexer_context_scan(t_lexer *state, t_context_args args)
 {
 	char		*str;
 	t_context	context;

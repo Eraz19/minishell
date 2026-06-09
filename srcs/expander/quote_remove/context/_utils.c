@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 16:28:32 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 15:24:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:54:51 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "__quote_remove_context.h"
 
-t_error	context_escape(t_quote_remove *state, t_context_args args)
+t_error	expander_context_escape(t_quote_remove *state, t_context_args args)
 {
 	if (state->input[state->i + 1] == '\0')
 		return (state->reached_EOW = true, quote_remove_consume(state));
@@ -26,7 +26,7 @@ t_error	context_escape(t_quote_remove *state, t_context_args args)
 	return (quote_remove_consume(state));
 }
 
-t_error	context_scan(t_quote_remove *state, t_context_args args)
+t_error	expander_context_scan(t_quote_remove *state, t_context_args args)
 {
 	char	current_char;
 
@@ -40,7 +40,7 @@ t_error	context_scan(t_quote_remove *state, t_context_args args)
 		else if (args.is_end != NULL && args.is_end(current_char, NULL))
 			return (quote_remove_advance(state, 1), state->err);
 		else if (current_char == '\\' && args.is_in_whitelist != NULL)
-			context_escape(state, args);
+			expander_context_escape(state, args);
 		else
 			quote_remove_consume(state);
 	}

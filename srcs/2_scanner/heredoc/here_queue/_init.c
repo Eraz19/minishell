@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:19:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/04 18:38:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:18:10 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "_here_queue.h"
+#include "__here_queue.h"
 
 void	here_queue_init(t_here_queue *queue)
 {
@@ -22,6 +22,6 @@ void	here_queue_init(t_here_queue *queue)
 void	here_queue_free(t_here_queue *queue)
 {
 	here_queue_clean(queue);
-	vector_free(queue);
+	vector_free(queue, NULL);
 	*queue = (t_here_queue){0};
 }

@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   __lexer.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:24:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:36:36 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 15:39:48 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __LEXER_H
 # define __LEXER_H
 
+# include "token.h"
 # include "error.h"
-# include "libft.h"
 # include "context.h"
-# include "__lexer_token.h"
 
 typedef struct s_lexer_backup
 {

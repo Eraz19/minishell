@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 13:54:53 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 16:29:40 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:17:47 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "__alias.h"
 #include "context.h"
 
 bool	builder_can_next_token_be_a_simple_cmd_name(void);
@@ -55,5 +54,6 @@ bool	is_valid_alias_name(char *word)
 
 t_error	alias_substitution()
 {
-	
+	// TODO
+	return (ERR_NO);
 }

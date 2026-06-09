@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   squote.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:11:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_error	context_squote_escape(t_lexer *state)
 	args.is_in_special_whitelist = NULL;
 	args.enable_line_continuation = false;
 	args.is_in_whitelist = is_in_context_squote_whitelist;
-	return (context_escape(state, args));
+	return (lexer_context_escape(state, args));
 }
 
 static t_error	context_squote_unescape(t_lexer *state, void *_)
@@ -29,7 +29,7 @@ static t_error	context_squote_unescape(t_lexer *state, void *_)
 
 	args.special_args = NULL;
 	args.special_handler = NULL;
-	return (context_unescape(state, args));
+	return (lexer_context_unescape(state, args));
 }
 
 static t_context_args	context_squote_rules(void)
@@ -49,7 +49,7 @@ static t_context_args	context_squote_rules(void)
 	return (res);
 }
 
-t_error	context_squote(t_lexer *state)
+t_error	lexer_context_squote(t_lexer *state)
 {
-	return (context_scan(state, context_squote_rules()));
+	return (lexer_context_scan(state, context_squote_rules()));
 }

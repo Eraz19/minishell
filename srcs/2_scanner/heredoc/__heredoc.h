@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   __heredoc.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:10:57 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:29:22 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 15:20:22 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __HEREDOC_H
 # define __HEREDOC_H
 
-# include "libft.h"
-# include "types.h"
 # include "__here_queue.h"
 
 typedef struct s_heredoc

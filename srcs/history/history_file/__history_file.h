@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   __history_file.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 16:00:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 12:09:59 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:24:01 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define __HISTORY_FILE_H
 
 # include "error.h"
-# include "libft.h"
 # include "types.h"
 # include "__history_list.h"
 

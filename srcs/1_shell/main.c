@@ -1,4 +1,5 @@
 #include "shell_priv.h"
+#include "history.h"
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -46,11 +47,21 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	error = params_load(&shell->params, argc, argv, envp);
 	if (error != ERR_NO)
 		return (error);
-	// TODO: history_load();
-	print_warn("History not implemented yet             => skipping loading\n");
+	error = history_load(&shell->history);
+	if (error != ERR_NO)
+		return (error);
 	// TODO: fun_load(&shell->functions);
 	print_warn("Functions not implemented yet           => skipping loading\n");
-	// TODO: scanner_load(&shell->lexer);
+	/*---------------------------------------*/
+	if (option_is_active(OPT_STDIN_INPUT))
+		error = scanner_load(&shell->scanner, SCAN_MODE_STDIN, shell->params.specials.source);
+	else if (option_is_active(OPT_CMD_STRING))
+		error = scanner_load(&shell->scanner, SCAN_MODE_STRING, shell->params.specials.source);
+	else
+		error = scanner_load(&shell->scanner, SCAN_MODE_FILE, shell->params.specials.source);
+	if (error != ERR_NO)
+		return (error);
+	/*---------------------------------------*/
 	print_warn("Scanner not implemented yet             => skipping loading\n");
 	error = builder_load(&shell->builder);
 	if (error != ERR_NO)

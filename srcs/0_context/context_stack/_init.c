@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 14:37:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:01:42 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ void	context_stack_init(t_context_stack *stack)
 
 void	context_stack_free(t_context_stack *stack)
 {
-	vector_free(stack);
+	vector_free(stack, NULL);
 	*stack = (t_context_stack){0};
 }

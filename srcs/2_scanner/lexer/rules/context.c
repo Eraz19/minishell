@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   context.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:37:26 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:20:32 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:43:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "__lexer_rules.h"
 
-t_error	rule_quoting(t_lexer *state, t_context context)
+t_error	lexer_rule_quoting(t_lexer *state, t_context context)
 {
 	return (lexer_context(state, context));
 }

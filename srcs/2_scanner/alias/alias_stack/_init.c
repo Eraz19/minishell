@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 14:37:14 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:13:49 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ void	alias_stack_init(t_alias_stack *stack)
 
 void	alias_stack_free(t_alias_stack *stack)
 {
-	vector_free(stack);
+	vector_free(stack, NULL);
 	*stack = (t_alias_stack){0};
 }

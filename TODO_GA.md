@@ -10,6 +10,7 @@
 
 # TODO
 
+- `time()` stub ASM
 - ⚠️ on `ERR_LIBC`: error message should be printed **IMMEDIATLY** to avoid `errno` modification (don't `free` before!!)
 - move `export_build_envp()` from `export` to `variables`
 - ⚠️ `undefined_behaviour()` should not `shell_exit()` ! (for example a `builtin` UB should only generate a builtin error, then the shell should behave as POSIX says for builtin errors!) => it should return `ERR_UNDEFINED_BEHAVIOUR`:

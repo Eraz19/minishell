@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   __quote_remove.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:58:05 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 11:18:39 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:00:03 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "libft.h"
 # include "error.h"
-# include "context.h"
 
 typedef struct s_quote_remove
 {

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   none.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:53:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 10:58:06 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:55:00 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "__quote_remove_context.h"
+#include "context.h"
 
 static t_context_args	context_none_rules(void)
 {
@@ -21,11 +22,11 @@ static t_context_args	context_none_rules(void)
 	return (args);
 }
 
-t_error	context_none(t_quote_remove *state)
+t_error	expander_context_none(t_quote_remove *state)
 {
 	if (state->input[state->i] == '\0')
 		return (state->reached_EOW = true, state->err);
 	if (state->input[state->i] == '\\')
-		return (context_escape(state, context_none_rules()));
+		return (expander_context_escape(state, context_none_rules()));
 	return (quote_remove_consume(state));
 }

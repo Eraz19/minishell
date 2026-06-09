@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:32:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 11:19:21 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:41:16 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define EXPANDER_H
 
 # include "error.h"
-# include "_quote_remove.h"
+# include "libft.h"
 
-t_error	expander_quote_remove(t_buff *res, t_buff *input);
+t_error	quote_remove(t_buff *res, t_buff *input);
 
 #endif

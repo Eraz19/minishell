@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   __lexer_token.h                                    :+:      :+:    :+:   */
+/*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:32:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:37:32 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 15:40:55 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __LEXER_TOKEN_H
-# define __LEXER_TOKEN_H
+#ifndef TOKEN_H
+# define TOKEN_H
 
 # include "error.h"
 # include "libft.h"

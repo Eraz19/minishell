@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 11:06:35 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:40:01 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ void	history_list_free(t_history_list *list)
 			((char **)list->data)[i++] = NULL;
 		}
 	}
-	vector_free(list);
+	vector_free(list, NULL);
 	*list = (t_history_list){0};
 }

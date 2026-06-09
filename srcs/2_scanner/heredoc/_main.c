@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 10:37:07 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:31:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:19:55 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "ft_time.h"
+#include "utils.h"
 #include "__lexer.h"
+#include "__heredoc.h"
 #include "__heredoc_body.h"
 
 static t_error	heredoc_tty(t_heredoc *state, t_here_queue_item *item)

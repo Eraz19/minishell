@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 13:19:38 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 12:07:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 17:25:56 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "error.h"
-#include "__history.h"
+#include "params.h"
+#include "history.h"
 #include "__history_rl.h"
 
 void	history_init(t_history *state)
@@ -33,14 +34,34 @@ void	history_free(t_history *state)
 	*state = (t_history){0};
 }
 
-t_error	history_load(t_history *state, t_file_path path, ssize_t max)
+t_error	history_load(t_history *state)
 {
-	ssize_t	max_entries;
+	t_file_path	path;
+	char		*max_as_string;
+	ssize_t 	max;
+	ssize_t		max_entries;
+	t_error		error;
 
+	/* -------- TODO (START) -------- */
+	error = params_get("HISTFILE", &path);
+	if (error != ERR_NO && error != ERR_VAR_NOT_FOUND)
+		return (error);
+	if (error == ERR_VAR_NOT_FOUND || path == NULL)
+	{
+		// TODO: create history file in $HOME/.sh_history
+	}
+	error = params_get("HISTSIZE", &max_as_string);
+	if (error != ERR_NO && error != ERR_VAR_NOT_FOUND)
+		return (error);
+	if (error == ERR_VAR_NOT_FOUND || max_as_string == NULL)
+	{
+		// TODO: ???
+	}
+	/* -------- TODO (END) -------- */
+	max = (ssize_t)ft_atol(max_as_string);
+	max_entries = max;
 	if (max >= 0 && max < 128)
 		max_entries = 128;
-	else
-		max_entries = max;
 	if (history_file_load(&state->file, path, max_entries))
 		return (state->err = state->file.err, state->err);
 	if (!vector_dup(&state->list, &state->file.loaded_list))
