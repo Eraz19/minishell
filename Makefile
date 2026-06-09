@@ -13,9 +13,12 @@ LOGS_DIR		:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
 
 SRCS		:= \
+	$(wildcard logs/*.c) \
 	$(wildcard srcs/*.c) \
 	$(wildcard srcs/0_posix_helpers/*.c) \
 	$(wildcard srcs/0_asm_stubs/*/*.c) \
+	$(wildcard srcs/0_utils/*.c) \
+	$(wildcard srcs/0_utils/*/*.c) \
 	$(wildcard srcs/1_shell/*.c) \
 	$(wildcard srcs/3_builder/*.c) \
 	$(wildcard srcs/3_builder/*/*.c) \

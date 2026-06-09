@@ -1173,9 +1173,9 @@ test_options_short_group_plus_disables()
 
 test_options_short_order_last_write_wins()
 {
-	begin_case "O04" "env -i ./minishell -efuxh +fuh -x" \
+	begin_case "O04" "env -i ./minishell -efuh +fuh -x" \
 		"uses final state after repeated short options" \
-		env -i "$MINISHELL" -efuxh +fuh -x
+		env -i "$MINISHELL" -efuh +fuh -x
 
 	expect_options_state \
 		e=true f=false u=false x=true h=false
