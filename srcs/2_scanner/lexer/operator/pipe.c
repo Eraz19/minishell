@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:11:31 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 11:20:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/05 20:18:50 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_operator.h"
+#include "__lexer_operator.h"
 
 bool	is_operator_char_pipe(t_lexer *state)
 {
@@ -23,7 +23,7 @@ bool	is_operator_char_pipe(t_lexer *state)
 	return (false);
 }
 
-void	operator_add_pipe(t_lexer *state)
+t_error	operator_add_pipe(t_lexer *state)
 {
 	if (state->token.type == PIPE)
 		return (lexer_consume(state, OR_IF, 1));
@@ -31,4 +31,5 @@ void	operator_add_pipe(t_lexer *state)
 		return (lexer_consume(state, CLOBBER, 1));
 	else if (state->token.type == NONE)
 		return (lexer_consume(state, PIPE, 1));
+	return (state->err = ERR_INCOHERENT_STATE, state->err);
 }

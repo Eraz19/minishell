@@ -6,12 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:29:34 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 14:54:15 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/05 19:38:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_lexer.h"
-#include "./token/_token.h"
+#include "__lexer.h"
 
 void	lexer_advance(t_lexer *state, size_t offset)
 {
@@ -39,31 +38,33 @@ t_lexer_backup	lexer_backup(t_lexer *state)
 	t_lexer_backup res;
 
     res.i = state->i;
-    res.ctx_len = state->ctx.len;
+    res.context_len = state->context.len;
     res.token_value_len = state->token.value.len;
     res.token_type = state->token.type;
 	return (res);
 }
 
-void	lexer_restore(t_lexer *state, t_lexer_backup backup)
+t_error	lexer_restore(t_lexer *state, t_lexer_backup backup)
 {
-	while (state->ctx.len > backup.ctx_len)
-        ctx_stack_pop(&state->ctx);
+	while (state->context.len > backup.context_len)
+    {
+		if (context_stack_pop(&state->context))
+			return (state->err);
+	}
     state->i = backup.i;
     state->token.type = backup.token_type;
     state->token.value.len = backup.token_value_len;
+	return (state->err);
 }
 
-void	lexer_delimit_token(t_token *res, t_lexer *state)
+t_error	lexer_delimit_token(t_lexer *state, t_token *res)
 {
     size_t	input_len;
 
     input_len = str_len(state->input);
 	state->err = token_dup(res, &state->token);
 	if (state->err)
-		return ;
+		return (state->err);
 	state->err = token_reset(&state->token, input_len);
-	if (state->err)
-		return ;
-    state->emited_token = true;
+	return (state->emited_token = true, state->err);
 }

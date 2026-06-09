@@ -6,85 +6,85 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 11:14:54 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/05 20:11:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_context.h"
-#include "../token/_token.h"
+#include "__lexer_rules.h"
+#include "__lexer_context.h"
 
-static bool	ctx_arith_special_handler(t_lexer *state, void *nesting_depth)
+static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
 {
 	if (state->input[state->i] == '(')
 	{
-		lexer_consume(state, state->token.type, 1);
-		if (state->err)
-			return (true);
-		return ((*((size_t *)nesting_depth))++, true);
+		(*((size_t *)nesting_depth))++;
+		if (lexer_consume(state, state->token.type, 1))
+			return (state->err);
 	}
 	else if (state->input[state->i] == ')')
 	{
-		lexer_consume(state, state->token.type, 1);
-		if (state->err)
-			return (true);
-		if (*((size_t *)nesting_depth) == 0)
-			return (false);
-		else
-			return ((*((size_t *)nesting_depth))--, true);
+		(*((size_t *)nesting_depth))--;
+		if (lexer_consume(state, state->token.type, 1))
+			return (state->err);
 	}
 	else
-		return (lexer_consume(state, state->token.type, 1), true);
+		return (lexer_consume(state, state->token.type, 1));
+	return (state->err);
 }
 
-static bool	ctx_arith_escape(t_lexer *state)
+static t_error	context_arith_escape(t_lexer *state)
 {
-	t_escape_handler	args;
+	t_escape_args	args;
 
 	args.is_in_special_context = NULL;
 	args.is_in_special_whitelist = NULL;
 	args.enable_line_continuation = true;
-	args.is_in_whitelist = is_in_ctx_dquote_whitelist;
-	return (ctx_escape(state, args));
+	args.is_in_whitelist = is_in_context_dquote_whitelist;
+	return (context_escape(state, args));
 }
 
-static bool	ctx_arith_unescape(t_lexer *state, void *nesting_depth)
+static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
 {
-	t_unescape_handler	args;
+	t_unescape_args	args;
 	
 	args.special_args = nesting_depth;
-	args.special_handler = ctx_arith_special_handler;
-	return (ctx_unescape(state, args));
+	args.special_handler = context_arith_unescape_;
+	return (context_unescape(state, args));
 }
 
-t_ctx_handler	ctx_arith_rules(size_t *nesting_depth)
+static t_context_args	context_arith_rules(size_t *nesting_depth)
 {
-	t_ctx_handler	res;
+	t_context_args	res;
 
-	res.is_end = NULL;
 	res.quoting = NULL;
 	res.opening_len = 3;
-	res.ctx_mode = ARITH;
-	res.escape = ctx_arith_escape;
-	res.unescaped = ctx_arith_unescape;
+	res.context = ARITH;
+	res.is_quoting = NULL;
+	res.escape = context_arith_escape;
 	res.unescaped_args = nesting_depth;
-	res.substitution = lexer_substitution;
+	res.is_end = is_context_arith_ending;
+	res.expansion = lexer_rule_expansion;
+	res.unescaped = context_arith_unescape;
+	res.is_expansion = is_expansion_context;
 	return (res);
 }
 
-bool	ctx_arith(t_lexer *state)
+t_error	context_arith(t_lexer *state)
 {
 	t_lexer_backup	backup;
 	size_t			nesting_depth;
 
 	nesting_depth = 0;
 	backup = lexer_backup(state);
-	ctx_handle(state, ctx_arith_rules(&nesting_depth));
-	if (state->err)
-		return (true);
+	if (context_scan(state, context_arith_rules(&nesting_depth)))
+		return (state->err);
 	if (state->input[state->i] != ')')
-		return (lexer_restore(state, backup), false);
-	lexer_consume(state, state->token.type, 1);
-	if (state->err)
-		return (true);
-	return (state->err = ctx_stack_pop(&state->ctx), true);
+	{
+		if (lexer_restore(state, backup))
+			return (state->err);
+		return (state->err = ERR_CTX_END_NOT_FOUND, state->err);
+	}
+	if (lexer_consume(state, state->token.type, 1))
+		return (state->err);
+	return (state->err = context_stack_pop(&state->context), state->err);
 }

@@ -6,13 +6,16 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:05:08 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 15:06:11 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/05 20:25:16 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_scanner.h"
+#include "__scanner.h"
 
 t_scanner	*shell_get_scanner(void)
 {
-	
+	t_scanner	*state;
+
+	state = NULL;
+	return (state);
 }

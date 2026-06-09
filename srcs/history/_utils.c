@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:10:11 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 13:54:38 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/07 18:32:24 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_history.h"
+#include "__history.h"
 
 t_history	*shell_get_history(void)
 {
@@ -19,3 +19,4 @@ t_history	*shell_get_history(void)
 	state = NULL;
 	return (state);
 }
+

@@ -6,56 +6,63 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/01 11:15:53 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/05 20:11:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_context.h"
-#include "../token/_token.h"
+#include "__lexer_rules.h"
+#include "__lexer_context.h"
 
 static bool	is_backtick_squote_surrounded(t_lexer *state)
 {
-	t_scanner_ctx	*ctx;
-	t_scanner_ctx	surrounding_ctx;
+	t_context	*ctx;
+	t_context	surrounding_ctx;
 
-    if (state->ctx.len < 2)
+    if (state->context.len < 2)
         return (false);
-    ctx = (t_scanner_ctx *)state->ctx.data;
-	surrounding_ctx = ctx[state->ctx.len - 2];
+    ctx = (t_context *)state->context.data;
+	surrounding_ctx = ctx[state->context.len - 2];
     return (surrounding_ctx == DQUOTE || surrounding_ctx == ARITH);
 }
 
-static bool	ctx_backtick_escape(t_lexer *state)
+static t_error	context_backtick_escape(t_lexer *state)
 {
-	t_escape_handler	args;
+	t_escape_args	args;
 
-	args.is_in_whitelist = is_in_ctx_backtick_whitelist;
+	args.is_in_whitelist = is_in_context_backtick_whitelist;
 	args.is_in_special_context = is_backtick_squote_surrounded;
-	args.is_in_special_whitelist = is_in_ctx_backtick_special_whitelist;
 	args.enable_line_continuation = is_backtick_squote_surrounded(state);
-	return (ctx_escape(state, args));
+	args.is_in_special_whitelist = is_in_context_backtick_special_whitelist;
+	return (context_escape(state, args));
 }
 
-static bool	ctx_backtick_unescape(t_lexer *state, void *_)
+static t_error	context_backtick_unescape(t_lexer *state, void *_)
 {
-	t_unescape_handler	args;
+	t_unescape_args	args;
 
 	args.special_args = NULL;
 	args.special_handler = NULL;
-	return (ctx_unescape(state, args));
+	return (context_unescape(state, args));
 }
 
-t_ctx_handler	ctx_backtick_rules(void)
+static t_context_args	context_backtick_rules(void)
 {
-	t_ctx_handler	res;
+	t_context_args	res;
 
 	res.opening_len = 1;
-	res.ctx_mode = BACKTICK;
+	res.context = BACKTICK;
 	res.unescaped_args = NULL;
-	res.quoting = lexer_quoting;
-	res.escape = ctx_backtick_escape;
-	res.is_end = is_ctx_backtick_ending;
-	res.substitution = lexer_substitution;
-	res.unescaped = ctx_backtick_unescape;
+	res.quoting = lexer_rule_quoting;
+	res.is_quoting = is_quoting_context;
+	res.escape = context_backtick_escape;
+	res.expansion = lexer_rule_expansion;
+	res.is_expansion = is_expansion_context;
+	res.is_end = is_context_backtick_ending;
+	res.unescaped = context_backtick_unescape;
 	return (res);
+}
+
+t_error	context_backtick(t_lexer *state)
+{
+	return (context_scan(state, context_backtick_rules()));
 }

@@ -5,41 +5,34 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 14:13:58 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/03 15:26:32 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/05 19:48:06 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/05 20:16:55 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "_context.h"
-#include "_scanner.h"
+#include "__reader.h"
+#include "__lexer_context.h"
 
-bool	ctx_start(t_lexer *state, t_scanner_ctx ctx, size_t len)
+static t_error	context_EOI(t_lexer *state)
 {
-	if (state->token.type == NONE)
-		state->token.type = TOKEN;
-	state->err = ctx_stack_push(&state->ctx, ctx);
-	if (state->err)
-		return (true);
-	return (lexer_consume(state, state->token.type, len));
+	if (state->is_tty)
+		state->err = reader_continuation(&state->input);
+	else
+		state->err = ERR_UNEXPECTED_EOI;
+	return (state->err);
 }
 
-bool	ctx_unescape(t_lexer *state, t_unescape_handler args)
+t_error	context_unescape(t_lexer *state, t_unescape_args args)
 {
 	if (state->input[state->i] == '\0')
-	{
-		if (state->is_tty)
-			state->err = reader_continuation(&state->input);
-		else
-			state->err = ERR_UNEXPECTED_EOI;
-		return (true);
-	}
+		return (context_EOI(state));
 	else if (args.special_handler != NULL)
 		return (args.special_handler(state, args.special_args));
 	else
 		return (lexer_consume(state, state->token.type, 1));
 }
 
-void	ctx_escape_next_char(t_lexer *state, t_escape_handler args)
+static t_error	context_escape_next_char(t_lexer *state, t_escape_args args)
 {
 	bool	in_special_context;
 
@@ -58,60 +51,54 @@ void	ctx_escape_next_char(t_lexer *state, t_escape_handler args)
 	}
 	else
 		state->err = ERR_INCOHERENT_STATE;
+	return (state->err);
 }
 
-bool	ctx_escape(t_lexer *state, t_escape_handler args)
+t_error	context_escape(t_lexer *state, t_escape_args args)
 {
 	if (args.enable_line_continuation && state->input[state->i + 1] == '\n')
 	{
 		lexer_advance(state, 2);
 		if (state->input[state->i] == '\0')
-		{
-			if (state->is_tty)
-				state->err = reader_continuation(&state->input);
-			else
-				state->err = ERR_UNEXPECTED_EOI;
-		}
+			return (context_EOI(state));
 	}
 	else if (state->input[state->i] == '\0')
-	{
-		if (state->is_tty)
-			state->err = reader_continuation(&state->input);
-		else
-			state->err = ERR_UNEXPECTED_EOI;
-	}
+		return (context_EOI(state));
 	else
 	{
-		lexer_consume(state, state->token.type, 1);
-		if (state->err == ERR_NO)
-			ctx_escape_next_char(state, args);
+		if (lexer_consume(state, state->token.type, 1))
+			return (state->err);	
+		if (context_escape_next_char(state, args))
+			return (state->err);
 	}
-	return (true);
+	return (state->err);
 }
 
-bool	ctx_handle(t_lexer *state, t_ctx_handler args)
+t_error	context_scan(t_lexer *state, t_context_args args)
 {
-	ctx_start(state, args.ctx_mode, args.opening_len);
+	char		*str;
+	t_context	context;
+
+	state->token.type = TOKEN;
+	state->err = context_stack_push(&state->context, args.context);
 	if (state->err)
-		return (true);
+		return (state->err);
+	lexer_consume(state, state->token.type, args.opening_len);
 	while (true)
 	{
 		if (state->err)
-			return (true);
-		else if (args.is_end != NULL && args.is_end(state->input[state->i]))
-		{
-			lexer_consume(state, state->token.type, 1);
-			if (state->err)
-				return (true);
-			return (state->err = ctx_stack_pop(&state->ctx), true);
-		}
-		else if (state->input[state->i] == '\\' && args.escape(state))
-			continue ;
-		else if (args.quoting != NULL && args.quoting(state))
-			continue ;
-		else if (args.substitution != NULL && args.substitution(state))
-			continue ;
-		else if (!args.unescaped(state, args.unescaped_args))
-			return (true);
+			return (state->err);
+		str = state->input + state->i;
+		if (args.is_end != NULL && args.is_end(*str, args.unescaped_args))
+			break ;
+		else if (*str == '\\')
+			args.escape(state);
+		else if (args.quoting != NULL && args.is_quoting(str, &context))
+			args.quoting(state, context);
+		else if (args.expansion != NULL && args.is_expansion(str, &context))
+			args.expansion(state, context);
+		else
+			args.unescaped(state, args.unescaped_args);
 	}
+	return (state->err = context_stack_pop(&state->context), state->err);
 }
