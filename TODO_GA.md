@@ -4,7 +4,9 @@
 - `Alias` builtin:
 	- Use `ft_getopt`
 	- Check for UB (cf `export`)
-- `ERR_LIBC` problem (see `TODO` section)
+- `errors` (`ERR_LIBC` problem: see `TODO` section):
+	- keep track of already printed or not ?
+	- save errno when error is thrown ?
 
 # TODO
 

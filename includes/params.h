@@ -85,6 +85,9 @@ t_error	params_replace_positionals(t_positionals *src);
 // @ret ERR_SHELL_NOT_FOUND / ERR_LIBC.
 t_error	params_pop_positionals(void);
 
+// @ret ERR_SHELL_NOT_FOUND / ERR_LIBC
+t_error	params_build_envp(char ***dst_envp);
+
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
 /* ************************************************************************* */

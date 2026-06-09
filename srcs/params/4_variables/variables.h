@@ -52,6 +52,9 @@ t_error	var_set(const char *name, const char *value, bool export, bool rdonly);
 // 		ERR_INDEX_OUT_OF_BOUND
 t_error	var_unset(const char *name);
 
+// @ret ERR_LIBC
+t_error	var_build_envp(const t_var_list *variables, char ***dst_envp);
+
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
