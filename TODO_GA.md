@@ -1,11 +1,17 @@
+# Alexander
+
+- `undefined_behaviour()` n'exit plus le shell
+- `Alias` builtin:
+	- Use `ft_getopt`
+	- Check for UB (cf `export`)
+- `ERR_LIBC` problem (see `TODO` section)
+
 # TODO
 
 - ⚠️ on `ERR_LIBC`: error message should be printed **IMMEDIATLY** to avoid `errno` modification (don't `free` before!!)
-- script de tests auto de `ft_getopt()`
-- `variables`:
-	- rename functions from `var_*_all()` to `variables_*()` (if needed resolve conflicts by renaming private ones into `variables_*_one()`)
-- rename all `*_dump_all()` into `*_dump()`
 - move `export_build_envp()` from `export` to `variables`
+- ⚠️ `undefined_behaviour()` should not `shell_exit()` ! (for example a `builtin` UB should only generate a builtin error, then the shell should behave as POSIX says for builtin errors!) => it should return `ERR_UNDEFINED_BEHAVIOUR`:
+	- Fixed but **NEED TO CHECK ALL EXISTING USAGES of `undefined_behaviour()`**
 
 ## BUILTINS
 

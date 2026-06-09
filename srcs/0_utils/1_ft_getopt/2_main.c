@@ -39,7 +39,7 @@ static t_error	getopt_process(t_getopt_state *state)
 	return (ERR_NO);
 }
 
-static void	getopt_catch_ub(t_getopt_out *out)
+static t_error	getopt_catch_ub(t_getopt_out *out)
 {
 	size_t			i;
 	t_getopt_option	*a;
@@ -59,11 +59,13 @@ static void	getopt_catch_ub(t_getopt_out *out)
 			if (b->argument)
 				continue ;
 			if (a->sign == b->sign && a->flag == b->flag)
-				undefined_behaviour("POSIX (XBD 12.1-3): "
+				return (vector_free(&out->options, NULL),
+					undefined_behaviour("POSIX (XBD 12.1-3): "
 					"If an option that does not have option-arguments is "
-					"repeated, the results are undefined");
+					"repeated, the results are undefined"));
 		}
 	}
+	return (ERR_NO);
 }
 
 t_error	ft_getopt(int argc, char **argv, t_getopt_in *in, t_getopt_out *out)
@@ -86,6 +88,6 @@ t_error	ft_getopt(int argc, char **argv, t_getopt_in *in, t_getopt_out *out)
 		return (error);
 	}
 	if (in->ub_on_repeated_flags)
-		getopt_catch_ub(out);
+		return (getopt_catch_ub(out));
 	return (ERR_NO);
 }

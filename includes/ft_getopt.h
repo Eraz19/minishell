@@ -29,8 +29,8 @@ typedef struct s_option_with_arg
 typedef struct s_getopt_in
 {
 	const char				*builtin_name;			// used to print error logs
-	const char				*valid_minus_flags;
-	const char				*valid_plus_flags;
+	const char				*valid_minus_flags;		// can be NULL
+	const char				*valid_plus_flags;		// can be NULL
 	t_getopt_flag_with_arg	*options_with_arg;		// multiple options_with_arg can have the same starting flag if they don't have the same sign
 	size_t					options_with_arg_count;
 	bool					single_delimiter;		// '-' will be treated as end of options
@@ -59,7 +59,8 @@ typedef struct s_getopt_out
 /* ************************************************************************* */
 
 // @warning: caller must free out->options with vector_free()
-// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG / ERR_LIBC
+// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG /
+//		ERR_UNDEFINED_BEHAVIOUR / ERR_LIBC
 t_error	ft_getopt(int argc, char **argv, t_getopt_in *input, t_getopt_out *out);
 
 /* ************************************************************************* */

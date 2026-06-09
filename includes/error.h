@@ -35,6 +35,7 @@ const char	*error_to_string(t_error error);
 t_error	error_print(const char *prefix, const char *error_type, t_error error);
 
 // Prints "you did: " + message + "la tête à Xavier"
-void	undefined_behaviour(const char *message);
+// @ret ERR_UNDEFINED_BEHAVIOUR
+t_error	undefined_behaviour(const char *message);
 
 #endif
