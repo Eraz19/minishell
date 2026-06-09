@@ -1,5 +1,6 @@
 # TODO
 
+- ⚠️ on `ERR_LIBC`: error message should be printed **IMMEDIATLY** to avoid `errno` modification (don't `free` before!!)
 - script de tests auto de `ft_getopt()`
 - `variables`:
 	- rename functions from `var_*_all()` to `variables_*()` (if needed resolve conflicts by renaming private ones into `variables_*_one()`)

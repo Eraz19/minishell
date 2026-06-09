@@ -4,6 +4,7 @@
 #include "options.h"
 #include <stdlib.h>
 
+// value can be NULL
 // @ret ERR_VAR_READ_ONLY / ERR_LIBC
 static t_error	var_update_value(
 	t_var *var,
@@ -13,7 +14,7 @@ static t_error	var_update_value(
 {
 	char	*new_value;
 
-	if (var->readonly)
+	if (var->readonly && value)
 		return (ERR_VAR_READ_ONLY);
 	if (value)
 	{

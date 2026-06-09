@@ -43,29 +43,3 @@ bool	var_find(const t_var_list *variables, const char *name, size_t *res)
 	}
 	return (false);
 }
-
-t_error	var_split(const char *src, char **dst_name, char **dst_value)
-{
-	size_t	len;
-
-	*dst_name = NULL;
-	*dst_value = NULL;
-	len = 0;
-	while (src[len] && src[len] != '=')
-		len++;
-	if (src[len] == '\0')
-		return (ERR_VAR_MISSING_EQUAL);
-	*dst_name = malloc(len + 1);
-	if (!*dst_name)
-		return (ERR_LIBC);
-	str_lcpy(*dst_name, src, len + 1);
-	src += len + 1;
-	len = 0;
-	while (src[len])
-		len ++;
-	*dst_value = malloc(len + 1);
-	if (!*dst_value)
-		return (free(*dst_name), *dst_name = NULL, ERR_LIBC);
-	str_lcpy(*dst_value, src, len + 1);
-	return (ERR_NO);
-}

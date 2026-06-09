@@ -1,61 +1,36 @@
 #include "shell.h"
 #include "variables_priv.h"
 #include "posix_helpers.h"
+#include "utils.h"
 #include <unistd.h>
-
-// @ret ERR_LIBC
-static t_error	var_print_escaped_value(const char *value)
-{
-	t_error	error;
-	size_t	i;
-
-	i = 0;
-	while (value[i])
-	{
-		if (value[i] == '\'')
-		{
-			error = posix_write(STDOUT_FILENO, "'\\''", 4);
-			if (error != ERR_NO)
-				return (error);
-		}
-		else
-		{
-			error = posix_write(STDOUT_FILENO, &value[i], 1);
-			if (error != ERR_NO)
-				return (error);
-		}
-		i++;
-	}
-	return (ERR_NO);
-}
+#include <stdlib.h>
 
 // @ret ERR_LIBC
 static t_error	var_print_one(const char *prefix, const t_var *var)
 {
-	size_t	len;
+	t_buff	buff;
 	t_error	error;
+	char	*escaped_value;
 
-	len = str_len(prefix);
-	error = posix_write(STDOUT_FILENO, prefix, len);
-	if (error != ERR_NO)
-		return (error);
-	len = str_len(var->name);
-	error = posix_write(STDOUT_FILENO, var->name, len);
-	if (error != ERR_NO)
-		return (error);
+	if (!buff_init(&buff, 0, prefix, -1))
+		return (ERR_LIBC);
+	if (!buff_append(&buff, var->name, -1))
+		return (buff_free(&buff), ERR_LIBC);
 	if (var->value)
 	{
-		error = posix_write(STDOUT_FILENO, "='", 2);
+		if (!buff_append(&buff, "=", -1))
+			return (buff_free(&buff), ERR_LIBC);
+		error = serialize(var->value, &escaped_value);
 		if (error != ERR_NO)
-			return (error);
-		error = var_print_escaped_value(var->value);
-		if (error != ERR_NO)
-			return (error);
-		error = posix_write(STDOUT_FILENO, "'", 1);
-		if (error != ERR_NO)
-			return (error);
+			return (buff_free(&buff), error);
+		if (!buff_append(&buff, escaped_value, -1))
+			return (free(escaped_value), buff_free(&buff), ERR_LIBC);
+		free(escaped_value);
 	}
-	return (posix_write(STDOUT_FILENO, "\n", 1));
+	if (!buff_append(&buff, "\n", -1))
+		return (buff_free(&buff), ERR_LIBC);
+	error = posix_write(STDOUT_FILENO, buff.data, buff.len);
+	return (buff_free(&buff), error);
 }
 
 t_error	var_print(t_var_print_mode mode)

@@ -1,4 +1,5 @@
-#include "variables_priv.h"
+#include "variables.h"
+#include "utils.h"
 #include <stdlib.h>
 # include "logs.h"	// TODO: tmp debug
 
@@ -35,11 +36,11 @@ t_error	var_load_envp(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		error = var_split(envp[i++], &name, &value);
-		if (error == ERR_VAR_MISSING_EQUAL)
-			continue ;
+		error = assignment_split(envp[i++], &name, &value);
 		if (error != ERR_NO)
 			return (error);
+		if (!value)
+			continue ;
 		error = process_variable(name, value);
 		free(name);
 		free(value);
