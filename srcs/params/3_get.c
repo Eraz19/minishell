@@ -40,3 +40,13 @@ t_error	params_get_positionals(t_positionals *dst)
 		return (ERR_SHELL_NOT_FOUND);
 	return (positionals_get(&shell->params.positionals, dst));
 }
+
+t_error	params_build_envp(char ***dst_envp)
+{
+	t_shell	*shell;
+
+	shell = shell_get();
+	if (!shell)
+		return (ERR_SHELL_NOT_FOUND);
+	return (var_build_envp(&shell->params.variables, dst_envp));
+}

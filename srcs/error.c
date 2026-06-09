@@ -12,14 +12,14 @@ const char	*error_to_string(t_error error)
 {
 	if (error == ERR_NO)
 		return ("success");
-	else if (error == ERR_SIZE_MAX_REACHED)
-		return ("SIZE_MAX has been reached");
+	else if (error == ERR_ASSIGNMENT_MISSING_NAME)
+		return ("missing assignment name");
 	else if (error == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
-	else if (error == ERR_BUILTIN_INVALID_FLAG)
-		return ("invalid option");
 	else if (error == ERR_INDEX_OUT_OF_BOUND)
 		return ("index out of bound");
+	else if (error == ERR_INVALID_FORMAT)
+		return ("invalid format");
 	else if (error == ERR_LIBC)
 		return (strerror(errno));
 	else if (error == ERR_LR_CONFLICT)
@@ -36,6 +36,8 @@ const char	*error_to_string(t_error error)
 		return ("shell data not found");
 	else if (error == ERR_SHIFT_INVALID_VALUE)
 		return ("shift value is out of range");
+	else if (error == ERR_SIZE_MAX_REACHED)
+		return ("SIZE_MAX has been reached");
 	else if (error == ERR_UNDEFINED_BEHAVIOUR)
 		return ("undefined behaviour 🤪");
 	else if (error == ERR_VAR_INVALID_NAME)

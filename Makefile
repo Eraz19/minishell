@@ -6,9 +6,6 @@ LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
 # DEBUG SECTION (START)
-DEBUG_SRCS		:= $(wildcard logs/*.c)
-DEBUG_INCLUDES	:= -Ilogs
-
 TEST_DIR		:= ./tests
 TESTERS			:= $(wildcard $(TEST_DIR)/*.zsh)
 FIXTURES_DIR	:= $(TEST_DIR)/fixtures
@@ -16,9 +13,12 @@ LOGS_DIR		:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
 
 SRCS		:= \
+	$(wildcard logs/*.c) \
 	$(wildcard srcs/*.c) \
 	$(wildcard srcs/0_posix_helpers/*.c) \
 	$(wildcard srcs/0_asm_stubs/*/*.c) \
+	$(wildcard srcs/0_utils/*.c) \
+	$(wildcard srcs/0_utils/*/*.c) \
 	$(wildcard srcs/1_shell/*.c) \
 	$(wildcard srcs/3_builder/*.c) \
 	$(wildcard srcs/3_builder/*/*.c) \
@@ -30,10 +30,10 @@ SRCS		:= \
 	$(wildcard srcs/params/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*/*.c) \
-	$(DEBUG_SRCS)
 
 INCLUDES	:= \
 	-Ilibft \
+	-Ilogs \
 	-Iincludes \
 	-Isrcs/3_builder/1_lr_machine \
 	-Isrcs/3_builder/1_lr_machine/1_hooks \
@@ -58,7 +58,6 @@ INCLUDES	:= \
 	-Isrcs/params/4_variables/load/2_mandatory \
 	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
 	-Isrcs/params/4_variables/load/3_up \
-	$(DEBUG_INCLUDES)
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
@@ -77,20 +76,22 @@ $(OBJ_DIR)/%.o : %.c
 
 bonus: all
 
+# DEBUG SECTION (START)
 test: all
 	@for tester in $(TESTERS); do \
 		echo "Running $$tester"; \
 		zsh "$$tester"; \
 	done
+# DEBUG SECTION (END)
 
 clean:
 	rm -rf $(OBJ_DIR) $(FIXTURES_DIR) $(LOGS_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(TEST_GETOPT_BIN) $(TEST_GETOPT_BIN).dSYM
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all bonus test clean fclean re
+.PHONY: all bonus test_getopt test clean fclean re

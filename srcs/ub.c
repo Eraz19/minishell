@@ -1,11 +1,11 @@
 #include "libft.h"
 #include "posix_helpers.h"
-#include "shell.h"
 #include <unistd.h>
 
-void	undefined_behaviour(const char *message)
+#define UB_SUFFIX	"\" 🤪\n ╰──▶ Byyye! 👋\n"
+
+t_error	undefined_behaviour(const char *message)
 {
-	static const char	suffix[] = "\" 🤪\n ╰──▶ Byyye! 👋\n";
 // 	const char	ascii[] = "                                              =..==-==                                              \n
 //                                          -=-=-======-=+---                                          \n
 //                                      -=======++++++--:.::-=::                                       \n
@@ -60,6 +60,6 @@ void	undefined_behaviour(const char *message)
 
 	(void)posix_write(STDOUT_FILENO, "\"", 1);
 	(void)posix_write(STDOUT_FILENO, message, str_len(message));
-	(void)posix_write(STDOUT_FILENO, suffix, str_len(suffix));
-	shell_exit(ERR_UNDEFINED_BEHAVIOUR);
+	(void)posix_write(STDOUT_FILENO, UB_SUFFIX, str_len(UB_SUFFIX));
+	return (ERR_UNDEFINED_BEHAVIOUR);
 }

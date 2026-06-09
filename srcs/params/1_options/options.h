@@ -33,12 +33,14 @@ typedef uint32_t	t_option;
 /* ************************************************************************* */
 
 void	options_init(t_option *options);
+void	options_free(t_option *options);
+
+// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG / ERR_LIBC
 t_error	options_load(
 	t_option *options,
 	int argc,
 	char **argv,
 	size_t *start_index);
-void	options_free(t_option *options);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

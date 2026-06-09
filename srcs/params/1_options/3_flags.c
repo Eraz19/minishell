@@ -1,6 +1,4 @@
-#include "error.h"
 #include "options.h"
-#include <stddef.h>
 
 static inline bool	options_process_flag1(t_option *options, char flag, bool on)
 {
@@ -51,29 +49,20 @@ static inline bool	options_process_flag2(
 	return (true);
 }
 
-bool	options_process_flags(
+t_error	options_process_flag(
 	t_option *options,
-	const char *arg,
+	char flag,
+	bool on,
 	bool *explicit_plus_m)
 {
-	size_t	i;
-	bool	on;
+	char flag_string[2];
 
-	if ((arg[0] != '-' && arg[0] != '+') || arg[1] == '\0')
-		return (false);
-	on = arg[0] == '-';
-	i = 1;
-	while (arg[i])
-	{
-		if (options_process_flag1(options, arg[i], on))
-			i++;
-		else if (options_process_flag2(options, arg[i], on, explicit_plus_m))
-			i++;
-		else
-		{
-			error_print(NULL, &arg[i], ERR_OPT_INVALID);
-			return (false);
-		}
-	}
-	return (true);
+	if (options_process_flag1(options, flag, on))
+		return (ERR_NO);
+	if (options_process_flag2(options, flag, on, explicit_plus_m))
+		return (ERR_NO);
+	flag_string[0] = flag;
+	flag_string[1] = '\0';
+	error_print(NULL, flag_string, ERR_OPT_INVALID);
+	return (ERR_OPT_INVALID);
 }

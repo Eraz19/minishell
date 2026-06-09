@@ -1,36 +1,54 @@
 #include "options_priv.h"
+#include "ft_getopt.h"
+#include "logs.h"
 #include <unistd.h>
-# include "logs.h"	// TODO: tmp debug
 
-static inline bool	options_is_delimiter(const char *arg)
+static void	options_build_getopt_in(t_getopt_in *in)
 {
-	if (arg[0] == '-' && arg[1] == '\0')
-		return (true);
-	if (arg[0] == '-' && arg[1] == '-' && arg[2] == '\0')
-		return (true);
-	return (false);
+	static const char				*valid_flags = "abCefhimnuvxcs";
+	static const char				*valid_o_args[] = {
+		"allexport", "errexit", "monitor", "noclobber", "noglob", "noexec",
+		"notify", "nounset", "verbose", "xtrace", "ignoreeof", "nolog",
+		"pipefail", "vi", NULL};
+	static t_getopt_flag_with_arg	flags_w_arg[] = {
+	{'-', 'o', valid_o_args, false},
+	{'+', 'o', valid_o_args, false}
+	};
+
+	in->builtin_name = "sh";
+	in->ub_on_repeated_flags = true;
+	in->single_delimiter = true;
+	in->valid_minus_flags = valid_flags;
+	in->valid_plus_flags = valid_flags;
+	in->options_with_arg = flags_w_arg;
+	in->options_with_arg_count = sizeof(flags_w_arg) / sizeof(*flags_w_arg);
 }
 
-static inline bool	options_load_one(
-	size_t *i,
-	char **argv,
+// @ret ERR_OPT_INVALID
+static t_error	options_apply_getopt_out(
 	t_option *options,
+	t_getopt_out *out,
 	bool *explicit_plus_m)
 {
-	if (argv[*i][1] == 'o' && argv[*i][2] == '\0')
+	t_getopt_option	option;
+	size_t			i;
+	t_error			error;
+
+	i = 0;
+	while (i < out->options.len)
 	{
-		(*i)++;
-		if (!options_process_name(
-			options,
-			argv[*i],
-			argv[*i - 1][0] == '-',
-			explicit_plus_m))
-			return (false);
+		option = ((t_getopt_option *)out->options.data)[i];
+		if (!option.argument)
+			error = options_process_flag(
+				options, option.flag, option.sign == '-', explicit_plus_m);
+		else
+			error = options_process_name(
+				options, option.argument, option.sign == '-', explicit_plus_m);
+		if (error != ERR_NO)
+			return (error);
+		i++;
 	}
-	else if (!options_process_flags(options, argv[*i], explicit_plus_m))
-		return (false);
-	(*i)++;
-	return (true);
+	return (ERR_NO);
 }
 
 static void	options_finalize(
@@ -53,24 +71,24 @@ t_error	options_load(
 	char **argv,
 	size_t *start_index)
 {
-	bool	explicit_plus_m;
-	size_t	remaining_args;
+	t_getopt_in		in;
+	t_getopt_out	out;
+	bool			explicit_plus_m;
+	size_t			remaining_args;
+	t_error			error;
 
 	print_title("options_load()");
 	*options = 0u;
 	explicit_plus_m = false;
-	while (*start_index < (size_t)argc)
-	{
-		if (argv[*start_index][0] != '-' && argv[*start_index][0] != '+')
-			break ;
-		if (options_is_delimiter(argv[*start_index]))
-		{
-			(*start_index)++;
-			break ;
-		}
-		if (!options_load_one(start_index, argv, options, &explicit_plus_m))
-			return (ERR_OPT_INVALID);
-	}
+	options_build_getopt_in(&in);
+	error = ft_getopt(argc, argv, &in, &out);
+	if (error != ERR_NO)
+		return (error);
+	error = options_apply_getopt_out(options, &out, &explicit_plus_m);
+	vector_free(&out.options, NULL);
+	if (error != ERR_NO)
+		return (error);
+	*start_index = out.first_operand_index;
 	print_result("options_load()");
 	print_title("options_finalize()");
 	if (*start_index >= (size_t)argc)
