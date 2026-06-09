@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-typedef enum e_error_type
+typedef enum e_error
 {
 	ERR_NO,
 	ERR_ASSIGNMENT_MISSING_NAME,
@@ -43,27 +43,19 @@ typedef enum e_error_type
 	ERR_UNEXPECTED_EOI,
 	ERR_NO_DELIM,
 	ERR_COUNT
-}	t_error_type;
+}	t_error;
 
 /* ---------- TODO (START) ---------- */
 
-typedef struct s_error
-{
-	t_error_type	type;
-	int				errno;
-	bool			printed;
-}	t_error;
+// typedef struct s_error
+// {
+// 	t_error_type	type;
+// 	int				errno;
+// 	bool			printed;
+// }	t_error;
 
-t_error	error_set(t_error_type type);
-void	error_print(t_error *error, ...);	// ... doit être un/des const char *
-
-t_error	risky_func(void);
-
-void function(void)
-{
-	char *test = malloc(12);
-	if (!test)
-}
+// t_error	error_set(t_error_type type);
+// void	error_print(t_error *error, ...);	// ... doit être un/des const char *
 
 /* ---------- TODO (END) ---------- */
 
