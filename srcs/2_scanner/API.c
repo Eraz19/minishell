@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:05:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 14:59:48 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/09 14:14:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ t_error	scanner_next_token(t_token *token)
 	if (token == NULL)
 		return (ERR_NULL_ARGS);
 	state = shell_get_scanner();
-	if ()
-
 	if (state->mode == SCAN_MODE_FILE && state->lexer.input == NULL)
 		reader_file_input(&state->lexer.input, state->arg.path);
 	else if (state->mode == SCAN_MODE_STRING && state->lexer.input == NULL)
