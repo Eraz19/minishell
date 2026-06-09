@@ -41,12 +41,16 @@ t_error	var_get(const char *name, char **dst_val);
 t_error	var_print(t_var_print_mode mode);
 
 // value can be NULL.
-// export == false and rdonly == false are ignored if variable already exists
+// export == false and rdonly == false are ignored if variable already exists.
 // if variable doesn't exist yet and option_is_active(OPT_EXPORT_ALL)
-// 		=> export will be set to true even if export == false
+// 		=> export will be set to true even if export == false.
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
 // 		/ ERR_LIBC.
 t_error	var_set(const char *name, const char *value, bool export, bool rdonly);
+
+// @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY /
+// 		ERR_INDEX_OUT_OF_BOUND
+t_error	var_unset(const char *name);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */

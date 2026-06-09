@@ -6,12 +6,12 @@ t_error	params_set_variable(
 	bool export,
 	bool readonly)
 {
-	t_shell		*shell;
-
-	shell = shell_get();
-	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
 	return (var_set(name, value, export, readonly));
+}
+
+t_error	params_unset_variable(const char *name)
+{
+	return (var_unset(name));
 }
 
 t_error	params_set_last_bg_pid(pid_t value)
