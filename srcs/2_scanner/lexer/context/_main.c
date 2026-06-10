@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:13:58 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:51:30 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:50:29 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_context.h"
+#include "lexer_context_.h"
 
 t_error	lexer_context(t_lexer *state, t_context context)
 {

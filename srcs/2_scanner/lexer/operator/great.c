@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:09:51 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:18:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:52:15 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_operator.h"
+#include "lexer_operator_.h"
 
 bool	is_operator_char_great(t_lexer *state)
 {

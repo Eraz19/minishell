@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 16:02:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:24:07 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:33:05 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "__history_file.h"
+#include "history_file_.h"
 
 t_error	history_file_open(t_history_file *state, int *fd, int flags)
 {

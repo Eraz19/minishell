@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_squote.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:53:21 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:55:28 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:46:40 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "context.h"
-#include "__quote_remove_context.h"
+#include "quote_remove_context_.h"
 
 static t_context_args	context_dollar_squote_rules(void)
 {

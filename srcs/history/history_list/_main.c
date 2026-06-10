@@ -6,13 +6,13 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 12:10:02 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:33:32 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "__history_list.h"
-#include "__history_file.h"
+#include "history_list_.h"
+#include "history_file_.h"
 
 t_error	history_list_push(t_history_list *list, char *item)
 {

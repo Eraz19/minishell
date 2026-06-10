@@ -6,12 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 16:05:55 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 12:09:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:32:48 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "__history_file.h"
+#include "history_file_.h"
 
 void	history_file_init(t_history_file *state)
 {
@@ -26,11 +26,10 @@ void	history_file_free(t_history_file *state)
 	*state = (t_history_file){0};
 }
 
-t_error	history_file_load(t_history_file *state, t_file_path path, ssize_t max)
+t_error	history_file_load(t_history_file *state, ssize_t max)
 {
 	char 	*entry;
 
-	state->path = path;
 	if (history_file_read(state, &state->content))
 		return (state->err);
 	while ((max >= 0 && state->loaded_list.len < (size_t)max) || max < 0)
@@ -47,7 +46,3 @@ t_error	history_file_load(t_history_file *state, t_file_path path, ssize_t max)
 	}
 	return (state->err);
 }
-
-
-
-

@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:09:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:21:57 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:53:55 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer.h"
+#include "lexer_.h"
 
 t_error	lexer_next_token(t_lexer *state, t_token *token)
 {

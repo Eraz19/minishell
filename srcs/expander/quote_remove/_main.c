@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:21:57 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:00:15 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:45:31 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__quote_remove.h"
-#include "__quote_remove_rules.h"
+#include "quote_remove_.h"
+#include "quote_remove_rules_.h"
 
 t_error	quote_remove(t_buff *res, t_buff *input)
 {

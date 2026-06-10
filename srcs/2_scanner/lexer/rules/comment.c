@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:39:53 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:20:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:53:09 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
+#include "lexer_rules_.h"
 
 bool	is_comment(t_lexer *state)
 {

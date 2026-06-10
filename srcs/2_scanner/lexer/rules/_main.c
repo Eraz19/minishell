@@ -6,12 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:24:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:19:31 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:52:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
-#include "__lexer_operator.h"
+#include "lexer_rules_.h"
+#include "lexer_operator_.h"
 
 t_error	lexer_rules(t_lexer *state, t_token *token, t_context *context)
 {

@@ -20,7 +20,7 @@
 		"-I${workspaceFolder}/srcs/2_scanner/heredoc/here_queue",
 		"-I${workspaceFolder}/srcs/2_scanner/heredoc/heredoc_body",
 		"-I${workspaceFolder}/srcs/2_scanner/alias",
-		"-I${workspaceFolder}/srcs/2_scanner/alias/alias_stack",			
+		"-I${workspaceFolder}/srcs/2_scanner/alias/stack",			
 		"-I${workspaceFolder}/srcs/expander/quote_remove",
 		"-I${workspaceFolder}/srcs/expander/quote_remove/rules",
 		"-I${workspaceFolder}/srcs/expander/quote_remove/context",			
@@ -50,5 +50,6 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up",
 		"-I${workspaceFolder}/srcs/builtins"
-	]
+	],
+	"explorer.sortOrder": "modified"
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 15:22:41 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:25:21 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:35:36 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <readline/readline.h>
-#include "__history_rl.h"
+#include "history_rl_.h"
 
 void	history_rl_init(t_history_rl *state)
 {
@@ -25,7 +25,7 @@ void	history_rl_free(t_history_rl *state)
 	state->count = 0;
 }
 
-void	history_rl_load(t_history_rl *state, ssize_t max)
+t_error	history_rl_load(t_history_rl *state, t_history_list *list)
 {
-	state->max = max;
+	return (history_rl_add(state, list, list->len));
 }

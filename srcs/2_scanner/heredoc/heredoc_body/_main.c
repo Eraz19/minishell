@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 19:21:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:33:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:49:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "__reader.h"
-#include "__heredoc_body.h"
+#include "reader_.h"
+#include "heredoc_body_.h"
 
 static t_error	heredoc_body_tty_EOI(t_heredoc_body *state, size_t *i)
 {

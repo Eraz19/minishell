@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:12:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:17:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:52:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_operator.h"
+#include "lexer_operator_.h"
 
 bool	is_operator_char_ampersand(t_lexer *state)
 {

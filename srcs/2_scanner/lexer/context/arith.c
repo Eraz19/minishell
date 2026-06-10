@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   arith.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:50:49 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
-#include "__lexer_context.h"
+#include "lexer_rules_.h"
+#include "lexer_context_.h"
 
 static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
 {

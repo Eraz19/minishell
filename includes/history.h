@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 13:04:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 17:24:06 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:24:34 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "error.h"
 # include "libft.h"
-# include "__history_rl.h"
-# include "__history_list.h"
-# include "__history_file.h"
+# include "history_rl_.h"
+# include "history_list_.h"
+# include "history_file_.h"
 
 typedef struct s_history
 {

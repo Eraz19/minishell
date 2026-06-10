@@ -6,12 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 11:15:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:32:50 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:49:16 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "__heredoc_body.h"
+#include "heredoc_body_.h"
 
 t_error	heredoc_body_add_line(t_heredoc_body *state)
 {

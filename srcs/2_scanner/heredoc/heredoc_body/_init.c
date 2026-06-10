@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 09:13:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:41:16 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:49:01 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "expander.h"
-#include "__heredoc_body.h"
+#include "heredoc_body_.h"
 
 void	heredoc_body_init(t_heredoc_body *state)
 {

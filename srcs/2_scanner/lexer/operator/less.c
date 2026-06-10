@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:10:18 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:18:16 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:52:20 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_operator.h"
+#include "lexer_operator_.h"
 
 bool	is_operator_char_less(t_lexer *state)
 {

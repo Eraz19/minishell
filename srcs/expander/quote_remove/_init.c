@@ -6,13 +6,13 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:34:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 11:19:33 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:45:23 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
-#include "__quote_remove.h"
+#include "quote_remove_.h"
 
 void	quote_remove_init(t_quote_remove *state)
 {

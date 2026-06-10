@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 17:35:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 15:02:26 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:54:25 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <readline/readline.h>
 #include "libft.h"
 #include "shell.h"
-#include "__reader.h"
+#include "reader_.h"
 
 t_error	readline_(char **res, const char *prompt)
 {

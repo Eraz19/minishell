@@ -6,13 +6,13 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 10:25:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 10:34:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:32:58 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <unistd.h>
-#include "__history_file.h"
+#include "history_file_.h"
 
 t_error	history_file_write(t_history_file *state, char *entry)
 {

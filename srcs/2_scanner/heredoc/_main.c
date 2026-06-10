@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 10:37:07 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:19:55 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:49:33 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "utils.h"
-#include "__lexer.h"
-#include "__heredoc.h"
-#include "__heredoc_body.h"
+#include "lexer_.h"
+#include "heredoc_.h"
+#include "heredoc_body_.h"
 
 static t_error	heredoc_tty(t_heredoc *state, t_here_queue_item *item)
 {

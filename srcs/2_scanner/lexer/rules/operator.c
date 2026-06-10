@@ -6,12 +6,12 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:33:31 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:20:53 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:53:24 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
-#include "__lexer_operator.h"
+#include "lexer_rules_.h"
+#include "lexer_operator_.h"
 
 bool	is_new_operator(t_lexer *state)
 {

@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:38:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:19:47 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:53:04 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
+#include "lexer_rules_.h"
 
 bool	is_blank(t_lexer *state)
 {

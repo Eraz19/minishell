@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   context.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:37:26 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:43:09 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:53:15 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
+#include "lexer_rules_.h"
 
 t_error	lexer_rule_quoting(t_lexer *state, t_context context)
 {

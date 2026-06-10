@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   scanner.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 17:35:29 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:57:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SCANNER_H
 # define SCANNER_H
 
-# include "__lexer.h"
-# include "__alias.h"
-# include "__heredoc.h"
-# include "context.h"
 # include "error.h"
 # include "types.h"
+# include "lexer_.h"
+# include "alias_.h"
+# include "heredoc_.h"
+# include "context.h"
 
 typedef enum e_scanner_mode
 {

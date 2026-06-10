@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_squote.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:36 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:51:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_context.h"
+#include "lexer_context_.h"
 
 static t_error	context_dollar_squote_escape(t_lexer *state)
 {

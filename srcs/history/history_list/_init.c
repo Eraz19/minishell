@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:40:01 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 17:20:33 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "__history_list.h"
+#include "history_list_.h"
+
+void	history_list_clean(void *item)
+{
+	char	*item_;
+
+	item_ = (char *)item;
+	if (item_ != NULL)
+		free(item_);
+}
 
 void	history_list_init(t_history_list *list)
 {
@@ -21,17 +30,6 @@ void	history_list_init(t_history_list *list)
 
 void	history_list_free(t_history_list *list)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < list->len)
-	{
-		if (((char **)list->data)[i] != NULL)
-		{
-			free(((char **)list->data)[i]);
-			((char **)list->data)[i++] = NULL;
-		}
-	}
-	vector_free(list, NULL);
+	vector_free(list, history_list_clean);
 	*list = (t_history_list){0};
 }

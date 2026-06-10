@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 20:22:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:21:41 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:54:21 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "__reader.h"
+#include "reader_.h"
 
 t_error	reader_file_input(char **res, t_file_path path)
 {

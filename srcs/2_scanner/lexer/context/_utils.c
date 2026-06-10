@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:48:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:50:42 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__reader.h"
-#include "__lexer_context.h"
+#include "reader_.h"
+#include "lexer_context_.h"
 
 static t_error	context_EOI(t_lexer *state)
 {

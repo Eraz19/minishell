@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:42:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:35:38 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:49:24 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__heredoc.h"
+#include "heredoc_.h"
 
 void	heredoc_init(t_heredoc *state)
 {

@@ -6,11 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:28:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 19:38:04 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 16:53:51 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer.h"
+#include "lexer_.h"
 
 void	lexer_init(t_lexer *state)
 {
