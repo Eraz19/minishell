@@ -1,18 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
+/*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 15:04:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 17:58:21 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/11 18:07:27 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/11 18:42:54 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_operator_.h"
+#include <unistd.h>
+#include "alias_.h"
 
-bool	is_in_middle_of_operator(t_lexer *state)
+void	alias_print_one(t_key_value *pair)
 {
-	return (state->token.type != NONE && state->token.type != TOKEN);
+	if (pair == NULL)
+		return ;
+	if (pair->value == NULL)
+		ft_printf("%s=''\n", pair->key);
+	else
+		ft_printf("%s='%s'\n", pair->key, (char *)pair->value);	
+}
+
+void	alias_print_all(t_key_value **pairs)
+{
+	size_t	i;
+
+	if (pairs == NULL)
+		return ;
+	i = 0;
+	while (pairs[i] != NULL)
+		alias_print_one(pairs[i++]);
 }

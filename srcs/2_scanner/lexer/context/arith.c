@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:50:49 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 18:01:03 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 
 static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
 {
-	if (state->input[state->i] == '(')
+	if (state->input.str[state->input.i] == '(')
 	{
 		(*((size_t *)nesting_depth))++;
 		if (lexer_consume(state, state->token.type, 1))
 			return (state->err);
 	}
-	else if (state->input[state->i] == ')')
+	else if (state->input.str[state->input.i] == ')')
 	{
 		(*((size_t *)nesting_depth))--;
 		if (lexer_consume(state, state->token.type, 1))
@@ -78,7 +78,7 @@ t_error	lexer_context_arith(t_lexer *state)
 	backup = lexer_backup(state);
 	if (lexer_context_scan(state, context_arith_rules(&nesting_depth)))
 		return (state->err);
-	if (state->input[state->i] != ')')
+	if (state->input.str[state->input.i] != ')')
 	{
 		if (lexer_restore(state, backup))
 			return (state->err);
@@ -86,5 +86,5 @@ t_error	lexer_context_arith(t_lexer *state)
 	}
 	if (lexer_consume(state, state->token.type, 1))
 		return (state->err);
-	return (state->err = context_stack_pop(&state->context), state->err);
+	return (state->err = context_stack_pop(&state->input.context), state->err);
 }

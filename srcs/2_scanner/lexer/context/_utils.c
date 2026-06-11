@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:48:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:50:42 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 18:00:32 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static t_error	context_EOI(t_lexer *state)
 {
 	if (state->is_tty)
-		state->err = reader_continuation(&state->input);
+		state->err = reader_continuation(&state->input.str);
 	else
 		state->err = ERR_UNEXPECTED_EOI;
 	return (state->err);
@@ -24,7 +24,7 @@ static t_error	context_EOI(t_lexer *state)
 
 t_error	lexer_context_unescape(t_lexer *state, t_unescape_args args)
 {
-	if (state->input[state->i] == '\0')
+	if (state->input.str[state->input.i] == '\0')
 		return (context_EOI(state));
 	else if (args.special_handler != NULL)
 		return (args.special_handler(state, args.special_args));
@@ -41,12 +41,12 @@ static t_error	context_escape_next_char(t_lexer *state, t_escape_args args)
 		in_special_context = args.is_in_special_context(state);
 	if (in_special_context && args.is_in_special_whitelist != NULL)
 	{
-		if (args.is_in_special_whitelist(state->input[state->i]))
+		if (args.is_in_special_whitelist(state->input.str[state->input.i]))
 			lexer_consume(state, state->token.type, 1);
 	}
 	else if (!in_special_context && args.is_in_whitelist != NULL)
 	{
-		if (args.is_in_whitelist(state->input[state->i]))
+		if (args.is_in_whitelist(state->input.str[state->input.i]))
 			lexer_consume(state, state->token.type, 1);
 	}
 	else
@@ -56,13 +56,14 @@ static t_error	context_escape_next_char(t_lexer *state, t_escape_args args)
 
 t_error	lexer_context_escape(t_lexer *state, t_escape_args args)
 {
-	if (args.enable_line_continuation && state->input[state->i + 1] == '\n')
+	if (args.enable_line_continuation &&
+		state->input.str[state->input.i + 1] == '\n')
 	{
 		lexer_advance(state, 2);
-		if (state->input[state->i] == '\0')
+		if (state->input.str[state->input.i] == '\0')
 			return (context_EOI(state));
 	}
-	else if (state->input[state->i] == '\0')
+	else if (state->input.str[state->input.i] == '\0')
 		return (context_EOI(state));
 	else
 	{
@@ -80,7 +81,7 @@ t_error	lexer_context_scan(t_lexer *state, t_context_args args)
 	t_context	context;
 
 	state->token.type = TOKEN;
-	state->err = context_stack_push(&state->context, args.context);
+	state->err = context_stack_push(&state->input.context, args.context);
 	if (state->err)
 		return (state->err);
 	lexer_consume(state, state->token.type, args.opening_len);
@@ -88,7 +89,7 @@ t_error	lexer_context_scan(t_lexer *state, t_context_args args)
 	{
 		if (state->err)
 			return (state->err);
-		str = state->input + state->i;
+		str = state->input.str + state->input.i;
 		if (args.is_end != NULL && args.is_end(*str, args.unescaped_args))
 			break ;
 		else if (*str == '\\')
@@ -100,5 +101,5 @@ t_error	lexer_context_scan(t_lexer *state, t_context_args args)
 		else
 			args.unescaped(state, args.unescaped_args);
 	}
-	return (state->err = context_stack_pop(&state->context), state->err);
+	return (state->err = context_stack_pop(&state->input.context), state->err);
 }

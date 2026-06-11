@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:32:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 15:40:55 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/10 18:48:16 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ typedef enum e_token_type
 	LESSGREAT,
 	DGREAT,
 	DLESS,
-	DLESSDASH
+	DLESSDASH,
+	EOF
 }	t_token_type;
 
 typedef struct s_token

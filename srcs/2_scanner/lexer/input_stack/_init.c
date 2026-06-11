@@ -5,28 +5,37 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 10:28:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 17:47:32 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/10 17:12:09 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/10 19:00:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_.h"
+#include <stdlib.h>
+#include "input_stack_.h"
 
-void	lexer_init(t_lexer *state)
+void	input_stack_item_free(void *item)
 {
-	*state = (t_lexer){0};
-	token_init(&state->token);
-	input_stack_init(&state->input_stack);
+	t_input_stack_item	*item_;
+
+	item_ = (t_input_stack_item *)item;
+	if (item_->str != NULL)
+		free(item_->str);
+	context_stack_free(&item_->context);
+	*item_ = (t_input_stack_item){0};
 }
 
-void	lexer_free(t_lexer *state)
+void	input_stack_item_init(t_input_stack_item *item)
 {
-	token_free(&state->token);
-	input_stack_free(&state->input_stack);
-	*state = (t_lexer){0};
+	*item = (t_input_stack_item){0};
+	context_stack_init(&item->context);
 }
 
-void	lexer_load(t_lexer *state, bool is_tty)
+void	input_stack_init(t_input_stack *stack)
 {
-	state->is_tty = is_tty;
+	vector_init(stack, sizeof(t_input_stack_item), 0);
+}
+
+void	input_stack_free(t_input_stack *stack)
+{
+	vector_free(stack, input_stack_item_free);
 }

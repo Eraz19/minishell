@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 10:37:07 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:49:33 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 19:08:05 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ t_error	heredoc_consume(t_heredoc *state, t_lexer *lexer)
 	t_here_queue_item	item;
 
 	i = 0;
-	state->i = &lexer->i;
-	state->input = lexer->input;
+	state->i = &lexer->input.i;
+	state->input = lexer->input.str;
 	while (i < state->queue.len)
 	{
 		state->err = here_queue_get(&state->queue, &item, i);
@@ -114,5 +114,5 @@ t_error	heredoc_consume(t_heredoc *state, t_lexer *lexer)
 			return (state->err);
 		i++;
 	}
-	return (state->err);
+	return (heredoc_reset(state), state->err);
 }

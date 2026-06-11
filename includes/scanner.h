@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:57:59 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/11 16:52:56 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,29 @@
 # include "error.h"
 # include "types.h"
 # include "lexer_.h"
-# include "alias_.h"
 # include "heredoc_.h"
 # include "context.h"
 
 typedef enum e_scanner_mode
 {
 	SCAN_NONE,
-	SCAN_MODE_FILE,
-	SCAN_MODE_STDIN,
-	SCAN_MODE_STRING
+	SCAN_FILE,
+	SCAN_STDIN,
+	SCAN_STRING
 }	t_scanner_mode;
-
-typedef char*	t_scanner_command;
-
-typedef union u_scanner_arg
-{
-	t_file_path			path;
-	t_scanner_command	command;
-}	t_scanner_arg;
 
 typedef struct s_scanner
 {
 	t_error			err;
-	t_scanner_arg	arg;
 	t_scanner_mode	mode;
-	t_alias			alias;
 	t_lexer			lexer;
+	const char		*source;
 	t_heredoc		heredoc;
 }	t_scanner;
 
 void	scanner_init(t_scanner *state);
 void	scanner_free(t_scanner *state);
-t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *arg);
+t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source);
 
 // @warning: res must have been init/cleaned with token_init() before call this function
 t_error	scanner_next_token(t_token *res);

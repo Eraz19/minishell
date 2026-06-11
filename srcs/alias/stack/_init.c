@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
+/*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 15:04:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 17:58:21 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/11 17:51:14 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_operator_.h"
+#include <stdlib.h>
+#include "alias.h"
 
-bool	is_in_middle_of_operator(t_lexer *state)
+void	alias_stack_init(t_alias_stack *stack)
 {
-	return (state->token.type != NONE && state->token.type != TOKEN);
+	vector_init(stack, sizeof(char *), 0);
+}
+
+void	alias_stack_free(t_alias_stack *stack)
+{
+	vector_free(stack, free);
 }

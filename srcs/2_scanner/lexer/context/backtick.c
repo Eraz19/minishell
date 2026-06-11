@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:50:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 18:01:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ static bool	is_backtick_squote_surrounded(t_lexer *state)
 	t_context	*ctx;
 	t_context	surrounding_ctx;
 
-    if (state->context.len < 2)
+    if (state->input.context.len < 2)
         return (false);
-    ctx = (t_context *)state->context.data;
-	surrounding_ctx = ctx[state->context.len - 2];
+    ctx = (t_context *)state->input.context.data;
+	surrounding_ctx = ctx[state->input.context.len - 2];
     return (surrounding_ctx == DQUOTE || surrounding_ctx == ARITH);
 }
 

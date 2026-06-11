@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
+/*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 15:04:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 17:58:21 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/10 17:13:48 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_operator_.h"
+#include "context.h"
 
-bool	is_in_middle_of_operator(t_lexer *state)
+void	context_stack_init(t_context_stack *stack)
 {
-	return (state->token.type != NONE && state->token.type != TOKEN);
+	*stack = (t_context_stack){0};
+	vector_init(stack, sizeof(t_context), 0);
+}
+
+void	context_stack_free(t_context_stack *stack)
+{
+	vector_free(stack, NULL);
+	*stack = (t_context_stack){0};
 }

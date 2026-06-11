@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:31:31 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:53:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 17:57:36 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_end(t_lexer *state)
 {
-	return (state->input[state->i] == '\0');
+	return (state->input.str[state->input.i] == '\0');
 }
 
 t_error	lexer_rule_end(t_lexer *state, t_token *token)

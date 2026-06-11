@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:23:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:52:00 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 17:58:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	is_operator_char(t_lexer *state)
 {
 	const char	*input_ptr;
 
-	input_ptr = state->input + state->i;
+	input_ptr = state->input.str + state->input.i;
 	if (input_ptr[0] == '\n' && !is_in_middle_of_operator(state))
 		return (true);
 	else if (input_ptr[0] == '(' && !is_in_middle_of_operator(state))
@@ -42,7 +42,7 @@ t_error	lexer_add_char_into_token_operator(t_lexer *state)
 {
 	const char	*input_ptr;
 
-	input_ptr = state->input + state->i;
+	input_ptr = state->input.str + state->input.i;
 	if (input_ptr[0] == '\n')
 		return (lexer_consume(state, NEWLINE_, 1));
 	else if (input_ptr[0] == '(')

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:40:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:53:29 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/10 17:57:52 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	is_in_middle_of_word(t_lexer *state)
 
 t_error	lexer_rule_in_middle_of_word(t_lexer *state)  // Rule 8
 {
-	if (state->input[state->i] == '\\')
+	if (state->input.str[state->input.i] == '\\')
 		return (context_top_level_escape(state));
 	else
 		return (lexer_consume(state, TOKEN, 1));
@@ -39,7 +39,7 @@ t_error	lexer_rule_in_middle_of_word(t_lexer *state)  // Rule 8
 
 t_error	lexer_rule_new_word(t_lexer *state) // Rule 10
 {
-	if (state->input[state->i] == '\\')
+	if (state->input.str[state->input.i] == '\\')
 		return (context_top_level_escape(state));
 	else
 		return (lexer_consume(state, TOKEN, 1));

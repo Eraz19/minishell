@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:01:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 10:57:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/11 18:55:22 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_error	context_stack_pop(t_context_stack *stack);
 t_error	context_stack_get(t_context_stack *stack, t_context *item);
 t_error	context_stack_push(t_context_stack *stack, t_context item);
 
+bool	is_blank(char c);
 bool	is_in_context_none_whitelist(char c);
 bool	is_context_none_ending(char c, void *_);
 
