@@ -6,10 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 17:10:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/11 19:17:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/12 16:24:05 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "shell.h"
 #include "alias_.h"
 #include "builder.h"
@@ -24,8 +25,8 @@ t_error	alias_on_expansion_end(void)
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
 	if (state->stack.len == 0)
-		return (ERR_NO);
-	return (alias_stack_pop(&state->stack), ERR_NO);
+		return (state->err);
+	return (alias_stack_pop(&state->stack), state->err);
 }
 
 t_error	alias_print(const char *name)
@@ -36,10 +37,9 @@ t_error	alias_print(const char *name)
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
 	if (name == NULL)
-		alias_print_all(hashmap_get_all(&state->map));
+		return (alias_print_all(hashmap_get_all(&state->map)), state->err);
 	else
-		alias_print_one(hashmap_get(&state->map, name));
-	return (ERR_NO);
+		return (alias_print_one(hashmap_get(&state->map, name)), state->err);
 }
 
 t_error	alias_remove(const char *name)
@@ -50,8 +50,8 @@ t_error	alias_remove(const char *name)
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
 	if (name == NULL)
-		return (ERR_NO);
-	return (hashmap_remove(&state->map, name));
+		return (state->err);
+	return (hashmap_remove(&state->map, name), state->err);
 }
 
 t_error	alias_add(const char *name, const char *value)
@@ -63,38 +63,41 @@ t_error	alias_add(const char *name, const char *value)
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
 	if (name == NULL)
-		return (ERR_NO);
-	value_copy = str_dup(value);
-	if (value != NULL && value_copy == NULL)
-		return (ERR_LIBC);
-	return (hashmap_put(&state->map, name, (void *)value_copy));
+		return (state->err);
+	if (value == NULL)
+		value_copy = str_dup("");
+	else
+		value_copy = str_dup(value);
+	if (value_copy == NULL)
+		return (state->err = ERR_LIBC);
+	if (!hashmap_put(&state->map, name, (void *)value_copy))
+		return (state->err = ERR_LIBC);
+	return (state->err);
 }
 
 t_error	alias_expand_token(char **expansion, t_buff *token_value)
 {
-	t_error	err;
 	t_alias	*state;
 	char	*token_str;
-	size_t	expansion_len;
 
-	*expansion = NULL;
 	state = shell_get_alias();
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
 	token_str = buff_get_string(token_value);
 	if (token_str == NULL)
-		return (ERR_LIBC);
-	if (is_token_aligeable_to_alias_expansion(state, token_str))
+		return (state->err = ERR_LIBC);
+	if (is_token_alias_expandable(state, token_str))
 	{
-		err = alias_stack_push(&state->stack, token_str);
-		if (err != ERR_NO)
-			return (err);
+		state->err = alias_stack_push(&state->stack, token_str);
+		if (state->err)
+			return (free(token_str), state->err);
 		*expansion = hashmap_get(&state->map, token_str)->value;
-		expansion_len = str_len(*expansion);
-		if (*expansion != NULL && is_blank((*expansion)[expansion_len - 1]))
-			state->disable_position = true;
-		else
-			state->disable_position = false;
+		if (*expansion == NULL)
+			return (state->err = ERR_INCOHERENT_STATE);
+		*expansion = str_dup(*expansion);
+		if (*expansion == NULL)
+			return (state->err = ERR_LIBC);
+		return (set_position_for_next_word(state, *expansion), state->err);
 	}	
-	return (ERR_NO);
+	return (free(token_str), state->err);
 }

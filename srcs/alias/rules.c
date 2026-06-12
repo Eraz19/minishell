@@ -52,7 +52,7 @@ static bool	is_valid_alias_name(char *word)
 	return (true);
 }
 
-bool	is_token_aligeable_to_alias_expansion(t_alias *state, char *word)
+bool	is_token_alias_expandable(t_alias *state, char *word)
 {
 	if (is_word_containing_quoting(word))
 		return (false);

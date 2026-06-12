@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:34:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:34:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/12 15:11:07 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "error.h"
 #include "history.h"
+#include "history_.h"
 
 t_error	history_save_entry(void)
 {
@@ -23,16 +24,18 @@ t_error	history_save_entry(void)
 	state = shell_get_history();
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
+	if (state->current_input.len == 0)
+		return (state->err);
 	entry = buff_get_string(&state->current_input);
 	if (entry == NULL)
-		return (state->err = ERR_LIBC, state->err);
+		return (state->err = ERR_LIBC);
 	state->err = history_list_push(&state->list, entry);
 	if (state->err)
 		return (free(entry), state->err);
 	buff_free(&state->current_input);
 	buff_init(&state->current_input, 0, NULL, 0);
 	if (history_rl_add(&state->rl_history, &state->list, 1))
-		return (state->err = state->rl_history.err, state->err);
+		return (state->err = state->rl_history.err);
 	return (state->err);
 }
 
@@ -44,29 +47,18 @@ t_error	history_append_to_entry(char *entry)
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
 	if (!buff_append(&state->current_input, entry, (long)str_len(entry)))
-		return (state->err = ERR_LIBC, state->err);
+		return (state->err = ERR_LIBC);
 	return (state->err);
 }
 
 t_error	history_save(void)
 {
-	size_t		i;
 	t_history	*state;
-	t_buff		content;
-	char 		*content_str;
 
 	state = shell_get_history();
 	if (state == NULL)
 		return (ERR_SHELL_NOT_FOUND);
-	buff_init(&content, 0, NULL, 0);
-	i = state->file.loaded_list.len;
-	state->err = history_list_to_file(&state->list, i, &content);
-	if (state->err)
-		return (buff_free(&content), state->err);
-	content_str = buff_get_string(&content);
-	if (content_str == NULL)
-		return (buff_free(&content), state->err = ERR_LIBC, state->err);
-	if (history_file_write(&state->file, content_str))
-		state->err = state->file.err;	
-	return (buff_free(&content), free(content_str), state->err);
+	if (history_build_file_content(state, state->file.loaded_count))
+		return (state->err);
+	return (state->err = history_file_write(&state->file));
 }

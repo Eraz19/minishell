@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 16:05:55 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:32:48 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/12 15:20:50 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,30 @@
 void	history_file_init(t_history_file *state)
 {
 	*state = (t_history_file){0};
-	history_list_init(&state->loaded_list);
 }
 
 void	history_file_free(t_history_file *state)
 {
 	free(state->content);
-	history_list_free(&state->loaded_list);
 	*state = (t_history_file){0};
 }
 
-t_error	history_file_load(t_history_file *state, ssize_t max)
+t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t max)
 {
-	char 	*entry;
+	char	*entry;
 
-	if (history_file_read(state, &state->content))
+	if (history_file_read(state))
 		return (state->err);
-	while ((max >= 0 && state->loaded_list.len < (size_t)max) || max < 0)
+	while ((max >= 0 && list->len < (size_t)max) || max < 0)
 	{
-		if (history_file_extract_prev_entry(state, &entry))
+		if (history_file_extract(state, &entry))
 			return (state->err);
 		if (entry == NULL)
 			break ;
-		history_file_entry_deserialize(&entry);
-		state->err = history_list_insert(&state->loaded_list, 0, entry);
+		state->err = history_list_insert(list, entry, 0);
 		if (state->err)
 			return (free(entry), state->err);
 		entry = NULL;
 	}
-	return (state->err);
+	return (state->loaded_count = list->len, state->err);
 }

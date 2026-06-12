@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:19:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 17:16:02 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:07:49 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,74 @@
 # include "error.h"
 # include "libft.h"
 
+/**
+ * @ingroup history
+ * @brief In-memory history entries, stored as a vector of owned strings.
+ *
+ * Each element is a heap-allocated, plain (non-serialised) entry string owned
+ * by the list. Entries enter as owned pointers and leave only as deep copies.
+ */
 typedef t_vector	t_history_list;
 
+/**
+ * @ingroup history
+ * @brief Frees one stored entry (vector element destructor).
+ *
+ * @param item Pointer to the stored entry string to free.
+ */
 void	history_list_clean(void *item);
+
+/**
+ * @ingroup history
+ * @brief Initialises an empty entry list.
+ *
+ * @param list Pointer to the list to initialise (borrowed).
+ */
 void	history_list_init(t_history_list *list);
+
+/**
+ * @ingroup history
+ * @brief Frees the list and every entry it owns.
+ *
+ * @param list Pointer to the list to free (borrowed).
+ */
 void	history_list_free(t_history_list *list);
 
+/**
+ * @ingroup history
+ * @brief Appends an entry to the list, taking ownership of @p item.
+ *
+ * @param list Pointer to the list (borrowed).
+ * @param item Entry string whose ownership is transferred to the list.
+ * @return ERR_NO on success, ERR_LIBC on allocation failure.
+ */
 t_error	history_list_push(t_history_list *list, char *item);
-t_error	history_list_get(char **item, size_t i, t_history_list *list);
-t_error	history_list_insert(t_history_list *list, size_t index, char *item);
-t_error	history_list_to_file(t_history_list *list, size_t i, t_buff *content);
+
+/**
+ * @ingroup history
+ * @brief Returns a serialised copy of the entry at index @p i.
+ *
+ * Duplicates the stored entry and encodes it for storage; the returned
+ * *item is freshly allocated and owned by the caller.
+ *
+ * @param list Pointer to the list (borrowed).
+ * @param item Out-parameter receiving the freshly allocated copy.
+ * @param i Index of the entry to read.
+ * @return ERR_NO on success, ERR_EMPTY_STACK if the list is empty,
+ *         ERR_INDEX_OUT_OF_BOUND if @p i is past the end, or ERR_LIBC on
+ *         allocation failure.
+ */
+t_error	history_list_get(t_history_list *list, char **item, size_t i);
+
+/**
+ * @ingroup history
+ * @brief Inserts an entry at @p index, taking ownership of @p item.
+ *
+ * @param list Pointer to the list (borrowed).
+ * @param item Entry string whose ownership is transferred to the list.
+ * @param index Position at which to insert the entry.
+ * @return ERR_NO on success, ERR_LIBC on allocation failure.
+ */
+t_error	history_list_insert(t_history_list *list, char *item, size_t index);
 
 #endif

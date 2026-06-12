@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 13:19:38 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:32:26 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:46:02 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,9 @@ t_error	history_load(t_history *state)
 		return (state->err);
 	if (history_load_size_env(state) != ERR_NO)
 		return (state->err);
-	if (history_file_load(&state->file, state->rl_history.max))
-		return (state->err = state->file.err, state->err);
-	if (!vector_dup(&state->list, &state->file.loaded_list))
-		return (state->err = ERR_LIBC, state->err);
+	if (history_file_load(&state->file, &state->list, state->rl_history.max))
+		return (state->err = state->file.err);
 	if (history_rl_load(&state->rl_history, &state->list))
-		return (state->err = state->rl_history.err, state->err);
+		return (state->err = state->rl_history.err);
 	return (state->err);
 }
