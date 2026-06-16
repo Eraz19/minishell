@@ -25,7 +25,7 @@ static t_error	print_conflict(t_action *action, size_t lr_state_id, t_symbol sym
 	fprint_err(false, "⚠️ conflict", format_string,
 		(int)lr_state_id, (int)symbol,
 		(int)action->payload, (int)target_payload);
-	return (ERR_LR_CONFLICT);
+	return (error(ERR_LR_CONFLICT));
 }
 
 // ERR_NO / ERR_LR_CONFLICT
@@ -53,7 +53,7 @@ static t_error	add_shifts(t_lr_machine *machine)
 		}
 		i++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // ERR_NO / ERR_LR_CONFLICT
@@ -71,11 +71,11 @@ static t_error	add_reduces(
 		return (print_conflict(action, lr_state_id, symbol, ACTION_REDUCE, rule_state.rule_id));
 	action->type = ACTION_REDUCE;
 	action->payload = rule_state.rule_id;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // ERR_NO / ERR_LR_CONFLICT
-static bool	add_reduces_and_accept(
+static t_error	add_reduces_and_accept(
 	t_lr_machine *machine,
 	size_t lr_state_id,
 	t_rule_state rule_state)
@@ -85,7 +85,7 @@ static bool	add_reduces_and_accept(
 
 	rule = machine->rules[rule_state.rule_id];
 	if (rule_state.pos < rule.rhs_len)
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (rule_state.rule_id == RULE_START_1 && rule_state.lookahead == SYM_EOF)
 	{
 		action = &machine->actions[lr_state_id][SYM_EOF];
@@ -93,7 +93,7 @@ static bool	add_reduces_and_accept(
 			return (print_conflict(action, lr_state_id, SYM_EOF, ACTION_ACCEPT, rule_state.rule_id));
 		action->type = ACTION_ACCEPT;
 		action->payload = rule_state.rule_id;
-		return (ERR_NO);
+		return (error(ERR_NO));
 	}
 	return (add_reduces(machine, lr_state_id, rule_state));
 }
@@ -104,38 +104,38 @@ static t_error	compute_rule_states(t_lr_machine *machine, size_t lr_state_id)
 	t_lr_state		lr_state;
 	size_t			rule_state_id;
 	t_rule_state	rule_state;
-	t_error			error;
+	t_error			err;
 
 	lr_state = ((t_lr_state *)machine->lr_states.data)[lr_state_id];
 	rule_state_id = 0;
 	while (rule_state_id < lr_state.len)
 	{
 		rule_state = ((t_rule_state *)lr_state.data)[rule_state_id];
-		error = add_reduces_and_accept(machine, lr_state_id, rule_state);
-		if (error != ERR_NO)
-			return (error);
+		err = add_reduces_and_accept(machine, lr_state_id, rule_state);
+		if (err.type != ERR_NO)
+			return (err);
 		rule_state_id++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	action_build_table(t_lr_machine *machine)
 {
 	size_t			lr_state_id;
-	t_error			error;
+	t_error			err;
 
-	error = action_build_default_table(machine);
-	if (error == ERR_NO)
-		error = add_shifts(machine);
-	if (error != ERR_NO)
-		return (error);
+	err = action_build_default_table(machine);
+	if (err.type == ERR_NO)
+		err = add_shifts(machine);
+	if (err.type != ERR_NO)
+		return (err);
 	lr_state_id = 0;
 	while (lr_state_id < machine->lr_states.len)
 	{
-		error = compute_rule_states(machine, lr_state_id);
-		if (error != ERR_NO)
-			return (error);
+		err = compute_rule_states(machine, lr_state_id);
+		if (err.type != ERR_NO)
+			return (err);
 		lr_state_id++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

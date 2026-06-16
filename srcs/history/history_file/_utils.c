@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 16:02:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:24:07 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 13:16:41 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_error	history_file_entry_serialize(char **entry)
 	t_buff	serialized;
 
 	if (!buff_init(&serialized, 0, *entry, (long)str_len(*entry)))
-		return (ERR_LIBC);
+		return (error_sys());
 	i = 0;
 	while (i < serialized.len)
 	{
@@ -72,7 +72,7 @@ t_error	history_file_entry_serialize(char **entry)
 	*entry = buff_get_string(&serialized);
 	if (*entry == NULL)
 		return (buff_free(&serialized), ERR_LIBC);
-	return (buff_free(&serialized), ERR_NO);
+	return (buff_free(&serialized), error(ERR_NO));
 }
 
 static char	*history_file_entry_last_unescaped_squote(char *entry)

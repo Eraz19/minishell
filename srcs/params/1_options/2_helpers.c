@@ -55,7 +55,7 @@ t_error	options_get(t_option options, char **dst)
 
 	*dst = malloc(OPT_SINGLE_COUNT + 1);
 	if (!*dst)
-		return (ERR_LIBC);
+		return (error_sys());
 	i = 0;
 	if (option_is_active_in(options, OPT_EXPORT_ALL))
 		(*dst)[i++] = 'a';
@@ -73,5 +73,5 @@ t_error	options_get(t_option options, char **dst)
 		(*dst)[i++] = 'i';
 	options_add_to_string(options, dst, &i);
 	(*dst)[i] = '\0';
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

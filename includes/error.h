@@ -98,7 +98,9 @@ t_error	error_sys(void);
  * @param ... Additional prefixes, NULL separator, optional format string, optional arguments.
  * @return The error descriptor received as argument.
  */
-t_error	error_print(t_error error, ...);
+t_error	error_print(t_error err, ...);
+
+const char	*error_to_string(t_error err);
 
 // @ret ERR_UNDEFINED_BEHAVIOUR
 t_error	undefined_behaviour(const char *message);

@@ -1,5 +1,27 @@
 # Alexander
 
+- ⚠️ `error_print()`: Garder la possibilité de donné un fstring + args ??
+- ⚠️ Vérifier que les `buff_*()`, `vector_*()` etc de `libft` ne free pas en cas d'échec (sinon `errno` undefined):
+	- 🚨 `buff_dup_n()` le fait !!
+	- 🚨 `buff/format/append()` le fait !!
+	- 🚨 `vector_dup()` le fait !!
+	- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
+
+1. Remplacer tous les `return (ERR_*)` par `return (error(ERR_*))`
+2. Remplacer tous les `ERR_*);` par `error(ERR_*));`
+3. 
+4. Remplacer tous les `t_error	error`
+5. Vérifier les `error =` / `error !`
+6. Vérifier les `error_print()` usages
+7. Vérifier que toutes les erreurs critiques (à minima `err_sys()` sont print: par exemple il manque les print dans actions et gotos !)
+
+Checks:
+- Aucun call ne modifie `errno` entre l'erreur et l'appel à `error_sys()`
+- **AUCUN** `error(ERR_LIBC)`
+- Tous les `error_print()` sont bien (double) `NULL` terminés
+
+---
+
 - `undefined_behaviour()` n'exit plus le shell
 - `Alias` builtin:
 	- Use `ft_getopt`

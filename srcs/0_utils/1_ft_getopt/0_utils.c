@@ -5,14 +5,14 @@
 t_error	getopt_add_option(t_getopt_state *state, t_getopt_option *src)
 {
 	if (!vector_push(&state->out->options, src))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	getopt_err(
-	t_getopt_state *state,
+	const t_getopt_state *state,
 	char flag,
-	const char *arg, t_error error)
+	const char *arg, t_error_type err_type)
 {
 	char	fmessage[GETOPT_FMESSAGE_CAP];
 
@@ -31,5 +31,5 @@ t_error	getopt_err(
 	}
 	else
 		fmessage[1] = '\0';
-	return (error_print(state->in->builtin_name, fmessage, error));
+	return (error_print(error(err_type), state->in->builtin_name, fmessage, NULL, NULL));
 }

@@ -14,7 +14,7 @@ t_error	var_set_ppid(void)
 
 	ppid = ft_pidtoa(ft_getppid());
 	if (!ppid)
-		return (ERR_LIBC);
+		return (error_sys());
 	error = var_set("PPID", ppid, false, false);
 	print_pass("'PPID' has been set to '%s'\n", ppid);
 	free(ppid);

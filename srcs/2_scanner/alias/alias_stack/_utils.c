@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/08 14:41:39 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 12:59:10 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 t_error	alias_stack_push(t_alias_stack *stack, char *item)
 {
 	if (!vector_push(stack, &item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 bool	alias_stack_contains(t_alias_stack *stack, char *word)

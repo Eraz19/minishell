@@ -57,9 +57,9 @@ t_error	options_process_name(
 	bool *explicit_plus_m)
 {
 	if (options_process_name1(options, arg, on, explicit_plus_m))
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (options_process_name2(options, arg, on))
-		return (ERR_NO);
-	error_print(NULL, arg, ERR_OPT_INVALID_ARG);
-	return (ERR_OPT_INVALID_ARG);
+		return (error(ERR_NO));
+	error_print(error(ERR_OPT_INVALID_ARG), arg, NULL, NULL);
+	return (error(ERR_OPT_INVALID_ARG));
 }

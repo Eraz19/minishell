@@ -42,24 +42,24 @@ void	var_init(t_var_list *variables)
 
 t_error	var_load(t_var_list *variables, char **envp)
 {
-	t_error	error;
+	t_error	err;
 
 	print_title("var_load_envp()");
-	error = var_load_envp(envp);
-	if (error != ERR_NO)
-		return (error);
+	err = var_load_envp(envp);
+	if (err.type != ERR_NO)
+		return (err);
 	print_result("var_load_envp()            => (entries: %'6zu)", variables->len);
 	print_title("var_load_mandatory");
-	error = var_load_mandatory();
-	if (error != ERR_NO)
-		return (error);
+	err = var_load_mandatory();
+	if (err.type != ERR_NO)
+		return (err);
 	print_result("var_load_mandatory()       => (entries: %'6zu)", variables->len);
 	print_title("var_load_up()");
-	error = var_load_up();
-	if (error != ERR_NO)
-		return (error);
+	err = var_load_up();
+	if (err.type != ERR_NO)
+		return (err);
 	print_result("var_load_up()              => (entries: %'6zu)", variables->len);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 void	var_free(t_var_list *variables)

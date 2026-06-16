@@ -16,10 +16,10 @@ t_error	params_get(const char *name, char **dst)
 	*dst = NULL;
 	shell = shell_get();
 	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	params = &shell->params;
 	if (name[0] == '\0')
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (name[0] == '-' && name[1] == '\0')
 		return (options_get(params->options, dst));
 	if (name[0] == '#' && name[1] == '\0')
@@ -37,7 +37,7 @@ t_error	params_get_positionals(t_positionals *dst)
 
 	shell = shell_get();
 	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	return (positionals_get(&shell->params.positionals, dst));
 }
 
@@ -47,6 +47,6 @@ t_error	params_build_envp(char ***dst_envp)
 
 	shell = shell_get();
 	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	return (var_build_envp(&shell->params.variables, dst_envp));
 }

@@ -61,5 +61,5 @@ t_error	undefined_behaviour(const char *message)
 	(void)posix_write(STDOUT_FILENO, "\"", 1);
 	(void)posix_write(STDOUT_FILENO, message, str_len(message));
 	(void)posix_write(STDOUT_FILENO, UB_SUFFIX, str_len(UB_SUFFIX));
-	return (ERR_UNDEFINED_BEHAVIOUR);
+	return (error(ERR_UNDEFINED_BEHAVIOUR));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:34:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/07 11:19:33 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 12:59:10 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_error	quote_remove_load(t_quote_remove *state, t_buff *input)
 {
 	state->input = buff_get_string(input);
 	if (state->input == NULL)
-		return (ERR_LIBC);
+		return (error_sys());
 	buff_init(&state->res, 0, NULL, 0);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

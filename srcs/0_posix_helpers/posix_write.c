@@ -20,13 +20,13 @@ t_error	posix_write(int fd, const char *buff, size_t len)
 		if (ret < 0 && errno == EINTR)
 			continue ;
 		else if (ret < 0 || (ret == 0 && len != 0))
-			return (ERR_LIBC);
+			return (error_sys());
 		else if ((size_t)ret == len && remaining == 0)
-			return (ERR_NO);
+			return (error(ERR_NO));
 		buff += ret;
 		len -= (size_t)ret;
 		len += remaining;
 		remaining = 0;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

@@ -28,7 +28,7 @@ void	positionals_dump(void)
 	printf("\nDUMP POSITIONALS\n");
 	shell = shell_get();
 	if (!shell)
-		error_print(NULL, "positionals_dump()", ERR_SHELL_NOT_FOUND);
+		error_print(error(ERR_SHELL_NOT_FOUND), "positionals_dump()", NULL, NULL);
 	stack = &shell->params.positionals;
 	count = stack->len;
 	i = 0;

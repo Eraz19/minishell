@@ -8,14 +8,14 @@ static t_error	process_variable(
 	const char *name,
 	const char *value)
 {
-	t_error	error;
+	t_error	err;
 
-	error = var_set(name, value, true, false);
-	if (error == ERR_VAR_INVALID_NAME)
-		return (ERR_NO);
-	if (error == ERR_NO)
+	err = var_set(name, value, true, false);
+	if (err.type == ERR_VAR_INVALID_NAME)
+		return (error(ERR_NO));
+	if (err.type == ERR_NO)
 		print_pass("'%s' = '%s'\n", name, value);
-	return (error);
+	return (err);
 }
 
 /*
@@ -29,23 +29,23 @@ t_error	var_load_envp(char **envp)
 	size_t	i;
 	char	*name;
 	char	*value;
-	t_error	error;
+	t_error	err;
 
 	if (!envp)
-		return (ERR_NO);
+		return (error(ERR_NO));
 	i = 0;
 	while (envp[i])
 	{
-		error = assignment_split(envp[i++], &name, &value);
-		if (error != ERR_NO)
-			return (error);
+		err = assignment_split(envp[i++], &name, &value);
+		if (err.type != ERR_NO)
+			return (err);
 		if (!value)
 			continue ;
-		error = process_variable(name, value);
+		err = process_variable(name, value);
 		free(name);
 		free(value);
-		if (error != ERR_NO)
-			return (error);
+		if (err.type != ERR_NO)
+			return (err);
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

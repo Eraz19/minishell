@@ -42,20 +42,20 @@ static t_error	pwd_is_the_current_working_dir(const char *pwd, bool *res)
 
 	*res = false;
 	if (stat(".", &current) == -1)
-		return (ERR_LIBC);
+		return (error_sys());
 	if (stat(pwd, &from_pwd) == -1)
 	{
 		if (errno == ENOENT || errno == ENOTDIR || errno == ELOOP
 			|| errno == ENAMETOOLONG)
-			return (ERR_NO);
-		return (ERR_LIBC);
+			return (error(ERR_NO));
+		return (error_sys());
 	}
 	if (current.st_dev != from_pwd.st_dev)
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (current.st_ino != from_pwd.st_ino)
-		return (ERR_NO);
+		return (error(ERR_NO));
 	*res = true;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 /*
@@ -69,11 +69,11 @@ static t_error	var_pwd_is_valid(const char *pwd, bool *res)
 {
 	*res = false;
 	if (!pwd)
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (pwd[0] != '/')
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (!pwd_has_no_dot_components(pwd))
-		return (ERR_NO);
+		return (error(ERR_NO));
 	return (pwd_is_the_current_working_dir(pwd, res));
 }
 
@@ -85,27 +85,27 @@ cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/util
 t_error	var_set_pwd(void)
 {
 	char	*pwd;
-	t_error	error;
+	t_error	err;
 	bool	is_valid;
 
-	error = var_get("PWD", &pwd);
-	if (error != ERR_NO && error != ERR_VAR_NOT_FOUND)
-		return (error);
-	if (error == ERR_NO)
+	err = var_get("PWD", &pwd);
+	if (err.type != ERR_NO && err.type != ERR_VAR_NOT_FOUND)
+		return (err);
+	if (err.type == ERR_NO)
 	{
-		error = var_pwd_is_valid(pwd, &is_valid);
+		err = var_pwd_is_valid(pwd, &is_valid);
 		free(pwd);
-		if (error != ERR_NO)
-			return (error);
+		if (err.type != ERR_NO)
+			return (err);
 		if (is_valid)
-			return (print_pass("'PWD' is already valid\n"), ERR_NO);
+			return (print_pass("'PWD' is already valid\n"), error(ERR_NO));
 	}
-	error = posix_getcwd(&pwd);
-	if (error != ERR_NO)
-		return (error);
-	error = var_set("PWD", pwd, false, false);
-	if (error == ERR_NO)
+	err = posix_getcwd(&pwd);
+	if (err.type != ERR_NO)
+		return (err);
+	err = var_set("PWD", pwd, false, false);
+	if (err.type == ERR_NO)
 		print_pass("'PWD' has been set to '%s'\n", pwd);
 	free(pwd);
-	return (error);
+	return (err);
 }

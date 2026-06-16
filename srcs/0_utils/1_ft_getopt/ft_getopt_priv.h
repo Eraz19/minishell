@@ -20,11 +20,11 @@ typedef struct s_getopt_state
 // @ret ERR_LIBC
 t_error	getopt_add_option(t_getopt_state *state, t_getopt_option *src);
 
-// @ret error
+// @ret error(err_type)
 t_error	getopt_err(
-	t_getopt_state *state,
+	const t_getopt_state *state,
 	char flag,
-	const char *arg, t_error error);
+	const char *arg, t_error_type err_type);
 
 /* ************************************************************************* */
 /*                                 OPTIONS                                   */

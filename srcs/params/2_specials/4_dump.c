@@ -9,7 +9,7 @@ void	specials_dump(void)
 	printf("\nDUMP SPECIALS\n");
 	shell = shell_get();
 	if (!shell)
-		error_print(NULL, "specials_dump()", ERR_SHELL_NOT_FOUND);
+		error_print(error(ERR_SHELL_NOT_FOUND), "specials_dump()", NULL, NULL);
 	specials = &shell->params.specials;
 	if (specials->source)
 		printf("SPECIAL source='%s'\n", specials->source);

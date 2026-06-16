@@ -58,11 +58,11 @@ t_error	options_process_flag(
 	char flag_string[2];
 
 	if (options_process_flag1(options, flag, on))
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (options_process_flag2(options, flag, on, explicit_plus_m))
-		return (ERR_NO);
+		return (error(ERR_NO));
 	flag_string[0] = flag;
 	flag_string[1] = '\0';
-	error_print(NULL, flag_string, ERR_OPT_INVALID);
-	return (ERR_OPT_INVALID);
+	error_print(error(ERR_OPT_INVALID), flag_string, NULL, NULL);
+	return (error(ERR_OPT_INVALID));
 }

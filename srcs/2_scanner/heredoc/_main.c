@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 10:37:07 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:19:55 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 12:59:10 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ static t_error	heredoc_generate_file_id(char **id)
 
 	current_time = get_now_unix_seconds();
 	if (current_time == -1)
-		return (ERR_LIBC);
+		return (error_sys());
 	*id = ft_ltoa(current_time);
 	if (*id == NULL)
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	heredoc_create_tmp_file(t_heredoc *state, t_file_path *file_path)

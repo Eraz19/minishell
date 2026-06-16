@@ -24,19 +24,19 @@ static bool	getopt_is_delimiter(t_getopt_state *state)
 // @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG / ERR_LIBC
 static t_error	getopt_process(t_getopt_state *state)
 {
-	t_error		error;
+	t_error		err;
 
 	while (state->arg_i < state->argc)
 	{
 		if (getopt_is_delimiter(state))
 			break ;
 		state->char_i = 1;
-		error = getopt_process_arg(state);
-		if (error != ERR_NO)
-			return (error);
+		err = getopt_process_arg(state);
+		if (err.type != ERR_NO)
+			return (err);
 	}
 	state->out->first_operand_index = (size_t)state->arg_i;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 static t_error	getopt_catch_ub(t_getopt_out *out)
@@ -65,13 +65,13 @@ static t_error	getopt_catch_ub(t_getopt_out *out)
 					"repeated, the results are undefined"));
 		}
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	ft_getopt(int argc, char **argv, t_getopt_in *in, t_getopt_out *out)
 {
 	t_getopt_state	state;
-	t_error			error;
+	t_error			err;
 
 	state.argc = argc;
 	state.argv = argv;
@@ -81,13 +81,13 @@ t_error	ft_getopt(int argc, char **argv, t_getopt_in *in, t_getopt_out *out)
 	state.out = out;
 	(void)vector_init(&out->options, sizeof(t_getopt_option), 0);
 	out->first_operand_index = 1;
-	error = getopt_process(&state);
-	if (error != ERR_NO)
+	err = getopt_process(&state);
+	if (err.type != ERR_NO)
 	{
 		vector_free(&out->options, NULL);
-		return (error);
+		return (err);
 	}
 	if (in->ub_on_repeated_flags)
 		return (getopt_catch_ub(out));
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

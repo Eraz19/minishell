@@ -16,14 +16,14 @@ static t_error	var_build_entry(
 	dst_size = name_len + value_len + 2;
 	*dst = malloc(dst_size);
 	if (!*dst)
-		return (ERR_LIBC);
+		return (error_sys());
 	str_lcpy(*dst, name, dst_size);
 	(*dst)[name_len] = '=';
 	if (value_len > 0)
 		str_lcpy(*dst + name_len + 1, value, dst_size - name_len - 1);
 	else
 		(*dst)[name_len + 1] = '\0';
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	var_build_envp(const t_var_list *variables, char ***dst_envp)
@@ -31,11 +31,11 @@ t_error	var_build_envp(const t_var_list *variables, char ***dst_envp)
 	size_t		envp_i;
 	size_t		var_i;
 	const t_var	*var;
-	t_error		error;
+	t_error		err;
 
 	*dst_envp = malloc((variables->len + 1) * sizeof(**dst_envp));
 	if (!*dst_envp)
-		return (ERR_LIBC);
+		return (error_sys());
 	envp_i = 0;
 	var_i = 0;
 	while (var_i < variables->len)
@@ -43,11 +43,11 @@ t_error	var_build_envp(const t_var_list *variables, char ***dst_envp)
 		var = &((const t_var *)variables->data)[var_i++];
 		if (!var->value || !var->export)
 			continue ;
-		error = var_build_entry(var->name, var->value, &(*dst_envp)[envp_i]);
-		if (error != ERR_NO)
-			return (str_array_free(dst_envp), error);
+		err = var_build_entry(var->name, var->value, &(*dst_envp)[envp_i]);
+		if (err.type != ERR_NO)
+			return (str_array_free(dst_envp), err);
 		envp_i++;
 	}
 	(*dst_envp)[envp_i] = NULL;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

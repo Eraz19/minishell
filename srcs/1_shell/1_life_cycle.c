@@ -31,7 +31,7 @@ void	shell_exit(t_error error)
 	// TODO: history_save();
 	if (shell)
 		shell_free(&shell);
-	exit((int)error);
+	exit((int)error.type);
 }
 
 void	shell_exit_on_veof(void)
@@ -40,5 +40,5 @@ void	shell_exit_on_veof(void)
 		return ;
 	if (option_is_active(OPT_IGNOREEOF))
 		return ;
-	shell_exit(ERR_NO);
+	shell_exit(error(ERR_NO));
 }

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 15:45:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:06:08 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 12:58:33 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ t_error	token_reset(t_token *token, size_t len)
 {
 	token_free(token);
 	if (!buff_init(&token->value, len, NULL, 0))
-        return (ERR_TOKEN_INIT);
-	return (ERR_NO);
+        return (error(ERR_TOKEN_INIT));
+	return (error(ERR_NO));
 }

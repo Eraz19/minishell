@@ -89,7 +89,7 @@ bool	go_to(size_t **gotos, size_t current_lr_state_id, t_symbol symbol,
  *                (borrowed, must NOT be NULL).
  * @return ERR_NO / ERR_LIBC.
  */
-bool	goto_build_table(t_lr_machine *machine);
+t_error	goto_build_table(t_lr_machine *machine);
 
 /**
  * @ingroup goto_pub

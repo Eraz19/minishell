@@ -25,12 +25,12 @@ t_error	lr_state_add_rule_state(
 	bool *did_add)
 {
 	if (lr_state_contains_rule_state(lr_state, rule_state))
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (!vector_push(lr_state, &rule_state))
-		return (ERR_LIBC);
+		return (error_sys());
 	if (did_add)
 		*did_add = true;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 bool	lr_state_equal(t_lr_state *a, t_lr_state *b)

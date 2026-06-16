@@ -44,6 +44,6 @@
  *                initialized (borrowed, must NOT be NULL).
  * @return ERR_NO / ERR_LIBC
  */
-bool	action_build_default_table(t_lr_machine *machine);
+t_error	action_build_default_table(t_lr_machine *machine);
 
 # endif

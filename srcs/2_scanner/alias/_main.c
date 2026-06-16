@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 13:54:53 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:17:47 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 12:58:33 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,5 @@ bool	is_valid_alias_name(char *word)
 t_error	alias_substitution()
 {
 	// TODO
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

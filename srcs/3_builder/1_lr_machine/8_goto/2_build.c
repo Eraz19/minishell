@@ -2,34 +2,42 @@
 #include "goto.h"
 #include <stdlib.h>
 
+// ERR_LIBC
+static t_error	goto_save_error_and_free(t_lr_machine *machine, size_t count)
+{
+	t_error	err;
+	size_t	j;
+
+	err = error_sys();
+	j = 0;
+	while (j < count)
+		free(machine->gotos[j++]);
+	free(machine->gotos);
+	machine->gotos = NULL;
+	return (err);
+}
+
 // ERR_NO / ERR_LIBC
 static t_error	malloc_goto_table(t_lr_machine *machine)
 {
 	size_t	rows;
 	size_t	cols;
 	size_t	i;
-	size_t	j;
 
 	rows = machine->lr_states.len;
 	cols = SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1;
 	machine->gotos = malloc(rows * sizeof(*machine->gotos));
 	if (!machine->gotos)
-		return (ERR_LIBC);
+		return (error_sys());
 	i = 0;
 	while (i < rows)
 	{
 		machine->gotos[i] = malloc(cols * sizeof(**machine->gotos));
 		if (!machine->gotos[i])
-		{
-			j = 0;
-			while (j < i)
-				free(machine->gotos[j++]);
-			free(machine->gotos);
-			return (machine->gotos = NULL, ERR_LIBC);
-		}
+			return (goto_save_error_and_free(machine, i));
 		i++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 static void	goto_set_empty(t_lr_machine *machine)
@@ -52,7 +60,7 @@ static void	goto_set_empty(t_lr_machine *machine)
 	}
 }
 
-bool	goto_build_table(t_lr_machine *machine)
+static void	goto_process_transitions(t_lr_machine *machine)
 {
 	size_t			i;
 	t_transition	transition;
@@ -60,9 +68,6 @@ bool	goto_build_table(t_lr_machine *machine)
 	size_t			row;
 	size_t			col;
 
-	if (malloc_goto_table(machine) != ERR_NO)
-		return (ERR_LIBC);
-	goto_set_empty(machine);
 	i = 0;
 	while (i < machine->transitions.len)
 	{
@@ -76,24 +81,16 @@ bool	goto_build_table(t_lr_machine *machine)
 		}
 		i++;
 	}
-	return (ERR_NO);
 }
 
-bool	go_to(
-	size_t **gotos,
-	size_t current_lr_state_id,
-	t_symbol symbol,
-	size_t *new_lr_state_id)
+t_error	goto_build_table(t_lr_machine *machine)
 {
-	size_t	symbol_offset;
-	size_t	tmp_lr_state_id;
+	t_error			err;
 
-	if (symbol < SYM_NON_TERMINAL_MIN || symbol > SYM_NON_TERMINAL_MAX)
-		return (false);
-	symbol_offset = symbol - SYM_NON_TERMINAL_MIN;
-	tmp_lr_state_id = gotos[current_lr_state_id][symbol_offset];
-	if (tmp_lr_state_id == GOTO_EMPTY)
-		return (false);
-	*new_lr_state_id = tmp_lr_state_id;
-	return (true);
+	err = malloc_goto_table(machine);
+	if (err.type != ERR_NO)
+		return (err);
+	goto_set_empty(machine);
+	goto_process_transitions(machine);
+	return (error(ERR_NO));
 }
