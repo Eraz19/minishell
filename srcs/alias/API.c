@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 17:10:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 16:24:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/12 17:08:06 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ t_error	alias_on_expansion_end(void)
 
 t_error	alias_print(const char *name)
 {
-	t_alias	*state;
+	t_key_value	*pair;
+	t_alias		*state;
+	t_key_value	**pairs;
 
 	state = shell_get_alias();
 	if (state == NULL)
@@ -39,7 +41,17 @@ t_error	alias_print(const char *name)
 	if (name == NULL)
 		return (alias_print_all(hashmap_get_all(&state->map)), state->err);
 	else
-		return (alias_print_one(hashmap_get(&state->map, name)), state->err);
+	{
+		pair = hashmap_get(&state->map, name);
+		if (pair == NULL)
+			return (state->err);
+		pairs = malloc(sizeof(t_key_value *) * 2);
+		if (pairs == NULL)
+			return (state->err = ERR_LIBC);
+		pairs[0] = pair;
+		pairs[1] = NULL;
+		return (alias_print_all(pairs), state->err);
+	}
 }
 
 t_error	alias_remove(const char *name)

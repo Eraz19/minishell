@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 18:41:16 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 15:50:04 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/12 17:07:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 # define ALIAS__H
 
 # include "alias.h"
-
-/**
- * @ingroup alias
- * @brief Prints a single alias as `name='value'`.
- *
- * Prints nothing when @p pair is NULL; an absent value is shown as `''`.
- *
- * @param pair Key/value pair to print (borrowed), or NULL.
- */
-void	alias_print_one(t_key_value *pair);
 
 /**
  * @ingroup alias

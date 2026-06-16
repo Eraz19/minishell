@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 17:35:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:54:25 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 12:17:29 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,20 @@ t_error	readline_(char **res, const char *prompt)
 {
 	char	*input;
 
-	while (true)
+	*res = readline(prompt);
+	while (*res == NULL)
 	{
+		shell_exit_on_veof();
+		if (!option_is_active(OPT_INTERACTIVE))
+			return (ERR_VEOF);
 		*res = readline(prompt);
+	}
+	if (**res == '\0')
+	{
+		free(*res);
+		*res = str_dup("");
 		if (*res == NULL)
-			shell_exit_on_veof();
-		else if (str_len(*res) == 0)
-			free(*res);
-		else
-			break ;
+			return (ERR_LIBC);
 	}
 	input = str_join(*res, "\n");
 	if (input == NULL)

@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   blank.c                                            :+:      :+:    :+:   */
+/*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 15:38:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 09:44:00 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/08 11:23:04 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/15 15:47:56 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_rules_.h"
+#include "history_readline_.h"
 
-t_error	lexer_rule_blank(t_lexer *state)
+ssize_t	history_rl_to_add_count(t_history_rl *state, size_t count)
 {
-	if (state->token->type != NONE)
-		return (lexer_delimit_token(state), state->err);
-	while (is_blank(state->input->str[state->input->i]) &&
-		state->input->str[state->input->i] != '\0')
-		state->input->i++;
-	return (state->err);
+	if (state->max < 0)
+		return ((ssize_t)count);
+	else if (state->count + count > (size_t)(state->max))
+		return (-(ssize_t)state->max);
+	else
+		return ((ssize_t)count);
 }

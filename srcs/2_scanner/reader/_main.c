@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 20:22:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 18:47:36 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 11:53:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_error	reader_heredoc(char **res)
 	err = readline_(&heredoc, "> ");
 	if (err != ERR_NO)
 		return (err);
+	if (*res == NULL)
+		return (*res = heredoc, ERR_NO);
 	new_input = str_join(*res, heredoc);
 	if (new_input == NULL)
 		return (free(heredoc), ERR_LIBC);
@@ -35,9 +37,16 @@ t_error	reader_heredoc(char **res)
 
 t_error	reader_new_input(char **res)
 {
+	t_error	err;
+
 	if (res == NULL)
 		return (ERR_NULL_ARGS);
-	return (readline_(res, "$ "));
+	err = readline_(res, "$ ");
+	if (err)
+		return (err);
+	if (str_len(*res) == 1)
+		return (free(*res), *res = NULL, ERR_NO);
+	return (ERR_NO);
 }
 
 t_error	reader_continuation(char **res)

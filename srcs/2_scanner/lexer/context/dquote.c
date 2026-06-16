@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:55 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:51:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 10:45:28 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_context_args	context_dquote_rules(void)
 
 	res.quoting = NULL;
 	res.opening_len = 1;
+	res.closing_len = 1;
 	res.context = DQUOTE;
 	res.is_quoting = NULL;
 	res.unescaped_args = NULL;

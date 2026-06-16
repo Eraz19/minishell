@@ -5,36 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 18:42:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:49:24 by adouieb          ###   ########.fr       */
+/*   Created: 2026/05/29 12:34:15 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/15 23:45:09 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heredoc_.h"
+#include <stdlib.h>
+#include "libft.h"
+#include "quote_removal_.h"
 
-void	heredoc_init(t_heredoc *state)
+void	quote_remove_init(t_quote_remove *state)
 {
-	*(state) = (t_heredoc){0};
-	here_queue_init(&state->queue);
+	*state = (t_quote_remove){0};
+	buff_init(&state->expanded_word, 0, NULL, 0);
 }
 
-void	heredoc_free(t_heredoc *state)
+t_error	quote_remove_free(t_quote_remove *state)
 {
-	here_queue_free(&state->queue);
-	*(state) = (t_heredoc){0};
+	if (state->word)
+		free(state->word);
+	buff_free(&state->expanded_word);
+	return (*state = (t_quote_remove){0}, err);
 }
 
-void	heredoc_load(t_heredoc *state, bool is_tty)
+t_error	quote_remove_load(t_quote_remove *state, t_buff *word)
 {
-	state->is_tty = is_tty;
-}
-
-void	heredoc_reset(t_heredoc *state)
-{
-	bool	is_tty;
-
-	is_tty = state->is_tty;
-	heredoc_free(state);
-	heredoc_init(state);
-	state->is_tty = is_tty;
+	state->word = buff_get_string(word);
+	if (state->word == NULL)
+		return (state->err = ERR_LIBC);
+	return (state->err);
 }

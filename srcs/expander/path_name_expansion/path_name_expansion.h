@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
+/*   path_name_expansion.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/08 11:23:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:33:58 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/15 15:42:10 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/15 15:42:26 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "history_rl_.h"
+#ifndef PATH_NAME_EXPANSION_H
+# define PATH_NAME_EXPANSION_H
 
-ssize_t	history_rl_to_add_count(t_history_rl *state, size_t count)
+# include "error.h"
+# include "libft.h"
+
+typedef struct s_path_name_expansion
 {
-	if (state->max < 0)
-		return ((ssize_t)count);
-	else if (state->count + count > (size_t)(state->max))
-		return (-(ssize_t)state->max);
-	else
-		return ((ssize_t)count);
-}
+	size_t	i;
+	t_error	err;
+	char	*word;
+	bool	reached_EOW;
+}	t_path_name_expansion;
+
+#endif

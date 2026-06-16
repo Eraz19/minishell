@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   blank.c                                            :+:      :+:    :+:   */
+/*   expander_substitutions.h                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 15:38:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 09:44:00 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/15 15:38:23 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/15 16:05:47 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_rules_.h"
+#ifndef EXPANDER_SUBSTITUTIONS_H
+# define EXPANDER_SUBSTITUTIONS_H
 
-t_error	lexer_rule_blank(t_lexer *state)
+# include "error.h"
+# include "libft.h"
+
+typedef struct s_expander_substitutions
 {
-	if (state->token->type != NONE)
-		return (lexer_delimit_token(state), state->err);
-	while (is_blank(state->input->str[state->input->i]) &&
-		state->input->str[state->input->i] != '\0')
-		state->input->i++;
-	return (state->err);
-}
+	size_t	i;
+	t_error	err;
+	char	*word;
+	bool	reached_EOW;
+}	t_expander_substitutions;
+
+t_error	expander_substitutions(char **expanded_word, char *word);
+
+#endif

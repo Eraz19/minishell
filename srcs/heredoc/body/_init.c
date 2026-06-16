@@ -6,15 +6,13 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 09:13:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:49:01 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/15 11:13:35 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include "expander.h"
 #include "heredoc_body_.h"
+#include "heredoc_queue_.h"
 
 void	heredoc_body_init(t_heredoc_body *state)
 {
@@ -24,8 +22,8 @@ void	heredoc_body_init(t_heredoc_body *state)
 
 void	heredoc_body_free(t_heredoc_body *state)
 {
-	free(state->delim);
 	buff_free(&state->content);
+	heredoc_queue_item_free(state->item);
 	if (state->input != NULL)
 		free(state->input);
 	if (state->line != NULL)
@@ -33,29 +31,19 @@ void	heredoc_body_free(t_heredoc_body *state)
 	*(state) = (t_heredoc_body){0};
 }
 
-static t_error	heredoc_build_delimiter(t_heredoc_body *state, t_buff *delim)
+t_error	heredoc_body_load(
+	t_heredoc_body *state,
+	t_heredoc_queue_item *item,
+	char *input,
+	size_t *i)
 {
-	t_buff	delim_no_quoting;
-
-	quote_remove(&delim_no_quoting, delim);
-	if (state->err)
-		return (state->err);
-	if (!buff_append(&delim_no_quoting, "\n", 1))
-		return (buff_free(&delim_no_quoting), ERR_LIBC);
-	state->delim = buff_get_string(&delim_no_quoting);
-	if (state->delim == NULL)
-		state->err = ERR_LIBC;
-	return (buff_free(&delim_no_quoting), state->err);
-}
-
-t_error	heredoc_body_load(t_heredoc_body *state, t_heredoc_body_load_args args)
-{
-	if (heredoc_build_delimiter(state, &args.item->delim))
-		return (state->err);
-	state->no_tty.i = args.i;
-	state->input = args.input;
-	state->is_tty = args.is_tty;
-	state->mode = args.item->mode;
-	state->path = args.item->path;
+	state->i = i;
+	state->item = item;
+	if (input != NULL)
+	{
+		state->input = str_dup(input);
+		if (state->input == NULL)
+			return (state->err = ERR_LIBC);
+	}
 	return (state->err);
 }

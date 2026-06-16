@@ -6,15 +6,15 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 08:36:50 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 15:06:26 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:47:49 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <readline/history.h>
-#include "history_rl_.h"
 #include "history_list_.h"
+#include "history_readline_.h"
 
 t_error	history_rl_add(t_history_rl *state, t_history_list *list, size_t count)
 {

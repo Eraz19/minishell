@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:12:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:52:30 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 00:12:57 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_operator_char_semicolon(t_lexer *state)
 {
-	if (state->token.type == SCOLON)
+	if (state->token->type == SCOLON)
 		return (true);
 	else if (!is_in_middle_of_operator(state))
 		return (true);
@@ -23,9 +23,9 @@ bool	is_operator_char_semicolon(t_lexer *state)
 
 t_error	operator_add_semicolon(t_lexer *state)
 {
-	if (state->token.type == SCOLON)
+	if (state->token->type == SCOLON)
 		return (lexer_consume(state, DSEMI, 1));
-	else if (state->token.type == NONE)
+	else if (state->token->type == NONE)
 		return (lexer_consume(state, SCOLON, 1));
 	return (state->err = ERR_INCOHERENT_STATE, state->err);
 }

@@ -6,21 +6,19 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:21:57 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:45:31 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/15 23:47:43 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "quote_remove_.h"
+#include "quote_removal_.h"
 #include "quote_remove_rules_.h"
 
-t_error	quote_remove(t_buff *res, t_buff *input)
+t_error	quote_removal(t_expansion *expansion)
 {
-	t_quote_remove	state;
+	t_buff	expanded_word;
 
-	quote_remove_init(&state);
-	state.err = quote_remove_load(&state, input);
-	if (state.err)
-		return (quote_remove_free(&state));
+	if (!buff_init(&expanded_word, 0, state->word, (long)str_len(state->word)))
+		return (ERR_LIBC);
 	while (!state.reached_EOW)
 	{
 		if (quote_remove_rules(&state))

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:28:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 17:47:32 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 00:04:46 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,16 @@
 void	lexer_init(t_lexer *state)
 {
 	*state = (t_lexer){0};
-	token_init(&state->token);
 	input_stack_init(&state->input_stack);
 }
 
 void	lexer_free(t_lexer *state)
 {
-	token_free(&state->token);
 	input_stack_free(&state->input_stack);
 	*state = (t_lexer){0};
 }
 
-void	lexer_load(t_lexer *state, bool is_tty)
+void	lexer_load(t_lexer *state, bool is_stdin)
 {
-	state->is_tty = is_tty;
+	state->is_stdin = is_stdin;
 }

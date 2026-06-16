@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:32:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 18:48:16 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 09:21:33 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef enum e_token_type
 	DGREAT,			/**< '>>' appending output redirection. */
 	DLESS,			/**< '<<' here-document. */
 	DLESSDASH,		/**< '<<-' tab-stripped here-document. */
-	EOF				/**< End of input. */
+	EOF_			/**< End of input. */
 }	t_token_type;
 
 /**

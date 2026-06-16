@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   history_rl_.h                                      :+:      :+:    :+:   */
+/*   history_readline_.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 15:17:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 14:09:35 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:45:22 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HISTORY_RL__H
-# define HISTORY_RL__H
+#ifndef HISTORY_READLINE__H
+# define HISTORY_READLINE__H
 
 # include "error.h"
 # include "history_list_.h"

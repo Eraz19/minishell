@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 18:01:19 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 10:45:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ static bool	is_backtick_squote_surrounded(t_lexer *state)
 	t_context	*ctx;
 	t_context	surrounding_ctx;
 
-    if (state->input.context.len < 2)
+    if (state->input->context.len < 2)
         return (false);
-    ctx = (t_context *)state->input.context.data;
-	surrounding_ctx = ctx[state->input.context.len - 2];
+    ctx = (t_context *)state->input->context.data;
+	surrounding_ctx = ctx[state->input->context.len - 2];
     return (surrounding_ctx == DQUOTE || surrounding_ctx == ARITH);
 }
 
@@ -50,6 +50,7 @@ static t_context_args	context_backtick_rules(void)
 	t_context_args	res;
 
 	res.opening_len = 1;
+	res.closing_len = 1;
 	res.context = BACKTICK;
 	res.unescaped_args = NULL;
 	res.quoting = lexer_rule_quoting;

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:36 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:51:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 10:45:20 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static t_context_args	context_dollar_squote_rules(void)
 
 	res.quoting = NULL;
 	res.opening_len = 2;
+	res.closing_len = 1;
 	res.is_quoting = NULL;
 	res.expansion = NULL;
 	res.unescaped_args = NULL;

@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/11 18:07:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 16:01:39 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/15 23:14:37 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/15 23:47:26 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <unistd.h>
-#include "libft.h"
-#include "alias_.h"
+#include "expander.h"
 
-void	alias_print_one(t_key_value *pair)
+void	expander_init(t_expansion *expansion)
 {
-	if (pair == NULL)
-		return ;
-	if (pair->value == NULL)
-		ft_printf("%s=''\n", pair->key);
-	else
-		ft_printf("%s='%s'\n", pair->key, (char *)pair->value);	
+	vector_init(expansion, sizeof(char *), 0);
 }
 
-void	alias_print_all(t_key_value **pairs)
+void	expander_free(t_expansion *expansion)
 {
-	size_t	i;
+	vector_free(expansion, free);
+}
 
-	if (pairs == NULL)
-		return ;
-	i = 0;
-	while (pairs[i] != NULL)
-		alias_print_one(pairs[i++]);
-	free(pairs);
+t_error	expander_load(t_expansion *expansion, char *word)
+{
+	if (!vector_push(expansion, &word))
+		return (ERR_LIBC);
+	return (ERR_NO);
 }

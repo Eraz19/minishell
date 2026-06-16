@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 13:04:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 13:53:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:47:11 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "error.h"
 # include "libft.h"
-# include "history_rl_.h"
 # include "history_list_.h"
 # include "history_file_.h"
+# include "history_readline_.h"
 
 /** @defgroup history History API
  *  @brief Command history backed by a file, an in-memory list and readline.

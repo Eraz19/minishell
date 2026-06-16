@@ -5,36 +5,29 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 12:34:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:45:23 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/04 18:42:35 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/12 18:01:40 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
-#include "quote_remove_.h"
+#include "heredoc.h"
+#include "heredoc_queue_.h"
+#include "utils.h"
 
-void	quote_remove_init(t_quote_remove *state)
+void	heredoc_init(t_heredoc *state)
 {
-	*state = (t_quote_remove){0};
+	*(state) = (t_heredoc){0};
+	heredoc_queue_init(&state->queue);
+	state->file_id = (size_t)get_now_unix_seconds();
 }
 
-t_error	quote_remove_free(t_quote_remove *state)
+void	heredoc_free(t_heredoc *state)
 {
-	t_error	err;
-
-	err = state->err;
-	if (state->input)
-		free(state->input);
-	buff_free(&state->res);
-	return (*state = (t_quote_remove){0}, err);
+	heredoc_queue_free(&state->queue);
+	*(state) = (t_heredoc){0};
 }
 
-t_error	quote_remove_load(t_quote_remove *state, t_buff *input)
+void	heredoc_load(t_heredoc *state, bool is_stdin)
 {
-	state->input = buff_get_string(input);
-	if (state->input == NULL)
-		return (ERR_LIBC);
-	buff_init(&state->res, 0, NULL, 0);
-	return (ERR_NO);
+	state->is_stdin = is_stdin;
 }
