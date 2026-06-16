@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   arith.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:05:28 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
-#include "__lexer_context.h"
+#include "lexer_rules_.h"
+#include "lexer_context_.h"
 
 static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
 {
-	if (state->input[state->i] == '(')
+	if (state->input->str[state->input->i] == '(')
 	{
 		(*((size_t *)nesting_depth))++;
-		if (lexer_consume(state, state->token.type, 1))
+		if (lexer_consume(state, state->token->type, 1))
 			return (state->err);
 	}
-	else if (state->input[state->i] == ')')
+	else if (state->input->str[state->input->i] == ')')
 	{
 		(*((size_t *)nesting_depth))--;
-		if (lexer_consume(state, state->token.type, 1))
+		if (lexer_consume(state, state->token->type, 1))
 			return (state->err);
 	}
 	else
-		return (lexer_consume(state, state->token.type, 1));
+		return (lexer_consume(state, state->token->type, 1));
 	return (state->err);
 }
 
@@ -58,6 +58,7 @@ static t_context_args	context_arith_rules(size_t *nesting_depth)
 
 	res.quoting = NULL;
 	res.opening_len = 3;
+	res.closing_len = 1;
 	res.context = ARITH;
 	res.is_quoting = NULL;
 	res.escape = context_arith_escape;
@@ -71,20 +72,27 @@ static t_context_args	context_arith_rules(size_t *nesting_depth)
 
 t_error	lexer_context_arith(t_lexer *state)
 {
+	size_t			start;
 	t_lexer_backup	backup;
 	size_t			nesting_depth;
 
 	nesting_depth = 0;
+	start = state->token->value.len;
 	backup = lexer_backup(state);
 	if (lexer_context_scan(state, context_arith_rules(&nesting_depth)))
 		return (state->err);
-	if (state->input[state->i] != ')')
+	if (state->input->str[state->input->i] != ')')
 	{
 		if (lexer_restore(state, backup))
 			return (state->err);
 		return (state->err = ERR_CTX_END_NOT_FOUND, state->err);
 	}
-	if (lexer_consume(state, state->token.type, 1))
+	if (lexer_consume(state, state->token->type, 1))
 		return (state->err);
-	return (state->err = context_stack_pop(&state->context), state->err);
+	state->err = token_context_queue_push(
+		&state->token->contexts,
+		start,
+		state->token->value.len,
+		ARITH);
+	return (state->err);
 }

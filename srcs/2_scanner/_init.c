@@ -3,42 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:00:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 17:37:18 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/15 23:58:07 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "scanner.h"
+#include "scanner_.h"
 
-void	scanner_init(t_scanner *state)
+t_error	scanner_init(t_scanner *state)
 {
 	*state = (t_scanner){0};
-	lexer_init(&state->lexer);
-	alias_init(&state->alias);
+	state->lexer = malloc(sizeof(t_lexer));
+	if (state->lexer == NULL)
+		return (ERR_LIBC);
+	lexer_init(state->lexer);
 	heredoc_init(&state->heredoc);
+	return (ERR_NO);
 }
 
 void	scanner_free(t_scanner *state)
 {
-	if (state->arg.command != NULL)
-		free(state->arg.command);
-	lexer_free(&state->lexer);
-	alias_free(&state->alias);
+	if (state->lexer != NULL)
+	{
+		lexer_free(state->lexer);
+		free(state->lexer);
+	}
 	heredoc_free(&state->heredoc);
 	*state = (t_scanner){0};
 }
 
-t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *arg)
+t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source)
 {
 	state->mode = mode;
-	lexer_load(&state->lexer, mode == SCAN_MODE_STDIN);
-	heredoc_load(&state->heredoc, mode == SCAN_MODE_STDIN);
-	if (mode == SCAN_MODE_STRING)
-		return (state->arg.command = arg, state->err);
-	else if (mode == SCAN_MODE_FILE)
-		return (state->arg.path = arg, state->err);
+	lexer_load(state->lexer, mode == SCAN_STDIN);
+	heredoc_load(&state->heredoc, mode == SCAN_STDIN);
+	if (mode == SCAN_STRING)
+		return (state->source = source, state->err);
+	else if (mode == SCAN_FILE)
+		return (state->source = source, state->err);
 	return (state->err);
 }

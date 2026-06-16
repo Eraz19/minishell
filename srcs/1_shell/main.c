@@ -48,11 +48,11 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	print_warn("Functions not implemented yet           => skipping loading\n");
 	/*---------------------------------------*/
 	if (option_is_active(OPT_STDIN_INPUT))
-		err = scanner_load(&shell->scanner, SCAN_MODE_STDIN, shell->params.specials.source);
+		err = scanner_load(&shell->scanner, SCAN_STDIN, shell->params.specials.source);
 	else if (option_is_active(OPT_CMD_STRING))
-		err = scanner_load(&shell->scanner, SCAN_MODE_STRING, shell->params.specials.source);
+		err = scanner_load(&shell->scanner, SCAN_STRING, shell->params.specials.source);
 	else
-		err = scanner_load(&shell->scanner, SCAN_MODE_FILE, shell->params.specials.source);
+		err = scanner_load(&shell->scanner, SCAN_FILE, shell->params.specials.source);
 	if (err.type != ERR_NO)
 		return (err);
 	/*---------------------------------------*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:32:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:41:16 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:49:08 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,28 @@
 
 # include "error.h"
 # include "libft.h"
+# include "token.h"
 
-t_error	quote_remove(t_buff *res, t_buff *input);
+typedef enum e_expander_phase
+{
+	ALL,
+	QUOTE_REMOVE_ONLY,
+}	t_expander_mode;
+
+typedef struct s_expander
+{
+	t_token		token;
+	t_vector	words;
+}	t_expander;
+
+void	expander_init(t_expander *expander);
+void	expander_free(t_expander *expander);
+t_error	expander_load(t_expander *expander, t_token token);
+
+t_error	expander_push(t_expander *state, char *word);
+t_error	expander_get(t_expander *state, char **result,  size_t index);
+
+t_error	expander_word(t_expansion *expansion, t_token token,
+			t_expander_mode mode);
 
 #endif

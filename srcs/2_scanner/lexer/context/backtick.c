@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   backtick.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:05:18 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
-#include "__lexer_context.h"
+#include "lexer_rules_.h"
+#include "lexer_context_.h"
 
 static bool	is_backtick_squote_surrounded(t_lexer *state)
 {
 	t_context	*ctx;
 	t_context	surrounding_ctx;
 
-    if (state->context.len < 2)
+    if (state->input->context.len < 2)
         return (false);
-    ctx = (t_context *)state->context.data;
-	surrounding_ctx = ctx[state->context.len - 2];
+    ctx = (t_context *)state->input->context.data;
+	surrounding_ctx = ctx[state->input->context.len - 2];
     return (surrounding_ctx == DQUOTE || surrounding_ctx == ARITH);
 }
 
@@ -50,6 +50,7 @@ static t_context_args	context_backtick_rules(void)
 	t_context_args	res;
 
 	res.opening_len = 1;
+	res.closing_len = 1;
 	res.context = BACKTICK;
 	res.unescaped_args = NULL;
 	res.quoting = lexer_rule_quoting;
@@ -64,5 +65,15 @@ static t_context_args	context_backtick_rules(void)
 
 t_error	lexer_context_backtick(t_lexer *state)
 {
-	return (lexer_context_scan(state, context_backtick_rules()));
+	size_t	start;
+
+	start = state->token->value.len;
+	if (lexer_context_scan(state, context_backtick_rules()))
+		return (state->err);
+	state->err = token_context_queue_push(
+		&state->token->contexts,
+		start,
+		state->token->value.len,
+		BACKTICK);
+	return (state->err);
 }

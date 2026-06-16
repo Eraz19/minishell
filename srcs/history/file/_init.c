@@ -1,0 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _init.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/07 16:05:55 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/12 15:20:50 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdlib.h>
+#include "history_file_.h"
+
+void	history_file_init(t_history_file *state)
+{
+	*state = (t_history_file){0};
+}
+
+void	history_file_free(t_history_file *state)
+{
+	free(state->content);
+	*state = (t_history_file){0};
+}
+
+t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t max)
+{
+	char	*entry;
+
+	if (history_file_read(state))
+		return (state->err);
+	while ((max >= 0 && list->len < (size_t)max) || max < 0)
+	{
+		if (history_file_extract(state, &entry))
+			return (state->err);
+		if (entry == NULL)
+			break ;
+		state->err = history_list_insert(list, entry, 0);
+		if (state->err)
+			return (free(entry), state->err);
+		entry = NULL;
+	}
+	return (state->loaded_count = list->len, state->err);
+}

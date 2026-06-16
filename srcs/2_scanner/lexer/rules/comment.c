@@ -6,19 +6,20 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:39:53 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/05 20:20:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 09:44:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
+#include "lexer_rules_.h"
 
 bool	is_comment(t_lexer *state)
 {
-	return (state->input[state->i] == '#');
+	return (state->input->str[state->input->i] == '#');
 }
 
 void	lexer_rule_comment(t_lexer *state)
 {
-	while (state->input[state->i] != '\0' && state->input[state->i] != '\n')
-		state->i++;
+	while (state->input->str[state->input->i] != '\0' &&
+		state->input->str[state->input->i] != '\n')
+		state->input->i++;
 }

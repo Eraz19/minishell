@@ -20,21 +20,8 @@ Checks:
 - **AUCUN** `error(ERR_LIBC)`
 - Tous les `error_print()` sont bien (double) `NULL` terminés
 
----
-
-- `undefined_behaviour()` n'exit plus le shell
-- `Alias` builtin:
-	- Use `ft_getopt`
-	- Check for UB (cf `export`)
-- `errors` (`ERR_LIBC` problem: see `TODO` section):
-	- keep track of already printed or not ?
-	- save errno when error is thrown ?
-
 # TODO
 
-- `time()` stub ASM
-- ⚠️ on `ERR_LIBC`: error message should be printed **IMMEDIATLY** to avoid `errno` modification (don't `free` before!!)
-- move `export_build_envp()` from `export` to `variables`
 - ⚠️ `undefined_behaviour()` should not `shell_exit()` ! (for example a `builtin` UB should only generate a builtin error, then the shell should behave as POSIX says for builtin errors!) => it should return `ERR_UNDEFINED_BEHAVIOUR`:
 	- Fixed but **NEED TO CHECK ALL EXISTING USAGES of `undefined_behaviour()`**
 
@@ -75,7 +62,6 @@ Checks:
 
 ## SHELL PROGRAM
 
-- Unsure it follows [XBD 12. Utility Conventions](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html).
 - Return correct `exit status` (see [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) `EXIT STATUS` section).
 - Shall use [exit](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#exit) builtin to exit itself ??
 - Implement correct [2.8.1 Consequences of Shell Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_01).

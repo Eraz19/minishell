@@ -89,7 +89,7 @@ t_error	error_sys(void);
  * the matching arguments. If fstring is NULL, no format arguments are read.
  *
  * Example:
- * error_print(error(ERR_OPT_INVALID), "export", "-x", NULL, "invalid option");
+ * error_print(error(ERR_OPT_INVALID), "export", "-x", NULL, "%i", my_integer);
  *
  * @warning The caller-provided prefix list must always be terminated by NULL.
  * @warning fstring arguments must match the conversion specifiers used by fstring.

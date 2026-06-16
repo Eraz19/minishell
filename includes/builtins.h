@@ -1,7 +1,7 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "shell.h"
+# include <stdbool.h>
 
 typedef int (*t_builtin_function)(int argc, char **argv, char **envp);
 
@@ -24,9 +24,5 @@ REGULAR / INTRINSICS:
 	- Shell does not exit on error.
 */
 t_builtin_function	builtins_get(const char *name, bool special);
-
-// TODO: move to params module!
-// @ret ERR_LIBC
-t_error	export_build_envp(const t_shell *shell, char ***dst_envp);
 
 #endif

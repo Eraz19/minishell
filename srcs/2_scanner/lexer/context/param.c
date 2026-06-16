@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   param.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/09 16:53:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:05:45 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__lexer_rules.h"
-#include "__lexer_context.h"
+#include "lexer_rules_.h"
+#include "lexer_context_.h"
 
 static t_error	context_param_escape(t_lexer *state)
 {
@@ -38,6 +38,7 @@ static t_context_args	context_param_rules(void)
 	t_context_args	res;
 
 	res.opening_len = 2;
+	res.closing_len = 1;
 	res.context = PARAM;
 	res.unescaped_args = NULL;
 	res.quoting = lexer_rule_quoting;
@@ -52,5 +53,15 @@ static t_context_args	context_param_rules(void)
 
 t_error	lexer_context_param(t_lexer *state)
 {
-	return (lexer_context_scan(state, context_param_rules()));
+	size_t	start;
+
+	start = state->token->value.len;
+	if (lexer_context_scan(state, context_param_rules()))
+		return (state->err);
+	state->err = token_context_queue_push(
+		&state->token->contexts,
+		start,
+		state->token->value.len,
+		PARAM);
+	return (state->err);
 }

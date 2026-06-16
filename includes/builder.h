@@ -381,4 +381,6 @@ void	builder_init(t_builder *builder);
 t_error	builder_load(t_builder *builder);
 void	builder_free(t_builder *builder);
 
+bool	builder_can_next_word_be_a_cmd_name(void);
+
 #endif
