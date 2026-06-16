@@ -13,11 +13,11 @@ t_error	params_get(const char *name, char **dst)
 	t_shell		*shell;
 	t_params	*params;
 
+	*dst = NULL;
 	shell = shell_get();
 	if (!shell)
 		return (ERR_SHELL_NOT_FOUND);
 	params = &shell->params;
-	*dst = NULL;
 	if (name[0] == '\0')
 		return (ERR_NO);
 	if (name[0] == '-' && name[1] == '\0')

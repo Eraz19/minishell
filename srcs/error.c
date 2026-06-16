@@ -4,11 +4,12 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdarg.h>
 
 #define SEPARATOR		": "
 
-// TODO: split in 2 functions
-const char	*error_to_string(t_error error)
+// TODO: split in 2 functions and move to another file
+static const char	*error_to_string(t_error_type error, int saved_errno)
 {
 	if (error == ERR_NO)
 		return ("success");
@@ -21,7 +22,7 @@ const char	*error_to_string(t_error error)
 	else if (error == ERR_INVALID_FORMAT)
 		return ("invalid format");
 	else if (error == ERR_LIBC)
-		return (strerror(errno));
+		return (strerror(saved_errno));
 	else if (error == ERR_LR_CONFLICT)
 		return ("LR conflict");
 	else if (error == ERR_LR_STATE_NOT_FOUND)
@@ -51,26 +52,63 @@ const char	*error_to_string(t_error error)
 	return ("unknown");
 }
 
-t_error	error_print(const char *prefix, const char *error_type, t_error error)
+t_error	error(t_error_type type)
 {
-	const char	*name;
-	const char	*error_details;
+	return ((t_error)
+	{
+		.type = type,
+		.saved_errno = 0
+	});
+}
 
-	name = shell_get_name();
-	error_details = error_to_string(error);
-	(void)posix_write(STDERR_FILENO, name, str_len(name));
+t_error	error_sys()
+{
+	return ((t_error)
+	{
+		.type = ERR_LIBC,
+		.saved_errno = errno
+	});
+}
+
+static void	error_print_format(const char *fstring, va_list args)
+{
+	va_list	copy;
+	t_buff	buff;
+
+	va_copy(copy, args);
+	(void)buff_init(&buff, 0, NULL, -1);
+	if (buff_append_vformat(&buff, fstring, copy))
+	{
+		(void)posix_write(STDERR_FILENO, buff.data, buff.len);
+		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
+	}
+	va_end(copy);
+	buff_free(&buff);
+}
+
+t_error	error_print(t_error error, ...)
+{
+	va_list		args;
+	const char	*shell_name;
+	const char	*string;
+
+	shell_name = shell_get_name();
+	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));
 	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
-	if (prefix)
+	va_start(args, error);
+	string = va_arg(args, const char *);
+	while (string)
 	{
-		(void)posix_write(STDERR_FILENO, prefix, str_len(prefix));
+		(void)posix_write(STDERR_FILENO, string, str_len(string));
 		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
+		string = va_arg(args, const char *);
 	}
-	if (error_type)
-	{
-		(void)posix_write(STDERR_FILENO, error_type, str_len(error_type));
-		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
-	}
-	(void)posix_write(STDERR_FILENO, error_details, str_len(error_details));
-	(void)posix_write(STDERR_FILENO, "\n", str_len("\n"));
+	string = va_arg(args, const char *);
+	if (string)
+		error_print_format(string, args);
+	va_end(args);
+	string = error_to_string(error.type, error.saved_errno);
+	(void)posix_write(STDERR_FILENO, string, str_len(string));
+	(void)posix_write(STDERR_FILENO, "\n", 1);
 	return (error);
 }
