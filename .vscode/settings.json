@@ -20,6 +20,7 @@
 		"-I${workspaceFolder}/srcs/2_scanner/lexer/operator",
 		"-I${workspaceFolder}/srcs/2_scanner/lexer/input_stack",
 		"-I${workspaceFolder}/srcs/2_scanner/lexer/context/context_stack",
+		"-I${workspaceFolder}/srcs/0_token/queue",
 		"-I${workspaceFolder}/srcs/heredoc",
 		"-I${workspaceFolder}/srcs/heredoc/body",
 		"-I${workspaceFolder}/srcs/heredoc/queue",

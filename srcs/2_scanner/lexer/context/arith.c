@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:55:51 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 15:05:28 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,12 @@ static t_context_args	context_arith_rules(size_t *nesting_depth)
 
 t_error	lexer_context_arith(t_lexer *state)
 {
+	size_t			start;
 	t_lexer_backup	backup;
 	size_t			nesting_depth;
 
 	nesting_depth = 0;
+	start = state->token->value.len;
 	backup = lexer_backup(state);
 	if (lexer_context_scan(state, context_arith_rules(&nesting_depth)))
 		return (state->err);
@@ -85,5 +87,12 @@ t_error	lexer_context_arith(t_lexer *state)
 			return (state->err);
 		return (state->err = ERR_CTX_END_NOT_FOUND, state->err);
 	}
-	return (lexer_consume(state, state->token->type, 1));
+	if (lexer_consume(state, state->token->type, 1))
+		return (state->err);
+	state->err = token_context_queue_push(
+		&state->token->contexts,
+		start,
+		state->token->value.len,
+		ARITH);
+	return (state->err);
 }

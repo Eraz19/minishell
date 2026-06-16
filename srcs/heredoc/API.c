@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 10:37:07 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 15:58:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 12:56:18 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ t_error	heredoc_add_to_queue(char **path, char *delim, t_heredoc_mode mode)
 	item.path = str_dup(*path);
 	if (item.path == NULL)
 		return (free(*path), state->err = ERR_LIBC);
-	item.delim = delim;
-	if (heredoc_build_delimiter(state, &item.delim))
+	item.delim = str_dup(delim);
+	if (item.delim == NULL)
 		return (free(*path), free(item.path), state->err = ERR_LIBC);
+	if (heredoc_build_delimiter(state, &item.delim))
+		return (free(*path), heredoc_queue_item_free(&item), state->err);
 	item.mode = mode;
 	state->err = heredoc_queue_push(&state->queue, item);
 	if (state->err)

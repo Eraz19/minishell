@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:45:55 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 15:05:45 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,15 @@ static t_context_args	context_param_rules(void)
 
 t_error	lexer_context_param(t_lexer *state)
 {
-	return (lexer_context_scan(state, context_param_rules()));
+	size_t	start;
+
+	start = state->token->value.len;
+	if (lexer_context_scan(state, context_param_rules()))
+		return (state->err);
+	state->err = token_context_queue_push(
+		&state->token->contexts,
+		start,
+		state->token->value.len,
+		PARAM);
+	return (state->err);
 }

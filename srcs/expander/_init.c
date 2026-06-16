@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 23:14:37 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 23:47:26 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 15:23:28 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	expander_free(t_expansion *expansion)
 	vector_free(expansion, free);
 }
 
-t_error	expander_load(t_expansion *expansion, char *word)
+t_error	expander_load(t_expansion *expansion, t_token token)
 {
 	if (!vector_push(expansion, &word))
 		return (ERR_LIBC);

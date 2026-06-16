@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   field_splitting.h                                  :+:      :+:    :+:   */
+/*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/15 15:41:08 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 15:41:34 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/16 14:18:23 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/16 14:41:14 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FIELD_SPLITTING_H
-# define FIELD_SPLITTING_H
+#include "token.h"
 
-# include "error.h"
-# include "libft.h"
-
-typedef struct s_field_splitting
+void	token_context_queue_init(t_token_context_queue *queue)
 {
-	size_t	i;
-	t_error	err;
-	char	*word;
-	bool	reached_EOW;
-}	t_field_splitting;
+	vector_init(queue, sizeof(t_token_context_queue_item), 0);
+}
 
-#endif
+void	token_context_queue_free(t_token_context_queue *queue)
+{
+	vector_free(queue, NULL);
+}

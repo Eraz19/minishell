@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 17:29:41 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 16:40:38 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 12:54:34 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
 	t_expansion	delim_unquoted;
 	char		*delim_unquoted_str;
 
-	expander_init(&delim_unquoted);
 	state->err = expander_word(&delim_unquoted, *delim, QUOTE_REMOVE_ONLY);
 	if (state->err)
 		return (state->err);

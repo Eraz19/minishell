@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:45:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 15:05:18 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,15 @@ static t_context_args	context_backtick_rules(void)
 
 t_error	lexer_context_backtick(t_lexer *state)
 {
-	return (lexer_context_scan(state, context_backtick_rules()));
+	size_t	start;
+
+	start = state->token->value.len;
+	if (lexer_context_scan(state, context_backtick_rules()))
+		return (state->err);
+	state->err = token_context_queue_push(
+		&state->token->contexts,
+		start,
+		state->token->value.len,
+		BACKTICK);
+	return (state->err);
 }
