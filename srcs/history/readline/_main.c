@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 08:36:50 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 15:47:49 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:18:04 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_error	history_rl_add(t_history_rl *state, t_history_list *list, size_t count)
 	while ((size_t)i < list->len)
 	{
 		state->err = history_list_get(list, &entry, (size_t)i++);
-		if (state->err)
+		if (state->err.type)
 			return (state->err);
 		add_history(entry);
 		free(entry);

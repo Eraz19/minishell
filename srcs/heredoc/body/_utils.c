@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 11:15:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 11:30:21 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:23:28 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ t_error	heredoc_body_save_content(t_heredoc_body *state)
 
 	fd = open(state->item->path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
-		return (state->err = ERR_LIBC);
+		return (state->err = error_sys());
 	if (write(fd, state->content.data, state->content.len) == -1)
-		state->err = ERR_LIBC;
+		state->err = error_sys();
 	return (close(fd), state->err);
 }
 
@@ -33,7 +33,7 @@ t_error	heredoc_body_line_to_content(t_heredoc_body *state)
 
 	line_len = str_len(state->line);
 	if (!buff_append(&state->content, state->line, (long)line_len))
-		return (state->err = ERR_LIBC);
+		return (state->err = error_sys());
 	return (free(state->line), state->line = NULL, state->err);
 }
 
@@ -47,7 +47,7 @@ t_error	heredoc_body_extract_line(t_heredoc_body *state, char *EOL, size_t *i)
 	line_len = (size_t)(EOL - start) + 1;
 	state->line = str_sub(start, 0, line_len);
 	if (state->line == NULL)
-		state->err = ERR_LIBC;
+		state->err = error_sys();
 	return (state->err);
 }
 
@@ -61,7 +61,7 @@ bool	is_line_delimiter(t_heredoc_body *state)
 	{
 		trimmed_line = str_trim_leading(state->line, "\t");
 		if (trimmed_line == NULL)
-			return (state->err = ERR_LIBC, true);
+			return (state->err = error_sys(), true);
 		free(state->line);
 		state->line = trimmed_line;
 	}

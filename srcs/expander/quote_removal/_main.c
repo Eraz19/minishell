@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:21:57 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 10:20:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:29:58 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_error	quote_removal_quoted(
 	else if (context == DOLLAR_SQUOTE)
 	{
 		state->err = expander_word_pop(word, &item);
-		if (state->err)
+		if (state->err.type)
 			return (state->err);
 		context_dollar_squote(state, word, word_expanded);
 	}
@@ -44,7 +44,7 @@ t_error	quote_remove_char(
 	t_expander_word_item	item;
 
 	state->err = expander_word_pop(word, &item);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	if (item.is_expand_res)
 		state->err = expander_word_push(word_exp, item);
@@ -55,9 +55,9 @@ t_error	quote_remove_char(
 		else
 		{
 			if (word->len == 0)
-				return (state->err = ERR_NO);
+				return (state->err = error(ERR_NO));
 			state->err = expander_word_pop(word, &item);
-			if (state->err)
+			if (state->err.type)
 				return (state->err);
 			state->err = expander_word_push(word_exp, item);
 		}
@@ -73,12 +73,12 @@ t_error	quote_removal_word(t_expander *state, t_expander_fields *fields)
 	t_expander_word	word_exp;
 
 	state->err = expander_fields_pop(&state->fields, &word);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	expander_word_init(&word_exp);
 	while (word.len > 0)
 	{
-		if (quote_remove_char(state, &word, &word_exp))
+		if (quote_remove_char(state, &word, &word_exp).type)
 		{
 			expander_word_free(&word);
 			expander_word_free(&word_exp);
@@ -87,7 +87,7 @@ t_error	quote_removal_word(t_expander *state, t_expander_fields *fields)
 	}
 	expander_word_free(&word);
 	state->err = expander_fields_push(fields, word_exp);
-	if (state->err)
+	if (state->err.type)
 		expander_word_free(&word_exp);
 	return (state->err);
 }
@@ -99,7 +99,7 @@ t_error	quote_removal(t_expander *state)
 	expander_fields_init(&fields);
 	while (state->fields.len > 0)
 	{
-		if (quote_removal_word(state, &fields))
+		if (quote_removal_word(state, &fields).type)
 			return (expander_fields_free(&fields), state->err);
 	}
 	expander_fields_free(&state->fields);

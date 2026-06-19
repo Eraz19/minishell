@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2026/06/17 14:26:05 by adouieb          ###   ########.fr       */
-=======
-/*   Updated: 2026/06/16 13:02:05 by gastesan         ###   ########.fr       */
->>>>>>> 5166bd946e9174f31a82aed460b533aec2b3c72d
+/*   Updated: 2026/06/19 15:58:39 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +22,19 @@ t_error	context_stack_push(t_context_stack *stack, t_context_stack_item *item)
 t_error	context_stack_bpop(t_context_stack *stack, t_context_stack_item **item)
 {
 	if (stack->len == 0)
-		return (ERR_EMPTY_STACK);
+		return (error(ERR_EMPTY_STACK));
 	if (!vector_pop(stack, item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	context_stack_fpop(t_context_stack *stack, t_context_stack_item **item)
 {
 	if (stack->len == 0)
-		return (ERR_EMPTY_STACK);
+		return (error(ERR_EMPTY_STACK));
 	if (!vector_remove(stack, 0, item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	context_stack_get(
@@ -47,11 +43,11 @@ t_error	context_stack_get(
 	size_t index)
 {
 	if (stack->len == 0)
-		return (ERR_EMPTY_STACK);
+		return (error(ERR_EMPTY_STACK));
 	if (index >= stack->len)
-		return (ERR_INDEX_OUT_OF_BOUND);
+		return (error(ERR_INDEX_OUT_OF_BOUND));
 	*item = ((t_context_stack_item **)stack->data)[index];
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	context_stack_dup(t_context_stack *dst, t_context_stack *src)
@@ -65,18 +61,18 @@ t_error	context_stack_dup(t_context_stack *dst, t_context_stack *src)
 	while (i < src->len)
 	{
 		err = context_stack_get(src, &src_item, i);
-		if (err)
+		if (err.type)
 			return (err);
 		err = context_stack_item_init(&dst_item, src_item->context);
-		if (err)
+		if (err.type)
 			return (err);
 		*dst_item = *src_item;
 		dst_item->end = src_item->end;
 		dst_item->start = src_item->start;
 		err = context_stack_push(dst, dst_item);
-		if (err)
+		if (err.type)
 			return (err);
 		i++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

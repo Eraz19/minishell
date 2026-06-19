@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 16:28:32 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/18 18:08:39 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:28:51 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static t_error	context_escape(
 	t_expander_word_item	escaped_item;
 
 	state->err = expander_word_pop(args.word, &escaped_item);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	if (!args.is_in_whitelist(escaped_item.c))
 	{
 		state->err = expander_word_push(args.word_expanded, item);
-		if (state->err)
+		if (state->err.type)
 			return (state->err);
 	}
 	return (state->err = expander_word_push(args.word_expanded, escaped_item));
@@ -48,20 +48,20 @@ t_error	context_scan(t_expander *state, t_context_args args)
 	while (true)
 	{
 		state->err = expander_word_pop(args.word, &item);
-		if (state->err)
+		if (state->err.type)
 			return (state->err);
 		if (args.is_end != NULL && args.is_end(item.c, NULL))
 			return (context_end(state, args));
 		else if (item.c == '\\' && args.is_in_whitelist != NULL)
 		{
 			state->err = context_escape(state, args, item);
-			if (state->err)
+			if (state->err.type)
 				return (state->err);
 		}
 		else
 		{
 			state->err = expander_word_push(args.word_expanded, item);
-			if (state->err)
+			if (state->err.type)
 				return (state->err);
 		}
 	}

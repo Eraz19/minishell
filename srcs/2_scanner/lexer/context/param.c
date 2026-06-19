@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 11:27:33 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:40:57 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ t_error	lexer_context_param(t_lexer *state)
 	t_context_stack_item	*item;
 
 	state->err = context_stack_item_init(&item, PARAM);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	return (lexer_context_scan(state, context_param_rules(item)));
 }

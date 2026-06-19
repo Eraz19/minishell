@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:29:34 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 11:19:19 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:36:51 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_error	lexer_consume(t_lexer *state, t_token_type type, size_t iter)
 	{
 		current_char = state->input->str[state->input->i];
 		if (!buff_append(&state->token->value, &current_char, 1))
-			return (state->err = ERR_LIBC, state->err);
+			return (state->err = error_sys());
 		state->token->type = type;
 		lexer_advance(state, 1);
 		i++;
@@ -54,12 +54,12 @@ t_error	lexer_restore(t_lexer *state, t_lexer_backup backup)
 
 	while (state->input->context.len > backup.context_len)
     {
-		if (context_stack_bpop(&state->input->context, NULL))
+		if (context_stack_bpop(&state->input->context, NULL).type)
 			return (state->err);
 	}
 	while (state->token->contexts.len > backup.token_contexts_len)
 	{
-		if (context_stack_bpop(&state->token->contexts, &item))
+		if (context_stack_bpop(&state->token->contexts, &item).type)
 			return (state->err);
 		free(item);
 	}

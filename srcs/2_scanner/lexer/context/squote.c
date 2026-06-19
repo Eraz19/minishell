@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 11:44:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:40:45 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_error	lexer_context_squote(t_lexer *state)
 	t_context_stack_item	*item;
 
 	state->err = context_stack_item_init(&item, SQUOTE);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	state->err = lexer_context_scan(state, context_squote_rules(item));
 	return (free(item), state->err);

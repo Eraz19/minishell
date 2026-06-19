@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 16:05:55 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 15:20:50 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:19:34 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t m
 {
 	char	*entry;
 
-	if (history_file_read(state))
+	if (history_file_read(state).type)
 		return (state->err);
 	while ((max >= 0 && list->len < (size_t)max) || max < 0)
 	{
-		if (history_file_extract(state, &entry))
+		if (history_file_extract(state, &entry).type)
 			return (state->err);
 		if (entry == NULL)
 			break ;
 		state->err = history_list_insert(list, entry, 0);
-		if (state->err)
+		if (state->err.type)
 			return (free(entry), state->err);
 		entry = NULL;
 	}

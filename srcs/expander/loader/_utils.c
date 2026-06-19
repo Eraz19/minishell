@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:51:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 15:44:22 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:27:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	is_substitution_start(t_expander_loader *state)
 	if (state->stack.len == 0)
 		return (false);
 	state->err = context_stack_get(&state->stack, &item, 0);
-	if (state->err || item == NULL)
+	if (state->err.type || item == NULL)
 		return (false);
 	return (state->i == item->start);
 }
@@ -47,10 +47,10 @@ t_error	expander_loader_push_context(t_expander_loader *state)
 	if (state->stack.len == 0)
 		return (state->err);
 	state->err = context_stack_fpop(&state->stack, &item);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->loading_stack, item);
-	if (state->err)
+	if (state->err.type)
 		return (free(item), state->err);
 	return (state->context_item = item, state->err);
 }
@@ -61,14 +61,14 @@ t_error	expander_loader_pop_context(t_expander_loader *state)
 	size_t					last_i;
 	
 	state->err = context_stack_bpop(&state->loading_stack, &item);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	free(item);
 	if (state->loading_stack.len > 0)
 	{
 		last_i = state->loading_stack.len - 1;
 		state->err = context_stack_get(&state->loading_stack, &item, last_i);
-		if (state->err)
+		if (state->err.type)
 			return (state->err);
 		state->context_item = item;
 	}
@@ -96,7 +96,7 @@ t_error	expander_loader_consume(t_expander_loader *state, size_t count)
 		current_char = state->word[state->i++];
 		item = expander_word_item_init(current_char, quoting, current, false);
 		state->err = expander_word_push(&state->loaded_word, item);
-		if (state->err)
+		if (state->err.type)
 			return (state->err);
 		i++;
 	}

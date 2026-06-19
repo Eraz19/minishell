@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:11:31 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 00:12:49 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:39:02 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,5 @@ t_error	operator_add_pipe(t_lexer *state)
 		return (lexer_consume(state, CLOBBER, 1));
 	else if (state->token->type == NONE)
 		return (lexer_consume(state, PIPE, 1));
-	return (state->err = ERR_INCOHERENT_STATE, state->err);
+	return (state->err = error(ERR_INCOHERENT_STATE));
 }

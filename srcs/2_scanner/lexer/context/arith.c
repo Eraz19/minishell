@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 11:26:40 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:42:45 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
 	if (state->input->str[state->input->i] == '(')
 	{
 		(*((size_t *)nesting_depth))++;
-		if (lexer_consume(state, state->token->type, 1))
+		if (lexer_consume(state, state->token->type, 1).type)
 			return (state->err);
 	}
 	else if (state->input->str[state->input->i] == ')')
 	{
 		(*((size_t *)nesting_depth))--;
-		if (lexer_consume(state, state->token->type, 1))
+		if (lexer_consume(state, state->token->type, 1).type)
 			return (state->err);
 	}
 	else
@@ -75,6 +75,7 @@ static t_context_args	context_arith_rules(
 
 t_error	lexer_context_arith(t_lexer *state)
 {
+	t_context_args			args;
 	t_context_stack_item	*item;
 	t_lexer_backup			backup;
 	size_t					nesting_depth;
@@ -82,20 +83,21 @@ t_error	lexer_context_arith(t_lexer *state)
 	nesting_depth = 0;
 	backup = lexer_backup(state);
 	state->err = context_stack_item_init(&item, ARITH);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
-	if (lexer_context_scan(state, context_arith_rules(&nesting_depth, item)))
+	args = context_arith_rules(&nesting_depth, item);
+	if (lexer_context_scan(state, args).type)
 		return (state->err);
 	if (state->input->str[state->input->i] != ')')
 	{
-		if (lexer_restore(state, backup))
+		if (lexer_restore(state, backup).type)
 			return (state->err);
-		return (state->err = ERR_CTX_END_NOT_FOUND, state->err);
+		return (state->err = error(ERR_CTX_END_NOT_FOUND), state->err);
 	}
-	if (lexer_consume(state, state->token->type, 1))
+	if (lexer_consume(state, state->token->type, 1).type)
 		return (state->err);
 	return (item->end = state->token->value.len, state->err);
 }

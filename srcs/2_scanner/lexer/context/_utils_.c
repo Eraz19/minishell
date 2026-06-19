@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 10:41:22 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 12:11:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:43:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_error	context_EOI(t_lexer *state)
 	if (state->is_stdin)
 		state->err = reader_continuation(&state->input->str);
 	else
-		state->err = ERR_UNEXPECTED_EOI;
+		state->err = error(ERR_UNEXPECTED_EOI);
 	return (state->err);
 }
 
@@ -40,6 +40,6 @@ t_error	context_escape_next_char(t_lexer *state, t_escape_args args)
 			lexer_consume(state, state->token->type, 1);
 	}
 	else
-		state->err = ERR_INCOHERENT_STATE;
+		state->err = error(ERR_INCOHERENT_STATE);
 	return (state->err);
 }

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:23:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 09:44:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:39:45 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,5 @@ t_error	lexer_add_char_into_token_operator(t_lexer *state)
 		return (operator_add_great(state));
 	else if (input_ptr[0] == '-')
 		return (lexer_consume(state, DLESSDASH, 1));
-	return (state->err = ERR_INCOHERENT_STATE, state->err);
+	return (state->err = error(ERR_INCOHERENT_STATE));
 }

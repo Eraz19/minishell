@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 11:27:08 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:41:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool	is_backtick_squote_surrounded(t_lexer *state)
 		&state->input->context,
 		&item,
 		state->input->context.len - 2);
-    if (state->err)
+    if (state->err.type)
         return (false);
     return (item->context == DQUOTE || item->context == ARITH);
 }
@@ -72,10 +72,10 @@ t_error	lexer_context_backtick(t_lexer *state)
 	t_context_stack_item	*item;
 
 	state->err = context_stack_item_init(&item, BACKTICK);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);
-	if (state->err)
+	if (state->err.type)
 		return (state->err);
 	return (lexer_context_scan(state, context_backtick_rules(item)));
 }

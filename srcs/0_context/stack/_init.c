@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 12:10:33 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 15:56:07 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ t_error	context_stack_item_init(t_context_stack_item **item, t_context context)
 {
 	*item = malloc(sizeof(t_context_stack_item));
 	if (*item == NULL)
-		return (ERR_LIBC);
+		return (error_sys());
 	**item = (t_context_stack_item){0};
 	(*item)->context = context;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 void	context_stack_init(t_context_stack *stack)

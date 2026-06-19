@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 17:12:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 12:27:27 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:40:27 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ t_error	input_stack_item_init(t_input_stack_item **item)
 {
 	*item = malloc(sizeof(t_input_stack_item));
 	if (*item == NULL)
-		return (ERR_LIBC);
+		return (error_sys());
 	**item = (t_input_stack_item){0};
 	context_stack_init(&(*item)->context);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 void	input_stack_init(t_input_stack *stack)
