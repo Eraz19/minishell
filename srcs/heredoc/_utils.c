@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 17:29:41 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 12:54:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 09:56:58 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,15 @@
 
 t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
 {
-	char		*delim_;
-	t_expansion	delim_unquoted;
-	char		*delim_unquoted_str;
+	char	*delim_;
 
-	state->err = expander_word(&delim_unquoted, *delim, QUOTE_REMOVE_ONLY);
+	state->err = expander_quote_remove(delim);
 	if (state->err)
-		return (state->err);
-	if (delim_unquoted.len == 0)
-		return (expander_free(&delim_unquoted), state->err = ERR_LIBC);
-	state->err = expander_get(&delim_unquoted, &delim_unquoted_str, 0);
-	if (state->err)
-		return (expander_free(&delim_unquoted), state->err);
-	delim_ = str_join(delim_unquoted_str, "\n");
+		return (free(*delim), state->err);
+	delim_ = str_join(*delim, "\n");
 	if (delim_ == NULL)
 		state->err = ERR_LIBC;
-	return (expander_free(&delim_unquoted), *delim = delim_, state->err);
+	return (free(*delim), *delim = delim_, state->err);
 }
 
 static t_error	heredoc_build_path(t_heredoc *state, char **path)

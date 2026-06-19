@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 15:05:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 11:27:33 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ static t_error	context_param_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_param_rules(void)
+static t_context_args	context_param_rules(t_context_stack_item *item)
 {
 	t_context_args	res;
 
 	res.opening_len = 2;
 	res.closing_len = 1;
 	res.context = PARAM;
+	res.stack_item = item;
 	res.unescaped_args = NULL;
 	res.quoting = lexer_rule_quoting;
 	res.escape = context_param_escape;
@@ -53,15 +54,13 @@ static t_context_args	context_param_rules(void)
 
 t_error	lexer_context_param(t_lexer *state)
 {
-	size_t	start;
+	t_context_stack_item	*item;
 
-	start = state->token->value.len;
-	if (lexer_context_scan(state, context_param_rules()))
+	state->err = context_stack_item_init(&item, PARAM);
+	if (state->err)
 		return (state->err);
-	state->err = token_context_queue_push(
-		&state->token->contexts,
-		start,
-		state->token->value.len,
-		PARAM);
-	return (state->err);
+	state->err = context_stack_push(&state->token->contexts, item);
+	if (state->err)
+		return (state->err);
+	return (lexer_context_scan(state, context_param_rules(item)));
 }

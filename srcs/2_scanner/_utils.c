@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 10:12:50 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 11:53:49 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 18:00:24 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ bool	is_EOF(t_scanner *state)
 		state->lexer->input_stack.len == 0);
 }
 
-t_error	scanner_read_input(t_scanner *state)
-{
+t_error	scanner_read_input(t_scanner *state) 
+{ 
 	t_input_stack_item	*item;
 
 	state->err = input_stack_item_init(&item);
@@ -37,7 +37,7 @@ t_error	scanner_read_input(t_scanner *state)
 			state->err = ERR_LIBC;
 	}
 	else if (state->mode == SCAN_STDIN)
-		state->err = reader_new_input(&item->str);
+		state->err = reader_new_input(&item->str); 
 	if (state->err || item->str == NULL)
 		return (input_stack_item_free(&item), state->err);
 	return (state->err = input_stack_push(&state->lexer->input_stack, item));

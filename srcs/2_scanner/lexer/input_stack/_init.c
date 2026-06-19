@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 17:12:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:02:57 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 12:27:27 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	input_stack_item_free(void *item)
 	item_ = (t_input_stack_item **)item;
 	if ((*item_)->str != NULL)
 		free((*item_)->str);
-	context_stack_free(&(*item_)->context);
+	ft_bzero((*item_)->context.data, (*item_)->context.cap);
+	vector_free(&(*item_)->context, NULL);
 	**item_ = (t_input_stack_item){0};
 	free(*item_);
 	*item_ = NULL;

@@ -6,10 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:29:34 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 09:43:09 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 11:19:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer_.h"
 
 void	lexer_advance(t_lexer *state, size_t offset)
@@ -40,18 +41,27 @@ t_lexer_backup	lexer_backup(t_lexer *state)
 	t_lexer_backup res;
 
     res.i = state->input->i;
+    res.token_type = state->token->type;
     res.context_len = state->input->context.len;
     res.token_value_len = state->token->value.len;
-    res.token_type = state->token->type;
+    res.token_contexts_len = state->token->contexts.len;
 	return (res);
 }
 
 t_error	lexer_restore(t_lexer *state, t_lexer_backup backup)
 {
+	t_context_stack_item	*item;
+
 	while (state->input->context.len > backup.context_len)
     {
-		if (context_stack_pop(&state->input->context))
+		if (context_stack_bpop(&state->input->context, NULL))
 			return (state->err);
+	}
+	while (state->token->contexts.len > backup.token_contexts_len)
+	{
+		if (context_stack_bpop(&state->token->contexts, &item))
+			return (state->err);
+		free(item);
 	}
     state->input->i = backup.i;
     state->token->type = backup.token_type;

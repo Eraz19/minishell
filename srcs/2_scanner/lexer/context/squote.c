@@ -6,10 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:46:04 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 11:44:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer_context_.h"
 
 static t_error	context_squote_escape(t_lexer *state)
@@ -32,7 +33,7 @@ static t_error	context_squote_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_squote_rules(void)
+static t_context_args	context_squote_rules(t_context_stack_item *item)
 {
 	t_context_args	res;
 
@@ -40,8 +41,9 @@ static t_context_args	context_squote_rules(void)
 	res.opening_len = 1;
 	res.closing_len = 1;
 	res.context = SQUOTE;
-	res.is_quoting = NULL;
 	res.expansion = NULL;
+	res.stack_item = item;
+	res.is_quoting = NULL;
 	res.is_expansion = NULL;
 	res.unescaped_args = NULL;
 	res.escape = context_squote_escape;
@@ -52,5 +54,11 @@ static t_context_args	context_squote_rules(void)
 
 t_error	lexer_context_squote(t_lexer *state)
 {
-	return (lexer_context_scan(state, context_squote_rules()));
+	t_context_stack_item	*item;
+
+	state->err = context_stack_item_init(&item, SQUOTE);
+	if (state->err)
+		return (state->err);
+	state->err = lexer_context_scan(state, context_squote_rules(item));
+	return (free(item), state->err);
 }

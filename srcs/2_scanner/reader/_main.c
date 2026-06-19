@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 20:22:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 11:53:10 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 17:51:38 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "reader_.h"
+#include "history.h"
 
 t_error	reader_heredoc(char **res)
 {
@@ -29,6 +30,9 @@ t_error	reader_heredoc(char **res)
 		return (err);
 	if (*res == NULL)
 		return (*res = heredoc, ERR_NO);
+	err = history_append_to_entry(heredoc);
+	if (err != ERR_NO)
+		return (free(heredoc), err);
 	new_input = str_join(*res, heredoc);
 	if (new_input == NULL)
 		return (free(heredoc), ERR_LIBC);
@@ -41,11 +45,15 @@ t_error	reader_new_input(char **res)
 
 	if (res == NULL)
 		return (ERR_NULL_ARGS);
+	history_save_entry();
 	err = readline_(res, "$ ");
 	if (err)
 		return (err);
 	if (str_len(*res) == 1)
 		return (free(*res), *res = NULL, ERR_NO);
+	err = history_append_to_entry(*res);
+	if (err != ERR_NO)
+		return (free(*res), err);
 	return (ERR_NO);
 }
 
@@ -60,6 +68,9 @@ t_error	reader_continuation(char **res)
 	err = readline_(&continuation, "> ");
 	if (err != ERR_NO)
 		return (err);
+	err = history_append_to_entry(continuation);
+	if (err != ERR_NO)
+		return (free(continuation), err);
 	new_input = str_join(*res, continuation);
 	if (new_input == NULL)
 		return (free(continuation), ERR_LIBC);

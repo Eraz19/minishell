@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:01:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/11 18:55:22 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 12:07:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,32 @@ typedef enum e_context
 
 /**
  * @ingroup context
- * @brief Stack of open contexts, innermost on top (a vector of t_context).
+ * @struct s_context_stack_item
+ * @brief One context together with the span it covers in a token's value
+ *        buffer.
+ *
+ * @var s_context_stack_item::end Index one past the construct's last character
+ *                                in the token value (filled in when the context
+ *                                closes).
+ * @var s_context_stack_item::start Index of the construct's first character in
+ *                                  the token value (filled in when the context
+ *                                  opens).
+ * @var s_context_stack_item::context Which construct it is.
+ */
+typedef struct s_context_stack_item
+{
+	size_t		end;
+	size_t		start;
+	t_context	context;
+}	t_context_stack_item;
+
+/**
+ * @ingroup context
+ * @brief Stack of context items (a vector of t_context_stack_item *).
+ *
+ * Used in two roles: the lexer's live nesting stack (innermost context on top,
+ * borrowing its items) and a token's recorded contexts (owning its items). See
+ * context_stack_free() for the matching ownership rule.
  */
 typedef t_vector	t_context_stack;
 
@@ -66,7 +91,13 @@ void	context_stack_init(t_context_stack *stack);
 
 /**
  * @ingroup context
- * @brief Frees the context stack (its elements are plain values).
+ * @brief Frees an owning stack: every item pointer it still holds, then its
+ *        backing array.
+ *
+ * Use this for a stack that OWNS its items (a token's recorded contexts). For a
+ * stack that only borrows item pointers owned elsewhere (the lexer's live
+ * nesting stack), free the backing array alone with vector_free(stack, NULL) so
+ * the borrowed items are left intact.
  *
  * @param stack Pointer to the stack to free (borrowed).
  */
@@ -74,32 +105,86 @@ void	context_stack_free(t_context_stack *stack);
 
 /**
  * @ingroup context
- * @brief Pops the innermost context off the stack.
+ * @brief Allocates a context-stack item on the heap.
  *
- * @param stack Pointer to the stack (borrowed).
- * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty.
- */
-t_error	context_stack_pop(t_context_stack *stack);
-
-/**
- * @ingroup context
- * @brief Reads the innermost context without removing it.
+ * The item's context is set to @p context; its start and end are zeroed and
+ * filled in later as the context opens and closes.
  *
- * @param stack Pointer to the stack (borrowed).
- * @param item Out-parameter receiving the top context.
- * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty.
- */
-t_error	context_stack_get(t_context_stack *stack, t_context *item);
-
-/**
- * @ingroup context
- * @brief Pushes a context, making it the new innermost one.
- *
- * @param stack Pointer to the stack (borrowed).
- * @param item Context to push.
+ * @param item Out-parameter receiving the newly allocated item (caller owns).
+ * @param context Which construct the item represents.
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error	context_stack_push(t_context_stack *stack, t_context item);
+t_error	context_stack_item_init(t_context_stack_item **item, t_context context);
+
+/**
+ * @ingroup context
+ * @brief Deep copies a context stack onto an already-initialised one.
+ *
+ * Allocates an independent item for every entry of @p src and pushes it onto
+ * @p dst in order, so the two stacks share no memory. @p dst must already be
+ * initialised (context_stack_init); its existing contents are kept and the
+ * copies are appended.
+ *
+ * @param dst Destination stack, initialised by the caller, appended to here
+ *            (borrowed).
+ * @param src Source stack to copy (borrowed).
+ * @return ERR_NO on success, ERR_LIBC on allocation failure.
+ */
+t_error	context_stack_dup(t_context_stack *dst, t_context_stack *src);
+
+/**
+ * @ingroup context
+ * @brief Pushes an item pointer onto the top (back) of the stack.
+ *
+ * Only the pointer is stored; ownership of the pointed-to item is not
+ * transferred.
+ *
+ * @param stack Pointer to the stack (borrowed).
+ * @param item Item pointer to push.
+ * @return ERR_NO on success, ERR_LIBC on allocation failure.
+ */
+t_error	context_stack_push(t_context_stack *stack, t_context_stack_item *item);
+
+/**
+ * @ingroup context
+ * @brief Removes the item on top (back) of the stack.
+ *
+ * Regular LIFO pop: yields the most recently pushed (innermost) context.
+ *
+ * @param stack Pointer to the stack (borrowed).
+ * @param item Out-parameter receiving the removed item pointer; may be NULL to
+ *             discard it.
+ * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty.
+ */
+t_error	context_stack_bpop(t_context_stack *stack, t_context_stack_item **item);
+
+/**
+ * @ingroup context
+ * @brief Removes the item at the bottom (front) of the stack.
+ *
+ * FIFO-style removal: yields the oldest (outermost) context.
+ *
+ * @param stack Pointer to the stack (borrowed).
+ * @param item Out-parameter receiving the removed item pointer; may be NULL to
+ *             discard it.
+ * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty.
+ */
+t_error	context_stack_fpop(t_context_stack *stack, t_context_stack_item **item);
+
+/**
+ * @ingroup context
+ * @brief Reads the item at @p index without removing it.
+ *
+ * Index 0 is the bottom (front / outermost) of the stack.
+ *
+ * @param stack Pointer to the stack (borrowed).
+ * @param item Out-parameter receiving the item pointer at @p index.
+ * @param index Position to read.
+ * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty,
+ *         ERR_INDEX_OUT_OF_BOUND if @p index is past the last element.
+ */
+t_error	context_stack_get(t_context_stack *stack, t_context_stack_item **item,
+			size_t index);
 
 /**
  * @ingroup context
@@ -235,6 +320,19 @@ bool	is_context_param_ending(char c, void *_);
  * @return true if @p str begins an expansion (and @p context was set).
  */
 bool	is_expansion_context(char *str, t_context *context);
+
+/**
+ * @ingroup context
+ * @brief Tests @p c against the whitelist of the given expansion context.
+ *
+ * Dispatches to the matching is_in_context_<x>_whitelist() for PARAM, ARITH,
+ * CMD_SUB and BACKTICK.
+ *
+ * @param c Character to test.
+ * @param context Expansion context whose whitelist to use.
+ * @return true if @p c is special within @p context.
+ */
+bool	is_in_expansion_whitelist(char c, t_context context);
 
 /**
  * @ingroup context

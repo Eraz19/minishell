@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 15:42:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 15:42:26 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 14:11:11 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "error.h"
 # include "libft.h"
+# include "expander_.h"
 
 typedef struct s_path_name_expansion
 {
@@ -23,5 +24,7 @@ typedef struct s_path_name_expansion
 	char	*word;
 	bool	reached_EOW;
 }	t_path_name_expansion;
+
+t_error	path_name_expansion(t_expander *state);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:49:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:42:16 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 09:36:55 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ typedef struct s_unescape_args
  * @var s_context_args::context The context tag pushed while scanning.
  * @var s_context_args::opening_len Length of the opening delimiter to consume.
  * @var s_context_args::closing_len Length of the closing delimiter to consume.
+ * @var s_context_args::stack_item Item whose [start, end) span this scan fills
+ *                                 in: start when the context opens, end when it
+ *                                 closes (NULL to record no span).
  * @var s_context_args::unescaped_args Opaque state for the unescaped handler.
  * @var s_context_args::escape Backslash handler.
  * @var s_context_args::is_end Predicate detecting the closing delimiter.
@@ -72,17 +75,18 @@ typedef struct s_unescape_args
  */
 typedef struct s_context_args
 {
-	t_context		context;
-	size_t			opening_len;
-	size_t			closing_len;
-	void			*unescaped_args;
-	t_error			(*escape)(t_lexer *);
-	bool			(*is_end)(char, void *);
-	t_error			(*unescaped)(t_lexer *, void *);
-	t_error			(*quoting)(t_lexer *, t_context);
-	bool			(*is_quoting)(char *, t_context *);
-	t_error			(*expansion)(t_lexer *, t_context);
-	bool			(*is_expansion)(char *, t_context *);
+	t_context				context;
+	size_t					opening_len;
+	size_t					closing_len;
+	t_context_stack_item	*stack_item;
+	void					*unescaped_args;
+	t_error					(*escape)(t_lexer *);
+	bool					(*is_end)(char, void *);
+	t_error					(*unescaped)(t_lexer *, void *);
+	t_error					(*quoting)(t_lexer *, t_context);
+	bool					(*is_quoting)(char *, t_context *);
+	t_error					(*expansion)(t_lexer *, t_context);
+	bool					(*is_expansion)(char *, t_context *);
 }	t_context_args;
 
 /**

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:24:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 12:25:55 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 11:16:31 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_lexer_backup
 	t_token_type	token_type;
 	size_t			context_len;
 	size_t			token_value_len;
+	size_t			token_contexts_len;
 }	t_lexer_backup;
 
 /**

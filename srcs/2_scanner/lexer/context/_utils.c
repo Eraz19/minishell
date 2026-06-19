@@ -6,17 +6,34 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:48:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:44:35 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/17 12:15:41 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "reader_.h"
 #include "lexer_context_.h"
 
+static t_error	context_start(t_lexer *state, t_context_args args)
+{
+	state->token->type = TOKEN;
+	if (args.stack_item != NULL)
+		args.stack_item->start = state->token->value.len;
+	state->err = context_stack_push(&state->input->context, args.stack_item);
+	if (state->err)
+		return (state->err);
+	return (lexer_consume(state, state->token->type, args.opening_len));
+}
+
 static t_error	context_end(t_lexer *state, t_context_args args)
 {
-	lexer_consume(state, state->token->type, args.closing_len);
-	return (state->err = context_stack_pop(&state->input->context));
+	t_context_stack_item	*item;
+
+	if (lexer_consume(state, state->token->type, args.closing_len))
+		return (state->err);
+	state->err = context_stack_bpop(&state->input->context, &item);
+	if (state->err)
+		return (state->err);
+	return (item->end = state->token->value.len, state->err);
 }
 
 t_error	lexer_context_unescape(t_lexer *state, t_unescape_args args)
@@ -55,11 +72,8 @@ t_error	lexer_context_scan(t_lexer *state, t_context_args args)
 	char		*str;
 	t_context	context;
 
-	state->token->type = TOKEN;
-	state->err = context_stack_push(&state->input->context, args.context);
-	if (state->err)
+	if (context_start(state, args))
 		return (state->err);
-	lexer_consume(state, state->token->type, args.opening_len);
 	while (true)
 	{
 		if (state->err)
