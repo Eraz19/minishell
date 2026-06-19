@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   API.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:34:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 15:11:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 16:51:43 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_error	history_append_to_entry(char *entry)
 
 	state = shell_get_history();
 	if (state == NULL)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	if (!buff_append(&state->current_input, entry, (long)str_len(entry)))
 		return (state->err = ERR_LIBC);
 	return (state->err);

@@ -11,16 +11,16 @@ t_error	specials_get(const t_specials *specials, char name, char **dst)
 	else if (name == '!')
 	{
 		if (specials->last_bg_pid == -1)
-			return (ERR_NO);
+			return (error(ERR_NO));
 		*dst = ft_pidtoa(specials->last_bg_pid);
 	}
 	else if (name == '?')
 		*dst = ft_ltoa(specials->last_status);
 	else
-		return (ERR_VAR_NOT_FOUND);
+		return (error(ERR_VAR_NOT_FOUND));
 	if (*dst == NULL)
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 void	specials_set_last_bg_pid(t_specials *specials, pid_t value)

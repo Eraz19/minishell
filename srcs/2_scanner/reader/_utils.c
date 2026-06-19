@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 17:35:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 12:17:29 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 16:52:56 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,5 @@ t_error	readline_(char **res, const char *prompt)
 	input = str_join(*res, "\n");
 	if (input == NULL)
 		return (free(*res), ERR_LIBC);
-	return (free(*res), *res = input, ERR_NO);
+	return (free(*res), *res = input, error(ERR_NO));
 }

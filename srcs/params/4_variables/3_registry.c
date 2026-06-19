@@ -4,6 +4,15 @@
 #include "options.h"
 #include <stdlib.h>
 
+static t_error	var_save_err_and_free(t_var *var)
+{
+	t_error	err;
+
+	err = error_sys();
+	var_free_one(var);
+	return (err);
+}
+
 // value can be NULL
 // @ret ERR_VAR_READ_ONLY / ERR_LIBC
 static t_error	var_update_value(
@@ -15,12 +24,12 @@ static t_error	var_update_value(
 	char	*new_value;
 
 	if (var->readonly && value)
-		return (ERR_VAR_READ_ONLY);
+		return (error(ERR_VAR_READ_ONLY));
 	if (value)
 	{
 		new_value = str_dup(value);
 		if (!new_value)
-			return (ERR_LIBC);
+			return (error_sys());
 		free(var->value);
 		var->value = new_value;
 	}
@@ -28,7 +37,7 @@ static t_error	var_update_value(
 		var->export = true;
 	if (readonly)
 		var->readonly = true;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	var_set(const char *name, const char *value, bool export, bool readonly)
@@ -40,10 +49,10 @@ t_error	var_set(const char *name, const char *value, bool export, bool readonly)
 	t_var		new_var;
 
 	if (!var_name_is_valid(name))
-		return (ERR_VAR_INVALID_NAME);
+		return (error(ERR_VAR_INVALID_NAME));
 	shell = shell_get();
 	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	list = &shell->params.variables;
 	if (var_find(list, name, &var_index))
 	{
@@ -54,10 +63,10 @@ t_error	var_set(const char *name, const char *value, bool export, bool readonly)
 		export = true;
 	new_var = var_new(name, value, export, readonly);
 	if (!new_var.name || (value && !new_var.value))
-		return (var_free_one(&new_var), ERR_LIBC);
+		return (var_save_err_and_free(&new_var));
 	if (!vector_push(list, &new_var))
-		return (var_free_one(&new_var), ERR_LIBC);
-	return (ERR_NO);
+		return (var_save_err_and_free(&new_var));
+	return (error(ERR_NO));
 }
 
 t_error	var_get(const char *name, char **dst_val)
@@ -70,22 +79,22 @@ t_error	var_get(const char *name, char **dst_val)
 
 	shell = shell_get();
 	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	list = &shell->params.variables;
 	if (!var_name_is_valid(name))
-		return (ERR_VAR_INVALID_NAME);
+		return (error(ERR_VAR_INVALID_NAME));
 	if (!var_find(list, name, &var_index))
-		return (ERR_VAR_NOT_FOUND);
+		return (error(ERR_VAR_NOT_FOUND));
 	res = NULL;
 	var = &((t_var *)list->data)[var_index];
 	if (var->value)
 	{
 		res = str_dup(var->value);
 		if (!res)
-			return (ERR_LIBC);
+			return (error_sys());
 	}
 	*dst_val = res;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	var_unset(const char *name)
@@ -96,18 +105,18 @@ t_error	var_unset(const char *name)
 	t_var		*var;
 
 	if (!var_name_is_valid(name))
-		return (ERR_VAR_INVALID_NAME);
+		return (error(ERR_VAR_INVALID_NAME));
 	shell = shell_get();
 	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	list = &shell->params.variables;
 	if (!var_find(list, name, &var_index))
-		return (ERR_NO);
+		return (error(ERR_NO));
 	var = &((t_var *)list->data)[var_index];
 	if (var->readonly)
-		return (ERR_VAR_READ_ONLY);
+		return (error(ERR_VAR_READ_ONLY));
 	var_free_one(var);
 	if (!vector_remove(list, var_index, NULL))
-		return (ERR_INDEX_OUT_OF_BOUND);
-	return (ERR_NO);
+		return (error(ERR_INDEX_OUT_OF_BOUND));
+	return (error(ERR_NO));
 }

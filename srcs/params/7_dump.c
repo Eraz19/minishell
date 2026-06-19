@@ -6,12 +6,12 @@
 static void	params_dump_scalar(const char *name)
 {
 	char		*value;
-	t_error		error;
+	t_error		err;
 
-	error = params_get(name, &value);
-	if (error != ERR_NO)
+	err = params_get(name, &value);
+	if (err.type != ERR_NO)
 	{
-		printf("PARAMS '%s'=[ERROR: '%s']\n", name, error_to_string(error));
+		printf("PARAMS '%s'=[ERROR: '%s']\n", name, error_to_string(err));
 		return ;
 	}
 	if (value)
@@ -32,7 +32,7 @@ static void	params_dump_variables(void)
 
 	shell = shell_get();
 	if (!shell)
-		error_print(NULL, "params_dump_variables()", ERR_SHELL_NOT_FOUND);
+		error_print(error(ERR_SHELL_NOT_FOUND), "params_dump_variables()", NULL, NULL);
 	var_list = &shell->params.variables;
 	i = 0;
 	while (i < var_list->len)
@@ -59,7 +59,7 @@ static void	params_dump_specials(void)
 static void	params_dump_positionals(void)
 {
 	t_shell	*shell;
-	t_error	error;
+	t_error	err;
 	char	*count_s;
 	size_t	count;
 	size_t	i;
@@ -68,13 +68,13 @@ static void	params_dump_positionals(void)
 	shell = shell_get();
 	if (!shell)
 	{
-		error_print(NULL, "params_dump_positionals()", ERR_SHELL_NOT_FOUND);
+		error_print(error(ERR_SHELL_NOT_FOUND), "params_dump_positionals()", NULL, NULL);
 		return ;
 	}
-	error = positionals_get_one(&shell->params.positionals, "#", &count_s);
-	if (error != ERR_NO)
+	err = positionals_get_one(&shell->params.positionals, "#", &count_s);
+	if (err.type != ERR_NO)
 	{
-		error_print(NULL, "params_dump_positionals()", error);
+		error_print(err, "params_dump_positionals()", NULL, NULL);
 		return ;
 	}
 	count = ft_atozu(count_s);
@@ -85,7 +85,7 @@ static void	params_dump_positionals(void)
 		name = ft_zutoa(i);
 		if (!name)
 		{
-			error_print(NULL, "params_dump_positionals()", ERR_LIBC);
+			error_print(error_sys(), "params_dump_positionals()", NULL, NULL);
 			break ;
 		}
 		params_dump_scalar(name);

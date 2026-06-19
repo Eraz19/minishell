@@ -2,34 +2,42 @@
 #include "action.h"
 #include <stdlib.h>
 
+// ERR_LIBC
+static t_error	action_save_error_and_free(t_lr_machine *machine, size_t count)
+{
+	t_error	err;
+	size_t	j;
+
+	err = error_sys();
+	j = 0;
+	while (j < count)
+		free(machine->actions[j++]);
+	free(machine->actions);
+	machine->actions = NULL;
+	return (err);
+}
+
 // ERR_NO / ERR_LIBC
 static t_error	malloc_action_table(t_lr_machine *machine)
 {
 	size_t	rows;
 	size_t	cols;
 	size_t	i;
-	size_t	j;
 
 	rows = machine->lr_states.len;
 	cols = SYM_TERMINAL_MAX + 1;
 	machine->actions = malloc(rows * sizeof(*machine->actions));
 	if (!machine->actions)
-		return (ERR_LIBC);
+		return (error_sys());
 	i = 0;
 	while (i < rows)
 	{
 		machine->actions[i] = malloc(cols * sizeof(**machine->actions));
 		if (!machine->actions[i])
-		{
-			j = 0;
-			while (j < i)
-				free(machine->actions[j++]);
-			free(machine->actions);
-			return (machine->actions = NULL, ERR_LIBC);
-		}
+			return (action_save_error_and_free(machine, i));
 		i++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 static void	action_set_error(t_lr_machine *machine)
@@ -57,11 +65,11 @@ static void	action_set_error(t_lr_machine *machine)
 
 t_error	action_build_default_table(t_lr_machine *machine)
 {
-	t_error	error;
+	t_error	err;
 
-	error = malloc_action_table(machine);
-	if (error != ERR_NO)
-		return (error);
+	err = malloc_action_table(machine);
+	if (err.type != ERR_NO)
+		return (err);
 	action_set_error(machine);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

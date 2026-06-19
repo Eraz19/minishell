@@ -41,25 +41,25 @@ static void	params_catch_undefined_2(int argc, char **argv, int start)
 
 t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 {
-	t_error	error;
+	t_error	err;
 	size_t	start_index;
 	
 	params_catch_undefined_1(argc, argv);
 	params->name = argv[0];
 	start_index = 1;
-	error = options_load(&params->options, argc, argv, &start_index);
-	if (error != ERR_NO)
-		return (error);
+	err = options_load(&params->options, argc, argv, &start_index);
+	if (err.type != ERR_NO)
+		return (err);
 	params_catch_undefined_2(argc, argv, (int)start_index);
-	error = specials_load(&params->specials, argc, argv, &start_index);
-	if (error != ERR_NO)
-		return (error);
-	error = positionals_load(&params->positionals, argc, argv, start_index);
-	if (error != ERR_NO)
-		return (error);
-	error = var_load(&params->variables, envp);
-	if (error != ERR_NO)
-		return (error);
+	err = specials_load(&params->specials, argc, argv, &start_index);
+	if (err.type != ERR_NO)
+		return (err);
+	err = positionals_load(&params->positionals, argc, argv, start_index);
+	if (err.type != ERR_NO)
+		return (err);
+	err = var_load(&params->variables, envp);
+	if (err.type != ERR_NO)
+		return (err);
 	/* ---------- TODO: tmp debug: START ---------- */
 	var_dump();
 	options_dump();
@@ -67,5 +67,5 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	positionals_dump();
 	params_dump();
 	/* ---------- TODO: tmp debug: END ---------- */
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

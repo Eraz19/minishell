@@ -1,18 +1,27 @@
 # Alexander
 
-- `undefined_behaviour()` n'exit plus le shell
-- `Alias` builtin:
-	- Use `ft_getopt`
-	- Check for UB (cf `export`)
-- `errors` (`ERR_LIBC` problem: see `TODO` section):
-	- keep track of already printed or not ?
-	- save errno when error is thrown ?
+- ⚠️ `error_print()`: Garder la possibilité de donné un fstring + args ??
+- ⚠️ Vérifier que les `buff_*()`, `vector_*()` etc de `libft` ne free pas en cas d'échec (sinon `errno` undefined):
+	- 🚨 `buff_dup_n()` le fait !!
+	- 🚨 `buff/format/append()` le fait !!
+	- 🚨 `vector_dup()` le fait !!
+	- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
+
+1. Remplacer tous les `return (ERR_*)` par `return (error(ERR_*))`
+2. Remplacer tous les `ERR_*);` par `error(ERR_*));`
+3. 
+4. Remplacer tous les `t_error	error`
+5. Vérifier les `error =` / `error !`
+6. Vérifier les `error_print()` usages
+7. Vérifier que toutes les erreurs critiques (à minima `err_sys()` sont print: par exemple il manque les print dans actions et gotos !)
+
+Checks:
+- Aucun call ne modifie `errno` entre l'erreur et l'appel à `error_sys()`
+- **AUCUN** `error(ERR_LIBC)`
+- Tous les `error_print()` sont bien (double) `NULL` terminés
 
 # TODO
 
-- `time()` stub ASM
-- ⚠️ on `ERR_LIBC`: error message should be printed **IMMEDIATLY** to avoid `errno` modification (don't `free` before!!)
-- move `export_build_envp()` from `export` to `variables`
 - ⚠️ `undefined_behaviour()` should not `shell_exit()` ! (for example a `builtin` UB should only generate a builtin error, then the shell should behave as POSIX says for builtin errors!) => it should return `ERR_UNDEFINED_BEHAVIOUR`:
 	- Fixed but **NEED TO CHECK ALL EXISTING USAGES of `undefined_behaviour()`**
 
@@ -53,7 +62,6 @@
 
 ## SHELL PROGRAM
 
-- Unsure it follows [XBD 12. Utility Conventions](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html).
 - Return correct `exit status` (see [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) `EXIT STATUS` section).
 - Shall use [exit](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#exit) builtin to exit itself ??
 - Implement correct [2.8.1 Consequences of Shell Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_01).

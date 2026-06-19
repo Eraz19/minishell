@@ -32,23 +32,23 @@ static t_error	options_apply_getopt_out(
 {
 	t_getopt_option	option;
 	size_t			i;
-	t_error			error;
+	t_error			err;
 
 	i = 0;
 	while (i < out->options.len)
 	{
 		option = ((t_getopt_option *)out->options.data)[i];
 		if (!option.argument)
-			error = options_process_flag(
+			err = options_process_flag(
 				options, option.flag, option.sign == '-', explicit_plus_m);
 		else
-			error = options_process_name(
+			err = options_process_name(
 				options, option.argument, option.sign == '-', explicit_plus_m);
-		if (error != ERR_NO)
-			return (error);
+		if (err.type != ERR_NO)
+			return (err);
 		i++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 static void	options_finalize(
@@ -75,19 +75,19 @@ t_error	options_load(
 	t_getopt_out	out;
 	bool			explicit_plus_m;
 	size_t			remaining_args;
-	t_error			error;
+	t_error			err;
 
 	print_title("options_load()");
 	*options = 0u;
 	explicit_plus_m = false;
 	options_build_getopt_in(&in);
-	error = ft_getopt(argc, argv, &in, &out);
-	if (error != ERR_NO)
-		return (error);
-	error = options_apply_getopt_out(options, &out, &explicit_plus_m);
+	err = ft_getopt(argc, argv, &in, &out);
+	if (err.type != ERR_NO)
+		return (err);
+	err = options_apply_getopt_out(options, &out, &explicit_plus_m);
 	vector_free(&out.options, NULL);
-	if (error != ERR_NO)
-		return (error);
+	if (err.type != ERR_NO)
+		return (err);
 	*start_index = out.first_operand_index;
 	print_result("options_load()");
 	print_title("options_finalize()");
@@ -97,5 +97,5 @@ t_error	options_load(
 		remaining_args = (size_t)argc - *start_index;
 	options_finalize(options, remaining_args, explicit_plus_m);
 	print_result("options_finalize()");
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

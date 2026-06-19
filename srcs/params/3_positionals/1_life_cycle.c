@@ -7,15 +7,18 @@ void	positionals_init(t_positionals_stack *stack)
 	vector_init(stack, sizeof(t_positionals), 0);
 }
 
-static void	positionals_free_partial(t_positionals *positionals)
+static t_error	positionals_free_partial(t_positionals *positionals)
 {
 	size_t	i;
+	t_error	err;
 
+	err = error_sys();
 	i = 0;
 	while (i < positionals->count)
 		free(positionals->params[i++]);
 	free(positionals->params);
 	positionals->params = NULL;
+	return (err);
 }
 
 t_error	positionals_load(
@@ -34,22 +37,22 @@ t_error	positionals_load(
 		positionals.params =
 			malloc(sizeof(*positionals.params) * ((size_t)argc - start_index));
 		if (!positionals.params)
-			return (ERR_LIBC);
+			return (error_sys());
 	}
 	while (start_index < (size_t)argc)
 	{
 		positionals.params[positionals.count] = str_dup(argv[start_index]);
 		if (!positionals.params[positionals.count])
-			return (positionals_free_partial(&positionals), ERR_LIBC);
+			return (positionals_free_partial(&positionals));
 		positionals.count++;
 		print_pass("$%zu = '%s'\n", positionals.count, argv[start_index]);
 		start_index++;
 	}
 	if (!vector_push(stack, &positionals))
-		return (positionals_free_partial(&positionals), ERR_LIBC);
+		return (positionals_free_partial(&positionals));
 	print_pass("$# = %zu\n", positionals.count);
 	print_result("positionals_load()");
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 void	positionals_free_item(void *positionals)

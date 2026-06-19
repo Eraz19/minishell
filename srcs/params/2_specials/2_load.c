@@ -14,8 +14,8 @@ static t_error	specials_load_cmd_string(
 {
 	if ((size_t)argc < *operand_index + 1)
 	{
-		error_print(NULL, "-c needs an argument", ERR_OPT_INVALID);
-		return (ERR_OPT_INVALID);
+		error_print(error(ERR_OPT_INVALID), "-c needs an argument", NULL, NULL);
+		return (error(ERR_OPT_INVALID));
 	}
 	specials->source = argv[(*operand_index)++];
 	if ((size_t)argc >= *operand_index + 1)
@@ -23,7 +23,7 @@ static t_error	specials_load_cmd_string(
 	print_pass("command_string (-c) mode initialized\n");
 	print_pass("zero set to              '%s'\n", specials->zero);
 	print_pass("source set to            '%s'\n", specials->source);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // @ret ERR_SHELL_NOT_FOUND / ERR_OPT_INVALID
@@ -40,7 +40,7 @@ static t_error	specials_load_source_and_zero(
 	else if (option_is_active(OPT_STDIN_INPUT))
 	{
 		print_pass("standard_input (-s) mode initialized\n");
-		// return (ERR_NO);
+		// return (error(ERR_NO));
 	}
 	else if ((size_t)argc >= *operand_index + 1)
 	{
@@ -50,7 +50,7 @@ static t_error	specials_load_source_and_zero(
 	}
 	print_pass("zero set to              '%s'\n", specials->zero);
 	print_pass("source set to            '%s'\n", specials->source);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	specials_load(
@@ -59,12 +59,12 @@ t_error	specials_load(
 	char **argv,
 	size_t *start_index)
 {
-	t_error	error;
+	t_error	err;
 
 	print_title("specials_load()");
-	error = specials_load_source_and_zero(specials, argc, argv, start_index);
-	if (error != ERR_NO)
-		return (error);
+	err = specials_load_source_and_zero(specials, argc, argv, start_index);
+	if (err.type != ERR_NO)
+		return (err);
 	specials->last_bg_pid = -1;
 	print_pass("last_bg_pid set to       %jd\n", (intmax_t)specials->last_bg_pid);
 	specials->last_status = EXIT_SUCCESS;
@@ -72,5 +72,5 @@ t_error	specials_load(
 	specials->pid = ft_getpid();
 	print_pass("pid set to               %jd\n", (intmax_t)specials->pid);
 	print_result("specials_load()");
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

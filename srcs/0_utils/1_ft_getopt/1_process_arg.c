@@ -15,19 +15,19 @@ static t_error	getopt_process_flags_without_arg(t_getopt_state *state)
 	else
 		valid_flags = state->in->valid_plus_flags;
 	if (!valid_flags)
-		return (ERR_OPT_INVALID);
+		return (error(ERR_OPT_INVALID));
 	i = 0;
 	while (valid_flags[i])
 	{
 		if (valid_flags[i++] == option.flag)
 		{
 			if (!vector_push(&state->out->options, &option))
-				return (ERR_LIBC);
+				return (error_sys());
 			state->char_i++;
-			return (ERR_NO);
+			return (error(ERR_NO));
 		}
 	}
-	return (ERR_OPT_INVALID);
+	return (error(ERR_OPT_INVALID));
 }
 
 // @ret ERR_OPT_INVALID_ARG / ERR_LIBC
@@ -119,17 +119,17 @@ static t_error	getopt_process_flags_with_arg(t_getopt_state *state)
 
 t_error	getopt_process_arg(t_getopt_state *state)
 {
-	t_error	error;
+	t_error	err;
 
 	while (state->argv[state->arg_i][state->char_i] != '\0')
 	{
-		error = getopt_process_flags_without_arg(state);
-		if (error == ERR_LIBC)
-			return (error);
-		if (error == ERR_OPT_INVALID)
+		err = getopt_process_flags_without_arg(state);
+		if (err.type == ERR_LIBC)
+			return (err);
+		if (err.type == ERR_OPT_INVALID)
 			return (getopt_process_flags_with_arg(state));
 	}
 	state->arg_i++;
 	state->char_i = 0;
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

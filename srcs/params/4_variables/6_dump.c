@@ -29,7 +29,7 @@ void	var_dump(void)
 	shell = shell_get();
 	if (!shell)
 	{
-		error_print(NULL, "var_dump()", ERR_SHELL_NOT_FOUND);
+		error_print(error(ERR_SHELL_NOT_FOUND), "var_dump()", NULL, NULL);
 		return ;
 	}
 	var_list = &shell->params.variables;

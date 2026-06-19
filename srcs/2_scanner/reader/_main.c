@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 20:22:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 17:51:38 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 15:51:49 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_error	reader_continuation(char **res)
 	char	*continuation;
 
 	if (res == NULL)
-		return (ERR_NULL_ARGS);
+		return (error(ERR_NULL_ARGS));
 	err = readline_(&continuation, "> ");
 	if (err != ERR_NO)
 		return (err);
@@ -74,7 +74,7 @@ t_error	reader_continuation(char **res)
 	new_input = str_join(*res, continuation);
 	if (new_input == NULL)
 		return (free(continuation), ERR_LIBC);
-	return (free(*res), free(continuation), *res = new_input, ERR_NO);
+	return (free(*res), free(continuation), *res = new_input, error(ERR_NO));
 }
 
 t_error	reader_file_input(char **res, const char *path)

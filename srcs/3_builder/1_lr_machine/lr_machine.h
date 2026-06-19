@@ -51,10 +51,9 @@
  * @warning This function performs no parameter validation.
  *
  * @param machine LR machine to build in place (borrowed, must NOT be NULL).
- * @return true if the whole LR machine was built successfully, false if one of
- *         the table-building steps failed.
+ * @return [TODO...]
  */
-bool	lr_machine_build(t_lr_machine *machine);
+t_error	lr_machine_build(t_lr_machine *machine);
 
 /**
  * @ingroup lr_machine_pub

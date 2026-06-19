@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2026/06/17 14:26:05 by adouieb          ###   ########.fr       */
+=======
+/*   Updated: 2026/06/16 13:02:05 by gastesan         ###   ########.fr       */
+>>>>>>> 5166bd946e9174f31a82aed460b533aec2b3c72d
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +19,8 @@
 t_error	context_stack_push(t_context_stack *stack, t_context_stack_item *item)
 {
 	if (!vector_push(stack, &item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	context_stack_bpop(t_context_stack *stack, t_context_stack_item **item)

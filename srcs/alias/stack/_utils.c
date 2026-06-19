@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/11 17:51:04 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 16:54:08 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 t_error	alias_stack_push(t_alias_stack *stack, char *item)
 {
 	if (!vector_push(stack, &item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 void	alias_stack_pop(t_alias_stack *stack)

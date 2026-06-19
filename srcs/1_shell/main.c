@@ -18,77 +18,71 @@ t_error	shell_set_stdin_to_blocking(void)
 	if (!is_a_terminal)
 	{
 		if (fstat(STDIN_FILENO, &stat_buff) != 0)
-		{
-			error_print(NULL, "unable to check if stdin is FIFO", ERR_LIBC);
-			return (ERR_LIBC);
-		}
+			return (error_print(error_sys(), "unable to check if stdin is FIFO", NULL, NULL));
 		is_fifo = S_ISFIFO(stat_buff.st_mode);
 		if (!is_fifo)
 		{
 			print_pass("stdin is not a fifo: did not set it to blocking mode\n");
-			return (ERR_NO);
+			return (error(ERR_NO));
 		}
 	}
 	enabled = 0;
 	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
-	{
-		error_print(NULL, "Unable to set stdin to blocking mode", ERR_LIBC);
-		return (ERR_LIBC);
-	}
+		return (error_print(error_sys(), "Unable to set stdin to blocking mode", NULL, NULL));
 	print_pass("stdin has been set to blocking mode\n");
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 {
-	t_error	error;
+	t_error	err;
 
 	print_title("shell_load()");
-	error = params_load(&shell->params, argc, argv, envp);
-	if (error != ERR_NO)
-		return (error);
-	error = history_load(&shell->history);
-	if (error != ERR_NO)
-		return (error);
+	err = params_load(&shell->params, argc, argv, envp);
+	if (err.type != ERR_NO)
+		return (err);
+	err = history_load(&shell->history);
+	if (err.type != ERR_NO)
+		return (err);
 	// TODO: fun_load(&shell->functions);
 	print_warn("Functions not implemented yet           => skipping loading\n");
 	/*---------------------------------------*/
 	if (option_is_active(OPT_STDIN_INPUT))
-		error = scanner_load(&shell->scanner, SCAN_STDIN, shell->params.specials.source);
+		err = scanner_load(&shell->scanner, SCAN_STDIN, shell->params.specials.source);
 	else if (option_is_active(OPT_CMD_STRING))
-		error = scanner_load(&shell->scanner, SCAN_STRING, shell->params.specials.source);
+		err = scanner_load(&shell->scanner, SCAN_STRING, shell->params.specials.source);
 	else
-		error = scanner_load(&shell->scanner, SCAN_FILE, shell->params.specials.source);
-	if (error != ERR_NO)
-		return (error);
+		err = scanner_load(&shell->scanner, SCAN_FILE, shell->params.specials.source);
+	if (err.type != ERR_NO)
+		return (err);
 	/*---------------------------------------*/
 	print_warn("Scanner not implemented yet             => skipping loading\n");
-	error = builder_load(&shell->builder);
-	if (error != ERR_NO)
-		return (error);
+	err = builder_load(&shell->builder);
+	if (err.type != ERR_NO)
+		return (err);
 	// TODO: runner_load(&shell->runner);
 	print_warn("Runner not implemented yet              => skipping loading\n");
-	error = shell_set_stdin_to_blocking();
-	if (error != ERR_NO)
-		return (error);
+	err = shell_set_stdin_to_blocking();
+	if (err.type != ERR_NO)
+		return (err);
 	print_result("shell_load()");
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // @ret ERR_NO / ERR_LIBC.
 static t_error	shell_exec_env(t_shell *shell)
 {
-	t_error	error;
+	t_error	err;
 	char	*raw_env;
 
 	print_title("shell_exec_env()");
 	if (!option_is_active_in(shell->params.options, OPT_INTERACTIVE))
-		return (ERR_NO);
-	error = params_get("ENV", &raw_env);
-	if (error == ERR_LIBC)
-		return (error);
+		return (error(ERR_NO));
+	err = params_get("ENV", &raw_env);
+	if (err.type == ERR_LIBC)
+		return (err);
 	if (!raw_env)
-		return (ERR_NO);
+		return (error(ERR_NO));
 	if (option_is_active(OPT_STDIN_INPUT))
 	{
 		print_warn("Expander and Runner not implemented yet => skipping ENV execution\n");
@@ -96,32 +90,32 @@ static t_error	shell_exec_env(t_shell *shell)
 		// TODO: exec ENV
 	}
 	print_result("shell_exec_env()");
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	shell_start(int argc, char **argv, char **envp)
 {
 	static const char	message[] = ": unable to malloc shell data struct: ";
 	t_shell				*shell;
-	t_error				error;
+	t_error				err;
 
 	// print_start(99, "shell_start()");
 	shell = malloc(sizeof(*shell));
 	if (!shell)
-		return (error_print(NULL, message, ERR_LIBC), ERR_LIBC);
+		return (error_print(error_sys(), message, NULL, NULL));
 	print_title("shell_init()");
 	shell_init(shell);
 	print_result("shell_init()");
 	shell_set(shell);
-	error = shell_load(shell, argc, argv, envp);
-	if (error != ERR_NO)
-		shell_exit(error);
-	error = shell_exec_env(shell);
-	if (error != ERR_NO)
-		return (error);
+	err = shell_load(shell, argc, argv, envp);
+	if (err.type != ERR_NO)
+		shell_exit(err);
+	err = shell_exec_env(shell);
+	if (err.type != ERR_NO)
+		return (err);
 	// TODO: runner_run(t_shell *shell);
 	print_warn("Runner not implemented yet => skipping execution loop\n");
 	print_stop();
-	shell_exit(error);
-	return (ERR_NO);
+	shell_exit(err);
+	return (error(ERR_NO));
 }

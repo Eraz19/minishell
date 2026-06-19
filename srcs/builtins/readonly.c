@@ -18,11 +18,11 @@ static t_error readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
 			"arguments are given, the results are unspecified."));
 	if (options_count > 0 && operand_count > 0)
 	{
-		(void)error_print(argv[0], READONLY_USAGE, ERR_BUILTIN_INVALID_USAGE);
+		(void)error_print(error(ERR_BUILTIN_INVALID_USAGE), argv[0], READONLY_USAGE, NULL, NULL);
 		return (undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
 		"mutually-exclusive arguments produces undefined results."));
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG /
@@ -30,7 +30,7 @@ static t_error readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
 static t_error	readonly_process_options(int argc, char **argv, t_getopt_out *out)
 {
 	t_getopt_in	in;
-	t_error		error;
+	t_error		err;
 
 	in.builtin_name = argv[0];
 	in.single_delimiter = false;
@@ -39,16 +39,16 @@ static t_error	readonly_process_options(int argc, char **argv, t_getopt_out *out
 	in.valid_plus_flags = NULL;
 	in.options_with_arg = NULL;
 	in.options_with_arg_count = 0;
-	error = ft_getopt(argc, argv, &in, out);
-	if (error != ERR_NO)
-		return (error);
-	error = readonly_catch_ub(argc, argv, out);
-	if (error != ERR_NO)
+	err = ft_getopt(argc, argv, &in, out);
+	if (err.type != ERR_NO)
+		return (err);
+	err = readonly_catch_ub(argc, argv, out);
+	if (err.type != ERR_NO)
 	{
 		vector_free(&out->options, NULL);
-		return (error);
+		return (err);
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_SHELL_NOT_FOUND /
@@ -57,18 +57,18 @@ static t_error	readonly_add_one(const char *builtin_name, const char *string)
 {
 	char	*name;
 	char	*value;
-	t_error	error;
+	t_error	err;
 
-	error = assignment_split(string, &name, &value);
-	if (error != ERR_NO)
-		return (error_print(builtin_name, string, error));
-	error = params_set_variable(name, value, false, true);
-	if (error != ERR_NO)
-		(void)error_print(builtin_name, string, error);
+	err = assignment_split(string, &name, &value);
+	if (err.type != ERR_NO)
+		return (error_print(err, builtin_name, string, NULL, NULL));
+	err = params_set_variable(name, value, false, true);
+	if (err.type != ERR_NO)
+		(void)error_print(err, builtin_name, string, NULL, NULL);
 	free(name);
 	if (value)
 		free(value);
-	return (error);
+	return (err);
 }
 
 // @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_SHELL_NOT_FOUND /
@@ -79,12 +79,12 @@ static t_error	readonly_add(size_t first_operand_index, int argc, char **argv)
 	t_error	last_exit_code;
 	t_error	exit_code;
 
-	exit_code = ERR_NO;
+	exit_code = error(ERR_NO);
 	i = (int)first_operand_index;
 	while (i < argc)
 	{
 		last_exit_code = readonly_add_one(argv[0], argv[i++]);
-		if (last_exit_code != ERR_NO)
+		if (last_exit_code.type != ERR_NO)
 			exit_code = last_exit_code;
 	}
 	return (exit_code);
@@ -97,18 +97,18 @@ int	readonly(int argc, char **argv, char **envp)
 
 	(void)envp;
 	exit_code = readonly_process_options(argc, argv, &out);
-	if (exit_code == ERR_LIBC)
-		return ((int)error_print(argv[0], "options parsing failed", exit_code));
-	if (exit_code != ERR_NO)
-		return ((int)exit_code);
+	if (exit_code.type == ERR_LIBC)
+		return ((int)error_print(exit_code, argv[0], "options parsing failed", NULL, NULL).type);
+	if (exit_code.type != ERR_NO)
+		return ((int)exit_code.type);
 	if (out.options.len > 0)
 	{
 		exit_code = params_print(PARAMS_PRINT_READONLY);
-		if (exit_code != ERR_NO)
-			(void)error_print(argv[0], "variables write failed", exit_code);
+		if (exit_code.type != ERR_NO)
+			(void)error_print(exit_code, argv[0], "variables write failed", NULL, NULL);
 	}
 	else
 		exit_code = readonly_add(out.first_operand_index, argc, argv);
 	vector_free(&out.options, NULL);
-	return ((int)exit_code);
+	return ((int)exit_code.type);
 }

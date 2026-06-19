@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:13:00 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 18:06:24 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 16:52:07 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 t_error	heredoc_queue_push(t_heredoc_queue *queue, t_heredoc_queue_item item)
 {
 	if (!vector_push(queue, &item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	heredoc_queue_pop(t_heredoc_queue *queue, t_heredoc_queue_item *item)

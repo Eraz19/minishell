@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 14:37:39 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/16 16:50:55 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@
 t_error	history_list_push(t_history_list *list, char *item)
 {
 	if (!vector_push(list, &item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	history_list_insert(t_history_list *list, char *item, size_t index)
 {
 	if (!vector_insert(list, index, &item))
-		return (ERR_LIBC);
-	return (ERR_NO);
+		return (error_sys());
+	return (error(ERR_NO));
 }
 
 t_error	history_list_get(t_history_list *list, char **item, size_t i)
@@ -35,7 +35,7 @@ t_error	history_list_get(t_history_list *list, char **item, size_t i)
 	char	*item_;
 
 	if (list->len == 0)
-		return (ERR_EMPTY_STACK);
+		return (error(ERR_EMPTY_STACK));
 	else if (i >= list->len)
 		return (ERR_INDEX_OUT_OF_BOUND);
 	item_ = str_dup(((char **)list->data)[i]);

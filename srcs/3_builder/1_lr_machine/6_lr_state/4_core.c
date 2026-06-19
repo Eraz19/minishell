@@ -34,7 +34,7 @@ static t_error	add_variants(
 	bool *did_add)
 {
 	t_symbol	terminal;
-	t_error		error;
+	t_error		err;
 
 	terminal = 0;
 	while (terminal <= SYM_TERMINAL_MAX)
@@ -42,13 +42,13 @@ static t_error	add_variants(
 		if (first->result[terminal] == true)
 		{
 			rule_state.lookahead = terminal;
-			error = lr_state_add_rule_state(lr_state, rule_state, did_add);
-			if (error != ERR_NO)
-				return (error);
+			err = lr_state_add_rule_state(lr_state, rule_state, did_add);
+			if (err.type != ERR_NO)
+				return (err);
 		}
 		terminal++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // ERR_NO / ERR_LIBC
@@ -62,11 +62,11 @@ static t_error	compute_rule_state(
 	t_first_param	first_param;
 	size_t			rule_id;
 	t_rule			rule;
-	t_error			error;
+	t_error			err;
 
 	next_symbol = rule_state_next_symbol(machine->rules, rule_state);
 	if (!symbol_is_non_terminal(next_symbol))
-		return (ERR_NO);
+		return (error(ERR_NO));
 	compute_first(machine, &first_param, rule_state);
 	rule_id = 0;
 	while (rule_id < RULE_COUNT)
@@ -76,13 +76,13 @@ static t_error	compute_rule_state(
 		{
 			rule_state.rule_id = rule_id;
 			rule_state.pos = 0;
-			error = add_variants(lr_state, rule_state, &first_param, did_add);
-			if (error != ERR_NO)
-				return (error);
+			err = add_variants(lr_state, rule_state, &first_param, did_add);
+			if (err.type != ERR_NO)
+				return (err);
 		}
 		rule_id++;
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	lr_state_complete(t_lr_machine *machine, t_lr_state *lr_state)
@@ -90,7 +90,7 @@ t_error	lr_state_complete(t_lr_machine *machine, t_lr_state *lr_state)
 	t_rule_state	rule_state;
 	bool			did_add;
 	size_t			i;
-	t_error			error;
+	t_error			err;
 
 	did_add = true;
 	while (did_add)
@@ -100,13 +100,13 @@ t_error	lr_state_complete(t_lr_machine *machine, t_lr_state *lr_state)
 		while (i < lr_state->len)
 		{
 			rule_state = ((t_rule_state *)lr_state->data)[i];
-			error = compute_rule_state(machine, lr_state, rule_state, &did_add);
-			if (error != ERR_NO)
-				return (error);
+			err = compute_rule_state(machine, lr_state, rule_state, &did_add);
+			if (err.type != ERR_NO)
+				return (err);
 			i++;
 		}
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error	lr_state_next(
@@ -118,7 +118,7 @@ t_error	lr_state_next(
 	size_t			i;
 	t_rule_state	rule_state;
 	t_symbol		next_symbol;
-	t_error			error;
+	t_error			err;
 
 	lr_state_init(dst);
 	i = 0;
@@ -129,15 +129,15 @@ t_error	lr_state_next(
 		if (next_symbol != symbol)
 			continue ;
 		rule_state.pos++;
-		error = lr_state_add_rule_state(dst, rule_state, NULL);
-		if (error != ERR_NO)
-			return (lr_state_free(dst), error);
+		err = lr_state_add_rule_state(dst, rule_state, NULL);
+		if (err.type != ERR_NO)
+			return (lr_state_free(dst), err);
 	}
 	if (dst->len > 0)
 	{
-		error = lr_state_complete(machine, dst);
-		if (error != ERR_NO)
-			return (lr_state_free(dst), error);
+		err = lr_state_complete(machine, dst);
+		if (err.type != ERR_NO)
+			return (lr_state_free(dst), err);
 	}
-	return (ERR_NO);
+	return (error(ERR_NO));
 }

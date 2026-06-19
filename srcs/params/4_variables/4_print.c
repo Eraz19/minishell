@@ -9,28 +9,29 @@
 static t_error	var_print_one(const char *prefix, const t_var *var)
 {
 	t_buff	buff;
-	t_error	error;
 	char	*escaped_value;
+	t_error	err;
 
 	if (!buff_init(&buff, 0, prefix, -1))
-		return (ERR_LIBC);
+		return (error_sys());
 	if (!buff_append(&buff, var->name, -1))
-		return (buff_free(&buff), ERR_LIBC);
+		return (err = error_sys(), buff_free(&buff), err);
 	if (var->value)
 	{
 		if (!buff_append(&buff, "=", -1))
-			return (buff_free(&buff), ERR_LIBC);
-		error = serialize(var->value, &escaped_value);
-		if (error != ERR_NO)
-			return (buff_free(&buff), error);
+			return (err = error_sys(), buff_free(&buff), err);
+		err = serialize(var->value, &escaped_value);
+		if (err.type != ERR_NO)
+			return (buff_free(&buff), err);
 		if (!buff_append(&buff, escaped_value, -1))
-			return (free(escaped_value), buff_free(&buff), ERR_LIBC);
+			return (err = error_sys(), free(escaped_value), buff_free(&buff),
+				err);
 		free(escaped_value);
 	}
 	if (!buff_append(&buff, "\n", -1))
-		return (buff_free(&buff), ERR_LIBC);
-	error = posix_write(STDOUT_FILENO, buff.data, buff.len);
-	return (buff_free(&buff), error);
+		return (err = error_sys(), buff_free(&buff), err);
+	err = posix_write(STDOUT_FILENO, buff.data, buff.len);
+	return (buff_free(&buff), err);
 }
 
 t_error	var_print(t_var_print_mode mode)
@@ -39,24 +40,24 @@ t_error	var_print(t_var_print_mode mode)
 	t_var_list	*list;
 	t_var		*var;
 	size_t		i;
-	t_error		error;
+	t_error		err;
 
 	shell = shell_get();
 	if (!shell)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	list = &shell->params.variables;
 	i = 0;
-	error = ERR_NO;
+	err = error(ERR_NO);
 	while (i < list->len)
 	{
 		var = &((t_var *)list->data)[i];
 		if (mode == VAR_PRINT_EXPORT && var->export)
-			error = var_print_one("export ", var);
+			err = var_print_one("export ", var);
 		else if (mode == VAR_PRINT_READONLY && var->readonly)
-			error = var_print_one("readonly ", var);
-		if (error != ERR_NO)
+			err = var_print_one("readonly ", var);
+		if (err.type != ERR_NO)
 			break ;
 		i++;
 	}
-	return (error);
+	return (err);
 }

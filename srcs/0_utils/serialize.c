@@ -45,9 +45,9 @@ t_error serialize(const char *src, char **dst)
 	dst_cap = src_len + 2 + (escape_count * ESCAPED_QUOTE_ADDITIONAL_LEN) + 1;
 	*dst = malloc(dst_cap);
 	if (!*dst)
-		return (ERR_LIBC);
+		return (error_sys());
 	copy_with_escape(src, dst, dst_cap);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 // @ret ERR_INVALID_FORMAT
@@ -65,10 +65,11 @@ static t_error copy_without_escape(const char *src, char **dst, size_t src_len)
 		{
 			if (str_ncmp(src + i, ESCAPED_QUOTE, ESCAPED_QUOTE_LEN) != 0)
 			{
-				error_print("deserializer", src, ERR_INVALID_FORMAT);
 				free(*dst);
 				*dst = NULL;
-				return (ERR_INVALID_FORMAT);
+				return (error_print(error(ERR_INVALID_FORMAT),
+					"deserializer", src,
+					NULL, NULL));
 			}
 			i += ESCAPED_QUOTE_ADDITIONAL_LEN;
 		}
@@ -76,7 +77,7 @@ static t_error copy_without_escape(const char *src, char **dst, size_t src_len)
 		j++;
 	}
 	(*dst)[j] = '\0';
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 t_error deserialize(const char *src, char **dst)
@@ -85,9 +86,12 @@ t_error deserialize(const char *src, char **dst)
 
 	src_len = str_len(src);
 	if (src_len < 2 || src[0] != '\'' || src[src_len - 1] != '\'')
-		return (error_print("deserializer", src, ERR_INVALID_FORMAT));
+		return (error_print(
+			error(ERR_INVALID_FORMAT),
+			"deserializer", src,
+			NULL, NULL));
 	*dst = malloc(src_len + 1);
 	if (!*dst)
-		return (ERR_LIBC);
+		return (error_sys());
 	return (copy_without_escape(src, dst, src_len));
 }
