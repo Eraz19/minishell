@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_substitutions.h                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 15:38:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 14:11:08 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 10:46:29 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define EXPANDER_SUBSTITUTIONS_H
 
 # include "error.h"
-# include "libft.h"
 # include "expander_.h"
 
 typedef struct s_expander_substitutions

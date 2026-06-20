@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_name_expansion.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 15:42:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 14:11:11 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 10:45:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define PATH_NAME_EXPANSION_H
 
 # include "error.h"
-# include "libft.h"
 # include "expander_.h"
 
 typedef struct s_path_name_expansion

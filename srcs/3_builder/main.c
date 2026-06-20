@@ -17,14 +17,12 @@ t_error	builder_load(t_builder *builder)
 
 t_error	builder_get_ast(t_ast_node **dst_ast)
 {
-	t_shell		*shell;
 	t_builder	*builder;
 	t_error		err;
 
-	shell = shell_get();
-	if (!shell)
+	builder = shell_get_builder();
+	if (!builder)
 		return (error(ERR_SHELL_NOT_FOUND));
-	builder = &shell->builder;
 	err = parser_build_cst(&builder->parser, &builder->lr_machine);
 	if (err.type != ERR_NO)
 		return (err);

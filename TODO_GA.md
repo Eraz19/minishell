@@ -1,5 +1,15 @@
 # ALEXANDER
 
+- `Makefile` : pense à le modifier quand tu changes les path des fichiers stp (idem pour `libft`)
+- `.vscode/settings.json` : idem
+- Attention au naming des fonctions :
+	- `path_name_expansion()` => `expand_path_name()`
+	- `substitutions()` => `substitute()`
+	- ...
+- Attention aux fonctions prototypées mais pas implémentées :
+	- `shell_get_alias()`, `shell_get_heredoc()`, `substitutions()`, `path_name_expansion()`...
+	- Pour des trucs aussi simples => les implémenter direct
+	- J'ai peur que tu oublies plein de trucs si tu fais pas dans l'ordre
 - `token_type` :
 	- devraient être préfixés (`NONE` par exemple tout le monde voudrait s'en servir...)
 	- pourquoi certains suffixés avec `_` (`EOF_`, `NEWLINE_`)
