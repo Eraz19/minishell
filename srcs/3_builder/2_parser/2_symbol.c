@@ -100,6 +100,7 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	if (err.type != ERR_NO)
 		return (err);
 	parser->lookahead_id = parser->tokens.len - 1;
+	printf("\n--------------------------------------------------\n");
 	printf("[PARSER] READ index=%zu token=%s symbol=%s value=%s\n",
 		parser->lookahead_id,
 		token_type_to_string(token.type),

@@ -363,12 +363,22 @@ typedef struct s_parser
 }	t_parser;
 
 /* ************************************************************************* */
+/*                                   AST                                     */
+/* ************************************************************************* */
+
+typedef struct s_ast_node
+{
+	// TODO
+}	t_ast_node;
+
+/* ************************************************************************* */
 /*                                 CONVERTER                                 */
 /* ************************************************************************* */
 
+// TODO
 typedef struct s_converter
 {
-	// TODO: AST
+	// TODO
 }	t_converter;
 
 /* ************************************************************************* */
@@ -384,6 +394,7 @@ typedef struct s_builder
 
 void	builder_init(t_builder *builder);
 t_error	builder_load(t_builder *builder);
+t_error	builder_get_ast(t_ast_node **dst_ast);
 void	builder_free(t_builder *builder);
 
 bool	builder_can_next_word_be_a_cmd_name(void);

@@ -113,7 +113,14 @@ t_error	shell_start(int argc, char **argv, char **envp)
 	err = shell_exec_env(shell);
 	if (err.type != ERR_NO)
 		return (err);
+	/* ---------- TODO (START) ---------- */
+	t_ast_node	ast;
+	t_ast_node	*ast_ptr = &ast;
+	printf("==========> LAUNCHING AST BUILD <==========");
+	builder_get_ast(&ast_ptr);
+	printf("==========> AST BUILD DONE <==========");
 	// TODO: runner_run(t_shell *shell);
+	/* ---------- TODO (END) ---------- */
 	print_warn("Runner not implemented yet => skipping execution loop\n");
 	print_stop();
 	shell_exit(err);

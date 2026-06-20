@@ -1,3 +1,4 @@
+#include "shell.h"
 #include "builder.h"
 #include "lr_machine.h"
 #include "parser.h"
@@ -6,6 +7,7 @@ void	builder_init(t_builder *builder)
 {
 	lr_machine_init(&builder->lr_machine);
 	parser_init(&builder->parser);
+	// TODO: converter_init(&builder->converter);
 }
 
 t_error	builder_load(t_builder *builder)
@@ -13,8 +15,27 @@ t_error	builder_load(t_builder *builder)
 	return (lr_machine_build(&builder->lr_machine));
 }
 
+t_error	builder_get_ast(t_ast_node **dst_ast)
+{
+	t_shell		*shell;
+	t_builder	*builder;
+	t_error		err;
+
+	shell = shell_get();
+	if (!shell)
+		return (error(ERR_SHELL_NOT_FOUND));
+	builder = &shell->builder;
+	err = parser_build_cst(&builder->parser, &builder->lr_machine);
+	if (err.type != ERR_NO)
+		return (err);
+	*dst_ast = NULL;
+	// TODO: converter_convert(builder->parser->cst, dst_ast)
+	return (error(ERR_NO));
+}
+
 void	builder_free(t_builder *builder)
 {
 	lr_machine_free(&builder->lr_machine);
 	parser_free(&builder->parser);
+	// TODO: converter_free(&builder->converter);
 }
