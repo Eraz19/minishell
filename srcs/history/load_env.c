@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   load_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:25:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:11:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 15:28:12 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_error	history_load_path_env(t_history *state)
 			return (free(path), state->err = error_sys());
 		free(path);
 	}
-	return (state->err);
+	return (state->err = error(ERR_NO));
 }
 
 t_error	history_load_size_env(t_history *state)
@@ -51,5 +51,5 @@ t_error	history_load_size_env(t_history *state)
 		if (max >= 0 && max < 128)
 			state->rl_history.max = 128;
 	}
-	return (state->err);
+	return (state->err = error(ERR_NO));
 }

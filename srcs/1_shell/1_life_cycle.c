@@ -5,8 +5,10 @@
 void	shell_init(t_shell *shell)
 {
 	params_init(&shell->params);
-	// TODO: fun_init(&shell->functions);
-	// TODO: scanner_init(&shell->lexer);
+	scanner_init(&shell->scanner);
+	alias_init(&shell->alias);
+	heredoc_init(&shell->heredoc);
+	history_init(&shell->history);
 	builder_init(&shell->builder);
 	// TODO: runner_init(&shell->runner);
 }
@@ -14,8 +16,10 @@ void	shell_init(t_shell *shell)
 void	shell_free(t_shell **shell)
 {
 	params_free(&(*shell)->params);
-	// TODO: fun_free(&(*shell)->functions);
-	// TODO: scanner_free(&(*shell)->lexer);
+	scanner_free(&(*shell)->scanner);
+	alias_free(&(*shell)->alias);
+	heredoc_free(&(*shell)->heredoc);
+	history_free(&(*shell)->history);
 	builder_free(&(*shell)->builder);
 	// TODO: runner_free(&(*shell)->runner);
 	free(*shell);
@@ -28,7 +32,7 @@ void	shell_exit(t_error error)
 	t_shell	*shell;
 
 	shell = shell_get();
-	// TODO: history_save();
+	(void)history_save();	// TODO: print error
 	if (shell)
 		shell_free(&shell);
 	exit((int)error.type);

@@ -27,7 +27,7 @@ t_error	lr_machine_build(t_lr_machine *machine)
 	t_error	err;
 
 	setlocale(LC_NUMERIC, "de_DE");
-	print_title("lr_machine_build");
+	print_title("lr_machine_build()");
 	rules_build(machine->rules);
 	print_pass("rules table built            (entries: %'6i)\n", RULE_COUNT);
 	symbols_build_nullables_table(machine);
@@ -47,7 +47,7 @@ t_error	lr_machine_build(t_lr_machine *machine)
 	if (err.type != ERR_NO)
 		return (error_print(err, LR_MACHINE_ERROR_MESSAGE, NULL, NULL));
 	print_pass("actions table built          (entries: %'6zu)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
-	print_result("===> [lr_machine_build]");
+	print_result("lr_machine_build()");
 	return (setlocale(LC_NUMERIC, ""), error(ERR_NO));
 }
 

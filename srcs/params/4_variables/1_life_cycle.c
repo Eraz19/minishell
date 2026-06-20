@@ -49,7 +49,7 @@ t_error	var_load(t_var_list *variables, char **envp)
 	if (err.type != ERR_NO)
 		return (err);
 	print_result("var_load_envp()            => (entries: %'6zu)", variables->len);
-	print_title("var_load_mandatory");
+	print_title("var_load_mandatory()");
 	err = var_load_mandatory();
 	if (err.type != ERR_NO)
 		return (err);

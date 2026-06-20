@@ -3,7 +3,6 @@
 
 # include "libft.h"
 # include "error.h"
-# include "token.h"
 # include <stdbool.h>
 # include <stddef.h>
 
@@ -123,6 +122,7 @@ typedef enum e_symbol
 	SYM_sequential_sep,
 	// ----------------------------------------------------
 	SYM_COUNT,
+	SYM_NONE,
 	SYM_error
 }	t_symbol;
 
@@ -145,11 +145,11 @@ typedef struct s_cst_node
 
 typedef struct s_stack_item
 {
-	t_token		*token_first;	// borrowed
-	t_token		*token_last;	// borrowed
 	t_symbol	symbol;
 	size_t		lr_state_id;
-	t_cst_node	*cst_node;		// borrowed
+	size_t		tokens_start_id;
+	size_t		tokens_count;
+	t_cst_node	*cst_node;
 }	t_stack_item;
 
 typedef t_vector	t_stack;
@@ -160,7 +160,7 @@ typedef t_vector	t_stack;
 
 # define RULE_RHS_CAP	7
 
-typedef bool	(*t_reduce_hook)(t_stack_item *rhs, size_t rhs_len, void *ctx);
+typedef t_error	(*t_reduce_hook)(t_stack_item *rhs, size_t len, void *ctx);
 
 typedef struct s_rule
 {
@@ -351,19 +351,34 @@ typedef struct s_lr_machine
 /*                                  PARSER                                   */
 /* ************************************************************************* */
 
+typedef t_vector	t_token_list;
+
 typedef struct s_parser
 {
-	t_stack	stack;
-	// TODO: CST
+	t_stack			stack;
+	t_token_list	tokens;
+	size_t			lookahead_id;
+	t_symbol		lookahead_symbol;
+	t_cst_node		*cst;
 }	t_parser;
+
+/* ************************************************************************* */
+/*                                   AST                                     */
+/* ************************************************************************* */
+
+typedef struct s_ast_node
+{
+	// TODO
+}	t_ast_node;
 
 /* ************************************************************************* */
 /*                                 CONVERTER                                 */
 /* ************************************************************************* */
 
+// TODO
 typedef struct s_converter
 {
-	// TODO: AST
+	// TODO
 }	t_converter;
 
 /* ************************************************************************* */
@@ -379,6 +394,7 @@ typedef struct s_builder
 
 void	builder_init(t_builder *builder);
 t_error	builder_load(t_builder *builder);
+t_error	builder_get_ast(t_ast_node **dst_ast);
 void	builder_free(t_builder *builder);
 
 bool	builder_can_next_word_be_a_cmd_name(void);

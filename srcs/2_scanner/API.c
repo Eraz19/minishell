@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   API.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:05:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:44:17 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 15:39:39 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include "alias.h"
-#include "reader_.h"
 #include "scanner_.h"
 
 t_error	scanner_next_token(t_token *token)
@@ -22,7 +21,7 @@ t_error	scanner_next_token(t_token *token)
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	if (state->lexer->reached_EOI)
+	if (state->lexer.reached_EOI)
 	{
 		state->err = alias_on_expansion_end();
 		if (state->err.type)
@@ -30,10 +29,10 @@ t_error	scanner_next_token(t_token *token)
 	}
 	if (is_EOF(state))
 		return (token->type = EOF_, state->err);
-	if (state->lexer->input_stack.len == 0 && scanner_read_input(state).type)
+	if (state->lexer.input_stack.len == 0 && scanner_read_input(state).type)
 		return (state->err);
-	if (lexer_next_token(state->lexer, token).type)
-		return (state->err = state->lexer->err, state->err);
+	if (lexer_next_token(&state->lexer, token).type)
+		return (state->err = state->lexer.err, state->err);
 	else if (token->type == NEWLINE_ && state->heredoc.queue.len > 0)
 		return (scanner_heredoc_store(state));
 	else if (token->type == TOKEN)

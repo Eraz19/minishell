@@ -1,17 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 16:54:08 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include "alias_stack_.h"
+# include <stdio.h>	// DEBUG
 
 t_error	alias_stack_push(t_alias_stack *stack, char *item)
 {
@@ -35,6 +24,7 @@ bool	alias_stack_contains(t_alias_stack *stack, char *word)
 {
 	size_t	i;
 
+	printf("alias_stack_contains() - start\n");
 	i = 0;
 	while (i < stack->len)
 	{
@@ -42,5 +32,6 @@ bool	alias_stack_contains(t_alias_stack *stack, char *word)
 			return (true);
 		i++;
 	}
+	printf("alias_stack_contains() - end\n");
 	return (false);
 }

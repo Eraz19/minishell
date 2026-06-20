@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:13:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:15:00 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 17:00:05 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ t_error	history_build_file_content(t_history *state, size_t start)
 		entry = NULL;
 		i++;
 	}
+	if (state->current_input.len != 0)
+		if (!buff_append(&content, state->current_input.data, (long)state->current_input.len))
+			return (error_sys());
 	state->file.content = buff_get_string(&content);
 	if (state->file.content == NULL)
 		return (buff_free(&content), state->err = error_sys());

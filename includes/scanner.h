@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 15:55:47 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 17:11:25 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 # define SCANNER_H
 
 # include "error.h"
-# include "types.h"
 # include "token.h"
 # include "heredoc.h"
-# include "context.h"
+# include "lexer_.h"
 
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
@@ -35,13 +34,6 @@
  *  its lexer and here-document state: scanner_init() allocates them and
  *  scanner_free() releases them.
  */
-
-/**
- * @ingroup scanner
- * @struct s_lexer
- * @brief Opaque lexer state, owned by the scanner (defined privately).
- */
-typedef struct s_lexer	t_lexer;
 
 /**
  * @ingroup scanner
@@ -72,7 +64,7 @@ typedef struct s_scanner
 {
 	t_error			err;
 	t_scanner_mode	mode;
-	t_lexer			*lexer;
+	t_lexer			lexer;
 	const char		*source;
 	t_heredoc		heredoc;
 }	t_scanner;

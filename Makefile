@@ -1,6 +1,6 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2 # -DNDEBUG # -g3 -fsanitize=address,undefined # -fsanitize=leak # -fsanitize=memory
+CFLAGS			:= -Wall -Wextra -Werror -O2 # -g3 -fsanitize=address,undefined # -DNDEBUG # -fsanitize=leak # -fsanitize=memory
 
 LIBFT_DIR		:= libft
 LIBFT			:= $(LIBFT_DIR)/libft.a
@@ -40,7 +40,11 @@ SRCS			:= \
 	$(wildcard srcs/params/*/*.c) \
 	$(wildcard srcs/params/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*.c) \
-	$(wildcard srcs/params/*/*/*/*/*.c)
+	$(wildcard srcs/params/*/*/*/*/*.c) \
+	$(wildcard srcs/alias/*.c) \
+	$(wildcard srcs/alias/*/*.c) \
+	$(wildcard srcs/heredoc/*.c) \
+	$(wildcard srcs/heredoc/*/*.c) \
 
 INCLUDES		:= \
 	-I$(READLINE_DIR)/include \
@@ -49,27 +53,15 @@ INCLUDES		:= \
 	-Ilibft \
 	-Ilibft/buff \
 	-Ilibft/buff/format \
+	-Isrcs/0_utils/1_ft_getopt \
 	-Isrcs/1_shell \
 	-Isrcs/2_scanner \
 	-Isrcs/2_scanner/lexer \
-	-Isrcs/2_scanner/reader \
-	-Isrcs/2_scanner/lexer/rules \
-	-Isrcs/2_scanner/lexer/token \
 	-Isrcs/2_scanner/lexer/context \
+	-Isrcs/2_scanner/lexer/input_stack \
 	-Isrcs/2_scanner/lexer/operator \
-	-Isrcs/2_scanner/lexer/context/context_stack \
-	-Isrcs/2_scanner/heredoc \
-	-Isrcs/2_scanner/heredoc/here_queue \
-	-Isrcs/2_scanner/heredoc/heredoc_body \
-	-Isrcs/2_scanner/alias \
-	-Isrcs/2_scanner/alias/alias_stack \
-	-Isrcs/expander/quote_remove \
-	-Isrcs/expander/quote_remove/rules \
-	-Isrcs/expander/quote_remove/context \
-	-Isrcs/history \
-	-Isrcs/history/history_rl \
-	-Isrcs/history/history_list \
-	-Isrcs/history/history_file \
+	-Isrcs/2_scanner/lexer/rules \
+	-Isrcs/2_scanner/reader \
 	-Isrcs/3_builder/1_lr_machine \
 	-Isrcs/3_builder/1_lr_machine/1_hooks \
 	-Isrcs/3_builder/1_lr_machine/2_rules \
@@ -81,7 +73,24 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/8_goto \
 	-Isrcs/3_builder/1_lr_machine/9_action \
 	-Isrcs/3_builder/2_parser \
-	-Isrcs/3_builder/2_parser/x_stack \
+	-Isrcs/alias \
+	-Isrcs/alias/stack \
+	-Isrcs/builtins \
+	-Isrcs/expander \
+	-Isrcs/expander/field \
+	-Isrcs/expander/loader \
+	-Isrcs/expander/path_name_expansion \
+	-Isrcs/expander/quote_removal \
+	-Isrcs/expander/quote_removal/context \
+	-Isrcs/expander/substitutions \
+	-Isrcs/expander/word \
+	-Isrcs/heredoc \
+	-Isrcs/heredoc/body \
+	-Isrcs/heredoc/queue \
+	-Isrcs/history \
+	-Isrcs/history/file \
+	-Isrcs/history/list \
+	-Isrcs/history/readline \
 	-Isrcs/params/1_options \
 	-Isrcs/params/2_specials \
 	-Isrcs/params/3_positionals \
@@ -90,8 +99,7 @@ INCLUDES		:= \
 	-Isrcs/params/4_variables/load/1_envp \
 	-Isrcs/params/4_variables/load/2_mandatory \
 	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
-	-Isrcs/params/4_variables/load/3_up \
-	-Isrcs/builtins
+	-Isrcs/params/4_variables/load/3_up
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
