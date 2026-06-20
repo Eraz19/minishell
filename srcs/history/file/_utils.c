@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/07 16:02:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:20:49 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -17,8 +5,10 @@
 #include "history_.h"
 #include "history_file_.h"
 
+# include <stdio.h>
 t_error	history_file_open(t_history_file *state, int *fd, int flags)
 {
+	printf("PATH = %s\n", state->path);
 	*fd = open(state->path, flags, 0644);
 	if (*fd == -1 && errno != ENOENT)
 		return (state->err = error_sys());

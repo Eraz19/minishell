@@ -11,7 +11,6 @@ t_error	parser_invalid_syntax(void)
 	return (error_print(
 		error(ERR_INVALID_SYNTAX),
 		"Parser",
-		"invalid syntax",
 		NULL,
 		NULL));
 }

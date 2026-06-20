@@ -1,6 +1,6 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2 # -DNDEBUG # -g3 -fsanitize=address,undefined # -fsanitize=leak # -fsanitize=memory
+CFLAGS			:= -Wall -Wextra -Werror -O2 # -g3 -fsanitize=address,undefined # -DNDEBUG # -fsanitize=leak # -fsanitize=memory
 
 LIBFT_DIR		:= libft
 LIBFT			:= $(LIBFT_DIR)/libft.a

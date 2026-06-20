@@ -1,25 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/12 10:40:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 17:04:17 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include "alias_.h"
 #include "builder.h"
 #include "context.h"
 #include "alias_stack_.h"
+# include <stdio.h>	// DEBUG
 
 static bool	is_word_containing_quoting(char *word)
 {
 	size_t	i;
 
+	printf("is_word_containing_quoting() - start\n");
 	i = 0;
 	while (word[i] != '\0')
 	{
@@ -30,6 +20,7 @@ static bool	is_word_containing_quoting(char *word)
 			return (true);
 		i++;
 	}
+	printf("is_word_containing_quoting() - end\n");
 	return (false);
 }
 
@@ -37,6 +28,7 @@ static bool	is_valid_alias_name(char *word)
 {
 	size_t	i;
 
+	printf("is_valid_alias_name() - start\n");
 	i = 0;
 	while (word[i] != '\0')
 	{
@@ -50,6 +42,7 @@ static bool	is_valid_alias_name(char *word)
 			return (false);
 		i++;
 	}
+	printf("is_valid_alias_name() - end\n");
 	return (true);
 }
 
@@ -83,8 +76,7 @@ bool	is_token_alias_expandable(t_alias *state, char *word)
 		return (false);
 	else if (!state->disable_position && !builder_can_next_word_be_a_cmd_name())
 		return (false);
-	else
-		return (true);
+	return (true);
 }
 
 void	set_position_for_next_word(t_alias *state, char *expansion)

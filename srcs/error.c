@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdarg.h>
+# include <stdio.h>	// DEBUG
 
 #define SEPARATOR		": "
 
@@ -49,25 +50,64 @@ const char	*error_to_string(t_error err)
 		return ("variable not found");
 	else if (err.type == ERR_VAR_READ_ONLY)
 		return ("readonly variable");
+	else if (err.type == ERR_NULL_ARGS)
+		return ("null arguments");
+	else if (err.type == ERR_TOKEN_INIT)
+		return ("token initialization failed");
+	else if (err.type == ERR_CTX_END_NOT_FOUND)
+		return ("context end not found");
+	else if (err.type == ERR_VALUE_OUT_OF_RANGE)
+		return ("value out of range");
+	else if (err.type == ERR_LEX_INCOMPLETE)
+		return ("incomplete lexical input");
+	else if (err.type == ERR_INVALID_SYNTAX)
+		return ("invalid syntax");
+	else if (err.type == ERR_EMPTY_STACK)
+		return ("empty stack");
+	else if (err.type == ERR_VEOF)
+		return ("unexpected end of input");
+	else if (err.type == ERR_EMPTY_CONTINUATION)
+		return ("empty continuation");
+	else if (err.type == ERR_INVALID_ARGS)
+		return ("invalid arguments");
+	else if (err.type == ERR_FILE_STAT)
+		return ("file stat failed");
+	else if (err.type == ERR_OPEN_FILE)
+		return ("unable to open file");
+	else if (err.type == ERR_INCOHERENT_STATE)
+		return ("incoherent state");
+	else if (err.type == ERR_NOT_IMPLEMENTED)
+		return ("not implemented");
+	else if (err.type == ERR_HEREDOC_FILE_LIMIT)
+		return ("heredoc file limit reached");
+	else if (err.type == ERR_UNEXPECTED_EOI)
+		return ("unexpected end of input");
+	else if (err.type == ERR_NO_DELIM)
+		return ("missing delimiter");
 	return ("unknown");
 }
 
-t_error	error(t_error_type type)
+t_error	error_priv(t_error_type type, const char *caller)
 {
-	return ((t_error)
-	{
-		.type = type,
-		.saved_errno = 0
-	});
+	t_error	err;
+
+	err.type = type;
+	err.saved_errno = 0;
+
+	if (type != ERR_NO)
+		printf("===> [ERROR] from [%s()] type = %s\n", caller, error_to_string(err));
+	return (err);
 }
 
-t_error	error_sys()
+t_error	error_sys_priv(const char *caller)
 {
-	return ((t_error)
-	{
-		.type = ERR_LIBC,
-		.saved_errno = errno
-	});
+	t_error	err;
+
+	err.type = ERR_LIBC;
+	err.saved_errno = errno;
+
+	printf("===> [ERROR] from [%s()] type = ERR_LIBC (%s)\n", caller, error_to_string(err));
+	return (err);
 }
 
 static void	error_print_format(const char *fstring, va_list args)

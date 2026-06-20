@@ -54,6 +54,7 @@ t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 		err = history_load(&shell->history);
 	if (err.type == ERR_NO)
 		err = shell_load_scanner(shell);
+	heredoc_load(&shell->heredoc, option_is_active(OPT_STDIN_INPUT));
 	if (err.type == ERR_NO)
 		err = builder_load(&shell->builder);
 	if (err.type == ERR_NO)

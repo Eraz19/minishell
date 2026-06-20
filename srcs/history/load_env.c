@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:25:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 11:49:17 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/20 15:28:12 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ t_error	history_load_path_env(t_history *state)
 			return (free(path), state->err = error_sys());
 		free(path);
 	}
-	state->err = error(ERR_NO);	// TO_CHECK
-	return (state->err);
+	return (state->err = error(ERR_NO));
 }
 
 t_error	history_load_size_env(t_history *state)
@@ -52,6 +51,5 @@ t_error	history_load_size_env(t_history *state)
 		if (max >= 0 && max < 128)
 			state->rl_history.max = 128;
 	}
-	state->err = error(ERR_NO);	// TO_CHECK
-	return (state->err);
+	return (state->err = error(ERR_NO));
 }

@@ -87,20 +87,16 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	t_token	token;
 	t_error	err;
 
-	printf("Initializing token...\n");
 	token_init(&token);
-	printf("Calling scanner_next_token()...\n");
 	err = scanner_next_token(&token);
+	printf("====> scanner_next_token() returned %i\n", (int)err.type);
 	if (err.type != ERR_NO)
 		return (err);
-	printf("===> TOKEN RECEIVED!\n");
 	if (!vector_push(&parser->tokens, &token))
 	{
-		printf("!!! vector_push() failed, freeing token...\n");
 		token_free(&token);
 		return (parser_internal_error());
 	}
-	printf("Converting token to symbol...\n");
 	err = symbol_convert(&token, &parser->lookahead_symbol);
 	if (err.type != ERR_NO)
 		return (err);

@@ -43,6 +43,7 @@ t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
 	if (err.type != ERR_NO)
 		return (err);
 	err = parser_read_next_symbol(parser);
+	printf("=====> ERR = %i\n", (int)err.type);
 	while (err.type == ERR_NO)
 	{
 		state_id = parser_stack_top(&parser->stack)->lr_state_id;

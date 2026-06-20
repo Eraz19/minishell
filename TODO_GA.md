@@ -1,7 +1,28 @@
+# DEBUG HASHMAP
+
+- Hashmap jamais init
+- `hashmap_put()` resize même si `key` existe déjà => inutile
+- `bucket_replace` ne s'arrête pas
+- risque de dangling pointers when `del` is not `NULL` :
+	- double set same `key-value` pair
+	- set a unique value to multiple `keys`
+	- TODO à documenter :
+```
+If del is not NULL, each stored value pointer must have unique ownership.
+To store shared or borrowed values, initialize the map with del = NULL.
+```
+- Usage risky de `t_vector` détourné
+	- `len` set manuellement
+	- `foreach` sur `len` au lieu de cap
+	- Utiliser un vrai array plutôt ?!
+- Ownership flou dans `hashmap_put()`: "On failure the value's ownership is left in an inconsistent state..."
+
 # ALEXANDER
 
+- Please retire les headers ça fait bugger mon IDE c'est insup' on les mettra à la fin
 - Plein de headers "not used directly"
 - J'ai commenté mes modifs de fix avec `// TO_CHECK` pour que tu puisses vérifier
+- Toujours faire review le code par l'IA après avoir codé, ça spot 99 % des problèmes en vrai
 - `Makefile` : pense à le modifier quand tu changes les path des fichiers stp (idem pour `libft`)
 - `.vscode/settings.json` : idem
 - Attention au naming des fonctions :
