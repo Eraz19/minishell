@@ -56,7 +56,6 @@ static t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	if (err.type != ERR_NO)
 		return (err);
 	/*---------------------------------------*/
-	print_warn("Scanner not implemented yet             => skipping loading\n");
 	err = builder_load(&shell->builder);
 	if (err.type != ERR_NO)
 		return (err);
@@ -99,7 +98,7 @@ t_error	shell_start(int argc, char **argv, char **envp)
 	t_shell				*shell;
 	t_error				err;
 
-	// print_start(99, "shell_start()");
+	print_start(99, "shell_start()");
 	shell = malloc(sizeof(*shell));
 	if (!shell)
 		return (error_print(error_sys(), message, NULL, NULL));

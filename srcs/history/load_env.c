@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   load_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:25:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:11:43 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 11:27:26 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_error	history_load_size_env(t_history *state)
 	state->err = params_get("HISTSIZE", &max_str);
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
+	state->err = error(ERR_NO);	// TO_CHECK: il faut reset le state à ERR_NO si tu a handle l'error
 	if (state->err.type == ERR_VAR_NOT_FOUND || max_str == NULL)
 		state->rl_history.max = -1;
 	else
