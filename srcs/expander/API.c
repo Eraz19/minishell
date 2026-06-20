@@ -6,13 +6,14 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 14:29:49 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:31:48 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 17:35:40 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "quote_removal_.h"
 #include "expander_loader_.h"
+#include "field_splitting_.h"
 #include "path_name_expansion.h"
 #include "expander_substitutions.h"
 
@@ -25,18 +26,16 @@ t_error	expander_word(char ***expansion, t_token token)
 	word = buff_get_string(&token.value);
 	if (word == NULL)
 		return (expander_free(&state), state.err = error_sys());
-	state.err = expander_load(&state, word, NULL);
-	if (state.err.type)
+	if (expander_load(&state, word, NULL).type)
 		return (free(word), expander_free(&state), state.err);
 	free(word);
-	state.err = substitutions(&state);
-	if (state.err.type)
+	if (substitutions(&state).type)
 		return (expander_free(&state), state.err);
-	state.err = path_name_expansion(&state);
-	if (state.err.type)
+	if (field_splitting(&state).type)
 		return (expander_free(&state), state.err);
-	state.err = quote_removal(&state);
-	if (state.err.type)
+	if (path_name_expansion(&state).type)
+		return (expander_free(&state), state.err);
+	if (quote_removal(&state).type)
 		return (expander_free(&state), state.err);
 	state.err = expander_loader_extract(&state.fields, expansion);
 	return (expander_free(&state), state.err);

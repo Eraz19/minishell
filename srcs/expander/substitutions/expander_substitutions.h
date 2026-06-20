@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 15:38:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 14:11:08 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 17:14:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@
 # include "error.h"
 # include "libft.h"
 # include "expander_.h"
-
-typedef struct s_expander_substitutions
-{
-	size_t	i;
-	t_error	err;
-	char	*word;
-	bool	reached_EOW;
-}	t_expander_substitutions;
 
 t_error	substitutions(t_expander *state);
 

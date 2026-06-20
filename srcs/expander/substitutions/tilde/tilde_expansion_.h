@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
+/*   tilde_expansion_.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 16:56:19 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/19 18:59:18 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/20 14:42:34 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "history_list_.h"
+#ifndef TILDE_EXPANSION__H
+# define TILDE_EXPANSION__H
 
-void	history_list_clean(void *item)
+#include "expander_.h"
+
+typedef struct s_tilde_expansion
 {
-	char	*item_;
+	char	*home;
+}	t_tilde_expansion;
 
-	item_ = (char *)item;
-	if (item_ != NULL)
-		free(item_);
-}
+bool	is_tilde_expansion(t_expander *state, t_expander_word *word);
 
-void	history_list_init(t_history_list *list)
-{
-	*list = (t_history_list){0};
-	vector_init(list, sizeof(char *), 0);
-}
 
-void	history_list_free(t_history_list *list)
-{
-	vector_free(list, history_list_clean);
-	*list = (t_history_list){0};
-}
+#endif

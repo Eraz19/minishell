@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:23:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 15:34:27 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 18:53:47 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_error					expander_word_pop(t_expander_word *word,
 							t_expander_word_item *item);
 t_error					expander_word_dup(t_expander_word *dst,
 							t_expander_word *src);
+t_error					expander_word_get(t_expander_word *word,
+							size_t index, t_expander_word_item *item);
 
 #endif
 	

@@ -29,6 +29,7 @@
 		"-I${workspaceFolder}/srcs/expander/word",
 		"-I${workspaceFolder}/srcs/expander/loader",
 		"-I${workspaceFolder}/srcs/expander/substitutions",
+		"-I${workspaceFolder}/srcs/expander/field_splitting",
 		"-I${workspaceFolder}/srcs/expander/quote_removal",
 		"-I${workspaceFolder}/srcs/expander/quote_removal/rules",
 		"-I${workspaceFolder}/srcs/expander/quote_removal/context",

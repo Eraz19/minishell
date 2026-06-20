@@ -6,15 +6,13 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 15:42:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 14:11:11 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 17:33:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PATH_NAME_EXPANSION_H
 # define PATH_NAME_EXPANSION_H
 
-# include "error.h"
-# include "libft.h"
 # include "expander_.h"
 
 typedef struct s_path_name_expansion
