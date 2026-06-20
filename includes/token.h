@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:32:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 14:41:48 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 04:04:32 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef enum e_token_type
 	DGREAT,			/**< '>>' appending output redirection. */
 	DLESS,			/**< '<<' here-document. */
 	DLESSDASH,		/**< '<<-' tab-stripped here-document. */
+	IO_NUMBER,		/**< A number immediatly followed by redirection operator */
 	EOF_			/**< End of input. */
 }	t_token_type;
 

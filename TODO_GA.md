@@ -1,27 +1,27 @@
-# Alexander
+# ALEXANDER
 
-- ⚠️ `error_print()`: Garder la possibilité de donné un fstring + args ??
+- `token_type` :
+	- devraient être préfixés (`NONE` par exemple tout le monde voudrait s'en servir...)
+	- pourquoi certains suffixés avec `_` (`EOF_`, `NEWLINE_`)
+- `error_print()` calls sont bien double NULLés ?
+- ⚠️ `echo 2>out` => `2` est un `IO_NUMBER` alors que `echo 2 >out` => `2` est un argument `WORD` :
+	- => `scanner` doit conserver l'info d'adjacence ! Donc soit il classe `2` directement comme `IO_NUMBER` soit `token` contient un `bool followed_by_redirection_operator`
+- ⚠️ `parser` va copier les token pour les conserver dans l'`ast` :
+	- Quid deepcopy / ownership / lifetime des deep content
+	- Quid ownership du token content => transféré au `parser` donc c'est lui qui call `token_free()` ?
+	- Comme je stocke les token dans le parser, je rappelle `token_init()` sur un token qui a déjà été populated par `scanner_next_token()` mais pas free derrière car `vector_push()` ne deep copy pas, c'est ok de ton côté ?
+
+# PARSER
+
+
+
+# TODO
+
 - ⚠️ Vérifier que les `buff_*()`, `vector_*()` etc de `libft` ne free pas en cas d'échec (sinon `errno` undefined):
 	- 🚨 `buff_dup_n()` le fait !!
 	- 🚨 `buff/format/append()` le fait !!
 	- 🚨 `vector_dup()` le fait !!
 	- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
-
-1. Remplacer tous les `return (ERR_*)` par `return (error(ERR_*))`
-2. Remplacer tous les `ERR_*);` par `error(ERR_*));`
-3. 
-4. Remplacer tous les `t_error	error`
-5. Vérifier les `error =` / `error !`
-6. Vérifier les `error_print()` usages
-7. Vérifier que toutes les erreurs critiques (à minima `err_sys()` sont print: par exemple il manque les print dans actions et gotos !)
-
-Checks:
-- Aucun call ne modifie `errno` entre l'erreur et l'appel à `error_sys()`
-- **AUCUN** `error(ERR_LIBC)`
-- Tous les `error_print()` sont bien (double) `NULL` terminés
-
-# TODO
-
 - ⚠️ `undefined_behaviour()` should not `shell_exit()` ! (for example a `builtin` UB should only generate a builtin error, then the shell should behave as POSIX says for builtin errors!) => it should return `ERR_UNDEFINED_BEHAVIOUR`:
 	- Fixed but **NEED TO CHECK ALL EXISTING USAGES of `undefined_behaviour()`**
 

@@ -81,7 +81,6 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/8_goto \
 	-Isrcs/3_builder/1_lr_machine/9_action \
 	-Isrcs/3_builder/2_parser \
-	-Isrcs/3_builder/2_parser/x_stack \
 	-Isrcs/params/1_options \
 	-Isrcs/params/2_specials \
 	-Isrcs/params/3_positionals \

@@ -43,7 +43,6 @@
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/8_goto",
 		"-I${workspaceFolder}/srcs/3_builder/1_lr_machine/9_action",
 		"-I${workspaceFolder}/srcs/3_builder/2_parser",
-		"-I${workspaceFolder}/srcs/3_builder/2_parser/x_stack",
 		"-I${workspaceFolder}/srcs/params/1_options",
 		"-I${workspaceFolder}/srcs/params/2_specials",
 		"-I${workspaceFolder}/srcs/params/3_positionals",
@@ -54,6 +53,5 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up",
 		"-I${workspaceFolder}/srcs/builtins"
-	],
-	"explorer.sortOrder": "modified"
+	]
 }
