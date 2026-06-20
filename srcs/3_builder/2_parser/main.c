@@ -1,4 +1,5 @@
 #include "parser_priv.h"
+# include <stdio.h>	// DEBUG
 
 static t_error	parser_push_initial_state(t_parser *parser)
 {
@@ -14,7 +15,6 @@ static t_error	parser_push_initial_state(t_parser *parser)
 	return (error(ERR_NO));
 }
 
-# include <stdio.h>
 static inline t_error	parser_store_cst(t_parser *parser)
 {
 	t_stack_item	*main_item;
@@ -30,7 +30,6 @@ static inline t_error	parser_store_cst(t_parser *parser)
 	return (error(ERR_NO));
 }
 
-# include <stdio.h>
 t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
 {
 	size_t		state_id;
