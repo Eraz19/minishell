@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:00:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:34:03 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 12:01:38 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "scanner_.h"
+# include "logs.h"	// DEBUG
 
 t_error	scanner_init(t_scanner *state)
 {
@@ -37,9 +38,20 @@ void	scanner_free(t_scanner *state)
 
 t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source)
 {
+	print_title("scanner_load()");
 	state->mode = mode;
+	print_pass("mode set to %i\n", (int)mode);
+	// TO_CHECK (START)
+	state->lexer = malloc(sizeof(*state->lexer));
+	if (!state->lexer)
+		return (state->err = error_sys(), state->err);
+	lexer_init(state->lexer);
+	// TO_CHECK (END)
 	lexer_load(state->lexer, mode == SCAN_STDIN);
+	print_pass("lexer_load()\n");
 	heredoc_load(&state->heredoc, mode == SCAN_STDIN);
+	print_pass("heredoc_load()\n");
+	print_result("scanner_load()");
 	if (mode == SCAN_STRING)
 		return (state->source = source, state->err);
 	else if (mode == SCAN_FILE)

@@ -1,7 +1,7 @@
 # ALEXANDER
 
-- J'ai commenté mes modifs de fix avec `// TO_CHECK` pour que tu puisses vérifier :
-	- J'ai fix le problème dans `history_load_size_env()` : il faut clear state->err quand tu handle une error
+- Plein de headers "not used directly"
+- J'ai commenté mes modifs de fix avec `// TO_CHECK` pour que tu puisses vérifier
 - `Makefile` : pense à le modifier quand tu changes les path des fichiers stp (idem pour `libft`)
 - `.vscode/settings.json` : idem
 - Attention au naming des fonctions :

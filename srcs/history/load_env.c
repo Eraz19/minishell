@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:25:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 11:27:26 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/20 11:49:17 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_error	history_load_path_env(t_history *state)
 			return (free(path), state->err = error_sys());
 		free(path);
 	}
+	state->err = error(ERR_NO);	// TO_CHECK
 	return (state->err);
 }
 
@@ -42,7 +43,6 @@ t_error	history_load_size_env(t_history *state)
 	state->err = params_get("HISTSIZE", &max_str);
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
-	state->err = error(ERR_NO);	// TO_CHECK: il faut reset le state à ERR_NO si tu a handle l'error
 	if (state->err.type == ERR_VAR_NOT_FOUND || max_str == NULL)
 		state->rl_history.max = -1;
 	else
@@ -52,5 +52,6 @@ t_error	history_load_size_env(t_history *state)
 		if (max >= 0 && max < 128)
 			state->rl_history.max = 128;
 	}
+	state->err = error(ERR_NO);	// TO_CHECK
 	return (state->err);
 }
