@@ -6,42 +6,63 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 16:28:32 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:46:33 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:28:51 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "quote_remove_context_.h"
+#include "quote_removal_context_.h"
 
-t_error	expander_context_escape(t_quote_remove *state, t_context_args args)
+static t_error	context_escape(
+	t_expander *state,
+	t_context_args args,
+	t_expander_word_item item)
 {
-	if (state->input[state->i + 1] == '\0')
-		return (state->reached_EOW = true, quote_remove_consume(state));
-	if (!args.is_in_whitelist(state->input[state->i + 1]))
+	t_expander_word_item	escaped_item;
+
+	state->err = expander_word_pop(args.word, &escaped_item);
+	if (state->err.type)
+		return (state->err);
+	if (!args.is_in_whitelist(escaped_item.c))
 	{
-		if (quote_remove_consume(state))
+		state->err = expander_word_push(args.word_expanded, item);
+		if (state->err.type)
 			return (state->err);
 	}
-	else
-		quote_remove_advance(state, 1);
-	return (quote_remove_consume(state));
+	return (state->err = expander_word_push(args.word_expanded, escaped_item));
 }
 
-t_error	expander_context_scan(t_quote_remove *state, t_context_args args)
+static t_error	context_end(t_expander *state, t_context_args args)
 {
-	char	current_char;
+	t_expander_word_item	item;
+
+	if (args.word_expanded->len != 0)
+		return (state->err);
+	item = expander_word_item_init('\0', args.context, args.context, false);
+	return (state->err = expander_word_push(args.word_expanded, item));
+}
+
+t_error	context_scan(t_expander *state, t_context_args args)
+{
+	t_expander_word_item	item;
 
 	while (true)
 	{
-		if (state->err)
+		state->err = expander_word_pop(args.word, &item);
+		if (state->err.type)
 			return (state->err);
-		current_char = state->input[state->i];
-		if (current_char == '\0')
-			return (state->reached_EOW = true, state->err);
-		else if (args.is_end != NULL && args.is_end(current_char, NULL))
-			return (quote_remove_advance(state, 1), state->err);
-		else if (current_char == '\\' && args.is_in_whitelist != NULL)
-			expander_context_escape(state, args);
+		if (args.is_end != NULL && args.is_end(item.c, NULL))
+			return (context_end(state, args));
+		else if (item.c == '\\' && args.is_in_whitelist != NULL)
+		{
+			state->err = context_escape(state, args, item);
+			if (state->err.type)
+				return (state->err);
+		}
 		else
-			quote_remove_consume(state);
+		{
+			state->err = expander_word_push(args.word_expanded, item);
+			if (state->err.type)
+				return (state->err);
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 09:13:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 11:13:35 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:21:38 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_error	heredoc_body_load(
 	{
 		state->input = str_dup(input);
 		if (state->input == NULL)
-			return (state->err = ERR_LIBC);
+			return (state->err = error_sys());
 	}
 	return (state->err);
 }

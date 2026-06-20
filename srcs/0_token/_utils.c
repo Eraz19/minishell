@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 15:35:39 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 16:55:17 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/19 15:59:00 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 t_error	token_dup(t_token *dst, t_token *src)
 {
+	dst->type = src->type;
 	if (!buff_dup_n(&dst->value, &src->value, src->value.len))
-		return (ERR_LIBC);
-	if (!vector_dup(&dst->contexts, &src->contexts))
-		return (ERR_LIBC);
-	return (dst->type = src->type, ERR_NO);
+		return (error_sys());
+	return (context_stack_dup(&dst->contexts, &src->contexts));
 }

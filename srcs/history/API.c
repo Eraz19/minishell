@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   API.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:34:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 16:51:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/19 16:13:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ t_error	history_save_entry(void)
 	
 	state = shell_get_history();
 	if (state == NULL)
-		return (ERR_SHELL_NOT_FOUND);
+		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->current_input.len == 0)
 		return (state->err);
 	entry = buff_get_string(&state->current_input);
 	if (entry == NULL)
-		return (state->err = ERR_LIBC);
+		return (state->err = error_sys());
 	state->err = history_list_push(&state->list, entry);
-	if (state->err)
+	if (state->err.type)
 		return (free(entry), state->err);
 	buff_free(&state->current_input);
 	buff_init(&state->current_input, 0, NULL, 0);
-	if (history_rl_add(&state->rl_history, &state->list, 1))
+	if (history_rl_add(&state->rl_history, &state->list, 1).type)
 		return (state->err = state->rl_history.err);
 	return (state->err);
 }
@@ -47,7 +47,7 @@ t_error	history_append_to_entry(char *entry)
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (!buff_append(&state->current_input, entry, (long)str_len(entry)))
-		return (state->err = ERR_LIBC);
+		return (state->err = error_sys());
 	return (state->err);
 }
 
@@ -57,8 +57,8 @@ t_error	history_save(void)
 
 	state = shell_get_history();
 	if (state == NULL)
-		return (ERR_SHELL_NOT_FOUND);
-	if (history_build_file_content(state, state->file.loaded_count))
+		return (error(ERR_SHELL_NOT_FOUND));
+	if (history_build_file_content(state, state->file.loaded_count).type)
 		return (state->err);
 	return (state->err = history_file_write(&state->file));
 }

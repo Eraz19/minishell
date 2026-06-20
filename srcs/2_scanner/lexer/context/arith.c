@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 15:05:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:42:45 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
 	if (state->input->str[state->input->i] == '(')
 	{
 		(*((size_t *)nesting_depth))++;
-		if (lexer_consume(state, state->token->type, 1))
+		if (lexer_consume(state, state->token->type, 1).type)
 			return (state->err);
 	}
 	else if (state->input->str[state->input->i] == ')')
 	{
 		(*((size_t *)nesting_depth))--;
-		if (lexer_consume(state, state->token->type, 1))
+		if (lexer_consume(state, state->token->type, 1).type)
 			return (state->err);
 	}
 	else
@@ -52,7 +52,9 @@ static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_arith_rules(size_t *nesting_depth)
+static t_context_args	context_arith_rules(
+	size_t *nesting_depth,
+	t_context_stack_item *item)
 {
 	t_context_args	res;
 
@@ -60,6 +62,7 @@ static t_context_args	context_arith_rules(size_t *nesting_depth)
 	res.opening_len = 3;
 	res.closing_len = 1;
 	res.context = ARITH;
+	res.stack_item = item;
 	res.is_quoting = NULL;
 	res.escape = context_arith_escape;
 	res.unescaped_args = nesting_depth;
@@ -72,27 +75,29 @@ static t_context_args	context_arith_rules(size_t *nesting_depth)
 
 t_error	lexer_context_arith(t_lexer *state)
 {
-	size_t			start;
-	t_lexer_backup	backup;
-	size_t			nesting_depth;
+	t_context_args			args;
+	t_context_stack_item	*item;
+	t_lexer_backup			backup;
+	size_t					nesting_depth;
 
 	nesting_depth = 0;
-	start = state->token->value.len;
 	backup = lexer_backup(state);
-	if (lexer_context_scan(state, context_arith_rules(&nesting_depth)))
+	state->err = context_stack_item_init(&item, ARITH);
+	if (state->err.type)
+		return (state->err);
+	state->err = context_stack_push(&state->token->contexts, item);
+	if (state->err.type)
+		return (state->err);
+	args = context_arith_rules(&nesting_depth, item);
+	if (lexer_context_scan(state, args).type)
 		return (state->err);
 	if (state->input->str[state->input->i] != ')')
 	{
-		if (lexer_restore(state, backup))
+		if (lexer_restore(state, backup).type)
 			return (state->err);
-		return (state->err = ERR_CTX_END_NOT_FOUND, state->err);
+		return (state->err = error(ERR_CTX_END_NOT_FOUND), state->err);
 	}
-	if (lexer_consume(state, state->token->type, 1))
+	if (lexer_consume(state, state->token->type, 1).type)
 		return (state->err);
-	state->err = token_context_queue_push(
-		&state->token->contexts,
-		start,
-		state->token->value.len,
-		ARITH);
-	return (state->err);
+	return (item->end = state->token->value.len, state->err);
 }

@@ -6,10 +6,11 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:36 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 10:45:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:41:11 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "lexer_context_.h"
 
 static t_error	context_dollar_squote_escape(t_lexer *state)
@@ -32,17 +33,18 @@ static t_error	context_dollar_squote_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_dollar_squote_rules(void)
+static t_context_args	context_dollar_squote_rules(t_context_stack_item *item)
 {
 	t_context_args	res;
 
 	res.quoting = NULL;
 	res.opening_len = 2;
 	res.closing_len = 1;
-	res.is_quoting = NULL;
 	res.expansion = NULL;
-	res.unescaped_args = NULL;
+	res.stack_item = item;
+	res.is_quoting = NULL;
 	res.is_expansion = NULL;
+	res.unescaped_args = NULL;
 	res.context = DOLLAR_SQUOTE;
 	res.escape = context_dollar_squote_escape;
 	res.is_end = is_context_dollar_squote_ending;
@@ -52,5 +54,11 @@ static t_context_args	context_dollar_squote_rules(void)
 
 t_error	lexer_context_dollar_squote(t_lexer *state)
 {
-	return (lexer_context_scan(state, context_dollar_squote_rules()));
+	t_context_stack_item	*item;
+
+	state->err = context_stack_item_init(&item, DOLLAR_SQUOTE);
+	if (state->err.type)
+		return (state->err);
+	state->err = lexer_context_scan(state, context_dollar_squote_rules(item));
+	return (free(item), state->err);
 }

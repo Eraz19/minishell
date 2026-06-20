@@ -5,32 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 15:56:07 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/18 10:34:37 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/19 15:52:10 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "context.h"
+#include "expander_word_.h"
 
-t_error	context_stack_item_init(t_context_stack_item **item, t_context context)
+void		expander_word_init(t_expander_word *word)
 {
-	*item = malloc(sizeof(t_context_stack_item));
-	if (*item == NULL)
-		return (error_sys());
-	**item = (t_context_stack_item){0};
-	(*item)->context = context;
-	return (error(ERR_NO));
+	vector_init(word, sizeof(t_expander_word_item), 0);
 }
 
-void	context_stack_init(t_context_stack *stack)
+void		expander_word_free(t_expander_word *word)
 {
-	*stack = (t_context_stack){0};
-	vector_init(stack, sizeof(t_context_stack_item *), 0);
+	vector_free(word, NULL);
 }
 
-void	context_stack_free(t_context_stack *stack)
+t_expander_word_item	expander_word_item_init(
+	char c,
+	t_context quoted,
+	t_context context,
+	bool is_expand_res)
 {
-	vector_free(stack, free);
-	*stack = (t_context_stack){0};
+	t_expander_word_item	item;
+
+	item.c = c;
+	if (quoted != SQUOTE && quoted != DQUOTE && quoted != DOLLAR_SQUOTE)
+		quoted = NONE_;
+	item.quoted = quoted;
+	item.context = context;
+	item.is_expand_res = is_expand_res;
+	return (item);
 }

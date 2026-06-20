@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 20:22:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 16:53:05 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/19 16:35:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "reader_.h"
+#include "history.h"
 
 t_error	reader_heredoc(char **res)
 {
@@ -22,31 +23,34 @@ t_error	reader_heredoc(char **res)
 	char	*new_input;
 	char	*heredoc;
 
-	if (res == NULL)
-		return (ERR_NULL_ARGS);
 	err = readline_(&heredoc, "> ");
-	if (err != ERR_NO)
+	if (err.type)
 		return (err);
 	if (*res == NULL)
-		return (*res = heredoc, ERR_NO);
+		return (*res = heredoc, error(ERR_NO));
+	err = history_append_to_entry(heredoc);
+	if (err.type)
+		return (free(heredoc), err);
 	new_input = str_join(*res, heredoc);
 	if (new_input == NULL)
-		return (free(heredoc), ERR_LIBC);
-	return (free(*res), free(heredoc), *res = new_input, ERR_NO);
+		return (free(heredoc), error_sys());
+	return (free(*res), free(heredoc), *res = new_input, error(ERR_NO));
 }
 
 t_error	reader_new_input(char **res)
 {
 	t_error	err;
 
-	if (res == NULL)
-		return (ERR_NULL_ARGS);
+	history_save_entry();
 	err = readline_(res, "$ ");
-	if (err)
+	if (err.type)
 		return (err);
 	if (str_len(*res) == 1)
-		return (free(*res), *res = NULL, ERR_NO);
-	return (ERR_NO);
+		return (free(*res), *res = NULL, error(ERR_NO));
+	err = history_append_to_entry(*res);
+	if (err.type)
+		return (free(*res), err);
+	return (error(ERR_NO));
 }
 
 t_error	reader_continuation(char **res)
@@ -55,14 +59,15 @@ t_error	reader_continuation(char **res)
 	char	*new_input;
 	char	*continuation;
 
-	if (res == NULL)
-		return (error(ERR_NULL_ARGS));
 	err = readline_(&continuation, "> ");
-	if (err != ERR_NO)
+	if (err.type)
 		return (err);
+	err = history_append_to_entry(continuation);
+	if (err.type)
+		return (free(continuation), err);
 	new_input = str_join(*res, continuation);
 	if (new_input == NULL)
-		return (free(continuation), ERR_LIBC);
+		return (free(continuation), error_sys());
 	return (free(*res), free(continuation), *res = new_input, error(ERR_NO));
 }
 
@@ -71,16 +76,14 @@ t_error	reader_file_input(char **res, const char *path)
 	int		fd;
 	t_buff	buffer;
 
-	if (path == NULL)
-		return (ERR_NULL_ARGS);
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		return (ERR_OPEN_FILE);
+		return (error(ERR_OPEN_FILE));
 	buff_init(&buffer, 0, NULL, 0);
 	if (!buff_read_all(&buffer, fd))
-		return (close(fd), buff_free(&buffer), ERR_LIBC);
+		return (close(fd), buff_free(&buffer), error_sys());
 	*res = buff_get_string(&buffer);
 	if (*res == NULL)
-		return (close(fd), buff_free(&buffer), ERR_LIBC);
-	return (close(fd), buff_free(&buffer), ERR_NO);
+		return (close(fd), buff_free(&buffer), error_sys());
+	return (close(fd), buff_free(&buffer), error(ERR_NO));
 }

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:13:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 14:59:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:15:00 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,26 @@ t_error	history_entry_serialize(char **entry)
 	t_buff	serialized;
 
 	if (!buff_init(&serialized, 0, *entry, (long)str_len(*entry)))
-		return (ERR_LIBC);
+		return (error_sys());
 	i = 0;
 	while (i < serialized.len)
 	{
 		if (serialized.data[i] == '\'')
 		{
 			if (!buff_insert(&serialized, (size_t)i++, "\\", 1))
-				return (buff_free(&serialized), ERR_LIBC);
+				return (buff_free(&serialized), error_sys());
 		}
 		i++;
 	}
 	if (!buff_prepend(&serialized, "'", 1))
-		return (buff_free(&serialized), ERR_LIBC);
+		return (buff_free(&serialized), error_sys());
 	if (!buff_append(&serialized, "'", 1))
-		return (buff_free(&serialized), ERR_LIBC);
+		return (buff_free(&serialized), error_sys());
 	entry_ = buff_get_string(&serialized);
 	if (entry_ == NULL)
-		return (buff_free(&serialized), ERR_LIBC);
-	return (free(*entry), *entry = entry_, buff_free(&serialized), ERR_NO);
+		return (buff_free(&serialized), error_sys());
+	buff_free(&serialized);
+	return (free(*entry), *entry = entry_, error(ERR_NO));
 }
 
 t_error	history_build_file_content(t_history *state, size_t start)
@@ -70,16 +71,16 @@ t_error	history_build_file_content(t_history *state, size_t start)
 	while (i < state->list.len)
 	{
 		state->err = history_list_get(&state->list, &entry, i);
-		if (state->err)
+		if (state->err.type)
 			return (state->err);
 		if (!buff_append(&content, entry, (long)str_len(entry)))
-			return (free(entry), buff_free(&content), state->err = ERR_LIBC);
+			return (free(entry), buff_free(&content), state->err = error_sys());
 		free(entry);
 		entry = NULL;
 		i++;
 	}
 	state->file.content = buff_get_string(&content);
 	if (state->file.content == NULL)
-		return (buff_free(&content), state->err = ERR_LIBC);
+		return (buff_free(&content), state->err = error_sys());
 	return (buff_free(&content), state->err);
 }

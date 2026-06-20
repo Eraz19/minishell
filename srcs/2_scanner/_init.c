@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:00:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 23:58:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:34:03 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ t_error	scanner_init(t_scanner *state)
 	*state = (t_scanner){0};
 	state->lexer = malloc(sizeof(t_lexer));
 	if (state->lexer == NULL)
-		return (ERR_LIBC);
+		return (error_sys());
 	lexer_init(state->lexer);
 	heredoc_init(&state->heredoc);
-	return (ERR_NO);
+	return (error(ERR_NO));
 }
 
 void	scanner_free(t_scanner *state)

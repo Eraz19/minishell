@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 15:45:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 16:55:13 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/19 15:51:11 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void	token_init(t_token *token)
 {
 	*token = (t_token){0};
 	buff_init(&token->value, 0, NULL, 0);
-	token_context_queue_init(&token->contexts);
+	context_stack_init(&token->contexts);
 }
 
 void	token_free(t_token *token)
 {
-	token_context_queue_free(&token->contexts);
+	context_stack_free(&token->contexts);
 	buff_free(&token->value);
 	*token = (t_token){0};
 }

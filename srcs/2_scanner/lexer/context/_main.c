@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:13:58 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/10 16:50:29 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:44:05 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ t_error	lexer_context(t_lexer *state, t_context context)
 	if (context == PARAM)
 		return (lexer_context_param(state));
 	if (context == CMD_SUB)
-		return (state->err = ERR_NOT_IMPLEMENTED, true);
+		return (state->err = error(ERR_NOT_IMPLEMENTED));
 	if (context == NONE_)
-		return (state->err = ERR_INCOHERENT_STATE, true);
-	return (state->err = ERR_INCOHERENT_STATE, true);
+		return (state->err = error(ERR_INCOHERENT_STATE));
+	return (state->err = error(ERR_INCOHERENT_STATE));
 }

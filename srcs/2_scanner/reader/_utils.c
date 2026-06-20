@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 17:35:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 16:52:56 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/19 16:36:14 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_error	readline_(char **res, const char *prompt)
 	{
 		shell_exit_on_veof();
 		if (!option_is_active(OPT_INTERACTIVE))
-			return (ERR_VEOF);
+			return (error(ERR_VEOF));
 		*res = readline(prompt);
 	}
 	if (**res == '\0')
@@ -34,10 +34,10 @@ t_error	readline_(char **res, const char *prompt)
 		free(*res);
 		*res = str_dup("");
 		if (*res == NULL)
-			return (ERR_LIBC);
+			return (error_sys());
 	}
 	input = str_join(*res, "\n");
 	if (input == NULL)
-		return (free(*res), ERR_LIBC);
+		return (free(*res), error_sys());
 	return (free(*res), *res = input, error(ERR_NO));
 }

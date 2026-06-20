@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 16:02:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 16:51:25 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/19 16:20:49 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ t_error	history_file_open(t_history_file *state, int *fd, int flags)
 {
 	*fd = open(state->path, flags, 0644);
 	if (*fd == -1 && errno != ENOENT)
-		return (state->err = ERR_LIBC);
+		return (state->err = error_sys());
 	if (*fd == -1)
 	{
 		*fd = open(state->path, O_CREAT | flags, 0644);
 		if (*fd == -1)
-			return (state->err = ERR_LIBC);
+			return (state->err = error_sys());
 	}
 	return (state->err);
 }
@@ -61,10 +61,10 @@ t_error	history_file_extract(t_history_file *state, char **entry)
 	end[0] = '\0';
 	start = history_file_entry_last_unescaped_squote(state->content);
 	if (start == NULL)
-		return (state->err = ERR_INCOHERENT_STATE);
+		return (state->err = error(ERR_INCOHERENT_STATE));
 	start[0] = '\0';
 	*entry = str_sub(start, 1, (size_t)(end - start - 1));
 	if (*entry == NULL)
-		return (state->err = ERR_LIBC);
+		return (state->err = error_sys());
 	return (history_entry_deserialize(entry), state->err);
 }

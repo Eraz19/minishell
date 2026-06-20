@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 13:19:38 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/12 14:46:02 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:17:25 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,16 @@ void	history_free(t_history *state)
 
 t_error	history_load(t_history *state)
 {
-	if (history_load_path_env(state) != ERR_NO)
+	ssize_t	max;
+
+	if (history_load_path_env(state).type)
 		return (state->err);
-	if (history_load_size_env(state) != ERR_NO)
+	max = state->rl_history.max;
+	if (history_load_size_env(state).type)
 		return (state->err);
-	if (history_file_load(&state->file, &state->list, state->rl_history.max))
+	if (history_file_load(&state->file, &state->list, max).type)
 		return (state->err = state->file.err);
-	if (history_rl_load(&state->rl_history, &state->list))
+	if (history_rl_load(&state->rl_history, &state->list).type)
 		return (state->err = state->rl_history.err);
 	return (state->err);
 }

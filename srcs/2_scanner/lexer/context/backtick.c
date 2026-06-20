@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 15:05:18 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:41:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 
 static bool	is_backtick_squote_surrounded(t_lexer *state)
 {
-	t_context	*ctx;
-	t_context	surrounding_ctx;
-
-    if (state->input->context.len < 2)
+	t_context_stack_item	*item;
+	
+	if (state->input->context.len < 2)
+		return (false);
+	state->err = context_stack_get(
+		&state->input->context,
+		&item,
+		state->input->context.len - 2);
+    if (state->err.type)
         return (false);
-    ctx = (t_context *)state->input->context.data;
-	surrounding_ctx = ctx[state->input->context.len - 2];
-    return (surrounding_ctx == DQUOTE || surrounding_ctx == ARITH);
+    return (item->context == DQUOTE || item->context == ARITH);
 }
 
 static t_error	context_backtick_escape(t_lexer *state)
@@ -45,12 +48,13 @@ static t_error	context_backtick_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_backtick_rules(void)
+static t_context_args	context_backtick_rules(t_context_stack_item *item)
 {
 	t_context_args	res;
 
 	res.opening_len = 1;
 	res.closing_len = 1;
+	res.stack_item = item;
 	res.context = BACKTICK;
 	res.unescaped_args = NULL;
 	res.quoting = lexer_rule_quoting;
@@ -65,15 +69,13 @@ static t_context_args	context_backtick_rules(void)
 
 t_error	lexer_context_backtick(t_lexer *state)
 {
-	size_t	start;
+	t_context_stack_item	*item;
 
-	start = state->token->value.len;
-	if (lexer_context_scan(state, context_backtick_rules()))
+	state->err = context_stack_item_init(&item, BACKTICK);
+	if (state->err.type)
 		return (state->err);
-	state->err = token_context_queue_push(
-		&state->token->contexts,
-		start,
-		state->token->value.len,
-		BACKTICK);
-	return (state->err);
+	state->err = context_stack_push(&state->token->contexts, item);
+	if (state->err.type)
+		return (state->err);
+	return (lexer_context_scan(state, context_backtick_rules(item)));
 }

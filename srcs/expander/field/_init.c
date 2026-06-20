@@ -5,19 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/16 14:18:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 14:41:14 by adouieb          ###   ########.fr       */
+/*   Created: 2026/06/18 10:32:04 by adouieb           #+#    #+#             */
+/*   Updated: 2026/06/18 13:35:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "token.h"
+#include "expander_field_.h"
 
-void	token_context_queue_init(t_token_context_queue *queue)
+void	expander_fields_init(t_expander_fields *fields)
 {
-	vector_init(queue, sizeof(t_token_context_queue_item), 0);
+	vector_init(fields, sizeof(t_expander_word), 0);
 }
 
-void	token_context_queue_free(t_token_context_queue *queue)
+void	expander_fields_free(t_expander_fields *fields)
 {
-	vector_free(queue, NULL);
+	vector_free(fields, (void (*)(void *))expander_word_free);
 }
