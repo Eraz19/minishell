@@ -16,33 +16,33 @@ t_error	params_unset_variable(const char *name)
 
 t_error	params_set_last_bg_pid(pid_t value)
 {
-	t_shell		*shell;
+	t_params	*params;
 
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	specials_set_last_bg_pid(&shell->params.specials, value);
+	specials_set_last_bg_pid(&params->specials, value);
 	return (error(ERR_NO));
 }
 
 t_error	params_set_last_status(int value)
 {
-	t_shell		*shell;
+	t_params	*params;
 
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	specials_set_last_status(&shell->params.specials, value);
+	specials_set_last_status(&params->specials, value);
 	return (error(ERR_NO));
 }
 
 t_error	params_set_option(t_option option, bool on)
 {
-	t_shell		*shell;
+	t_params	*params;
 
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	option_set(&shell->params.options, option, on);
+	option_set(&params->options, option, on);
 	return (error(ERR_NO));
 }

@@ -1,10 +1,19 @@
 # WIP
 
-- `parser_can_next_token_be_a_cmd_name_or_word()`
+- `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
+	- Changer signature 😫
+- `error.already_printed` => print before exit if `false`
+- stoper la main loop si `TOKEN_EOF` et ≠stdin
+- CST
 
 ---
 
 # ALEXANDER
+
+## NEW
+- `shell_exit_on_veof()`:
+	- Même problème que celui qu'avait `shell_exit()`
+	- Plutôt retourner `ERR_VEOF` => elle remontera jusqu'au `driver` qui décidera de stopper ou non la boucle de lecture
 
 ## BUGS
 - `history`:
@@ -12,56 +21,19 @@
 	- `history_load()`: Pas d'historique avec flèche du haut quand on vient de lancer le shell
 	- L'historique apparaît quoted
 	- Le `newline` apparait dans l'input (il ne devrait pas être stocké dans l'historique)
-- `scanner_get_next_token()`:
-	- Renvoie `TOKEN_NONE` au lieu de `TOKEN_EOF` ? (nécessaire pour reduce le programme + distinguer d'une error)
-	- Ne renvoie pas d'erreur lorsque la cmd_string / le fichier d'input est déjà consommée !
-	- Modifier la doc pour enlever l'obligation d'init le token côté caller
 - `heredoc`:
-	- Ne lit pas le here document après le `newline` malgré le trigger de `scanner_report_io_here()`
-	- (actuellement je reçois le contenu et le delimiter dans les `token`)
-	- Le flow correct doit être :
-	1. Le `parser` trigger le `scanner` lorsqu'il reduce un `io_here` (via `scanner_report_io_here()`)
-	2. Le `scanner` trigger le module `heredoc` qui créé un fichier temporaire et renvoie son path au `scanner` qui le renvoie au `parser`
-	3. Lorsque le `scanner` renvoie le prochain `NEWLINE`: il set `should_parse_heredoc = true`.
-	4. Au `scanner_get_next_token()` suivant: `should_parse_heredoc == true` donc `scanner` trigger `heredoc_read()`.
-	5. le `heredoc` parse + stocke **les** heredoc bodys dans les fichiers temporaires correspondants.
-	6. Le `scanner` remet `should_parse_heredoc = false`.
-	7. Le `scanner` skip les tokens consommés par `heredoc`.
-	8. Le `scanner` renvoie le prochain `token` au `parser` (`EOF` si c'est la fin de l'input).
+	- Ne lit pas le here document malgré `scanner_report_io_here()` + `scanner_heredoc_read()`
 
 ## AJOUTS DONT J'AI BESOIN
-- `token_contains_unquoted_equal()`:
+- `token->assign_operand_offset` (-1 si inexistant):
 	> If the TOKEN contains an unquoted (as determined while applying rule 4 from 2.3 Token Recognition) <equals-sign> character that is not part of an embedded parameter expansion, command substitution, or arithmetic expansion construct (as determined while applying rule 5 from 2.3 Token Recognition)
-	- `token->assign_operand_offset` (-1 si inexistant)
 - `scanner_reset()`:
 	- Pour refresh après une syntax error (ou autre error...?)
 	- `free()` les items mais pas les arrays pour éviter de re `malloc()` après
-- `IO_NUMBER` et `IO_LOCATION`:
-	- Décrits dans `Grammar Lexical Conventions` + `The rules for token recognition in 2.3 Token Recognition shall apply`
-	- Donc clairement responsabilité du `lexer` selon moi
-	- `IO_NUMBER` : Solely digits and the delimiter character is '<' or '>'
-	- `IO_LOCATION` : At least three characters, begins with '{' and ends '}', and the delimiter character is '<' or '>'
-	- Nécessaire pour distinguer `echo 2>out` de `echo 2 >out`
-
-## UPDATE QUE J'AI FAIT DANS MON CODE
-- `t_error	builder_can_next_word_be_a_cmd_name(bool *dst)`:
-	- La signature a changé pour return un `t_error`
-	- Il faut donc désormais gérer la possible erreur `ERR_SHELL_NOT_FOUND` dans `is_token_alias_expandable()`
-	- Ou j'exit le shell dans ce cas là ?
-	- ⚠️ **TODO**: remove `shell_exit()` because it could let somme allocations inside pending functions => just return error
-- `make debug`:
-	- compile avec les flags de sanitizing + debug au lieu des flags d'opti
 
 ## DOUTES
 - `error_print()`:
 	- Vérifier que tous les call sont bien doublement `NULL` terminés
-
-## VALIDÉ
-- `parser` own les `token` (et leur `value`) reçus via `scanner_get_next_token()`
-- `\n` à la fin de chaque input du `reader`
-- `scanner_report_io_here()`:
-	- J'envoie le delimiter brut (donc pas unquoted) pour que tu saches si le body doit être expandu on est d'accord ?
-	- Tu le copies donc je free de mon côté ? (pas très opti donc on pourrait juste documenter l'ownership plutôt ?)
 
 ---
 
@@ -78,7 +50,6 @@
 	- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
 - `undefined_behaviour()`:
 	- N'exit plus le shell => Vérifier que tous les callers prennent ça en compte
-- `undefined_behaviour()`:
 	- print la tête à Xavier
 
 ---

@@ -5,7 +5,7 @@
 
 void	shell_init(t_shell *shell);
 t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp);
+t_error	shell_exec_env(void);
 void	shell_set(t_shell *addr);
-void	shell_free(t_shell **shell);
 
 #endif

@@ -17,8 +17,10 @@ t_error	builder_load(t_builder *builder)
 	err = lr_machine_build_tables(&builder->lr_machine);
 	if (err.type != ERR_NO)
 		return (err);
-	return (
-		parser_build_qualifiers_table(&builder->parser, &builder->lr_machine));
+	// TODO: converter_load(&builder->converter);
+	return (parser_build_qualifiers_table(
+		&builder->parser,
+		&builder->lr_machine));
 }
 
 t_error	builder_get_ast(t_ast_node **dst_ast)
@@ -33,8 +35,7 @@ t_error	builder_get_ast(t_ast_node **dst_ast)
 	if (err.type != ERR_NO)
 		return (err);
 	*dst_ast = NULL;
-	// shell_exit(error(ERR_NO));
-	// TODO: converter_convert(builder->parser->cst, dst_ast)
+	// TODO: converter_convert(builder->parser->cst, dst_ast);
 	return (error(ERR_NO));
 }
 
@@ -45,6 +46,7 @@ t_error	builder_reset(void)
 	builder = shell_get_builder();
 	if (!builder)
 		return (error(ERR_SHELL_NOT_FOUND));
+	// TODO: converter_reset(&builder->converter);
 	return (parser_reset(&builder->parser));
 }
 

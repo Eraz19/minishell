@@ -10,14 +10,12 @@ static bool	params_is_special(char name)
 
 t_error	params_get(const char *name, char **dst)
 {
-	t_shell		*shell;
 	t_params	*params;
 
 	*dst = NULL;
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	params = &shell->params;
 	if (name[0] == '\0')
 		return (error(ERR_NO));
 	if (name[0] == '-' && name[1] == '\0')
@@ -33,20 +31,20 @@ t_error	params_get(const char *name, char **dst)
 
 t_error	params_get_positionals(t_positionals *dst)
 {
-	t_shell		*shell;
+	t_params	*params;
 
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	return (positionals_get(&shell->params.positionals, dst));
+	return (positionals_get(&params->positionals, dst));
 }
 
 t_error	params_build_envp(char ***dst_envp)
 {
-	t_shell	*shell;
+	t_params	*params;
 
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	return (var_build_envp(&shell->params.variables, dst_envp));
+	return (var_build_envp(&params->variables, dst_envp));
 }

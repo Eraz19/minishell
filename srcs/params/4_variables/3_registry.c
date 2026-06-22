@@ -43,7 +43,7 @@ static t_error	var_update_value(
 
 t_error	var_set(const char *name, const char *value, bool export, bool readonly)
 {
-	t_shell		*shell;
+	t_params	*params;
 	t_var_list	*list;
 	size_t		var_index;
 	t_var		*current_var;
@@ -51,10 +51,10 @@ t_error	var_set(const char *name, const char *value, bool export, bool readonly)
 
 	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	list = &shell->params.variables;
+	list = &params->variables;
 	if (var_find(list, name, &var_index))
 	{
 		current_var = &((t_var *)list->data)[var_index];
@@ -72,16 +72,16 @@ t_error	var_set(const char *name, const char *value, bool export, bool readonly)
 
 t_error	var_get(const char *name, char **dst_val)
 {
-	t_shell		*shell;
+	t_params	*params;
 	t_var_list	*list;
 	size_t		var_index;
 	t_var		*var;
 	char		*res;
 
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	list = &shell->params.variables;
+	list = &params->variables;
 	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	if (!var_find(list, name, &var_index))
@@ -100,17 +100,17 @@ t_error	var_get(const char *name, char **dst_val)
 
 t_error	var_unset(const char *name)
 {
-	t_shell		*shell;
+	t_params	*params;
 	t_var_list	*list;
 	size_t		var_index;
 	t_var		*var;
 
 	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	list = &shell->params.variables;
+	list = &params->variables;
 	if (!var_find(list, name, &var_index))
 		return (error(ERR_NO));
 	var = &((t_var *)list->data)[var_index];

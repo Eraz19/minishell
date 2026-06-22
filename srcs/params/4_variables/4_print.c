@@ -36,16 +36,16 @@ static t_error	var_print_one(const char *prefix, const t_var *var)
 
 t_error	var_print(t_var_print_mode mode)
 {
-	t_shell		*shell;
+	t_params	*params;
 	t_var_list	*list;
 	t_var		*var;
 	size_t		i;
 	t_error		err;
 
-	shell = shell_get();
-	if (!shell)
+	params = shell_get_params();
+	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	list = &shell->params.variables;
+	list = &params->variables;
 	i = 0;
 	err = error(ERR_NO);
 	while (i < list->len)

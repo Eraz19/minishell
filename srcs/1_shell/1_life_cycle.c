@@ -1,7 +1,6 @@
 #include "shell_priv.h"
 #include "options.h"
 #include <stdlib.h>
-# include "logs.h"
 
 void	shell_init(t_shell *shell)
 {
@@ -14,30 +13,22 @@ void	shell_init(t_shell *shell)
 	runner_init(&shell->runner);
 }
 
-void	shell_free(t_shell **shell)
-{
-	params_free(&(*shell)->params);
-	scanner_free(&(*shell)->scanner);
-	alias_free(&(*shell)->alias);
-	heredoc_free(&(*shell)->heredoc);
-	history_free(&(*shell)->history);
-	builder_free(&(*shell)->builder);
-	runner_free(&(*shell)->runner);
-	free(*shell);
-	*shell = NULL;
-	shell_set(NULL);
-}
-
-void	shell_exit(t_error error)
+void	shell_free(void)
 {
 	t_shell	*shell;
 
-	(void)history_save();	// TODO: print error
 	shell = shell_get();
-	if (shell)
-		shell_free(&shell);
-	print_stop();
-	exit((int)error.type);
+	if (!shell)
+		return ;
+	params_free(&shell->params);
+	scanner_free(&shell->scanner);
+	alias_free(&shell->alias);
+	heredoc_free(&shell->heredoc);
+	history_free(&shell->history);
+	builder_free(&shell->builder);
+	runner_free(&shell->runner);
+	free(shell);
+	shell_set(NULL);
 }
 
 void	shell_exit_on_veof(void)
@@ -46,5 +37,5 @@ void	shell_exit_on_veof(void)
 		return ;
 	if (option_is_active(OPT_IGNOREEOF))
 		return ;
-	shell_exit(error(ERR_NO));
+	exit(EXIT_SUCCESS);	// TODO: trouver une autre solution car on risque de leak
 }
