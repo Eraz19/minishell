@@ -8,7 +8,7 @@ static t_context_args	context_squote_rules(
 	t_context_args	args;
 	
 	args.word = word;
-	args.context = SQUOTE;
+	args.context = CONTEXT_SQUOTE;
 	args.is_in_whitelist = NULL;
 	args.word_expanded = word_expanded;
 	args.is_end = is_context_squote_ending;

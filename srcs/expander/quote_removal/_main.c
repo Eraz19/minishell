@@ -9,11 +9,11 @@ t_error	quote_removal_quoted(
 {
 	t_expander_word_item	item;
 
-	if (context == SQUOTE)
+	if (context == CONTEXT_SQUOTE)
 		context_squote(state, word, word_expanded);
-	else if (context == DQUOTE)
+	else if (context == CONTEXT_DQUOTE)
 		context_dquote(state, word, word_expanded);
-	else if (context == DOLLAR_SQUOTE)
+	else if (context == CONTEXT_DOLLAR_SQUOTE)
 	{
 		state->err = expander_word_pop(word, &item);
 		if (state->err.type)
@@ -35,7 +35,7 @@ t_error	quote_remove_char(
 		return (state->err);
 	if (item.opt.is_expand_res)
 		state->err = expander_word_push(word_exp, item);
-	else if (item.opt.quoted == NONE_)
+	else if (item.opt.quoted == CONTEXT_NONE)
 	{
 		if (item.c != '\\')
 			state->err = expander_word_push(word_exp, item);

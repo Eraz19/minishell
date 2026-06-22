@@ -41,7 +41,7 @@ t_error	expander_loader_quoted(t_expander_loader *state)
 {
 	char	current;
 
-	if (state->quoting != DOLLAR_SQUOTE)
+	if (state->quoting != CONTEXT_DOLLAR_SQUOTE)
 		expander_loader_consume(state, 1);
 	else
 		expander_loader_consume(state, 2);

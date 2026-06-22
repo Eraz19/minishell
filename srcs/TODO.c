@@ -7,9 +7,3 @@ t_error	path_name_expansion(t_expander *state)
 	(void)state;
 	return (error(ERR_NO));
 }
-
-t_error	substitutions(t_expander *state)
-{
-	(void)state;
-	return (error(ERR_NO));
-}

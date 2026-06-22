@@ -63,6 +63,7 @@ t_error	reader_file_input(char **res, const char *path)
 {
 	int		fd;
 	t_buff	buffer;
+	char	*content;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
@@ -70,8 +71,11 @@ t_error	reader_file_input(char **res, const char *path)
 	buff_init(&buffer, 0, NULL, 0);
 	if (!buff_read_all(&buffer, fd))
 		return (close(fd), buff_free(&buffer), error_sys());
-	*res = buff_get_string(&buffer);
-	if (*res == NULL)
+	content = buff_get_string(&buffer);
+	if (content == NULL)
 		return (close(fd), buff_free(&buffer), error_sys());
-	return (close(fd), buff_free(&buffer), error(ERR_NO));
+	*res = str_join(content, "\n");
+	if (*res == NULL)
+		return (close(fd), buff_free(&buffer), free(content), error_sys());
+	return (close(fd), buff_free(&buffer), free(content), error(ERR_NO));
 }

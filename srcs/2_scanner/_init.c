@@ -23,3 +23,10 @@ t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source)
 		return (state->source = source, state->err);
 	return (state->err);
 }
+
+t_error	scanner_reset(t_scanner *state)
+{
+
+	//IMPLEMENT: reset the scanner state
+	return (state->err);
+}

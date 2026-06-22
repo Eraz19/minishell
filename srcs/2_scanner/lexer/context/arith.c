@@ -49,9 +49,9 @@ static t_context_args	context_arith_rules(
 	res.quoting = NULL;
 	res.opening_len = 3;
 	res.closing_len = 1;
-	res.context = ARITH;
 	res.stack_item = item;
 	res.is_quoting = NULL;
+	res.context = CONTEXT_ARITH;
 	res.escape = context_arith_escape;
 	res.unescaped_args = nesting_depth;
 	res.is_end = is_context_arith_ending;
@@ -70,7 +70,7 @@ t_error	lexer_context_arith(t_lexer *state)
 
 	nesting_depth = 0;
 	backup = lexer_backup(state);
-	state->err = context_parser_stack_item_init(&item, ARITH);
+	state->err = context_parser_stack_item_init(&item, CONTEXT_ARITH);
 	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);

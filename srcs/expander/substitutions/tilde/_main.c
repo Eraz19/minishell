@@ -27,7 +27,7 @@ t_error	tilde_extract_username(t_expander *state, char **username)
 			break ;
 		else if (state->role == EXPANDER_ASSIGNMENT && item.c == ':')
 			break ;
-		else if (item.opt.quoted != NONE_)
+		else if (item.opt.quoted != CONTEXT_NONE)
 			return (*username = NULL, state->err);
 		i++;
 	}

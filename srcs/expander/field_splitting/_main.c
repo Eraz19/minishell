@@ -2,5 +2,5 @@
 
 t_error	field_splitting(t_expander *state)
 {
-	
+	return (state->err);
 }

@@ -14,7 +14,7 @@ static t_error	context_top_level_escape(t_lexer *state)
 
 bool	is_in_middle_of_word(t_lexer *state)
 {
-	return (state->token->type == TOKEN);
+	return (state->token->type == TOKEN_TOKEN);
 }
 
 t_error	lexer_rule_in_middle_of_word(t_lexer *state)  // Rule 8
@@ -22,7 +22,7 @@ t_error	lexer_rule_in_middle_of_word(t_lexer *state)  // Rule 8
 	if (state->input->str[state->input->i] == '\\')
 		return (context_top_level_escape(state));
 	else
-		return (lexer_consume(state, TOKEN, 1));
+		return (lexer_consume(state, TOKEN_TOKEN, 1));
 }
 
 t_error	lexer_rule_new_word(t_lexer *state) // Rule 10
@@ -30,5 +30,5 @@ t_error	lexer_rule_new_word(t_lexer *state) // Rule 10
 	if (state->input->str[state->input->i] == '\\')
 		return (context_top_level_escape(state));
 	else
-		return (lexer_consume(state, TOKEN, 1));
+		return (lexer_consume(state, TOKEN_TOKEN, 1));
 }

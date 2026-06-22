@@ -40,10 +40,10 @@ t_error	lexer_rule_in_middle_of_operator(t_lexer *state) // Rule 2-3
 
 t_error	lexer_rule_new_operator(t_lexer *state) // Rule 6
 {
-	if (state->token->type != NONE)
+	if (state->token->type != TOKEN_NONE)
 	{
 		if (is_token_io_number(state))
-			state->token->type = IO_NUMBER;
+			state->token->type = TOKEN_IO_NUMBER;
 		if (state->err.type)
 			return (state->err);
 		else

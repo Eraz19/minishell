@@ -33,7 +33,7 @@ static t_context_args	context_dollar_squote_rules(t_context_parser_stack_item *i
 	res.is_quoting = NULL;
 	res.is_expansion = NULL;
 	res.unescaped_args = NULL;
-	res.context = DOLLAR_SQUOTE;
+	res.context = CONTEXT_DOLLAR_SQUOTE;
 	res.escape = context_dollar_squote_escape;
 	res.is_end = is_context_dollar_squote_ending;
 	res.unescaped = context_dollar_squote_unescape;
@@ -44,7 +44,7 @@ t_error	lexer_context_dollar_squote(t_lexer *state)
 {
 	t_context_parser_stack_item	*item;
 
-	state->err = context_parser_stack_item_init(&item, DOLLAR_SQUOTE);
+	state->err = context_parser_stack_item_init(&item, CONTEXT_DOLLAR_SQUOTE);
 	if (state->err.type)
 		return (state->err);
 	state->err = lexer_context_scan(state, context_dollar_squote_rules(item));

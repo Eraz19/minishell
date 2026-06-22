@@ -43,18 +43,16 @@ typedef struct s_lexer_backup
  *                        continuation and here-document body reads.
  * @var s_lexer::input_stack Stack of inputs; alias expansions and line
  *                           continuations are pushed on top of the base input.
- * @var s_lexer::reached_EOI Set when end-of-input was reached with no token.
  * @var s_lexer::emited_token Set when a complete token has been delimited.
  */
 typedef struct s_lexer
 {
-	t_error				err;
+	t_error						err;
 	t_input_parser_stack_item	*input;
-	t_token				*token;
-	bool				is_stdin;
-	t_input_stack		input_stack;
-	bool				reached_EOI;
-	bool				emited_token;
+	t_token						*token;
+	bool						is_stdin;
+	t_input_stack				input_stack;
+	bool						emited_token;
 }	t_lexer;
 
 /**

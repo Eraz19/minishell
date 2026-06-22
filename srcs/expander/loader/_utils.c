@@ -9,7 +9,7 @@ bool	is_char_escaped(t_expander_loader *state)
 
 	current_char = state->word[state->i];
 	next_char = state->word[state->i + 1];
-	if (state->quoting != NONE_)
+	if (state->quoting != CONTEXT_NONE)
 		is_in_whitelist = is_in_quoting_whitelist(next_char, state->quoting);
 	else
 		is_in_whitelist = is_in_expansion_whitelist(next_char, state->quoting);
@@ -76,7 +76,7 @@ t_error	expander_loader_consume(t_expander_loader *state, size_t count)
 	i = 0;
 	quoting = state->quoting;
 	if (state->context_item == NULL)
-		current = NONE_;
+		current = CONTEXT_NONE;
 	else
 		current = state->context_item->context;
 	while (i < count)

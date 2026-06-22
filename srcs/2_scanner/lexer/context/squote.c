@@ -28,7 +28,7 @@ static t_context_args	context_squote_rules(t_context_parser_stack_item *item)
 	res.quoting = NULL;
 	res.opening_len = 1;
 	res.closing_len = 1;
-	res.context = SQUOTE;
+	res.context = CONTEXT_SQUOTE;
 	res.expansion = NULL;
 	res.stack_item = item;
 	res.is_quoting = NULL;
@@ -44,7 +44,7 @@ t_error	lexer_context_squote(t_lexer *state)
 {
 	t_context_parser_stack_item	*item;
 
-	state->err = context_parser_stack_item_init(&item, SQUOTE);
+	state->err = context_parser_stack_item_init(&item, CONTEXT_SQUOTE);
 	if (state->err.type)
 		return (state->err);
 	state->err = lexer_context_scan(state, context_squote_rules(item));

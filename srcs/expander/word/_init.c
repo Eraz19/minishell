@@ -19,8 +19,10 @@ t_expander_word_item	expander_word_item_init(
 	t_expander_word_item	item;
 
 	item.c = c;
-	if (quoted != SQUOTE && quoted != DQUOTE && quoted != DOLLAR_SQUOTE)
-		quoted = NONE_;
+	if (quoted != CONTEXT_SQUOTE 
+		&& quoted != CONTEXT_DQUOTE
+		&& quoted != CONTEXT_DOLLAR_SQUOTE)
+		quoted = CONTEXT_NONE;
 	item.opt.quoted = quoted;
 	item.opt.context = context;
 	item.opt.is_expand_res = is_expand_res;

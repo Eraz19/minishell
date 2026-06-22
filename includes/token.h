@@ -25,30 +25,30 @@
  */
 typedef enum e_token_type
 {
-	NONE,			/**< Unset / placeholder type. */
-	TOKEN,			/**< A word token (command name, argument, ...). */
-	NEWLINE_,		/**< A newline. */
-	SCOLON,			/**< ';' command separator. */
-	AMPERSAND,		/**< '&' background / async operator. */
-	DSEMI,			/**< ';;' case-list terminator. */
-	SEMI_AND,		/**< ';&' case fall-through terminator. */
-	AND_IF,			/**< '&&' logical AND. */
-	OR_IF,			/**< '||' logical OR. */
-	PIPE,			/**< '|' pipe. */
-	LPARENTHESIS,	/**< '(' subshell open. */
-	RPARENTHESIS,	/**< ')' subshell close. */
-	LESSAND,		/**< '<&' duplicate input descriptor. */
-	GREATAND,		/**< '>&' duplicate output descriptor. */
-	LESS,			/**< '<' input redirection. */
-	GREAT,			/**< '>' output redirection. */
-	CLOBBER,		/**< '>|' forced output redirection. */
-	LESSGREAT,		/**< '<>' open for reading and writing. */
-	DGREAT,			/**< '>>' appending output redirection. */
-	DLESS,			/**< '<<' here-document. */
-	DLESSDASH,		/**< '<<-' tab-stripped here-document. */
-	IO_NUMBER,		/**< Solely digits and the delimiter character is '<' or '>' */
-	IO_LOCATION,	/**< At least three characters, begins with '{' and ends '}', and the delimiter character is '<' or '>' */
-	EOF_			/**< End of input. */
+	TOKEN_NONE,			/**< Unset / placeholder type. */
+	TOKEN_TOKEN,		/**< A word token (command name, argument, ...). */
+	TOKEN_NEWLINE,		/**< A newline. */
+	TOKEN_SCOLON,		/**< ';' command separator. */
+	TOKEN_AMPERSAND,	/**< '&' background / async operator. */
+	TOKEN_DSEMI,		/**< ';;' case-list terminator. */
+	TOKEN_SEMI_AND,		/**< ';&' case fall-through terminator. */
+	TOKEN_AND_IF,		/**< '&&' logical AND. */
+	TOKEN_OR_IF,		/**< '||' logical OR. */
+	TOKEN_PIPE,			/**< '|' pipe. */
+	TOKEN_LPARENTHESIS,	/**< '(' subshell open. */
+	TOKEN_RPARENTHESIS,	/**< ')' subshell close. */
+	TOKEN_LESSAND,		/**< '<&' duplicate input descriptor. */
+	TOKEN_GREATAND,		/**< '>&' duplicate output descriptor. */
+	TOKEN_LESS,			/**< '<' input redirection. */
+	TOKEN_GREAT,		/**< '>' output redirection. */
+	TOKEN_CLOBBER,		/**< '>|' forced output redirection. */
+	TOKEN_LESSGREAT,	/**< '<>' open for reading and writing. */
+	TOKEN_DGREAT,		/**< '>>' appending output redirection. */
+	TOKEN_DLESS,		/**< '<<' here-document. */
+	TOKEN_DLESSDASH,	/**< '<<-' tab-stripped here-document. */
+	TOKEN_IO_NUMBER,	/**< Solely digits and the delimiter character is '<' or '>' */
+	TOKEN_IO_LOCATION,	/**< At least three characters, begins with '{' and ends '}', and the delimiter character is '<' or '>' */
+	TOKEN_EOF			/**< End of input. */
 }	t_token_type;
 
 /**

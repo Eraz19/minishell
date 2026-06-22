@@ -2,5 +2,5 @@
 
 t_error	substitutions(t_expander *state)
 {
-
+	return (state->err);
 }

@@ -2,7 +2,7 @@
 
 bool	is_operator_char_semicolon(t_lexer *state)
 {
-	if (state->token->type == SCOLON)
+	if (state->token->type == TOKEN_SCOLON)
 		return (true);
 	else if (!is_in_middle_of_operator(state))
 		return (true);
@@ -11,9 +11,9 @@ bool	is_operator_char_semicolon(t_lexer *state)
 
 t_error	operator_add_semicolon(t_lexer *state)
 {
-	if (state->token->type == SCOLON)
-		return (lexer_consume(state, DSEMI, 1));
-	else if (state->token->type == NONE)
-		return (lexer_consume(state, SCOLON, 1));
+	if (state->token->type == TOKEN_SCOLON)
+		return (lexer_consume(state, TOKEN_DSEMI, 1));
+	else if (state->token->type == TOKEN_NONE)
+		return (lexer_consume(state, TOKEN_SCOLON, 1));
 	return (state->err = error(ERR_INCOHERENT_STATE));
 }

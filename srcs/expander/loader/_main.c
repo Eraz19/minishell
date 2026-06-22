@@ -3,7 +3,7 @@
 
 t_error	expander_loader_build(t_expander_loader *state)
 {
-	state->quoting = NONE_;
+	state->quoting = CONTEXT_NONE;
 	if (is_substitution_start(state))
 		expander_loader_substitution(state);
 	else if (is_char_escaped(state))
