@@ -85,11 +85,13 @@ INCLUDES		:= \
 	-Isrcs/builtins \
 	-Isrcs/expander \
 	-Isrcs/expander/field \
+	-Isrcs/expander/field_splitting \
 	-Isrcs/expander/loader \
 	-Isrcs/expander/path_name_expansion \
 	-Isrcs/expander/quote_removal \
 	-Isrcs/expander/quote_removal/context \
 	-Isrcs/expander/substitutions \
+	-Isrcs/expander/substitutions/tilde \
 	-Isrcs/expander/word \
 	-Isrcs/heredoc \
 	-Isrcs/heredoc/body \

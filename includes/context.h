@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   context.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/05 17:01:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef CONTEXT_H
 # define CONTEXT_H
 
@@ -40,14 +28,14 @@
  */
 typedef enum e_context
 {
-	NONE_,			/**< Top level, outside any quoting or expansion. */
-	SQUOTE,			/**< Single quotes: '...'. */
-	DQUOTE,			/**< Double quotes: "...". */
-	DOLLAR_SQUOTE,	/**< ANSI-C quoting: $'...'. */
-	BACKTICK,		/**< Backquote command substitution: `...`. */
-	CMD_SUB,		/**< Command substitution: $(...). */
-	ARITH,			/**< Arithmetic expansion: $((...)). */
-	PARAM,			/**< Parameter expansion: ${...}. */
+	CONTEXT_NONE,			/**< Top level, outside any quoting or expansion. */
+	CONTEXT_SQUOTE,			/**< Single quotes: '...'. */
+	CONTEXT_DQUOTE,			/**< Double quotes: "...". */
+	CONTEXT_DOLLAR_SQUOTE,	/**< ANSI-C quoting: $'...'. */
+	CONTEXT_BACKTICK,		/**< Backquote command substitution: `...`. */
+	CONTEXT_CMD_SUB,		/**< Command substitution: $(...). */
+	CONTEXT_ARITH,			/**< Arithmetic expansion: $((...)). */
+	CONTEXT_PARAM,			/**< Parameter expansion: ${...}. */
 }	t_context;
 
 /**

@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 16:13:00 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:23:46 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdlib.h>
 #include "heredoc_queue_.h"
 
 t_error	heredoc_queue_push(t_heredoc_queue *queue, t_heredoc_queue_item item)

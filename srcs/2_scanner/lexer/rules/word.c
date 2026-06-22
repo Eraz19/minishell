@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   word.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 15:40:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 09:44:30 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lexer_rules_.h"
 #include "lexer_context_.h"
 
@@ -26,7 +14,7 @@ static t_error	context_top_level_escape(t_lexer *state)
 
 bool	is_in_middle_of_word(t_lexer *state)
 {
-	return (state->token->type == TOKEN);
+	return (state->token->type == TOKEN_TOKEN);
 }
 
 t_error	lexer_rule_in_middle_of_word(t_lexer *state)  // Rule 8
@@ -34,7 +22,7 @@ t_error	lexer_rule_in_middle_of_word(t_lexer *state)  // Rule 8
 	if (state->input->str[state->input->i] == '\\')
 		return (context_top_level_escape(state));
 	else
-		return (lexer_consume(state, TOKEN, 1));
+		return (lexer_consume(state, TOKEN_TOKEN, 1));
 }
 
 t_error	lexer_rule_new_word(t_lexer *state) // Rule 10
@@ -42,5 +30,5 @@ t_error	lexer_rule_new_word(t_lexer *state) // Rule 10
 	if (state->input->str[state->input->i] == '\\')
 		return (context_top_level_escape(state));
 	else
-		return (lexer_consume(state, TOKEN, 1));
+		return (lexer_consume(state, TOKEN_TOKEN, 1));
 }

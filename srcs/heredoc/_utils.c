@@ -1,34 +1,33 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/12 17:29:41 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:24:21 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include "libft.h"
-#include "utils.h"
 #include "heredoc_.h"
 #include "expander.h"
 
 t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
 {
 	char	*delim_;
+	t_buff	delim_buff;
+	char	**delim_exp;
 
-	state->err = expander_quote_remove(delim);
-	if (state->err.type)
-		return (free(*delim), state->err);
-	delim_ = str_join(*delim, "\n");
+	if (!buff_init(&delim_buff, 0, *delim, (long)str_len(*delim)))
+		return (state->err = error_sys());
+	state->err = expander_expand_word(
+		&delim_exp,
+		delim_buff,
+		NULL,
+		EXPANDER_HEREDOC_DELIMITER);
+	if (state->err.type || delim_exp == NULL)
+		return (buff_free(&delim_buff), free(*delim), state->err);
+	buff_free(&delim_buff);
+	if (delim_exp[0] == NULL)
+		return (free(*delim), str_array_free(&delim_exp), state->err);
+	delim_ = str_join(delim_exp[0], "\n");
 	if (delim_ == NULL)
 		state->err = error_sys();
+	str_array_free(&delim_exp);
 	return (free(*delim), *delim = delim_, state->err);
 }
 

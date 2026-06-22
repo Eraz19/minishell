@@ -12,7 +12,6 @@ void	history_file_free(t_history_file *state)
 	*state = (t_history_file){0};
 }
 
-# include "logs.h"
 // TODO: use deserializer
 t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t max)
 {

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   backtick.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 14:19:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lexer_rules_.h"
 #include "lexer_context_.h"
 
@@ -25,7 +13,7 @@ static bool	is_backtick_squote_surrounded(t_lexer *state)
 		state->input->context.len - 2);
     if (state->err.type)
         return (false);
-    return (item->context == DQUOTE || item->context == ARITH);
+    return (item->context == CONTEXT_DQUOTE || item->context == CONTEXT_ARITH);
 }
 
 static t_error	context_backtick_escape(t_lexer *state)
@@ -55,7 +43,7 @@ static t_context_args	context_backtick_rules(t_context_parser_stack_item *item)
 	res.opening_len = 1;
 	res.closing_len = 1;
 	res.stack_item = item;
-	res.context = BACKTICK;
+	res.context = CONTEXT_BACKTICK;
 	res.unescaped_args = NULL;
 	res.quoting = lexer_rule_quoting;
 	res.is_quoting = is_quoting_context;
@@ -71,7 +59,7 @@ t_error	lexer_context_backtick(t_lexer *state)
 {
 	t_context_parser_stack_item	*item;
 
-	state->err = context_parser_stack_item_init(&item, BACKTICK);
+	state->err = context_parser_stack_item_init(&item, CONTEXT_BACKTICK);
 	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);

@@ -49,8 +49,6 @@ t_error	history_entry_serialize(char **entry)
 	return (free(*entry), *entry = entry_, error(ERR_NO));
 }
 
-// TODO: use serializer
-# include "debug.h"
 t_error	history_build_file_content(t_history *state, size_t start)
 {
 	size_t	i;
@@ -65,7 +63,6 @@ t_error	history_build_file_content(t_history *state, size_t start)
 		state->err = history_list_get(&state->list, &entry, i);
 		if (state->err.type)
 			return (state->err);
-		printf("entry = %s\n", entry);
 		if (!buff_append(&content, entry, (long)str_len(entry)))
 			return (free(entry), buff_free(&content), state->err = error_sys());
 		free(entry);

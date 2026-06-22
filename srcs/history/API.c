@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   API.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/10 16:34:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/22 14:47:48 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "shell.h"
 #include <stdlib.h>
 #include "error.h"
@@ -51,12 +39,10 @@ t_error	history_append_to_entry(char *entry)
 	return (state->err);
 }
 
-# include "debug.h"
 t_error	history_save(void)
 {
 	t_history	*state;
 
-	printf("%s\n", __func__);
 	state = shell_get_history();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));

@@ -1,19 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   quote_removal_context_.h                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/05 18:27:39 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/18 18:03:39 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef QUOTE_REMOVAL_CONTEXT__H
 # define QUOTE_REMOVAL_CONTEXT__H
 
-# include "quote_removal_.h"
+#include "expander_.h"
 
 typedef struct s_context_args
 {

@@ -1,32 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scanner_.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 10:17:37 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 12:26:05 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef SCANNER__H
 # define SCANNER__H
 
 # include "scanner.h"
-# include "lexer_.h"
-
-/**
- * @ingroup scanner
- * @brief Tests whether the input is fully consumed (non-STDIN modes).
- *
- * True when the lexer has reached end-of-input, the mode is not STDIN (which
- * keeps prompting for more) and no input remains on the lexer's input stack.
- *
- * @param state Pointer to the scanner state (borrowed).
- * @return true when no more tokens can be produced.
- */
-bool		is_EOF(t_scanner *state);
 
 /**
  * @ingroup scanner

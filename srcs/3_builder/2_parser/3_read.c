@@ -4,27 +4,27 @@
 
 static inline t_error	sym_conv1(t_token_type token_type, t_symbol *dst_symbol)
 {
-	if (token_type == TOKEN)
+	if (token_type == TOKEN_TOKEN)
 		*dst_symbol = SYM_TOKEN;
-	else if (token_type == NEWLINE_)
+	else if (token_type == TOKEN_NEWLINE)
 		*dst_symbol = SYM_NEWLINE;
-	else if (token_type == SCOLON)
+	else if (token_type == TOKEN_SCOLON)
 		*dst_symbol = SYM_SEMI;
-	else if (token_type == AMPERSAND)
+	else if (token_type == TOKEN_AMPERSAND)
 		*dst_symbol = SYM_AMPERSAND;
-	else if (token_type == DSEMI)
+	else if (token_type == TOKEN_DSEMI)
 		*dst_symbol = SYM_DSEMI;
-	else if (token_type == SEMI_AND)
+	else if (token_type == TOKEN_SEMI_AND)
 		*dst_symbol = SYM_SEMI_AND;
-	else if (token_type == AND_IF)
+	else if (token_type == TOKEN_AND_IF)
 		*dst_symbol = SYM_AND_IF;
-	else if (token_type == OR_IF)
+	else if (token_type == TOKEN_OR_IF)
 		*dst_symbol = SYM_OR_IF;
-	else if (token_type == PIPE)
+	else if (token_type == TOKEN_PIPE)
 		*dst_symbol = SYM_PIPE;
-	else if (token_type == LPARENTHESIS)
+	else if (token_type == TOKEN_LPARENTHESIS)
 		*dst_symbol = SYM_LPARENTHESIS;
-	else if (token_type == RPARENTHESIS)
+	else if (token_type == TOKEN_RPARENTHESIS)
 		*dst_symbol = SYM_RPARENTHESIS;
 	else
 		return (error(ERR_INVALID_SYNTAX));
@@ -33,27 +33,27 @@ static inline t_error	sym_conv1(t_token_type token_type, t_symbol *dst_symbol)
 
 static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
 {
-	if (token_type == LESSAND)
+	if (token_type == TOKEN_LESSAND)
 		*dst_symbol = SYM_LESSAND;
-	else if (token_type == GREATAND)
+	else if (token_type == TOKEN_GREATAND)
 		*dst_symbol = SYM_GREATAND;
-	else if (token_type == LESS)
+	else if (token_type == TOKEN_LESS)
 		*dst_symbol = SYM_LESS;
-	else if (token_type == GREAT)
+	else if (token_type == TOKEN_GREAT)
 		*dst_symbol = SYM_GREAT;
-	else if (token_type == CLOBBER)
+	else if (token_type == TOKEN_CLOBBER)
 		*dst_symbol = SYM_CLOBBER;
-	else if (token_type == LESSGREAT)
+	else if (token_type == TOKEN_LESSGREAT)
 		*dst_symbol = SYM_LESSGREAT;
-	else if (token_type == DGREAT)
+	else if (token_type == TOKEN_DGREAT)
 		*dst_symbol = SYM_DGREAT;
-	else if (token_type == DLESS)
+	else if (token_type == TOKEN_DLESS)
 		*dst_symbol = SYM_DLESS;
-	else if (token_type == DLESSDASH)
+	else if (token_type == TOKEN_DLESSDASH)
 		*dst_symbol = SYM_DLESSDASH;
-	else if (token_type == IO_NUMBER)
+	else if (token_type == TOKEN_IO_NUMBER)
 		*dst_symbol = SYM_IO_NUMBER;
-	else if (token_type == EOF_ || token_type == NONE)
+	else if (token_type == TOKEN_EOF || token_type == TOKEN_NONE)
 		*dst_symbol = SYM_EOF;
 	else
 		return (error(ERR_INVALID_SYNTAX));

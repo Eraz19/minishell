@@ -1,21 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/05 19:48:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "reader_.h"
 #include "lexer_context_.h"
 
 static t_error	context_start(t_lexer *state, t_context_args args)
 {
-	state->token->type = TOKEN;
+	state->token->type = TOKEN_TOKEN;
 	if (args.stack_item != NULL)
 		args.stack_item->start = state->token->value.len;
 	state->err = context_stack_push(&state->input->context, args.stack_item);

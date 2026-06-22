@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   param.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 14:20:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lexer_rules_.h"
 #include "lexer_context_.h"
 
@@ -39,7 +27,7 @@ static t_context_args	context_param_rules(t_context_parser_stack_item *item)
 
 	res.opening_len = 2;
 	res.closing_len = 1;
-	res.context = PARAM;
+	res.context = CONTEXT_PARAM;
 	res.stack_item = item;
 	res.unescaped_args = NULL;
 	res.quoting = lexer_rule_quoting;
@@ -56,7 +44,7 @@ t_error	lexer_context_param(t_lexer *state)
 {
 	t_context_parser_stack_item	*item;
 
-	state->err = context_parser_stack_item_init(&item, PARAM);
+	state->err = context_parser_stack_item_init(&item, CONTEXT_PARAM);
 	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);

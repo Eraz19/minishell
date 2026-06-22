@@ -1,34 +1,22 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _main.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 14:13:58 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:44:05 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lexer_context_.h"
 
 t_error	lexer_context(t_lexer *state, t_context context)
 {
-	if (context == SQUOTE)
+	if (context == CONTEXT_SQUOTE)
 		return (lexer_context_squote(state));
-	if (context == DQUOTE)
+	if (context == CONTEXT_DQUOTE)
 		return (lexer_context_dquote(state));
-	if (context == DOLLAR_SQUOTE)
+	if (context == CONTEXT_DOLLAR_SQUOTE)
 		return (lexer_context_dollar_squote(state));
-	if (context == BACKTICK)
+	if (context == CONTEXT_BACKTICK)
 		return (lexer_context_backtick(state));
-	if (context == ARITH)
+	if (context == CONTEXT_ARITH)
 		return (lexer_context_arith(state));
-	if (context == PARAM)
+	if (context == CONTEXT_PARAM)
 		return (lexer_context_param(state));
-	if (context == CMD_SUB)
+	if (context == CONTEXT_CMD_SUB)
 		return (state->err = error(ERR_NOT_IMPLEMENTED));
-	if (context == NONE_)
+	if (context == CONTEXT_NONE)
 		return (state->err = error(ERR_INCOHERENT_STATE));
 	return (state->err = error(ERR_INCOHERENT_STATE));
 }

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander_loader_.h                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 13:28:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef EXPANDER_LOADER__H
 # define EXPANDER_LOADER__H
 
@@ -32,8 +20,8 @@ typedef struct s_expander_loader
 
 void	expander_loader_init(t_expander_loader *state);
 void	expander_loader_free(t_expander_loader *state);
-t_error	expander_loader_load(t_expander_loader *state,
-			t_context_stack *stack, char *word);
+t_error	expander_loader_load(t_expander_loader *state, t_context_stack *stack,
+			t_buff word);
 
 bool	is_char_escaped(t_expander_loader *state);
 bool	is_substitution_start(t_expander_loader *state);

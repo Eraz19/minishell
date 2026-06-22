@@ -1,20 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   blank.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 15:38:40 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/16 09:44:00 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lexer_rules_.h"
 
 t_error	lexer_rule_blank(t_lexer *state)
 {
-	if (state->token->type != NONE)
+	if (state->token->type != TOKEN_NONE)
 		return (lexer_delimit_token(state), state->err);
 	while (is_blank(state->input->str[state->input->i]) &&
 		state->input->str[state->input->i] != '\0')

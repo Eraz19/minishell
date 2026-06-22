@@ -1,21 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _main.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 10:10:52 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:26:54 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include "expander_loader_.h"
 
 t_error	expander_loader_build(t_expander_loader *state)
 {
-	state->quoting = NONE_;
+	state->quoting = CONTEXT_NONE;
 	if (is_substitution_start(state))
 		expander_loader_substitution(state);
 	else if (is_char_escaped(state))

@@ -17,30 +17,30 @@ const char	*token_type_to_string(t_token_type token_type)
 {
 	switch (token_type)
 	{
-		case NONE: return ("NONE");
-		case TOKEN: return ("TOKEN");
-		case NEWLINE_: return ("NEWLINE_");
-		case SCOLON: return ("SCOLON");
-		case AMPERSAND: return ("AMPERSAND");
-		case DSEMI: return ("DSEMI");
-		case SEMI_AND: return ("SEMI_AND");
-		case AND_IF: return ("AND_IF");
-		case OR_IF: return ("OR_IF");
-		case PIPE: return ("PIPE");
-		case LPARENTHESIS: return ("LPARENTHESIS");
-		case RPARENTHESIS: return ("RPARENTHESIS");
-		case LESSAND: return ("LESSAND");
-		case GREATAND: return ("GREATAND");
-		case LESS: return ("LESS");
-		case GREAT: return ("GREAT");
-		case CLOBBER: return ("CLOBBER");
-		case LESSGREAT: return ("LESSGREAT");
-		case DGREAT: return ("DGREAT");
-		case DLESS: return ("DLESS");
-		case DLESSDASH: return ("DLESSDASH");
-		case IO_NUMBER: return ("IO_NUMBER");
-		case IO_LOCATION: return ("IO_LOCATION");
-		case EOF_: return ("EOF_");
+		case TOKEN_NONE: return ("NONE");
+		case TOKEN_TOKEN: return ("TOKEN");
+		case TOKEN_NEWLINE: return ("NEWLINE_");
+		case TOKEN_SCOLON: return ("SCOLON");
+		case TOKEN_AMPERSAND: return ("AMPERSAND");
+		case TOKEN_DSEMI: return ("DSEMI");
+		case TOKEN_SEMI_AND: return ("SEMI_AND");
+		case TOKEN_AND_IF: return ("AND_IF");
+		case TOKEN_OR_IF: return ("OR_IF");
+		case TOKEN_PIPE: return ("PIPE");
+		case TOKEN_LPARENTHESIS: return ("LPARENTHESIS");
+		case TOKEN_RPARENTHESIS: return ("RPARENTHESIS");
+		case TOKEN_LESSAND: return ("LESSAND");
+		case TOKEN_GREATAND: return ("GREATAND");
+		case TOKEN_LESS: return ("LESS");
+		case TOKEN_GREAT: return ("GREAT");
+		case TOKEN_CLOBBER: return ("CLOBBER");
+		case TOKEN_LESSGREAT: return ("LESSGREAT");
+		case TOKEN_DGREAT: return ("DGREAT");
+		case TOKEN_DLESS: return ("DLESS");
+		case TOKEN_DLESSDASH: return ("DLESSDASH");
+		case TOKEN_IO_NUMBER: return ("IO_NUMBER");
+		case TOKEN_IO_LOCATION: return ("IO_LOCATION");
+		case TOKEN_EOF: return ("EOF_");
 		default: return ("unknown");
 	}
 }

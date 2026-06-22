@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scanner.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/22 20:07:46 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef SCANNER_H
 # define SCANNER_H
 
@@ -112,6 +100,8 @@ void	scanner_free(t_scanner *state);
  */
 t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source);
 
+t_error	scanner_reset(t_scanner *state);
+
 /**
  * @ingroup scanner
  * @brief Produces the next token from the input.
@@ -121,11 +111,7 @@ t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source);
  * and expands aliases on word tokens. Yields a token of type EOF_ once the
  * input is fully consumed. Operates on the global shell scanner state.
  *
- * @warning @p token must have been initialised (and any previous value freed)
- *          with token_init() before this call.
- *
- * @param token Out-parameter receiving the produced token (borrowed; the
- *              caller owns its value buffer).
+ * @param token Out-parameter for the next token, is intialized during lexing.
  * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell scanner state is
  *         unavailable, or the recorded error on failure.
  */

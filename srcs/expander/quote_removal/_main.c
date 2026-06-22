@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _main.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 12:21:57 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:29:58 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdlib.h>
 #include "quote_removal_.h"
 #include "quote_removal_context_.h"
 
@@ -22,11 +9,11 @@ t_error	quote_removal_quoted(
 {
 	t_expander_word_item	item;
 
-	if (context == SQUOTE)
+	if (context == CONTEXT_SQUOTE)
 		context_squote(state, word, word_expanded);
-	else if (context == DQUOTE)
+	else if (context == CONTEXT_DQUOTE)
 		context_dquote(state, word, word_expanded);
-	else if (context == DOLLAR_SQUOTE)
+	else if (context == CONTEXT_DOLLAR_SQUOTE)
 	{
 		state->err = expander_word_pop(word, &item);
 		if (state->err.type)
@@ -46,9 +33,9 @@ t_error	quote_remove_char(
 	state->err = expander_word_pop(word, &item);
 	if (state->err.type)
 		return (state->err);
-	if (item.is_expand_res)
+	if (item.opt.is_expand_res)
 		state->err = expander_word_push(word_exp, item);
-	else if (item.quoted == NONE_)
+	else if (item.opt.quoted == CONTEXT_NONE)
 	{
 		if (item.c != '\\')
 			state->err = expander_word_push(word_exp, item);
@@ -63,7 +50,7 @@ t_error	quote_remove_char(
 		}
 	}
 	else
-		quote_removal_quoted(state, item.quoted, word, word_exp);
+		quote_removal_quoted(state, item.opt.quoted, word, word_exp);
 	return (state->err);
 }
 

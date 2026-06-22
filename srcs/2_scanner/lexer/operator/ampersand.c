@@ -1,26 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ampersand.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 10:12:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:39:25 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lexer_operator_.h"
 
 bool	is_operator_char_ampersand(t_lexer *state)
 {
-	if (state->token->type == SCOLON)
+	if (state->token->type == TOKEN_SCOLON)
 		return (true);
-	else if (state->token->type == AMPERSAND)
+	else if (state->token->type == TOKEN_AMPERSAND)
 		return (true);
-	else if (state->token->type == LESS)
+	else if (state->token->type == TOKEN_LESS)
 		return (true);
-	else if (state->token->type == GREAT)
+	else if (state->token->type == TOKEN_GREAT)
 		return (true);
 	else if (!is_in_middle_of_operator(state))
 		return (true);
@@ -29,15 +17,15 @@ bool	is_operator_char_ampersand(t_lexer *state)
 
 t_error	operator_add_ampersand(t_lexer *state)
 {
-	if (state->token->type == SCOLON)
-		return (lexer_consume(state, SEMI_AND, 1));
-	else if (state->token->type == AMPERSAND)
-		return (lexer_consume(state, AND_IF, 1));
-	else if (state->token->type == LESS)
-		return (lexer_consume(state, LESSAND, 1));
-	else if (state->token->type == GREAT)
-		return (lexer_consume(state, GREATAND, 1));
-	else if (state->token->type == NONE)
-		return (lexer_consume(state, AMPERSAND, 1));
+	if (state->token->type == TOKEN_SCOLON)
+		return (lexer_consume(state, TOKEN_SEMI_AND, 1));
+	else if (state->token->type == TOKEN_AMPERSAND)
+		return (lexer_consume(state, TOKEN_AND_IF, 1));
+	else if (state->token->type == TOKEN_LESS)
+		return (lexer_consume(state, TOKEN_LESSAND, 1));
+	else if (state->token->type == TOKEN_GREAT)
+		return (lexer_consume(state, TOKEN_GREATAND, 1));
+	else if (state->token->type == TOKEN_NONE)
+		return (lexer_consume(state, TOKEN_AMPERSAND, 1));
 	return (state->err = error(ERR_INCOHERENT_STATE));
 }

@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   context.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 14:46:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:28:10 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdlib.h>
 #include "expander_loader_.h"
 
 static t_error	expander_loader_char(t_expander_loader *state)
@@ -54,7 +41,7 @@ t_error	expander_loader_quoted(t_expander_loader *state)
 {
 	char	current;
 
-	if (state->quoting != DOLLAR_SQUOTE)
+	if (state->quoting != CONTEXT_DOLLAR_SQUOTE)
 		expander_loader_consume(state, 1);
 	else
 		expander_loader_consume(state, 2);
