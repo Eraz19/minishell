@@ -34,11 +34,15 @@ static inline t_error	parser_store_cst(t_parser *parser)
 	t_parser_stack_item	*main_item;
 
 	main_item = parser_stack_top(&parser->stack);
-	printf("[PARSER] ACCEPT root=%s state=%zu token_start=%zu token_count=%zu\n",
+	printf("[PARSER] ACCEPT => %s (token_start=%zu token_count=%zu)\n",
 		symbol_to_string(main_item->symbol),
-		main_item->lr_state_id,
 		main_item->tokens_start_id,
 		main_item->tokens_count);
+	// printf("[PARSER] ACCEPT root=%s state=%zu token_start=%zu token_count=%zu\n",
+	// 	symbol_to_string(main_item->symbol),
+	// 	main_item->lr_state_id,
+	// 	main_item->tokens_start_id,
+	// 	main_item->tokens_count);
 	parser->cst = main_item->cst_node;
 	main_item->cst_node = NULL;
 	return (error(ERR_NO));
@@ -61,11 +65,11 @@ t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
 		if (err.type != ERR_NO)
 			return (err);
 		action = machine->actions[lr_state_id][parser->lookahead_symbol];
-		printf("[PARSER] ACTION state=%zu lookahead=%s action=%s payload=%zu\n",
-			lr_state_id,
-			symbol_to_string(parser->lookahead_symbol),
-			action_type_to_string(action.type),
-			action.payload);
+		// printf("[PARSER] ACTION state=%zu lookahead=%s action=%s payload=%zu\n",
+		// 	lr_state_id,
+		// 	symbol_to_string(parser->lookahead_symbol),
+		// 	action_type_to_string(action.type),
+		// 	action.payload);
 		if (action.type == ACTION_ERROR)
 			return (parser_invalid_syntax());
 		else if (action.type == ACTION_ACCEPT)

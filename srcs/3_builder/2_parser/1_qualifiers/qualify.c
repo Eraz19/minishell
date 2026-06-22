@@ -14,23 +14,27 @@ t_error	parser_qualify_symbol(
 	err = error(ERR_NO);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
 	if (parser->lookahead_symbol != SYM_TOKEN)
+	{
+		// printf("=> %s\n", symbol_to_string(parser->lookahead_symbol));
 		return (err);
+	}
 	token_value = buff_get_string(&token->value);
 	if (!token_value)
 		return (error_print(error_sys(), "parser", __func__,
 			"unable to get token value", NULL, NULL));
 	if (parser->qualifiers[lr_state_id])
 	{
-		printf("[QUALIFIER RUN] state=%zu raw=%s value=%s qualifier=%p\n",
-			lr_state_id,
-			symbol_to_string(parser->lookahead_raw_symbol),
-			token_value,
-			parser->qualifiers[lr_state_id]);
+		// printf("[QUALIFIER RUN] state=%zu raw=%s value=%s qualifier=%p\n",
+		// 	lr_state_id,
+		// 	symbol_to_string(parser->lookahead_raw_symbol),
+		// 	token_value,
+		// 	parser->qualifiers[lr_state_id]);
 		err = parser->qualifiers[lr_state_id](parser, token_value);
-		printf("[QUALIFIER RUN] state=%zu result=%s\n",
-			lr_state_id,
-			symbol_to_string(parser->lookahead_symbol));
+		// printf("[QUALIFIER RUN] state=%zu result=%s\n",
+		// 	lr_state_id,
+		// 	symbol_to_string(parser->lookahead_symbol));
 	}
 	free(token_value);
+	// printf("=> %s\n", symbol_to_string(parser->lookahead_symbol));
 	return (err);
 }

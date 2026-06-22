@@ -97,12 +97,13 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		return (err);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
 	parser->lookahead_id = parser->tokens.len - 1;
-	printf("\n--------------------------------------------------\n");
-	printf("[PARSER] READ index=%zu token=%s symbol=%s value=%s\n",
-		parser->lookahead_id,
-		token_type_to_string(token.type),
-		symbol_to_string(parser->lookahead_raw_symbol),
-		buff_get_string(&token.value));
-	printf("--------------------------------------------------\n");
+	printf("[PARSER] READ   => %s (\"%s\")\n", token_type_to_string(token.type), buff_get_string(&token.value));
+	// printf("\n--------------------------------------------------\n");
+	// printf("[PARSER] READ index=%zu token=%s symbol=%s value=%s\n",
+	// 	parser->lookahead_id,
+	// 	token_type_to_string(token.type),
+	// 	symbol_to_string(parser->lookahead_raw_symbol),
+	// 	buff_get_string(&token.value));
+	// printf("--------------------------------------------------\n");
 	return (error(ERR_NO));
 }
