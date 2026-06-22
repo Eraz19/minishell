@@ -33,8 +33,8 @@ typedef t_vector	t_heredoc_queue;
  */
 typedef enum e_heredoc_mode
 {
-	NORMAL,
-	TAB_STRIP
+	HEREDOC_MODE_NORMAL,
+	HEREDOC_MODE_TAB_STRIP
 }	t_heredoc_mode;
 
 /**

@@ -61,6 +61,8 @@ void	alias_print_all(t_key_value **pairs)
 
 bool	is_token_alias_expandable(t_alias *state, char *word)
 {
+	bool	can_next_token_be_a_cmd_name;
+
 	if (is_word_containing_quoting(word))
 		return (false);
 	else if (!is_valid_alias_name(word))
@@ -69,8 +71,13 @@ bool	is_token_alias_expandable(t_alias *state, char *word)
 		return (false);
 	else if (alias_stack_contains(&state->stack, word))
 		return (false);
-	else if (!state->disable_position && !builder_can_next_word_be_a_cmd_name())
-		return (false);
+	else if (!state->disable_position)
+	{
+		// TODO: handle error
+		(void)builder_can_next_word_be_a_cmd_name(&can_next_token_be_a_cmd_name);
+		if (!can_next_token_be_a_cmd_name)
+			return (false);
+	}
 	return (true);
 }
 

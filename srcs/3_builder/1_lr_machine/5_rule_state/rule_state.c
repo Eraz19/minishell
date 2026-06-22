@@ -1,4 +1,5 @@
-#include "builder.h"
+#include "rule_state_type.h"
+#include "rules__type.h"
 
 bool	rule_state_equal(t_rule_state a, t_rule_state b)
 {

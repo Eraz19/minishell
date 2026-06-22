@@ -1,6 +1,7 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2 # -g3 -fsanitize=address,undefined # -DNDEBUG # -fsanitize=leak # -fsanitize=memory
+CFLAGS			:= -Wall -Wextra -Werror -O2
+DEBUG_CFLAGS	:= -Wall -Wextra -Werror -g3 -fsanitize=address,undefined
 
 LIBFT_DIR		:= libft
 LIBFT			:= $(LIBFT_DIR)/libft.a
@@ -30,6 +31,7 @@ SRCS			:= \
 	$(wildcard srcs/3_builder/*.c) \
 	$(wildcard srcs/3_builder/*/*.c) \
 	$(wildcard srcs/3_builder/*/*/*.c) \
+	$(wildcard srcs/4_runner/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
@@ -64,8 +66,8 @@ INCLUDES		:= \
 	-Isrcs/2_scanner/reader \
 	-Isrcs/3_builder/1_lr_machine \
 	-Isrcs/3_builder/1_lr_machine/1_hooks \
-	-Isrcs/3_builder/1_lr_machine/2_rules \
-	-Isrcs/3_builder/1_lr_machine/3_symbols \
+	-Isrcs/3_builder/1_lr_machine/2_symbols \
+	-Isrcs/3_builder/1_lr_machine/3_rules \
 	-Isrcs/3_builder/1_lr_machine/4_first \
 	-Isrcs/3_builder/1_lr_machine/5_rule_state \
 	-Isrcs/3_builder/1_lr_machine/6_lr_state \
@@ -73,6 +75,10 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/8_goto \
 	-Isrcs/3_builder/1_lr_machine/9_action \
 	-Isrcs/3_builder/2_parser \
+	-Isrcs/3_builder/2_parser/1_qualifiers \
+	-Isrcs/3_builder/2_parser/2_stack \
+	-Isrcs/3_builder/2_parser/3_cst \
+	-Isrcs/4_runner \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \
 	-Isrcs/builtins \
@@ -118,6 +124,9 @@ $(OBJ_DIR)/%.o : %.c
 
 bonus: all
 
+debug: CFLAGS := $(DEBUG_CFLAGS)
+debug: re
+
 # DEBUG SECTION (START)
 test: all
 	@for tester in $(TESTERS); do \
@@ -136,4 +145,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all bonus test_getopt test clean fclean re
+.PHONY: all bonus debug test_getopt test clean fclean re

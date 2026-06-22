@@ -38,7 +38,7 @@ t_lexer_backup	lexer_backup(t_lexer *state)
 
 t_error	lexer_restore(t_lexer *state, t_lexer_backup backup)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
 	while (state->input->context.len > backup.context_len)
     {

@@ -49,7 +49,7 @@ typedef struct s_lexer_backup
 typedef struct s_lexer
 {
 	t_error				err;
-	t_input_stack_item	*input;
+	t_input_parser_stack_item	*input;
 	t_token				*token;
 	bool				is_stdin;
 	t_input_stack		input_stack;

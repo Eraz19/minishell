@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "history_.h"
 #include "history_list_.h"
 
 t_error	history_list_push(t_history_list *list, char *item)
@@ -28,7 +27,7 @@ t_error	history_list_get(t_history_list *list, char **item, size_t i)
 	item_ = str_dup(((char **)list->data)[i]);
 	if (item_ == NULL)
 		return (error_sys());
-	err = history_entry_serialize(&item_);
+	err = serialize(item_, item);
 	if (err.type)
 		return (free(item_), err);
 	return (*item = item_, error(ERR_NO));

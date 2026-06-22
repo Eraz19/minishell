@@ -40,28 +40,28 @@ typedef enum e_context
 
 /**
  * @ingroup context
- * @struct s_context_stack_item
+ * @struct s_context_parser_stack_item
  * @brief One context together with the span it covers in a token's value
  *        buffer.
  *
- * @var s_context_stack_item::end Index one past the construct's last character
+ * @var s_context_parser_stack_item::end Index one past the construct's last character
  *                                in the token value (filled in when the context
  *                                closes).
- * @var s_context_stack_item::start Index of the construct's first character in
+ * @var s_context_parser_stack_item::start Index of the construct's first character in
  *                                  the token value (filled in when the context
  *                                  opens).
- * @var s_context_stack_item::context Which construct it is.
+ * @var s_context_parser_stack_item::context Which construct it is.
  */
-typedef struct s_context_stack_item
+typedef struct s_context_parser_stack_item
 {
 	size_t		end;
 	size_t		start;
 	t_context	context;
-}	t_context_stack_item;
+}	t_context_parser_stack_item;
 
 /**
  * @ingroup context
- * @brief Stack of context items (a vector of t_context_stack_item *).
+ * @brief Stack of context items (a vector of t_context_parser_stack_item *).
  *
  * Used in two roles: the lexer's live nesting stack (innermost context on top,
  * borrowing its items) and a token's recorded contexts (owning its items). See
@@ -102,7 +102,7 @@ void	context_stack_free(t_context_stack *stack);
  * @param context Which construct the item represents.
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error	context_stack_item_init(t_context_stack_item **item, t_context context);
+t_error	context_parser_stack_item_init(t_context_parser_stack_item **item, t_context context);
 
 /**
  * @ingroup context
@@ -131,7 +131,7 @@ t_error	context_stack_dup(t_context_stack *dst, t_context_stack *src);
  * @param item Item pointer to push.
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error	context_stack_push(t_context_stack *stack, t_context_stack_item *item);
+t_error	context_stack_push(t_context_stack *stack, t_context_parser_stack_item *item);
 
 /**
  * @ingroup context
@@ -144,7 +144,7 @@ t_error	context_stack_push(t_context_stack *stack, t_context_stack_item *item);
  *             discard it.
  * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty.
  */
-t_error	context_stack_bpop(t_context_stack *stack, t_context_stack_item **item);
+t_error	context_stack_bpop(t_context_stack *stack, t_context_parser_stack_item **item);
 
 /**
  * @ingroup context
@@ -157,7 +157,7 @@ t_error	context_stack_bpop(t_context_stack *stack, t_context_stack_item **item);
  *             discard it.
  * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty.
  */
-t_error	context_stack_fpop(t_context_stack *stack, t_context_stack_item **item);
+t_error	context_stack_fpop(t_context_stack *stack, t_context_parser_stack_item **item);
 
 /**
  * @ingroup context
@@ -171,7 +171,7 @@ t_error	context_stack_fpop(t_context_stack *stack, t_context_stack_item **item);
  * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty,
  *         ERR_INDEX_OUT_OF_BOUND if @p index is past the last element.
  */
-t_error	context_stack_get(t_context_stack *stack, t_context_stack_item **item,
+t_error	context_stack_get(t_context_stack *stack, t_context_parser_stack_item **item,
 			size_t index);
 
 /**

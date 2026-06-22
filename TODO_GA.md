@@ -1,64 +1,126 @@
-# DEBUG HASHMAP
+# WIP
 
-- Hashmap jamais init
-- `hashmap_put()` resize même si `key` existe déjà => inutile
-- `bucket_replace` ne s'arrête pas
-- risque de dangling pointers when `del` is not `NULL` :
-	- double set same `key-value` pair
-	- set a unique value to multiple `keys`
-	- TODO à documenter :
-```
-If del is not NULL, each stored value pointer must have unique ownership.
-To store shared or borrowed values, initialize the map with del = NULL.
-```
-- Usage risky de `t_vector` détourné
-	- `len` set manuellement
-	- `foreach` sur `len` au lieu de cap
-	- Utiliser un vrai array plutôt ?!
-- Ownership flou dans `hashmap_put()`: "On failure the value's ownership is left in an inconsistent state..."
+- `deserialize_all()`:
+	- split et unquote le contenu d'un `char *` et renvoyer un `char **`
+- `parser_can_next_token_be_a_cmd_name_or_word()`
+
+---
 
 # ALEXANDER
 
-- Please retire les headers ça fait bugger mon IDE c'est insup' on les mettra à la fin
-- Plein de headers "not used directly"
-- J'ai commenté mes modifs de fix avec `// TO_CHECK` pour que tu puisses vérifier
-- Toujours faire review le code par l'IA après avoir codé, ça spot 99 % des problèmes en vrai
-- `Makefile` : pense à le modifier quand tu changes les path des fichiers stp (idem pour `libft`)
-- `.vscode/settings.json` : idem
-- Attention au naming des fonctions :
-	- `path_name_expansion()` => `expand_path_name()`
-	- `substitutions()` => `substitute()`
-	- ...
-- Attention aux fonctions prototypées mais pas implémentées :
-	- `shell_get_alias()`, `shell_get_heredoc()`, `substitutions()`, `path_name_expansion()`...
-	- Pour des trucs aussi simples => les implémenter direct
-	- J'ai peur que tu oublies plein de trucs si tu fais pas dans l'ordre
-- `token_type` :
-	- devraient être préfixés (`NONE` par exemple tout le monde voudrait s'en servir...)
-	- pourquoi certains suffixés avec `_` (`EOF_`, `NEWLINE_`)
-- `error_print()` calls sont bien double NULLés ?
-- ⚠️ `echo 2>out` => `2` est un `IO_NUMBER` alors que `echo 2 >out` => `2` est un argument `WORD` :
-	- => `scanner` doit conserver l'info d'adjacence ! Donc soit il classe `2` directement comme `IO_NUMBER` soit `token` contient un `bool followed_by_redirection_operator`
-- ⚠️ `parser` va copier les token pour les conserver dans l'`ast` :
-	- Quid deepcopy / ownership / lifetime des deep content
-	- Quid ownership du token content => transféré au `parser` donc c'est lui qui call `token_free()` ?
-	- Comme je stocke les token dans le parser, je rappelle `token_init()` sur un token qui a déjà été populated par `scanner_next_token()` mais pas free derrière car `vector_push()` ne deep copy pas, c'est ok de ton côté ?
+## BUGS
+- `history`:
+	- use `serialize()` and `deserialize()` and `deserialize_all()`
+	- `history_load()`: Pas d'historique avec flèche du haut quand on vient de lancer le shell
+	- L'historique apparaît quoted
+	- Le `newline` apparait dans l'input (il ne devrait pas être stocké dans l'historique)
+- `scanner_get_next_token()`:
+	- Renvoie `TOKEN_NONE` au lieu de `TOKEN_EOF` ? (nécessaire pour reduce le programme + distinguer d'une error)
+	- Ne renvoie pas d'erreur lorsque la cmd_string / le fichier d'input est déjà consommée !
+	- Modifier la doc pour enlever l'obligation d'init le token côté caller
+- `heredoc`:
+	- Ne lit pas le here document après le `newline` malgré le trigger de `scanner_report_io_here()`
+	- (actuellement je reçois le contenu et le delimiter dans les `token`)
+	- Le flow correct doit être :
+	1. Le `parser` trigger le `scanner` lorsqu'il reduce un `io_here` (via `scanner_report_io_here()`)
+	2. Le `scanner` trigger le module `heredoc` qui créé un fichier temporaire et renvoie son path au `scanner` qui le renvoie au `parser`
+	3. Lorsque le `scanner` renvoie le prochain `NEWLINE`: il set `should_parse_heredoc = true`.
+	4. Au `scanner_get_next_token()` suivant: `should_parse_heredoc == true` donc `scanner` trigger `heredoc_read()`.
+	5. le `heredoc` parse + stocke **les** heredoc bodys dans les fichiers temporaires correspondants.
+	6. Le `scanner` remet `should_parse_heredoc = false`.
+	7. Le `scanner` skip les tokens consommés par `heredoc`.
+	8. Le `scanner` renvoie le prochain `token` au `parser` (`EOF` si c'est la fin de l'input).
 
-# PARSER
+## AJOUTS DONT J'AI BESOIN
+- `token_contains_unquoted_equal()`:
+	> If the TOKEN contains an unquoted (as determined while applying rule 4 from 2.3 Token Recognition) <equals-sign> character that is not part of an embedded parameter expansion, command substitution, or arithmetic expansion construct (as determined while applying rule 5 from 2.3 Token Recognition)
+	- `token->assign_operand_offset` (-1 si inexistant)
+- `scanner_reset()`:
+	- Pour refresh après une syntax error (ou autre error...?)
+	- `free()` les items mais pas les arrays pour éviter de re `malloc()` après
+- `IO_NUMBER` et `IO_LOCATION`:
+	- Décrits dans `Grammar Lexical Conventions` + `The rules for token recognition in 2.3 Token Recognition shall apply`
+	- Donc clairement responsabilité du `lexer` selon moi
+	- `IO_NUMBER` : Solely digits and the delimiter character is '<' or '>'
+	- `IO_LOCATION` : At least three characters, begins with '{' and ends '}', and the delimiter character is '<' or '>'
+	- Nécessaire pour distinguer `echo 2>out` de `echo 2 >out`
 
+## UPDATE QUE J'AI FAIT DANS TON CODE
+- `t_heredoc_mode`:
+	- J'ai préfixé avec `HEREDOC_MODE_` (pls prefix all sinon je galère à trouver le nom des enums de tes modules)
+- `t_token_type`:
+	- J'ai préfixé avec `TOKEN_` et retirer les trailing `_`
 
+## UPDATE QUE J'AI FAIT DANS MON CODE
+- `t_error	builder_can_next_word_be_a_cmd_name(bool *dst)`:
+	- La signature a changé pour return un `t_error`
+	- Il faut donc désormais gérer la possible erreur `ERR_SHELL_NOT_FOUND` dans `is_token_alias_expandable()`
+	- Ou j'exit le shell dans ce cas là ?
+	- ⚠️ **TODO**: remove `shell_exit()` because it could let somme allocations inside pending functions => just return error
+- `make debug`:
+	- compile avec les flags de sanitizing + debug au lieu des flags d'opti
 
-# TODO
+## DOUTES
+- `error_print()`:
+	- Vérifier que tous les call sont bien doublement `NULL` terminés
 
+## VALIDÉ
+- `parser` own les `token` (et leur `value`) reçus via `scanner_get_next_token()`
+- `\n` à la fin de chaque input du `reader`
+- `scanner_report_io_here()`:
+	- J'envoie le delimiter brut (donc pas unquoted) pour que tu saches si le body doit être expandu on est d'accord ?
+	- Tu le copies donc je free de mon côté ? (pas très opti donc on pourrait juste documenter l'ownership plutôt ?)
+
+---
+
+# TODO (HIGH PRIORIY)
+
+- `void shell_utility_error(t_shell_error shell_err, t_error err)`:
+	- `shell_err` = type d'erreur haut niveau (`SHELL_ERR_BUILTIN`, ...)
+	- `err` = type d'erreur bas niveau (`ERR_LIBC`, ...)
+	- `exit()` si les conditions sont remplies
 - ⚠️ Vérifier que les `buff_*()`, `vector_*()` etc de `libft` ne free pas en cas d'échec (sinon `errno` undefined):
 	- 🚨 `buff_dup_n()` le fait !!
 	- 🚨 `buff/format/append()` le fait !!
 	- 🚨 `vector_dup()` le fait !!
 	- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
-- ⚠️ `undefined_behaviour()` should not `shell_exit()` ! (for example a `builtin` UB should only generate a builtin error, then the shell should behave as POSIX says for builtin errors!) => it should return `ERR_UNDEFINED_BEHAVIOUR`:
-	- Fixed but **NEED TO CHECK ALL EXISTING USAGES of `undefined_behaviour()`**
+- `undefined_behaviour()`:
+	- N'exit plus le shell => Vérifier que tous les callers prennent ça en compte
+- `undefined_behaviour()`:
+	- print la tête à Xavier
 
-## BUILTINS
+---
+
+# TODO (LOW PRIORIY)
+
+## VARIABLES
+
+- `params`: Switch `t_vector`s to **hash table** ?
+
+## SHELL PROGRAM
+
+- Return correct `exit status` (see [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) `EXIT STATUS` section).
+- Shall use [exit](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#exit) builtin to exit itself ??
+- Implement correct [2.8.1 Consequences of Shell Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_01).
+
+## ENV PROCESSING
+
+- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
+- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
+
+## LIBFT
+
+- Remove **wildcards** from `libft`'s `Makefile`
+- ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
+- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
+
+## MATHS AND ARITHMETIC EXPANSIONS
+
+- [2.6.4 Arithmetic Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_04)
+- [1.1.2.1 Arithmetic Precision and Operations](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_01)
+- [1.1.2.2 Mathematical Functions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_02)
+
+## BUILTINS CRITICAL ERROR vs CLASSIC ERROR
 
 | ERROR                               | DESCRIPTION                                                   | SOURCE                                                       | TEST CMD                                                        | CONFIRMED |
 |-------------------------------------|---------------------------------------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------|-----------|
@@ -73,58 +135,9 @@ To store shared or borrowed values, initialize the map with del = NULL.
 | `ERR_UTILITY_OPT_ACTION_FAILED`     | requested action characterized by option/option-argument failed | 1.4 Utility Description Defaults / CONSEQUENCES OF ERRORS | utility-specific; needs the target utility page                 | YES       |
 | `ERR_UTILITY_UNRECOVERABLE`         | unrecoverable error condition                                 | 1.4 Utility Description Defaults / CONSEQUENCES OF ERRORS   | hard to make deterministic / implementation-dependent           | YES       |
 
-- `shell` shall expose `void shell_set_utility_error(t_utility_error error)`
-- errors:
-	- ✅ `ERR_UTILITY_OPT_INVALID`: option non reconnue (`bash --posix -c 'export -z; echo NOT_REACHED'`);
-	- ❔ `ERR_UTILITY_OPT_MISSING_ARG`: option qui requiert un argument mais ne le reçoit pas ;
-
-- Remove `t_shell *shell` from args: same signature as classic `main()`
-- Check all doc
-	- [XBD 12. Utility Conventions](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html)
-	- [1.4 Utility Description Defaults](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_04)
-	- [1.6 Built-In Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_06)
-	- [1.7 Intrinsic Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_07)
-	- [2.15 Special Built-In Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_15)
-- ⚠️ `builtins`: ensure to follow [Utility Conventions](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap12.html#tag_12_02):
-	- ⚠️ "Guideline 5: One or more options without option-arguments, **followed by at most one option that takes an option-argument**, should be accepted when grouped behind one '-' delimiter." => actually `-aio <option_argument>` is not parsed correctly ??
-- ⚠️ `special builtins`: ensure to follow [2.15 Special Built-In Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_15)
-	- Make the full list of special builtins
-- ⚠️ `export`, `readonly` and `unset`: `--` is the end of options (`-` also ?)
-- implement `set` builtin (to edit `positionals`)
-- implement `shift` builtin (to edit `positionals`)
-
-## SHELL PROGRAM
-
-- Return correct `exit status` (see [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) `EXIT STATUS` section).
-- Shall use [exit](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#exit) builtin to exit itself ??
-- Implement correct [2.8.1 Consequences of Shell Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_01).
-
-## ENV PROCESSING
-
-- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
-- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
-
-## LR_MACHINE MODULE
-
-- Implement `parser hooks`
-- add `const` everywhere it's missing
-- Make doc less verbose
-
-## LIBFT
-
-- Remove **wildcards** from `libft`'s `Makefile`
-- ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
-- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
-
 ---
 
-# LATER
-
-## MATHS AND ARITHMETIC EXPANSIONS
-
-- [2.6.4 Arithmetic Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_04)
-- [1.1.2.1 Arithmetic Precision and Operations](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_01)
-- [1.1.2.2 Mathematical Functions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_02)
+# UNSPECIFIED BEHAVIUOURS NOT IMPLEMENTED YET
 
 ## MAILPATH
 
@@ -137,25 +150,16 @@ To store shared or borrowed values, initialize the map with del = NULL.
 
 ---
 
-# TESTS
+# TODO (BEFORE SUBMIT)
 
-- `sh` parsing (`variables` + `options` + `operands` + `arguments`)
-- `builtins` parsing
-- `ft_getppid()` + `ft_getpid()` on **Linux**, **Mac_x86**, and **freeBSD**
-
----
-
-# OPTIMIZATIONS
-
-## LR_MACHINE
-
-- Switch from `LR(1)` to `LRAR(1)` or `mini LR(1)` ?
-- Switch `action` and `goto` tables from **2D** to **1D** arrays / **hash tables** ?
-- Merge `to_lr_state_id` and `rule_id` in `t_action` into a unique `payload` field (one is used by `SHIFT` actions, the other one by `REDUCE` action so they are never useful at the same time)
-
-## VARIABLES
-
-- Switch from `t_vector` to **hash table** ?
+- add `const` everywhere it's missing
+- Make doc
+- delete `logs` lib
+- delete `printf()` calls
+- delete `*_dump.c` files and `*_dump()` functions
+- delete `debug.h` and `debug.c`
+- delete all `DEBUG` sections
+- check all `TODO` comments
 
 ---
 
@@ -197,11 +201,3 @@ To store shared or borrowed values, initialize the map with del = NULL.
 	- **git issues**
 	- **github actions** (`CI/CD`)
 	- **discord hooks**
-
----
-
-# TO REMOVE BEFORE SUBMIT
-
-- delete `logs` lib and all calls to it
-- delete `*_dump.c` files and `*_dump()` functions
-- delete `debug.h` and `debug.c`

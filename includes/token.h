@@ -46,7 +46,8 @@ typedef enum e_token_type
 	DGREAT,			/**< '>>' appending output redirection. */
 	DLESS,			/**< '<<' here-document. */
 	DLESSDASH,		/**< '<<-' tab-stripped here-document. */
-	IO_NUMBER,		/**< A number immediatly followed by redirection operator */
+	IO_NUMBER,		/**< Solely digits and the delimiter character is '<' or '>' */
+	IO_LOCATION,	/**< At least three characters, begins with '{' and ends '}', and the delimiter character is '<' or '>' */
 	EOF_			/**< End of input. */
 }	t_token_type;
 

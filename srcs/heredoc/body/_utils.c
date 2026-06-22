@@ -45,7 +45,7 @@ bool	is_line_delimiter(t_heredoc_body *state)
 	char	*trimmed_line;
 
 	delim_len = str_len(state->item->delim);
-	if (state->item->mode == TAB_STRIP)
+	if (state->item->mode == HEREDOC_MODE_TAB_STRIP)
 	{
 		trimmed_line = str_trim_leading(state->line, "\t");
 		if (trimmed_line == NULL)

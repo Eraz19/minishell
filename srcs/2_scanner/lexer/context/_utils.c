@@ -13,7 +13,7 @@ static t_error	context_start(t_lexer *state, t_context_args args)
 
 static t_error	context_end(t_lexer *state, t_context_args args)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
 	if (lexer_consume(state, state->token->type, args.closing_len).type)
 		return (state->err);

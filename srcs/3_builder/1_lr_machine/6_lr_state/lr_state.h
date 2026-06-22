@@ -1,7 +1,9 @@
 #ifndef LR_STATE_H
 # define LR_STATE_H
 
-# include "builder.h"
+# include "lr_machine_type.h"
+# include "lr_state_type.h"
+# include "rule_state_type.h"
 
 /* ************************************************************************* */
 /*                                   GROUPS                                  */

@@ -22,7 +22,7 @@ static t_error	context_dquote_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_dquote_rules(t_context_stack_item *item)
+static t_context_args	context_dquote_rules(t_context_parser_stack_item *item)
 {
 	t_context_args	res;
 
@@ -43,9 +43,9 @@ static t_context_args	context_dquote_rules(t_context_stack_item *item)
 
 t_error	lexer_context_dquote(t_lexer *state)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
-	state->err = context_stack_item_init(&item, DQUOTE);
+	state->err = context_parser_stack_item_init(&item, DQUOTE);
 	if (state->err.type)
 		return (state->err);
 	state->err = lexer_context_scan(state, context_dquote_rules(item));

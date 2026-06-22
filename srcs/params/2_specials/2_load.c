@@ -2,8 +2,8 @@
 #include "options.h"
 #include "specials.h"
 #include <stdlib.h>
-# include "logs.h"	// TODO: tmp debug
-# include <inttypes.h>	// TODO: tmp debug
+# include "logs.h"	// DEBUG
+# include <inttypes.h>	// DEBUG
 
 // @ret ERR_OPT_INVALID
 static t_error	specials_load_cmd_string(

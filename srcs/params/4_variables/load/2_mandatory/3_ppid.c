@@ -1,7 +1,7 @@
 #include "asm_stubs.h"
 #include "variables.h"
 #include <stdlib.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 /*
 cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05_03)

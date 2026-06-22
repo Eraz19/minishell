@@ -63,7 +63,7 @@ typedef struct s_scanner
  *
  * Zeroes the structure, allocates and initialises the lexer, and initialises
  * the here-document collector. Must be called before scanner_load() or
- * scanner_next_token().
+ * scanner_get_next_token().
  *
  * @param state Pointer to the scanner state to initialise (borrowed).
  * @return ERR_NO on success, ERR_LIBC if the lexer allocation fails.
@@ -114,7 +114,7 @@ t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source);
  * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell scanner state is
  *         unavailable, or the recorded error on failure.
  */
-t_error	scanner_next_token(t_token *token);
+t_error	scanner_get_next_token(t_token *token);
 
 /**
  * @ingroup scanner

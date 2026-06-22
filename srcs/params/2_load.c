@@ -60,12 +60,12 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	err = var_load(&params->variables, envp);
 	if (err.type != ERR_NO)
 		return (err);
-	/* ---------- TODO: tmp debug: START ---------- */
+	/* ---------- DEBUG: START ---------- */
 	var_dump();
 	options_dump();
 	specials_dump();
 	positionals_dump();
 	params_dump();
-	/* ---------- TODO: tmp debug: END ---------- */
+	/* ---------- DEBUG: END ---------- */
 	return (error(ERR_NO));
 }

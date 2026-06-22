@@ -1,7 +1,7 @@
 #include "variables.h"
 #include <stdlib.h>
 #include <unistd.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 // @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	var_init_target_up(const char *name, const char *value)

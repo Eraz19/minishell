@@ -1,7 +1,7 @@
 #ifndef FIRST_H
 # define FIRST_H
 
-# include "builder.h"
+# include "lr_machine_type.h"
 
 /* ************************************************************************* */
 /*                                   TYPES                                   */

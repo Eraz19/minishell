@@ -1,4 +1,5 @@
 #include "lr_state.h"
+#include "transition_type.h"
 
 // ERR_NO / ERR_LIBC
 static t_error	build_initial_lr_state(

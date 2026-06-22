@@ -15,7 +15,7 @@ typedef struct s_expander_loader
 	t_context				quoting;
 	t_expander_word			loaded_word;
 	t_context_stack			loading_stack;
-	t_context_stack_item	*context_item;
+	t_context_parser_stack_item	*context_item;
 }	t_expander_loader;
 
 void	expander_loader_init(t_expander_loader *state);

@@ -1,4 +1,5 @@
-#include "builder.h"
+#include "libft.h"
+#include "transition_type.h"
 
 void	transition_init(t_vector *transitions)
 {

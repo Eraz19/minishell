@@ -21,7 +21,7 @@ static t_error	context_param_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_param_rules(t_context_stack_item *item)
+static t_context_args	context_param_rules(t_context_parser_stack_item *item)
 {
 	t_context_args	res;
 
@@ -42,9 +42,9 @@ static t_context_args	context_param_rules(t_context_stack_item *item)
 
 t_error	lexer_context_param(t_lexer *state)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
-	state->err = context_stack_item_init(&item, PARAM);
+	state->err = context_parser_stack_item_init(&item, PARAM);
 	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);

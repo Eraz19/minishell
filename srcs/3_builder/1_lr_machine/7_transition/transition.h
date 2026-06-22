@@ -1,7 +1,7 @@
 #ifndef TRANSITION_H
 # define TRANSITION_H
 
-# include "builder.h"
+# include "lr_machine_type.h"
 
 /* ************************************************************************* */
 /*                                   GROUPS                                  */

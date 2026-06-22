@@ -2,7 +2,7 @@
 #include "alias.h"
 #include "scanner_.h"
 
-t_error	scanner_next_token(t_token *token)
+t_error	scanner_get_next_token(t_token *token)
 {
 	t_scanner	*state;
 

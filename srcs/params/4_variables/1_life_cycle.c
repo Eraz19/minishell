@@ -4,7 +4,7 @@
 #include "var_load_mandatory.h"
 #include "var_load_up.h"
 #include <stdlib.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 t_var	var_new(const char *name, const char *value, bool export, bool ronly)
 {

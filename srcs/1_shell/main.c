@@ -1,6 +1,6 @@
 #include "shell_priv.h"
 #include <stdlib.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 // @ret ERR_NO / ERR_LIBC.
 static t_error	shell_exec_env(void)
@@ -56,14 +56,7 @@ t_error	shell_start(int argc, char **argv, char **envp)
 	err = shell_exec_env();
 	if (err.type != ERR_NO)
 		return (err);
-	/* ---------- TODO (START) ---------- */
-	t_ast_node	ast;
-	t_ast_node	*ast_ptr = &ast;
-	builder_get_ast(&ast_ptr);
-	// TODO: runner_run(t_shell *shell);
-	/* ---------- TODO (END) ---------- */
-	print_warn("Runner not implemented yet => skipping execution loop\n");
-	print_stop();
+	err = runner_loop(&shell->runner);
 	shell_exit(err);
 	return (error(ERR_NO));
 }

@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdarg.h>
-# include <stdio.h>	// DEBUG
+# include <debug.h>	// DEBUG
 
 #define SEPARATOR		": "
 
@@ -18,6 +18,8 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
+	else if (err.type == ERR_HOOK_INVALID_RHS_LEN)
+		return ("invalid rhs len");
 	else if (err.type == ERR_INDEX_OUT_OF_BOUND)
 		return ("index out of bound");
 	else if (err.type == ERR_INVALID_FORMAT)
@@ -34,6 +36,12 @@ const char	*error_to_string(t_error err)
 		return ("invalid option argument");
 	else if (err.type == ERR_OPT_MISSING_ARG)
 		return ("missing option argument");
+	else if (err.type == ERR_PARSER_EMPTY_GOTO)
+		return ("empty goto");
+	else if (err.type == ERR_PARSER_INVALID_FUNCTION_NAME)
+		return ("invalid function name");
+	else if (err.type == ERR_PARSER_INVALID_STATE)
+		return ("invalid state");
 	else if (err.type == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
 	else if (err.type == ERR_SHIFT_INVALID_VALUE)
@@ -93,9 +101,9 @@ t_error	error_priv(t_error_type type, const char *caller)
 
 	err.type = type;
 	err.saved_errno = 0;
-
-	if (type != ERR_NO)
-		printf("===> [ERROR] from [%s()] type = %s\n", caller, error_to_string(err));
+	// if (type != ERR_NO)
+	// 	printf(RED "===> [ERROR] from [%s()] type = %s\n" NC, caller, error_to_string(err));
+	(void)caller;
 	return (err);
 }
 
@@ -105,8 +113,8 @@ t_error	error_sys_priv(const char *caller)
 
 	err.type = ERR_LIBC;
 	err.saved_errno = errno;
-
-	printf("===> [ERROR] from [%s()] type = ERR_LIBC (%s)\n", caller, error_to_string(err));
+	// printf(RED "===> [ERROR] from [%s()] type = ERR_LIBC (%s)\n" NC, caller, error_to_string(err));
+	(void)caller;
 	return (err);
 }
 

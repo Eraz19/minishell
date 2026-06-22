@@ -39,10 +39,12 @@ t_error	history_append_to_entry(char *entry)
 	return (state->err);
 }
 
+# include "debug.h"
 t_error	history_save(void)
 {
 	t_history	*state;
 
+	printf("%s\n", __func__);
 	state = shell_get_history();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));

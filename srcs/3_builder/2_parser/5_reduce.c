@@ -1,28 +1,35 @@
 #include "parser_priv.h"
+#include "goto.h"
 
-static inline size_t	parser_new_lr_state(
+static inline t_error	parser_new_lr_state(
 	t_parser *parser,
 	t_lr_machine *machine,
-	t_rule *rule)
+	t_rule *rule,
+	size_t *dst)
 {
-	t_stack			*stack;
+	t_parser_stack			*stack;
 	size_t			previous_item_id;
-	t_stack_item	*previous_item;
+	t_parser_stack_item	*previous_item;
 	size_t			lr_state_from;
+	size_t			lr_state_to;
 
 	stack = &parser->stack;
 	previous_item_id = stack->len - rule->rhs_len - 1;
-	previous_item = &((t_stack_item *)stack->data)[previous_item_id];
+	previous_item = &((t_parser_stack_item *)stack->data)[previous_item_id];
 	lr_state_from = previous_item->lr_state_id;
-	return (machine->gotos[lr_state_from][rule->lhs]);
+	lr_state_to = machine->gotos[lr_state_from][rule->lhs - SYM_NON_TERMINAL_MIN];
+	if (lr_state_to == GOTO_EMPTY)
+		return (error_print(error(ERR_PARSER_EMPTY_GOTO), "parser", NULL, NULL));
+	*dst = lr_state_to;
+	return (error(ERR_NO));
 }
 
 static inline size_t	parser_tokens_count_sum(
-	t_stack_item *rhs_items,
+	t_parser_stack_item *rhs_items,
 	size_t count)
 {
 	size_t			i;
-	t_stack_item	*item;
+	t_parser_stack_item	*item;
 	size_t			token_count;
 
 	token_count = 0;
@@ -39,7 +46,7 @@ static inline size_t	parser_tokens_count_sum(
 static t_error	parser_replace_items(
 	t_parser *parser,
 	size_t count,
-	t_stack_item *item)
+	t_parser_stack_item *item)
 {
 	size_t	i;
 
@@ -60,35 +67,42 @@ t_error	parser_reduce(t_parser *parser, t_lr_machine *machine, size_t rule_id)
 {
 	t_rule			*rule;
 	size_t			rhs_start;
-	t_stack_item	*rhs;
-	t_stack_item	item;
+	t_parser_stack_item	*rhs;
+	t_parser_stack_item	item;
 	t_error			err;
 
 	rule = &machine->rules[rule_id];
 	rhs_start = parser->stack.len - rule->rhs_len;
-	rhs = &((t_stack_item *)parser->stack.data)[rhs_start];
+	rhs = &((t_parser_stack_item *)parser->stack.data)[rhs_start];
 	item.symbol = rule->lhs;
-	item.lr_state_id = parser_new_lr_state(parser, machine, rule);
+	err = parser_new_lr_state(parser, machine, rule, &item.lr_state_id);
+	if (err.type != ERR_NO)
+		return (err);
 	item.tokens_start_id = parser->lookahead_id;
 	if (rule->rhs_len > 0)
 		item.tokens_start_id = rhs[0].tokens_start_id;
 	item.tokens_count = parser_tokens_count_sum(rhs, rule->rhs_len);
-	printf("[PARSER] REDUCE rule=%zu lhs=%s goto=%zu rhs_len=%zu token_start=%zu token_count=%zu\n",
-		rule_id,
-		symbol_to_string(item.symbol),
-		item.lr_state_id,
-		rule->rhs_len,
-		item.tokens_start_id,
-		item.tokens_count);
+	// printf("[PARSER] REDUCE rule=%zu lhs=%s goto=%zu rhs_len=%zu token_start=%zu token_count=%zu\n",
+	// 	rule_id,
+	// 	symbol_to_string(item.symbol),
+	// 	item.lr_state_id,
+	// 	rule->rhs_len,
+	// 	item.tokens_start_id,
+	// 	item.tokens_count);
+	printf("[PARSER] REDUCE => %s [", symbol_to_string(item.symbol));
 	for (size_t i = 0; i < rule->rhs_len; i++)
 	{
-		printf("[PARSER] RHS[%zu] symbol=%s state=%zu token_start=%zu token_count=%zu\n",
-			i,
-			symbol_to_string(rhs[i].symbol),
-			rhs[i].lr_state_id,
-			rhs[i].tokens_start_id,
-			rhs[i].tokens_count);
+		printf("%s", symbol_to_string(rhs[i].symbol));
+		if (i < rule->rhs_len - 1)
+			printf(" ");
+		// printf("[PARSER] RHS[%zu] symbol=%s state=%zu token_start=%zu token_count=%zu\n",
+		// 	i,
+		// 	symbol_to_string(rhs[i].symbol),
+		// 	rhs[i].lr_state_id,
+		// 	rhs[i].tokens_start_id,
+		// 	rhs[i].tokens_count);
 	}
+	printf("]\n");
 	item.cst_node = NULL;
 	err = error(ERR_NO);
 	if (rule->hook)

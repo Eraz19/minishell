@@ -66,7 +66,7 @@ typedef struct s_context_args
 	t_context				context;
 	size_t					opening_len;
 	size_t					closing_len;
-	t_context_stack_item	*stack_item;
+	t_context_parser_stack_item	*stack_item;
 	void					*unescaped_args;
 	t_error					(*escape)(t_lexer *);
 	bool					(*is_end)(char, void *);

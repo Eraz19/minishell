@@ -1,5 +1,5 @@
-#include "builder.h"
 #include "goto.h"
+#include "transition_type.h"
 #include <stdlib.h>
 
 // ERR_LIBC

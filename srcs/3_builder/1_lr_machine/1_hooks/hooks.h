@@ -1,16 +1,24 @@
 #ifndef HOOKS_H
 # define HOOKS_H
 
-# include "builder.h"
+# include "error.h"
+# include "parser_stack_type.h"
 
-t_error	hook_2(t_stack_item *rhs, size_t len, void *ctx);
-t_error	hook_3(t_stack_item *rhs, size_t len, void *ctx); // trigger le switch en heredoc mode avec le delimiter still quoted
-t_error	hook_4(t_stack_item *rhs, size_t len, void *ctx);
-t_error	hook_5(t_stack_item *rhs, size_t len, void *ctx);
-t_error	hook_6(t_stack_item *rhs, size_t len, void *ctx);
-t_error	hook_7a(t_stack_item *rhs, size_t len, void *ctx);
-t_error	hook_7b(t_stack_item *rhs, size_t len, void *ctx);
-t_error	hook_8(t_stack_item *rhs, size_t len, void *ctx);
-t_error	hook_9(t_stack_item *rhs, size_t len, void *ctx);
+// Triggered on SYM_io_here reduction
+t_error	hook_3(t_parser_stack_item *rhs, size_t len, void *ctx);
+
+// Triggered by hook_fname()
+t_error	hook_9_increment(t_parser_stack_item *rhs, size_t len, void *ctx);
+
+// Triggered on SYM_function_body reduction
+t_error	hook_9_decrement(t_parser_stack_item *rhs, size_t len, void *ctx);
+
+/*
+* Triggered on SYM_fname reduction
+* Rule 9 starts here
+* Although function_body is parsed later, only '(' ')' and linebreak can appear
+* before it, so disabling assignment and expansion now is safe.
+*/
+t_error	hook_fname(t_parser_stack_item *rhs, size_t len, void *ctx);
 
 #endif
