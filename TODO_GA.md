@@ -1,6 +1,6 @@
 # WIP
 
-- add hook on `newline_list` reduction to call `t_error scanner_heredoc_read(void)` only if `report_io_here()` has been triggered before
+- ⚠️ `trap` si `ctrl + D` après avoir déjà saisi une input
 - `parser_can_next_token_be_a_cmd_name_or_word()`
 
 ---

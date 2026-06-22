@@ -3,11 +3,11 @@
 
 void	history_list_clean(void *item)
 {
-	char	*item_;
+	char	*str;
 
-	item_ = (char *)item;
-	if (item_ != NULL)
-		free(item_);
+	str = *(char **)item;
+	if (str)
+		free(str);
 }
 
 void	history_list_init(t_history_list *list)

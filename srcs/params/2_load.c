@@ -61,11 +61,11 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 	if (err.type != ERR_NO)
 		return (err);
 	/* ---------- DEBUG: START ---------- */
-	var_dump();
-	options_dump();
-	specials_dump();
-	positionals_dump();
-	params_dump();
+	// var_dump();
+	// options_dump();
+	// specials_dump();
+	// positionals_dump();
+	// params_dump();
 	/* ---------- DEBUG: END ---------- */
 	return (error(ERR_NO));
 }
