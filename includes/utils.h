@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 # define UTILS_H
 
+# include "libft.h"
 # include "error.h"
 # include <time.h>
 
@@ -16,5 +17,8 @@ t_error serialize(const char *src, char **dst);
 
 // @ret ERR_INVALID_FORMAT / ERR_LIBC
 t_error deserialize(const char *src, char **dst);
+
+// @ret ERR_LIBC
+t_error	deserialize_all(const char *src, t_vector *dst);
 
 #endif

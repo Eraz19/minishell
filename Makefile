@@ -56,6 +56,7 @@ INCLUDES		:= \
 	-Ilibft/buff \
 	-Ilibft/buff/format \
 	-Isrcs/0_utils/1_ft_getopt \
+	-Isrcs/0_utils/2_serializer \
 	-Isrcs/1_shell \
 	-Isrcs/2_scanner \
 	-Isrcs/2_scanner/lexer \

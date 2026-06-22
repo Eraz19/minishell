@@ -11,6 +11,7 @@
 		"-I${workspaceFolder}/libft/src/hashmap/buckets",
 		"-I${workspaceFolder}/libft/src/hashmap/key_value",
 		"-I${workspaceFolder}/srcs/0_utils/1_ft_getopt",
+		"-I${workspaceFolder}/srcs/0_utils/2_serializer",
 		"-I${workspaceFolder}/srcs/1_shell",
 		"-I${workspaceFolder}/srcs/2_scanner",
 		"-I${workspaceFolder}/srcs/2_scanner/lexer",
