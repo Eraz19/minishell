@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 16:34:10 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 16:57:25 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/22 14:47:48 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,12 @@ t_error	history_append_to_entry(char *entry)
 	return (state->err);
 }
 
+# include "debug.h"
 t_error	history_save(void)
 {
 	t_history	*state;
 
+	printf("%s\n", __func__);
 	state = shell_get_history();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));

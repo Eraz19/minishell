@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdarg.h>
-# include <stdio.h>	// DEBUG
+# include <debug.h>	// DEBUG
 
 #define SEPARATOR		": "
 

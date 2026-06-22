@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/01 13:19:38 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 11:24:30 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include "error.h"
 #include "history_.h"
@@ -41,13 +29,21 @@ t_error	history_load(t_history *state)
 	if (history_load_path_env(state).type)
 		return (state->err);
 	print_pass("history_load_path_env()\n");
-	max = state->rl_history.max;
 	if (history_load_size_env(state).type)
 		return (state->err);
+	max = state->rl_history.max;
 	print_pass("history_load_size_env()\n");
+	print_warn("rl_history.max = %i\n", (int)state->rl_history.max);
+	print_warn("file.path = %s\n", state->file.path);
 	if (history_file_load(&state->file, &state->list, max).type)
 		return (state->err = state->file.err);
 	print_pass("history_file_load()\n");
+	print_warn("list.len = %i\n", (int)state->list.len);
+	for (size_t i = 0; i < state->list.len; i++)
+	{
+		print_warn("%s\n", ((char **)state->list.data)[i]);
+	}
+	print_warn("file.path = %s\n", state->file.path);
 	if (history_rl_load(&state->rl_history, &state->list).type)
 		return (state->err = state->rl_history.err);
 	print_pass("history_rl_load()\n");

@@ -33,6 +33,7 @@ t_error	builder_get_ast(t_ast_node **dst_ast)
 	if (err.type != ERR_NO)
 		return (err);
 	*dst_ast = NULL;
+	// shell_exit(error(ERR_NO));
 	// TODO: converter_convert(builder->parser->cst, dst_ast)
 	return (error(ERR_NO));
 }

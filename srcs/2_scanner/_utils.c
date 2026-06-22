@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 10:12:50 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/22 15:00:51 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "reader_.h"
 #include "scanner_.h"
 
+# include "debug.h" // DEBUG
 bool	is_EOF(t_scanner *state)
 {
-	return (state->lexer.reached_EOI &&
-		state->mode != SCAN_STDIN &&
-		state->lexer.input_stack.len == 0);
+	printf("%s\n", bool_to_string(state->lexer.reached_EOI));
+	return (state->lexer.reached_EOI && state->lexer.input_stack.len == 0);
 }
 
 t_error	scanner_read_input(t_scanner *state) 

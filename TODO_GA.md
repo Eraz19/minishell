@@ -1,5 +1,7 @@
 # WIP
 
+- `deserialize_all()`:
+	- split et unquote le contenu d'un `char *` et renvoyer un `char **`
 - `parser_can_next_token_be_a_cmd_name_or_word()`
 
 ---
@@ -7,15 +9,15 @@
 # ALEXANDER
 
 ## BUGS
-- `history_load()`:
-	- Pas d'historique avec flèche du haut quand on vient de lancer le shell
 - `history`:
+	- use `serialize()` and `deserialize()` and `deserialize_all()`
+	- `history_load()`: Pas d'historique avec flèche du haut quand on vient de lancer le shell
 	- L'historique apparaît quoted
 	- Le `newline` apparait dans l'input (il ne devrait pas être stocké dans l'historique)
 - `scanner_get_next_token()`:
 	- Renvoie `TOKEN_NONE` au lieu de `TOKEN_EOF` ? (nécessaire pour reduce le programme + distinguer d'une error)
 	- Ne renvoie pas d'erreur lorsque la cmd_string / le fichier d'input est déjà consommée !
-- `scanner_next_token()` modifier la doc pour enlever l'obligation d'init le token côté caller
+	- Modifier la doc pour enlever l'obligation d'init le token côté caller
 - `heredoc`:
 	- Ne lit pas le here document après le `newline` malgré le trigger de `scanner_report_io_here()`
 	- (actuellement je reçois le contenu et le delimiter dans les `token`)
@@ -32,8 +34,10 @@
 ## AJOUTS DONT J'AI BESOIN
 - `token_contains_unquoted_equal()`:
 	> If the TOKEN contains an unquoted (as determined while applying rule 4 from 2.3 Token Recognition) <equals-sign> character that is not part of an embedded parameter expansion, command substitution, or arithmetic expansion construct (as determined while applying rule 5 from 2.3 Token Recognition)
+	- `token->assign_operand_offset` (-1 si inexistant)
 - `scanner_reset()`:
 	- Pour refresh après une syntax error (ou autre error...?)
+	- `free()` les items mais pas les arrays pour éviter de re `malloc()` après
 - `IO_NUMBER` et `IO_LOCATION`:
 	- Décrits dans `Grammar Lexical Conventions` + `The rules for token recognition in 2.3 Token Recognition shall apply`
 	- Donc clairement responsabilité du `lexer` selon moi
@@ -52,19 +56,20 @@
 	- La signature a changé pour return un `t_error`
 	- Il faut donc désormais gérer la possible erreur `ERR_SHELL_NOT_FOUND` dans `is_token_alias_expandable()`
 	- Ou j'exit le shell dans ce cas là ?
+	- ⚠️ **TODO**: remove `shell_exit()` because it could let somme allocations inside pending functions => just return error
 - `make debug`:
 	- compile avec les flags de sanitizing + debug au lieu des flags d'opti
 
 ## DOUTES
-- `scanner_report_io_here()`:
-	- J'envoie le delimiter brut (donc pas unquoted) pour que tu saches si le body doit être expandu on est d'accord ?
-	- Tu le copies donc je free de mon côté ? (pas très opti donc on pourrait juste documenter l'ownership plutôt ?)
 - `error_print()`:
 	- Vérifier que tous les call sont bien doublement `NULL` terminés
 
 ## VALIDÉ
 - `parser` own les `token` (et leur `value`) reçus via `scanner_get_next_token()`
 - `\n` à la fin de chaque input du `reader`
+- `scanner_report_io_here()`:
+	- J'envoie le delimiter brut (donc pas unquoted) pour que tu saches si le body doit être expandu on est d'accord ?
+	- Tu le copies donc je free de mon côté ? (pas très opti donc on pourrait juste documenter l'ownership plutôt ?)
 
 ---
 

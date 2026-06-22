@@ -2,7 +2,7 @@
 #include "token.h"
 #include <stdlib.h>
 
-# include "debug.h"	// DEBUG
+// # include "debug.h"	// DEBUG
 t_error	parser_qualify_symbol(
 	t_parser *parser,
 	size_t lr_state_id,

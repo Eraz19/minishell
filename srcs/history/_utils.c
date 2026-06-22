@@ -1,17 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/12 14:13:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 17:00:05 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include "history.h"
+#include "utils.h"
 
 void	history_entry_deserialize(char **entry)
 {
@@ -30,6 +19,7 @@ void	history_entry_deserialize(char **entry)
 	}
 }
 
+// TODO: use serializer
 t_error	history_entry_serialize(char **entry)
 {
 	size_t	i;
@@ -48,9 +38,9 @@ t_error	history_entry_serialize(char **entry)
 		}
 		i++;
 	}
-	if (!buff_prepend(&serialized, "'", 1))
+	if (!buff_prepend(&serialized, "\'", 1))
 		return (buff_free(&serialized), error_sys());
-	if (!buff_append(&serialized, "'", 1))
+	if (!buff_append(&serialized, "\'", 1))
 		return (buff_free(&serialized), error_sys());
 	entry_ = buff_get_string(&serialized);
 	if (entry_ == NULL)
@@ -59,6 +49,8 @@ t_error	history_entry_serialize(char **entry)
 	return (free(*entry), *entry = entry_, error(ERR_NO));
 }
 
+// TODO: use serializer
+# include "debug.h"
 t_error	history_build_file_content(t_history *state, size_t start)
 {
 	size_t	i;
@@ -73,6 +65,7 @@ t_error	history_build_file_content(t_history *state, size_t start)
 		state->err = history_list_get(&state->list, &entry, i);
 		if (state->err.type)
 			return (state->err);
+		printf("entry = %s\n", entry);
 		if (!buff_append(&content, entry, (long)str_len(entry)))
 			return (free(entry), buff_free(&content), state->err = error_sys());
 		free(entry);
@@ -80,8 +73,16 @@ t_error	history_build_file_content(t_history *state, size_t start)
 		i++;
 	}
 	if (state->current_input.len != 0)
-		if (!buff_append(&content, state->current_input.data, (long)state->current_input.len))
+	{
+		char *str = buff_get_string(&state->current_input);
+		if (!str)
 			return (error_sys());
+		t_error err = serialize(str, &entry);
+		if (err.type)
+			return (err);
+		if (!buff_append(&content, entry, (long)state->current_input.len))
+			return (error_sys());
+	}
 	state->file.content = buff_get_string(&content);
 	if (state->file.content == NULL)
 		return (buff_free(&content), state->err = error_sys());

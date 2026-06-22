@@ -32,8 +32,8 @@ void	shell_exit(t_error error)
 {
 	t_shell	*shell;
 
-	shell = shell_get();
 	(void)history_save();	// TODO: print error
+	shell = shell_get();
 	if (shell)
 		shell_free(&shell);
 	print_stop();
