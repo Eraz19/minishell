@@ -11,6 +11,10 @@ t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine);
 t_error	parser_reset(t_parser *parser);
 void	parser_free(t_parser *parser);
 
-bool	parser_can_next_token_be_a_cmd_name_or_word(t_parser *parser);
+// @ret ERR_PARSER_INVALID_STATE / ERR_PARSER_EMPTY_GOTO / ERR_LIBC
+t_error	parser_can_next_token_be_a_cmd_name_or_word(
+	t_parser *parser,
+	t_lr_machine *machine,
+	bool *dst);
 
 #endif

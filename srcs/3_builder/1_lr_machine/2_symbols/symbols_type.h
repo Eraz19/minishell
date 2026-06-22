@@ -24,7 +24,7 @@ typedef enum e_symbol
 	SYM_RPARENTHESIS,	// )
 	//		- Redirection
 	SYM_IO_NUMBER,		// [0-9]+
-	SYM_IO_LOCATION,	// Not supported (optional POSIX symbol)
+	SYM_IO_LOCATION,	// 3+ char, begins with '{', ends with '}', and the delimiter character is '<' or '>'
 	SYM_LESS,			// <
 	SYM_DLESS,			// <<
 	SYM_DLESSDASH,		// <<-

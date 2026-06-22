@@ -1,7 +1,6 @@
 #include "parser.h"
 #include "parser_priv.h"
 #include "qualifiers.h"
-#include "qualifiers_priv.h"
 # include <stdio.h>	// DEBUG
 
 static t_error	parser_push_initial_state(t_parser *parser)
@@ -80,15 +79,4 @@ t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
 			err = parser_reduce(parser, machine, action.payload);
 	}
 	return (err);
-}
-
-// TODO
-bool	parser_can_next_token_be_a_cmd_name_or_word(t_parser *parser)
-{
-	size_t		lr_state_id;
-	t_qualifier	qualifier;
-
-	lr_state_id = parser_stack_top(&parser->stack)->lr_state_id;
-	qualifier = parser->qualifiers[lr_state_id];
-	return (qualifier == qualify_7a || qualifier == qualify_7b);
 }

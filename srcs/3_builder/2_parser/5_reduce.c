@@ -7,11 +7,11 @@ static inline t_error	parser_new_lr_state(
 	t_rule *rule,
 	size_t *dst)
 {
-	t_parser_stack			*stack;
-	size_t			previous_item_id;
+	t_parser_stack		*stack;
+	size_t				previous_item_id;
 	t_parser_stack_item	*previous_item;
-	size_t			lr_state_from;
-	size_t			lr_state_to;
+	size_t				lr_state_from;
+	size_t				lr_state_to;
 
 	stack = &parser->stack;
 	previous_item_id = stack->len - rule->rhs_len - 1;
@@ -28,9 +28,9 @@ static inline size_t	parser_tokens_count_sum(
 	t_parser_stack_item *rhs_items,
 	size_t count)
 {
-	size_t			i;
+	size_t				i;
 	t_parser_stack_item	*item;
-	size_t			token_count;
+	size_t				token_count;
 
 	token_count = 0;
 	i = 0;
@@ -44,9 +44,9 @@ static inline size_t	parser_tokens_count_sum(
 }
 
 static t_error	parser_replace_items(
-	t_parser *parser,
-	size_t count,
-	t_parser_stack_item *item)
+	t_parser			*parser,
+	size_t 				count,
+	t_parser_stack_item	*item)
 {
 	size_t	i;
 
@@ -65,11 +65,11 @@ static t_error	parser_replace_items(
 # include <stdio.h>
 t_error	parser_reduce(t_parser *parser, t_lr_machine *machine, size_t rule_id)
 {
-	t_rule			*rule;
-	size_t			rhs_start;
+	t_rule				*rule;
+	size_t				rhs_start;
 	t_parser_stack_item	*rhs;
 	t_parser_stack_item	item;
-	t_error			err;
+	t_error				err;
 
 	rule = &machine->rules[rule_id];
 	rhs_start = parser->stack.len - rule->rhs_len;
