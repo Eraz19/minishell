@@ -101,6 +101,7 @@ t_error	error_priv(t_error_type type, const char *caller)
 
 	err.type = type;
 	err.saved_errno = 0;
+	err.printed = false;
 	// if (type != ERR_NO)
 	// 	printf(RED "===> [ERROR] from [%s()] type = %s\n" NC, caller, error_to_string(err));
 	(void)caller;
@@ -113,6 +114,7 @@ t_error	error_sys_priv(const char *caller)
 
 	err.type = ERR_LIBC;
 	err.saved_errno = errno;
+	err.printed = false;
 	// printf(RED "===> [ERROR] from [%s()] type = ERR_LIBC (%s)\n" NC, caller, error_to_string(err));
 	(void)caller;
 	return (err);
@@ -140,6 +142,8 @@ t_error	error_print(t_error err, ...)
 	const char	*shell_name;
 	const char	*string;
 
+	if (err.printed)
+		return (err);
 	shell_name = shell_get_name();
 	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));
 	(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
@@ -158,5 +162,5 @@ t_error	error_print(t_error err, ...)
 	string = error_to_string(err);
 	(void)posix_write(STDERR_FILENO, string, str_len(string));
 	(void)posix_write(STDERR_FILENO, "\n", 1);
-	return (err);
+	return (err.printed = true, err);
 }

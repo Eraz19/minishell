@@ -56,6 +56,7 @@ typedef struct s_error
 {
 	t_error_type	type;
 	int				saved_errno;
+	bool			printed;
 }	t_error;
 
 /**

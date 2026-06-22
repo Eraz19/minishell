@@ -4,12 +4,14 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_error	shell_err;
+	t_error	err;
 
 	setlocale(LC_NUMERIC, "de_DE");	// DEBUG
-	shell_err = shell_run(argc, argv, envp);
+	err = shell_run(argc, argv, envp);
+	if (err.type)
+		error_print(err);
 	shell_free();
 	print_stop();
 	setlocale(LC_NUMERIC, "");	// DEBUG
-	return ((int)shell_err.type);
+	return ((int)err.type);
 }
