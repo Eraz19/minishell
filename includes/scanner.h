@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/21 23:49:52 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/22 20:07:46 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "token.h"
 # include "heredoc.h"
 # include "lexer_.h"
+
+// TODO
+t_error	scanner_heredoc_read(void);
 
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.

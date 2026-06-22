@@ -37,6 +37,7 @@ t_error	hook_3(t_parser_stack_item *rhs, size_t len, void *ctx)
 	printf ("[PARSER] [%s] scanner_report_io_here(%p, %s, %i)\n", __func__, &path, delim, (int)mode);
 	printf("----------\n");
 	err = scanner_report_io_here(&path, delim, mode);
+	parser->must_read_heredoc = true;
 	free(delim);
 	free(path);	// TODO: remove it when cst_node is implemented (it will own it)
 	return (err);

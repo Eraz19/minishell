@@ -32,8 +32,6 @@ t_error	hook_fname(t_parser_stack_item *rhs, size_t len, void *ctx)
 	t_token		*token;
 	t_error		err;
 
-	(void)rhs;
-	(void)len;
 	if (len != 1)
 		return (error_print(error(ERR_HOOK_INVALID_RHS_LEN), __func__,
 			NULL, "expected 1 received %i", (int)len));

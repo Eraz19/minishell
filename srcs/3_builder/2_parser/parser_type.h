@@ -20,6 +20,7 @@ typedef struct s_parser
 	size_t			function_body_depth;
 	bool			assignment_disabled;
 	bool			expansion_disabled;
+	bool			must_read_heredoc;
 }	t_parser;
 
 #endif

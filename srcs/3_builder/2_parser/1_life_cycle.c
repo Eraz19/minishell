@@ -14,6 +14,7 @@ void	parser_init(t_parser *parser)
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
+	parser->must_read_heredoc = false;
 }
 
 t_error	parser_reset(t_parser *parser)
@@ -36,6 +37,7 @@ t_error	parser_reset(t_parser *parser)
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
+	parser->must_read_heredoc = false;
 	return (error(ERR_NO));
 }
 
