@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 11:15:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:23:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 21:55:18 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ bool	is_line_delimiter(t_heredoc_body *state)
 	char	*trimmed_line;
 
 	delim_len = str_len(state->item->delim);
-	if (state->item->mode == TAB_STRIP)
+	if (state->item->mode == HEREDOC_MODE_TAB_STRIP)
 	{
 		trimmed_line = str_trim_leading(state->line, "\t");
 		if (trimmed_line == NULL)

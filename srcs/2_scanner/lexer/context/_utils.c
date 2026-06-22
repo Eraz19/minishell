@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 19:48:06 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:43:14 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static t_error	context_start(t_lexer *state, t_context_args args)
 
 static t_error	context_end(t_lexer *state, t_context_args args)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
 	if (lexer_consume(state, state->token->type, args.closing_len).type)
 		return (state->err);

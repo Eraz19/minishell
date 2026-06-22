@@ -1,4 +1,4 @@
-#include "builder.h"
+#include "symbols_type.h"
 #include <stdbool.h>
 
 void	first_add(bool *dst, bool *did_add)

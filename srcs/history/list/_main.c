@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:20:42 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:18:47 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/20 17:15:04 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "history_.h"
 #include "history_list_.h"
-#include "history_file_.h"
 
 t_error	history_list_push(t_history_list *list, char *item)
 {

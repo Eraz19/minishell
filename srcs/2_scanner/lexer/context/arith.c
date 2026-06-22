@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arith.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:20:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:42:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
 
 static t_context_args	context_arith_rules(
 	size_t *nesting_depth,
-	t_context_stack_item *item)
+	t_context_parser_stack_item *item)
 {
 	t_context_args	res;
 
@@ -76,13 +76,13 @@ static t_context_args	context_arith_rules(
 t_error	lexer_context_arith(t_lexer *state)
 {
 	t_context_args			args;
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 	t_lexer_backup			backup;
 	size_t					nesting_depth;
 
 	nesting_depth = 0;
 	backup = lexer_backup(state);
-	state->err = context_stack_item_init(&item, ARITH);
+	state->err = context_parser_stack_item_init(&item, ARITH);
 	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);

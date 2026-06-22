@@ -1,4 +1,5 @@
-#include "lr_state.h"
+#include "rule_state_type.h"
+#include "lr_state_type.h"
 #include "rule_state.h"
 
 static bool	lr_state_contains_rule_state(

@@ -1,7 +1,8 @@
 #ifndef RULE_STATE_H
 # define RULE_STATE_H
 
-# include "builder.h"
+# include "rules__type.h"
+# include "rule_state_type.h"
 
 /* ************************************************************************* */
 /*                                   GROUPS                                  */

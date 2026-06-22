@@ -1,7 +1,7 @@
 #ifndef ACTION_PRIV_H
 # define ACTION_PRIV_H
 
-# include "builder.h"
+# include "lr_machine_type.h"
 
 /* ************************************************************************* */
 /*                                   GROUPS                                  */

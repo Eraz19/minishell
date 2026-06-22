@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:24:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 11:16:31 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_lexer_backup
 typedef struct s_lexer
 {
 	t_error				err;
-	t_input_stack_item	*input;
+	t_input_parser_stack_item	*input;
 	t_token				*token;
 	bool				is_stdin;
 	t_input_stack		input_stack;

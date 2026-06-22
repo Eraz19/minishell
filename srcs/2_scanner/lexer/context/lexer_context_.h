@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_context_.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:49:13 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 09:36:55 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct s_context_args
 	t_context				context;
 	size_t					opening_len;
 	size_t					closing_len;
-	t_context_stack_item	*stack_item;
+	t_context_parser_stack_item	*stack_item;
 	void					*unescaped_args;
 	t_error					(*escape)(t_lexer *);
 	bool					(*is_end)(char, void *);

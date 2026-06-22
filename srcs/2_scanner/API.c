@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:05:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 15:39:39 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/21 23:49:52 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "alias.h"
 #include "scanner_.h"
 
-t_error	scanner_next_token(t_token *token)
+t_error	scanner_get_next_token(t_token *token)
 {
 	t_scanner	*state;
 

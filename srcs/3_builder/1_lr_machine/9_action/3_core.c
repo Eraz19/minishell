@@ -1,7 +1,9 @@
-#include "builder.h"
 #include "action_priv.h"
+#include "transition_type.h"
+#include "rule_state_type.h"
+#include "lr_state_type.h"
 
-// TODO: tmp debug (always return ERR_LR_CONFLICT)
+// DEBUG (always return ERR_LR_CONFLICT)
 static t_error	print_conflict(t_action *action, size_t lr_state_id, t_symbol symbol, t_action_type target_type, size_t target_payload)
 {
 	t_buff	buff;

@@ -1,7 +1,7 @@
 #include "variables.h"
 #include "utils.h"
 #include <stdlib.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
 static t_error	process_variable(

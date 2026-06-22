@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   squote.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 14:21:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:40:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static t_error	context_squote_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_squote_rules(t_context_stack_item *item)
+static t_context_args	context_squote_rules(t_context_parser_stack_item *item)
 {
 	t_context_args	res;
 
@@ -54,9 +54,9 @@ static t_context_args	context_squote_rules(t_context_stack_item *item)
 
 t_error	lexer_context_squote(t_lexer *state)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
-	state->err = context_stack_item_init(&item, SQUOTE);
+	state->err = context_parser_stack_item_init(&item, SQUOTE);
 	if (state->err.type)
 		return (state->err);
 	state->err = lexer_context_scan(state, context_squote_rules(item));

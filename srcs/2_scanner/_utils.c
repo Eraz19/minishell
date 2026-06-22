@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 10:12:50 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 15:39:24 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ bool	is_EOF(t_scanner *state)
 
 t_error	scanner_read_input(t_scanner *state) 
 { 
-	t_input_stack_item	*item;
+	t_input_parser_stack_item	*item;
 
-	state->err = input_stack_item_init(&item);
+	state->err = input_parser_stack_item_init(&item);
 	if (state->err.type)
 		return (state->err);
 	if (state->mode == SCAN_FILE)
@@ -39,13 +39,13 @@ t_error	scanner_read_input(t_scanner *state)
 	else if (state->mode == SCAN_STDIN)
 		state->err = reader_new_input(&item->str); 
 	if (state->err.type || item->str == NULL)
-		return (input_stack_item_free(&item), state->err);
+		return (input_parser_stack_item_free(&item), state->err);
 	return (state->err = input_stack_push(&state->lexer.input_stack, item));
 }
 
 t_error	scanner_heredoc_store(t_scanner *state)
 {
-	t_input_stack_item	*item;
+	t_input_parser_stack_item	*item;
 	
 	if (state->lexer.input != NULL)
 	{
@@ -59,14 +59,14 @@ t_error	scanner_heredoc_store(t_scanner *state)
 
 t_error	scanner_alias_expand(t_scanner *state, t_token *token)
 {
-	t_input_stack_item	*item;
+	t_input_parser_stack_item	*item;
 
-	state->err = input_stack_item_init(&item);
+	state->err = input_parser_stack_item_init(&item);
 	if (state->err.type)
 		return (state->err);
 	state->err = alias_expand_token(&item->str, &token->value);
 	if (state->err.type || item->str == NULL)
-		return (input_stack_item_free(&item), state->err);
+		return (input_parser_stack_item_free(&item), state->err);
 	input_stack_push(&state->lexer.input_stack, item);
 	token_free(token);
 	if (lexer_next_token(&state->lexer, token).type)

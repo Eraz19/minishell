@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:39:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 14:40:55 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 16:41:51 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ typedef t_vector	t_heredoc_queue;
  */
 typedef enum e_heredoc_mode
 {
-	NORMAL,
-	TAB_STRIP
+	HEREDOC_MODE_NORMAL,
+	HEREDOC_MODE_TAB_STRIP
 }	t_heredoc_mode;
 
 /**

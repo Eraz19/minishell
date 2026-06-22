@@ -1,7 +1,7 @@
 #ifndef GOTO_H
 # define GOTO_H
 
-# include "builder.h"
+# include "lr_machine_type.h"
 # include <stdint.h>
 
 # define GOTO_EMPTY	SIZE_MAX

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 static bool pwd_has_no_dot_components(const char *pwd)
 {

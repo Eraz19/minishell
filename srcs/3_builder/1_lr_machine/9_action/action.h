@@ -1,7 +1,7 @@
 #ifndef ACTION_H
 # define ACTION_H
 
-# include "builder.h"
+# include "lr_machine_type.h"
 # include "stdint.h"
 
 # define ACTION_PAYLOAD_EMPTY	SIZE_MAX

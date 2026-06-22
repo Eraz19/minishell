@@ -1,6 +1,6 @@
 #include "positionals.h"
 #include <stdlib.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 void	positionals_init(t_positionals_stack *stack)
 {

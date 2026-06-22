@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:51:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:27:30 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	is_char_escaped(t_expander_loader *state)
 
 bool	is_substitution_start(t_expander_loader *state)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
 	if (state->stack.len == 0)
 		return (false);
@@ -42,7 +42,7 @@ bool	is_substitution_start(t_expander_loader *state)
 
 t_error	expander_loader_push_context(t_expander_loader *state)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
 	if (state->stack.len == 0)
 		return (state->err);
@@ -57,7 +57,7 @@ t_error	expander_loader_push_context(t_expander_loader *state)
 
 t_error	expander_loader_pop_context(t_expander_loader *state)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 	size_t					last_i;
 	
 	state->err = context_stack_bpop(&state->loading_stack, &item);

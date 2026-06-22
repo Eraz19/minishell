@@ -28,7 +28,6 @@ void	var_free_one(void *var);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-bool	var_name_is_valid(const char *name);
 bool	var_find(const t_var_list *variables, const char *name, size_t *res);
 
 /* ************************************************************************* */

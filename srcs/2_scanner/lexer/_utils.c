@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 10:29:34 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:36:51 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_lexer_backup	lexer_backup(t_lexer *state)
 
 t_error	lexer_restore(t_lexer *state, t_lexer_backup backup)
 {
-	t_context_stack_item	*item;
+	t_context_parser_stack_item	*item;
 
 	while (state->input->context.len > backup.context_len)
     {

@@ -3,7 +3,7 @@
 # include <stdio.h>
 t_error	parser_shift(t_parser *parser, size_t lr_state_id)
 {
-	t_stack_item	item;
+	t_parser_stack_item	item;
 	t_error			err;
 
 	item.symbol = parser->lookahead_symbol;

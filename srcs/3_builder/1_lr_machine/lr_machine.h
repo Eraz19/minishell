@@ -1,7 +1,8 @@
 #ifndef LR_MACHINE_H
 # define LR_MACHINE_H
 
-# include "builder.h"
+# include "lr_machine_type.h"
+# include "error.h"
 
 /* ************************************************************************* */
 /*                                   GROUPS                                  */
@@ -53,7 +54,7 @@
  * @param machine LR machine to build in place (borrowed, must NOT be NULL).
  * @return [TODO...]
  */
-t_error	lr_machine_build(t_lr_machine *machine);
+t_error	lr_machine_build_tables(t_lr_machine *machine);
 
 /**
  * @ingroup lr_machine_pub
@@ -91,7 +92,7 @@ void	lr_machine_free(t_lr_machine *machine);
  * the GOTO table pointer with @ref goto_init.
  *
  * @note After this call, @p machine is ready to be passed to
- *       @ref lr_machine_build.
+ *       @ref lr_machine_build_tables.
  * @note This function does not build derived parsing tables; it only prepares
  *       their storage and default empty state.
  *

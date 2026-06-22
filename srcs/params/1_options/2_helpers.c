@@ -1,6 +1,6 @@
 #include "shell.h"
 #include <stdlib.h>
-# include "logs.h"	// TODO: tmp debug
+# include "logs.h"	// DEBUG
 
 bool	option_is_active(t_option option)
 {

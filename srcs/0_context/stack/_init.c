@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:15:33 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 15:56:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "context.h"
 
-t_error	context_stack_item_init(t_context_stack_item **item, t_context context)
+t_error	context_parser_stack_item_init(t_context_parser_stack_item **item, t_context context)
 {
-	*item = malloc(sizeof(t_context_stack_item));
+	*item = malloc(sizeof(t_context_parser_stack_item));
 	if (*item == NULL)
 		return (error_sys());
-	**item = (t_context_stack_item){0};
+	**item = (t_context_parser_stack_item){0};
 	(*item)->context = context;
 	return (error(ERR_NO));
 }
@@ -26,7 +26,7 @@ t_error	context_stack_item_init(t_context_stack_item **item, t_context context)
 void	context_stack_init(t_context_stack *stack)
 {
 	*stack = (t_context_stack){0};
-	vector_init(stack, sizeof(t_context_stack_item *), 0);
+	vector_init(stack, sizeof(t_context_parser_stack_item *), 0);
 }
 
 void	context_stack_free(t_context_stack *stack)

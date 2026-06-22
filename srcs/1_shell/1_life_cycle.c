@@ -1,6 +1,7 @@
 #include "shell_priv.h"
 #include "options.h"
 #include <stdlib.h>
+# include "logs.h"
 
 void	shell_init(t_shell *shell)
 {
@@ -10,7 +11,7 @@ void	shell_init(t_shell *shell)
 	heredoc_init(&shell->heredoc);
 	history_init(&shell->history);
 	builder_init(&shell->builder);
-	// TODO: runner_init(&shell->runner);
+	runner_init(&shell->runner);
 }
 
 void	shell_free(t_shell **shell)
@@ -21,7 +22,7 @@ void	shell_free(t_shell **shell)
 	heredoc_free(&(*shell)->heredoc);
 	history_free(&(*shell)->history);
 	builder_free(&(*shell)->builder);
-	// TODO: runner_free(&(*shell)->runner);
+	runner_free(&(*shell)->runner);
 	free(*shell);
 	*shell = NULL;
 	shell_set(NULL);
@@ -35,6 +36,7 @@ void	shell_exit(t_error error)
 	(void)history_save();	// TODO: print error
 	if (shell)
 		shell_free(&shell);
+	print_stop();
 	exit((int)error.type);
 }
 

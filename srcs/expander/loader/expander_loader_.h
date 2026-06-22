@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_loader_.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:28:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 15:27:14 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/06/21 17:44:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_expander_loader
 	t_context				quoting;
 	t_expander_word			loaded_word;
 	t_context_stack			loading_stack;
-	t_context_stack_item	*context_item;
+	t_context_parser_stack_item	*context_item;
 }	t_expander_loader;
 
 void	expander_loader_init(t_expander_loader *state);

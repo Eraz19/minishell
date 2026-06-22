@@ -2,6 +2,7 @@
 #include "shell.h"
 #include "variables_priv.h"
 #include "options.h"
+#include "utils.h"
 #include <stdlib.h>
 
 static t_error	var_save_err_and_free(t_var *var)
@@ -48,7 +49,7 @@ t_error	var_set(const char *name, const char *value, bool export, bool readonly)
 	t_var		*current_var;
 	t_var		new_var;
 
-	if (!var_name_is_valid(name))
+	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	shell = shell_get();
 	if (!shell)
@@ -81,7 +82,7 @@ t_error	var_get(const char *name, char **dst_val)
 	if (!shell)
 		return (error(ERR_SHELL_NOT_FOUND));
 	list = &shell->params.variables;
-	if (!var_name_is_valid(name))
+	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	if (!var_find(list, name, &var_index))
 		return (error(ERR_VAR_NOT_FOUND));
@@ -104,7 +105,7 @@ t_error	var_unset(const char *name)
 	size_t		var_index;
 	t_var		*var;
 
-	if (!var_name_is_valid(name))
+	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	shell = shell_get();
 	if (!shell)

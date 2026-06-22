@@ -1,4 +1,5 @@
-#include "lr_state.h"
+#include "rule_state_type.h"
+#include "lr_state_type.h"
 #include <stdlib.h>
 
 void	lr_state_init(t_lr_state *lr_state)
