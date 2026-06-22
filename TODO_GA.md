@@ -1,6 +1,5 @@
 # WIP
 
-- ⚠️ `trap` si `ctrl + D` après avoir déjà saisi une input
 - `parser_can_next_token_be_a_cmd_name_or_word()`
 
 ---
@@ -43,12 +42,6 @@
 	- `IO_NUMBER` : Solely digits and the delimiter character is '<' or '>'
 	- `IO_LOCATION` : At least three characters, begins with '{' and ends '}', and the delimiter character is '<' or '>'
 	- Nécessaire pour distinguer `echo 2>out` de `echo 2 >out`
-
-## UPDATE QUE J'AI FAIT DANS TON CODE
-- `t_heredoc_mode`:
-	- J'ai préfixé avec `HEREDOC_MODE_` (pls prefix all sinon je galère à trouver le nom des enums de tes modules)
-- `t_token_type`:
-	- J'ai préfixé avec `TOKEN_` et retirer les trailing `_`
 
 ## UPDATE QUE J'AI FAIT DANS MON CODE
 - `t_error	builder_can_next_word_be_a_cmd_name(bool *dst)`:

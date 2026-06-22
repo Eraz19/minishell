@@ -19,7 +19,7 @@ const char	*token_type_to_string(t_token_type token_type)
 	{
 		case TOKEN_NONE: return ("NONE");
 		case TOKEN_TOKEN: return ("TOKEN");
-		case TOKEN_NEWLINE: return ("NEWLINE_");
+		case TOKEN_NEWLINE: return ("NEWLINE");
 		case TOKEN_SCOLON: return ("SCOLON");
 		case TOKEN_AMPERSAND: return ("AMPERSAND");
 		case TOKEN_DSEMI: return ("DSEMI");
@@ -40,7 +40,7 @@ const char	*token_type_to_string(t_token_type token_type)
 		case TOKEN_DLESSDASH: return ("DLESSDASH");
 		case TOKEN_IO_NUMBER: return ("IO_NUMBER");
 		case TOKEN_IO_LOCATION: return ("IO_LOCATION");
-		case TOKEN_EOF: return ("EOF_");
+		case TOKEN_EOF: return ("EOF");
 		default: return ("unknown");
 	}
 }

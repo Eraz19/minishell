@@ -53,7 +53,7 @@ static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
 		*dst_symbol = SYM_DLESSDASH;
 	else if (token_type == TOKEN_IO_NUMBER)
 		*dst_symbol = SYM_IO_NUMBER;
-	else if (token_type == TOKEN_EOF || token_type == TOKEN_NONE)
+	else if (token_type == TOKEN_EOF)
 		*dst_symbol = SYM_EOF;
 	else
 		return (error(ERR_INVALID_SYNTAX));
