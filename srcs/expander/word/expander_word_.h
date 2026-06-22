@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander_word_.h                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 10:23:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 18:53:47 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef EXPANDER_WORD__H
 # define EXPANDER_WORD__H
 
@@ -19,12 +7,17 @@
 
 typedef t_vector	t_expander_word;
 
-typedef struct s_expander_word_item
+typedef struct s_expander_word_item_opt
 {
-	char		c;
 	t_context	quoted;
 	t_context	context;
 	bool		is_expand_res;
+}	t_expander_word_item_opt;
+
+typedef struct s_expander_word_item
+{
+	char						c;
+	t_expander_word_item_opt	opt;
 }	t_expander_word_item;
 
 void					expander_word_init(t_expander_word *word);
@@ -42,6 +35,12 @@ t_error					expander_word_dup(t_expander_word *dst,
 							t_expander_word *src);
 t_error					expander_word_get(t_expander_word *word,
 							size_t index, t_expander_word_item *item);
+t_error					expander_word_remove(t_expander_word *word,
+							size_t start, size_t len);
+t_error					expander_word_to_str(t_expander_word *word, char **str,
+							size_t start, size_t len);
+t_error	expander_word_from_str(t_expander_word *word, const char *str,
+							t_expander_word_item_opt opt);
 
 #endif
 	

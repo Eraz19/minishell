@@ -1,20 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   API.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/11 17:10:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/19 16:09:41 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include "shell.h"
 #include "alias_.h"
-#include "builder.h"
-#include "context.h"
 #include "alias_stack_.h"
 
 t_error	alias_on_expansion_end(void)

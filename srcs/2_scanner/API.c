@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   API.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/28 16:05:54 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 15:39:39 by gastesan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "shell.h"
 #include "alias.h"
 #include "scanner_.h"
@@ -27,8 +15,6 @@ t_error	scanner_next_token(t_token *token)
 		if (state->err.type)
 			return (state->err);
 	}
-	if (is_EOF(state))
-		return (token->type = EOF_, state->err);
 	if (state->lexer.input_stack.len == 0 && scanner_read_input(state).type)
 		return (state->err);
 	if (lexer_next_token(&state->lexer, token).type)
@@ -49,5 +35,16 @@ t_error	scanner_report_io_here(char **path, char *delim, t_heredoc_mode mode)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (heredoc_add_to_queue(path, delim, mode).type)
 		return (state->err = state->heredoc.err, state->err);
+	return (state->err);
+}
+
+t_error	scanner_reset()
+{
+	t_scanner	*state;
+
+	state = shell_get_scanner();
+	if (state == NULL)
+		return (error(ERR_SHELL_NOT_FOUND));
+	//IMPLEMENT: reset the scanner state
 	return (state->err);
 }

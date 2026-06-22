@@ -1,22 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/29 12:32:43 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/17 14:45:04 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
 # include "error.h"
-# include "token.h"
+# include "context.h"
 
-t_error	expander_quote_remove(char **word);
-t_error	expander_expand_token(char ***expansion, t_token token);
+typedef enum e_expander_role
+{
+	EXPANDER_NORMAL,
+	EXPANDER_ASSIGNMENT,
+	EXPANDER_REDIRECT_FILENAME,
+	EXPANDER_HEREDOC_DELIMITER,
+	EXPANDER_HEREDOC_BODY
+}	t_expander_role;
+
+t_error	expander_expand_word(char ***expansion, t_buff value,
+			t_context_stack *contexts, t_expander_role role);
 
 #endif

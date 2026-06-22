@@ -3,13 +3,11 @@
 #include "builder.h"
 #include "context.h"
 #include "alias_stack_.h"
-# include <stdio.h>	// DEBUG
 
 static bool	is_word_containing_quoting(char *word)
 {
 	size_t	i;
 
-	printf("is_word_containing_quoting() - start\n");
 	i = 0;
 	while (word[i] != '\0')
 	{
@@ -20,7 +18,6 @@ static bool	is_word_containing_quoting(char *word)
 			return (true);
 		i++;
 	}
-	printf("is_word_containing_quoting() - end\n");
 	return (false);
 }
 
@@ -28,7 +25,6 @@ static bool	is_valid_alias_name(char *word)
 {
 	size_t	i;
 
-	printf("is_valid_alias_name() - start\n");
 	i = 0;
 	while (word[i] != '\0')
 	{
@@ -42,7 +38,6 @@ static bool	is_valid_alias_name(char *word)
 			return (false);
 		i++;
 	}
-	printf("is_valid_alias_name() - end\n");
 	return (true);
 }
 

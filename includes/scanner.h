@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scanner.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/20 16:05:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/20 17:11:25 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef SCANNER_H
 # define SCANNER_H
 
@@ -143,5 +131,7 @@ t_error	scanner_next_token(t_token *token);
  *         unavailable, or the recorded error on failure.
  */
 t_error	scanner_report_io_here(char **path, char *delim, t_heredoc_mode mode);
+
+t_error	scanner_reset();
 
 #endif

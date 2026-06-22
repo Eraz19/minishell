@@ -1,20 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   heredoc_body_.h                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 18:41:25 by adouieb           #+#    #+#             */
-/*   Updated: 2026/06/15 11:40:23 by adouieb          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef HEREDOC_BODY__H
 # define HEREDOC_BODY__H
 
-# include "error.h"
-# include "heredoc_.h"
+# include "heredoc.h"
 
 /**
  * @ingroup heredoc
