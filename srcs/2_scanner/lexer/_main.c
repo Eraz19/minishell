@@ -1,6 +1,5 @@
 #include "alias.h"
 #include "lexer_.h"
-#include "lexer_rules_.h"
 
 t_error	lexer_next_token(t_lexer *state, t_token *token)
 {
@@ -17,7 +16,7 @@ t_error	lexer_next_token(t_lexer *state, t_token *token)
 		if (lexer_rules(state, &context).type)
 			return (state->err);
 	}
-	if (is_end(state) && state->input_stack.len > 0)
+	if (token->type == TOKEN_EOF && state->input_stack.len > 0)
 	{
 		state->err = input_stack_pop(&state->input_stack);
 		if (state->err.type)
