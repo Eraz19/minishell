@@ -9,7 +9,7 @@
 
 /* ---------- DEBUG (START) ---------- */
 
-# include "debug.h"	// DEBUG
+# include <stdio.h>	// DEBUG
 
 static inline size_t	qualifier_current_priority(t_qualifier_id qualifier_id)
 {
@@ -34,103 +34,6 @@ static inline void	detect_qualifier_conflict(t_qualifier_id current, t_qualifier
 		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 		printf("[ERROR] conflict of qualifiers %zu\n", current_priority);
 		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	}
-}
-
-static inline void	debug_warn_hidden_command_name_candidate(
-	t_lr_state *lr_state,
-	size_t lr_state_id,
-	t_qualifier_id qualifier_id)
-{
-	t_rule_state	*rule_state;
-	size_t			i;
-
-	if (qualifier_id == QUALIFIER_7A || qualifier_id == QUALIFIER_7B)
-		return ;
-	i = 0;
-	while (i < lr_state->len)
-	{
-		rule_state = &((t_rule_state *)lr_state->data)[i];
-		if ((rule_state->rule_id == RULE_CMD_NAME_1 && rule_state->pos == 0)
-			|| (rule_state->rule_id == RULE_CMD_WORD_1 && rule_state->pos == 0))
-		{
-			printf("[PARSER] WARNING: command-name candidate hidden ");
-			printf("by qualifier %d in state %zu\n",
-				(int)qualifier_id,
-				lr_state_id);
-			return ;
-		}
-		i++;
-	}
-}
-
-static void	debug_log_function_qualifier_state(
-	t_lr_machine *machine,
-	t_lr_state *lr_state,
-	size_t lr_state_id,
-	t_qualifier_id qualifier_id)
-{
-	t_rule_state	*rule_state;
-	bool			has_fname;
-	bool			has_cmd_name;
-	size_t			i;
-
-	has_fname = false;
-	has_cmd_name = false;
-	i = 0;
-	while (i < lr_state->len)
-	{
-		rule_state = &((t_rule_state *)lr_state->data)[i];
-		if (rule_state->rule_id == RULE_FNAME_1 && rule_state->pos == 0)
-			has_fname = true;
-		if (rule_state->rule_id == RULE_CMD_NAME_1 && rule_state->pos == 0)
-			has_cmd_name = true;
-		i++;
-	}
-	if (!has_fname && !has_cmd_name)
-		return ;
-	printf("[QUALIFIER BUILD] state=%zu qualifier=%d ", lr_state_id,
-		(int)qualifier_id);
-	printf("has_fname=%d has_cmd_name=%d ", has_fname, has_cmd_name);
-	printf("action[NAME]=%s:%zu action[WORD]=%s:%zu\n",
-		action_type_to_string(machine->actions[lr_state_id][SYM_NAME].type),
-		machine->actions[lr_state_id][SYM_NAME].payload,
-		action_type_to_string(machine->actions[lr_state_id][SYM_WORD].type),
-		machine->actions[lr_state_id][SYM_WORD].payload);
-}
-
-static void	debug_dump_function_qualifier_state(
-	t_lr_machine *machine,
-	t_lr_state *lr_state,
-	size_t lr_state_id,
-	t_qualifier_id qualifier_id)
-{
-	t_rule_state	*rule_state;
-	t_rule			*rule;
-	t_symbol		next;
-	size_t			i;
-
-	i = 0;
-	while (i < lr_state->len)
-	{
-		rule_state = &((t_rule_state *)lr_state->data)[i];
-		rule = &machine->rules[rule_state->rule_id];
-		next = SYM_NONE;
-		if (rule_state->pos < rule->rhs_len)
-			next = rule->rhs[rule_state->pos];
-		if (rule->lhs == SYM_function_definition
-			|| rule->lhs == SYM_function_header
-			|| rule->lhs == SYM_fname
-			|| rule->lhs == SYM_cmd_name)
-		{
-			printf("[QBUILD] state=%zu qualifier=%d rule=%zu ",
-				lr_state_id, (int)qualifier_id, rule_state->rule_id);
-			printf("pos=%zu lhs=%s next=%s\n",
-				rule_state->pos,
-				symbol_to_string(rule->lhs),
-				symbol_to_string(next));
-		}
-		i++;
 	}
 }
 
@@ -212,9 +115,9 @@ static inline t_qualifier_id	qualifiers_get_id(
 	size_t lr_state_id,
 	t_rule_state *rule_state)
 {
-	if (rule_is_at_target(rule_state, RULE_FNAME_1, 0))
-		return (QUALIFIER_8);
-	else if (rule_is_at_target(rule_state, RULE_CMD_NAME_1, 0))
+	// if (rule_is_at_target(rule_state, RULE_FNAME_1, 0))
+	// 	return (QUALIFIER_8);
+	if (rule_is_at_target(rule_state, RULE_CMD_NAME_1, 0))
 		return (QUALIFIER_7A);
 	else if (rule_is_at_target(rule_state, RULE_CMD_WORD_1, 0))
 		return (QUALIFIER_7B);
@@ -244,9 +147,9 @@ static inline void	qualifiers_set_entry_func(
 	t_qualifier_id qualifier_id)
 {
 	parser->qualifiers[lr_state_id] = NULL;
-	if (qualifier_id == QUALIFIER_8)
-		parser->qualifiers[lr_state_id] = qualify_8;
-	else if (qualifier_id == QUALIFIER_7A)
+	// if (qualifier_id == QUALIFIER_8)
+	// 	parser->qualifiers[lr_state_id] = qualify_8;
+	if (qualifier_id == QUALIFIER_7A)
 		parser->qualifiers[lr_state_id] = qualify_7a;
 	else if (qualifier_id == QUALIFIER_7B)
 		parser->qualifiers[lr_state_id] = qualify_7b;
@@ -293,10 +196,6 @@ static inline void	qualifiers_build_entry(
 			qualifier_id = curr_qualifier_id;
 		i++;
 	}
-	debug_warn_hidden_command_name_candidate(lr_state, lr_state_id, qualifier_id);
-	debug_log_function_qualifier_state(machine, lr_state, lr_state_id, qualifier_id);
-	if (lr_state_id == 4)
-		debug_dump_function_qualifier_state(machine, lr_state, lr_state_id, qualifier_id);
 	qualifiers_set_entry_func(parser, machine, lr_state_id, qualifier_id);
 }
 

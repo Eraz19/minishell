@@ -3,6 +3,8 @@
 #include "action_type.h"
 #include "token.h"
 #include "lr_machine_type.h"
+#include "lr_state_type.h"
+#include "rule_state_type.h"
 
 const char	*bool_to_string(bool value)
 {
@@ -171,4 +173,41 @@ void	debug_dump_rule(t_lr_machine *machine, size_t rule_id)
 		i++;
 	}
 	printf("rhs_len=%zu hook=%p\n", rule->rhs_len, rule->hook);
+}
+
+void	debug_dump_state(t_lr_machine *machine, size_t lr_state_id)
+{
+	t_lr_state		*state;
+	t_rule_state	*rule_state;
+	t_rule			*rule;
+	t_symbol		next;
+	size_t			i;
+
+	state = &((t_lr_state *)machine->lr_states.data)[lr_state_id];
+	printf("\n[STATE %zu]\n", lr_state_id);
+	i = 0;
+	while (i < state->len)
+	{
+		rule_state = &((t_rule_state *)state->data)[i];
+		rule = &machine->rules[rule_state->rule_id];
+		next = SYM_NONE;
+		if (rule_state->pos < rule->rhs_len)
+			next = rule->rhs[rule_state->pos];
+		printf("rule=%zu pos=%zu lhs=%s next=%s lookahead=%s\n",
+			rule_state->rule_id,
+			rule_state->pos,
+			symbol_to_string(rule->lhs),
+			symbol_to_string(next),
+			symbol_to_string(rule_state->lookahead));
+		i++;
+	}
+	printf("action[Lbrace]=%s:%zu\n",
+		action_type_to_string(machine->actions[lr_state_id][SYM_Lbrace].type),
+		machine->actions[lr_state_id][SYM_Lbrace].payload);
+	printf("action[WORD]=%s:%zu\n",
+		action_type_to_string(machine->actions[lr_state_id][SYM_WORD].type),
+		machine->actions[lr_state_id][SYM_WORD].payload);
+	printf("action[NEWLINE]=%s:%zu\n",
+		action_type_to_string(machine->actions[lr_state_id][SYM_NEWLINE].type),
+		machine->actions[lr_state_id][SYM_NEWLINE].payload);
 }

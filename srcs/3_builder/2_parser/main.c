@@ -78,6 +78,7 @@ t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
 	return (err);
 }
 
+// TODO
 bool	parser_can_next_token_be_a_cmd_name_or_word(t_parser *parser)
 {
 	size_t		lr_state_id;

@@ -1,8 +1,6 @@
 # WIP
 
-- `SYM_NAME` vs `SYM_WORD`
-- `hook_9_increment()`
-- `parser_could_be_a_command_name()`
+- `parser_can_next_token_be_a_cmd_name_or_word()`
 
 ---
 
@@ -16,6 +14,7 @@
 	- Le `newline` apparait dans l'input (il ne devrait pas être stocké dans l'historique)
 - `scanner_get_next_token()`:
 	- Renvoie `TOKEN_NONE` au lieu de `TOKEN_EOF` ? (nécessaire pour reduce le programme + distinguer d'une error)
+	- Ne renvoie pas d'erreur lorsque la cmd_string / le fichier d'input est déjà consommée !
 - `scanner_next_token()` modifier la doc pour enlever l'obligation d'init le token côté caller
 - `heredoc`:
 	- Ne lit pas le here document après le `newline` malgré le trigger de `scanner_report_io_here()`
@@ -53,6 +52,8 @@
 	- La signature a changé pour return un `t_error`
 	- Il faut donc désormais gérer la possible erreur `ERR_SHELL_NOT_FOUND` dans `is_token_alias_expandable()`
 	- Ou j'exit le shell dans ce cas là ?
+- `make debug`:
+	- compile avec les flags de sanitizing + debug au lieu des flags d'opti
 
 ## DOUTES
 - `scanner_report_io_here()`:

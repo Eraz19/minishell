@@ -1,7 +1,6 @@
 #include "error.h"
 #include "posix_helpers.h"
 #include "shell.h"
-#include "logs.h"
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
@@ -39,6 +38,8 @@ const char	*error_to_string(t_error err)
 		return ("missing option argument");
 	else if (err.type == ERR_PARSER_EMPTY_GOTO)
 		return ("empty goto");
+	else if (err.type == ERR_PARSER_INVALID_FUNCTION_NAME)
+		return ("invalid function name");
 	else if (err.type == ERR_PARSER_INVALID_STATE)
 		return ("invalid state");
 	else if (err.type == ERR_SHELL_NOT_FOUND)

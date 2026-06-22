@@ -13,5 +13,5 @@ void	rules_build_function_definition(t_rule *rules)
 	rules[RULE_FUNCTION_DEFINITION_1].rhs[2] = SYM_RPARENTHESIS;
 	rules[RULE_FUNCTION_DEFINITION_1].rhs[3] = SYM_linebreak;
 	rules[RULE_FUNCTION_DEFINITION_1].rhs[4] = SYM_function_body;
-	rules[RULE_FUNCTION_DEFINITION_1].rhs_len = 3;
+	rules[RULE_FUNCTION_DEFINITION_1].rhs_len = 5;
 }
