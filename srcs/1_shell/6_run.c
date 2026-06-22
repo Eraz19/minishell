@@ -23,7 +23,7 @@ t_error	shell_run(int argc, char **argv, char **envp)
 	err = shell_exec_env();
 	if (err.type != ERR_NO)
 		return (err);
-	err = runner_loop(&shell->runner);
+	err = runner_run(&shell->runner);
 	history_err = history_save();
 	if (history_err.type)
 		error_print(history_err, "history", NULL, NULL);

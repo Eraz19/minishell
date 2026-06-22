@@ -2,7 +2,6 @@
 
 - `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
 	- Changer signature 😫
-- `error.already_printed` => print before exit if `false`
 - stoper la main loop si `TOKEN_EOF` et ≠stdin
 - CST
 
