@@ -1,12 +1,29 @@
 # WIP
 
-- `CST`:
-	- store le `CST` dès que `complete_command` est reduced (hook ?)
-	- stopper la boucle dès que `parser->cst != NULL`
-	- reset la `parser_stack` à chaque début de build de `cst`
+1. walk_ast() call walk_list()
+2. walk_list() call walk_and_or()
+3. walk_and_or() call walk_pipeline()
+4. walk_pipeline() call walk_command()
+5. walk_command() call redirect_push() (sauf simple_command et function_def)
+6. walk_command() peut call soit :
+	- walk_if() call walk_list() (back to step 2)
+	- walk_for() call walk_list() (back to step 2)
+	- walk_loop() call walk_list() (back to step 2)
+	- walk_case() call walk_list() (back to step 2)
+	- walk_list() (back to step 2)
+	- walk_func() save juste la fonction
+	- execute() qui execute la simple command
+7. walk_command() call redirect_pop()
+
+---
+
 - `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
 	- Changer signature 😫
 - Vérifier partout que les `error_sys()` sont bien créées avant de free quoi que ce soit (ou tout autre call `libc`)
+
+# EXAM
+
+print tous les board pour lesquels 2 dames peuvent pas se manger (selon règle des échecs)
 
 ---
 
