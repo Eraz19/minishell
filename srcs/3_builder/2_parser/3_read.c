@@ -1,6 +1,5 @@
 #include "parser_priv.h"
 #include "scanner.h"
-# include <stdio.h>	// DEBUG
 
 static inline t_error	sym_conv1(t_token_type token_type, t_symbol *dst_symbol)
 {
@@ -82,6 +81,9 @@ static t_error	symbol_convert(t_token *src_token, t_symbol *dst_symbol)
 	return (err);
 }
 
+# include <stdio.h>		// DEBUG
+# include "logs.h"		// DEBUG
+# include <stdlib.h>	// DEBUG
 t_error	parser_read_next_symbol(t_parser *parser)
 {
 	t_token	token;
@@ -97,13 +99,19 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		return (err);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
 	parser->lookahead_id = parser->tokens.len - 1;
-	printf("\n--------------------------------------------------\n");
-	printf("[PARSER] READ   => %s (\"%s\")\n", token_type_to_string(token.type), buff_get_string(&token.value));
-	// printf("[PARSER] READ index=%zu token=%s symbol=%s value=%s\n",
+	// fprintf(stderr, "\n--------------------------------------------------\n");
+	char *token_value = buff_get_string(&token.value);
+	fprintf(stderr, "[PARSER] READ   => [%3zu] %s%s%s",
+		parser->lookahead_id, RED, token_type_to_string(token.type), NC);
+	if (token.type == TOKEN_TOKEN)
+		fprintf(stderr, " (%s%s%s)", BLUE, token_value, NC);
+	fprintf(stderr, "\n");
+	free(token_value);
+	// fprintf(stderr, "[PARSER] READ index=%zu token=%s symbol=%s value=%s\n",
 	// 	parser->lookahead_id,
 	// 	token_type_to_string(token.type),
 	// 	symbol_to_string(parser->lookahead_raw_symbol),
 	// 	buff_get_string(&token.value));
-	// printf("--------------------------------------------------\n");
+	// fprintf(stderr, "--------------------------------------------------\n");
 	return (error(ERR_NO));
 }

@@ -23,6 +23,7 @@ t_error	builder_load(t_builder *builder)
 		&builder->lr_machine));
 }
 
+# include "debug.h"	// DEBUG
 t_error	builder_get_ast(t_ast_node **dst_ast)
 {
 	t_builder	*builder;
@@ -34,6 +35,10 @@ t_error	builder_get_ast(t_ast_node **dst_ast)
 	err = parser_build_cst(&builder->parser, &builder->lr_machine);
 	if (err.type != ERR_NO)
 		return (err);
+	fprintf(stderr, "--------------------------------------------------\n");
+	fprintf(stderr, "[BUILDER] CST built:\n");
+	debug_dump_cst_node(builder->parser.cst);
+	fprintf(stderr, "--------------------------------------------------\n");
 	*dst_ast = NULL;
 	// TODO: converter_convert(builder->parser->cst, dst_ast);
 	return (error(ERR_NO));

@@ -49,13 +49,13 @@ void	options_dump(void)
 	const char		*name;
 	const char		*value;
 
-	printf("\nDUMP OPTIONS\n");
+	fprintf(stderr, "\nDUMP OPTIONS\n");
 	option = 1u << 0;
 	while (option <= OPT_VI)
 	{
 		name = option_to_string(option);
 		value = bool_to_string(option_is_active(option));
-		printf("OPTION %s=%s\n", name, value);
+		fprintf(stderr, "OPTION %s=%s\n", name, value);
 		option <<= 1;
 	}
 }

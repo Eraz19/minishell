@@ -12,10 +12,10 @@ static void	positionals_dump_depth(t_positionals_stack *stack, size_t depth)
 	i = 0;
 	while (i < count)
 	{
-		printf("POSITIONALS[%zu] %zu='%s'\n", depth, i, positionals->params[i]);
+		fprintf(stderr, "POSITIONALS[%zu] %zu='%s'\n", depth, i, positionals->params[i]);
 		i++;
 	}
-	printf("POSITIONALS #=%zu\n", count);
+	fprintf(stderr, "POSITIONALS #=%zu\n", count);
 }
 
 void	positionals_dump(void)
@@ -25,7 +25,7 @@ void	positionals_dump(void)
 	size_t				count;
 	size_t				i;
 
-	printf("\nDUMP POSITIONALS\n");
+	fprintf(stderr, "\nDUMP POSITIONALS\n");
 	shell = shell_get();
 	if (!shell)
 		error_print(error(ERR_SHELL_NOT_FOUND), "positionals_dump()", NULL, NULL);
@@ -37,6 +37,6 @@ void	positionals_dump(void)
 		positionals_dump_depth(stack, i);
 		i++;
 		if (i < count)
-			printf("---\n");
+			fprintf(stderr, "---\n");
 	}
 }

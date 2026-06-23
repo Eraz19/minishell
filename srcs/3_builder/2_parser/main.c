@@ -1,9 +1,10 @@
 #include "parser.h"
 #include "parser_priv.h"
 #include "qualifiers.h"
-# include <stdio.h>	// DEBUG
+#include "cst.h"
+# include "debug.h"	// DEBUG
 
-static t_error	parser_push_initial_state(t_parser *parser)
+static inline t_error	parser_push_initial_state(t_parser *parser)
 {
 	t_parser_stack_item	item;
 
@@ -20,31 +21,45 @@ static t_error	parser_push_initial_state(t_parser *parser)
 static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 {
 	t_error		err;
+	size_t	i;
 
-	parser_reset(parser);
+	i = 0;
+	while (i < parser->stack.len)
+		parser_free_stack_item(&((t_parser_stack_item *)parser->stack.data)[i++]);
+	parser->stack.len = 0;
 	err = parser_push_initial_state(parser);
-	if (err.type == ERR_NO)
+	if (err.type == ERR_NO && parser->lookahead_raw_symbol == SYM_NONE)
 		err = parser_read_next_symbol(parser);
+	cst_node_free(&parser->cst);
+	parser->cst = NULL;
+	parser->function_body_depth = 0;
+	parser->assignment_disabled = false;
+	parser->expansion_disabled = false;
+	parser->must_read_heredoc = false;
 	return (err);
 }
 
-static inline t_error	parser_store_cst(t_parser *parser)
+t_error	parser_store_cst(t_parser *parser, t_parser_stack_item *main_item)
+{
+	fprintf(stderr, "[PARSER] ACCEPT =======> %s%s%s (token_start=%zu token_count=%zu)\n",
+		GREEN, symbol_to_string(main_item->symbol), NC,
+		main_item->tokens_start_id,
+		main_item->tokens_count);
+	parser->cst = main_item->cst_node;
+	main_item->cst_node = NULL;
+	if (parser->lookahead_raw_symbol == SYM_NEWLINE)
+		return (parser_read_heredoc(parser));
+	return (error(ERR_NO));
+}
+
+static inline t_error	parser_accept(t_parser *parser)
 {
 	t_parser_stack_item	*main_item;
 
+	parser->lookahead_raw_symbol = SYM_NONE;
+	parser->lookahead_symbol = SYM_NONE;
 	main_item = parser_stack_top(&parser->stack);
-	printf("[PARSER] ACCEPT => %s (token_start=%zu token_count=%zu)\n",
-		symbol_to_string(main_item->symbol),
-		main_item->tokens_start_id,
-		main_item->tokens_count);
-	// printf("[PARSER] ACCEPT root=%s state=%zu token_start=%zu token_count=%zu\n",
-	// 	symbol_to_string(main_item->symbol),
-	// 	main_item->lr_state_id,
-	// 	main_item->tokens_start_id,
-	// 	main_item->tokens_count);
-	parser->cst = main_item->cst_node;
-	main_item->cst_node = NULL;
-	return (error(ERR_NO));
+	return (parser_store_cst(parser, main_item));
 }
 
 t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
@@ -55,8 +70,7 @@ t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
 	t_error		err;
 
 	err = parser_prepare_to_build_cst(parser);
-	lr_state_id = 0;
-	while (err.type == ERR_NO)
+	while (err.type == ERR_NO && parser->cst == NULL)
 	{
 		lr_state_id = parser_stack_top(&parser->stack)->lr_state_id;
 		token = &((t_token *)parser->tokens.data)[parser->lookahead_id];
@@ -64,15 +78,10 @@ t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
 		if (err.type != ERR_NO)
 			return (err);
 		action = machine->actions[lr_state_id][parser->lookahead_symbol];
-		// printf("[PARSER] ACTION state=%zu lookahead=%s action=%s payload=%zu\n",
-		// 	lr_state_id,
-		// 	symbol_to_string(parser->lookahead_symbol),
-		// 	action_type_to_string(action.type),
-		// 	action.payload);
 		if (action.type == ACTION_ERROR)
 			return (parser_invalid_syntax());
 		else if (action.type == ACTION_ACCEPT)
-			return (parser_store_cst(parser));
+			return (parser_accept(parser));
 		else if (action.type == ACTION_SHIFT)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)

@@ -1,0 +1,160 @@
+[0;32m⌽[1;33m LOGS STARTED ⇢ shell_run()[0m
+[0m[1;34m╰─────╮[0m
+      [1;34m⏺ SHELL_INIT()[0m
+      [1;32m⍟ SHELL_INIT()
+[1;32m╭─────╯[0m
+[1;34m╰─────╮[0m
+      [1;34m⏺ SHELL_LOAD()[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ OPTIONS_LOAD()[0m
+            [1;32m⍟ OPTIONS_LOAD()
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ OPTIONS_FINALIZE()[0m
+            [0;32m✔ [0;90mSetting ON  option s
+[0m            [1;32m⍟ OPTIONS_FINALIZE()
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ SPECIALS_LOAD()[0m
+            [0;32m✔ [0;90mstandard_input (-s) mode initialized
+[0m            [0;32m✔ [0;90mzero set to              './minishell'
+[0m            [0;32m✔ [0;90msource set to            '(null)'
+[0m            [0;32m✔ [0;90mlast_bg_pid set to       -1
+[0m            [0;32m✔ [0;90mlast_status set to       0
+[0m            [0;32m✔ [0;90mpid set to               44777
+[0m            [1;32m⍟ SPECIALS_LOAD()
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ POSITIONALS_LOAD()[0m
+            [0;32m✔ [0;90m$# = 0
+[0m            [1;32m⍟ POSITIONALS_LOAD()
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ VAR_LOAD_ENVP()[0m
+            [0;32m✔ [0;90m'PWD' = '/Users/gui/repos/minishell'
+[0m            [0;32m✔ [0;90m'OSLogRateLimit' = '64'
+[0m            [0;32m✔ [0;90m'SSH_AUTH_SOCK' = '/private/tmp/com.apple.launchd.icUn0IgNjM/Listeners'
+[0m            [0;32m✔ [0;90m'TMPDIR' = '/var/folders/h6/bczdgzqd7_j3fhw9cjt8tl9c0000gn/T/'
+[0m            [0;32m✔ [0;90m'KITTY_PUBLIC_KEY' = '1:=aP)L7N!Oix=j=i>&iASUaZTm6A5n+E-KPwepl39'
+[0m            [0;32m✔ [0;90m'XPC_FLAGS' = '0x0'
+[0m            [0;32m✔ [0;90m'DISPLAY' = '/private/tmp/com.apple.launchd.iFtBVjMEhv/org.xquartz:0'
+[0m            [0;32m✔ [0;90m'KITTY_WINDOW_ID' = '12'
+[0m            [0;32m✔ [0;90m'KITTY_PID' = '78734'
+[0m            [0;32m✔ [0;90m'TERMINFO' = '/Applications/kitty.app/Contents/Resources/kitty/terminfo'
+[0m            [0;32m✔ [0;90m'USER' = 'gui'
+[0m            [0;32m✔ [0;90m'TERM' = 'xterm-kitty'
+[0m            [0;32m✔ [0;90m'PATH' = '/opt/homebrew/Cellar/openjdk@21/21.0.8/libexec/openjdk.jdk/Contents/Home/bin:/opt/homebrew/opt/openjdk@21/bin:/Users/gui/.pyenv/shims:/Users/gui/.pyenv/bin:/opt/homebrew/opt/node@20/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/Apple/usr/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/gui/.local/bin:/Applications/kitty.app/Contents/MacOS'
+[0m            [0;32m✔ [0;90m'LOGNAME' = 'gui'
+[0m            [0;32m✔ [0;90m'HOME' = '/Users/gui'
+[0m            [0;32m✔ [0;90m'__CF_USER_TEXT_ENCODING' = '0x1F5:0x0:0x1'
+[0m            [0;32m✔ [0;90m'COMMAND_MODE' = 'unix2003'
+[0m            [0;32m✔ [0;90m'LANG' = 'fr_FR.UTF-8'
+[0m            [0;32m✔ [0;90m'XPC_SERVICE_NAME' = '0'
+[0m            [0;32m✔ [0;90m'SHELL' = '/bin/zsh'
+[0m            [0;32m✔ [0;90m'WINDOWID' = '55435'
+[0m            [0;32m✔ [0;90m'__CFBundleIdentifier' = 'net.kovidgoyal.kitty'
+[0m            [0;32m✔ [0;90m'MANPATH' = ':/usr/share/man:/usr/local/share/man:/opt/X11/share/man:/Applications/kitty.app/Contents/Resources/man:'
+[0m            [0;32m✔ [0;90m'COLORTERM' = 'truecolor'
+[0m            [0;32m✔ [0;90m'KITTY_INSTALLATION_DIR' = '/Applications/kitty.app/Contents/Resources/kitty'
+[0m            [0;32m✔ [0;90m'SHLVL' = '1'
+[0m            [0;32m✔ [0;90m'OLDPWD' = '/Users/gui/repos/minishell/libft'
+[0m            [0;32m✔ [0;90m'ZDOTDIR' = '/Users/gui/.zsh'
+[0m            [0;32m✔ [0;90m'HOMEBREW_PREFIX' = '/opt/homebrew'
+[0m            [0;32m✔ [0;90m'HOMEBREW_CELLAR' = '/opt/homebrew/Cellar'
+[0m            [0;32m✔ [0;90m'HOMEBREW_REPOSITORY' = '/opt/homebrew'
+[0m            [0;32m✔ [0;90m'FPATH' = '/Applications/kitty.app/Contents/Resources/kitty/shell-integration/zsh/completions:/opt/homebrew/share/zsh/site-functions:/usr/local/share/zsh/site-functions:/usr/share/zsh/site-functions:/usr/share/zsh/5.9/functions'
+[0m            [0;32m✔ [0;90m'INFOPATH' = '/opt/homebrew/share/info:'
+[0m            [0;32m✔ [0;90m'P9K_TTY' = 'old'
+[0m            [0;32m✔ [0;90m'_P9K_TTY' = '/dev/ttys000'
+[0m            [0;32m✔ [0;90m'P9K_SSH' = '0'
+[0m            [0;32m✔ [0;90m'_P9K_SSH_TTY' = '/dev/ttys000'
+[0m            [0;32m✔ [0;90m'LS_COLORS' = 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.7z=01;31:*.ace=01;31:*.alz=01;31:*.apk=01;31:*.arc=01;31:*.arj=01;31:*.bz=01;31:*.bz2=01;31:*.cab=01;31:*.cpio=01;31:*.crate=01;31:*.deb=01;31:*.drpm=01;31:*.dwm=01;31:*.dz=01;31:*.ear=01;31:*.egg=01;31:*.esd=01;31:*.gz=01;31:*.jar=01;31:*.lha=01;31:*.lrz=01;31:*.lz=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.lzo=01;31:*.pyz=01;31:*.rar=01;31:*.rpm=01;31:*.rz=01;31:*.sar=01;31:*.swm=01;31:*.t7z=01;31:*.tar=01;31:*.taz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tgz=01;31:*.tlz=01;31:*.txz=01;31:*.tz=01;31:*.tzo=01;31:*.tzst=01;31:*.udeb=01;31:*.war=01;31:*.whl=01;31:*.wim=01;31:*.xz=01;31:*.z=01;31:*.zip=01;31:*.zoo=01;31:*.zst=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.jxl=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:'
+[0m            [0;32m✔ [0;90m'PYENV_ROOT' = '/Users/gui/.pyenv'
+[0m            [0;32m✔ [0;90m'PYENV_SHELL' = 'zsh'
+[0m            [0;32m✔ [0;90m'JAVA_HOME' = '/opt/homebrew/Cellar/openjdk@21/21.0.8/libexec/openjdk.jdk/Contents/Home'
+[0m            [0;32m✔ [0;90m'_' = '/Users/gui/repos/minishell/./minishell'
+[0m            [1;32m⍟ VAR_LOAD_ENVP()            => (ENTRIES:     42)
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ VAR_LOAD_MANDATORY()[0m
+            [0;32m✔ [0;90m'IFS' has been set to ' 	
+'
+[0m            [0;32m✔ [0;90m'PWD' is already valid
+[0m            [0;32m✔ [0;90m'PPID' has been set to '89215'
+[0m            [1;32m⍟ VAR_LOAD_MANDATORY()       => (ENTRIES:     44)
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ VAR_LOAD_UP()[0m
+            [0;32m✔ [0;90m'PS1' has been set to '$ '
+[0m            [0;32m✔ [0;90m'PS2' has been set to '> '
+[0m            [0;32m✔ [0;90m'PS4' has been set to '+ '
+[0m            [1;32m⍟ VAR_LOAD_UP()              => (ENTRIES:     47)
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ LR_MACHINE_BUILD_TABLES()[0m
+            [0;32m✔ [0;90mrules table built            (entries:    113)
+[0m            [0;32m✔ [0;90mnullable symbols table built (entries:     91)
+[0m            [0;32m✔ [0;90mfirst table built            (entries:  3.822)
+[0m            [0;32m✔ [0;90mtransitions table built      (entries:  5.812)
+[0m            [0;32m✔ [0;90mlr_states table built        (entries:  1.770)
+[0m            [0;32m✔ [0;90mgotos table built            (entries: 86.730)
+[0m            [0;32m✔ [0;90mactions table built          (entries: 74.340)
+[0m            [1;32m⍟ LR_MACHINE_BUILD_TABLES()
+      [1;32m╭─────╯[0m
+      [1;34m╰─────╮[0m
+            [1;34m⏺ PARSER_BUILD_QUALIFIERS_TABLE[0m
+            [0;32m✔ [0;90mqualifiers table built       (entries: 1770)
+[0m            [1;32m⍟ PARSER_BUILD_QUALIFIERS_TABLE
+      [1;32m╭─────╯[0m
+      [0;33m⚑ [0;90mRunner not implemented yet              => skipping loading
+[0m      [0;32m✔ [0;90mstdin has been set to blocking mode
+[0m      [1;32m⍟ SHELL_LOAD()
+[1;32m╭─────╯[0m
+[1;34m╰─────╮[0m
+      [1;34m⏺ SHELL_EXEC_ENV()[0m
+      [0;33m⚑ [0;90mnon-interactive mode => skipping ENV execution
+[0m      [1;32m⍟ SHELL_EXEC_ENV()
+[1;32m╭─────╯[0m
+
+--------------------------------------------------
+[CST] SYM_program rule=1 tokens=0-8 (9)
+	[CST] SYM_linebreak rule=106 tokens=0-18446744073709551615 (0)
+	[CST] SYM_complete_commands rule=4 tokens=0-7 (8)
+		[CST] SYM_complete_command rule=6 tokens=0-7 (8)
+			[CST] SYM_list rule=8 tokens=0-7 (8)
+				[CST] SYM_and_or rule=9 tokens=0-7 (8)
+					[CST] SYM_pipeline rule=12 tokens=0-7 (8)
+						[CST] SYM_pipe_sequence rule=14 tokens=0-7 (8)
+							[CST] SYM_command rule=19 tokens=0-7 (8)
+								[CST] SYM_function_definition rule=65 tokens=0-7 (8)
+									[CST] SYM_fname rule=66 tokens=0-0 (1)
+										[CST] SYM_WORD tokens=0-0 (1)
+									[CST] SYM_LPARENTHESIS tokens=1-1 (1)
+									[CST] SYM_RPARENTHESIS tokens=2-2 (1)
+									[CST] SYM_linebreak rule=106 tokens=3-2 (0)
+									[CST] SYM_function_body rule=63 tokens=3-7 (5)
+										[CST] SYM_compound_command rule=20 tokens=3-7 (5)
+											[CST] SYM_brace_group rule=67 tokens=3-7 (5)
+												[CST] SYM_Lbrace tokens=3-3 (1)
+												[CST] SYM_compound_list rule=29 tokens=4-6 (3)
+													[CST] SYM_linebreak rule=106 tokens=4-3 (0)
+													[CST] SYM_term rule=31 tokens=4-5 (2)
+														[CST] SYM_and_or rule=9 tokens=4-5 (2)
+															[CST] SYM_pipeline rule=12 tokens=4-5 (2)
+																[CST] SYM_pipe_sequence rule=14 tokens=4-5 (2)
+																	[CST] SYM_command rule=16 tokens=4-5 (2)
+																		[CST] SYM_simple_command rule=72 tokens=4-5 (2)
+																			[CST] SYM_cmd_name rule=74 tokens=4-4 (1)
+																				[CST] SYM_WORD tokens=4-4 (1)
+																			[CST] SYM_cmd_suffix rule=82 tokens=5-5 (1)
+																				[CST] SYM_WORD tokens=5-5 (1)
+													[CST] SYM_separator rule=109 tokens=6-6 (1)
+														[CST] SYM_separator_op rule=108 tokens=6-6 (1)
+															[CST] SYM_SEMI tokens=6-6 (1)
+														[CST] SYM_linebreak rule=106 tokens=7-6 (0)
+												[CST] SYM_Rbrace tokens=7-7 (1)
+	[CST] SYM_linebreak rule=105 tokens=8-8 (1)
+		[CST] SYM_newline_list rule=103 tokens=8-8 (1)
+			[CST] SYM_NEWLINE tokens=8-8 (1)
+[1;31m⍉[0;33m LOGS STOPPED[0m
+[0m

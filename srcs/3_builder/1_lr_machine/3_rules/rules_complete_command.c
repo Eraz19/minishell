@@ -1,4 +1,5 @@
 #include "rules__type.h"
+#include "hooks.h"
 
 static void	rules_build_complete_command_1(t_rule *rules);
 static void	rules_build_complete_command_2(t_rule *rules);
@@ -21,6 +22,7 @@ static void	rules_build_complete_command_1(t_rule *rules)
 	rules[RULE_COMPLETE_COMMAND_1].rhs[0] = SYM_list;
 	rules[RULE_COMPLETE_COMMAND_1].rhs[1] = SYM_separator_op;
 	rules[RULE_COMPLETE_COMMAND_1].rhs_len = 2;
+	rules[RULE_COMPLETE_COMMAND_1].hook = hook_store_cst;
 }
 
 // complete_command -> list
@@ -29,4 +31,5 @@ static void	rules_build_complete_command_2(t_rule *rules)
 	rules[RULE_COMPLETE_COMMAND_2].lhs = SYM_complete_command;
 	rules[RULE_COMPLETE_COMMAND_2].rhs[0] = SYM_list;
 	rules[RULE_COMPLETE_COMMAND_2].rhs_len = 1;
+	rules[RULE_COMPLETE_COMMAND_2].hook = hook_store_cst;
 }

@@ -5,6 +5,14 @@
 #include "lr_machine_type.h"
 #include "lr_state_type.h"
 #include "rule_state_type.h"
+#include "cst_type.h"
+
+#include <stdio.h>
+#include <stdbool.h>
+
+/* ************************************************************************* */
+/*                                   BOOL                                    */
+/* ************************************************************************* */
 
 const char	*bool_to_string(bool value)
 {
@@ -12,6 +20,10 @@ const char	*bool_to_string(bool value)
 		return ("true");
 	return ("false");
 }
+
+/* ************************************************************************* */
+/*                                   TOKEN                                   */
+/* ************************************************************************* */
 
 const char	*token_type_to_string(t_token_type token_type)
 {
@@ -44,6 +56,10 @@ const char	*token_type_to_string(t_token_type token_type)
 		default: return ("unknown");
 	}
 }
+
+/* ************************************************************************* */
+/*                                  SYMBOL                                   */
+/* ************************************************************************* */
 
 const char	*symbol_to_string(t_symbol symbol)
 {
@@ -147,6 +163,71 @@ const char	*symbol_to_string(t_symbol symbol)
 	}
 }
 
+/* ************************************************************************* */
+/*                                   RULE                                    */
+/* ************************************************************************* */
+
+void	debug_dump_rule(t_lr_machine *machine, size_t rule_id)
+{
+	t_rule	*rule;
+	size_t	i;
+
+	rule = &machine->rules[rule_id];
+	fprintf(stderr, "[RULE] %zu lhs=%s rhs=", rule_id, symbol_to_string(rule->lhs));
+	i = 0;
+	while (i < rule->rhs_len)
+	{
+		fprintf(stderr, "%s ", symbol_to_string(rule->rhs[i]));
+		i++;
+	}
+	fprintf(stderr, "rhs_len=%zu hook=%p\n", rule->rhs_len, rule->hook);
+}
+
+/* ************************************************************************* */
+/*                                 LR_STATE                                  */
+/* ************************************************************************* */
+
+void	debug_dump_lr_state(t_lr_machine *machine, size_t lr_state_id)
+{
+	t_lr_state		*state;
+	t_rule_state	*rule_state;
+	t_rule			*rule;
+	t_symbol		next;
+	size_t			i;
+
+	state = &((t_lr_state *)machine->lr_states.data)[lr_state_id];
+	fprintf(stderr, "\n[STATE %zu]\n", lr_state_id);
+	i = 0;
+	while (i < state->len)
+	{
+		rule_state = &((t_rule_state *)state->data)[i];
+		rule = &machine->rules[rule_state->rule_id];
+		next = SYM_NONE;
+		if (rule_state->pos < rule->rhs_len)
+			next = rule->rhs[rule_state->pos];
+		fprintf(stderr, "rule=%zu pos=%zu lhs=%s next=%s lookahead=%s\n",
+			rule_state->rule_id,
+			rule_state->pos,
+			symbol_to_string(rule->lhs),
+			symbol_to_string(next),
+			symbol_to_string(rule_state->lookahead));
+		i++;
+	}
+	fprintf(stderr, "action[Lbrace]=%s:%zu\n",
+		action_type_to_string(machine->actions[lr_state_id][SYM_Lbrace].type),
+		machine->actions[lr_state_id][SYM_Lbrace].payload);
+	fprintf(stderr, "action[WORD]=%s:%zu\n",
+		action_type_to_string(machine->actions[lr_state_id][SYM_WORD].type),
+		machine->actions[lr_state_id][SYM_WORD].payload);
+	fprintf(stderr, "action[NEWLINE]=%s:%zu\n",
+		action_type_to_string(machine->actions[lr_state_id][SYM_NEWLINE].type),
+		machine->actions[lr_state_id][SYM_NEWLINE].payload);
+}
+
+/* ************************************************************************* */
+/*                                  ACTION                                   */
+/* ************************************************************************* */
+
 const char	*action_type_to_string(t_action_type action_type)
 {
 	switch (action_type)
@@ -159,55 +240,86 @@ const char	*action_type_to_string(t_action_type action_type)
 	}
 }
 
-void	debug_dump_rule(t_lr_machine *machine, size_t rule_id)
+/* ************************************************************************* */
+/*                                    CST                                    */
+/* ************************************************************************* */
+
+static inline void	cst_log_prefix(bool *lasts, size_t depth)
 {
-	t_rule	*rule;
 	size_t	i;
 
-	rule = &machine->rules[rule_id];
-	printf("[RULE] %zu lhs=%s rhs=", rule_id, symbol_to_string(rule->lhs));
-	i = 0;
-	while (i < rule->rhs_len)
+	i = 1;
+	while (i < depth)
 	{
-		printf("%s ", symbol_to_string(rule->rhs[i]));
+		if (lasts[i])
+			fprintf(stderr, "    ");
+		else
+			fprintf(stderr, " │  ");
 		i++;
 	}
-	printf("rhs_len=%zu hook=%p\n", rule->rhs_len, rule->hook);
 }
 
-void	debug_dump_state(t_lr_machine *machine, size_t lr_state_id)
+static inline void	cst_log_branch(bool *lasts, size_t depth, bool is_last)
 {
-	t_lr_state		*state;
-	t_rule_state	*rule_state;
-	t_rule			*rule;
-	t_symbol		next;
-	size_t			i;
+	if (depth == 0)
+		return ;
+	cst_log_prefix(lasts, depth);
+	if (is_last)
+		fprintf(stderr, " ╰──");
+	else
+		fprintf(stderr, " ├──");
+}
 
-	state = &((t_lr_state *)machine->lr_states.data)[lr_state_id];
-	printf("\n[STATE %zu]\n", lr_state_id);
-	i = 0;
-	while (i < state->len)
+static inline void	cst_log_span(t_cst_node *node)
+{
+	size_t	token_end_id;
+
+	if (node->tokens_count == 0)
 	{
-		rule_state = &((t_rule_state *)state->data)[i];
-		rule = &machine->rules[rule_state->rule_id];
-		next = SYM_NONE;
-		if (rule_state->pos < rule->rhs_len)
-			next = rule->rhs[rule_state->pos];
-		printf("rule=%zu pos=%zu lhs=%s next=%s lookahead=%s\n",
-			rule_state->rule_id,
-			rule_state->pos,
-			symbol_to_string(rule->lhs),
-			symbol_to_string(next),
-			symbol_to_string(rule_state->lookahead));
+		fprintf(stderr, " tokens=empty");
+		return ;
+	}
+	token_end_id = node->tokens_start_id + node->tokens_count - 1;
+	fprintf(stderr, " tokens=%zu-%zu (%zu)",
+		node->tokens_start_id, token_end_id, node->tokens_count);
+}
+
+static void	cst_log_node(t_cst_node *node, size_t depth, bool *lasts, bool is_last)
+{
+	size_t		i;
+	const char	*color;
+
+	if (!node)
+		return ;
+	color = NC;
+	if (node->symbol <= SYM_TERMINAL_MAX)
+		color = RED;
+	else if (node->symbol <= SYM_complete_command)
+		color = GREEN;
+	else if (node->symbol <= SYM_NON_TERMINAL_MAX)
+		color = YELLOW;
+	cst_log_branch(lasts, depth, is_last);
+	fprintf(stderr, "%s%s%s", color, symbol_to_string(node->symbol), NC);
+	if (node->rule_id != RULE_NONE)
+		fprintf(stderr, " rule=%i", (int)node->rule_id);
+	cst_log_span(node);
+	if (node->data)
+		fprintf(stderr, " data=%p", node->data);
+	fprintf(stderr, "\n");
+	lasts[depth] = is_last;
+	i = 0;
+	while (i < node->child_count)
+	{
+		cst_log_node(node->children[i], depth + 1, lasts,
+			i + 1 == node->child_count);
 		i++;
 	}
-	printf("action[Lbrace]=%s:%zu\n",
-		action_type_to_string(machine->actions[lr_state_id][SYM_Lbrace].type),
-		machine->actions[lr_state_id][SYM_Lbrace].payload);
-	printf("action[WORD]=%s:%zu\n",
-		action_type_to_string(machine->actions[lr_state_id][SYM_WORD].type),
-		machine->actions[lr_state_id][SYM_WORD].payload);
-	printf("action[NEWLINE]=%s:%zu\n",
-		action_type_to_string(machine->actions[lr_state_id][SYM_NEWLINE].type),
-		machine->actions[lr_state_id][SYM_NEWLINE].payload);
+}
+
+void	debug_dump_cst_node(t_cst_node *node)
+{
+	bool	lasts[256];
+	if (!node)
+		return ;
+	cst_log_node(node, 0, lasts, true);
 }

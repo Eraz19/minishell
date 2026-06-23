@@ -8,7 +8,7 @@ t_error		qualify_8(void *parser, const char *token_value)
 	t_parser	*parser_;
 
 	parser_ = (t_parser *)parser;
-	printf("[QUALIFIER 8] value=%s valid_name=%d disabled_assign=%d\n",
+	fprintf(stderr, "[QUALIFIER 8] value=%s valid_name=%d disabled_assign=%d\n",
 		token_value,
 		name_is_valid(token_value),
 		parser_->assignment_disabled);

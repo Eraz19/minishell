@@ -1,6 +1,7 @@
 #ifndef LR_MACHINE_TYPE_H
 # define LR_MACHINE_TYPE_H
 
+# include "libft.h"
 # include "rules__type.h"
 # include "action_type.h"
 

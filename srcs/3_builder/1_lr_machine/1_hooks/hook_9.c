@@ -7,29 +7,32 @@ static inline void	update_parser_bools(t_parser *parser)
 	parser->expansion_disabled = parser->function_body_depth > 0;
 }
 
-# include <stdio.h>
-t_error	hook_9_increment(t_parser_stack_item *rhs, size_t len, void *ctx)
+# include <stdio.h>	// DEBUG
+# include "logs.h"	// DEBUG
+t_error	hook_9_increment(
+	t_parser *parser,
+	t_parser_stack_item *rhs,
+	size_t len,
+	t_parser_stack_item *lhs)
 {
-	t_parser	*parser;
-
 	(void)rhs;
 	(void)len;
-	parser = (t_parser *)ctx;
+	(void)lhs;
 	parser->function_body_depth++;
 	update_parser_bools(parser);
-	printf("----------\n");
-	printf ("[PARSER] [%s] function_body_depth = %zu\n", __func__, parser->function_body_depth);
-	printf("----------\n");
+	fprintf(stderr, "[PARSER] %sfunction_body_depth = %zu%s\n", YELLOW, parser->function_body_depth, NC);
 	return (error(ERR_NO));
 }
 
-t_error	hook_9_decrement(t_parser_stack_item *rhs, size_t len, void *ctx)
+t_error	hook_9_decrement(
+	t_parser *parser,
+	t_parser_stack_item *rhs,
+	size_t len,
+	t_parser_stack_item *lhs)
 {
-	t_parser	*parser;
-
 	(void)rhs;
 	(void)len;
-	parser = (t_parser *)ctx;
+	(void)lhs;
 	if (parser->function_body_depth == 0)
 		return (error_print(
 			error(ERR_PARSER_INVALID_STATE),
@@ -39,8 +42,6 @@ t_error	hook_9_decrement(t_parser_stack_item *rhs, size_t len, void *ctx)
 			NULL));
 	parser->function_body_depth--;
 	update_parser_bools(parser);
-	printf("----------\n");
-	printf ("[PARSER] [%s] function_body_depth = %zu\n", __func__, parser->function_body_depth);
-	printf("----------\n");
+	fprintf(stderr, "[PARSER] %sfunction_body_depth = %zu%s\n", YELLOW, parser->function_body_depth, NC);
 	return (error(ERR_NO));
 }

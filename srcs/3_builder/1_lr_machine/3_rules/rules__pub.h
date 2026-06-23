@@ -1,5 +1,5 @@
-#ifndef RULES_H
-# define RULES_H
+#ifndef RULES__PUB_H
+# define RULES__PUB_H
 
 # include "rules__type.h"
 

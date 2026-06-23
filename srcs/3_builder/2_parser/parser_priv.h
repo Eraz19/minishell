@@ -26,6 +26,7 @@ void	parser_free(t_parser *parser);
 /* ************************************************************************* */
 
 t_error	parser_read_next_symbol(t_parser *parser);
+t_error	parser_read_heredoc(t_parser *parser);
 
 /* ************************************************************************* */
 /*                                   STACK                                   */
@@ -33,11 +34,13 @@ t_error	parser_read_next_symbol(t_parser *parser);
 
 # define STACK_INITIAL_CAP	16
 
-void			parser_stack_init(t_parser_stack *stack);
+void				parser_stack_init(t_parser_stack *stack);
 t_parser_stack_item	*parser_stack_top(t_parser_stack *stack);
-bool			parser_stack_push(t_parser_stack *stack, t_parser_stack_item *item);
-bool			parser_stack_pop(t_parser_stack *stack, t_parser_stack_item *dst);
-void			parser_stack_free(t_parser_stack *stack);
+bool				parser_stack_push(t_parser_stack *stack,
+	t_parser_stack_item *item);
+bool				parser_stack_pop(t_parser_stack *stack,
+	t_parser_stack_item *dst);
+void				parser_stack_free(t_parser_stack *stack);
 
 /* ************************************************************************* */
 /*                                  ACTIONS                                  */
@@ -45,17 +48,6 @@ void			parser_stack_free(t_parser_stack *stack);
 
 t_error	parser_shift(t_parser *parser, size_t lr_state_id);
 t_error	parser_reduce(t_parser *parser, t_lr_machine *machine, size_t rule_id);
-
-/* ************************************************************************* */
-/*                                    CST                                    */
-/* ************************************************************************* */
-
-t_error	parser_cst_node_new(
-	t_parser_stack_item *lhs,
-	t_parser_stack_item *rhs,
-	size_t item_count,
-	t_cst_node **dst);
-void	parser_cst_node_free(t_cst_node **node);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */

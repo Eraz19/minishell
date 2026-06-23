@@ -1,5 +1,6 @@
 #include "parser_priv.h"
 #include "token.h"
+#include "cst.h"
 #include <stdlib.h>
 
 void	parser_init(t_parser *parser)
@@ -29,7 +30,7 @@ t_error	parser_reset(t_parser *parser)
 	while (i < parser->tokens.len)
 		parser_free_token(&((t_token *)parser->tokens.data)[i++]);
 	parser->tokens.len = 0;
-	parser_cst_node_free(&parser->cst);
+	cst_node_free(&parser->cst);
 	parser->cst = NULL;
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
@@ -51,14 +52,14 @@ void	parser_free_stack_item(void *raw_item)
 	t_parser_stack_item	*item;
 
 	item = raw_item;
-	parser_cst_node_free(&item->cst_node);
+	cst_node_free(&item->cst_node);
 }
 
 void	parser_free(t_parser *parser)
 {
 	vector_free(&parser->stack, parser_free_stack_item);
 	vector_free(&parser->tokens, parser_free_token);
-	parser_cst_node_free(&parser->cst);
+	cst_node_free(&parser->cst);
 	free(parser->qualifiers);
 	parser_init(parser);
 }

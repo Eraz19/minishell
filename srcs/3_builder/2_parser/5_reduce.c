@@ -1,5 +1,6 @@
 #include "parser_priv.h"
 #include "goto.h"
+#include "cst.h"
 
 static inline t_error	parser_new_lr_state(
 	t_parser *parser,
@@ -82,36 +83,34 @@ t_error	parser_reduce(t_parser *parser, t_lr_machine *machine, size_t rule_id)
 	if (rule->rhs_len > 0)
 		item.tokens_start_id = rhs[0].tokens_start_id;
 	item.tokens_count = parser_tokens_count_sum(rhs, rule->rhs_len);
-	// printf("[PARSER] REDUCE rule=%zu lhs=%s goto=%zu rhs_len=%zu token_start=%zu token_count=%zu\n",
+	// fprintf(stderr, "[PARSER] REDUCE rule=%zu lhs=%s goto=%zu rhs_len=%zu token_start=%zu token_count=%zu\n",
 	// 	rule_id,
 	// 	symbol_to_string(item.symbol),
 	// 	item.lr_state_id,
 	// 	rule->rhs_len,
 	// 	item.tokens_start_id,
 	// 	item.tokens_count);
-	printf("[PARSER] REDUCE => %s [", symbol_to_string(item.symbol));
-	for (size_t i = 0; i < rule->rhs_len; i++)
-	{
-		printf("%s", symbol_to_string(rhs[i].symbol));
-		if (i < rule->rhs_len - 1)
-			printf(" ");
-		// printf("[PARSER] RHS[%zu] symbol=%s state=%zu token_start=%zu token_count=%zu\n",
-		// 	i,
-		// 	symbol_to_string(rhs[i].symbol),
-		// 	rhs[i].lr_state_id,
-		// 	rhs[i].tokens_start_id,
-		// 	rhs[i].tokens_count);
-	}
-	printf("]\n");
+	// fprintf(stderr, "[PARSER] REDUCE => %s [", symbol_to_string(item.symbol));
+	// for (size_t i = 0; i < rule->rhs_len; i++)
+	// {
+	// 	fprintf(stderr, "%s", symbol_to_string(rhs[i].symbol));
+	// 	if (i < rule->rhs_len - 1)
+	// 		fprintf(stderr, " ");
+	// 	// fprintf(stderr, "[PARSER] RHS[%zu] symbol=%s state=%zu token_start=%zu token_count=%zu\n",
+	// 	// 	i,
+	// 	// 	symbol_to_string(rhs[i].symbol),
+	// 	// 	rhs[i].lr_state_id,
+	// 	// 	rhs[i].tokens_start_id,
+	// 	// 	rhs[i].tokens_count);
+	// }
+	// fprintf(stderr, "]\n");
 	item.cst_node = NULL;
-	err = error(ERR_NO);
-	if (rule->hook)
-		err = rule->hook(rhs, rule->rhs_len, parser);
-	if (err.type == ERR_NO)
-		err = parser_cst_node_new(&item, rhs, rule->rhs_len, &item.cst_node);
+	err = cst_node_new(&item, rhs, rule->rhs_len, (t_rule_id)rule_id);
+	if (err.type == ERR_NO && rule->hook)
+		err = rule->hook(parser, rhs, rule->rhs_len, &item);
 	if (err.type == ERR_NO)
 		err = parser_replace_items(parser, rule->rhs_len, &item);
 	if (err.type != ERR_NO)
-		parser_cst_node_free(&item.cst_node);
+		cst_node_free(&item.cst_node);
 	return (err);
 }

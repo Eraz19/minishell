@@ -31,9 +31,9 @@ static inline void	detect_qualifier_conflict(t_qualifier_id current, t_qualifier
 		return ;
 	if (qualifier_current_priority(new) == current_priority)
 	{
-		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-		printf("[ERROR] conflict of qualifiers %zu\n", current_priority);
-		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+		fprintf(stderr, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+		fprintf(stderr, "[ERROR] conflict of qualifiers %zu\n", current_priority);
+		fprintf(stderr, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	}
 }
 

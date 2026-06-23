@@ -1,20 +1,11 @@
-#ifndef RULES_TYPE_H
-# define RULES_TYPE_H
+#ifndef RULES__TYPE_H
+# define RULES__TYPE_H
 
 # define RULE_RHS_CAP	7
 
 # include "symbols_type.h"
 # include "hooks_type.h"
 
-typedef struct s_rule
-{
-	t_symbol		lhs;
-	t_symbol		rhs[RULE_RHS_CAP];
-	size_t			rhs_len;
-	t_reduce_hook	hook;
-}	t_rule;
-
-// ⚠️ custom intermediate rule RULE_FUNCTION_HEADER to allow easy computing of rule 9
 typedef enum e_rule_id
 {
 	RULE_START_1,					// start				-> program
@@ -130,7 +121,16 @@ typedef enum e_rule_id
 	RULE_SEPARATOR_2,				// separator			-> newline_list
 	RULE_SEQUENTIAL_SEP_1,			// sequential_sep		-> ';' linebreak
 	RULE_SEQUENTIAL_SEP_2,			// sequential_sep		-> newline_list
-	RULE_COUNT						// rule_count			-> <sentinel>
+	RULE_COUNT,						// rule_count			-> <sentinel>
+	RULE_NONE						// rule_none			-> <sentinel>
 }	t_rule_id;
+
+typedef struct s_rule
+{
+	t_symbol		lhs;
+	t_symbol		rhs[RULE_RHS_CAP];
+	size_t			rhs_len;
+	t_reduce_hook	hook;
+}	t_rule;
 
 #endif

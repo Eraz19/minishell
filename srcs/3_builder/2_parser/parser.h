@@ -8,6 +8,7 @@ void	parser_init(t_parser *parser);
 t_error	parser_reset(t_parser *parser);
 t_error	parser_build_qualifiers_table(t_parser *parser, t_lr_machine *machine);
 t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine);
+t_error	parser_store_cst(t_parser *parser, t_parser_stack_item *main_item);
 t_error	parser_reset(t_parser *parser);
 void	parser_free(t_parser *parser);
 

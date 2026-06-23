@@ -5,13 +5,25 @@
 # include "parser_stack_type.h"
 
 // Triggered on SYM_io_here reduction
-t_error	hook_3(t_parser_stack_item *rhs, size_t len, void *ctx);
+t_error	hook_3(
+	t_parser *parser,
+	t_parser_stack_item *rhs,
+	size_t len,
+	t_parser_stack_item *lhs);
 
 // Triggered by hook_fname()
-t_error	hook_9_increment(t_parser_stack_item *rhs, size_t len, void *ctx);
+t_error	hook_9_increment(
+	t_parser *parser,
+	t_parser_stack_item *rhs,
+	size_t len,
+	t_parser_stack_item *lhs);
 
 // Triggered on SYM_function_body reduction
-t_error	hook_9_decrement(t_parser_stack_item *rhs, size_t len, void *ctx);
+t_error	hook_9_decrement(
+	t_parser *parser,
+	t_parser_stack_item *rhs,
+	size_t len,
+	t_parser_stack_item *lhs);
 
 /*
 * Triggered on SYM_fname reduction
@@ -19,6 +31,16 @@ t_error	hook_9_decrement(t_parser_stack_item *rhs, size_t len, void *ctx);
 * Although function_body is parsed later, only '(' ')' and linebreak can appear
 * before it, so disabling assignment and expansion now is safe.
 */
-t_error	hook_fname(t_parser_stack_item *rhs, size_t len, void *ctx);
+t_error	hook_fname(
+	t_parser *parser,
+	t_parser_stack_item *rhs,
+	size_t len,
+	t_parser_stack_item *lhs);
+
+t_error	hook_store_cst(
+	t_parser *parser,
+	t_parser_stack_item *rhs,
+	size_t len,
+	t_parser_stack_item *lhs);
 
 #endif

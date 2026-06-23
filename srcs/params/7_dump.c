@@ -11,16 +11,16 @@ static void	params_dump_scalar(const char *name)
 	err = params_get(name, &value);
 	if (err.type != ERR_NO)
 	{
-		printf("PARAMS '%s'=[ERROR: '%s']\n", name, error_to_string(err));
+		fprintf(stderr, "PARAMS '%s'=[ERROR: '%s']\n", name, error_to_string(err));
 		return ;
 	}
 	if (value)
 	{
-		printf("PARAMS '%s'='%s'\n", name, value);
+		fprintf(stderr, "PARAMS '%s'='%s'\n", name, value);
 		free(value);
 	}
 	else
-		printf("PARAMS '%s'=NULL\n", name);
+		fprintf(stderr, "PARAMS '%s'=NULL\n", name);
 }
 
 static void	params_dump_variables(void)
@@ -97,7 +97,7 @@ static void	params_dump_positionals(void)
 
 void	params_dump(void)
 {
-	printf("\nDUMP PARAMS\n");
+	fprintf(stderr, "\nDUMP PARAMS\n");
 	params_dump_variables();
 	params_dump_options();
 	params_dump_specials();

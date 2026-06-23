@@ -103,7 +103,7 @@ t_error	error_priv(t_error_type type, const char *caller)
 	err.saved_errno = 0;
 	err.printed = false;
 	// if (type != ERR_NO)
-	// 	printf(RED "===> [ERROR] from [%s()] type = %s\n" NC, caller, error_to_string(err));
+	// 	fprintf(stderr, RED "===> [ERROR] from [%s()] type = %s\n" NC, caller, error_to_string(err));
 	(void)caller;
 	return (err);
 }
@@ -115,7 +115,7 @@ t_error	error_sys_priv(const char *caller)
 	err.type = ERR_LIBC;
 	err.saved_errno = errno;
 	err.printed = false;
-	// printf(RED "===> [ERROR] from [%s()] type = ERR_LIBC (%s)\n" NC, caller, error_to_string(err));
+	// fprintf(stderr, RED "===> [ERROR] from [%s()] type = ERR_LIBC (%s)\n" NC, caller, error_to_string(err));
 	(void)caller;
 	return (err);
 }

@@ -1,9 +1,12 @@
 # WIP
 
+- `CST`:
+	- store le `CST` dès que `complete_command` est reduced (hook ?)
+	- stopper la boucle dès que `parser->cst != NULL`
+	- reset la `parser_stack` à chaque début de build de `cst`
 - `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
 	- Changer signature 😫
-- stoper la main loop si `TOKEN_EOF` et ≠stdin
-- CST
+- Vérifier partout que les `error_sys()` sont bien créées avant de free quoi que ce soit (ou tout autre call `libc`)
 
 ---
 

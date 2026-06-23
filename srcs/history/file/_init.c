@@ -28,7 +28,7 @@ t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t m
 	// 		return (state->err);
 	// 	if (entry == NULL)
 	// 		break ;
-	// 	printf("entry (%zu) = %s\n", list->len, entry);
+	// 	fprintf(stderr, "entry (%zu) = %s\n", list->len, entry);
 	// 	state->err = history_list_insert(list, entry, 0);
 	// 	if (state->err.type)
 	// 		return (free(entry), state->err);

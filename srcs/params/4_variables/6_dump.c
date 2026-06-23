@@ -6,13 +6,13 @@
 void	var_dump_one(t_var *var)
 {
 	if (var->value)
-		printf("VAR name='%s' value='%s' exported=%s readonly=%s\n",
+		fprintf(stderr, "VAR name='%s' value='%s' exported=%s readonly=%s\n",
 			var->name,
 			var->value,
 			bool_to_string(var->export),
 			bool_to_string(var->readonly));
 	else
-		printf("VAR name='%s' value=NULL exported=%s readonly=%s\n",
+		fprintf(stderr, "VAR name='%s' value=NULL exported=%s readonly=%s\n",
 			var->name,
 			bool_to_string(var->export),
 			bool_to_string(var->readonly));
@@ -25,7 +25,7 @@ void	var_dump(void)
 	t_var		*var;
 	size_t		i;
 
-	printf("\nDUMP VARIABLES\n");
+	fprintf(stderr, "\nDUMP VARIABLES\n");
 	shell = shell_get();
 	if (!shell)
 	{
