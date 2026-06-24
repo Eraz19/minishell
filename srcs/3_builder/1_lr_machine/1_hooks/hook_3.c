@@ -14,6 +14,15 @@ static t_error	get_heredoc_delim(t_parser *parser, t_parser_stack_item *rhs, cha
 	return (error(ERR_NO));
 }
 
+static void	free_buff_and_ptr(void *buff_ptr)
+{
+	t_buff	*buff;
+
+	buff = (t_buff *)buff_ptr;
+	buff_free(buff);
+	free(buff);
+}
+
 # include <stdio.h>	// DEBUG
 # include "logs.h"	// DEBUG
 t_error	hook_3(
@@ -22,8 +31,7 @@ t_error	hook_3(
 	size_t len,
 	t_parser_stack_item *lhs)
 {
-	char			*path;	// TODO: remove
-	t_buff			*path_buff;
+	t_buff			*path;
 	char			*delim;
 	t_heredoc_mode	mode;
 	t_error			err;
@@ -37,17 +45,14 @@ t_error	hook_3(
 		mode = HEREDOC_MODE_TAB_STRIP;
 	else
 		mode = HEREDOC_MODE_NORMAL;
-	path = NULL;
+	path = malloc(sizeof(t_buff));
+	if (!path)
+		return (error_print(err, __func__, "unable to malloc heredoc path buff", NULL, NULL));
 	fprintf(stderr, "[PARSER] %sscanner_report_io_here(%p, %s%s%s, %i)%s\n", YELLOW, &path, BLUE, delim, YELLOW, (int)mode, NC);
-	err = scanner_report_io_here(&path, delim, mode);
+	err = scanner_report_io_here(path, delim, mode);
 	if (err.type == ERR_NO)
 	{
-		path_buff = malloc(sizeof(t_buff));
-		if (!path_buff)
-			return (free(path), error_print(err, __func__, "unable to malloc heredoc path buff", NULL, NULL));
-		if (!buff_init(path_buff, 0, path, -1))
-			return (free(path), error_print(err, __func__, "unable to init heredoc path buff", NULL, NULL));
-		cst_node_set_data(lhs->cst_node, path_buff, buff_free_void);
+		cst_node_set_data(lhs->cst_node, path, free_buff_and_ptr);
 		parser->must_read_heredoc = true;
 	}
 	free(delim);
