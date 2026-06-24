@@ -20,14 +20,16 @@ static bool	runner_continue_on_builder_error(t_runner *runner, t_error err)
 
 t_error	runner_loop_cycle(t_runner *runner)
 {
-	t_ast_node	*ast;
+	t_ast_root	ast_root;
 	t_error		err;
 
-	err = builder_get_ast(&ast);
+	err = builder_get_ast(&ast_root);
 	if (err.type != ERR_NO && !runner_continue_on_builder_error(runner, err))
 		return (err);
-	// TODO: execute
+	ast_root_free(&ast_root);
+	// TODO: err = walk_ast(&ast_root);
 	// TODO: handle non-fatal errors
+	// TODO: ast_free_node(&ast_root);
 	return (error(ERR_NO));
 }
 

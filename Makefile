@@ -31,6 +31,7 @@ SRCS			:= \
 	$(wildcard srcs/3_builder/*.c) \
 	$(wildcard srcs/3_builder/*/*.c) \
 	$(wildcard srcs/3_builder/*/*/*.c) \
+	$(wildcard srcs/3_builder/*/*/*/*.c) \
 	$(wildcard srcs/4_runner/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/expander/*.c) \
@@ -79,6 +80,7 @@ INCLUDES		:= \
 	-Isrcs/3_builder/2_parser/1_qualifiers \
 	-Isrcs/3_builder/2_parser/2_stack \
 	-Isrcs/3_builder/2_parser/3_cst \
+	-Isrcs/3_builder/3_converter \
 	-Isrcs/4_runner \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \

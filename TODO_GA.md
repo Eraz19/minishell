@@ -17,6 +17,7 @@
 
 ---
 
+- `parser` => use `t_buff` instead of `char *` to store **heredoc path**!
 - `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
 	- Changer signature 😫
 - Vérifier partout que les `error_sys()` sont bien créées avant de free quoi que ce soit (ou tout autre call `libc`)
