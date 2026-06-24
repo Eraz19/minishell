@@ -3,18 +3,6 @@
 #include <stdlib.h>
 #include "heredoc_body_.h"
 
-t_error	heredoc_body_save_content(t_heredoc_body *state)
-{
-	int	fd;
-
-	fd = open(state->item->path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (fd == -1)
-		return (state->err = error_sys());
-	if (write(fd, state->content.data, state->content.len) == -1)
-		state->err = error_sys();
-	return (close(fd), state->err);
-}
-
 t_error	heredoc_body_line_to_content(t_heredoc_body *state)
 {
 	size_t	line_len;

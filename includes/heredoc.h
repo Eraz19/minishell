@@ -51,9 +51,11 @@ typedef enum e_heredoc_mode
  */
 typedef struct s_heredoc_queue_item
 {
+	size_t			*i;
 	t_heredoc_mode	mode;
 	char			*path;
 	char			*delim;
+	char			*input;
 }	t_heredoc_queue_item;
 
 /**

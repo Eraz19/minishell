@@ -22,16 +22,13 @@ void	heredoc_body_free(t_heredoc_body *state)
 t_error	heredoc_body_load(
 	t_heredoc_body *state,
 	t_heredoc_queue_item *item,
-	char *input,
-	size_t *i)
+	bool is_stdin)
 {
-	state->i = i;
+	state->i = item->i;
 	state->item = item;
-	if (input != NULL)
-	{
-		state->input = str_dup(input);
-		if (state->input == NULL)
-			return (state->err = error_sys());
-	}
+	state->is_stdin = is_stdin;
+	state->input = str_dup(item->input);
+	if (state->input == NULL)
+		return (state->err = error_sys());
 	return (state->err);
 }

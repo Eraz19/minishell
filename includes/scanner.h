@@ -57,79 +57,20 @@ typedef struct s_scanner
 	t_heredoc		heredoc;
 }	t_scanner;
 
-/**
- * @ingroup scanner
- * @brief Initialises a scanner to an empty, ready-to-use value.
- *
- * Zeroes the structure, allocates and initialises the lexer, and initialises
- * the here-document collector. Must be called before scanner_load() or
- * scanner_get_next_token().
- *
- * @param state Pointer to the scanner state to initialise (borrowed).
- * @return ERR_NO on success, ERR_LIBC if the lexer allocation fails.
- */
 t_error	scanner_init(t_scanner *state);
 
-/**
- * @ingroup scanner
- * @brief Releases every resource held by a scanner state.
- *
- * Frees the lexer (its contents and the allocation itself) and the
- * here-document collector, then resets the structure to zero.
- *
- * @param state Pointer to the scanner state to free (borrowed).
- */
 void	scanner_free(t_scanner *state);
 
-/**
- * @ingroup scanner
- * @brief Selects the input source for the next scan.
- *
- * Records the mode and, for FILE/STRING modes, the borrowed source string,
- * and propagates the interactivity flag to the lexer and the here-document
- * collector (true only for STDIN mode).
- *
- * @param state Pointer to the scanner state (borrowed).
- * @param mode Where to read input from.
- * @param source File path (FILE) or command string (STRING), borrowed; unused
- *               for STDIN.
- * @return The error currently recorded on the scanner.
- */
 t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source);
 
 t_error	scanner_reset(t_scanner *state);
 
-/**
- * @ingroup scanner
- * @brief Produces the next token from the input.
- *
- * Reads more input when the current input is exhausted, asks the lexer for one
- * token, and on the way: stores pending here-document bodies after a newline,
- * and expands aliases on word tokens. Yields a token of type EOF_ once the
- * input is fully consumed. Operates on the global shell scanner state.
- *
- * @param token Out-parameter for the next token, is intialized during lexing.
- * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell scanner state is
- *         unavailable, or the recorded error on failure.
- */
 t_error	scanner_get_next_token(t_token *token);
 
-/**
- * @ingroup scanner
- * @brief Queues a here-document read reported by the parser.
- *
- * Enqueues a here-document with its target path, delimiter and mode so its
- * body is collected when the current line's newline is reached. Operates on
- * the global shell scanner state.
- *
- * @param path Out/in-parameter for the here-document target path (borrowed).
- * @param delim Here-document delimiter word (borrowed).
- * @param mode Here-document mode (e.g. tab-stripping for <<-).
- * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell scanner state is
- *         unavailable, or the recorded error on failure.
- */
 t_error	scanner_report_io_here(char **path, char *delim, t_heredoc_mode mode);
 
 t_error	scanner_heredoc_read(void);
+
+t_error	scanner_read_continuation(char **res);
 
 #endif

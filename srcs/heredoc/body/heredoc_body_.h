@@ -25,9 +25,10 @@ typedef struct s_heredoc_body
 	size_t					*i;
 	t_error					err;
 	t_heredoc_queue_item	*item;
-	char					*input;
 	char					*line;
+	char					*input;
 	t_buff					content;
+	bool					is_stdin;
 }	t_heredoc_body;
 
 /**
@@ -60,12 +61,10 @@ void	heredoc_body_free(t_heredoc_body *state);
  *
  * @param state Pointer to the body state (borrowed).
  * @param item Heredoc to fill (ownership held for the body's lifetime).
- * @param input Source text to copy and scan, or NULL for interactive reading.
- * @param i Cursor into @p input (borrowed), advanced as the body is read.
  * @return ERR_NO on success, or ERR_LIBC if the input copy fails.
  */
 t_error	heredoc_body_load(t_heredoc_body *state, t_heredoc_queue_item *item,
-			char *input, size_t *i);
+			bool is_stdin);
 
 /**
  * @ingroup heredoc
@@ -132,12 +131,8 @@ t_error	heredoc_body_extract_line(t_heredoc_body *state, char *match_EOL,
  * @param state Pointer to the owning heredoc state (borrowed); receives the
  *              resulting error.
  * @param item Heredoc to fill (consumed: freed by this call).
- * @param input Source text in non-interactive mode (borrowed), or NULL to read
- *              interactively.
- * @param start In/out cursor into @p input, advanced past the consumed body.
  * @return ERR_NO on success, or the recorded error on failure.
  */
-t_error	heredoc_body_store(t_heredoc *state, t_heredoc_queue_item *item,
-			char *input, size_t *start);
+t_error	heredoc_body_store(t_heredoc *state, t_heredoc_queue_item *item);
 
 #endif

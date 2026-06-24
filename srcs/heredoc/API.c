@@ -4,6 +4,7 @@
 #include "heredoc_body_.h"
 #include "heredoc_queue_.h"
 
+#include <stdio.h> //DEBUG
 t_error	heredoc_store_all(char *input, size_t *start)
 {
 	t_heredoc_queue_item	item;
@@ -17,11 +18,9 @@ t_error	heredoc_store_all(char *input, size_t *start)
 		state->err = heredoc_queue_pop(&state->queue, &item);
 		if (state->err.type)
 			return (state->err);
-		if (state->is_stdin)
-			heredoc_body_store(state, &item, NULL, NULL);
-		else
-			heredoc_body_store(state, &item, input, start);
-		if (state->err.type)
+		item.i = start;
+		item.input = input;
+		if (heredoc_body_store(state, &item).type)
 			return (state->err);
 	}
 	return (state->err);

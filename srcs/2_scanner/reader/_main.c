@@ -5,26 +5,6 @@
 #include "reader_.h"
 #include "history.h"
 
-t_error	reader_heredoc(char **res)
-{
-	t_error	err;
-	char	*new_input;
-	char	*heredoc;
-
-	err = readline_(&heredoc, "> ");
-	if (err.type)
-		return (err);
-	if (*res == NULL)
-		return (*res = heredoc, error(ERR_NO));
-	err = history_append_to_entry(heredoc);
-	if (err.type)
-		return (free(heredoc), err);
-	new_input = str_join(*res, heredoc);
-	if (new_input == NULL)
-		return (free(heredoc), error_sys());
-	return (free(*res), free(heredoc), *res = new_input, error(ERR_NO));
-}
-
 t_error	reader_new_input(char **res)
 {
 	t_error	err;

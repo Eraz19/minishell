@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "reader_.h"
 #include "heredoc.h"
 #include "scanner_.h"
 
@@ -42,12 +43,13 @@ t_error	scanner_heredoc_read(void)
 		return (error(ERR_SHELL_NOT_FOUND));
 	printf("=====> Scanner state obtained\n");
 	printf("=====> Lexer input: %s\n", state->lexer.input ? state->lexer.input->str : "NULL");
-	if (state->lexer.input != NULL)
-	{
-		item = state->lexer.input;
-		state->err = heredoc_store_all(item->str, &item->i);
-		if (state->err.type)
-			return (state->err = state->heredoc.err);
-	}
+	item = state->lexer.input;
+	state->err = heredoc_store_all(item->str, &item->i);
+	if (state->err.type)
+		return (state->err = state->heredoc.err);
 	return (state->err);
+}
+t_error	scanner_read_continuation(char **res)
+{
+	return (reader_continuation(res));
 }
