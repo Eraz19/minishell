@@ -1,4 +1,9 @@
 {
+	"clangd.arguments": [
+		"--background-index",
+		"--compile-commands-dir=${workspaceFolder}",
+		"--header-insertion=never"
+	],
 	"clangd.fallbackFlags": [
 		"-x", "c",
 		"-I${workspaceFolder}",

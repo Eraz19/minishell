@@ -39,20 +39,6 @@ t_error	scanner_read_input(t_scanner *state)
 	return (state->err = input_stack_push(&state->lexer.input_stack, item));
 }
 
-t_error	scanner_heredoc_store(t_scanner *state)
-{
-	t_input_parser_stack_item	*item;
-	
-	if (state->lexer.input != NULL)
-	{
-		item = state->lexer.input;
-		state->err = heredoc_store_all(item->str, &item->i);
-		if (state->err.type)
-			return (state->err = state->heredoc.err);
-	}
-	return (state->err);
-}
-
 t_error	scanner_alias_expand(t_scanner *state, t_token *token)
 {
 	t_input_parser_stack_item	*item;
