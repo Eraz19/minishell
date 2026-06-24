@@ -19,7 +19,7 @@
  *             caller on success, freed internally on failure).
  * @return ERR_NO on success, or ERR_LIBC on allocation or open failure.
  */
-t_error	heredoc_create_file(t_heredoc *state, char **path);
+t_error	heredoc_create_file(t_heredoc *state, t_buff *path);
 
 /**
  * @ingroup heredoc

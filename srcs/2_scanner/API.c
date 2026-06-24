@@ -19,15 +19,19 @@ t_error	scanner_get_next_token(t_token *token)
 	return (state->err);
 }
 
-t_error	scanner_report_io_here(char **path, char *delim, t_heredoc_mode mode)
+#include <stdio.h> //DEBUG
+t_error	scanner_report_io_here(t_buff *path, char *delim, t_heredoc_mode mode)
 {
 	t_scanner	*state;
 
+	printf("=====> In scanner_report_io_here\n");
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
+	printf("=====> Scanner state obtained\n");
 	if (heredoc_add_to_queue(path, delim, mode).type)
-		return (state->err = state->heredoc.err, state->err);
+		return (printf("FUCK\n"), state->err = state->heredoc.err, state->err);
+	printf("=====> Heredoc added to queue with path: %s\n", buff_get_string(path));
 	return (state->err);
 }
 

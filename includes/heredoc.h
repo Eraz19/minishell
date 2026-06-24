@@ -116,47 +116,8 @@ void	heredoc_free(t_heredoc *state);
  */
 void	heredoc_load(t_heredoc *state, bool is_stdin);
 
-/**
- * @ingroup heredoc
- * @brief Reads and stores the body of every queued heredoc.
- *
- * Drains the queue in order; for each heredoc it reads body lines until the
- * delimiter and writes them to the heredoc's temporary file. In interactive
- * mode lines are prompted for; otherwise they are scanned from @p input with
- * @p start advanced past the consumed text. The input is deep copied
- * internally, so the caller keeps ownership of its buffer. Operates on the
- * global shell heredoc state.
- *
- * @param input Buffer to scan bodies from in non-interactive mode (borrowed),
- *              unused when reading interactively.
- * @param start In/out cursor into @p input, advanced past the consumed bytes.
- * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell heredoc state is
- *         unavailable, ERR_NO_DELIM if @p input ends before the delimiter, or
- *         the recorded error on failure.
- */
 t_error	heredoc_store_all(char *input, size_t *start);
 
-/**
- * @ingroup heredoc
- * @brief Registers a new pending heredoc and reserves its temporary file.
- *
- * Creates a fresh unique temporary file, returns its path through @p path (the
- * caller takes ownership of *path), and enqueues an item holding the module's
- * own deep copy of that path together with an owned, quote-stripped,
- * newline-terminated copy of @p delim. The caller keeps ownership of @p delim.
- * Operates on the global shell heredoc state.
- *
- * @note On success, ownership of *path passes to the caller, which must
- *       eventually unlink and free it.
- *
- * @param path Out-parameter receiving the freshly created temporary file path
- *             (owned by the caller).
- * @param delim Delimiter word as written on the command line (borrowed; quote
- *              removed and deep copied internally).
- * @param mode Verbatim (NORMAL) or tab-stripping (TAB_STRIP) behaviour.
- * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell heredoc state is
- *         unavailable, or ERR_LIBC on allocation or file-creation failure.
- */
-t_error	heredoc_add_to_queue(char **path, char *delim, t_heredoc_mode mode);
+t_error	heredoc_add_to_queue(t_buff *path, char *delim, t_heredoc_mode mode);
 
 #endif
