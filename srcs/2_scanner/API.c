@@ -19,36 +19,33 @@ t_error	scanner_get_next_token(t_token *token)
 	return (state->err);
 }
 
-#include <stdio.h> //DEBUG
 t_error	scanner_report_io_here(t_buff *path, char *delim, t_heredoc_mode mode)
 {
 	t_scanner	*state;
 
-	printf("=====> In scanner_report_io_here\n");
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	printf("=====> Scanner state obtained\n");
 	if (heredoc_add_to_queue(path, delim, mode).type)
-		return (printf("FUCK\n"), state->err = state->heredoc.err, state->err);
-	printf("=====> Heredoc added to queue with path: %s\n", buff_get_string(path));
+		return (state->err = state->heredoc.err, state->err);
 	return (state->err);
 }
 
-#include <stdio.h>
 t_error	scanner_heredoc_read(void)
 {
-	t_input_parser_stack_item	*item;
+	t_input_lexer_stack_item	*item;
 	t_scanner					*state;
 
-	printf("=====> Enter heredoc read\n");
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	printf("=====> Scanner state obtained\n");
-	printf("=====> Lexer input: %s\n", state->lexer.input ? state->lexer.input->str : "NULL");
-	item = state->lexer.input;
-	state->err = heredoc_store_all(item->str, &item->i);
+	if (state->lexer.input == NULL)
+		state->err = heredoc_store_all(NULL, NULL);
+	else
+	{
+		item = state->lexer.input;
+		state->err = heredoc_store_all(item->str, &item->i);
+	}
 	if (state->err.type)
 		return (state->err = state->heredoc.err);
 	return (state->err);

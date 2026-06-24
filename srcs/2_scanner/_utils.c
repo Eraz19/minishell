@@ -5,7 +5,7 @@
 
 static t_error	scanner_dup_command_input(
 	t_scanner *state,
-	t_input_parser_stack_item *item)
+	t_input_lexer_stack_item *item)
 {
 	char	*command;
 
@@ -20,7 +20,7 @@ static t_error	scanner_dup_command_input(
 
 t_error	scanner_read_input(t_scanner *state) 
 {
-	t_input_parser_stack_item	*item;
+	t_input_lexer_stack_item	*item;
 
 	state->err = input_parser_stack_item_init(&item);
 	if (state->err.type)
@@ -41,7 +41,7 @@ t_error	scanner_read_input(t_scanner *state)
 
 t_error	scanner_alias_expand(t_scanner *state, t_token *token)
 {
-	t_input_parser_stack_item	*item;
+	t_input_lexer_stack_item	*item;
 
 	state->err = input_parser_stack_item_init(&item);
 	if (state->err.type)

@@ -27,7 +27,10 @@ t_error	heredoc_body_load(
 	state->i = item->i;
 	state->item = item;
 	state->is_stdin = is_stdin;
-	state->input = str_dup(item->input);
+	if (item->input == NULL)
+		state->input = str_dup("");
+	else
+		state->input = str_dup(item->input);
 	if (state->input == NULL)
 		return (state->err = error_sys());
 	return (state->err);

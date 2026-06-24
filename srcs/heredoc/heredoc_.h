@@ -4,6 +4,8 @@
 # include "error.h"
 # include "heredoc.h"
 
+# define HEREDOC_TMP_PATH "/tmp/minishell_heredoc_"
+
 /**
  * @ingroup heredoc
  * @brief Creates a fresh, uniquely named temporary file for a heredoc body.

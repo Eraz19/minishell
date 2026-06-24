@@ -1,8 +1,8 @@
 #include <fcntl.h>
+#include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
 #include "libft.h"
 #include "heredoc_.h"
 #include "expander.h"
@@ -40,7 +40,7 @@ static t_error	heredoc_build_path(t_heredoc *state, t_buff *path)
 	i = 0;
 	while (i < INT_MAX)
 	{
-		if (!buff_init(path, 0, /*"/tmp/minishell_heredoc_"*/"/home/alexander/Documents/42/common_core/minishell/heredoc_", 59))
+		if (!buff_init(path, 0, HEREDOC_TMP_PATH, sizeof(HEREDOC_TMP_PATH) - 1))
 			return (state->err = error_sys());
 		id = ft_itoa(i);
 		if (id == NULL)
