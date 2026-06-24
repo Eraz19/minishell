@@ -74,8 +74,8 @@ typedef struct s_heredoc
 {
 	t_error			err;
 	t_heredoc_queue	queue;
-	bool			is_stdin;
 	size_t			file_id;
+	bool			is_stdin;
 }	t_heredoc;
 
 /**

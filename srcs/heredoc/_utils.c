@@ -36,7 +36,7 @@ static t_error	heredoc_build_path(t_heredoc *state, char **path)
 	char	*id;
 	t_buff	path_buff;
 
-	if (!buff_init(&path_buff, 0, "/tmp/minishell_heredoc_", 23))
+	if (!buff_init(&path_buff, 0, /*"/tmp/minishell_heredoc_"*/"/home/alexander/Documents/42/common_core/minishell/heredoc_", 59))
 		return (state->err = error_sys());
 	id = ft_ltoa((long)state->file_id);
 	if (id == NULL || id[0] == '-')

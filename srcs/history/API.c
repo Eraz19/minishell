@@ -14,6 +14,8 @@ t_error	history_save_entry(void)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->current_input.len == 0)
 		return (state->err);
+	if (state->current_input.data[state->current_input.len - 1] == '\n')
+		state->current_input.len--;
 	entry = buff_get_string(&state->current_input);
 	if (entry == NULL)
 		return (state->err = error_sys());

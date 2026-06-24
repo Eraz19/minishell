@@ -8,6 +8,8 @@ t_error	heredoc_body_get_content_no_tty(t_heredoc_body *state)
 {
 	char	*match_EOL;
 
+	if (state->input == NULL)
+		return (state->err = error(ERR_NO_DELIM));
 	while (true)
 	{
 		match_EOL = str_chr(state->input + *state->i, '\n');
@@ -70,7 +72,7 @@ t_error	heredoc_body_store(
 	heredoc_body_init(&body);
 	if (heredoc_body_load(&body, item, input, start).type)
 		return (heredoc_body_free(&body), state->err = body.err);
-	if (input != NULL)
+	if (!state->is_stdin)
 	{
 		if (heredoc_body_get_content_no_tty(&body).type)
 			return (heredoc_body_free(&body), state->err = body.err);

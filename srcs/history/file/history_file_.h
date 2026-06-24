@@ -59,22 +59,6 @@ t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t m
 
 /**
  * @ingroup history
- * @brief Extracts the last entry from the content buffer.
- *
- * Carves the trailing serialised entry out of state->content (mutating it)
- * and decodes it into a freshly allocated *entry owned by the caller. Sets
- * *entry to NULL when no entry remains; safe to call with NULL content.
- *
- * @param state Pointer to the file backing (borrowed).
- * @param entry Out-parameter receiving the decoded entry, or NULL when none
- *              remains.
- * @return ERR_NO on success or exhaustion, ERR_INCOHERENT_STATE on a
- *         malformed buffer, or ERR_LIBC on allocation failure.
- */
-t_error	history_file_extract(t_history_file *state, char **entry);
-
-/**
- * @ingroup history
  * @brief Opens the history file, creating it when missing.
  *
  * Opens state->path with @p flags, retrying with O_CREAT if the file does

@@ -19,18 +19,6 @@ t_error		scanner_read_input(t_scanner *state);
 
 /**
  * @ingroup scanner
- * @brief Collects the bodies of the here-documents pending after a newline.
- *
- * Reads the queued here-document bodies from the current input position,
- * advancing the input cursor past them.
- *
- * @param state Pointer to the scanner state (borrowed).
- * @return ERR_NO on success, or the here-document module's error.
- */
-t_error		scanner_heredoc_store(t_scanner *state);
-
-/**
- * @ingroup scanner
  * @brief Expands a word token's alias and re-lexes from the expansion.
  *
  * When @p token expands, pushes the expansion as a new input on the lexer

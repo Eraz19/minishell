@@ -6,9 +6,6 @@
 # include "heredoc.h"
 # include "lexer_.h"
 
-// TODO
-t_error	scanner_heredoc_read(void);
-
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
  *
@@ -132,5 +129,7 @@ t_error	scanner_get_next_token(t_token *token);
  *         unavailable, or the recorded error on failure.
  */
 t_error	scanner_report_io_here(char **path, char *delim, t_heredoc_mode mode);
+
+t_error	scanner_heredoc_read(void);
 
 #endif

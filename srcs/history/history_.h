@@ -29,32 +29,6 @@ t_error	history_load_size_env(t_history *state);
 
 /**
  * @ingroup history
- * @brief Encodes an entry for on-disk storage.
- *
- * Wraps *entry in single quotes and backslash-escapes any embedded quote,
- * replacing *entry with the freshly allocated encoded string and freeing the
- * original.
- *
- * @param entry In/out pointer to the entry to encode (owned; replaced on
- *              success).
- * @return ERR_NO on success, ERR_LIBC on allocation failure.
- */
-t_error	history_entry_serialize(char **entry);
-
-/**
- * @ingroup history
- * @brief Decodes, in place, an entry read from disk.
- *
- * Removes the backslash escapes inserted by history_entry_serialize() from
- * *entry; the surrounding quotes are stripped earlier by
- * history_file_extract().
- *
- * @param entry In/out pointer to the entry to decode in place.
- */
-void	history_entry_deserialize(char **entry);
-
-/**
- * @ingroup history
  * @brief Builds the file content buffer from the list tail.
  *
  * Serialises and concatenates the list entries from index @p start onward
