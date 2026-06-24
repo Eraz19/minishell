@@ -382,12 +382,12 @@ static inline void	ast_log_head(
 	lasts[depth] = is_last;
 }
 
-static void	ast_log_buff(const char *name, t_buff *buff)
+static void	ast_log_token_value(t_buff *buff)
 {
 	size_t	i;
 	char	c;
 
-	fprintf(stderr, " %s=\"", name);
+	fprintf(stderr, " (%s", BLUE);
 	i = 0;
 	while (i < buff->len)
 	{
@@ -398,15 +398,21 @@ static void	ast_log_buff(const char *name, t_buff *buff)
 			fprintf(stderr, "\\t");
 		else if (c == '\r')
 			fprintf(stderr, "\\r");
-		else if (c == '"')
-			fprintf(stderr, "\\\"");
+		else if (c == ')')
+			fprintf(stderr, "\\)");
 		else if (c == '\\')
 			fprintf(stderr, "\\\\");
 		else
 			fprintf(stderr, "%c", c);
 		i++;
 	}
-	fprintf(stderr, "\" len=%zu", buff->len);
+	fprintf(stderr, "%s)", NC);
+}
+
+static void	ast_log_buff(const char *name, t_buff *buff)
+{
+	fprintf(stderr, " %s", name);
+	ast_log_token_value(buff);
 }
 
 static const char	*ast_redir_op_to_string(t_ast_redir_op op)
@@ -506,7 +512,7 @@ static void	ast_log_buff_vector(
 		buff = AST_AT(t_buff, vector, i);
 		ast_log_head(lasts, depth + 1, i + 1 == vector->len,
 			CYAN, item_name);
-		ast_log_buff("value", buff);
+		ast_log_token_value(buff);
 		fprintf(stderr, "\n");
 		i++;
 	}

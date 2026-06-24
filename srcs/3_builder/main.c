@@ -40,7 +40,7 @@ t_error	builder_get_ast(t_ast_root *dst_ast)
 	fprintf(stderr, "[BUILDER] CST built:\n");
 	debug_dump_cst_node(builder->parser.cst);
 	fprintf(stderr, "--------------------------------------------------\n");
-	convert_cst_to_ast(builder->parser.cst, dst_ast);
+	convert_cst_to_ast(&builder->parser, builder->parser.cst, dst_ast);
 	fprintf(stderr, "[BUILDER] AST built:\n");
 	debug_dump_ast(dst_ast);
 	fprintf(stderr, "--------------------------------------------------\n");

@@ -17,7 +17,7 @@ static t_error	check_name(const char *hook_name, t_token *token)
 		return (error_print(error_sys(), "parser", hook_name,
 			"unable to get token value", NULL, NULL));
 	valid_name = name_is_valid(token_value);
-	fprintf(stderr, "[PARSER] %sfunction_name is valid = %s%s\n", YELLOW, bool_to_string(valid_name), NC);
+	fprintf(stderr, "[PARSER] %sfunction_name_is_valid = %s%s\n", YELLOW, bool_to_string(valid_name), NC);
 	if (!valid_name)
 	{
 		(void)error_print(error(ERR_PARSER_INVALID_FUNCTION_NAME),

@@ -32,7 +32,7 @@ t_error	converter_dup_buff(
 	err = converter_get_buff(parser, node, node_token_id, &token_buff);
 	if (err.type)
 		return (err);
-	if (!buff_dup_n(dst, token_buff, token_buff->len))
+	if (!buff_init(dst, 0, token_buff->data, (long)token_buff->len))
 		return (error_sys());
 	return (error(ERR_NO));
 }

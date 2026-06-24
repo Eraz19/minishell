@@ -15,7 +15,7 @@ static bool	runner_continue_on_builder_error(t_runner *runner, t_error err)
 	(void)runner;
 	(void)err;
 	// TODO
-	return (true);
+	return (false);
 }
 
 t_error	runner_loop_cycle(t_runner *runner)

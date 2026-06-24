@@ -43,17 +43,28 @@ static inline bool	heredoc_should_expand(t_buff *token_buff)
 
 static inline t_error	convert_here_end(
 	t_parser *parser,
-	t_cst_node *here_end_node,
+	t_cst_node *here_end,
 	t_ast_redirection *out)
 {
+	t_buff	delim;
 	t_error	err;
 
-	if (!buff_append(&out->word, here_end_node->data, -1))
-		return (ast_redirection_free(out), error_sys());
-	err = converter_dup_buff(parser, here_end_node, 0, &out->word);
+	err = converter_dup_buff(parser, here_end, 0, &delim);
 	if (err.type)
 		return (ast_redirection_free(out), err);
-	out->expand_heredoc_body = heredoc_should_expand(&out->word);
+	out->expand_heredoc_body = heredoc_should_expand(&delim);
+	return (error(ERR_NO));
+}
+
+static inline t_error	convert_io_here(
+	t_cst_node *io_here,
+	t_ast_redirection *out)
+{
+	t_buff	*heredoc_path;
+
+	heredoc_path = (t_buff *)io_here->data;
+	if (!buff_dup_n(&out->word, heredoc_path, heredoc_path->len))
+		return (ast_redirection_free(out), error_sys());
 	return (error(ERR_NO));
 }
 
@@ -87,7 +98,12 @@ t_error	convert_io_file_or_here(
 	if (err.type)
 		return (ast_redirection_free(out), err);
 	if (out->operation == AST_REDIR_HEREDOC)
+	{
+		err = convert_io_here(io_file_node, out);
+		if (err.type)
+			return (err);
 		return (convert_here_end(parser, io_file_node->children[1], out));
+	}
 	filename_node = io_file_node->children[1];
 	err = converter_dup_buff(parser, filename_node, 0, &out->word);
 	if (err.type)
