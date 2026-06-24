@@ -45,6 +45,7 @@ t_error	runner_run(t_runner *runner)
 		if (err.type)
 			return (err);
 	}
+	return (error(ERR_NO));
 }
 
 void	runner_free(t_runner *runner)

@@ -1,9 +1,3 @@
-# ALEX
-
-- modifier `scanner_report_io_here()` pour utiliser un `t_buff` au lieu d'un `char *`
-
----
-
 # WIP
 
 1. walk_ast() call walk_list()
@@ -23,6 +17,7 @@
 
 ---
 
+- `shell_exit_on_veof()` => `bool shell_should_exit()`
 - `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
 	- Changer signature 😫
 - Vérifier partout que les `error_sys()` sont bien créées avant de free quoi que ce soit (ou tout autre call `libc`)
@@ -35,19 +30,14 @@ print tous les board pour lesquels 2 dames peuvent pas se manger (selon règle d
 
 # ALEXANDER
 
-## NEW
-- `shell_exit_on_veof()`:
-	- Même problème que celui qu'avait `shell_exit()`
-	- Plutôt retourner `ERR_VEOF` => elle remontera jusqu'au `driver` qui décidera de stopper ou non la boucle de lecture
-
 ## BUGS
-- `history`:
-	- use `serialize()` and `deserialize()` and `deserialize_all()`
-	- `history_load()`: Pas d'historique avec flèche du haut quand on vient de lancer le shell
-	- L'historique apparaît quoted
-	- Le `newline` apparait dans l'input (il ne devrait pas être stocké dans l'historique)
 - `heredoc`:
-	- Ne lit pas le here document malgré `scanner_report_io_here()` + `scanner_heredoc_read()`
+	- `scanner_report_io_here()`
+		- N'envoie pas de path au premier appel
+		- Envoie plusieurs fois le même path
+		- Devrait renvoyer un `t_buff` au lieu d'un `char *`
+	- `scanner_heredoc_read()`
+		- Ne lit pas les here documents
 
 ## AJOUTS DONT J'AI BESOIN
 - `token->assign_operand_offset` (-1 si inexistant):
