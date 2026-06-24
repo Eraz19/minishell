@@ -28,7 +28,9 @@ typedef struct s_ast_redirection
 {
 	t_ast_redir_op	operation;
 	int				fd;					// pre-computed fd
-	char			*word;				// raw token content / heredoc file path
+	bool			is_location;
+	t_buff			location;			// only if is_location == true
+	t_buff			word;				// raw token content / heredoc file path
 	bool			expand_heredoc_body;
 }	t_ast_redirection;
 
@@ -58,13 +60,14 @@ void	redirect_free(t_redir_stack *stack);
 
 typedef struct s_ast_simple_command
 {
-	t_vector	assignments;	// vector of char *
-	t_vector	words;			// vector of char *
+	t_vector			assignments;	// vector of t_buff
+	t_vector			words;			// vector of t_buff
+	t_ast_redir_list	redirs;			// vector of t_ast_redirection
 }	t_ast_simple_command;
 
 /* ---------- EXECUTOR (IN RUNNER) ---------- */
 
-t_error	execute(t_ast_simple_command *cmd, t_ast_redir_list *redirections, int *exit_status);
+t_error	execute(t_ast_simple_command *cmd, int *exit_status);
 
 /* ************************************************************************* */
 /*                                    WALKER                                 */
@@ -86,8 +89,8 @@ typedef struct s_ast_and_or
 
 typedef struct s_ast_list
 {
-	t_vector	and_or;				// vector of t_ast_and_or
-	t_vector	async;				// vector of bool (& => true)
+	t_vector	and_ors;			// vector of t_ast_and_or
+	t_vector	asyncs;				// vector of bool (& => true)
 	bool		subshell;
 }	t_ast_list;
 
@@ -103,8 +106,8 @@ typedef struct s_ast_if
 
 typedef struct s_ast_for
 {
-	char		*item_var_name;
-	t_vector	words;				// vector of char * (set to ["@"] if input doesn't contain)
+	t_buff		var_name;
+	t_vector	words;				// vector of t_buff (set to ["@"] if input doesn't contain)
 	t_ast_list	body;
 }	t_ast_for;
 
@@ -117,8 +120,8 @@ typedef struct s_ast_loop
 
 typedef struct s_ast_case
 {
-	char		*word;				// raw tested word
-	t_vector	patterns;			// vector of t_vector(char *)
+	t_buff		word;				// raw tested word
+	t_vector	patterns;			// vector of t_vector(t_buff)
 	t_vector	bodies;				// vector of t_ast_list
 	t_vector	fallthrough;		// vector of bool
 }	t_ast_case;
@@ -127,8 +130,9 @@ typedef struct s_ast_command	t_ast_command;
 
 typedef struct s_ast_function_def
 {
-	char			*name;
-	t_ast_command	*body;
+	t_buff				name;
+	t_ast_command		*body;
+	t_ast_redir_list	redirs;		// vector of t_ast_redirection
 }	t_ast_function_def;
 
 /* ---------- MAIN COMMAND (IN CONVERTER) ---------- */
@@ -160,7 +164,7 @@ typedef struct s_ast_command
 {
 	t_ast_command_type	type;
 	t_ast_command_data	data;
-	t_vector			redirs;		// vector of t_ast_redirection
+	t_ast_redir_list	redirs;		// vector of t_ast_redirection
 }	t_ast_command;
 
 typedef t_ast_list	t_ast_root;
@@ -180,7 +184,7 @@ t_error	walk_if(t_ast_if *if_clause);
 t_error	walk_for(t_ast_for *for_clause);
 t_error	walk_loop(t_ast_loop *loop);
 t_error	walk_case(t_ast_case *case_clause);
-t_error	walk_func(t_ast_function_def *function_def);
+t_error	walk_func(t_ast_function_def *function_def, t_ast_redir_list *redirs);
 
 /* --- MAIN WALKER (PRIVATE) --- */
 t_error walk_ast(t_ast_root *root_ast_node);

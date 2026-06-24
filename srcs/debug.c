@@ -6,6 +6,7 @@
 #include "lr_state_type.h"
 #include "rule_state_type.h"
 #include "cst_type.h"
+#include "ast_type.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -136,7 +137,6 @@ const char	*symbol_to_string(t_symbol symbol)
 		case SYM_until_clause: return ("SYM_until_clause");
 		case SYM_function_definition: return ("SYM_function_definition");
 		case SYM_function_body: return ("SYM_function_body");
-		case SYM_function_header: return ("SYM_function_header");
 		case SYM_fname: return ("SYM_fname");
 		case SYM_brace_group: return ("SYM_brace_group");
 		case SYM_do_group: return ("SYM_do_group");
@@ -322,4 +322,480 @@ void	debug_dump_cst_node(t_cst_node *node)
 	if (!node)
 		return ;
 	cst_log_node(node, 0, lasts, true);
+}
+
+/* ************************************************************************* */
+/*                                    AST                                    */
+/* ************************************************************************* */
+
+#ifndef MAGENTA
+# define MAGENTA "\033[35m"
+#endif
+#ifndef CYAN
+# define CYAN "\033[36m"
+#endif
+
+#define AST_AT(type, vec, i) (&((type *)(vec)->data)[i])
+
+static inline const char	*ast_bool(bool value)
+{
+	if (value)
+		return ("true");
+	return ("false");
+}
+
+static inline void	ast_log_prefix(bool *lasts, size_t depth)
+{
+	size_t	i;
+
+	i = 1;
+	while (i < depth)
+	{
+		if (lasts[i])
+			fprintf(stderr, "    ");
+		else
+			fprintf(stderr, " │  ");
+		i++;
+	}
+}
+
+static inline void	ast_log_branch(bool *lasts, size_t depth, bool is_last)
+{
+	if (depth == 0)
+		return ;
+	ast_log_prefix(lasts, depth);
+	if (is_last)
+		fprintf(stderr, " ╰──");
+	else
+		fprintf(stderr, " ├──");
+}
+
+static inline void	ast_log_head(
+	bool *lasts,
+	size_t depth,
+	bool is_last,
+	const char *color,
+	const char *name)
+{
+	ast_log_branch(lasts, depth, is_last);
+	fprintf(stderr, "%s%s%s", color, name, NC);
+	lasts[depth] = is_last;
+}
+
+static void	ast_log_token_value(t_buff *buff)
+{
+	size_t	i;
+	char	c;
+
+	fprintf(stderr, " (%s", BLUE);
+	i = 0;
+	while (i < buff->len)
+	{
+		c = ((char *)buff->data)[i];
+		if (c == '\n')
+			fprintf(stderr, "\\n");
+		else if (c == '\t')
+			fprintf(stderr, "\\t");
+		else if (c == '\r')
+			fprintf(stderr, "\\r");
+		else if (c == ')')
+			fprintf(stderr, "\\)");
+		else if (c == '\\')
+			fprintf(stderr, "\\\\");
+		else
+			fprintf(stderr, "%c", c);
+		i++;
+	}
+	fprintf(stderr, "%s)", NC);
+}
+
+static void	ast_log_buff(const char *name, t_buff *buff)
+{
+	fprintf(stderr, " %s", name);
+	ast_log_token_value(buff);
+}
+
+static const char	*ast_redir_op_to_string(t_ast_redir_op op)
+{
+	if (op == AST_REDIR_READ)
+		return ("READ");
+	if (op == AST_REDIR_HEREDOC)
+		return ("HEREDOC");
+	if (op == AST_REDIR_DUP_READ)
+		return ("DUP_READ");
+	if (op == AST_REDIR_WRITE)
+		return ("WRITE");
+	if (op == AST_REDIR_APPEND)
+		return ("APPEND");
+	if (op == AST_REDIR_DUP_WRITE)
+		return ("DUP_WRITE");
+	if (op == AST_REDIR_CLOBBER)
+		return ("CLOBBER");
+	if (op == AST_REDIR_READ_WRITE)
+		return ("READ_WRITE");
+	return ("INVALID");
+}
+
+static const char	*ast_command_type_to_string(t_ast_command_type type)
+{
+	if (type == AST_CMD_SIMPLE)
+		return ("SIMPLE");
+	if (type == AST_CMD_LIST)
+		return ("LIST");
+	if (type == AST_CMD_IF)
+		return ("IF");
+	if (type == AST_CMD_FOR)
+		return ("FOR");
+	if (type == AST_CMD_LOOP)
+		return ("LOOP");
+	if (type == AST_CMD_CASE)
+		return ("CASE");
+	if (type == AST_CMD_FUNCTION_DEF)
+		return ("FUNCTION_DEF");
+	return ("INVALID");
+}
+
+static void	ast_log_redirection(
+	t_ast_redirection *redir,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	ast_log_head(lasts, depth, is_last, RED, "REDIRECTION");
+	fprintf(stderr, " op=%s", ast_redir_op_to_string(redir->operation));
+	fprintf(stderr, " fd=%d", redir->fd);
+	fprintf(stderr, " is_location=%s", ast_bool(redir->is_location));
+	if (redir->is_location)
+		ast_log_buff("location", &redir->location);
+	ast_log_buff("word", &redir->word);
+	fprintf(stderr, " expand_heredoc_body=%s",
+		ast_bool(redir->expand_heredoc_body));
+	fprintf(stderr, "\n");
+}
+
+static void	ast_log_redir_list(
+	const char *name,
+	t_ast_redir_list *redirs,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t	i;
+
+	ast_log_head(lasts, depth, is_last, RED, name);
+	fprintf(stderr, " count=%zu\n", redirs->len);
+	i = 0;
+	while (i < redirs->len)
+	{
+		ast_log_redirection(AST_AT(t_ast_redirection, redirs, i),
+			depth + 1, lasts, i + 1 == redirs->len);
+		i++;
+	}
+}
+
+static void	ast_log_buff_vector(
+	const char *name,
+	const char *item_name,
+	t_vector *vector,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t	i;
+	t_buff	*buff;
+
+	ast_log_head(lasts, depth, is_last, CYAN, name);
+	fprintf(stderr, " count=%zu\n", vector->len);
+	i = 0;
+	while (i < vector->len)
+	{
+		buff = AST_AT(t_buff, vector, i);
+		ast_log_head(lasts, depth + 1, i + 1 == vector->len,
+			CYAN, item_name);
+		ast_log_token_value(buff);
+		fprintf(stderr, "\n");
+		i++;
+	}
+}
+
+static void	ast_log_list(
+	const char *name,
+	t_ast_list *list,
+	size_t depth,
+	bool *lasts,
+	bool is_last);
+
+static void	ast_log_command(
+	t_ast_command *command,
+	size_t depth,
+	bool *lasts,
+	bool is_last);
+
+static void	ast_log_simple_command(
+	t_ast_simple_command *cmd,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t	child_count;
+	size_t	child_id;
+
+	child_count = 3;
+	child_id = 0;
+	ast_log_head(lasts, depth, is_last, GREEN, "SIMPLE_COMMAND");
+	fprintf(stderr, " assignments=%zu words=%zu redirs=%zu\n",
+		cmd->assignments.len, cmd->words.len, cmd->redirs.len);
+	ast_log_buff_vector("ASSIGNMENTS", "ASSIGNMENT",
+		&cmd->assignments, depth + 1, lasts, ++child_id == child_count);
+	ast_log_buff_vector("WORDS", "WORD",
+		&cmd->words, depth + 1, lasts, ++child_id == child_count);
+	ast_log_redir_list("REDIRS", &cmd->redirs,
+		depth + 1, lasts, ++child_id == child_count);
+}
+
+static void	ast_log_pipeline(
+	t_ast_pipeline *pipeline,
+	size_t depth,
+	bool *lasts,
+	bool is_last,
+	const char *next_op)
+{
+	size_t	i;
+
+	ast_log_head(lasts, depth, is_last, YELLOW, "PIPELINE");
+	fprintf(stderr, " negated=%s commands=%zu", ast_bool(pipeline->negated),
+		pipeline->commands.len);
+	if (next_op)
+		fprintf(stderr, " next=%s", next_op);
+	fprintf(stderr, "\n");
+	i = 0;
+	while (i < pipeline->commands.len)
+	{
+		ast_log_command(AST_AT(t_ast_command, &pipeline->commands, i),
+			depth + 1, lasts, i + 1 == pipeline->commands.len);
+		i++;
+	}
+}
+
+static void	ast_log_and_or(
+	t_ast_and_or *and_or,
+	size_t depth,
+	bool *lasts,
+	bool is_last,
+	bool async)
+{
+	size_t		i;
+	bool		*ops;
+	const char	*next_op;
+
+	ast_log_head(lasts, depth, is_last, YELLOW, "AND_OR");
+	fprintf(stderr, " pipelines=%zu operators=%zu async=%s\n",
+		and_or->pipelines.len, and_or->next_on_success.len,
+		ast_bool(async));
+	ops = (bool *)and_or->next_on_success.data;
+	i = 0;
+	while (i < and_or->pipelines.len)
+	{
+		next_op = NULL;
+		if (i < and_or->next_on_success.len)
+		{
+			if (ops[i])
+				next_op = "&&";
+			else
+				next_op = "||";
+		}
+		ast_log_pipeline(AST_AT(t_ast_pipeline, &and_or->pipelines, i),
+			depth + 1, lasts, i + 1 == and_or->pipelines.len, next_op);
+		i++;
+	}
+}
+
+static void	ast_log_list(
+	const char *name,
+	t_ast_list *list,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t	i;
+	bool	*asyncs;
+
+	ast_log_head(lasts, depth, is_last, GREEN, name);
+	fprintf(stderr, " and_ors=%zu asyncs=%zu subshell=%s\n",
+		list->and_ors.len, list->asyncs.len, ast_bool(list->subshell));
+	asyncs = (bool *)list->asyncs.data;
+	i = 0;
+	while (i < list->and_ors.len)
+	{
+		ast_log_and_or(AST_AT(t_ast_and_or, &list->and_ors, i),
+			depth + 1, lasts, i + 1 == list->and_ors.len, asyncs[i]);
+		i++;
+	}
+}
+
+static void	ast_log_if(
+	t_ast_if *if_node,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t	i;
+	size_t	total;
+	size_t	id;
+
+	total = if_node->conditions.len * 2 + if_node->has_else;
+	id = 0;
+	ast_log_head(lasts, depth, is_last, MAGENTA, "IF");
+	fprintf(stderr, " branches=%zu has_else=%s\n",
+		if_node->conditions.len, ast_bool(if_node->has_else));
+	i = 0;
+	while (i < if_node->conditions.len)
+	{
+		ast_log_list("CONDITION", AST_AT(t_ast_list, &if_node->conditions, i),
+			depth + 1, lasts, ++id == total);
+		ast_log_list("BODY", AST_AT(t_ast_list, &if_node->bodies, i),
+			depth + 1, lasts, ++id == total);
+		i++;
+	}
+	if (if_node->has_else)
+		ast_log_list("ELSE", &if_node->else_body,
+			depth + 1, lasts, true);
+}
+
+static void	ast_log_for(
+	t_ast_for *for_node,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	ast_log_head(lasts, depth, is_last, MAGENTA, "FOR");
+	ast_log_buff("var", &for_node->var_name);
+	fprintf(stderr, " words=%zu\n", for_node->words.len);
+	ast_log_buff_vector("WORDS", "WORD", &for_node->words,
+		depth + 1, lasts, false);
+	ast_log_list("BODY", &for_node->body, depth + 1, lasts, true);
+}
+
+static void	ast_log_loop(
+	t_ast_loop *loop,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	ast_log_head(lasts, depth, is_last, MAGENTA, "LOOP");
+	fprintf(stderr, " condition_must_be_true=%s\n",
+		ast_bool(loop->condition_must_be_true));
+	ast_log_list("CONDITION", &loop->condition, depth + 1, lasts, false);
+	ast_log_list("BODY", &loop->body, depth + 1, lasts, true);
+}
+
+static void	ast_log_case_item(
+	t_ast_case *case_node,
+	size_t index,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	bool	*fallthrough;
+
+	fallthrough = (bool *)case_node->fallthrough.data;
+	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE_ITEM");
+	fprintf(stderr, " index=%zu fallthrough=%s\n",
+		index, ast_bool(fallthrough[index]));
+	ast_log_buff_vector("PATTERNS", "PATTERN",
+		AST_AT(t_vector, &case_node->patterns, index),
+		depth + 1, lasts, false);
+	ast_log_list("BODY", AST_AT(t_ast_list, &case_node->bodies, index),
+		depth + 1, lasts, true);
+}
+
+static void	ast_log_case(
+	t_ast_case *case_node,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t	i;
+
+	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE");
+	ast_log_buff("word", &case_node->word);
+	fprintf(stderr, " items=%zu\n", case_node->patterns.len);
+	i = 0;
+	while (i < case_node->patterns.len)
+	{
+		ast_log_case_item(case_node, i, depth + 1, lasts,
+			i + 1 == case_node->patterns.len);
+		i++;
+	}
+}
+
+static void	ast_log_function(
+	t_ast_function_def *function,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t	child_count;
+	size_t	id;
+
+	child_count = 1;
+	if (function->redirs.len > 0)
+		child_count++;
+	id = 0;
+	ast_log_head(lasts, depth, is_last, MAGENTA, "FUNCTION_DEF");
+	ast_log_buff("name", &function->name);
+	fprintf(stderr, " redirs=%zu\n", function->redirs.len);
+	if (function->body)
+		ast_log_command(function->body, depth + 1, lasts,
+			++id == child_count);
+	if (function->redirs.len > 0)
+		ast_log_redir_list("REDIRS", &function->redirs,
+			depth + 1, lasts, ++id == child_count);
+}
+
+static void	ast_log_command_data(
+	t_ast_command *command,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	if (command->type == AST_CMD_SIMPLE)
+		ast_log_simple_command(&command->data.simple, depth, lasts, is_last);
+	else if (command->type == AST_CMD_LIST)
+		ast_log_list("LIST", &command->data.list, depth, lasts, is_last);
+	else if (command->type == AST_CMD_IF)
+		ast_log_if(&command->data.if_clause, depth, lasts, is_last);
+	else if (command->type == AST_CMD_FOR)
+		ast_log_for(&command->data.for_clause, depth, lasts, is_last);
+	else if (command->type == AST_CMD_LOOP)
+		ast_log_loop(&command->data.loop, depth, lasts, is_last);
+	else if (command->type == AST_CMD_CASE)
+		ast_log_case(&command->data.case_clause, depth, lasts, is_last);
+	else if (command->type == AST_CMD_FUNCTION_DEF)
+		ast_log_function(&command->data.function_def, depth, lasts, is_last);
+}
+
+static void	ast_log_command(
+	t_ast_command *command,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	ast_log_head(lasts, depth, is_last, BLUE, "COMMAND");
+	fprintf(stderr, " type=%s redirs=%zu\n",
+		ast_command_type_to_string(command->type), command->redirs.len);
+	ast_log_command_data(command, depth + 1, lasts,
+		command->redirs.len == 0);
+	if (command->redirs.len > 0)
+		ast_log_redir_list("COMMAND_REDIRS", &command->redirs,
+			depth + 1, lasts, true);
+}
+
+void	debug_dump_ast(t_ast_root *root)
+{
+	bool	lasts[256];
+
+	if (!root)
+		return ;
+	ast_log_list("AST_ROOT", root, 0, lasts, true);
 }

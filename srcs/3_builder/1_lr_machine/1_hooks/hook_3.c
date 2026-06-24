@@ -22,7 +22,8 @@ t_error	hook_3(
 	size_t len,
 	t_parser_stack_item *lhs)
 {
-	char			*path;
+	char			*path;	// TODO: remove
+	t_buff			*path_buff;
 	char			*delim;
 	t_heredoc_mode	mode;
 	t_error			err;
@@ -41,7 +42,12 @@ t_error	hook_3(
 	err = scanner_report_io_here(&path, delim, mode);
 	if (err.type == ERR_NO)
 	{
-		cst_node_set_data(lhs->cst_node, path, free);
+		path_buff = malloc(sizeof(t_buff));
+		if (!path_buff)
+			return (free(path), error_print(err, __func__, "unable to malloc heredoc path buff", NULL, NULL));
+		if (!buff_init(path_buff, 0, path, -1))
+			return (free(path), error_print(err, __func__, "unable to init heredoc path buff", NULL, NULL));
+		cst_node_set_data(lhs->cst_node, path_buff, buff_free_void);
 		parser->must_read_heredoc = true;
 	}
 	free(delim);

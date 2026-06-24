@@ -39,6 +39,7 @@
 		"-I${workspaceFolder}/srcs/3_builder/2_parser/1_qualifiers",
 		"-I${workspaceFolder}/srcs/3_builder/2_parser/2_stack",
 		"-I${workspaceFolder}/srcs/3_builder/2_parser/3_cst",
+		"-I${workspaceFolder}/srcs/3_builder/3_converter",
 		"-I${workspaceFolder}/srcs/alias",
 		"-I${workspaceFolder}/srcs/alias/stack",
 		"-I${workspaceFolder}/srcs/builtins",

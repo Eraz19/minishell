@@ -1,3 +1,9 @@
+# ALEX
+
+- modifier `scanner_report_io_here()` pour utiliser un `t_buff` au lieu d'un `char *`
+
+---
+
 # WIP
 
 1. walk_ast() call walk_list()
