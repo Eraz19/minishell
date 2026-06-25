@@ -4,16 +4,12 @@
 #include "path_name_expansion.h"
 #include "expander_substitutions.h"
 
-t_error	expander_expand_word(
-	char ***expansion,
-	t_buff value,
-	t_context_stack	*contexts,
-	t_expander_role role)
+t_error	expander_expand_word(char ***expansion, t_expander_args *args)
 {
 	t_expander	state;
 
-	expander_init(&state, role);
-	if (expander_load(&state, value, contexts).type)
+	expander_init(&state, args->role);
+	if (expander_load(&state, args->value, args->contexts).type)
 		return (expander_free(&state), state.err);
 	if (substitutions(&state).type)
 		return (expander_free(&state), state.err);

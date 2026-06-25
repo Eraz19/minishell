@@ -48,6 +48,7 @@ t_error	scanner_heredoc_read(void)
 	}
 	return (state->err);
 }
+
 t_error	scanner_read_continuation(char **res)
 {
 	return (reader_continuation(res));

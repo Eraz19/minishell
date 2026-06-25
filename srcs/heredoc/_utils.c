@@ -9,17 +9,17 @@
 
 t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
 {
-	char	*delim_;
-	t_buff	delim_buff;
-	char	**delim_exp;
+	t_expander_args	args;
+	char			*delim_;
+	t_buff			delim_buff;
+	char			**delim_exp;
 
 	if (!buff_init(&delim_buff, 0, *delim, (long)str_len(*delim)))
 		return (state->err = error_sys());
-	state->err = expander_expand_word(
-		&delim_exp,
-		delim_buff,
-		NULL,
-		EXPANDER_HEREDOC_DELIMITER);
+	args.value = delim_buff;
+	args.role = EXPANDER_HEREDOC_DELIMITER;
+	args.contexts = NULL;
+	state->err = expander_expand_word(&delim_exp, &args);
 	if (state->err.type || delim_exp == NULL)
 		return (buff_free(&delim_buff), free(*delim), state->err);
 	buff_free(&delim_buff);
