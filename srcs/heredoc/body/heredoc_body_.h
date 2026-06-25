@@ -3,32 +3,12 @@
 
 # include "heredoc.h"
 
-/**
- * @ingroup heredoc
- * @struct s_heredoc_body
- * @brief Scratch state for reading and storing one heredoc body.
- *
- * @var s_heredoc_body::i Cursor into the source text; in non-interactive mode
- *                        it borrows the caller's input index, advanced as lines
- *                        are consumed.
- * @var s_heredoc_body::err Last error recorded while reading the body.
- * @var s_heredoc_body::item The heredoc being filled (owned for the body's
- *                           lifetime; released by heredoc_body_free()).
- * @var s_heredoc_body::input Text the body is read from: a deep copy of the
- *                            caller's buffer (non-interactive) or the
- *                            accumulated terminal input (interactive); owned.
- * @var s_heredoc_body::line Current line being examined (owned).
- * @var s_heredoc_body::content Accumulated body bytes to write out (owned).
- */
 typedef struct s_heredoc_body
 {
-	size_t					*i;
 	t_error					err;
 	t_heredoc_queue_item	*item;
 	char					*line;
-	char					*input;
 	t_buff					content;
-	bool					is_stdin;
 }	t_heredoc_body;
 
 /**
@@ -61,10 +41,8 @@ void	heredoc_body_free(t_heredoc_body *state);
  *
  * @param state Pointer to the body state (borrowed).
  * @param item Heredoc to fill (ownership held for the body's lifetime).
- * @return ERR_NO on success, or ERR_LIBC if the input copy fails.
  */
-t_error	heredoc_body_load(t_heredoc_body *state, t_heredoc_queue_item *item,
-			bool is_stdin);
+void	heredoc_body_load(t_heredoc_body *state, t_heredoc_queue_item *item);
 
 /**
  * @ingroup heredoc
@@ -118,21 +96,6 @@ t_error	heredoc_body_line_to_content(t_heredoc_body *state);
 t_error	heredoc_body_extract_line(t_heredoc_body *state, char *match_EOL,
 			size_t *i);
 
-/**
- * @ingroup heredoc
- * @brief Reads one heredoc's body to completion and stores it.
- *
- * Sets up a private body state, reads lines until the delimiter (interactively
- * when @p input is NULL, otherwise from @p input with @p start advanced),
- * writes the collected body to the heredoc's temporary file, and frees all
- * scratch state including the item. The outcome is mirrored into
- * @p state->err.
- *
- * @param state Pointer to the owning heredoc state (borrowed); receives the
- *              resulting error.
- * @param item Heredoc to fill (consumed: freed by this call).
- * @return ERR_NO on success, or the recorded error on failure.
- */
-t_error	heredoc_body_store(t_heredoc *state, t_heredoc_queue_item *item);
+t_error	heredoc_body_read(t_heredoc *state, t_heredoc_queue_item *item);
 
 #endif

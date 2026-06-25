@@ -21,15 +21,15 @@ t_error	heredoc_body_get_content(t_heredoc_body *state)
 
 	while (true)
 	{
-		if (state->input[*state->i] == '\0')
+		if (state->item->input[*state->item->i] == '\0')
 		{
-			if (state->is_stdin)
-				scanner_read_continuation(&state->input);
+			if (state->item->is_tty)
+				scanner_read_continuation(&state->item->input);
 			else
 				return (state->err = error(ERR_NO_DELIM));
 		}
-		match_EOL = str_chr(state->input + *state->i, '\n');
-		if (heredoc_body_extract_line(state, match_EOL, state->i).type)
+		match_EOL = str_chr(state->item->input + *state->item->i, '\n');
+		if (heredoc_body_extract_line(state, match_EOL, state->item->i).type)
 			return (state->err);
 		if (is_line_delimiter(state))
 			return (state->err);
@@ -38,16 +38,15 @@ t_error	heredoc_body_get_content(t_heredoc_body *state)
 	}
 }
 
-t_error	heredoc_body_store(t_heredoc *state, t_heredoc_queue_item *item)
+t_error	heredoc_body_read(t_heredoc *state, t_heredoc_queue_item *item)
 {
 	t_heredoc_body	body;
 
 	heredoc_body_init(&body);
-	if (heredoc_body_load(&body, item, state->is_stdin).type)
-		return (heredoc_body_free(&body), state->err = body.err);
+	heredoc_body_load(&body, item);
 	if (heredoc_body_get_content(&body).type)
-		return (heredoc_body_free(&body), state->err = body.err);
-	if (heredoc_body_save_content(&body).type)
-		return (heredoc_body_free(&body), state->err = body.err);
+		state->err = body.err;
+	else if (heredoc_body_save_content(&body).type)
+		state->err = body.err;
 	return (heredoc_body_free(&body), state->err);
 }

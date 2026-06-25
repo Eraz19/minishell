@@ -54,30 +54,16 @@ typedef struct s_heredoc_queue_item
 	size_t			*i;
 	t_heredoc_mode	mode;
 	char			*path;
+	bool			is_tty;
 	char			*delim;
 	char			*input;
 }	t_heredoc_queue_item;
 
-/**
- * @ingroup heredoc
- * @struct s_heredoc
- * @brief Aggregate state of the heredoc module.
- *
- * @var s_heredoc::err Last error recorded by the module.
- * @var s_heredoc::queue Pending heredocs, processed in FIFO order (owns every
- *                       item's path and delimiter).
- * @var s_heredoc::is_stdin Whether bodies are streamed line-by-line from stdin
- *                          (true, interactive terminal or pipe) or pulled from
- *                          an already-read input buffer (false).
- * @var s_heredoc::file_id Monotonic counter seeded from the clock, used to
- *                         build unique temporary file names.
- */
 typedef struct s_heredoc
 {
 	t_error			err;
 	t_heredoc_queue	queue;
 	size_t			file_id;
-	bool			is_stdin;
 }	t_heredoc;
 
 /**
@@ -104,20 +90,9 @@ void	heredoc_init(t_heredoc *state);
  */
 void	heredoc_free(t_heredoc *state);
 
-/**
- * @ingroup heredoc
- * @brief Selects the body-reading source for the next store.
- *
- * Records whether subsequent bodies are streamed line-by-line from stdin
- * (@p is_stdin true) or extracted from an already-read input buffer.
- *
- * @param state Pointer to the heredoc state (borrowed).
- * @param is_stdin true to read bodies from stdin, false to read from input.
- */
-void	heredoc_load(t_heredoc *state, bool is_stdin);
-
 t_error	heredoc_store_all(char *input, size_t *start);
 
-t_error	heredoc_add_to_queue(t_buff *path, char *delim, t_heredoc_mode mode);
+t_error	heredoc_add_to_queue(t_buff *path, char *delim, t_heredoc_mode mode,
+			bool is_tty);
 
 #endif

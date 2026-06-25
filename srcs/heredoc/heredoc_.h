@@ -4,7 +4,7 @@
 # include "error.h"
 # include "heredoc.h"
 
-# define HEREDOC_TMP_PATH "/tmp/minishell_heredoc_"
+# define HEREDOC_TMP_PATH "/home/alexander/Documents/42/common_core/minishell/heredoc_"//"/tmp/minishell_heredoc_"
 
 /**
  * @ingroup heredoc

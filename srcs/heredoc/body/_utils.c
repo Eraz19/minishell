@@ -18,7 +18,7 @@ t_error	heredoc_body_extract_line(t_heredoc_body *state, char *EOL, size_t *i)
 	char	*start;
 	size_t	line_len;
 
-	start = state->input + *i;
+	start = state->item->input + *i;
 	*i += (size_t)(EOL - start) + 1;
 	line_len = (size_t)(EOL - start) + 1;
 	state->line = str_sub(start, 0, line_len);

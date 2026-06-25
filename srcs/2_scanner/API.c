@@ -21,14 +21,14 @@ t_error	scanner_get_next_token(t_token *token)
 
 t_error	scanner_report_io_here(t_buff *path, char *delim, t_heredoc_mode mode)
 {
+	bool		is_tty;
 	t_scanner	*state;
 
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	if (heredoc_add_to_queue(path, delim, mode).type)
-		return (state->err = state->heredoc.err, state->err);
-	return (state->err);
+	is_tty = state->mode == SCAN_STDIN_TTY;	
+	return (state->err = heredoc_add_to_queue(path, delim, mode, is_tty));
 }
 
 t_error	scanner_heredoc_read(void)
@@ -46,8 +46,6 @@ t_error	scanner_heredoc_read(void)
 		item = state->lexer.input;
 		state->err = heredoc_store_all(item->str, &item->i);
 	}
-	if (state->err.type)
-		return (state->err = state->heredoc.err);
 	return (state->err);
 }
 t_error	scanner_read_continuation(char **res)

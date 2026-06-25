@@ -1,7 +1,21 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include "alias.h"
 #include "reader_.h"
 #include "scanner_.h"
+
+static t_error	scanner_stdin_input(char **res)
+{
+	t_buff	buf;
+
+	buff_init(&buf, 0, NULL, 0);
+	if (!buff_read_all(&buf, STDIN_FILENO))
+		return (buff_free(&buf), error_sys());
+	*res = buff_get_string(&buf);
+	if (*res == NULL)
+		return (buff_free(&buf), error_sys());
+	return (buff_free(&buf), error(ERR_NO));
+}
 
 static t_error	scanner_dup_command_input(
 	t_scanner *state,
@@ -32,7 +46,9 @@ t_error	scanner_read_input(t_scanner *state)
 		if (scanner_dup_command_input(state, item).type)
 			return (input_parser_stack_item_free(&item), state->err);
 	}
-	else if (state->mode == SCAN_STDIN)
+	else if (state->mode == SCAN_STDIN_PIPE)
+		state->err = scanner_stdin_input(&item->str);
+	else if (state->mode == SCAN_STDIN_TTY)
 		state->err = reader_new_input(&item->str); 
 	if (state->err.type || item->str == NULL)
 		return (input_parser_stack_item_free(&item), state->err);

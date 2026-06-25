@@ -8,6 +8,7 @@ void	heredoc_queue_item_free(void *item)
 	item_ = (t_heredoc_queue_item *)item;
 	free(item_->path);
 	free(item_->delim);
+	free(item_->input);
 	*item_ = (t_heredoc_queue_item){0};
 }
 

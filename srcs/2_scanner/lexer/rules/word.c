@@ -22,7 +22,12 @@ t_error	lexer_rule_in_middle_of_word(t_lexer *state)  // Rule 8
 	if (state->input->str[state->input->i] == '\\')
 		return (context_top_level_escape(state));
 	else
+	{
+		if (state->input->str[state->input->i] == '='
+			&& state->token->assignment_offset == -1)
+			state->token->assignment_offset = (ssize_t)state->input->i;
 		return (lexer_consume(state, TOKEN_TOKEN, 1));
+	}
 }
 
 t_error	lexer_rule_new_word(t_lexer *state) // Rule 10

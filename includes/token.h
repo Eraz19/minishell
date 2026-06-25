@@ -51,22 +51,12 @@ typedef enum e_token_type
 	TOKEN_EOF			/**< End of input. */
 }	t_token_type;
 
-/**
- * @ingroup token
- * @struct s_token
- * @brief A grammar type paired with the raw text it was scanned from.
- *
- * @var s_token::type Grammar type of the token.
- * @var s_token::value Owned, growable buffer holding the token text.
- * @var s_token::contexts Expansion constructs found in the value, in appearance
- *                        order, each with its [start, end) range; owns its
- *                        items.
- */
 typedef struct s_token
 {
 	t_token_type	type;
 	t_buff			value;
 	t_context_stack	contexts;
+	ssize_t			assignment_offset;
 }	t_token;
 
 /**
