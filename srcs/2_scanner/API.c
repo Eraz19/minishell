@@ -3,6 +3,7 @@
 #include "heredoc.h"
 #include "scanner_.h"
 
+#include <stdio.h>
 t_error	scanner_get_next_token(t_token *token)
 {
 	t_scanner	*state;
@@ -12,6 +13,8 @@ t_error	scanner_get_next_token(t_token *token)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->lexer.input_stack.len == 0 && scanner_read_input(state).type)
 		return (state->err);
+	if (state->lexer.input != NULL)
+		printf("======> index %zu\n", state->lexer.input->i);
 	if (lexer_next_token(&state->lexer, token).type)
 		return (state->err = state->lexer.err, state->err);
 	if (token->type == TOKEN_TOKEN)

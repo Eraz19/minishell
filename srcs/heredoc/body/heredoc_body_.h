@@ -5,6 +5,7 @@
 
 typedef struct s_heredoc_body
 {
+	size_t					i;
 	t_error					err;
 	t_heredoc_queue_item	*item;
 	char					*line;

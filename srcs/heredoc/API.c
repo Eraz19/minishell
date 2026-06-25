@@ -4,8 +4,10 @@
 #include "heredoc_body_.h"
 #include "heredoc_queue_.h"
 
+// BIG BUG
 t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start)
 {
+
 	size_t					i;
 	t_heredoc_queue_item	item;
 
