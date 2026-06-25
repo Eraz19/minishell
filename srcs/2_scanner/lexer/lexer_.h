@@ -6,6 +6,15 @@
 # include "context.h"
 # include "input_stack_.h"
 
+typedef enum e_lexer_mode
+{
+	LEX_NONE,
+	LEX_FILE,
+	LEX_STRING,
+	LEX_STDIN_TTY,
+	LEX_STDIN_PIPE
+}	t_lexer_mode;
+
 /**
  * @ingroup scanner
  * @struct s_lexer_backup
@@ -48,9 +57,9 @@ typedef struct s_lexer_backup
 typedef struct s_lexer
 {
 	t_error						err;
+	t_lexer_mode				mode;
 	t_input_lexer_stack_item	*input;
 	t_token						*token;
-	bool						is_stdin;
 	t_input_stack				input_stack;
 	bool						emited_token;
 }	t_lexer;
@@ -69,13 +78,9 @@ void			lexer_free(t_lexer *state);
  */
 void			lexer_init(t_lexer *state);
 
-/**
- * @ingroup scanner
- * @brief Records whether input is streamed line-by-line from stdin.
- * @param state Pointer to the lexer state (borrowed).
- * @param is_stdin true when reading incrementally from stdin (terminal/pipe).
- */
-void			lexer_load(t_lexer *state, bool is_stdin);
+void			lexer_load(t_lexer *state, t_lexer_mode mode);
+
+void			lexer_reset(t_lexer *state);
 
 /**
  * @ingroup scanner

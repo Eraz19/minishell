@@ -32,8 +32,9 @@ typedef enum e_scanner_mode
 {
 	SCAN_NONE,		/**< Unset / not yet loaded. */
 	SCAN_FILE,		/**< Read the whole input from a file path. */
-	SCAN_STDIN,		/**< Read input line-by-line from standard input. */
-	SCAN_STRING		/**< Read the input from an in-memory command string. */
+	SCAN_STRING,	/**< Read the input from an in-memory command string. */
+	SCAN_STDIN_TTY,	/**< Read input line-by-line from standard input, with a terminal. */
+	SCAN_STDIN_PIPE	/**< Read input line-by-line from standard input. */
 }	t_scanner_mode;
 
 /**
@@ -46,7 +47,6 @@ typedef enum e_scanner_mode
  * @var s_scanner::lexer Owned lexer state (opaque; allocated by scanner_init).
  * @var s_scanner::source Borrowed file path or command string for FILE/STRING
  *                        modes; unused for STDIN.
- * @var s_scanner::heredoc Owned here-document collector for the pending queue.
  */
 typedef struct s_scanner
 {
@@ -54,14 +54,13 @@ typedef struct s_scanner
 	t_scanner_mode	mode;
 	t_lexer			lexer;
 	const char		*source;
-	t_heredoc		heredoc;
 }	t_scanner;
 
 t_error	scanner_init(t_scanner *state);
 
 void	scanner_free(t_scanner *state);
 
-t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source);
+t_error	scanner_load(t_scanner *state, const char *source);
 
 t_error	scanner_reset(t_scanner *state);
 

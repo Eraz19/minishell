@@ -3,7 +3,7 @@
 
 t_error	context_EOI(t_lexer *state)
 {
-	if (state->is_stdin)
+	if (state->mode == LEX_STDIN_TTY)
 		state->err = reader_continuation(&state->input->str);
 	else
 		state->err = error(ERR_UNEXPECTED_EOI);

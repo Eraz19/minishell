@@ -1,3 +1,4 @@
+#include "options.h"
 #include "scanner.h"
 
 t_error	scanner_init(t_scanner *state)
@@ -13,20 +14,33 @@ void	scanner_free(t_scanner *state)
 	*state = (t_scanner){0};
 }
 
-t_error	scanner_load(t_scanner *state, t_scanner_mode mode, const char *source)
+t_error	scanner_load(t_scanner *state, const char *source)
 {
-	state->mode = mode;
-	lexer_load(&state->lexer, mode == SCAN_STDIN);
-	if (mode == SCAN_STRING)
-		return (state->source = source, state->err);
-	else if (mode == SCAN_FILE)
-		return (state->source = source, state->err);
-	return (state->err);
+	state->mode = SCAN_NONE;
+	if (option_is_active(OPT_STDIN_INPUT))
+	{
+		if (option_is_active(OPT_INTERACTIVE))
+		{
+			state->mode = SCAN_STDIN_TTY;
+		}
+		else
+			state->mode = SCAN_STDIN_PIPE;
+	}
+	else if (option_is_active(OPT_CMD_STRING))
+	{
+		state->mode = SCAN_STRING;
+		state->source = source;
+	}
+	else
+	{
+		state->mode = SCAN_FILE;
+		state->source = source;
+	}
+	return (lexer_load(&state->lexer, (t_lexer_mode)state->mode), state->err);
 }
 
 t_error	scanner_reset(t_scanner *state)
 {
-
-	//IMPLEMENT: reset the scanner state
-	return (state->err);
+	lexer_reset(&state->lexer);
+	return (error(ERR_NO));
 }

@@ -34,15 +34,7 @@ t_error	shell_set_stdin_to_blocking(void)
 
 static t_error	shell_load_scanner(t_shell *shell)
 {
-	t_scanner_mode	mode;
-
-	if (option_is_active(OPT_STDIN_INPUT))
-		mode = SCAN_STDIN;
-	else if (option_is_active(OPT_CMD_STRING))
-		mode = SCAN_STRING;
-	else
-		mode = SCAN_FILE;
-	return (scanner_load(&shell->scanner, mode, shell->params.specials.source));
+	return (scanner_load(&shell->scanner, shell->params.specials.source));
 }
 
 t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
@@ -55,7 +47,6 @@ t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 		err = history_load(&shell->history);
 	if (err.type == ERR_NO)
 		err = shell_load_scanner(shell);
-	heredoc_load(&shell->heredoc, option_is_active(OPT_STDIN_INPUT));
 	if (err.type == ERR_NO)
 		err = builder_load(&shell->builder);
 	if (err.type == ERR_NO)
