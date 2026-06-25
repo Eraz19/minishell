@@ -1,5 +1,55 @@
 # WIP
 
+## RESOURCES
+
+- [2.9.1.1 Order of Processing](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_01)
+	- [2.15 Special Built-In Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_15)
+	- [2.7 Redirection](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07)
+- [2.9.1.2 Variable Assignments](2.9.1.2 Variable Assignments)
+- [2.9.1.4 Command Search and Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_04)
+- [2.9.5 Function Definition Command](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_05)
+- [1.7 Intrinsic Utilities](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_07)
+- [8. Environment Variables](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html#tag_08)
+- [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
+- [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
+
+1. Expand `words` (see 2.9.1.1:2)
+2. Redirect (see 2.7)
+3. Expand `assignments`
+> ⚠️ Steps `2` and `3` **may** be reversed if :
+>	- no command name results from step 1
+>	- the command name matches the name of a special built-in utility (see 2.15)
+
+## IMPLEMENTATION ORDER
+
+1. Module `redirection` :
+	- Créer une redirection
+	- Push une redirection sur la stack
+	- Restaurer une redirection
+	- Pop une redirection de la stack
+2. Module `function_registry` :
+	- `t_function` = `char *name` + `t_ast_command body` + `t_ast_redir_list redirs`
+	- Save une fonction
+	- Retrieve une fonction
+	- Delete une fonction
+3. Module `command_search`
+	- Check if command name contains `\`
+	- Check if the command name matches the name of a `special built-in utility`
+	- Check if the command name matches the name of an `utility` for which results are `unspecified`
+	- Ask `function_registry` to know if the command name matches a `function` name (+ path search)
+	- Check if the command name matches the name of an `intrinsic utility`
+	- Search for command using `PATH` variable content :
+		> ⚠️ `builtins` must be associated with a `directory` to know when to recognize them during `PATH` exploration
+	- Remember `PATH` value to **NOT** search again while `PATH` is not `re-assigned` and the remembered command location is still valid
+2. Module `executor`
+	- Chercher une commande (function, builtin, path resolution) => Quelle section POSIX ?
+3. Vérifier que ce système minimal fonctionne
+3. Implémenter le module qui créé un subshell et y exécute une commande
+4. Implémenter le module qui gère les pipeline
+5. TODO...
+
+---
+
 1. walk_ast() call walk_list()
 2. walk_list() call walk_and_or()
 3. walk_and_or() call walk_pipeline()
@@ -21,10 +71,6 @@
 - `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
 	- Changer signature 😫
 - Vérifier partout que les `error_sys()` sont bien créées avant de free quoi que ce soit (ou tout autre call `libc`)
-
-# EXAM
-
-print tous les board pour lesquels 2 dames peuvent pas se manger (selon règle des échecs)
 
 ---
 
