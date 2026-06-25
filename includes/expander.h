@@ -13,7 +13,13 @@ typedef enum e_expander_role
 	EXPANDER_HEREDOC_BODY
 }	t_expander_role;
 
-t_error	expander_expand_word(char ***expansion, t_buff value,
-			t_context_stack *contexts, t_expander_role role);
+typedef	struct s_expander_args
+{
+	t_buff			value;
+	t_expander_role role;
+	t_context_stack *contexts;
+}	t_expander_args;
+
+t_error	expander_expand_word(char ***expansion, t_expander_args *args);
 
 #endif
