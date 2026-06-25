@@ -9,10 +9,12 @@ bool	is_tilde_expansion(t_expander *state, t_expander_word *word)
 	state->err = expander_word_peek(word, &item);
 	if (state->err.type)
 		return (false);
+	if (item.opt.quoted != CONTEXT_NONE)
+		return (false);
 	return (item.c == '~');
 }
 
-t_error	tilde_extract_username(t_expander *state, char **username)
+static t_error	tilde_extract_username(t_expander *state, char **username)
 {
 	size_t					i;
 	t_expander_word_item	item;
@@ -34,7 +36,10 @@ t_error	tilde_extract_username(t_expander *state, char **username)
 	return (state->err = expander_word_to_str(&state->word, username, 1, i));
 }
 
-t_error	tilde_resolve_path(t_expander *state, char **path, char *username)
+static t_error	tilde_resolve_path(
+	t_expander *state,
+	char **path,
+	char *username)
 {
 	struct passwd *password;
 

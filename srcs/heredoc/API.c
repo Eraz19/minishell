@@ -41,6 +41,7 @@ t_error	heredoc_store_all(char *input, size_t *start)
 	return (state->err);
 }
 
+#include <stdio.h>
 t_error	heredoc_add_to_queue(
 	t_buff *path,
 	char *delim,
@@ -62,8 +63,10 @@ t_error	heredoc_add_to_queue(
 	item.delim = str_dup(delim);
 	if (item.delim == NULL)
 		return (buff_free(path), free(item.path), state->err = error_sys());
-	if (heredoc_build_delimiter(state, &item.delim).type)
-		return (buff_free(path), heredoc_queue_item_free(&item), state->err);
+	printf("=====> heredoc_build_delimiter\n");
+	//if (heredoc_build_delimiter(state, &item.delim).type)
+	//	return (buff_free(path), heredoc_queue_item_free(&item), state->err);
+	printf("=====> heredoc_build_delimiter done\n");
 	item.mode = mode;
 	state->err = heredoc_queue_push(&state->queue, item);
 	if (state->err.type)
