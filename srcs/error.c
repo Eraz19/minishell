@@ -64,32 +64,18 @@ const char	*error_to_string(t_error err)
 		return ("variable not found");
 	else if (err.type == ERR_VAR_READ_ONLY)
 		return ("readonly variable");
-	else if (err.type == ERR_NULL_ARGS)
-		return ("null arguments");
 	else if (err.type == ERR_CTX_END_NOT_FOUND)
 		return ("context end not found");
-	else if (err.type == ERR_VALUE_OUT_OF_RANGE)
-		return ("value out of range");
-	else if (err.type == ERR_LEX_INCOMPLETE)
-		return ("incomplete lexical input");
-	else if (err.type == ERR_INVALID_SYNTAX)
+	else if (err.type == ERR_SYNTAX_INVALID)
 		return ("invalid syntax");
 	else if (err.type == ERR_EMPTY_STACK)
 		return ("empty stack");
 	else if (err.type == ERR_VEOF)
 		return ("unexpected end of input");
-	else if (err.type == ERR_EMPTY_CONTINUATION)
-		return ("empty continuation");
-	else if (err.type == ERR_INVALID_ARGS)
-		return ("invalid arguments");
-	else if (err.type == ERR_OPEN_FILE)	// TODO: should be ERR_LIBC to print errno ?
-		return ("unable to open file");
 	else if (err.type == ERR_INCOHERENT_STATE)
 		return ("incoherent state");
 	else if (err.type == ERR_NOT_IMPLEMENTED)
 		return ("not implemented");
-	else if (err.type == ERR_HEREDOC_FILE_LIMIT)	// TODO: should be ERR_LIBC to print errno ?
-		return ("heredoc file limit reached");
 	else if (err.type == ERR_UNEXPECTED_EOI)
 		return ("unexpected end of input");
 	else if (err.type == ERR_NO_DELIM)
@@ -103,7 +89,10 @@ t_error	error_priv(t_error_type type, const char *caller)
 
 	err.type = type;
 	err.saved_errno = 0;
-	err.printed = false;
+	if (type == ERR_VEOF)
+		err.printed = true;
+	else
+		err.printed = false;
 	// if (type != ERR_NO)
 	// 	fprintf(stderr, RED "===> [ERROR] from [%s()] type = %s\n" NC, caller, error_to_string(err));
 	(void)caller;
