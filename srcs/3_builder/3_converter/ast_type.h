@@ -13,13 +13,13 @@
 
 typedef enum e_ast_redir_op
 {
-    AST_REDIR_READ,          // <			SYM_LESS
     AST_REDIR_HEREDOC,       // << / <<-	SYM_DLESS / SYM_DLESSDASH
-    AST_REDIR_DUP_READ,      // <&			SYM_LESSAND
+    AST_REDIR_READ,          // <			SYM_LESS
     AST_REDIR_WRITE,         // >			SYM_GREAT
+    AST_REDIR_CLOBBER,       // >|			SYM_CLOBBER
     AST_REDIR_APPEND,        // >>			SYM_DGREAT
     AST_REDIR_DUP_WRITE,     // >&			SYM_GREATAND
-    AST_REDIR_CLOBBER,       // >|			SYM_CLOBBER
+    AST_REDIR_DUP_READ,      // <&			SYM_LESSAND
     AST_REDIR_READ_WRITE,    // <>			SYM_LESSGREAT
 	AST_REDIR_COUNT
 }	t_ast_redir_op;
@@ -35,22 +35,6 @@ typedef struct s_ast_redirection
 }	t_ast_redirection;
 
 typedef t_vector	t_ast_redir_list;	// vector of t_ast_redirection
-
-/* ---------- REDIRECTOR MODULE (IN RUNNER) ---------- */
-
-typedef struct s_redir_frame
-{
-	t_vector	fds;		// vector of int
-	t_vector	backup_fds;	// vector of int (-1 if fd was closed before redirection)
-}	t_redir_frame;
-
-typedef t_vector	t_redir_stack;
-
-void	redirect_init(t_redir_stack *stack);
-t_error	redirect_push(t_redir_stack *stack, t_ast_redir_list *redirections);
-t_error	redirect_pop(t_redir_stack *stack);
-t_error	redirect_restore(t_redir_stack *stack);
-void	redirect_free(t_redir_stack *stack);
 
 /* ************************************************************************* */
 /*                                   EXECUTOR                                */

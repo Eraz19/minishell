@@ -9,6 +9,5 @@ t_error	hook_store_cst(
 {
 	(void)rhs;
 	(void)len;
-	parser_store_cst(parser, lhs);
-	return (error(ERR_NO));
+	return (parser_store_cst(parser, lhs));
 }

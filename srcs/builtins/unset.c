@@ -41,10 +41,10 @@ static t_error	unset_process_options(int argc, char **argv, t_getopt_out *out)
 	{
 		(void)error_print(error(ERR_BUILTIN_INVALID_USAGE), argv[0], UNSET_USAGE, NULL, NULL);
 		vector_free(&out->options, NULL);
-		return (undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
-			"mutually-exclusive arguments produces undefined results."));
+		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
+			"mutually-exclusive arguments produces undefined results.");
 	}
-	return (error(ERR_NO));
+	return (err);
 }
 
 // @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_SHELL_NOT_FOUND /
@@ -62,8 +62,8 @@ static t_error	unset_var(size_t first_operand_index, int argc, char **argv)
 		last_exit_code = params_unset_variable(argv[i]);
 		if (last_exit_code.type != ERR_NO)
 		{
-			(void)error_print(last_exit_code, argv[0], argv[i], NULL, NULL);
-			exit_code = last_exit_code;
+			exit_code = error_print(
+				last_exit_code, argv[0], argv[i], NULL, NULL);
 		}
 		i++;
 	}

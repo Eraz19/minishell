@@ -31,11 +31,11 @@ void	shell_free(void)
 	shell_set(NULL);
 }
 
-void	shell_exit_on_veof(void)
+bool	shell_should_exit_on_veof(void)
 {
 	if (!option_is_active(OPT_INTERACTIVE))
-		return ;
+		return (false);
 	if (option_is_active(OPT_IGNOREEOF))
-		return ;
-	exit(EXIT_SUCCESS);	// TODO: trouver une autre solution car on risque de leak
+		return (false);
+	return (true);
 }

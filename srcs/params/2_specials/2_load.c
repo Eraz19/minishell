@@ -13,10 +13,8 @@ static t_error	specials_load_cmd_string(
 	size_t *operand_index)
 {
 	if ((size_t)argc < *operand_index + 1)
-	{
-		error_print(error(ERR_OPT_INVALID), "-c needs an argument", NULL, NULL);
-		return (error(ERR_OPT_INVALID));
-	}
+		return (error_print(error(ERR_OPT_INVALID),
+			"-c needs an argument", NULL, NULL));
 	specials->source = argv[(*operand_index)++];
 	if ((size_t)argc >= *operand_index + 1)
 		specials->zero = argv[(*operand_index)++];

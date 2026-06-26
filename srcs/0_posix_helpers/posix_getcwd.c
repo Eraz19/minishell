@@ -1,5 +1,4 @@
 #include "error.h"
-#include "libft.h"
 #include "posix_helpers.h"
 #include <errno.h>
 #include <stdbool.h>
@@ -9,18 +8,12 @@
 
 #define BUFF_INITIAL_CAP	128
 
-static bool	posix_getcwd_grow_size(size_t *size)
+static t_error	getcwd_grow_size(size_t *size)
 {
 	if (*size > SIZE_MAX / 2)
-	{
-		error_print(
-			error(ERR_SIZE_MAX_REACHED),
-			"posix_getcwd()",
-			"unable to grow buffer");
-		return (false);
-	}
+		return (error(ERR_SIZE_MAX_REACHED));
 	*size *= 2;
-	return (true);
+	return (error(ERR_NO));
 }
 
 t_error	posix_getcwd(char **dst)
@@ -39,15 +32,11 @@ t_error	posix_getcwd(char **dst)
 		if (getcwd(buff, size))
 			return (*dst = buff, error(ERR_NO));
 		err = error_sys();
-		if (err.saved_errno == EACCES)
-		{
-			(void)str_lcpy(buff, PWD_UNSPECIFIED_VALUE, size);
-			return (*dst = buff, error(ERR_NO));
-		}
 		free(buff);
 		if (err.saved_errno != ERANGE)
 			return (err);
-		if (!posix_getcwd_grow_size(&size))
-			return (error(ERR_SIZE_MAX_REACHED));
+		err = getcwd_grow_size(&size);
+		if (err.type)
+			return (err);
 	}
 }

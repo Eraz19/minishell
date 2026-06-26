@@ -26,6 +26,6 @@ t_error	shell_run(int argc, char **argv, char **envp)
 	err = runner_run(&shell->runner);
 	history_err = history_save();
 	if (history_err.type)
-		error_print(history_err, "history", NULL, NULL);
+		(void)error_print(history_err, "history", NULL, NULL);
 	return (err);
 }

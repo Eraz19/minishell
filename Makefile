@@ -21,6 +21,7 @@ SRCS			:= \
 	$(wildcard srcs/0_context/*.c) \
 	$(wildcard srcs/0_context/*/*.c) \
 	$(wildcard srcs/0_posix_helpers/*.c) \
+	$(wildcard srcs/0_posix_helpers/*/*.c) \
 	$(wildcard srcs/0_token/*.c) \
 	$(wildcard srcs/0_utils/*.c) \
 	$(wildcard srcs/0_utils/*/*.c) \
@@ -56,6 +57,8 @@ INCLUDES		:= \
 	-Ilibft \
 	-Ilibft/buff \
 	-Ilibft/buff/format \
+	-Isrcs/0_posix_helpers \
+	-Isrcs/0_posix_helpers/posix_open \
 	-Isrcs/0_utils/1_ft_getopt \
 	-Isrcs/0_utils/2_serializer \
 	-Isrcs/1_shell \

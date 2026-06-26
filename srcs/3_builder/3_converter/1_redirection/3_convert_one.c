@@ -3,17 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static inline int	get_default_fd(t_symbol operator_symbol)
-{
-	if (operator_symbol == SYM_LESS
-		|| operator_symbol == SYM_DLESS
-		|| operator_symbol == SYM_DLESSDASH
-		|| operator_symbol == SYM_LESSAND
-		|| operator_symbol == SYM_LESSGREAT)
-		return (STDIN_FILENO);
-	return (STDOUT_FILENO);
-}
-
 static inline t_error	convert_io_number(
 	t_parser *parser,
 	t_cst_node *io_number_node,
@@ -78,14 +67,12 @@ t_error	convert_redirection(
 	t_cst_node *io_redirect,
 	t_ast_redirection *out)
 {
-	t_symbol	operator_symbol;
 	t_error		err;
 
 	ast_redirection_init(out);
 	if (io_redirect->child_count == 1)
 	{
-		operator_symbol = io_redirect->children[0]->children[0]->symbol;
-		out->fd = get_default_fd(operator_symbol);
+		out->fd = -1;
 		return (convert_io_file_or_here(parser, io_redirect->children[0], out));
 	}
 	else if (io_redirect->children[0]->symbol == SYM_IO_NUMBER)

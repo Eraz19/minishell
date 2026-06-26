@@ -1,32 +1,57 @@
 #include "error.h"
+#include "posix_helpers.h"
+#include "posix_helpers_priv.h"
 #include <errno.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <unistd.h>
+
+static inline t_error	write_handle_result(
+	ssize_t ret,
+	size_t requested,
+	size_t *written,
+	bool *retry)
+{
+	t_error	err;
+
+	*written = 0;
+	*retry = false;
+	if (ret < 0 && errno == EINTR)
+	{
+		err = posix_handle_eintr();
+		if (err.type)
+			return (err);
+		*retry = true;
+		return (error(ERR_NO));
+	}
+	if (ret < 0 || (ret == 0 && requested != 0))
+		return (error_sys());
+	*written = (size_t)ret;
+	return (error(ERR_NO));
+}
 
 t_error	posix_write(int fd, const char *buff, size_t len)
 {
-	size_t	remaining;
+	size_t	chunk_len;
+	size_t	written;
 	ssize_t	ret;
+	bool	retry;
+	t_error	err;
 
-	remaining = 0;
 	while (len > 0)
 	{
-		if (len > SSIZE_MAX)
-		{
-			remaining = len - SSIZE_MAX;
-			len -= remaining;
-		}
-		ret = write(fd, buff, len);
-		if (ret < 0 && errno == EINTR)
+		if (len > (size_t)SSIZE_MAX)
+			chunk_len = (size_t)SSIZE_MAX;
+		else
+			chunk_len = len;
+		ret = write(fd, buff, chunk_len);
+		err = write_handle_result(ret, chunk_len, &written, &retry);
+		if (err.type)
+			return (err);
+		if (retry)
 			continue ;
-		else if (ret < 0 || (ret == 0 && len != 0))
-			return (error_sys());
-		else if ((size_t)ret == len && remaining == 0)
-			return (error(ERR_NO));
-		buff += ret;
-		len -= (size_t)ret;
-		len += remaining;
-		remaining = 0;
+		buff += written;
+		len -= written;
 	}
 	return (error(ERR_NO));
 }
