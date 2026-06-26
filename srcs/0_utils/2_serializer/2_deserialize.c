@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-// @ret ERR_INVALID_FORMAT
+// @ret ERR_FORMAT_INVALID
 static inline t_error copy_and_remove_escape(
 	const char *src,
 	char **dst,
@@ -24,7 +24,7 @@ static inline t_error copy_and_remove_escape(
 			{
 				free(*dst);
 				*dst = NULL;
-				return (error_print(error(ERR_INVALID_FORMAT),
+				return (error_print(error(ERR_FORMAT_INVALID),
 					"deserializer", src,
 					NULL, NULL));
 			}
@@ -43,7 +43,7 @@ t_error deserialize(const char *src, char **dst)
 
 	src_len = str_len(src);
 	if (src_len < 2 || src[0] != '\'' || src[src_len - 1] != '\'')
-		return (error(ERR_INVALID_FORMAT));
+		return (error(ERR_FORMAT_INVALID));
 	*dst = malloc(src_len + 1);
 	if (!*dst)
 		return (error_sys());

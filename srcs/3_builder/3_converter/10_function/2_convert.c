@@ -46,7 +46,7 @@ t_error	convert_function(
 
 	ast_function_def_init(out);
 	fname = function_definition->children[0];
-	err = converter_dup_buff(parser, fname, 0, &out->name);
+	err = converter_get_token(parser, fname, 0, &out->name);
 	body = function_definition->children[4];
 	if (err.type == ERR_NO)
 		err = convert_function_body(parser, body, out);

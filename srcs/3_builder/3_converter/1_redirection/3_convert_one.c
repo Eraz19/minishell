@@ -14,9 +14,16 @@ static inline t_error	convert_io_number(
 	err = converter_get_string(parser, io_number_node, 0, &token_string);
 	if (err.type)
 		return (err);
-	out->fd = ft_atoi(token_string);
+	if (!parse_int(token_string, &out->fd))
+	{
+		err = error(ERR_FD_INVALID);
+		err = error_print(err, "converter", NULL, "%s", token_string);
+		free(token_string);
+		return (err);
+	}
+	// TODO: Disallow range of fd used for backuped fds
 	free(token_string);
-	return (error(ERR_NO));
+	return (err);
 }
 
 static inline t_error	convert_io_location(
@@ -25,17 +32,12 @@ static inline t_error	convert_io_location(
 	t_ast_redirection *out)
 {
 	t_error	err;
-	t_buff	*token_buff;
-	char	*src;
 
-	err = converter_get_buff(parser, io_location_node, 0, &token_buff);
+	err = converter_get_token(parser, io_location_node, 0, &out->location);
 	if (err.type)
 		return (err);
-	src = ((char *)token_buff->data) + 1;
-	if (!buff_append(&out->location, src, (long)token_buff->len - 2))
-		return (error_sys());
 	out->is_location = true;
-	return (error(ERR_NO));
+	return (err);
 }
 
 /*

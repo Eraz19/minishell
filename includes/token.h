@@ -75,6 +75,10 @@ void	token_init(t_token *token);
  */
 void	token_free(t_token *token);
 
+// TODO: doc
+// @note used for vector_free() compatibility
+void	token_free_void(void *token);
+
 /**
  * @ingroup token
  * @brief Deep copies a token into another.

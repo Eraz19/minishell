@@ -10,27 +10,33 @@
 /*                                CST_HELPERS                                */
 /* ************************************************************************* */
 
+// @ret ERR_INDEX_OUT_OF_BOUND
+t_error	converter_get_token(
+	t_parser *parser,
+	t_cst_node *node,
+	size_t node_token_id,
+	t_token **dst);
+
+// @ret ERR_INDEX_OUT_OF_BOUND
 t_error	converter_get_buff(
 	t_parser *parser,
 	t_cst_node *node,
 	size_t node_token_id,
 	t_buff **dst);
 
+// @ret ERR_INDEX_OUT_OF_BOUND / ERR_LIBC
 t_error	converter_dup_buff(
 	t_parser *parser,
 	t_cst_node *node,
 	size_t node_token_id,
 	t_buff *dst);
 
+// @ret ERR_INDEX_OUT_OF_BOUND / ERR_LIBC
 t_error	converter_get_string(
 	t_parser *parser,
 	t_cst_node *node,
 	size_t node_token_id,
 	char **dst);
-	
-t_error	converter_cst_collect_relevant_children(
-	t_cst_node *node,
-	t_vector *dst);
 
 /* ************************************************************************* */
 /*                                REDIRECTION                                */

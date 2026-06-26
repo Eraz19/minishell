@@ -18,13 +18,15 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
+	else if (err.type == ERR_FD_INVALID)
+		return ("invalid file descriptor");
 	else if (err.type == ERR_HOOK_INVALID_RHS_LEN)
 		return ("invalid rhs len");
 	else if (err.type == ERR_INDEX_OUT_OF_BOUND)
 		return ("index out of bound");
 	else if (err.type == ERR_INTERRUPTED)
 		return ("interupted by signal");
-	else if (err.type == ERR_INVALID_FORMAT)
+	else if (err.type == ERR_FORMAT_INVALID)
 		return ("invalid format");
 	else if (err.type == ERR_LIBC)
 		return (strerror(err.saved_errno));

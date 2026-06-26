@@ -3,20 +3,20 @@
 #include "ast_type.h"
 #include "converter_priv.h"
 
-static inline t_error	add_buff_to(
+static inline t_error	add_token_to(
 	t_parser *parser,
 	t_cst_node *node,
 	t_vector *out)
 {
-	t_buff	token_value;
+	t_token	*token;
 	t_error	err;
 
-	err = converter_dup_buff(parser, node, 0, &token_value);
+	err = converter_get_token(parser, node, 0, &token);
 	if (err.type)
 		return (err);
-	if (!vector_push(out, &token_value))
-		return (buff_free(&token_value), error_sys());
-	return (error(ERR_NO));
+	if (!vector_push(out, &token))
+		return (error_sys());
+	return (err);
 }
 
 static inline t_error	parse_rec(
@@ -38,9 +38,9 @@ static inline t_error	parse_rec(
 		else if (child->symbol == SYM_cmd_name
 			|| child->symbol == SYM_cmd_word
 			|| child->symbol == SYM_WORD)
-			err = add_buff_to(parser, child, &out->words);
+			err = add_token_to(parser, child, &out->words);
 		else if (child->symbol == SYM_ASSIGNMENT_WORD)
-			err = add_buff_to(parser, child, &out->assignments);
+			err = add_token_to(parser, child, &out->assignments);
 		else
 			err = parse_rec(parser, child, out);
 		i++;

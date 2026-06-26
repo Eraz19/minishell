@@ -60,7 +60,7 @@ static inline t_error	parse_entry(const char *src, size_t len, t_vector *dst)
 		return (error_sys());
 	err = deserialize(entry, &out);
 	free(entry);
-	if (err.type == ERR_INVALID_FORMAT)
+	if (err.type == ERR_FORMAT_INVALID)
 		return (error(ERR_NO));
 	if (err.type)
 		return (err);

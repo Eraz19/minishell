@@ -3,19 +3,19 @@
 #include "ast_type.h"
 #include "converter_priv.h"
 
-static inline t_error	add_word(
+static inline t_error	convert_add_pattern_word(
 	t_parser *parser,
 	t_cst_node *word,
 	t_vector *out)
 {
-	t_buff	token_value;
+	t_token	*token;
 	t_error	err;
 
-	err = converter_dup_buff(parser, word, 0, &token_value);
+	err = converter_get_token(parser, word, 0, &token);
 	if (err.type)
 		return (err);
-	if (!vector_push(out, &token_value))
-		return (buff_free(&token_value), error_sys());
+	if (!vector_push(out, &token))
+		return (error_sys());
 	return (err);
 }
 
@@ -40,7 +40,7 @@ static inline t_error	convert_pattern_list(
 			return (err);
 	}
 	word = pattern_list->children[pattern_list->child_count - 1];
-	return (add_word(parser, word, out));
+	return (convert_add_pattern_word(parser, word, out));
 }
 
 /*
@@ -123,7 +123,7 @@ t_error	convert_case(
 	t_error		err;
 
 	ast_case_init(out);
-	err = converter_dup_buff(parser, case_clause->children[1], 0, &out->word);
+	err = converter_get_token(parser, case_clause->children[1], 0, &out->word);
 	if (err.type == ERR_NO && case_clause->child_count == 7)
 		err = convert_case_list(parser, case_clause->children[5], out);
 	if (err.type)

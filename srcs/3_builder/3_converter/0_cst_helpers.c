@@ -3,6 +3,21 @@
 #include "token.h"
 #include <stdbool.h>
 
+t_error	converter_get_token(
+	t_parser *parser,
+	t_cst_node *node,
+	size_t node_token_id,
+	t_token **dst)
+{
+	size_t	token_id;
+
+	if (node_token_id >= node->tokens_count)
+		return (error(ERR_INDEX_OUT_OF_BOUND));
+	token_id = node->tokens_start_id + node_token_id;
+	*dst = &((t_token *)parser->tokens.data)[token_id];
+	return (error(ERR_NO));
+}
+
 t_error	converter_get_buff(
 	t_parser *parser,
 	t_cst_node *node,
@@ -10,14 +25,13 @@ t_error	converter_get_buff(
 	t_buff **dst)
 {
 	t_token	*token;
-	size_t	token_id;
+	t_error	err;
 
-	if (node_token_id >= node->tokens_count)
-		return (error(ERR_INDEX_OUT_OF_BOUND));
-	token_id = node->tokens_start_id + node_token_id;
-	token = &((t_token *)parser->tokens.data)[token_id];
+	err = converter_get_token(parser, node, node_token_id, &token);
+	if (err.type)
+		return (err);
 	*dst = &token->value;
-	return (error(ERR_NO));
+	return (err);
 }
 
 t_error	converter_dup_buff(
@@ -34,7 +48,7 @@ t_error	converter_dup_buff(
 		return (err);
 	if (!buff_init(dst, 0, token_buff->data, (long)token_buff->len))
 		return (error_sys());
-	return (error(ERR_NO));
+	return (err);
 }
 
 t_error	converter_get_string(
@@ -52,5 +66,5 @@ t_error	converter_get_string(
 	*dst = buff_get_string(buff);
 	if (!*dst)
 		return (error_sys());
-	return (error(ERR_NO));
+	return (err);
 }

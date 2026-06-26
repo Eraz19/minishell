@@ -3,6 +3,7 @@
 
 # include "libft.h"
 # include "error.h"
+# include "token.h"
 # include <stddef.h>
 
 /* ************************************************************************* */
@@ -27,10 +28,10 @@ typedef enum e_ast_redir_op
 typedef struct s_ast_redirection
 {
 	t_ast_redir_op	operation;
-	int				fd;					// pre-computed fd
+	int				fd;					// -1 if [n] not specified in input
 	bool			is_location;
-	t_buff			location;			// only if is_location == true
-	t_buff			word;				// raw token content / heredoc file path
+	t_token			*location;			// only if is_location == true (borrowed)
+	t_token			*word;				// word (borrowed) / heredoc file path (⚠️ owned)
 	bool			expand_heredoc_body;
 }	t_ast_redirection;
 
@@ -44,8 +45,8 @@ typedef t_vector	t_ast_redir_list;	// vector of t_ast_redirection
 
 typedef struct s_ast_simple_command
 {
-	t_vector			assignments;	// vector of t_buff
-	t_vector			words;			// vector of t_buff
+	t_vector			assignments;	// vector of t_token * (borrowed)
+	t_vector			words;			// vector of t_token * (borrowed)
 	t_ast_redir_list	redirs;			// vector of t_ast_redirection
 }	t_ast_simple_command;
 
@@ -90,9 +91,10 @@ typedef struct s_ast_if
 
 typedef struct s_ast_for
 {
-	t_buff		var_name;
-	t_vector	words;				// vector of t_buff (set to ["@"] if input doesn't contain)
+	t_token		*var_name;			// borrowed
+	t_vector	words;				// vector of t_token * (borrowed ⚠️ except if word_token_is_owned = true) (set to ["@"] if input doesn't contain any word)
 	t_ast_list	body;
+	bool		word_token_is_owned;
 }	t_ast_for;
 
 typedef struct s_ast_loop
@@ -104,8 +106,8 @@ typedef struct s_ast_loop
 
 typedef struct s_ast_case
 {
-	t_buff		word;				// raw tested word
-	t_vector	patterns;			// vector of t_vector(t_buff)
+	t_token		*word;				// raw tested word (borrowed)
+	t_vector	patterns;			// vector of t_vector(t_token *) (borrowed)
 	t_vector	bodies;				// vector of t_ast_list
 	t_vector	fallthrough;		// vector of bool
 }	t_ast_case;
@@ -114,8 +116,8 @@ typedef struct s_ast_command	t_ast_command;
 
 typedef struct s_ast_function_def
 {
-	t_buff				name;
-	t_ast_command		*body;
+	t_token				*name;		// borrowed
+	t_ast_command		*body;		// owned (shallow copy)
 	t_ast_redir_list	redirs;		// vector of t_ast_redirection
 }	t_ast_function_def;
 

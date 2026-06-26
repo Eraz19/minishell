@@ -1,4 +1,5 @@
 #include "converter_priv.h"
+#include <stdlib.h>
 
 static inline t_error	convert_io_operator(
 	t_symbol symbol,
@@ -25,15 +26,15 @@ static inline t_error	convert_io_operator(
 	return (error(ERR_NO));
 }
 
-static inline bool	heredoc_should_expand(t_buff *token_buff)
+static inline bool	heredoc_should_expand(t_token *delim_token)
 {
 	size_t	i;
 	char	c;
 
 	i = 0;
-	while (i < token_buff->len)
+	while (i < delim_token->value.len)
 	{
-		c = ((char *)token_buff->data)[i];
+		c = ((char *)delim_token->value.data)[i];
 		if (c == '\'' || c == '"' || c == '\\')
 			return (false);
 		i++;
@@ -46,25 +47,25 @@ static inline t_error	convert_here_end(
 	t_cst_node *here_end,
 	t_ast_redirection *out)
 {
-	t_buff	delim;
+	t_token	*delim;
 	t_error	err;
 
-	err = converter_dup_buff(parser, here_end, 0, &delim);
+	err = converter_get_token(parser, here_end, 0, &delim);
 	if (err.type)
 		return (ast_redirection_free(out), err);
-	out->expand_heredoc_body = heredoc_should_expand(&delim);
-	return (error(ERR_NO));
+	out->expand_heredoc_body = heredoc_should_expand(delim);
+	return (err);
 }
 
 static inline t_error	convert_io_here(
 	t_cst_node *io_here,
 	t_ast_redirection *out)
 {
-	t_buff	*heredoc_path;
-
-	heredoc_path = (t_buff *)io_here->data;
-	if (!buff_dup_n(&out->word, heredoc_path, heredoc_path->len))
-		return (ast_redirection_free(out), error_sys());
+	out->word = malloc(sizeof(*out->word));
+	if (!out->word)
+		return (error_sys());
+	token_init(out->word);
+	out->word->value = *((t_buff *)io_here->data);
 	return (error(ERR_NO));
 }
 
@@ -105,7 +106,7 @@ t_error	convert_io_file_or_here(
 		return (convert_here_end(parser, io_file_node->children[1], out));
 	}
 	filename_node = io_file_node->children[1];
-	err = converter_dup_buff(parser, filename_node, 0, &out->word);
+	err = converter_get_token(parser, filename_node, 0, &out->word);
 	if (err.type)
 		ast_redirection_free(out);
 	return (err);

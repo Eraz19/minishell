@@ -3,14 +3,27 @@
 
 void	ast_for_init(t_ast_for *for_node)
 {
-	(void)buff_init(&for_node->var_name, 0, NULL, -1);
-	vector_init(&for_node->words, sizeof(t_buff), 0);
+	for_node->var_name = NULL;
+	vector_init(&for_node->words, sizeof(t_token *), 0);
 	ast_list_init(&for_node->body);
+	for_node->word_token_is_owned = false;
 }
 
 void	ast_for_free(t_ast_for *for_node)
 {
-	buff_free(&for_node->var_name);
-	vector_free(&for_node->words, buff_free_void);
+	t_token	*default_word_token;
+
+	for_node->var_name = NULL;
+	if (for_node->word_token_is_owned)
+	{
+		default_word_token = ((t_token **)for_node->words.data)[0];
+		token_free(default_word_token);
+		free(default_word_token);
+		((t_token **)for_node->words.data)[0] = NULL;
+		vector_free(&for_node->words, NULL);
+	}
+	else
+		vector_free(&for_node->words, NULL);
 	ast_list_free(&for_node->body);
+	for_node->word_token_is_owned = false;
 }

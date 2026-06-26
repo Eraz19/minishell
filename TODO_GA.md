@@ -1,8 +1,7 @@
 # WIP
 
-- 🚧 **ALL**: add doc
-- 🚧 `converter`:
-	- 🚧 `AST` update all from `t_buff` to `t_token`
+- ✅ `converter`:
+	- ✅ `AST` update all from `t_buff` to `t_token`
 - 🚧 `redirector`:
 	- ✅ transfer **default fd** processing from `converter` to `redirector`
 	- 🚧 finish module (need `t_token` in `AST`)
@@ -22,21 +21,11 @@
 - 🚧 Include prototypes `.h` in all `.c`
 - 🚧 Check all `error_sys()`:
 	- 🚧 must be called before any `free()` / `libc` call
+- 🚧 **ALL**: add doc
 
 ## DONE
 
-- ✅ `option_is_active()` peut fail (`ERR_SHELL_NOT_FOUND`):
-	- ✅ add `bool *out` argument
-	- ✅ update return value from `bool` to `t_error`
-- ✅ `shell`:
-	- ✅ Implement `shell_should_interrupt()`
-	- ✅ `posix_write()` must also call it before retrying
-	- ✅ `shell_should_exit_on_veof()` returns a `t_error` because of `option_is_active()` update
-	- ✅ `shell_should_interrupt()` => return `ERR_INTERRUPTED` instead of taking bool arg
-- ✅ update usage:
-	- ✅ `option_is_active()`
-	- ✅ `shell_should_exit_on_veof()`
-- ✅ remove unused error types
+
 
 ## RESOURCES
 
