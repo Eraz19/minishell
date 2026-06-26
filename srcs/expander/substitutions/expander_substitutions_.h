@@ -1,5 +1,5 @@
-#ifndef EXPANDER_SUBSTITUTIONS_H
-# define EXPANDER_SUBSTITUTIONS_H
+#ifndef EXPANDER_SUBSTITUTIONS__H
+# define EXPANDER_SUBSTITUTIONS__H
 
 # include "error.h"
 # include "expander_.h"

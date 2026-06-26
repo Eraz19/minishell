@@ -1,5 +1,5 @@
-#ifndef PATH_NAME_EXPANSION_H
-# define PATH_NAME_EXPANSION_H
+#ifndef PATH_NAME_EXPANSION__H
+# define PATH_NAME_EXPANSION__H
 
 # include "expander_.h"
 

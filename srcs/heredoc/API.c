@@ -1,13 +1,12 @@
 #include <stdlib.h>
 #include "shell.h"
+#include "heredoc.h"
 #include "heredoc_.h"
 #include "heredoc_body_.h"
 #include "heredoc_queue_.h"
 
-// BIG BUG
-t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start)
+static t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start)
 {
-
 	size_t					i;
 	t_heredoc_queue_item	item;
 
@@ -43,7 +42,6 @@ t_error	heredoc_store_all(char *input, size_t *start)
 	return (state->err);
 }
 
-#include <stdio.h>
 t_error	heredoc_add_to_queue(
 	t_buff *path,
 	char *delim,
@@ -61,14 +59,15 @@ t_error	heredoc_add_to_queue(
 	item.is_tty = is_tty;
 	item.path = buff_get_string(path);
 	if (item.path == NULL)
-		return (buff_free(path), state->err = error_sys());
+		return (state->err = error_sys(), buff_free(path), state->err);
 	item.delim = str_dup(delim);
 	if (item.delim == NULL)
-		return (buff_free(path), free(item.path), state->err = error_sys());
-	printf("=====> heredoc_build_delimiter\n");
-	//if (heredoc_build_delimiter(state, &item.delim).type)
-	//	return (buff_free(path), heredoc_queue_item_free(&item), state->err);
-	printf("=====> heredoc_build_delimiter done\n");
+	{
+		state->err = error_sys();
+		return (buff_free(path), free(item.path), state->err);
+	}
+	if (heredoc_build_delimiter(state, &item.delim).type)
+		return (buff_free(path), heredoc_queue_item_free(&item), state->err);
 	item.mode = mode;
 	state->err = heredoc_queue_push(&state->queue, item);
 	if (state->err.type)

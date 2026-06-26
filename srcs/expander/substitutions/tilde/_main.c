@@ -2,16 +2,32 @@
 #include "params.h"
 #include "tilde_expansion_.h"
 
-bool	is_tilde_expansion(t_expander *state, t_expander_word *word)
+bool	is_tilde_expansion(
+	t_expander *state,
+	t_expander_word *word,
+	t_expander_word_item *current_item)
 {
 	t_expander_word_item	item;
 
-	state->err = expander_word_peek(word, &item);
+	state->err = expander_word_peek(word, &item, 0);
 	if (state->err.type)
 		return (false);
-	if (item.opt.quoted != CONTEXT_NONE)
+	if (item.opt.quoted != CONTEXT_NONE || current_item->opt.escaped)
 		return (false);
-	return (item.c == '~');
+	if (current_item->opt.i == 0 && current_item->c == '~')
+		return (true);
+	else if (state->assignement_offset > 0
+		&& item.opt.i == (size_t)state->assignement_offset + 1
+		&& current_item->c == '='
+		&& item.c == '~')
+		return (true);
+	else if (state->role == EXPANDER_ASSIGNMENT
+		&& state->assignement_offset > 0
+		&& current_item->opt.i > (size_t)state->assignement_offset
+		&& current_item->c == ':'
+		&& item.c == '~')
+		return (true);
+	return (false);
 }
 
 static t_error	tilde_extract_username(t_expander *state, char **username)
@@ -54,7 +70,10 @@ static t_error	tilde_resolve_path(
 	}
 }
 
-t_error	tilde_expansion(t_expander *state)
+t_error	tilde_expansion(
+	t_expander *state,
+	t_expander_word *word,
+	t_expander_word *word_exp)
 {
 	t_expander_word_item_opt	opt;
 	t_expander_word_item		item;
@@ -65,15 +84,15 @@ t_error	tilde_expansion(t_expander *state)
 		return (state->err);
 	if (tilde_resolve_path(state, &path, username).type || path == NULL)
 		return (state->err);
-	state->err = expander_word_pop(&state->word, &item);
+	state->err = expander_word_pop(word, &item);
 	if (state->err.type)
 		return (state->err);
 	opt = (t_expander_word_item_opt){
-		.is_expand_res = true,
+		.is_expand_res = false,
 		.quoted = item.opt.quoted,
 		.context = item.opt.context,
 	};
-	state->err = expander_word_from_str(&state->word, path, opt);
+	state->err = expander_word_from_str(word_exp, path, opt);
 	if (state->err.type)
 		return (state->err);
 	state->err = expander_word_remove(&state->word, 0, str_len(path));

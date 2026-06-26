@@ -1,3 +1,4 @@
+#include "lexer_.h"
 #include "lexer_operator_.h"
 
 bool	is_operator_char(t_lexer *state)

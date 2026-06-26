@@ -3,7 +3,9 @@
 
 #include "expander_.h"
 
-t_error	tilde_expansion(t_expander *state);
-bool	is_tilde_expansion(t_expander *state, t_expander_word *word);
+bool	is_tilde_expansion(t_expander *state, t_expander_word *word,
+			t_expander_word_item *current_item);
+t_error	tilde_expansion(t_expander *state, t_expander_word *word,
+			t_expander_word *word_exp);
 
 #endif

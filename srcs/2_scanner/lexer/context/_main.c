@@ -1,3 +1,4 @@
+#include "lexer_.h"
 #include "lexer_context_.h"
 
 t_error	lexer_context(t_lexer *state, t_context context)

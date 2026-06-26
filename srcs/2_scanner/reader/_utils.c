@@ -7,6 +7,7 @@
 
 t_error	readline_(char **res, const char *prompt)
 {
+	t_error	err;
 	char	*input;
 
 	*res = readline(prompt);
@@ -26,6 +27,6 @@ t_error	readline_(char **res, const char *prompt)
 	}
 	input = str_join(*res, "\n");
 	if (input == NULL)
-		return (free(*res), error_sys());
+		return (err = error_sys(), free(*res), err);
 	return (free(*res), *res = input, error(ERR_NO));
 }

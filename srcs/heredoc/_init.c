@@ -1,6 +1,6 @@
+#include "utils.h"
 #include "heredoc.h"
 #include "heredoc_queue_.h"
-#include "utils.h"
 
 void	heredoc_init(t_heredoc *state)
 {

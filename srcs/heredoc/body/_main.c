@@ -15,7 +15,7 @@ t_error	heredoc_body_save_content(t_heredoc_body *state)
 	return (close(fd), state->err);
 }
 
-t_error	heredoc_body_continuation(
+static t_error	heredoc_body_continuation(
 	t_heredoc_body *state,
 	bool *used_continuation)
 {
@@ -30,7 +30,7 @@ t_error	heredoc_body_continuation(
 		return (state->err = error(ERR_NO_DELIM));
 }
 
-t_error	heredoc_body_get_content(t_heredoc_body *state)
+static t_error	heredoc_body_get_content(t_heredoc_body *state)
 {
 	char	*match_EOL;
 	bool	used_continuation;

@@ -1,4 +1,5 @@
 #include "error.h"
+#include "history.h"
 #include "history_.h"
 
 void	history_init(t_history *state)

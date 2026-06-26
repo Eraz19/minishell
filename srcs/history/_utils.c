@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "history.h"
+#include "history_.h"
 
 static t_error	history_prepare_entry(
 	t_history *state,
@@ -13,9 +14,15 @@ static t_error	history_prepare_entry(
 	if (state->err.type)
 		return (free(entry), state->err);
 	if (!buff_append(content, serial_entry, (long)str_len(serial_entry)))
-		return (free(serial_entry), free(entry), state->err = error_sys());
+	{
+		state->err = error_sys();
+		return (free(serial_entry), free(entry), state->err);
+	}
 	if (!buff_append(content, "\n", 1))
-		return (free(serial_entry), free(entry), state->err = error_sys());
+	{
+		state->err = error_sys();
+		return (free(serial_entry), free(entry), state->err);
+	}
 	return (free(serial_entry), serial_entry = NULL, state->err);
 }
 
@@ -72,6 +79,6 @@ t_error	history_build_file_content(t_history *state, size_t start)
 		return (buff_free(&content), state->err);
 	state->file.content = buff_get_string(&content);
 	if (state->file.content == NULL)
-		return (buff_free(&content), state->err = error_sys());
+		return (state->err = error_sys(), buff_free(&content), state->err);
 	return (buff_free(&content), state->err);
 }

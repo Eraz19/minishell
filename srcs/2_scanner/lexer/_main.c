@@ -23,6 +23,8 @@ t_error	lexer_next_token(t_lexer *state, t_token *token)
 	}
 	token_init(token);
 	state->token = token;
+	if (state->input_stack.len == 1)
+		state->token->index.start = (ssize_t)state->input->i;
 	while (!state->emited_token)
 	{
 		if (lexer_rules(state, &context).type)

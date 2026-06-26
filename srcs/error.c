@@ -80,8 +80,6 @@ const char	*error_to_string(t_error err)
 		return ("invalid arguments");
 	else if (err.type == ERR_FILE_STAT)
 		return ("file stat failed");
-	else if (err.type == ERR_OPEN_FILE)
-		return ("unable to open file");
 	else if (err.type == ERR_INCOHERENT_STATE)
 		return ("incoherent state");
 	else if (err.type == ERR_NOT_IMPLEMENTED)

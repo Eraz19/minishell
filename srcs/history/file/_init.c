@@ -28,7 +28,10 @@ t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t m
 	while (file_entries.len > 0 && (max < 0 || i < (size_t)max))
 	{
 		if (!vector_remove(&file_entries, file_entries.len - 1, &entry))
-			return (vector_free(&file_entries, free), state->err = error_sys());
+		{
+			state->err = error_sys();
+			return (vector_free(&file_entries, free), state->err);
+		}
 		state->err = history_list_insert(list, entry, 0);
 	 	if (state->err.type)
 	 		return (vector_free(&file_entries, free), free(entry), state->err);
@@ -36,6 +39,5 @@ t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t m
 		i++;
 	}
 	state->loaded_count = list->len;
-	vector_free(&file_entries, free);
-	return (state->err);
+	return (vector_free(&file_entries, free), state->err);
 }

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "params.h"
 #include "history.h"
+#include "history_.h"
 
 t_error	history_load_path_env(t_history *state)
 {
@@ -16,7 +17,7 @@ t_error	history_load_path_env(t_history *state)
 			return (state->err);
 		state->file.path = str_join(path, "/.sh_history");
 		if (state->file.path == NULL)
-			return (free(path), state->err = error_sys());
+			return (state->err = error_sys(), free(path), state->err);
 		free(path);
 	}
 	return (state->err = error(ERR_NO));

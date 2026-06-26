@@ -35,27 +35,31 @@ t_error	reader_continuation(char **res)
 		return (free(continuation), err);
 	new_input = str_join(*res, continuation);
 	if (new_input == NULL)
-		return (free(continuation), error_sys());
+		return (err = error_sys(), free(continuation), err);
 	return (free(*res), free(continuation), *res = new_input, error(ERR_NO));
 }
 
 t_error	reader_file_input(char **res, const char *path)
 {
 	int		fd;
+	t_error	err;
 	t_buff	buffer;
 	char	*content;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		return (error(ERR_OPEN_FILE));
+		return (error_sys());
 	buff_init(&buffer, 0, NULL, 0);
 	if (!buff_read_all(&buffer, fd))
-		return (close(fd), buff_free(&buffer), error_sys());
+		return (err = error_sys(), close(fd), buff_free(&buffer), err);
 	content = buff_get_string(&buffer);
 	if (content == NULL)
-		return (close(fd), buff_free(&buffer), error_sys());
+		return (err = error_sys(), close(fd), buff_free(&buffer), err);
 	*res = str_join(content, "\n");
 	if (*res == NULL)
-		return (close(fd), buff_free(&buffer), free(content), error_sys());
+	{
+		err = error_sys();
+		return (close(fd), buff_free(&buffer), free(content), err);
+	}
 	return (close(fd), buff_free(&buffer), free(content), error(ERR_NO));
 }

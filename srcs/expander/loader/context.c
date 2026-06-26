@@ -4,10 +4,12 @@ static t_error	expander_loader_char(t_expander_loader *state)
 {
 	if (is_char_escaped(state))
 	{
-		if (expander_loader_consume(state, 1).type)
+		if (expander_loader_consume(state, 1, false).type)
 			return (state->err);
+		return (expander_loader_consume(state, 1, true));
 	}
-	return (expander_loader_consume(state, 1));
+	else
+		return (expander_loader_consume(state, 1, false));
 }
 
 static t_error	expander_loader_context(t_expander_loader *state)
@@ -42,9 +44,9 @@ t_error	expander_loader_quoted(t_expander_loader *state)
 	char	current;
 
 	if (state->quoting != CONTEXT_DOLLAR_SQUOTE)
-		expander_loader_consume(state, 1);
+		expander_loader_consume(state, 1, false);
 	else
-		expander_loader_consume(state, 2);
+		expander_loader_consume(state, 2, false);
 	if (state->err.type)
 		return (state->err);
 	current = state->word[state->i];
@@ -56,5 +58,5 @@ t_error	expander_loader_quoted(t_expander_loader *state)
 	}
 	if (state->word[state->i] == '\0')
 		return (state->err);
-	return (expander_loader_consume(state, 1));
+	return (expander_loader_consume(state, 1, false));
 }

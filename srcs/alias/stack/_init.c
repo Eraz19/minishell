@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "alias.h"
+#include "alias_stack_.h"
 
 void	alias_stack_init(t_alias_stack *stack)
 {

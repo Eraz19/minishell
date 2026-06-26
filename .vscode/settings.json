@@ -68,5 +68,6 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up"
-	]
+	],
+	"explorer.sortOrder": "modified"
 }

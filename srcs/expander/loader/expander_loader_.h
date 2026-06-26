@@ -27,7 +27,8 @@ bool	is_char_escaped(t_expander_loader *state);
 bool	is_substitution_start(t_expander_loader *state);
 t_error	expander_loader_pop_context(t_expander_loader *state);
 t_error	expander_loader_push_context(t_expander_loader *state);
-t_error	expander_loader_consume(t_expander_loader *state, size_t count);
+t_error	expander_loader_consume(t_expander_loader *state, size_t count,
+			bool escaped);
 
 t_error	expander_loader_quoted(t_expander_loader *state);
 t_error	expander_loader_substitution(t_expander_loader *state);

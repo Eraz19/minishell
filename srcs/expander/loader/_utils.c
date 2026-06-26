@@ -65,24 +65,28 @@ t_error	expander_loader_pop_context(t_expander_loader *state)
 	return (state->err);
 }
 
-t_error	expander_loader_consume(t_expander_loader *state, size_t count)
+t_error	expander_loader_consume(
+	t_expander_loader *state,
+	size_t count,
+	bool escaped)
 {
-	size_t					i;
-	t_expander_word_item	item;
-	t_context				quoting;
-	t_context				current;
-	char					current_char;
+	size_t						i;
+	t_expander_word_item_opt	opt;
+	t_expander_word_item		item;
+	char						current_char;
 	
 	i = 0;
-	quoting = state->quoting;
+	opt.escaped = escaped;
+	opt.quoted = state->quoting;
 	if (state->context_item == NULL)
-		current = CONTEXT_NONE;
+		opt.context = CONTEXT_NONE;
 	else
-		current = state->context_item->context;
+		opt.context = state->context_item->context;
 	while (i < count)
 	{
+		opt.i = state->i;
 		current_char = state->word[state->i++];
-		item = expander_word_item_init(current_char, quoting, current, false);
+		item = expander_word_item_init(current_char, opt);
 		state->err = expander_word_push(&state->loaded_word, item);
 		if (state->err.type)
 			return (state->err);

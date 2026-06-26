@@ -94,6 +94,11 @@ INCLUDES		:= \
 	-Isrcs/expander/quote_removal/context \
 	-Isrcs/expander/substitutions \
 	-Isrcs/expander/substitutions/tilde \
+	-Isrcs/expander/substitutions/param \
+	-Isrcs/expander/substitutions/cmd_sub \
+	-Isrcs/expander/substitutions/dollar_squote \
+	-Isrcs/expander/substitutions/arith \
+	-Isrcs/expander/substitutions/backtick \
 	-Isrcs/expander/word \
 	-Isrcs/heredoc \
 	-Isrcs/heredoc/body \

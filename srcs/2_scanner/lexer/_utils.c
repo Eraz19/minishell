@@ -60,4 +60,5 @@ t_error	lexer_restore(t_lexer *state, t_lexer_backup backup)
 void	lexer_delimit_token(t_lexer *state)
 {
 	state->emited_token = true;
+	state->token->index.end = (ssize_t)state->input->i;
 }
