@@ -47,7 +47,8 @@ t_error	options_load(
 /* ************************************************************************* */
 
 void	option_set(t_option *options, t_option option, bool on);
-bool	option_is_active(t_option option);
+// @ret ERR_SHELL_NOT_FOUND
+t_error	option_is_active(t_option option, bool *out);
 bool	option_is_active_in(t_option options, t_option option);
 
 // @ret ERR_NO / ERR_LIBC

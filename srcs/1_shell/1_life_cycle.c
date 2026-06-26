@@ -31,11 +31,16 @@ void	shell_free(void)
 	shell_set(NULL);
 }
 
-bool	shell_should_exit_on_veof(void)
+t_error		shell_should_exit_on_veof(void)
 {
-	if (!option_is_active(OPT_INTERACTIVE))
-		return (false);
-	if (option_is_active(OPT_IGNOREEOF))
-		return (false);
-	return (true);
+	bool	is_interactive;
+	bool	ignore_eof;
+	t_error	err;
+
+	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (err.type == ERR_NO)
+		err = option_is_active(OPT_IGNOREEOF, &ignore_eof);
+	if (err.type == ERR_NO && is_interactive == true && ignore_eof == false)
+		return (error(ERR_VEOF));
+	return (err);
 }

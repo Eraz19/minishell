@@ -42,7 +42,7 @@ t_error	var_print(t_var_print_mode mode);
 
 // value can be NULL.
 // export == false and rdonly == false are ignored if variable already exists.
-// if variable doesn't exist yet and option_is_active(OPT_EXPORT_ALL)
+// if variable doesn't exist yet and option OPT_EXPORT_ALL is active
 // 		=> export will be set to true even if export == false.
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
 // 		/ ERR_LIBC.

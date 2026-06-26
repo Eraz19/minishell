@@ -2,15 +2,15 @@
 #include <stdlib.h>
 # include "logs.h"	// DEBUG
 
-// TODO: masque une potentielle erreur !
-bool	option_is_active(t_option option)
+t_error	option_is_active(t_option option, bool *out)
 {
 	t_params	*params;
 
 	params = shell_get_params();
 	if (!params)
-		return (false);
-	return ((params->options & option) != 0);
+		return (error(ERR_SHELL_NOT_FOUND));
+	*out = (params->options & option) != 0;
+	return (error(ERR_NO));
 }
 
 bool	option_is_active_in(t_option options, t_option option)

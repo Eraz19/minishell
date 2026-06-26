@@ -19,8 +19,6 @@ static t_error	specials_load_cmd_string(
 	if ((size_t)argc >= *operand_index + 1)
 		specials->zero = argv[(*operand_index)++];
 	print_pass("command_string (-c) mode initialized\n");
-	print_pass("zero set to              '%s'\n", specials->zero);
-	print_pass("source set to            '%s'\n", specials->source);
 	return (error(ERR_NO));
 }
 
@@ -31,24 +29,33 @@ static t_error	specials_load_source_and_zero(
 	char **argv,
 	size_t *operand_index)
 {
+	bool	is_cmd_string;
+	bool	is_stdin;
+	t_error	err;
+
 	specials->source = NULL;
 	specials->zero = argv[0];
-	if (option_is_active(OPT_CMD_STRING))
-		return (specials_load_cmd_string(specials, argc, argv, operand_index));
-	else if (option_is_active(OPT_STDIN_INPUT))
-	{
-		print_pass("standard_input (-s) mode initialized\n");
-		// return (error(ERR_NO));
-	}
+	err = option_is_active(OPT_CMD_STRING, &is_cmd_string);
+	if (err.type == ERR_NO)
+		err = option_is_active(OPT_STDIN_INPUT, &is_stdin);
+	if (err.type != ERR_NO)
+		return (err);
+	if (is_stdin)
+		print_pass("standard_input (-s) mode initialized\n");	// TODO: return (error(ERR_NO))
+	else if (is_cmd_string)
+		err = specials_load_cmd_string(specials, argc, argv, operand_index);	// TODO: return (specials_load_cmd_string())
 	else if ((size_t)argc >= *operand_index + 1)
 	{
 		print_pass("command_file mode initialized\n");
 		specials->source = argv[(*operand_index)++];
 		specials->zero = specials->source;
 	}
-	print_pass("zero set to              '%s'\n", specials->zero);
-	print_pass("source set to            '%s'\n", specials->source);
-	return (error(ERR_NO));
+	if (err.type == ERR_NO)
+	{
+		print_pass("zero set to              '%s'\n", specials->zero);
+		print_pass("source set to            '%s'\n", specials->source);
+	}
+	return (err);
 }
 
 t_error	specials_load(

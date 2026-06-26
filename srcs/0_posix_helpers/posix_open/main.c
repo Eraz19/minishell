@@ -1,7 +1,7 @@
 #include "error.h"
 #include "posix_helpers.h"
 #include "posix_open_priv.h"
-#include "posix_helpers_priv.h"
+#include "shell.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -30,7 +30,7 @@ static inline t_error	posix_open_priv(
 			return (error(ERR_NO));
 		if (errno == EINTR)
 		{
-			err = posix_handle_eintr();
+			err = shell_should_interrupt();
 			if (err.type)
 				return (err);
 			continue ;

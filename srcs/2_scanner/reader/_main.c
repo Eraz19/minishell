@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "posix_helpers.h"
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -44,10 +45,14 @@ t_error	reader_file_input(char **res, const char *path)
 	int		fd;
 	t_buff	buffer;
 	char	*content;
+	t_error	err;
 
-	fd = open(path, O_RDONLY);	// TODO: use posix_open()
-	if (fd < 0)
-		return (error(ERR_OPEN_FILE));
+	err = posix_open(path, O_RDONLY, &fd);
+	if (err.type)
+		return (err);
+	else if (fd == -1)
+		return (error_print(error_sys(), "reader", "unable to open source file",
+			NULL, NULL));
 	buff_init(&buffer, 0, NULL, 0);
 	if (!buff_read_all(&buffer, fd))
 		return (close(fd), buff_free(&buffer), error_sys());

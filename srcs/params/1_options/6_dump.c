@@ -45,17 +45,25 @@ const char	*option_to_string(t_option option)
 
 void	options_dump(void)
 {
+	bool			is_active;
 	unsigned int	option;
 	const char		*name;
 	const char		*value;
+	t_error			err;
 
 	fprintf(stderr, "\nDUMP OPTIONS\n");
 	option = 1u << 0;
 	while (option <= OPT_VI)
 	{
 		name = option_to_string(option);
-		value = bool_to_string(option_is_active(option));
-		fprintf(stderr, "OPTION %s=%s\n", name, value);
+		err = option_is_active(option, &is_active);
+		if (err.type)
+			(void)error_print(err, __func__, "option_is_active() failed", NULL, NULL);
+		else
+		{
+			value = bool_to_string(is_active);
+			fprintf(stderr, "OPTION %s=%s\n", name, value);
+		}
 		option <<= 1;
 	}
 }

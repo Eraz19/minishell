@@ -5,11 +5,16 @@
 
 t_error	shell_exec_env(void)
 {
-	t_error	err;
+	bool	is_interactive;
+	bool	read_from_stdin;
 	char	*raw_env;
+	t_error	err;
 
 	print_title("shell_exec_env()");
-	if (!option_is_active(OPT_INTERACTIVE))
+	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (err.type)
+		return (err);
+	if (is_interactive == false)
 	{
 		print_warn("non-interactive mode => skipping ENV execution\n");
 		print_result("shell_exec_env()");
@@ -24,7 +29,10 @@ t_error	shell_exec_env(void)
 		print_result("shell_exec_env()");
 		return (error(ERR_NO));
 	}
-	if (option_is_active(OPT_STDIN_INPUT))
+	err = option_is_active(OPT_STDIN_INPUT, &read_from_stdin);
+	if (err.type)
+		return (err);
+	if (read_from_stdin == true)
 	{
 		print_warn("Expander and Runner not implemented yet => skipping ENV execution\n");
 		// TODO: expand ENV

@@ -24,8 +24,10 @@ typedef struct s_shell
 t_error		shell_run(int argc, char **argv, char **envp);
 t_shell		*shell_get(void);
 const char	*shell_get_name(void);
-bool		shell_should_exit_on_veof(void);	// TODO: return a t_error in case of `option_is_active()` failure
-t_error		shell_should_interrupt(bool *out);
+// @ret ERR_SHELL_NOT_FOUND
+t_error		shell_should_exit_on_veof(void);
+// @ret ERR_SHELL_NOT_FOUND / ERR_INTERRUPTED
+t_error		shell_should_interrupt(void);
 void		shell_free(void);
 
 // Les fonctions pour les enfaaaaaants

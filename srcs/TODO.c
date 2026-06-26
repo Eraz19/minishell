@@ -4,10 +4,10 @@
 
 /* ---------- TODO: shell ---------- */
 
-t_error		shell_should_interrupt(bool *out)
+t_error		shell_should_interrupt(void)
 {
-	*out = true;
-	return (error(ERR_NO));
+	// TODO
+	return (error(ERR_INTERRUPTED));
 }
 
 /* ---------- TODO: expander ---------- */

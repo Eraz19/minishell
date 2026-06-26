@@ -9,7 +9,7 @@ t_error	parser_internal_error(void)
 t_error	parser_invalid_syntax(void)
 {
 	return (error_print(
-		error(ERR_INVALID_SYNTAX),
+		error(ERR_SYNTAX_INVALID),
 		"parser",
 		NULL,
 		NULL));

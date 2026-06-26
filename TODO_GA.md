@@ -1,37 +1,42 @@
 # WIP
 
+- 🚧 **ALL**: add doc
+- 🚧 `converter`:
+	- 🚧 `AST` update all from `t_buff` to `t_token`
+- 🚧 `redirector`:
+	- ✅ transfer **default fd** processing from `converter` to `redirector`
+	- 🚧 finish module (need `t_token` in `AST`)
+- 🚧 `params`:
+	- 🚧 use `t_buff` instead of `char *`
+	- 🚧 `params_get_positionals()` => update argument to `t_vector` of `t_buff`
+- 🚧 `parser`:
+	- 🚧 use `token->assignment_offset` (-1 if missing) in `ASSIGNMENT_WORD` qualifier
+	- 🚧 call `scanner_reset()` (+ `parser_reset()` ?) on syntax errors
+	- 🚧 add `t_token *closing_par` argument:
+		- 🚧 if `closing_par == NULL` => normal mode
+		- 🚧 else:
+			- 🚧 input contains `(`
+			- 🚧 on `subshell` reduction => shallow copy last token in `closing_par` + `return`
+- 🚧 `subshell`:
+	- 🚧 create module (must be compatible with `command_substitution` search)
+- 🚧 Include prototypes `.h` in all `.c`
+- 🚧 Check all `error_sys()`:
+	- 🚧 must be called before any `free()` / `libc` call
 
-- `shell`:
+## DONE
+
+- ✅ `option_is_active()` peut fail (`ERR_SHELL_NOT_FOUND`):
+	- ✅ add `bool *out` argument
+	- ✅ update return value from `bool` to `t_error`
+- ✅ `shell`:
 	- ✅ Implement `shell_should_interrupt()`
 	- ✅ `posix_write()` must also call it before retrying
-	- `shell_should_exit_on_veof()` returns a `t_error` because of `option_is_active()` update
-- `posix_open()`:
-	- ✅ create it
-	- use it in `redirector`
-- `converter`:
-	- `AST` update all from `t_buff` to `t_token`
-- `redirector`:
-	- ✅ transfer **default fd** processing from `converter` to `redirector`
-	- finish module (need `t_token` in `AST`)
-- `params`:
-	- use `t_buff` instead of `char *`
-	- `params_get_positionals()` => update argument to `t_vector` of `t_buff`
-- `parser`:
-	- use `token->assignment_offset` (-1 if missing) in `ASSIGNMENT_WORD` qualifier
-	- call `scanner_reset()` (+ `parser_reset()` ?) on syntax errors
-	- add `t_token *closing_par` argument:
-		- if `closing_par == NULL` => normal mode
-		- else:
-			- input contains `(`
-			- on `subshell` reduction => shallow copy last token in `closing_par` + `return`
-- `subshell`:
-	- create module (must be compatible with `command_substitution` search)
-- Include prototypes `.h` in all `.c`
-- `option_is_active()` peut fail (`ERR_SHELL_NOT_FOUND`):
-	- add `bool *out` argument
-	- update return value from `bool` to `t_error`
-- Check all `error_sys()`:
-	- must be called before any `free()` / `libc` call
+	- ✅ `shell_should_exit_on_veof()` returns a `t_error` because of `option_is_active()` update
+	- ✅ `shell_should_interrupt()` => return `ERR_INTERRUPTED` instead of taking bool arg
+- ✅ update usage:
+	- ✅ `option_is_active()`
+	- ✅ `shell_should_exit_on_veof()`
+- ✅ remove unused error types
 
 ## RESOURCES
 
@@ -109,7 +114,6 @@
 - `heredoc`:
 	- `tmp/minishell/*` au lieu de `tmp/*` pour pouvoir supprimer facilement tous nos fichiers temporaires sans avoir à connaître leurs noms ? => miss `mkdir()` function
 - `errors`:
-	- `ERR_OPEN_FILE` should be `ERR_LIBC` to print errno ?
 	- Vérifier que tous les call à `error_print()` sont bien doublement `NULL` terminés
 
 ---

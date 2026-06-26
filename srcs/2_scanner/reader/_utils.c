@@ -13,12 +13,9 @@ t_error	readline_(char **res, const char *prompt)
 	*res = readline(prompt);
 	while (*res == NULL)
 	{
-		if (shell_should_exit_on_veof())
-		{
-			err = error(ERR_VEOF);
-			err.printed = true;
+		err = shell_should_exit_on_veof();
+		if (err.type)
 			return (err);
-		}
 		*res = readline(prompt);
 	}
 	if (**res == '\0')

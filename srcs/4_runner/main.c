@@ -35,9 +35,13 @@ t_error	runner_loop_cycle(t_runner *runner)
 
 t_error	runner_run(t_runner *runner)
 {
+	bool	is_interactive;
 	t_error	err;
 
-	if (!option_is_active(OPT_INTERACTIVE))
+	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (err.type)
+		return (err);
+	if (is_interactive == false)
 		return (runner_loop_cycle(runner));
 	while (true)
 	{
