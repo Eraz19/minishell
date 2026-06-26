@@ -1,7 +1,7 @@
 #include "parser_priv.h"
 #include "scanner.h"
 
-static inline t_error	sym_conv1(t_token_type token_type, t_symbol *dst_symbol)
+static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
 {
 	if (token_type == TOKEN_TOKEN)
 		*dst_symbol = SYM_TOKEN;
@@ -30,7 +30,7 @@ static inline t_error	sym_conv1(t_token_type token_type, t_symbol *dst_symbol)
 	return (error(ERR_NO));
 }
 
-static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
+static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
 {
 	if (token_type == TOKEN_LESSAND)
 		*dst_symbol = SYM_LESSAND;
@@ -55,7 +55,7 @@ static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
 	else if (token_type == TOKEN_EOF)
 		*dst_symbol = SYM_EOF;
 	else
-		return (error(ERR_INVALID_SYNTAX));
+		return (sym_conv2(token_type, dst_symbol));
 	return (error(ERR_NO));
 }
 
@@ -65,9 +65,7 @@ static t_error	symbol_convert(t_token *src_token, t_symbol *dst_symbol)
 	t_token_type	token_type;
 
 	token_type = src_token->type;
-	err = sym_conv1(token_type, dst_symbol);
-	if (err.type != ERR_NO)
-		err = sym_conv2(token_type, dst_symbol);
+	err = sym_conv(token_type, dst_symbol);
 	if (err.type != ERR_NO)
 	{
 		*dst_symbol = SYM_error;

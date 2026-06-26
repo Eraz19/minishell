@@ -10,7 +10,9 @@ static t_error export_catch_ub(int argc, char **argv, t_getopt_out *out)
 {
 	size_t	options_count;
 	size_t	operand_count;
+	t_error	err;
 
+	err = error(ERR_NO);
 	options_count = out->options.len;
 	operand_count = (size_t)argc - out->first_operand_index;
 	if (options_count == 0 && operand_count == 0)
@@ -19,10 +21,10 @@ static t_error export_catch_ub(int argc, char **argv, t_getopt_out *out)
 	if (options_count > 0 && operand_count > 0)
 	{
 		(void)error_print(error(ERR_BUILTIN_INVALID_USAGE), argv[0], EXPORT_USAGE, NULL, NULL);
-		return (undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
-		"mutually-exclusive arguments produces undefined results."));
+		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
+		"mutually-exclusive arguments produces undefined results.");
 	}
-	return (error(ERR_NO));
+	return (err);
 }
 
 // @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG /
@@ -64,7 +66,7 @@ static t_error	export_add_one(const char *builtin_name, const char *string)
 		return (error_print(err, builtin_name, string, NULL, NULL));
 	err = params_set_variable(name, value, true, false);
 	if (err.type != ERR_NO)
-		(void)error_print(err, builtin_name, string, NULL, NULL);
+		err = error_print(err, builtin_name, string, NULL, NULL);
 	free(name);
 	if (value)
 		free(value);

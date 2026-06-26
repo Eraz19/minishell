@@ -60,6 +60,5 @@ t_error	options_process_name(
 		return (error(ERR_NO));
 	if (options_process_name2(options, arg, on))
 		return (error(ERR_NO));
-	error_print(error(ERR_OPT_INVALID_ARG), arg, NULL, NULL);
-	return (error(ERR_OPT_INVALID_ARG));
+	return (error_print(error(ERR_OPT_INVALID_ARG), arg, NULL, NULL));
 }

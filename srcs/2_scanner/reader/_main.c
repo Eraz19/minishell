@@ -45,7 +45,7 @@ t_error	reader_file_input(char **res, const char *path)
 	t_buff	buffer;
 	char	*content;
 
-	fd = open(path, O_RDONLY);
+	fd = open(path, O_RDONLY);	// TODO: use posix_open()
 	if (fd < 0)
 		return (error(ERR_OPEN_FILE));
 	buff_init(&buffer, 0, NULL, 0);

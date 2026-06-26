@@ -398,10 +398,8 @@ static void	ast_log_token_value(t_buff *buff)
 			fprintf(stderr, "\\t");
 		else if (c == '\r')
 			fprintf(stderr, "\\r");
-		else if (c == ')')
-			fprintf(stderr, "\\)");
 		else if (c == '\\')
-			fprintf(stderr, "\\\\");
+			fprintf(stderr, "\\");
 		else
 			fprintf(stderr, "%c", c);
 		i++;

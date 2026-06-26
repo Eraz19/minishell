@@ -77,6 +77,22 @@ static t_error	var_pwd_is_valid(const char *pwd, bool *res)
 	return (pwd_is_the_current_working_dir(pwd, res));
 }
 
+static inline t_error	handle_pwd_getcwd_error(t_error err, char **pwd)
+{
+	size_t	default_pwd_len;
+
+	if (err.type == ERR_LIBC && err.saved_errno == EACCES)
+	{
+		default_pwd_len = str_len(PWD_UNSPECIFIED_VALUE);
+		*pwd = malloc(default_pwd_len + 1);
+		if (!*pwd)
+			return (error_sys());
+		(void)str_lcpy(*pwd, PWD_UNSPECIFIED_VALUE, default_pwd_len + 1);
+		return (error(ERR_NO));
+	}
+	return (err);
+}
+
 /*
 cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05_03)
 	a) "If a value for PWD is passed to the shell in the environment when it is executed, the value is an absolute pathname of the current working directory [...optional...] and the value does not contain any components that are dot or dot-dot, then the shell shall set PWD to the value from the environment"
@@ -101,6 +117,7 @@ t_error	var_set_pwd(void)
 			return (print_pass("'PWD' is already valid\n"), error(ERR_NO));
 	}
 	err = posix_getcwd(&pwd);
+	err = handle_pwd_getcwd_error(err, &pwd);
 	if (err.type != ERR_NO)
 		return (err);
 	err = var_set("PWD", pwd, false, false);

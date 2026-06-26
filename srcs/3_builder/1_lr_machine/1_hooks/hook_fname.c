@@ -20,9 +20,8 @@ static t_error	check_name(const char *hook_name, t_token *token)
 	fprintf(stderr, "[PARSER] %sfunction_name_is_valid = %s%s\n", YELLOW, bool_to_string(valid_name), NC);
 	if (!valid_name)
 	{
-		(void)error_print(error(ERR_PARSER_INVALID_FUNCTION_NAME),
-			"parser", NULL, "%s", token_value);
-		err = error(ERR_INVALID_SYNTAX);
+		err = error_print(error(ERR_INVALID_SYNTAX),
+			"parser", NULL, "invalid function name: %s", token_value);
 	}
 	free(token_value);
 	return (err);

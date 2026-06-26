@@ -1,5 +1,38 @@
 # WIP
 
+
+- `shell`:
+	- ✅ Implement `shell_should_interrupt()`
+	- ✅ `posix_write()` must also call it before retrying
+	- `shell_should_exit_on_veof()` returns a `t_error` because of `option_is_active()` update
+- `posix_open()`:
+	- ✅ create it
+	- use it in `redirector`
+- `converter`:
+	- `AST` update all from `t_buff` to `t_token`
+- `redirector`:
+	- ✅ transfer **default fd** processing from `converter` to `redirector`
+	- finish module (need `t_token` in `AST`)
+- `params`:
+	- use `t_buff` instead of `char *`
+	- `params_get_positionals()` => update argument to `t_vector` of `t_buff`
+- `parser`:
+	- use `token->assignment_offset` (-1 if missing) in `ASSIGNMENT_WORD` qualifier
+	- call `scanner_reset()` (+ `parser_reset()` ?) on syntax errors
+	- add `t_token *closing_par` argument:
+		- if `closing_par == NULL` => normal mode
+		- else:
+			- input contains `(`
+			- on `subshell` reduction => shallow copy last token in `closing_par` + `return`
+- `subshell`:
+	- create module (must be compatible with `command_substitution` search)
+- Include prototypes `.h` in all `.c`
+- `option_is_active()` peut fail (`ERR_SHELL_NOT_FOUND`):
+	- add `bool *out` argument
+	- update return value from `bool` to `t_error`
+- Check all `error_sys()`:
+	- must be called before any `free()` / `libc` call
+
 ## RESOURCES
 
 - [2.9.1.1 Order of Processing](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_01)
@@ -12,6 +45,7 @@
 - [8. Environment Variables](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html#tag_08)
 - [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
 - [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
+- [2.9.2 Pipelines](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_02)
 
 1. Expand `words` (see 2.9.1.1:2)
 2. Redirect (see 2.7)
@@ -45,7 +79,8 @@
 	- Chercher une commande (function, builtin, path resolution) => Quelle section POSIX ?
 3. Vérifier que ce système minimal fonctionne
 3. Implémenter le module qui créé un subshell et y exécute une commande
-4. Implémenter le module qui gère les pipeline
+4. Implémenter le module qui gère les pipeline:
+	- `pipefail option` behaviour to check
 5. TODO...
 
 ---
@@ -67,34 +102,15 @@
 
 ---
 
-- `shell_exit_on_veof()` => `bool shell_should_exit()`
-- `option_is_active()` peut fail (ERR_SHELL_NOT_FOUND):
-	- Changer signature 😫
-- Vérifier partout que les `error_sys()` sont bien créées avant de free quoi que ce soit (ou tout autre call `libc`)
-
----
-
 # ALEXANDER
 
-## BUGS
+## TODO
+- use `posix_write()` instead of `write()`
 - `heredoc`:
-	- `scanner_report_io_here()`
-		- N'envoie pas de path au premier appel
-		- Envoie plusieurs fois le même path
-		- Devrait renvoyer un `t_buff` au lieu d'un `char *`
-	- `scanner_heredoc_read()`
-		- Ne lit pas les here documents
-
-## AJOUTS DONT J'AI BESOIN
-- `token->assign_operand_offset` (-1 si inexistant):
-	> If the TOKEN contains an unquoted (as determined while applying rule 4 from 2.3 Token Recognition) <equals-sign> character that is not part of an embedded parameter expansion, command substitution, or arithmetic expansion construct (as determined while applying rule 5 from 2.3 Token Recognition)
-- `scanner_reset()`:
-	- Pour refresh après une syntax error (ou autre error...?)
-	- `free()` les items mais pas les arrays pour éviter de re `malloc()` après
-
-## DOUTES
-- `error_print()`:
-	- Vérifier que tous les call sont bien doublement `NULL` terminés
+	- `tmp/minishell/*` au lieu de `tmp/*` pour pouvoir supprimer facilement tous nos fichiers temporaires sans avoir à connaître leurs noms ? => miss `mkdir()` function
+- `errors`:
+	- `ERR_OPEN_FILE` should be `ERR_LIBC` to print errno ?
+	- Vérifier que tous les call à `error_print()` sont bien doublement `NULL` terminés
 
 ---
 

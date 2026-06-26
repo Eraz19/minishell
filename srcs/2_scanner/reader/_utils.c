@@ -8,13 +8,17 @@
 t_error	readline_(char **res, const char *prompt)
 {
 	char	*input;
+	t_error	err;
 
 	*res = readline(prompt);
 	while (*res == NULL)
 	{
-		shell_exit_on_veof();
-		if (!option_is_active(OPT_INTERACTIVE))
-			return (error(ERR_VEOF));
+		if (shell_should_exit_on_veof())
+		{
+			err = error(ERR_VEOF);
+			err.printed = true;
+			return (err);
+		}
 		*res = readline(prompt);
 	}
 	if (**res == '\0')

@@ -22,6 +22,8 @@ const char	*error_to_string(t_error err)
 		return ("invalid rhs len");
 	else if (err.type == ERR_INDEX_OUT_OF_BOUND)
 		return ("index out of bound");
+	else if (err.type == ERR_INTERRUPTED)
+		return ("interupted by signal");
 	else if (err.type == ERR_INVALID_FORMAT)
 		return ("invalid format");
 	else if (err.type == ERR_LIBC)
@@ -30,6 +32,8 @@ const char	*error_to_string(t_error err)
 		return ("LR conflict");
 	else if (err.type == ERR_LR_STATE_NOT_FOUND)
 		return ("LR state not found");
+	else if (err.type == ERR_OPEN_INVALID_USAGE)
+		return ("invalid open() usage");
 	else if (err.type == ERR_OPT_INVALID)
 		return ("invalid option");
 	else if (err.type == ERR_OPT_INVALID_ARG)
@@ -42,6 +46,8 @@ const char	*error_to_string(t_error err)
 		return ("invalid function name");
 	else if (err.type == ERR_PARSER_INVALID_STATE)
 		return ("invalid state");
+	else if (err.type == ERR_REDIRECTION_FAILED)
+		return ("redirection failed");
 	else if (err.type == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
 	else if (err.type == ERR_SHIFT_INVALID_VALUE)
@@ -60,8 +66,6 @@ const char	*error_to_string(t_error err)
 		return ("readonly variable");
 	else if (err.type == ERR_NULL_ARGS)
 		return ("null arguments");
-	else if (err.type == ERR_TOKEN_INIT)
-		return ("token initialization failed");
 	else if (err.type == ERR_CTX_END_NOT_FOUND)
 		return ("context end not found");
 	else if (err.type == ERR_VALUE_OUT_OF_RANGE)
@@ -78,15 +82,13 @@ const char	*error_to_string(t_error err)
 		return ("empty continuation");
 	else if (err.type == ERR_INVALID_ARGS)
 		return ("invalid arguments");
-	else if (err.type == ERR_FILE_STAT)
-		return ("file stat failed");
-	else if (err.type == ERR_OPEN_FILE)
+	else if (err.type == ERR_OPEN_FILE)	// TODO: should be ERR_LIBC to print errno ?
 		return ("unable to open file");
 	else if (err.type == ERR_INCOHERENT_STATE)
 		return ("incoherent state");
 	else if (err.type == ERR_NOT_IMPLEMENTED)
 		return ("not implemented");
-	else if (err.type == ERR_HEREDOC_FILE_LIMIT)
+	else if (err.type == ERR_HEREDOC_FILE_LIMIT)	// TODO: should be ERR_LIBC to print errno ?
 		return ("heredoc file limit reached");
 	else if (err.type == ERR_UNEXPECTED_EOI)
 		return ("unexpected end of input");
@@ -142,7 +144,7 @@ t_error	error_print(t_error err, ...)
 	const char	*shell_name;
 	const char	*string;
 
-	if (err.printed)
+	if (err.printed == true)
 		return (err);
 	shell_name = shell_get_name();
 	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));

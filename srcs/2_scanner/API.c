@@ -19,7 +19,6 @@ t_error	scanner_get_next_token(t_token *token)
 	return (state->err);
 }
 
-#include <stdio.h>
 t_error	scanner_report_io_here(t_buff *path, char *delim, t_heredoc_mode mode)
 {
 	bool		is_tty;
@@ -28,10 +27,8 @@ t_error	scanner_report_io_here(t_buff *path, char *delim, t_heredoc_mode mode)
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	printf("=====> heredoc_add_to_queue\n");
 	is_tty = state->mode == SCAN_STDIN_TTY;
 	state->err = heredoc_add_to_queue(path, delim, mode, is_tty);
-	printf("=====> heredoc_add_to_queue done\n");
 	return (state->err);
 }
 

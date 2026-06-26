@@ -55,7 +55,7 @@ t_error	options_process_flag(
 	bool on,
 	bool *explicit_plus_m)
 {
-	char flag_string[2];
+	char	flag_string[2];
 
 	if (options_process_flag1(options, flag, on))
 		return (error(ERR_NO));
@@ -63,6 +63,5 @@ t_error	options_process_flag(
 		return (error(ERR_NO));
 	flag_string[0] = flag;
 	flag_string[1] = '\0';
-	error_print(error(ERR_OPT_INVALID), flag_string, NULL, NULL);
-	return (error(ERR_OPT_INVALID));
+	return (error_print(error(ERR_OPT_INVALID), flag_string, NULL, NULL));
 }
