@@ -63,7 +63,7 @@ static inline t_error	convert_case_item(
 	bool		fallthrough;
 	t_error		err;
 
-	(void)vector_init(&pattern_list, sizeof(t_buff), 0);
+	(void)vector_init(&pattern_list, sizeof(t_token *), 0);
 	err = convert_pattern_list(parser, case_item->children[0], &pattern_list);
 	if (err.type)
 		return (vector_free(&pattern_list, buff_free_void), err);
