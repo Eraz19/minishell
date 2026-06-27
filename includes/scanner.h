@@ -62,7 +62,7 @@ void	scanner_free(t_scanner *state);
 
 t_error	scanner_load(t_scanner *state, const char *source);
 
-t_error	scanner_reset(t_scanner *state);
+t_error	scanner_reset(void);
 
 t_error	scanner_get_next_token(t_token *token);
 

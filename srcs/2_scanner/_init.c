@@ -1,5 +1,6 @@
 #include "options.h"
 #include "scanner.h"
+#include "shell.h"
 
 t_error	scanner_init(t_scanner *state)
 {
@@ -57,8 +58,13 @@ t_error	scanner_load(t_scanner *state, const char *source)
 	return (lexer_load(&state->lexer, (t_lexer_mode)state->mode), state->err);
 }
 
-t_error	scanner_reset(t_scanner *state)
+t_error	scanner_reset(void)
 {
-	lexer_reset(&state->lexer);
+	t_scanner	*scanner;
+
+	scanner = shell_get_scanner();
+	if (!scanner)
+		return (error(ERR_SHELL_NOT_FOUND));
+	lexer_reset(&scanner->lexer);
 	return (error(ERR_NO));
 }

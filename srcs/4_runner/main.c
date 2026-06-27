@@ -1,8 +1,8 @@
 #include "error.h"
-#include "runner.h"
+#include "scanner.h"
 #include "builder.h"
+#include "runner.h"
 #include "options.h"
-#include "shell.h"
 #include <stdbool.h>
 
 void	runner_init(t_runner *runner)
@@ -13,16 +13,11 @@ void	runner_init(t_runner *runner)
 
 static inline t_error	runner_handle_builder_error(t_runner *runner, t_error err)
 {
-	t_scanner	*scanner;
-
 	(void)runner;
 	// TODO
 	if (err.type != ERR_SYNTAX_INVALID)
 		return (err);
-	scanner = shell_get_scanner();
-	if (!scanner)
-		return (error(ERR_SHELL_NOT_FOUND));
-	err = scanner_reset(scanner);
+	err = scanner_reset();
 	if (err.type)
 		return (error_print(err, "runner", "unable to reset scanner",
 			NULL, NULL));
@@ -67,7 +62,6 @@ t_error	runner_run(t_runner *runner)
 		if (err.type)
 			return (err);
 	}
-	return (error(ERR_NO));
 }
 
 void	runner_free(t_runner *runner)
