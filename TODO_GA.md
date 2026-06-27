@@ -1,13 +1,19 @@
 # WIP
 
-- ✅ `converter`:
-	- ✅ `AST` update all from `t_buff` to `t_token`
-- 🚧 `redirector`:
-	- ✅ transfer **default fd** processing from `converter` to `redirector`
-	- 🚧 finish module (need `t_token` in `AST`)
 - 🚧 `params`:
-	- 🚧 use `t_buff` instead of `char *`
-	- 🚧 `params_get_positionals()` => update argument to `t_vector` of `t_buff`
+	- 🚧 `options`:
+		- 🚧 `options_get()`: `char *` => `t_buff`
+	- 🚧 `specials`:
+		- 🚧 `source`: `char *` => `t_buff`
+		- 🚧 `zero`: `char *` => `t_buff`
+	- 🚧 `positionals`:
+		- 🚧 `params`: `char **` => `t_vector(t_buff)`
+	- 🚧 `variables`:
+		- 🚧 `var.name`: `char *` => `t_buff`
+		- 🚧 `var.value`: `char *` => `t_buff`
+		- 🚧 `var.has_value`: add it to make difference before set without value and set with empty value
+	- 🚧 `params`:
+		- 🚧 update all API from `char *` to `t_buff` (and from `char **` to `t_vector(t_buff)`)
 - 🚧 `parser`:
 	- 🚧 use `token->assignment_offset` (-1 if missing) in `ASSIGNMENT_WORD` qualifier
 	- 🚧 call `scanner_reset()` (+ `parser_reset()` ?) on syntax errors
@@ -18,14 +24,13 @@
 			- 🚧 on `subshell` reduction => shallow copy last token in `closing_par` + `return`
 - 🚧 `subshell`:
 	- 🚧 create module (must be compatible with `command_substitution` search)
+- 🚧 `redirector`:
+	- 🚧 finish module (need `t_token` in `AST`)
+- 🚧 Split `builder/parser/qualifiers/build_table.c` into multiple files
 - 🚧 Include prototypes `.h` in all `.c`
 - 🚧 Check all `error_sys()`:
 	- 🚧 must be called before any `free()` / `libc` call
 - 🚧 **ALL**: add doc
-
-## DONE
-
-
 
 ## RESOURCES
 
@@ -98,11 +103,16 @@
 
 # ALEXANDER
 
+## QUESTION
+- ⚠️ **ALEXANDER** => use `lexer` to do `assignment_split()` ? (cf `export`, `readonly`, `variables/load/envp`)
+
 ## TODO
 - use `posix_write()` instead of `write()`
+- use `posiw_open()` instead of `open()`
 - `heredoc`:
 	- `tmp/minishell/*` au lieu de `tmp/*` pour pouvoir supprimer facilement tous nos fichiers temporaires sans avoir à connaître leurs noms ? => miss `mkdir()` function
 - `errors`:
+	- Vérifier qu'aucun call à `free()` / `libc` n'est fait avant un `error_sys()`
 	- Vérifier que tous les call à `error_print()` sont bien doublement `NULL` terminés
 
 ---

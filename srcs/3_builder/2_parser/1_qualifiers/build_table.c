@@ -147,6 +147,11 @@ static inline void	qualifiers_set_entry_func(
 	t_qualifier_id qualifier_id)
 {
 	parser->qualifiers[lr_state_id] = NULL;
+	/*
+	** @note	qualify_8 has been disabled since fname has been replaced by 
+	**			WORD in grammar (name validation is now applied on 
+	**			function_definition reduction)
+	*/
 	// if (qualifier_id == QUALIFIER_8)
 	// 	parser->qualifiers[lr_state_id] = qualify_8;
 	if (qualifier_id == QUALIFIER_7A)

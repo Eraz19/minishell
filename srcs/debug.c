@@ -464,8 +464,8 @@ static void	ast_log_redirection(
 	fprintf(stderr, " fd=%d", redir->fd);
 	fprintf(stderr, " is_location=%s", ast_bool(redir->is_location));
 	if (redir->is_location)
-		ast_log_buff("location", &redir->location);
-	ast_log_buff("word", &redir->word);
+		ast_log_buff("location", &redir->location->value);
+	ast_log_buff("word", &redir->word->value);
 	fprintf(stderr, " expand_heredoc_body=%s",
 		ast_bool(redir->expand_heredoc_body));
 	fprintf(stderr, "\n");
@@ -667,7 +667,7 @@ static void	ast_log_for(
 	bool is_last)
 {
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FOR");
-	ast_log_buff("var", &for_node->var_name);
+	ast_log_buff("var", &for_node->var_name->value);
 	fprintf(stderr, " words=%zu\n", for_node->words.len);
 	ast_log_buff_vector("WORDS", "WORD", &for_node->words,
 		depth + 1, lasts, false);
@@ -716,7 +716,7 @@ static void	ast_log_case(
 	size_t	i;
 
 	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE");
-	ast_log_buff("word", &case_node->word);
+	ast_log_buff("word", &case_node->word->value);
 	fprintf(stderr, " items=%zu\n", case_node->patterns.len);
 	i = 0;
 	while (i < case_node->patterns.len)
@@ -741,7 +741,7 @@ static void	ast_log_function(
 		child_count++;
 	id = 0;
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FUNCTION_DEF");
-	ast_log_buff("name", &function->name);
+	ast_log_buff("name", &function->name->value);
 	fprintf(stderr, " redirs=%zu\n", function->redirs.len);
 	if (function->body)
 		ast_log_command(function->body, depth + 1, lasts,
