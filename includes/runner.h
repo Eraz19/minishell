@@ -2,10 +2,11 @@
 # define RUNNER_H
 
 # include "error.h"
+// # include "redirect.h"
 
 typedef struct s_runner
 {
-	// TODO;
+	// t_redir_stack	redir_stack;
 }	t_runner;
 
 void	runner_init(t_runner *runner);

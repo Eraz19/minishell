@@ -2,6 +2,7 @@
 # define OPTIONS_H
 
 # include "error.h"
+# include "libft.h"
 # include <stdbool.h>
 # include <stddef.h>
 # include <stdint.h>
@@ -52,7 +53,7 @@ t_error	option_is_active(t_option option, bool *out);
 bool	option_is_active_in(t_option options, t_option option);
 
 // @ret ERR_NO / ERR_LIBC
-t_error	options_get(t_option options, char **dst);
+t_error	options_get(t_option options, t_buff *dst);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */

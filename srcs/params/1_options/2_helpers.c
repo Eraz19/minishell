@@ -30,51 +30,42 @@ void	option_set(t_option *options, t_option option, bool on)
 		*options &= ~option;
 }
 
-static void	options_add_to_string(t_option options, char **dst, size_t *i_ptr)
+static void	options_add_to_string(t_option options, t_buff *dst)
 {
-	size_t	i;
-
-	i = *i_ptr;
 	if (option_is_active_in(options, OPT_MONITOR))
-		(*dst)[i++] = 'm';
+		dst->data[dst->len++] = 'm';
 	if (option_is_active_in(options, OPT_NOEXEC))
-		(*dst)[i++] = 'n';
+		dst->data[dst->len++] = 'n';
 	if (option_is_active_in(options, OPT_NOUNSET))
-		(*dst)[i++] = 'u';
+		dst->data[dst->len++] = 'u';
 	if (option_is_active_in(options, OPT_VERBOSE))
-		(*dst)[i++] = 'v';
+		dst->data[dst->len++] = 'v';
 	if (option_is_active_in(options, OPT_XTRACE))
-		(*dst)[i++] = 'x';
+		dst->data[dst->len++] = 'x';
 	if (option_is_active_in(options, OPT_CMD_STRING))
-		(*dst)[i++] = 'c';
+		dst->data[dst->len++] = 'c';
 	if (option_is_active_in(options, OPT_STDIN_INPUT))
-		(*dst)[i++] = 's';
-	*i_ptr = i;
+		dst->data[dst->len++] = 's';
 }
 
-t_error	options_get(t_option options, char **dst)
+t_error	options_get(t_option options, t_buff *dst)
 {
-	size_t	i;
-
-	*dst = malloc(OPT_SINGLE_COUNT + 1);
-	if (!*dst)
+	if (!buff_init(dst, OPT_SINGLE_COUNT + 1, NULL, -1))
 		return (error_sys());
-	i = 0;
 	if (option_is_active_in(options, OPT_EXPORT_ALL))
-		(*dst)[i++] = 'a';
+		dst->data[dst->len++] = 'a';
 	if (option_is_active_in(options, OPT_NOTIFY))
-		(*dst)[i++] = 'b';
+		dst->data[dst->len++] = 'b';
 	if (option_is_active_in(options, OPT_NOCLOBBER))
-		(*dst)[i++] = 'C';
+		dst->data[dst->len++] = 'C';
 	if (option_is_active_in(options, OPT_ERREXIT))
-		(*dst)[i++] = 'e';
+		dst->data[dst->len++] = 'e';
 	if (option_is_active_in(options, OPT_NOGLOB))
-		(*dst)[i++] = 'f';
+		dst->data[dst->len++] = 'f';
 	if (option_is_active_in(options, OPT_HASHALL))
-		(*dst)[i++] = 'h';
+		dst->data[dst->len++] = 'h';
 	if (option_is_active_in(options, OPT_INTERACTIVE))
-		(*dst)[i++] = 'i';
-	options_add_to_string(options, dst, &i);
-	(*dst)[i] = '\0';
+		dst->data[dst->len++] = 'i';
+	options_add_to_string(options, dst);
 	return (error(ERR_NO));
 }

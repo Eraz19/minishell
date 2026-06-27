@@ -1,5 +1,8 @@
 # WIP
 
+- 🚧 `libft`:
+	- 🚧 update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
+	- 🚧 update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
 - 🚧 `params`:
 	- 🚧 `options`:
 		- 🚧 `options_get()`: `char *` => `t_buff`
@@ -105,6 +108,9 @@
 
 ## QUESTION
 - ⚠️ **ALEXANDER** => use `lexer` to do `assignment_split()` ? (cf `export`, `readonly`, `variables/load/envp`)
+- `scanner_reset()`:
+	- ⚠️ free un pointeur qui n'a pas été malloc (reproduce with syntax error)
+	- ne devrait pas prendre d'argument car c'est le runner qui l'appelle donc il n'est pas sensé connaître sa struct
 
 ## TODO
 - use `posix_write()` instead of `write()`
