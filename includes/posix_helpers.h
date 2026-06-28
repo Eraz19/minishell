@@ -2,15 +2,14 @@
 # define POSIX_HELPERS_H
 
 # include "error.h"
+# include "libft.h"
 # include <stddef.h>
 # include <sys/stat.h>
 
 # define PWD_UNSPECIFIED_VALUE	"undefined (access error)"
 
-// @warning in case of EACCES:
-// 			returns ERR_NO and sets *dst to PWD_UNSPECIFIED_VALUE
-// @ret ERR_LIBC
-t_error	posix_getcwd(char **dst);
+// @ret ERR_SIZE_MAX_REACHED / ERR_LIBC
+t_error	posix_getcwd(t_string *dst);
 
 // @ret ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_write(int fd, const char *buff, size_t len);
