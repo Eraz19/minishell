@@ -33,33 +33,95 @@ typedef uint32_t	t_option;
 /*                                LIFE CYCLE                                 */
 /* ************************************************************************* */
 
-void	options_init(t_option *options);
-void	options_free(t_option *options);
+/**
+ * @brief Placeholder cleanup for an option bitset.
+ *
+ * The bitset owns no heap memory and nothing is released.
+ *
+ * @param options Bitset to clear (borrowed).
+ */
+void		options_free(t_option *options);
 
-// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG / ERR_LIBC
-t_error	options_load(
-	t_option *options,
-	int argc,
-	char **argv,
-	size_t *start_index);
+/**
+ * @brief Reset an option bitset to its empty state.
+ *
+ * @param options Destination bitset (borrowed).
+ */
+void		options_init(t_option *options);
+
+/**
+ * @brief Parse shell options from argv.
+ *
+ * @param options Destination bitset (borrowed).
+ * @param argc Argument count.
+ * @param argv Argument vector (borrowed, read-only).
+ * @param start_index Output index of the first non-option operand (borrowed).
+ * @return `ERR_OPT_INVALID`, `ERR_OPT_MISSING_ARG`, `ERR_OPT_INVALID_ARG`
+ *         or `ERR_LIBC` on failure.
+ */
+t_error		options_load(
+				t_option *options,
+				int argc,
+				char **argv,
+				size_t *start_index);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-void	option_set(t_option *options, t_option option, bool on);
-// @ret ERR_SHELL_NOT_FOUND
-t_error	option_is_active(t_option option, bool *out);
-bool	option_is_active_in(t_option options, t_option option);
+/**
+ * @brief Set or clear a specific option bit in a bitset.
+ *
+ * @param options Bitset to modify (borrowed).
+ * @param option Option bit to change.
+ * @param on True to enable the bit, false to clear it.
+ */
+void		option_set(t_option *options, t_option option, bool on);
 
-// @ret ERR_NO / ERR_LIBC
-t_error	options_get(t_option options, t_string *dst);
+/**
+ * @brief Check whether an option is active in the current shell state.
+ *
+ * @param option Option bit to query.
+ * @param out Receives the active state (borrowed).
+ * @return `ERR_SHELL_NOT_FOUND` on failure.
+ */
+t_error		option_is_active(t_option option, bool *out);
+
+/**
+ * @brief Check whether an option is active in a provided bitset.
+ *
+ * @param options Bitset to inspect.
+ * @param option Option bit to query.
+ * @return True when the bit is set.
+ */
+bool		option_is_active_in(t_option options, t_option option);
+
+/**
+ * @brief Serialize active options into a fresh string.
+ *
+ * The caller owns `dst` on success and must release it with `string_free()`.
+ *
+ * @param options Bitset to serialize.
+ * @param dst Destination string (borrowed).
+ * @return `ERR_NO` or `ERR_LIBC`.
+ */
+t_error		options_get(t_option options, t_string *dst);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
+/**
+ * @brief Dump the current option state to stderr.
+ */
 void		options_dump(void);
+
+/**
+ * @brief Convert a single option bit to its canonical textual name.
+ *
+ * @param option Option bit to convert.
+ * @return Static string representation, or `"unknown"` when unsupported.
+ */
 const char	*option_to_string(t_option option);
 
 #endif

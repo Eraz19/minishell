@@ -9,9 +9,15 @@
 /*                                   TYPES                                   */
 /* ************************************************************************* */
 
-// t_vector(t_var)
+/**
+ * @brief Variable list stored as a vector of @ref t_var entries.
+ */
 typedef t_vector	t_var_list;
 
+/**
+ * @enum e_var_print_mode
+ * @brief Output mode used by @ref var_print().
+ */
 typedef enum e_var_print_mode
 {
 	VAR_PRINT_EXPORT,
@@ -22,48 +28,104 @@ typedef enum e_var_print_mode
 /*                                 LIFE CYCLE                                */
 /* ************************************************************************* */
 
+/**
+ * @brief Initialize an empty variable list.
+ *
+ * @param variables Destination list (borrowed).
+ */
 void	var_init(t_var_list *variables);
 
-// ERR_VAR_INVALID_NAME / ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
+/**
+ * @brief Load variables from the environment array.
+ *
+ * @param variables Destination list (borrowed).
+ * @param envp Environment vector (borrowed, read-only).
+ * @return `ERR_VAR_INVALID_NAME`, `ERR_VAR_NOT_FOUND`, `ERR_VAR_READ_ONLY`
+ *         or `ERR_LIBC`.
+ */
 t_error	var_load(t_var_list *variables, char **envp);
 
+/**
+ * @brief Release every variable owned by the list.
+ *
+ * @param variables List to clear (borrowed).
+ */
 void	var_free(t_var_list *variables);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-// @warning: dst_val->data can be NULL if var->value is unset (error will be ERR_NO).
-// @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_NOT_FOUND
-// 		/ ERR_LIBC.
+/**
+ * @brief Build an envp array from exported variables.
+ *
+ * The returned array and entries are owned by the caller.
+ *
+ * @param variables Source list (borrowed, read-only).
+ * @param dst_envp Destination envp pointer (borrowed).
+ * @return `ERR_LIBC`.
+ */
+t_error	var_build_envp(const t_var_list *variables, char ***dst_envp);
+
+/**
+ * @brief Read a variable value into a fresh string.
+ *
+ * The caller owns @p dst_val on success and must release it with
+ * @ref string_free(). @c dst_val->data may be @c NULL when the variable exists
+ * but has no value.
+ *
+ * @param name Variable name (borrowed, read-only).
+ * @param dst_val Destination string (borrowed).
+ * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_NOT_FOUND`
+ *         or `ERR_LIBC`.
+ */
 t_error	var_get(const t_string *name, t_string *dst_val);
 
-// @ret ERR_SHELL_NOT_FOUND / ERR_INTERRUPTED / ERR_LIBC
+/**
+ * @brief Print variables in export or readonly format.
+ *
+ * @param mode Output mode.
+ * @return `ERR_SHELL_NOT_FOUND`, `ERR_INTERRUPTED` or `ERR_LIBC`.
+ */
 t_error	var_print(t_var_print_mode mode);
 
-// value can be NULL.
-// export == false and rdonly == false are ignored if variable already exists.
-// if variable doesn't exist yet and option OPT_EXPORT_ALL is active
-// 		=> export will be set to true even if export == false.
-// @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
-// 		/ ERR_LIBC.
+/**
+ * @brief Create or update a variable.
+ *
+ * @p value may be @c NULL. When the variable already exists, @p export and
+ * @p readonly only affect the stored flags when the function updates them. If
+ * the variable is new and @c OPT_EXPORT_ALL is active, it becomes exported even
+ * when @p export is false.
+ *
+ * @param name Variable name (borrowed, read-only).
+ * @param value Variable value (borrowed, read-only).
+ * @param export Export flag to apply.
+ * @param rdonly Read-only flag to apply.
+ * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY`
+ *         or `ERR_LIBC`.
+ */
 t_error	var_set(
 			const t_string *name,
 			const t_string *value,
 			bool export,
 			bool rdonly);
 
-// @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY /
-// 		ERR_INDEX_OUT_OF_BOUND
+/**
+ * @brief Remove a variable by name.
+ *
+ * @param name Variable name (borrowed, read-only).
+ * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY`
+ *         or `ERR_INDEX_OUT_OF_BOUND`.
+ */
 t_error	var_unset(const t_string *name);
-
-// @ret ERR_LIBC
-t_error	var_build_envp(const t_var_list *variables, char ***dst_envp);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
+/**
+ * @brief Dump the variable list to stderr.
+ */
 void	var_dump(void);
 
 #endif

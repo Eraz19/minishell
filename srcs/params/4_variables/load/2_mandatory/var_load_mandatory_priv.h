@@ -3,16 +3,34 @@
 
 # include "error.h"
 
-// @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
+/**
+ * @brief Set the IFS mandatory variable.
+ *
+ * @return `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY` or `ERR_LIBC`.
+ */
 t_error	var_set_ifs(void);
 
-// @ret ERR_LIBC.
+/**
+ * @brief Validate whether a PWD value is acceptable.
+ *
+ * @param pwd Candidate PWD value (borrowed, read-only).
+ * @param res Receives the validation result (borrowed).
+ * @return `ERR_LIBC`.
+ */
 t_error	var_pwd_is_valid(const char *pwd, bool *res);
 
-// @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
+/**
+ * @brief Set the PWD mandatory variable.
+ *
+ * @return `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY` or `ERR_LIBC`.
+ */
 t_error	var_set_pwd(void);
 
-// @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
+/**
+ * @brief Set the PPID mandatory variable.
+ *
+ * @return `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY` or `ERR_LIBC`.
+ */
 t_error	var_set_ppid(void);
 
 #endif

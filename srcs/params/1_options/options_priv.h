@@ -3,14 +3,30 @@
 
 # include "options.h"
 
-// @ret ERR_OPT_INVALID
+/**
+ * @brief Apply a single short option flag.
+ *
+ * @param options Bitset to modify (borrowed).
+ * @param flag Short flag character.
+ * @param on True to enable, false to disable.
+ * @param explicit_plus_m Tracks explicit `+m` usage (borrowed).
+ * @return `ERR_OPT_INVALID` on failure.
+ */
 t_error	options_process_flag(
 	t_option *options,
 	char flag,
 	bool on,
 	bool *explicit_plus_m);
 
-// @ret ERR_OPT_INVALID_ARG
+/**
+ * @brief Apply a long option name.
+ *
+ * @param options Bitset to modify (borrowed).
+ * @param arg Long option name (borrowed, read-only).
+ * @param on True to enable, false to disable.
+ * @param explicit_plus_m Tracks explicit `+m` usage (borrowed).
+ * @return `ERR_OPT_INVALID_ARG` on failure.
+ */
 t_error	options_process_name(
 	t_option *options,
 	const char *arg,

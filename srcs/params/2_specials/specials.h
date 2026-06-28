@@ -6,44 +6,106 @@
 # include <stddef.h>
 # include <sys/types.h>
 
+/**
+ * @struct s_specials
+ * @brief Storage for shell special parameters.
+ *
+ * @var s_specials::source Source string, used for `$0` input context (borrowed).
+ * @var s_specials::zero `$0` value (borrowed).
+ * @var s_specials::pid Current shell PID.
+ * @var s_specials::last_bg_pid Last background PID, or `-1` when unset.
+ * @var s_specials::last_status Last command status.
+ */
 typedef struct s_specials
 {
-	char	*source;		// (internal, can be NULL)
-	char	*zero;			// $0 (NOT editable after instanciation)
-	pid_t	pid;			// $$ (NOT editable after instanciation)
-	pid_t	last_bg_pid;	// $!
-	int		last_status;	// $?
+	/** @brief Source string, used for `$0` input context (borrowed). */
+	char	*source;
+	/** @brief `$0` value (borrowed). */
+	char	*zero;
+	/** @brief Current shell PID. */
+	pid_t	pid;
+	/** @brief Last background PID, or `-1` when unset. */
+	pid_t	last_bg_pid;
+	/** @brief Last command status. */
+	int		last_status;
 }	t_specials;
 
 /* ************************************************************************* */
 /*                                LIFE CYCLE                                 */
 /* ************************************************************************* */
 
+/**
+ * @brief Initialize special parameters with their default state.
+ *
+ * No heap ownership is assumed at initialization.
+ *
+ * @param specials Destination structure (borrowed).
+ */
 void	specials_init(t_specials *specials);
 
-// @ret ERR_NO / ERR_SHELL_NOT_FOUND / ERR_OPT_INVALID.
+/**
+ * @brief Load special parameters from argv and current shell options.
+ *
+ * @param specials Destination structure (borrowed).
+ * @param argc Argument count.
+ * @param argv Argument array (borrowed, read-only).
+ * @param start_index Input/output index of the first non-option operand (borrowed).
+ * @return `ERR_NO`, `ERR_SHELL_NOT_FOUND` or `ERR_OPT_INVALID`.
+ */
 t_error	specials_load(
-	t_specials *specials,
-	int argc,
-	char **argv,
-	size_t *start_index);
-	
+			t_specials *specials,
+			int argc,
+			char **argv,
+			size_t *start_index);
+
+/**
+ * @brief Release special parameter storage.
+ *
+ * This structure does not own heap allocations.
+ *
+ * @param specials Structure to clear.
+ */
 void	specials_free(t_specials *specials);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-// @warning: dst content is owned by caller, he must string_free() it.
-// @ret ERR_NO / ERR_VAR_NOT_FOUND / ERR_LIBC.
+/**
+ * @brief Read a special parameter into a fresh string.
+ *
+ * The caller owns `dst` on success and must release it with `string_free()`.
+ *
+ * @param specials Special values source (borrowed, read-only).
+ * @param name Special parameter name.
+ * @param dst Destination string (borrowed).
+ * @return `ERR_NO`, `ERR_VAR_NOT_FOUND` or `ERR_LIBC`.
+ */
 t_error	specials_get(const t_specials *specials, char name, t_string *dst);
+
+/**
+ * @brief Update the stored last background PID.
+ *
+ * @param specials Special values source (borrowed).
+ * @param value New PID value.
+ */
 void	specials_set_last_bg_pid(t_specials *specials, pid_t value);
+
+/**
+ * @brief Update the stored last command status.
+ *
+ * @param specials Special values source (borrowed).
+ * @param value New status value.
+ */
 void	specials_set_last_status(t_specials *specials, int value);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
+/**
+ * @brief Dump special parameter state to stderr.
+ */
 void	specials_dump(void);
 
 #endif
