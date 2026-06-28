@@ -9,12 +9,12 @@
  *  @brief Lexical tokens produced by the scanner.
  *
  *  A token couples a grammar type with the raw text that produced it. The
- *  text lives in an owned, growable buffer, so a token owns its value and
+ *  text lives in an owned, growable string, so a token owns its value and
  *  token_dup() hands out an independent deep copy.
  *
  *  A word token also carries the expansion constructs found while scanning it
  *  (${ }, $(( )), ` `), in the left-to-right order their openings appeared, each
- *  marked with its [start, end) range inside the value buffer, so the expansion
+ *  marked with its [start, end) range inside the value string, so the expansion
  *  phase can locate every construct without rescanning the word.
  */
 
@@ -54,14 +54,15 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	t_token_type	type;
-	t_buff			value;
+	t_string		value;
 	t_context_stack	contexts;
 	ssize_t			assignment_offset;
 }	t_token;
 
+// TODO: doc: add warning to specify that token.value.data == NULL after token_init(), owner must NULL-check its access to token.value.data if he's not sure that token.value.data has been allocated by a further call
 /**
  * @ingroup token
- * @brief Initialises a token to an empty word with an empty value buffer.
+ * @brief Initialises a token to an empty word with an empty value string.
  *
  * @param token Pointer to the token to initialise (borrowed).
  */
@@ -69,7 +70,7 @@ void	token_init(t_token *token);
 
 /**
  * @ingroup token
- * @brief Frees the token's value buffer and resets it to zero.
+ * @brief Frees the token's value string and resets it to zero.
  *
  * @param token Pointer to the token to free (borrowed).
  */
@@ -83,7 +84,7 @@ void	token_free_void(void *token);
  * @ingroup token
  * @brief Deep copies a token into another.
  *
- * Duplicates @p src's value buffer and deep-copies its context list into
+ * Duplicates @p src's value string and deep-copies its context list into
  * @p dst, and copies its type, so @p dst owns an independent copy and @p src is
  * left untouched.
  *
@@ -91,6 +92,6 @@ void	token_free_void(void *token);
  * @param src Source token to copy (borrowed).
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error	token_dup(t_token *dst, t_token *src);
+t_error	token_dup(t_token *dst, const t_token *src);
 
 #endif

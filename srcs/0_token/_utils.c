@@ -1,9 +1,9 @@
 #include "token.h"
 
-t_error	token_dup(t_token *dst, t_token *src)
+t_error	token_dup(t_token *const dst, const t_token *const src)
 {
 	dst->type = src->type;
-	if (!buff_dup_n(&dst->value, &src->value, src->value.len))
+	if (!string_dup(&dst->value, &src->value))
 		return (error_sys());
 	return (context_stack_dup(&dst->contexts, &src->contexts));
 }
