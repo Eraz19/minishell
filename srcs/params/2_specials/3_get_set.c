@@ -1,25 +1,41 @@
 #include "libft.h"
 #include "specials.h"
+#include <stdlib.h>
 
-t_error	specials_get(const t_specials *specials, char name, char **dst)
+static t_error	specials_get_from_alloc(char *src, t_string *dst)
 {
-	*dst = NULL;
+	t_error	err;
+
+	if (!src)
+		return (error_sys());
+	if (!string_init(dst, 0, src, -1))
+		err = error_sys();
+	else
+		err = error(ERR_NO);
+	free(src);
+	return (err);
+}
+
+t_error	specials_get(const t_specials *specials, char name, t_string *dst)
+{
+	(void)string_init(dst, 0, NULL, 0);
 	if (name == '0')
-		*dst = str_dup(specials->zero);
+	{
+		if (!string_init(dst, 0, specials->zero, -1))
+			return (error_sys());
+	}
 	else if (name == '$')
-		*dst = ft_pidtoa(specials->pid);
+		return (specials_get_from_alloc(ft_pidtoa(specials->pid), dst));
 	else if (name == '!')
 	{
 		if (specials->last_bg_pid == -1)
 			return (error(ERR_NO));
-		*dst = ft_pidtoa(specials->last_bg_pid);
+		return (specials_get_from_alloc(ft_pidtoa(specials->last_bg_pid), dst));
 	}
 	else if (name == '?')
-		*dst = ft_ltoa(specials->last_status);
+		return (specials_get_from_alloc(ft_ltoa(specials->last_status), dst));
 	else
 		return (error(ERR_VAR_NOT_FOUND));
-	if (*dst == NULL)
-		return (error_sys());
 	return (error(ERR_NO));
 }
 

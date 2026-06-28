@@ -1,5 +1,19 @@
 # WIP
 
+- 🚧 **ALL REPO**:
+	- 🚧 `const` partout
+	- 🚧 `inline` partout
+	- 🚧 `assert` partout
+
+- **TODO**: convert `posix_helpers` (coûterait trop cher avec ChatGPT)
+- `5_exec_env` => Utilise `params_get()` donc à update après avoir update le module `params`
+- `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
+- `specials->zero` convert to `t_string` to avoid multiple `str_len()` when accessing it ?
+
+- 🚧 `posix_read()`:
+	- 🚧 implement it using `string_read_*()` API ? (⚠️ remove auto retry ?!)
+- 🚧 `assignment_split()`:
+	- 🚧 refactor
 - 🚧 `libft`:
 	- 🚧 update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
 	- 🚧 update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
@@ -111,6 +125,8 @@
 - `scanner_reset()`:
 	- ⚠️ free un pointeur qui n'a pas été malloc (reproduce with syntax error)
 	- ne devrait pas prendre d'argument car c'est le runner qui l'appelle donc il n'est pas sensé connaître sa struct
+- `ft_getpwnam`:
+	- Besoin forcément d'un `static buff` ou on peut convertir pour utiliser `t_string` et `posix_read()` ?
 
 ## TODO
 - use `posix_write()` instead of `write()`
@@ -203,6 +219,7 @@
 
 - add `const` everywhere it's missing
 - Make doc
+- delete `assert()` calls
 - delete `logs` lib
 - delete `printf()` calls
 - delete `*_dump.c` files and `*_dump()` functions

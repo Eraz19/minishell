@@ -10,30 +10,31 @@
 
 typedef struct s_var
 {
-	char	*name;
-	char	*value;
-	bool	export;
-	bool	readonly;
+	t_string	name;
+	t_string	value;
+	bool		export;
+	bool		readonly;
 }	t_var;
 
 /* ************************************************************************* */
 /*                                LIFE CYCLE                                 */
 /* ************************************************************************* */
 
-// @warning: if name var.name == NULL => ERR_LIBC
-t_var	var_new(const char *name, const char *value, bool export, bool ronly);
 void	var_free_one(void *var);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-bool	var_find(const t_var_list *variables, const char *name, size_t *res);
+bool	var_find(
+			const t_var_list *variables,
+			const t_string *name,
+			size_t *res);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
 /* ************************************************************************* */
 
-void	var_dump_one(t_var *var);
+void	var_dump_one(const t_var *var);
 
 #endif

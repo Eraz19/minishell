@@ -1,18 +1,20 @@
 #include "shell.h"
-# include <stdio.h>
+# include <stdio.h>	// DEBUG
 
-static void	positionals_dump_depth(t_positionals_stack *stack, size_t depth)
+static inline void	positionals_dump_depth(t_positionals_stack *stack, size_t depth)
 {
 	t_positionals	*positionals;
 	size_t			count;
 	size_t			i;
+	t_string		*param;
 
 	positionals = &((t_positionals *)stack->data)[depth];
-	count = positionals->count;
+	count = positionals->len;
 	i = 0;
 	while (i < count)
 	{
-		fprintf(stderr, "POSITIONALS[%zu] %zu='%s'\n", depth, i, positionals->params[i]);
+		param = &((t_string *)positionals->data)[i];
+		fprintf(stderr, "POSITIONALS[%zu] %zu='%s'\n", depth, i, param->data);
 		i++;
 	}
 	fprintf(stderr, "POSITIONALS #=%zu\n", count);
@@ -29,7 +31,7 @@ void	positionals_dump(void)
 	shell = shell_get();
 	if (!shell)
 		error_print(error(ERR_SHELL_NOT_FOUND), "positionals_dump()", NULL, NULL);
-	stack = &shell->params.positionals;
+	stack = &shell->params.positionals_stack;
 	count = stack->len;
 	i = 0;
 	while (i < count)

@@ -1,6 +1,7 @@
 #include "shell.h"
 #include <stdlib.h>
-# include "logs.h"	// DEBUG
+# include "logs.h"		// DEBUG
+# include <assert.h>	// DEBUG
 
 t_error	option_is_active(t_option option, bool *out)
 {
@@ -21,51 +22,64 @@ bool	option_is_active_in(t_option options, t_option option)
 void	option_set(t_option *options, t_option option, bool on)
 {
 	if (on)
+	{
 		print_pass("Setting ON  option %s\n", option_to_string(option));
-	else
-		print_pass("Setting OFF option %s\n", option_to_string(option));
-	if (on)
 		*options |= option;
+	}
 	else
+	{
+		print_pass("Setting OFF option %s\n", option_to_string(option));
 		*options &= ~option;
+	}
 }
 
-static void	options_add_to_string(t_option options, t_buff *dst)
+static void	options_add_to_string(t_option options, char *buff, size_t *len)
 {
-	if (option_is_active_in(options, OPT_MONITOR))
-		dst->data[dst->len++] = 'm';
-	if (option_is_active_in(options, OPT_NOEXEC))
-		dst->data[dst->len++] = 'n';
-	if (option_is_active_in(options, OPT_NOUNSET))
-		dst->data[dst->len++] = 'u';
-	if (option_is_active_in(options, OPT_VERBOSE))
-		dst->data[dst->len++] = 'v';
-	if (option_is_active_in(options, OPT_XTRACE))
-		dst->data[dst->len++] = 'x';
-	if (option_is_active_in(options, OPT_CMD_STRING))
-		dst->data[dst->len++] = 'c';
-	if (option_is_active_in(options, OPT_STDIN_INPUT))
-		dst->data[dst->len++] = 's';
-}
-
-t_error	options_get(t_option options, t_buff *dst)
-{
-	if (!buff_init(dst, OPT_SINGLE_COUNT + 1, NULL, -1))
-		return (error_sys());
-	if (option_is_active_in(options, OPT_EXPORT_ALL))
-		dst->data[dst->len++] = 'a';
-	if (option_is_active_in(options, OPT_NOTIFY))
-		dst->data[dst->len++] = 'b';
 	if (option_is_active_in(options, OPT_NOCLOBBER))
-		dst->data[dst->len++] = 'C';
+		buff[(*len)++] = 'C';
 	if (option_is_active_in(options, OPT_ERREXIT))
-		dst->data[dst->len++] = 'e';
+		buff[(*len)++] = 'e';
 	if (option_is_active_in(options, OPT_NOGLOB))
-		dst->data[dst->len++] = 'f';
+		buff[(*len)++] = 'f';
 	if (option_is_active_in(options, OPT_HASHALL))
-		dst->data[dst->len++] = 'h';
+		buff[(*len)++] = 'h';
 	if (option_is_active_in(options, OPT_INTERACTIVE))
-		dst->data[dst->len++] = 'i';
-	options_add_to_string(options, dst);
+		buff[(*len)++] = 'i';
+	if (option_is_active_in(options, OPT_MONITOR))
+		buff[(*len)++] = 'm';
+	if (option_is_active_in(options, OPT_NOEXEC))
+		buff[(*len)++] = 'n';
+	if (option_is_active_in(options, OPT_NOUNSET))
+		buff[(*len)++] = 'u';
+	if (option_is_active_in(options, OPT_VERBOSE))
+		buff[(*len)++] = 'v';
+	if (option_is_active_in(options, OPT_XTRACE))
+		buff[(*len)++] = 'x';
+	if (option_is_active_in(options, OPT_CMD_STRING))
+		buff[(*len)++] = 'c';
+	if (option_is_active_in(options, OPT_STDIN_INPUT))
+		buff[(*len)++] = 's';
+}
+
+t_error	options_get(t_option options, t_string *dst)
+{
+	char	*buff;
+	size_t	cap;
+	size_t	len;
+
+	assert(dst != NULL);
+	cap = OPT_SINGLE_COUNT + 1;
+	buff = malloc (cap);
+	if (!buff)
+		return (error_sys());
+	len = 0;
+	if (option_is_active_in(options, OPT_EXPORT_ALL))
+		buff[len++] = 'a';
+	if (option_is_active_in(options, OPT_NOTIFY))
+		buff[len++] = 'b';
+	options_add_to_string(options, buff, &len);
+	assert(len <= cap);
+	buff[len] = '\0';
+	string_take(dst, buff, cap, len);
 	return (error(ERR_NO));
 }

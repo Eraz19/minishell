@@ -5,35 +5,24 @@
 #include "options.h"
 #include "utils.h"
 #include <stdlib.h>
-
-static inline t_error	var_save_err_and_free(t_var *var)
-{
-	t_error	err;
-
-	err = error_sys();
-	var_free_one(var);
-	return (err);
-}
+# include <assert.h>
 
 // value can be NULL
 // @ret ERR_VAR_READ_ONLY / ERR_LIBC
 static inline t_error	var_update_value(
-	t_var *var,
-	const char *value,
-	bool export,
-	bool readonly)
+							t_var *var,
+							const t_string *value,
+							bool export,
+							bool readonly)
 {
-	char	*new_value;
-
+	assert(var != NULL);
 	if (var->readonly && value)
 		return (error(ERR_VAR_READ_ONLY));
 	if (value)
 	{
-		new_value = str_dup(value);
-		if (!new_value)
+		var->value.len = 0;
+		if (!string_append(&var->value, value))
 			return (error_sys());
-		free(var->value);
-		var->value = new_value;
 	}
 	if (export)
 		var->export = true;
@@ -42,39 +31,48 @@ static inline t_error	var_update_value(
 	return (error(ERR_NO));
 }
 
-static inline t_error	var_create(const char *name, const char *value, bool export, bool readonly)
+static inline t_error	var_create(
+							const t_string *name,
+							const t_string *value,
+							bool export,
+							bool readonly)
 {
 	t_params	*params;
 	t_var_list	*list;
-	bool		export_is_active;
 	t_var		new_var;
 	t_error		err;
 
+	assert(name != NULL);
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
 	list = &params->variables;
-	err = option_is_active(OPT_EXPORT_ALL, &export_is_active);
-	if (err.type)
-		return (err);
-	if (export_is_active == true)
-		export = true;
-	new_var = var_new(name, value, export, readonly);
-	if (!new_var.name || (value && !new_var.value))
-		return (var_save_err_and_free(&new_var));
+	if (!string_init(&new_var.name, 0, name->data, (long)name->len))
+		return (error_sys());
+	(void)string_init(&new_var.value, 0, NULL, 0);
+	if (value && !string_append(&new_var.value, value))
+		return (err = error_sys(), var_free_one(&new_var), err);
+	new_var.export = export
+		|| option_is_active_in(params->options, OPT_EXPORT_ALL);
+	new_var.readonly = readonly;
 	if (!vector_push(list, &new_var))
-		return (var_save_err_and_free(&new_var));
+		return (err = error_sys(), var_free_one(&new_var), err);
 	return (error(ERR_NO));
 }
 
-t_error	var_set(const char *name, const char *value, bool export, bool readonly)
+t_error	var_set(
+			const t_string *name,
+			const t_string *value,
+			bool export,
+			bool readonly)
 {
 	t_params	*params;
 	t_var_list	*list;
 	size_t		var_index;
 	t_var		*current_var;
 
-	if (!name_is_valid(name))
+	assert(name != NULL);
+	if (!name_is_valid(name->data))
 		return (error(ERR_VAR_INVALID_NAME));
 	params = shell_get_params();
 	if (!params)

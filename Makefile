@@ -4,7 +4,8 @@ CFLAGS			:= -Wall -Wextra -Werror -O2	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Werror \
 	-g3 -fsanitize=address,undefined \
-	-DDEBUG_ERROR_TRACE
+	-DDEBUG_ERROR_TRACE \
+	-DDEBUG_DUMP
 
 LIBFT_DIR		:= libft
 LIBFT			:= $(LIBFT_DIR)/libft.a

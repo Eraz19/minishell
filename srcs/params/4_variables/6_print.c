@@ -4,34 +4,37 @@
 #include "utils.h"
 #include <unistd.h>
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
-// @ret ERR_LIBC
-static t_error	var_print_one(const char *prefix, const t_var *var)
+// @ret ERR_INTERRUPTED / ERR_LIBC
+static inline t_error	var_print_one(const char *prefix, const t_var *var)
 {
-	t_buff	buff;
-	char	*escaped_value;
-	t_error	err;
+	t_string	string;
+	t_string	escaped_value;
+	t_error		err;
 
-	if (!buff_init(&buff, 0, prefix, -1))
+	assert(prefix != NULL);
+	assert(var != NULL);
+	if (!string_init(&string, 0, prefix, -1))
 		return (error_sys());
-	if (!buff_append(&buff, var->name, -1))
-		return (err = error_sys(), buff_free(&buff), err);
-	if (var->value)
+	if (!string_append(&string, &var->name))
+		return (err = error_sys(), string_free(&string), err);
+	if (var->value.data)
 	{
-		if (!buff_append(&buff, "=", -1))
-			return (err = error_sys(), buff_free(&buff), err);
-		err = serialize(var->value, &escaped_value);
+		if (!string_append_n(&string, "=", -1))
+			return (err = error_sys(), string_free(&string), err);
+		err = serialize(var->value.data, &escaped_value);
 		if (err.type != ERR_NO)
-			return (buff_free(&buff), err);
-		if (!buff_append(&buff, escaped_value, -1))
-			return (err = error_sys(), free(escaped_value), buff_free(&buff),
-				err);
-		free(escaped_value);
+			return (string_free(&string), err);
+		if (!string_append(&string, &escaped_value))
+			return (err = error_sys(), string_free(&escaped_value),
+				string_free(&string), err);
+		string_free(&escaped_value);
 	}
-	if (!buff_append(&buff, "\n", -1))
-		return (err = error_sys(), buff_free(&buff), err);
-	err = posix_write(STDOUT_FILENO, buff.data, buff.len);
-	return (buff_free(&buff), err);
+	if (!string_append_n(&string, "\n", -1))
+		return (err = error_sys(), string_free(&string), err);
+	err = posix_write(STDOUT_FILENO, string.data, string.len);
+	return (string_free(&string), err);
 }
 
 t_error	var_print(t_var_print_mode mode)
@@ -42,6 +45,7 @@ t_error	var_print(t_var_print_mode mode)
 	size_t		i;
 	t_error		err;
 
+	assert(mode == VAR_PRINT_EXPORT || mode == VAR_PRINT_READONLY);
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));

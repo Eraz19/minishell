@@ -2,6 +2,7 @@
 # define SPECIALS_H
 
 # include "error.h"
+# include "libft.h"
 # include <stddef.h>
 # include <sys/types.h>
 
@@ -33,9 +34,9 @@ void	specials_free(t_specials *specials);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-// @warning: *dst is owned by caller, he must free it.
+// @warning: dst content is owned by caller, he must string_free() it.
 // @ret ERR_NO / ERR_VAR_NOT_FOUND / ERR_LIBC.
-t_error	specials_get(const t_specials *specials, char name, char **dst);
+t_error	specials_get(const t_specials *specials, char name, t_string *dst);
 void	specials_set_last_bg_pid(t_specials *specials, pid_t value);
 void	specials_set_last_status(t_specials *specials, int value);
 

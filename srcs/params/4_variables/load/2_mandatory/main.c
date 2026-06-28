@@ -9,13 +9,13 @@
 */
 t_error	var_load_mandatory(void)
 {
-	t_error	error;
+	t_error	err;
 
-	error = var_set_ifs();
-	if (error.type != ERR_NO)
-		return (error);
-	error = var_set_pwd();
-	if (error.type != ERR_NO)
-		return (error);
+	err = var_set_ifs();
+	if (err.type != ERR_NO)
+		return (err);
+	err = var_set_pwd();
+	if (err.type != ERR_NO)
+		return (err);
 	return (var_set_ppid());
 }

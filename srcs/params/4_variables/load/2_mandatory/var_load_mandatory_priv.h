@@ -6,6 +6,9 @@
 // @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 t_error	var_set_ifs(void);
 
+// @ret ERR_LIBC.
+t_error	var_pwd_is_valid(const char *pwd, bool *res);
+
 // @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
 t_error	var_set_pwd(void);
 

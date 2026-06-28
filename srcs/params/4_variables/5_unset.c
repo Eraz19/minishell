@@ -4,15 +4,17 @@
 #include "variables_priv.h"
 #include "utils.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
-t_error	var_unset(const char *name)
+t_error	var_unset(const t_string *name)
 {
 	t_params	*params;
 	t_var_list	*list;
 	size_t		var_index;
 	t_var		*var;
 
-	if (!name_is_valid(name))
+	assert(name != NULL);
+	if (!name_is_valid(name->data))
 		return (error(ERR_VAR_INVALID_NAME));
 	params = shell_get_params();
 	if (!params)

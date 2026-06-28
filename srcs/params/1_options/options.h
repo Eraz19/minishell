@@ -53,7 +53,7 @@ t_error	option_is_active(t_option option, bool *out);
 bool	option_is_active_in(t_option options, t_option option);
 
 // @ret ERR_NO / ERR_LIBC
-t_error	options_get(t_option options, t_buff *dst);
+t_error	options_get(t_option options, t_string *dst);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */

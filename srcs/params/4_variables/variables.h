@@ -9,6 +9,7 @@
 /*                                   TYPES                                   */
 /* ************************************************************************* */
 
+// t_vector(t_var)
 typedef t_vector	t_var_list;
 
 typedef enum e_var_print_mode
@@ -32,12 +33,12 @@ void	var_free(t_var_list *variables);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-// @warning: *dst_val can be NULL if var->value == NULL (error will be ERR_NO).
+// @warning: dst_val->data can be NULL if var->value is unset (error will be ERR_NO).
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_NOT_FOUND
 // 		/ ERR_LIBC.
-t_error	var_get(const char *name, char **dst_val);
+t_error	var_get(const t_string *name, t_string *dst_val);
 
-// @ret ERR_SHELL_NOT_FOUND / ERR_LIBC
+// @ret ERR_SHELL_NOT_FOUND / ERR_INTERRUPTED / ERR_LIBC
 t_error	var_print(t_var_print_mode mode);
 
 // value can be NULL.
@@ -46,11 +47,15 @@ t_error	var_print(t_var_print_mode mode);
 // 		=> export will be set to true even if export == false.
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
 // 		/ ERR_LIBC.
-t_error	var_set(const char *name, const char *value, bool export, bool rdonly);
+t_error	var_set(
+			const t_string *name,
+			const t_string *value,
+			bool export,
+			bool rdonly);
 
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY /
 // 		ERR_INDEX_OUT_OF_BOUND
-t_error	var_unset(const char *name);
+t_error	var_unset(const t_string *name);
 
 // @ret ERR_LIBC
 t_error	var_build_envp(const t_var_list *variables, char ***dst_envp);

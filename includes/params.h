@@ -8,11 +8,11 @@
 
 typedef struct s_params
 {
-	const char			*name;			// (internal)
-	t_var_list			variables;		// $<var_name>
-	t_option			options;		// $-
-	t_specials			specials;		// $0 $$ $! $?
-	t_positionals_stack	positionals;	// $@ $* $# $<n>
+	const char			*name;				// (internal)
+	t_var_list			variables;			// $<var_name>
+	t_option			options;			// $-
+	t_specials			specials;			// $0 $$ $! $?
+	t_positionals_stack	positionals_stack;	// $@ $* $# $<n>
 }	t_params;
 
 typedef enum e_params_print_mode
@@ -36,11 +36,11 @@ void	params_free(t_params *params);
 // @ret ERR_SHELL_NOT_FOUND / ERR_LIBC
 t_error params_print(t_params_print_mode mode);
 
-// @warning: caller owns *dst, he must free it (if not NULL).
-// @warning: *dst_val can be NULL if var->value == NULL (error will be ERR_NO).
+// @warning: caller owns dst content, he must string_free() it.
+// @warning: dst->data can be NULL if var->value is unset (error will be ERR_NO).
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_NOT_FOUND
 // 		/ ERR_LIBC.
-t_error	params_get(const char *name, char **dst);
+t_error	params_get(const t_string *name, t_string *dst);
 
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_NOT_FOUND
 t_error	params_get_positionals(t_positionals *dst);
@@ -52,14 +52,14 @@ t_error	params_get_positionals(t_positionals *dst);
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
 // 		/ ERR_LIBC.
 t_error	params_set_variable(
-	const char *name,
-	const char *value,
+	const t_string *name,
+	const t_string *value,
 	bool export,
 	bool readonly);
 
 // @ret ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY /
 // 		ERR_INDEX_OUT_OF_BOUND
-t_error	params_unset_variable(const char *name);
+t_error	params_unset_variable(const t_string *name);
 
 // @ret ERR_SHELL_NOT_FOUND.
 t_error	params_set_last_bg_pid(pid_t value);

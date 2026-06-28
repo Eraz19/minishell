@@ -2,25 +2,38 @@
 #include "variables_priv.h"
 #include <stdlib.h>
 # include <stdio.h>
+# include <assert.h>	// DEBUG
 
-static void	params_dump_scalar(const char *name)
+static void	params_dump_scalar(const t_string *name)
 {
-	char		*value;
+	t_string	value;
 	t_error		err;
 
+	assert(name != NULL);
+	assert(name->len > 0);
 	err = params_get(name, &value);
 	if (err.type != ERR_NO)
 	{
-		fprintf(stderr, "PARAMS '%s'=[ERROR: '%s']\n", name, error_to_string(err));
+		fprintf(stderr, "PARAMS '%s'=[ERROR: '%s']\n", name->data, error_to_string(err));
 		return ;
 	}
-	if (value)
+	if (value.data)
 	{
-		fprintf(stderr, "PARAMS '%s'='%s'\n", name, value);
-		free(value);
+		fprintf(stderr, "PARAMS '%s'='%s'\n", name->data, value.data);
+		string_free(&value);
 	}
 	else
-		fprintf(stderr, "PARAMS '%s'=NULL\n", name);
+		fprintf(stderr, "PARAMS '%s'=NULL\n", name->data);
+}
+
+static void	params_dump_scalar_cst(const char *name_cst)
+{
+	t_string	name;
+
+	assert(name_cst != NULL);
+	string_init(&name, 0, name_cst, -1);
+	params_dump_scalar(&name);
+	string_free(&name);
 }
 
 static void	params_dump_variables(void)
@@ -38,32 +51,33 @@ static void	params_dump_variables(void)
 	while (i < var_list->len)
 	{
 		var = &((t_var *)var_list->data)[i];
-		params_dump_scalar(var->name);
+		params_dump_scalar(&var->name);
 		i++;
 	}
 }
 
 static void	params_dump_options(void)
 {
-	params_dump_scalar("-");
+	params_dump_scalar_cst("-");
 }
 
 static void	params_dump_specials(void)
 {
-	params_dump_scalar("0");
-	params_dump_scalar("$");
-	params_dump_scalar("!");
-	params_dump_scalar("?");
+	params_dump_scalar_cst("0");
+	params_dump_scalar_cst("$");
+	params_dump_scalar_cst("!");
+	params_dump_scalar_cst("?");
 }
 
 static void	params_dump_positionals(void)
 {
-	t_shell	*shell;
-	t_error	err;
-	char	*count_s;
-	size_t	count;
-	size_t	i;
-	char	*name;
+	t_shell		*shell;
+	t_error		err;
+	t_string	name_string;
+	t_string	count_s;
+	size_t		count;
+	size_t		i;
+	char		*name;
 
 	shell = shell_get();
 	if (!shell)
@@ -71,14 +85,16 @@ static void	params_dump_positionals(void)
 		error_print(error(ERR_SHELL_NOT_FOUND), "params_dump_positionals()", NULL, NULL);
 		return ;
 	}
-	err = positionals_get_one(&shell->params.positionals, "#", &count_s);
+	string_init(&name_string, 0, "#", -1);
+	err = positionals_get_one(&shell->params.positionals_stack, &name_string, &count_s);
+	string_free(&name_string);
 	if (err.type != ERR_NO)
 	{
 		error_print(err, "params_dump_positionals()", NULL, NULL);
 		return ;
 	}
-	count = ft_atozu(count_s);
-	free(count_s);
+	count = ft_atozu(count_s.data);
+	string_free(&count_s);
 	i = 1;
 	while (i <= count)
 	{
@@ -88,11 +104,11 @@ static void	params_dump_positionals(void)
 			error_print(error_sys(), "params_dump_positionals()", NULL, NULL);
 			break ;
 		}
-		params_dump_scalar(name);
+		params_dump_scalar_cst(name);
 		free(name);
 		i++;
 	}
-	params_dump_scalar("#");
+	params_dump_scalar_cst("#");
 }
 
 void	params_dump(void)

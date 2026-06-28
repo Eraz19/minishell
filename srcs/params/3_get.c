@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "shell.h"
+# include <assert.h>	// DEBUG
 
 static bool	params_is_special(char name)
 {
@@ -8,24 +9,27 @@ static bool	params_is_special(char name)
 	return (str_chr(specials, name) != NULL);
 }
 
-t_error	params_get(const char *name, char **dst)
+t_error	params_get(const t_string *name, t_string *dst)
 {
 	t_params	*params;
 
-	*dst = NULL;
+	assert(name != NULL);
+	assert(name->data != NULL);
+	assert(dst != NULL);
+	(void)string_init(dst, 0, NULL, 0);
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	if (name[0] == '\0')
+	if (name->data[0] == '\0')
 		return (error(ERR_NO));
-	if (name[0] == '-' && name[1] == '\0')
+	if (name->data[0] == '-' && name->data[1] == '\0')
 		return (options_get(params->options, dst));
-	if (name[0] == '#' && name[1] == '\0')
-		return (positionals_get_one(&params->positionals, name, dst));
-	if (name[1] == '\0' && params_is_special(name[0]))
-		return (specials_get(&params->specials, name[0], dst));
-	if (ft_isdigit(name[0]))
-		return (positionals_get_one(&params->positionals, name, dst));
+	if (name->data[0] == '#' && name->data[1] == '\0')
+		return (positionals_get_one(&params->positionals_stack, name, dst));
+	if (name->data[1] == '\0' && params_is_special(name->data[0]))
+		return (specials_get(&params->specials, name->data[0], dst));
+	if (ft_isdigit(name->data[0]))
+		return (positionals_get_one(&params->positionals_stack, name, dst));
 	return (var_get(name, dst));
 }
 
@@ -36,7 +40,7 @@ t_error	params_get_positionals(t_positionals *dst)
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
-	return (positionals_get(&params->positionals, dst));
+	return (positionals_get(&params->positionals_stack, dst));
 }
 
 t_error	params_build_envp(char ***dst_envp)

@@ -2,18 +2,20 @@
 #include "variables_priv.h"
 # include <stdio.h>
 # include "debug.h"
+# include <assert.h>	// DEBUG
 
-void	var_dump_one(t_var *var)
+void	var_dump_one(const t_var *var)
 {
-	if (var->value)
+	assert(var != NULL);
+	if (var->value.data)
 		fprintf(stderr, "VAR name='%s' value='%s' exported=%s readonly=%s\n",
-			var->name,
-			var->value,
+			var->name.data,
+			var->value.data,
 			bool_to_string(var->export),
 			bool_to_string(var->readonly));
 	else
 		fprintf(stderr, "VAR name='%s' value=NULL exported=%s readonly=%s\n",
-			var->name,
+			var->name.data,
 			bool_to_string(var->export),
 			bool_to_string(var->readonly));
 }

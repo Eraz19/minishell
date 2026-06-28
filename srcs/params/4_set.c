@@ -1,16 +1,20 @@
 #include "shell.h"
+# include <assert.h>	// DEBUG
 
 t_error	params_set_variable(
-	const char *name,
-	const char *value,
+	const t_string *name,
+	const t_string *value,
 	bool export,
 	bool readonly)
 {
+	assert(name != NULL);
+	assert(value != NULL);
 	return (var_set(name, value, export, readonly));
 }
 
-t_error	params_unset_variable(const char *name)
+t_error	params_unset_variable(const t_string *name)
 {
+	assert(name != NULL);
 	return (var_unset(name));
 }
 

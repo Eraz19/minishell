@@ -1,20 +1,23 @@
 #include "params.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 void	params_init(t_params *params)
 {
+	assert(params != NULL);
 	params->name = NULL;
 	var_init(&params->variables);
 	options_init(&params->options);
 	specials_init(&params->specials);
-	positionals_init(&params->positionals);
+	positionals_init_stack(&params->positionals_stack);
 }
 
 void	params_free(t_params *params)
 {
+	assert(params != NULL);
 	params->name = NULL;
 	var_free(&params->variables);
 	options_free(&params->options);
 	specials_free(&params->specials);
-	positionals_free(&params->positionals);
+	positionals_free_stack(&params->positionals_stack);
 }
