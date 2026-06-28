@@ -12,13 +12,16 @@ time_t	get_now_unix_seconds(void);
 bool	name_is_valid(const char *name);
 
 // @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_LIBC
-t_error assignment_split(const char *src, char **dst_name, char **dst_value);
+t_error assignment_split(
+			const char *src,
+			t_string *dst_name,
+			t_string *dst_value);
 
 // @ret ERR_LIBC
-t_error serialize(const char *src, char **dst);
+t_error serialize(const char *src, t_string *dst);
 
 // @ret ERR_FORMAT_INVALID / ERR_LIBC
-t_error deserialize(const char *src, char **dst);
+t_error deserialize(const char *src, t_string *dst);
 
 // @ret ERR_LIBC
 t_error	deserialize_all(const char *src, t_vector *dst);

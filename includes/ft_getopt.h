@@ -9,7 +9,7 @@
 /*
 ⚠️ TODO: in each builtin (if doc doesn't specifiy anything else): call undefined_behaviour() when "use of conflicting mutually-exclusive arguments" cf 12.1:8.
 ---
-⚠️ XBD 12.2:
+⚠️ TODO: XBD 12.2:
 	- Guideline 7
 	- Guideline 8
 */

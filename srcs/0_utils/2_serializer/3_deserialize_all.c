@@ -53,7 +53,7 @@ static inline t_error	parse_entry(const char *src, size_t len, t_vector *dst)
 {
 	t_error	err;
 	char	*entry;
-	char	*out;
+	t_string	out;
 
 	entry = str_ndup(src, len);
 	if (!entry)
@@ -65,7 +65,7 @@ static inline t_error	parse_entry(const char *src, size_t len, t_vector *dst)
 	if (err.type)
 		return (err);
 	if (!vector_push(dst, &out))
-		return (free(out), error_sys());
+		return (string_free(&out), error_sys());
 	return (error(ERR_NO));
 }
 
@@ -76,7 +76,7 @@ t_error	deserialize_all(const char *src, t_vector *dst)
 	size_t		end;
 	t_error		err;
 
-	if (!vector_init(dst, sizeof(char *), VECTOR_INIT_CAP))
+	if (!vector_init(dst, sizeof(t_string), VECTOR_INIT_CAP))
 		return (error_sys());
 	i = 0;
 	while (src[i])
@@ -85,7 +85,7 @@ t_error	deserialize_all(const char *src, t_vector *dst)
 			break ;
 		err = parse_entry(src + i + start, end - start + 1, dst);
 		if (err.type)
-			return (vector_free(dst, free), err);
+			return (vector_free(dst, string_free_void), err);
 		i += end + 1;
 		while (src[i] == '\n')
 			i++;

@@ -3,32 +3,33 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+# include <assert.h>
 
-t_error assignment_split(const char *src, char **dst_name, char **dst_value)
+t_error assignment_split(
+			const char *src,
+			t_string *dst_name,
+			t_string *dst_value)
 {
 	size_t	len;
 	bool	has_equal;
 	t_error	err;
 
-	*dst_name = NULL;
-	*dst_value = NULL;
+	assert(src != NULL);
+	assert(dst_name != NULL);
+	assert(dst_value != NULL);
+	(void)string_init(dst_name, 0, NULL, 0);
+	(void)string_init(dst_value, 0, NULL, 0);
 	len = 0;
 	while (src[len] && src[len] != '=')
 		len++;
 	if (len == 0)
 		return (error(ERR_ASSIGNMENT_MISSING_NAME));
 	has_equal = src[len] == '=';
-	*dst_name = malloc(len + 1);
-	if (!*dst_name)
+	if (!string_append_n(dst_name, src, (long)len + 1))
 		return (error_sys());
-	str_lcpy(*dst_name, src, len + 1);
 	if (!has_equal)
 		return (error(ERR_NO));
-	*dst_value = str_dup(src + len + 1);
-	if (!*dst_value)
-	{
-		err = error_sys();
-		return (free(*dst_name), *dst_name = NULL, err);
-	}
+	if (!string_append_n(dst_value, src + len + 1, -1))
+		return (err = error_sys(), string_free(dst_name), err);
 	return (error(ERR_NO));
 }

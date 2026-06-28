@@ -5,47 +5,50 @@
 #include <stdlib.h>
 
 static inline void copy_and_add_escape(
-	const char *src,
-	char **dst,
-	size_t dst_cap)
+					const char *src,
+					char *buff,
+					size_t buff_cap,
+					t_string *dst)
 {
 	size_t	i;
 	size_t	j;
 
-	(*dst)[0] = '\'';
+	buff[0] = '\'';
 	i = 0;
 	j = 1;
 	while (src[i])
 	{
 		if (src[i] == '\'')
 		{
-			str_lcpy(*dst + j, ESCAPED_QUOTE, dst_cap - j);
+			str_lcpy(buff + j, ESCAPED_QUOTE, dst->cap - j);
 			j += ESCAPED_QUOTE_ADDITIONAL_LEN;
 		}
 		else
-			(*dst)[j] = src[i];
+			buff[j] = src[i];
 		i++;
 		j++;
 	}
-	(*dst)[dst_cap - 2] = '\'';
-	(*dst)[dst_cap - 1] = '\0';
+	buff[j] = '\'';
+	buff[j + 1] = '\0';
+	string_take(dst, buff, buff_cap, j);
 }
 
-t_error serialize(const char *src, char **dst)
+t_error serialize(const char *src, t_string *dst)
 {
 	size_t	src_len;
-	size_t	dst_cap;
+	size_t	buff_cap;
 	size_t	escape_count;
+	char	*buff;
 
 	escape_count = 0;
 	src_len = 0;
 	while (src[src_len])
 		if (src[src_len++] == '\'')
 			escape_count++;
-	dst_cap = src_len + 2 + (escape_count * ESCAPED_QUOTE_ADDITIONAL_LEN) + 1;
-	*dst = malloc(dst_cap);
-	if (!*dst)
+	buff_cap = src_len + 2 + (escape_count * ESCAPED_QUOTE_ADDITIONAL_LEN) + 1;
+	buff = malloc(buff_cap);
+	if (!buff)
 		return (error_sys());
-	copy_and_add_escape(src, dst, dst_cap);
+	copy_and_add_escape(src, buff, buff_cap, dst);
 	return (error(ERR_NO));
 }
