@@ -1,7 +1,7 @@
 #include "error.h"
 #include "params.h"
 #include <stdlib.h>
-# include "logs.h"	// DEBUG
+# include "logs.h"		// DEBUG
 # include <assert.h>	// DEBUG
 
 #define ENV_NAME	"ENV"
@@ -16,6 +16,7 @@ static inline void	env_build_name(t_string *out)
 	string_take(out, name, len + 1, len);
 }
 
+// TODO
 t_error	shell_exec_env(void)
 {
 	bool		is_interactive;

@@ -13,10 +13,7 @@ int	main(int argc, char **argv)
 	assert(argv != NULL);
 	assert(environ != NULL);
 	setlocale(LC_NUMERIC, "de_DE");	// DEBUG
-	err = shell_run(argc, argv, environ);
-	if (err.type)
-		error_print(err, NULL, NULL);
-	shell_free();
+	shell_run(argc, argv, environ);
 	print_stop();
 	setlocale(LC_NUMERIC, "");	// DEBUG
 	return ((int)err.type);

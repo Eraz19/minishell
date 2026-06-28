@@ -13,13 +13,8 @@ void	shell_init(t_shell *shell)
 	runner_init(&shell->runner);
 }
 
-void	shell_free(void)
+void	shell_free(t_shell *shell)
 {
-	t_shell	*shell;
-
-	shell = shell_get();
-	if (!shell)
-		return ;
 	params_free(&shell->params);
 	scanner_free(&shell->scanner);
 	alias_free(&shell->alias);
