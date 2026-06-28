@@ -91,7 +91,7 @@ t_error	params_build_envp(char ***dst_envp);
  * `dst->data` may be `NULL` when the parameter exists but has no value.
  *
  * @param name Parameter name (borrowed, read-only).
- * @param dst Destination string (borrowed).
+ * @param dst Uninitialized destination string (borrowed).
  * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_NOT_FOUND`
  *         or `ERR_LIBC` on failure.
  */

@@ -78,7 +78,7 @@ void	specials_free(t_specials *specials);
  *
  * @param specials Special values source (borrowed, read-only).
  * @param name Special parameter name.
- * @param dst Destination string (borrowed).
+ * @param dst Initialized destination string (borrowed).
  * @return `ERR_NO`, `ERR_VAR_NOT_FOUND` or `ERR_LIBC`.
  */
 t_error	specials_get(const t_specials *specials, char name, t_string *dst);

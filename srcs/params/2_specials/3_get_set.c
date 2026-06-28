@@ -18,7 +18,6 @@ static t_error	specials_get_from_alloc(char *src, t_string *dst)
 
 t_error	specials_get(const t_specials *specials, char name, t_string *dst)
 {
-	(void)string_init(dst, 0, NULL, 0);
 	if (name == '0')
 	{
 		if (!string_init(dst, 0, specials->zero, -1))

@@ -26,13 +26,6 @@ typedef t_vector	t_positionals_stack;
 void	positionals_init_stack(t_positionals_stack *stack);
 
 /**
- * @brief Release every positional frame owned by the stack.
- *
- * @param stack Stack to clear (borrowed).
- */
-void	positionals_free_stack(t_positionals_stack *stack);
-
-/**
  * @brief Load the initial positional frame from @p argv .
  *
  * The pushed frame owns copies of the argument strings.
@@ -48,6 +41,13 @@ t_error	positionals_load_stack(
 			int argc,
 			char **argv,
 			size_t start_index);
+
+/**
+ * @brief Release every positional frame owned by the stack.
+ *
+ * @param stack Stack to clear (borrowed).
+ */
+void	positionals_free_stack(t_positionals_stack *stack);
 
 /* ************************************************************************* */
 /*                                   OPS                                     */
@@ -71,7 +71,7 @@ t_error	positionals_get(const t_positionals_stack *stack, t_positionals *dst);
  *
  * @param stack Source stack (borrowed, read-only).
  * @param name Requested positional name (borrowed, read-only).
- * @param dst Destination string (borrowed).
+ * @param dst Initialized destination string (borrowed).
  * @return `ERR_NO`, `ERR_VAR_NOT_FOUND`, `ERR_VAR_INVALID_NAME` or
  *         `ERR_LIBC`.
  */

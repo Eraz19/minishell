@@ -102,7 +102,7 @@ bool		option_is_active_in(t_option options, t_option option);
  * The caller owns `dst` on success and must release it with `string_free()`.
  *
  * @param options Bitset to serialize.
- * @param dst Destination string (borrowed).
+ * @param dst Initialized destination string (borrowed).
  * @return `ERR_NO` or `ERR_LIBC`.
  */
 t_error		options_get(t_option options, t_string *dst);

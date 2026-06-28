@@ -42,7 +42,6 @@ t_error	positionals_get_one(
 	assert(name != NULL);
 	assert(name->len > 0);
 	assert(dst != NULL);
-	(void)string_init(dst, 0, NULL, 0);
 	positionals = &((t_positionals *)stack->data)[stack->len - 1];
 	if (name->data[0] == '#' && name->data[1] == '\0')
 	{

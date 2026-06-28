@@ -75,7 +75,7 @@ t_error	var_build_envp(const t_var_list *variables, char ***dst_envp);
  * but has no value.
  *
  * @param name Variable name (borrowed, read-only).
- * @param dst_val Destination string (borrowed).
+ * @param dst_val Initialized destination string (borrowed).
  * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_NOT_FOUND`
  *         or `ERR_LIBC`.
  */

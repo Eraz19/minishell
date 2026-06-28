@@ -15,7 +15,6 @@ t_error	var_get(const t_string *name, t_string *dst_val)
 
 	assert(name != NULL);
 	assert(dst_val != NULL);
-	(void)string_init(dst_val, 0, NULL, 0);
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
