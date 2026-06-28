@@ -85,7 +85,8 @@ const char	*error_to_string(t_error err)
 	return ("unknown");
 }
 
-t_error	error_priv(t_error_type type, const char *caller)
+// DEBUG
+t_error	error_priv(t_error_type type, const char *file, int line, const char *caller)
 {
 	t_error	err;
 
@@ -95,28 +96,43 @@ t_error	error_priv(t_error_type type, const char *caller)
 		err.printed = true;
 	else
 		err.printed = false;
-	// if (type != ERR_NO)
-	// 	fprintf(stderr, RED "===> [ERROR] from [%s()] type = %s\n" NC, caller, error_to_string(err));
+#ifdef DEBUG_ERROR_TRACE
+	if (type != ERR_NO)
+		fprintf(stderr, RED "===> [ERROR] %s:%i:%s => %s\n" NC, 
+			file, line, caller, error_to_string(err));
+# else
+	(void)file;
+	(void)line;
 	(void)caller;
+#endif
 	return (err);
 }
 
-t_error	error_sys_priv(const char *caller)
+// DEBUG
+t_error	error_sys_priv(const char *file, int line, const char *caller)
 {
 	t_error	err;
 
 	err.type = ERR_LIBC;
 	err.saved_errno = errno;
 	err.printed = false;
-	// fprintf(stderr, RED "===> [ERROR] from [%s()] type = ERR_LIBC (%s)\n" NC, caller, error_to_string(err));
+#ifdef DEBUG_ERROR_TRACE
+	fprintf(stderr, RED "===> [ERROR] %s:%i:%s => ERR_LIBC (%s)\n" NC, 
+		file, line, caller, error_to_string(err));
+# else
+	(void)file;
+	(void)line;
+	(void)caller;
+#endif
 	(void)caller;
 	return (err);
 }
 
 static void	error_print_format(const char *fstring, va_list args)
 {
-	va_list	copy;
-	t_buff	buff;
+	va_list		copy;
+	t_buff		buff;
+	const char	default_message[] = "(unable to compute formatted message)";
 
 	va_copy(copy, args);
 	(void)buff_init(&buff, 0, NULL, -1);
@@ -125,6 +141,11 @@ static void	error_print_format(const char *fstring, va_list args)
 		(void)posix_write(STDERR_FILENO, buff.data, buff.len);
 		(void)posix_write(STDERR_FILENO, SEPARATOR, str_len(SEPARATOR));
 	}
+	else
+		(void)posix_write(
+			STDERR_FILENO,
+			default_message,
+			str_len(default_message));
 	va_end(copy);
 	buff_free(&buff);
 }

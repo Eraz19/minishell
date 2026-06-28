@@ -3,9 +3,6 @@
 
 #include <stdbool.h>
 
-# define error(type) error_priv(type, __func__)
-# define error_sys(type) error_sys_priv(__func__)
-
 typedef enum e_error_type
 {
 	ERR_NO,
@@ -47,6 +44,9 @@ typedef enum e_error_type
 	ERR_COUNT
 }	t_error_type;
 
+#define error(type) error_priv(type, __FILE__, __LINE__, __func__)	//DEBUG
+#define error_sys() error_sys_priv(__FILE__, __LINE__, __func__)	//DEBUG
+
 typedef struct s_error
 {
 	t_error_type	type;
@@ -65,7 +65,7 @@ typedef struct s_error
  * @param type Error type to store.
  * @return Error descriptor containing type and no saved errno.
  */
-t_error	error_priv(t_error_type type, const char *caller);
+t_error	error_priv(t_error_type type, const char *file, int line, const char *caller);	// DEBUG
 
 /**
  * @brief Builds a libc error descriptor and saves the current errno value.
@@ -75,7 +75,7 @@ t_error	error_priv(t_error_type type, const char *caller);
  *
  * @return Error descriptor containing ERR_LIBC and the current errno value.
  */
-t_error	error_sys_priv(const char *caller);
+t_error	error_sys_priv(const char *file, int line, const char *caller);	// DEBUG
 
 /**
  * @brief Prints a formatted shell error message to stderr.

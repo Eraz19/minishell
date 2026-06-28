@@ -1,7 +1,10 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2
-DEBUG_CFLAGS	:= -Wall -Wextra -Werror -g3 -fsanitize=address,undefined
+CFLAGS			:= -Wall -Wextra -Werror -O2	# -DNDEBUG (disable assert())
+DEBUG_CFLAGS	:= \
+	-Wall -Wextra -Werror \
+	-g3 -fsanitize=address,undefined \
+	-DDEBUG_ERROR_TRACE
 
 LIBFT_DIR		:= libft
 LIBFT			:= $(LIBFT_DIR)/libft.a
