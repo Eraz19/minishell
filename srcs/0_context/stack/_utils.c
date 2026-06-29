@@ -26,9 +26,9 @@ t_error	context_stack_fpop(t_context_stack *stack, t_context_parser_stack_item *
 }
 
 t_error	context_stack_get(
-	t_context_stack *stack,
-	t_context_parser_stack_item **item,
-	size_t index)
+			const t_context_stack *stack,
+			t_context_parser_stack_item **item,
+			size_t index)
 {
 	if (stack->len == 0)
 		return (error(ERR_EMPTY_STACK));
@@ -38,7 +38,7 @@ t_error	context_stack_get(
 	return (error(ERR_NO));
 }
 
-t_error	context_stack_dup(t_context_stack *dst, t_context_stack *src)
+t_error	context_stack_dup(t_context_stack *dst, const t_context_stack *src)
 {
 	size_t					i;
 	t_error					err;

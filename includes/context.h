@@ -118,7 +118,7 @@ t_error	context_parser_stack_item_init(t_context_parser_stack_item **item, t_con
  * @param src Source stack to copy (borrowed).
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error	context_stack_dup(t_context_stack *dst, t_context_stack *src);
+t_error	context_stack_dup(t_context_stack *dst, const t_context_stack *src);
 
 /**
  * @ingroup context
@@ -171,7 +171,9 @@ t_error	context_stack_fpop(t_context_stack *stack, t_context_parser_stack_item *
  * @return ERR_NO on success, ERR_EMPTY_STACK if the stack is empty,
  *         ERR_INDEX_OUT_OF_BOUND if @p index is past the last element.
  */
-t_error	context_stack_get(t_context_stack *stack, t_context_parser_stack_item **item,
+t_error	context_stack_get(
+			const t_context_stack *stack,
+			t_context_parser_stack_item **item,
 			size_t index);
 
 /**

@@ -1,6 +1,6 @@
 #include "token.h"
 
-t_error	token_dup(t_token *const dst, const t_token *const src)
+t_error	token_dup(t_token *const dst, const t_token *src)
 {
 	dst->type = src->type;
 	if (!string_dup(&dst->value, &src->value))
