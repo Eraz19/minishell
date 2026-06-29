@@ -14,7 +14,7 @@ t_error	var_unset(const t_string *name)
 	t_var		*var;
 
 	assert(name != NULL);
-	if (!name_is_valid(name->data))
+	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	params = shell_get_params();
 	if (!params)

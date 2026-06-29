@@ -9,7 +9,7 @@
 
 time_t	get_now_unix_seconds(void);
 
-bool	name_is_valid(const char *name);
+bool	name_is_valid(const t_string *name);
 
 // @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_LIBC
 t_error assignment_split(

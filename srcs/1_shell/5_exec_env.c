@@ -12,7 +12,7 @@ static inline void	env_build_name(t_string *out)
 	size_t		len;
 
 	assert(out != NULL);
-	len = str_len(name);
+	len = sizeof(ENV_NAME);
 	string_take(out, name, len + 1, len);
 }
 
