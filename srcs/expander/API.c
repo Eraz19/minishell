@@ -1,30 +1,118 @@
-#include "quote_removal_.h"
-#include "expander_loader_.h"
-#include "field_splitting_.h"
-#include "path_name_expansion_.h"
-#include "expander_substitutions_.h"
+#include <stdlib.h>
+#include "expander.h"
+#include "expander_.h"
 
-t_error	expander_expand_word(char ***expansion, t_expander_args *args)
+t_error	expander_expand_word(t_token *word, t_vector *out)
 {
-	t_expander	state;
+	size_t			i;
+	t_error			err;
+	t_expander_args	args;
+	t_buff			buff;
+	char			**expansion;
 
-	expander_init(&state, args->role);
-	if (expander_load(&state, args->value, args->contexts).type)
-		return (expander_free(&state), state.err);
-	if (substitutions(&state).type)
-		return (expander_free(&state), state.err);
-	if (field_splitting(&state).type)
-		return (expander_free(&state), state.err);
-	if (path_name_expansion(&state).type)
-		return (expander_free(&state), state.err);
-	if (quote_removal(&state).type)
-		return (expander_free(&state), state.err);
-	state.err = expander_loader_extract(&state.fields, expansion);
-	return (expander_free(&state), state.err);
+	args.value = word->value;
+	args.role = EXPANDER_ASSIGNMENT;
+	args.contexts = &(word->contexts);
+	args.assignment_offset = word->assignment_offset;
+	err = expander_expand(&expansion, &args);
+	if (err.type)
+		return (err);
+	i = 0;
+	while (expansion[i])
+	{
+		if (!buff_init(&buff, 0, expansion[i], (long)str_len(expansion[i])))
+			return (err = error_sys(), str_array_free(&expansion), err);
+		if (!vector_push(out, &buff))
+			return (err = error_sys(), str_array_free(&expansion), err);
+		i++;
+	}
+	return (str_array_free(&expansion), err);
 }
 
-/home/alexander/Documents/42/common_core/minishell/srcs/0_utils/ft_getpwnam/_main.c
-/home/alexander/Documents/42/common_core/minishell/srcs/2_scanner/reader/_main.c
-/home/alexander/Documents/42/common_core/minishell/srcs/heredoc/_utils.c
-/home/alexander/Documents/42/common_core/minishell/srcs/heredoc/body/_main.c
-/home/alexander/Documents/42/common_core/minishell/srcs/history/file/_utils.c
+t_error	expander_expand_filename(t_token *filename, t_vector *out)
+{
+	size_t			i;
+	t_error			err;
+	t_expander_args	args;
+	t_buff			buff;
+	char			**expansion;
+
+	args.value = filename->value;
+	args.contexts = &(filename->contexts);
+	args.role = EXPANDER_REDIRECT_FILENAME;
+	args.assignment_offset = filename->assignment_offset;
+	err = expander_expand(&expansion, &args);
+	if (err.type)
+		return (err);
+	i = 0;
+	while (expansion[i])
+	{
+		if (!buff_init(&buff, 0, expansion[i], (long)str_len(expansion[i])))
+			return (err = error_sys(), str_array_free(&expansion), err);
+		if (!vector_push(out, &buff))
+			return (err = error_sys(), str_array_free(&expansion), err);
+		i++;
+	}
+	return (str_array_free(&expansion), err);
+}
+
+t_error	expander_expand_heredoc_delim(t_buff *heredoc_delim, t_buff *out)
+{
+	t_error			err;
+	t_expander_args	args;
+	char			**expansion;
+
+	args.contexts = NULL;
+	args.value = *heredoc_delim;
+	args.assignment_offset = -1;
+	args.role = EXPANDER_HEREDOC_DELIMITER;
+	err = expander_expand(&expansion, &args);
+	if (err.type)
+		return (err);
+	if (expansion[0] != NULL)
+	{
+		if (!buff_init(out, 0, expansion[0], (long)str_len(expansion[0])))
+			return (err = error_sys(), str_array_free(&expansion), err);
+	}
+	return (str_array_free(&expansion), err);
+}
+
+t_error	expander_expand_heredoc_body(t_buff *heredoc_file_path)
+{
+	t_error			err;
+	t_expander_args	args;
+	char			**expansion;
+	t_buff			heredoc_body;
+
+	err = read_heredoc_body(heredoc_file_path, &heredoc_body);
+	if (err.type)
+		return (err);
+	args.contexts = NULL;
+	args.value = heredoc_body;
+	args.assignment_offset = -1;
+	args.role = EXPANDER_HEREDOC_BODY;
+	err = expander_expand(&expansion, &args);
+	if (err.type)
+		return (err);
+}
+
+t_error	expander_expand_assignment(t_token *assignment, t_buff *out)
+{
+	t_error			err;
+	t_expander_args	args;
+	char			**expansion;
+
+	args.value = assignment->value;
+	args.role = EXPANDER_ASSIGNMENT;
+	args.contexts = &(assignment->contexts);
+	args.assignment_offset = assignment->assignment_offset;
+	err = expander_expand(&expansion, &args);
+	if (err.type)
+		return (err);
+	if (expansion[0] != NULL)
+	{
+		if (!buff_init(out, 0, expansion[0], (long)str_len(expansion[0])))
+			return (err = error_sys(), str_array_free(&expansion), err);
+	}
+	return (str_array_free(&expansion), err);
+}

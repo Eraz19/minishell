@@ -40,11 +40,11 @@ static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_arith_rules(
+static t_lexer_context_args	context_arith_rules(
 	size_t *nesting_depth,
 	t_context_parser_stack_item *item)
 {
-	t_context_args	res;
+	t_lexer_context_args	res;
 
 	res.quoting = NULL;
 	res.opening_len = 3;
@@ -63,7 +63,7 @@ static t_context_args	context_arith_rules(
 
 t_error	lexer_context_arith(t_lexer *state)
 {
-	t_context_args			args;
+	t_lexer_context_args			args;
 	t_context_parser_stack_item	*item;
 	t_lexer_backup			backup;
 	size_t					nesting_depth;

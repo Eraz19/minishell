@@ -2,6 +2,7 @@
 # define HEREDOC_BODY__H
 
 # include "heredoc.h"
+# include "context.h"
 
 typedef struct s_heredoc_body
 {
@@ -10,13 +11,14 @@ typedef struct s_heredoc_body
 	t_heredoc_queue_item	*item;
 	char					*line;
 	t_buff					content;
+	t_context_stack			contexts;
 }	t_heredoc_body;
 
 /**
  * @ingroup heredoc
  * @brief Initialises a body state to an empty, ready-to-use value.
  *
- * Zeroes the structure and initialises the content buffer.
+ * Zeroes the structure and initialises the content buffer and context stack.
  *
  * @param state Pointer to the body state to initialise (borrowed).
  */
@@ -26,7 +28,8 @@ void	heredoc_body_init(t_heredoc_body *state);
  * @ingroup heredoc
  * @brief Releases every resource held by a body state.
  *
- * Frees the content buffer, the owned heredoc item (its path and delimiter),
+ * Frees the content buffer, the context stack, the owned heredoc item (its
+ * path and delimiter),
  * the input copy and the current line, then resets the structure to zero.
  *
  * @param state Pointer to the body state to free (borrowed).

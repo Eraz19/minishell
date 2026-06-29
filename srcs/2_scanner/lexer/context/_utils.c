@@ -1,6 +1,6 @@
 #include "lexer_context_.h"
 
-static t_error	context_start(t_lexer *state, t_context_args args)
+static t_error	context_start(t_lexer *state, t_lexer_context_args args)
 {
 	state->token->type = TOKEN_TOKEN;
 	if (args.stack_item != NULL)
@@ -11,7 +11,7 @@ static t_error	context_start(t_lexer *state, t_context_args args)
 	return (lexer_consume(state, state->token->type, args.opening_len));
 }
 
-static t_error	context_end(t_lexer *state, t_context_args args)
+static t_error	context_end(t_lexer *state, t_lexer_context_args args)
 {
 	t_context_parser_stack_item	*item;
 
@@ -55,7 +55,7 @@ t_error	lexer_context_escape(t_lexer *state, t_escape_args args)
 	return (state->err);
 }
 
-t_error	lexer_context_scan(t_lexer *state, t_context_args args)
+t_error	lexer_context_scan(t_lexer *state, t_lexer_context_args args)
 {
 	char		*str;
 	t_context	context;

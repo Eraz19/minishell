@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "libft.h"
 #include "heredoc_.h"
+#include "posix_helpers.h"
 //#include "expander.h"
 
 t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
@@ -32,31 +33,42 @@ t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
 	return (free(*delim), *delim = delim_, state->err);
 }
 
+static t_error	heredoc_try_build_path(t_heredoc *state, t_buff *path, int i)
+{
+	char	*id;
+	bool	exists;
+
+	if (!buff_init(path, 0, HEREDOC_TMP_PATH, sizeof(HEREDOC_TMP_PATH) - 1))
+		return (state->err = error_sys());
+	id = ft_itoa(i);
+	if (id == NULL)
+		return (state->err = error_sys(), buff_free(path), state->err);
+	if (!buff_append(path, id, (long)str_len(id)))
+	{
+		state->err = error_sys();
+		return (free(id), buff_free(path), state->err);
+	}
+	state->err = posix_access(buff_get_string(path), F_OK, &exists);
+	if (state->err.type)
+		return (free(id), buff_free(path), state->err);
+	if (exists)
+		return (free(id), buff_free(path), state->err);
+	else
+		return (free(id), state->err);
+}
+
 static t_error	heredoc_build_path(t_heredoc *state, t_buff *path)
 {
-	int		i;
-	char	*id;
-	
+	int	i;
+
 	i = 0;
 	while (i < INT_MAX)
 	{
-		if (!buff_init(path, 0, HEREDOC_TMP_PATH, sizeof(HEREDOC_TMP_PATH) - 1))
-			return (state->err = error_sys());
-		id = ft_itoa(i);
-		if (id == NULL)
-			return (state->err = error_sys(), buff_free(path), state->err);
-		if (!buff_append(path, id, (long)str_len(id)))
-		{
-			state->err = error_sys();
-			return (free(id), buff_free(path), state->err);
-		}
-		if (access(buff_get_string(path), F_OK) == 0)
-		{
-			free(id);
-			buff_free(path);
-		}
-		else
-			return (free(id), state->err);
+		state->err = heredoc_try_build_path(state, path, i);
+		if (state->err.type)
+			return (state->err);
+		if (path->data != NULL)
+			return (state->err);
 		++i;
 	}
 	return (state->err);
@@ -65,20 +77,25 @@ static t_error	heredoc_build_path(t_heredoc *state, t_buff *path)
 t_error	heredoc_create_file(t_heredoc *state, t_buff *path)
 {
 	int		fd;
+	int		flags;
 	char	*path_str;
 
 	fd = -1;
+	flags = O_CREAT | O_EXCL | O_WRONLY;
 	while (fd == -1)
 	{
 		if (heredoc_build_path(state, path).type)
 			return (state->err);
 		path_str = buff_get_string(path);
-		fd = open(path_str, O_CREAT | O_EXCL | O_WRONLY, 0600);
-		if (fd == -1 && errno != EEXIST)
-			return (state->err = error_sys(), free(path_str), state->err);
+		state->err = posix_open_with_mode(path_str, flags, 0600, &fd);
+		if (state->err.type && state->err.saved_errno != EEXIST)
+			return (free(path_str), buff_free(path), state->err);
 		if (fd == -1)
+		{
 			free(path_str);
+			buff_free(path);
+		}
 		state->file_id++;
 	}
-	return (close(fd), state->err);
+	return (posix_close(fd), state->err);
 }

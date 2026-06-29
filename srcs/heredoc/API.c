@@ -74,3 +74,19 @@ t_error	heredoc_add_to_queue(
 		return (buff_free(path), heredoc_queue_item_free(&item), state->err);
 	return (state->err);
 }
+
+bool	heredoc_is_delim_quoted(t_buff *delim)
+{
+	if (buff_get_index(delim, '\'') != -1)
+		return (true);
+	else if (buff_get_index(delim, '"') != -1)
+		return (true);
+	else if (buff_get_index(delim, '\\') != -1)
+		return (true);
+	return (false);
+}
+
+t_error	heredoc_track_body_context(t_buff *body, t_context_stack *stack)
+{
+
+}

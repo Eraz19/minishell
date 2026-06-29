@@ -1,8 +1,9 @@
-#include <sys/types.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <pwd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <sys/types.h>
 #include "libft.h"
+#include "posix_helpers.h"
 
 static void	ft_pw_fill(struct passwd *pw, char **field)
 {
@@ -38,37 +39,40 @@ static int	ft_pw_split(char *line, struct passwd *pw, const char *name)
 	return (ft_pw_fill(pw, field), 1);
 }
 
-static ssize_t	ft_pw_slurp(char *buf, size_t cap)
+static t_error	ft_pw_slurp(char **out)
 {
 	int		fd;
-	ssize_t	n;
-	ssize_t	total;
+	t_buff	buffer;
+	t_error	err;
 
-	fd = open("/etc/passwd", O_RDONLY);
-	if (fd < 0)
-		return (-1);
-	total = 0;
-	n = read(fd, buf + total, cap - 1 - (size_t)total);
-	while (n > 0)
-	{
-		total += n;
-		n = read(fd, buf + total, cap - 1 - (size_t)total);
-	}
-	close(fd);
-	if (n < 0)
-		return (-1);
-	return (buf[total] = '\0', total);
+	err = posix_open("/etc/passwd", O_RDONLY, &fd);
+	if (err.type)
+		return (err);
+	buff_init(&buffer, 0, NULL, 0);
+	if (!buff_read_all(&buffer, fd))
+		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
+	*out = buff_get_string(&buffer);
+	if (*out == NULL)
+		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
+	return (posix_close(fd), buff_free(&buffer), error(ERR_NO));
 }
 
-struct passwd	*ft_getpwnam(const char *name)
+t_error	ft_getpwnam(const char *name, struct passwd **out_pw)
 {
 	static struct passwd	pw;
-	static char				buf[65536];
+	static char				*buf;
 	char					*line;
 	char					*next;
+	t_error					err;
 
-	if (name == NULL || ft_pw_slurp(buf, sizeof(buf)) < 0)
-		return (NULL);
+	*out_pw = NULL;
+	if (name == NULL)
+		return (error(ERR_NO));
+	free(buf);
+	buf = NULL;
+	err = ft_pw_slurp(&buf);
+	if (err.type)
+		return (err);
 	line = buf;
 	while (*line)
 	{
@@ -78,8 +82,8 @@ struct passwd	*ft_getpwnam(const char *name)
 		if (*next == '\n')
 			*next++ = '\0';
 		if (ft_pw_split(line, &pw, name))
-			return (&pw);
+			return (*out_pw = &pw, error(ERR_NO));
 		line = next;
 	}
-	return (NULL);
+	return (error(ERR_NO));
 }

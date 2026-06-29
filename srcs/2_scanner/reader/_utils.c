@@ -9,7 +9,6 @@ t_error	readline_(char **res, const char *prompt)
 {
 	t_error	err;
 	char	*input;
-	t_error	err;
 
 	*res = readline(prompt);
 	while (*res == NULL)

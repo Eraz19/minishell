@@ -61,7 +61,7 @@ typedef struct s_unescape_args
  * @var s_context_args::expansion Nested expansion handler (may be NULL).
  * @var s_context_args::is_expansion Nested expansion detector (may be NULL).
  */
-typedef struct s_context_args
+typedef struct s_lexer_context_args
 {
 	t_context				context;
 	size_t					opening_len;
@@ -75,7 +75,7 @@ typedef struct s_context_args
 	bool					(*is_quoting)(char *, t_context *);
 	t_error					(*expansion)(t_lexer *, t_context);
 	bool					(*is_expansion)(char *, t_context *);
-}	t_context_args;
+}	t_lexer_context_args;
 
 /**
  * @ingroup scanner
@@ -114,7 +114,7 @@ t_error	context_escape_next_char(t_lexer *state, t_escape_args args);
  * @param args Configuration describing this context.
  * @return ERR_NO on success, or the recorded error on failure.
  */
-t_error	lexer_context_scan(t_lexer *state, t_context_args args);
+t_error	lexer_context_scan(t_lexer *state, t_lexer_context_args args);
 
 /**
  * @ingroup scanner

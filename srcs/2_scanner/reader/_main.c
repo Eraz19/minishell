@@ -1,9 +1,9 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include "reader_.h"
 #include "history.h"
+#include "posix_helpers.h"
 
 t_error	reader_new_input(char **res)
 {
@@ -46,20 +46,20 @@ t_error	reader_file_input(char **res, const char *path)
 	t_buff	buffer;
 	char	*content;
 
-	fd = open(path, O_RDONLY);	// TODO: use posix_open()
-	if (fd < 0)
-		return (error_sys());
+	err = posix_open(path, O_RDONLY, &fd);
+	if (err.type)
+		return (err);
 	buff_init(&buffer, 0, NULL, 0);
 	if (!buff_read_all(&buffer, fd))
-		return (err = error_sys(), close(fd), buff_free(&buffer), err);
+		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
 	content = buff_get_string(&buffer);
 	if (content == NULL)
-		return (err = error_sys(), close(fd), buff_free(&buffer), err);
+		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
 	*res = str_join(content, "\n");
 	if (*res == NULL)
 	{
 		err = error_sys();
-		return (close(fd), buff_free(&buffer), free(content), err);
+		return (posix_close(fd), buff_free(&buffer), free(content), err);
 	}
-	return (close(fd), buff_free(&buffer), free(content), error(ERR_NO));
+	return (posix_close(fd), buff_free(&buffer), free(content), error(ERR_NO));
 }

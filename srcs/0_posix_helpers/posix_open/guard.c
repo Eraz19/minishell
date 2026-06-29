@@ -31,9 +31,11 @@ static inline bool	open_access_mode_is_write_or_rdwr(int oflag)
 */
 static inline bool	open_access_mode_is_exec_or_search(int oflag)
 {
+#if defined(O_EXEC) || defined(O_SEARCH)
 	int	access_mode;
 
 	access_mode = oflag & O_ACCMODE;
+#endif
 #ifdef O_EXEC
 	if (O_EXEC != O_RDONLY
 		&& O_EXEC != O_WRONLY
@@ -48,6 +50,7 @@ static inline bool	open_access_mode_is_exec_or_search(int oflag)
 		&& access_mode == O_SEARCH)
 		return (true);
 #endif
+	(void)oflag;
 	return (false);
 }
 

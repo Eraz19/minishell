@@ -90,9 +90,12 @@ void	heredoc_init(t_heredoc *state);
  */
 void	heredoc_free(t_heredoc *state);
 
+bool	heredoc_is_delim_quoted(t_buff *delim);
+
 t_error	heredoc_store_all(char *input, size_t *start);
 
 t_error	heredoc_add_to_queue(t_buff *path, char *delim, t_heredoc_mode mode,
 			bool is_tty);
+
 
 #endif

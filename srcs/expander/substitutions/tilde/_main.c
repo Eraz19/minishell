@@ -57,17 +57,19 @@ static t_error	tilde_resolve_path(
 	char **path,
 	char *username)
 {
-	struct passwd *password;
+	struct passwd	*password;
 
+	*path = NULL;
 	if (username[0] == '\0')
 		return (state->err = params_get("HOME", path));
-	else
-	{
-		password = ft_getpwnam(username);
-		if (password == NULL)
-			return (state->err = error_sys());
-		return (*path = password->pw_dir, state->err);
-	}
+	state->err = ft_getpwnam(username, &password);
+	if (state->err.type == ERR_INTERRUPTED)
+		return (state->err);
+	if (state->err.type)
+		return (state->err = error(ERR_NO));
+	if (password != NULL)
+		*path = password->pw_dir;
+	return (state->err);
 }
 
 t_error	tilde_expansion(

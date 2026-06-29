@@ -36,9 +36,9 @@ static t_error	context_backtick_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_context_args	context_backtick_rules(t_context_parser_stack_item *item)
+static t_lexer_context_args	context_backtick_rules(t_context_parser_stack_item *item)
 {
-	t_context_args	res;
+	t_lexer_context_args	res;
 
 	res.opening_len = 1;
 	res.closing_len = 1;

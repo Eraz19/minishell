@@ -24,8 +24,12 @@ t_error deserialize(const char *src, char **dst);
 t_error	deserialize_all(const char *src, t_vector *dst);
 
 // home/user lookup reimplemented over /etc/passwd (getpwnam is forbidden).
-// Returns a pointer to static storage (invalidated by the next call), or NULL
-// when name is NULL, the file cannot be read, or no matching entry exists.
-struct passwd	*ft_getpwnam(const char *name);
+// On success returns ERR_NO and sets *out_pw either to a pointer to static
+// storage (invalidated by the next call) when a matching entry is found, or to
+// NULL when name is NULL or no entry matches (not an error: the caller leaves
+// the tilde literal). On a read failure returns ERR_LIBC, or ERR_INTERRUPTED if
+// a signal interrupted the open; *out_pw is set to NULL in both cases.
+// @ret ERR_INTERRUPTED / ERR_LIBC
+t_error	ft_getpwnam(const char *name, struct passwd **out_pw);
 
 #endif
