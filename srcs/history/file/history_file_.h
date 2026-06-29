@@ -63,20 +63,6 @@ t_error	history_file_load(t_history_file *state, t_history_list *list, ssize_t m
 
 /**
  * @ingroup history
- * @brief Opens the history file, creating it when missing.
- *
- * Opens state->path with @p flags, retrying with O_CREAT if the file does
- * not exist.
- *
- * @param state Pointer to the file backing (borrowed).
- * @param fd Out-parameter receiving the opened descriptor.
- * @param flags open(2) flags to use.
- * @return ERR_NO on success, ERR_LIBC on failure.
- */
-t_error	history_file_open(t_history_file *state, int *fd, int flags);
-
-/**
- * @ingroup history
  * @brief Reads the whole history file into state->content.
  *
  * Leaves state->content empty when the file cannot be opened, cannot be

@@ -17,8 +17,6 @@
 	- 🚧 unlink heredoc path after use
 - 🚧 `posix_read()`:
 	- 🚧 implement it using `string_read_*()` API ? (⚠️ remove auto retry on EINTR in libft !)
-- 🚧 `assignment_split()`:
-	- 🚧 refactor
 - 🚧 `libft`:
 	- 🚧 update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
 	- 🚧 update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
@@ -127,30 +125,14 @@
 
 ## QUESTION
 - Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
-- `history`:
-	- Désactiver l'historique persistant si l'ouverture du fichier échoue mais ne pas faire remonter l'erreur dans le caller
-	- `history_file_open()`: pourquoi pas directement essayer avec `O_CREAT` ?
-- ⚠️ signature de `positionals_get()` modifiée pour renvoyer un pointeur read-only
-- ⚠️ `params_get()` use `t_string`, `params_get_from_const()` use `const char *`
-- ⚠️ J'ai vu plein de `error_sys()` après des `free*()` dans ton code
-- use `string_append_format()` / `buff_append_format()` pour pas avoir à `ft_itoa()` + `free()`
-- use `t_string` everywhere instead of `t_buff` (NUL-terminé donc évite plein d'allocs / manips manuelles, je peux refacto si besoin)
 - `scanner_reset()`:
 	- ⚠️ free un pointeur qui n'a pas été malloc (reproduce with syntax error)
-	- J'ai remove son argument car c'est le `runner` qui l'appelle donc il n'est pas sensé connaître sa struct
-- `ft_getpwnam`:
-	- Besoin forcément d'un `static buff` ou on peut convertir pour utiliser `t_string` et `posix_read()` ?
-- `scanner_report_io_here()`:
-	- ✅ j'ai refacto pour utiliser `t_string *path` et `t_token *delim`
-	- ✅ du coup j'ai aussi refacto `heredoc_add_to_queue()`, `heredoc_create_file()` et `heredoc_build_path()` (opti + fix)
 - `scanner_heredoc_read()`:
 	- print bien une erreur dans le cas du delim manquant en non interactif ? (impossible pour le `parser` de savoir quel heredoc était en train d'être lu à ce moment là)
 
 ## TODO
 - use `posix_write()` instead of `write()`
 - use `posiw_open()` instead of `open()`
-- `heredoc`:
-	- `tmp/minishell/*` au lieu de `tmp/*` pour pouvoir supprimer facilement tous nos fichiers temporaires sans avoir à connaître leurs noms ? => miss `mkdir()` function
 - `errors`:
 	- Vérifier qu'aucun call à `free()` / `libc` n'est fait avant un `error_sys()`
 	- Vérifier que tous les call à `error_print()` sont bien doublement `NULL` terminés

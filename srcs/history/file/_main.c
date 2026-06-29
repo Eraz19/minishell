@@ -5,11 +5,14 @@
 
 t_error	history_file_read(t_history_file *state)
 {
-	int		fd;
+	int	fd;
+	int	oflag;
 
 	if (state->path.len == 0)
 		return (state->err);
-	if (history_file_open(state, &fd, O_RDONLY).type)
+	oflag = O_CREAT | O_RDONLY;
+	state->err = posix_open_with_mode(state->path.data, oflag, 0644, &fd);
+	if (state->err.type)
 	{
 		(void)error_print(state->err,
 			"history", "unable to open history file",
@@ -31,10 +34,13 @@ t_error	history_file_read(t_history_file *state)
 t_error	history_file_write(t_history_file *state)
 {
 	int	fd;
+	int	oflag;
 
 	if (state->path.len == 0 || state->content.len == 0)
 		return (state->err);
-	if (history_file_open(state, &fd, O_WRONLY | O_APPEND).type)
+	oflag = O_WRONLY | O_APPEND;
+	state->err = posix_open_with_mode(state->path.data, oflag, 0644, &fd);
+	if (state->err.type)
 	{
 		(void)error_print(state->err,
 			"history", "unable to open history file",
