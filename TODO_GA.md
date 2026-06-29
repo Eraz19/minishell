@@ -1,3 +1,7 @@
+# A REPARER
+
+- `ft_getpwnam()`
+
 # WIP
 
 - ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages

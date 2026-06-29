@@ -1,21 +1,25 @@
 #ifndef HEREDOC_BODY__H
 # define HEREDOC_BODY__H
 
+# include "lexer.h"
 # include "heredoc.h"
+# include "context.h"
 
 typedef struct s_heredoc_body
 {
+	size_t					i;
 	t_error					err;
 	t_heredoc_queue_item	*item;
 	char					*line;
 	t_buff					content;
+	t_context_stack			contexts;
 }	t_heredoc_body;
 
 /**
  * @ingroup heredoc
  * @brief Initialises a body state to an empty, ready-to-use value.
  *
- * Zeroes the structure and initialises the content buffer.
+ * Zeroes the structure and initialises the content buffer and context stack.
  *
  * @param state Pointer to the body state to initialise (borrowed).
  */
@@ -25,7 +29,8 @@ void	heredoc_body_init(t_heredoc_body *state);
  * @ingroup heredoc
  * @brief Releases every resource held by a body state.
  *
- * Frees the content buffer, the owned heredoc item (its path and delimiter),
+ * Frees the content buffer, the context stack, the owned heredoc item (its
+ * path and delimiter),
  * the input copy and the current line, then resets the structure to zero.
  *
  * @param state Pointer to the body state to free (borrowed).
@@ -60,18 +65,6 @@ bool	is_line_delimiter(t_heredoc_body *state);
 
 /**
  * @ingroup heredoc
- * @brief Writes the accumulated body to the heredoc's temporary file.
- *
- * Truncates and opens the item's path, writes the collected content and
- * closes the file.
- *
- * @param state Pointer to the body state (borrowed).
- * @return ERR_NO on success, or ERR_LIBC on open or write failure.
- */
-t_error	heredoc_body_save_content(t_heredoc_body *state);
-
-/**
- * @ingroup heredoc
  * @brief Appends the current line to the body content and clears it.
  *
  * Copies the current line into the content buffer, then frees it and sets the
@@ -97,5 +90,7 @@ t_error	heredoc_body_extract_line(t_heredoc_body *state, char *match_EOL,
 			size_t *i);
 
 t_error	heredoc_body_read(t_heredoc *state, t_heredoc_queue_item *item);
+
+t_lexer_context_args	heredoc_body_context_rules(void);
 
 #endif

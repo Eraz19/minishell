@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "history.h"
+#include "history_.h"
 
 static t_error	history_prepare_entry(
 					t_history *state,
@@ -11,7 +12,7 @@ static t_error	history_prepare_entry(
 	if (state->err.type)
 		return (state->err);
 	if (!string_append_n(content, "\n", 1))
-		return (state->err = error_sys(), state->err);
+		return (state->err = error_sys());
 	return (state->err);
 }
 
@@ -61,8 +62,6 @@ static t_error	history_build_from_list(
 
 t_error	history_build_file_content(t_history *state, size_t start)
 {
-	string_free(&state->file.content);
-	string_init(&state->file.content, 0, NULL, 0);
 	if (history_build_from_list(state, &state->file.content, start).type)
 		return (string_free(&state->file.content), state->err);
 	if (history_build_from_current(state, &state->file.content).type)

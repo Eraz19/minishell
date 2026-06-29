@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "alias.h"
 #include "shell.h"
 #include "alias_.h"
 #include "alias_stack_.h"

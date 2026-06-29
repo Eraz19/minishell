@@ -30,6 +30,8 @@ SRCS			:= \
 	$(wildcard srcs/0_utils/*.c) \
 	$(wildcard srcs/0_utils/*/*.c) \
 	$(wildcard srcs/1_shell/*.c) \
+	$(wildcard srcs/lexer/*.c) \
+	$(wildcard srcs/lexer/*/*.c) \
 	$(wildcard srcs/2_scanner/*.c) \
 	$(wildcard srcs/2_scanner/*/*.c) \
 	$(wildcard srcs/2_scanner/*/*/*.c) \
@@ -66,12 +68,10 @@ INCLUDES		:= \
 	-Isrcs/0_utils/1_ft_getopt \
 	-Isrcs/0_utils/2_serializer \
 	-Isrcs/1_shell \
+	-Isrcs/lexer \
 	-Isrcs/2_scanner \
-	-Isrcs/2_scanner/lexer \
-	-Isrcs/2_scanner/lexer/context \
-	-Isrcs/2_scanner/lexer/input_stack \
-	-Isrcs/2_scanner/lexer/operator \
-	-Isrcs/2_scanner/lexer/rules \
+	-Isrcs/2_scanner/recognition \
+	-Isrcs/2_scanner/recognition/operator \
 	-Isrcs/2_scanner/reader \
 	-Isrcs/3_builder/1_lr_machine \
 	-Isrcs/3_builder/1_lr_machine/1_hooks \
@@ -101,6 +101,11 @@ INCLUDES		:= \
 	-Isrcs/expander/quote_removal/context \
 	-Isrcs/expander/substitutions \
 	-Isrcs/expander/substitutions/tilde \
+	-Isrcs/expander/substitutions/param \
+	-Isrcs/expander/substitutions/cmd_sub \
+	-Isrcs/expander/substitutions/dollar_squote \
+	-Isrcs/expander/substitutions/arith \
+	-Isrcs/expander/substitutions/backtick \
 	-Isrcs/expander/word \
 	-Isrcs/heredoc \
 	-Isrcs/heredoc/body \

@@ -62,5 +62,6 @@ t_error	history_file_load(
 		state->loaded_count++;
 	}
 	vector_free(&file_entries, string_free_void);
+	string_free(&state->content);
 	return (state->err);
 }

@@ -49,18 +49,14 @@ t_error	expander_word_from_str(
 	const char *str,
 	t_expander_word_item_opt opt)
 {
-	size_t					i;
-	t_error					err;
-	t_expander_word_item	item;
+	size_t						i;
+	t_error						err;
+	t_expander_word_item		item;
 
 	i = 0;
 	while (str[i] != '\0')
 	{
-		item = expander_word_item_init(
-			str[i],
-			opt.quoted,
-			opt.context,
-			opt.is_expand_res);
+		item = expander_word_item_init(str[i], opt);
 		err = expander_word_push(word, item);
 		if (err.type)
 			return (err);

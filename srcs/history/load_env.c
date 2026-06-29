@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "params.h"
 #include "history.h"
+#include "history_.h"
 
 t_error	history_load_path_env(t_history *state)
 {

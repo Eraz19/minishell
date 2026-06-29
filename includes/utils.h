@@ -53,17 +53,15 @@ t_error	deserialize(const char *src, t_string *dst);
  */
 t_error	deserialize_all(const char *src, t_vector *dst);
 
-/**
- * @brief Look up a passwd entry in @c /etc/passwd.
- *
- * The returned pointer refers to static storage and is overwritten by the
- * next call.
- *
- * @param name Login name (borrowed, read-only).
- * @return Matching entry, or @c NULL if @p name is @c NULL, @c /etc/passwd
- *         cannot be read, or no entry matches.
- */
-struct passwd	*ft_getpwnam(const char *name);
+
+// home/user lookup reimplemented over /etc/passwd (getpwnam is forbidden).
+// On success returns ERR_NO and sets *out_pw either to a pointer to static
+// storage (invalidated by the next call) when a matching entry is found, or to
+// NULL when name is NULL or no entry matches (not an error: the caller leaves
+// the tilde literal). On a read failure returns ERR_LIBC, or ERR_INTERRUPTED if
+// a signal interrupted the open; *out_pw is set to NULL in both cases.
+// @ret ERR_INTERRUPTED / ERR_LIBC
+t_error	ft_getpwnam(const char *name, struct passwd **out_pw);
 
 /**
  * @brief Get the current Unix time in seconds.

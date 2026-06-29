@@ -1,5 +1,4 @@
 #include <fcntl.h>
-#include <unistd.h>
 #include "history_file_.h"
 #include "posix_helpers.h"
 
@@ -27,8 +26,9 @@ t_error	history_file_read(t_history_file *state)
 		string_free(&state->content);
 		state->err = error(ERR_NO);
 	}
-	close(fd);
-	return (state->err);
+	if (state->err.type == ERR_NO)
+		return (state->err = posix_close(fd));
+	return (posix_close(fd), state->err);
 }
 
 t_error	history_file_write(t_history_file *state)
@@ -55,6 +55,7 @@ t_error	history_file_write(t_history_file *state)
 			"persistent history disabled", NULL, "%s", state->path);
 		state->err = error(ERR_NO);
 	}
-	close(fd);
-	return (state->err);
+	if (state->err.type == ERR_NO)
+		return (state->err = posix_close(fd));
+	return (posix_close(fd), state->err);
 }

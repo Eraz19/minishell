@@ -7,11 +7,14 @@ t_error	expander_loader_build(t_expander_loader *state)
 	if (is_substitution_start(state))
 		expander_loader_substitution(state);
 	else if (is_char_escaped(state))
-		expander_loader_consume(state, 2);
+	{
+		expander_loader_consume(state, 1, false);
+		expander_loader_consume(state, 1, true);
+	}
 	else if (is_quoting_context(state->word + state->i, &state->quoting))
 		expander_loader_quoted(state);
 	else
-		expander_loader_consume(state, 1);
+		expander_loader_consume(state, 1, false);
 	return (state->err);
 }
 

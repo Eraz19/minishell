@@ -1,29 +1,25 @@
 #include <stdlib.h>
+#include "fcntl.h"
 #include "shell.h"
+#include "heredoc.h"
 #include "heredoc_.h"
+#include "posix_helpers.h"
 #include "heredoc_body_.h"
 #include "heredoc_queue_.h"
 
-t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start)
+t_error	heredoc_body_save_content(char *path, t_buff *content)
 {
-	size_t					i;
-	t_heredoc_queue_item	item;
+	int		fd;
+	t_error	err;
 
-	i = 0;
-	state->err = heredoc_queue_pop(&state->queue, &item);
-	if (state->err.type)
-		return (state->err);
-	if (input == NULL)
-		item.input = str_dup("");
-	else
-		item.input = str_dup(input);
-	if (start == NULL || *start > str_len(item.input))
-		item.i = &i;
-	else 
-		item.i = start;
-	if (heredoc_body_read(state, &item).type)
-		return (heredoc_queue_item_free(&item), state->err);
-	return (heredoc_queue_item_free(&item), state->err);
+	err = posix_open_with_mode(
+			path, O_WRONLY | O_CREAT | O_TRUNC, 0600, &fd);
+	if (err.type)
+		return (err);
+	err = posix_write(fd, content->data, content->len);
+	if (err.type)
+		return (posix_close(fd), err);
+	return (posix_close(fd), err);
 }
 
 t_error	heredoc_store_all(char *input, size_t *start)
@@ -41,9 +37,8 @@ t_error	heredoc_store_all(char *input, size_t *start)
 	return (state->err);
 }
 
-# include <stdio.h>	// DEBUG
 t_error	heredoc_add_to_queue(
-			t_string *out_path,
+			t_string *path,
 			t_token *delim,
 			t_heredoc_mode mode,
 			bool is_tty)
@@ -54,22 +49,48 @@ t_error	heredoc_add_to_queue(
 	state = shell_get_heredoc();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	if (heredoc_create_file(state, out_path).type)
+	if (heredoc_create_file(state, path).type)
 		return (state->err);
 	item.is_tty = is_tty;
-	item.path = str_dup(out_path->data);
+	item.path = str_dup(path->data);
 	if (item.path == NULL)
-		return (string_free(out_path), state->err = error_sys());
+		return (string_free(path), state->err = error_sys());
 	item.delim = str_dup(delim->value.data);
 	if (item.delim == NULL)
-		return (string_free(out_path), free(item.path), state->err = error_sys());
-	// TODO
-	//if (heredoc_build_delimiter(state, &item.delim).type)
-	//	return (string_free(path), heredoc_queue_item_free(&item), state->err);
+		return (string_free(path), free(item.path), state->err = error_sys());
+	if (heredoc_build_delimiter(state, &item.delim).type)
+		return (string_free(path), heredoc_queue_item_free(&item), state->err);
 	item.mode = mode;
 	state->err = heredoc_queue_push(&state->queue, item);
 	if (state->err.type)
-		return (string_free(out_path),
+		return (string_free(path),
 			heredoc_queue_item_free(&item), state->err);
 	return (state->err);
+}
+
+bool	heredoc_is_delim_quoted(t_string *delim)
+{
+	if (string_get_index_c(delim, '\'') != -1)
+		return (true);
+	else if (string_get_index_c(delim, '"') != -1)
+		return (true);
+	else if (string_get_index_c(delim, '\\') != -1)
+		return (true);
+	return (false);
+}
+
+t_error	heredoc_track_body_context(t_buff *body, t_context_stack *stack)
+{
+	t_error	err;
+	t_lexer	lexer;
+	char	*input;
+
+	input = buff_get_string(body);
+	if (input == NULL)
+		return (error_sys());
+	lexer_init(&lexer);
+	err = lexer_push_input(&lexer, input);
+	if (!err.type)
+		err = lexer_track_context(&lexer, stack, heredoc_body_context_rules());
+	return (lexer_free(&lexer), err);
 }

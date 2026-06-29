@@ -2,9 +2,9 @@
 #include "posix_helpers.h"
 #include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include "reader_.h"
 #include "history.h"
+#include "posix_helpers.h"
 
 t_error	reader_new_input(char **res)
 {
@@ -36,31 +36,32 @@ t_error	reader_continuation(char **res)
 		return (free(continuation), err);
 	new_input = str_join(*res, continuation);
 	if (new_input == NULL)
-		return (free(continuation), error_sys());
+		return (err = error_sys(), free(continuation), err);
 	return (free(*res), free(continuation), *res = new_input, error(ERR_NO));
 }
 
 t_error	reader_file_input(char **res, const char *path)
 {
 	int		fd;
+	t_error	err;
 	t_buff	buffer;
 	char	*content;
-	t_error	err;
 
 	err = posix_open(path, O_RDONLY, &fd);
 	if (err.type)
-		return (err);
-	else if (fd == -1)
 		return (error_print(error_sys(), "reader", "unable to open source file",
-			NULL, NULL));
+			NULL, "%s", path));
 	buff_init(&buffer, 0, NULL, 0);
 	if (!buff_read_all(&buffer, fd))
-		return (close(fd), buff_free(&buffer), error_sys());
+		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
 	content = buff_get_string(&buffer);
 	if (content == NULL)
-		return (close(fd), buff_free(&buffer), error_sys());
+		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
 	*res = str_join(content, "\n");
 	if (*res == NULL)
-		return (close(fd), buff_free(&buffer), free(content), error_sys());
-	return (close(fd), buff_free(&buffer), free(content), error(ERR_NO));
+	{
+		err = error_sys();
+		return (posix_close(fd), buff_free(&buffer), free(content), err);
+	}
+	return (posix_close(fd), buff_free(&buffer), free(content), error(ERR_NO));
 }

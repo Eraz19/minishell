@@ -55,7 +55,7 @@ t_error	scanner_load(t_scanner *state, const char *source)
 		state->mode = SCAN_FILE;
 		state->source = source;
 	}
-	return (lexer_load(&state->lexer, (t_lexer_mode)state->mode), state->err);
+	return (state->err);
 }
 
 t_error	scanner_reset(void)

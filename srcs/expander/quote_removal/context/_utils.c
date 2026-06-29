@@ -21,11 +21,14 @@ static t_error	context_escape(
 
 static t_error	context_end(t_expander *state, t_context_args args)
 {
-	t_expander_word_item	item;
+	t_expander_word_item_opt	opt;
+	t_expander_word_item		item;
 
 	if (args.word_expanded->len != 0)
 		return (state->err);
-	item = expander_word_item_init('\0', args.context, args.context, false);
+	opt.context = args.context;
+	
+	item = expander_word_item_init('\0', opt);
 	return (state->err = expander_word_push(args.word_expanded, item));
 }
 

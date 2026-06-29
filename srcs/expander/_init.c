@@ -19,14 +19,15 @@ void	expander_free(t_expander *state)
 	*state = (t_expander){0};
 }
 
-t_error	expander_load(t_expander *state, t_buff word, t_context_stack *stack)
+t_error	expander_load(t_expander *state, t_expander_args *args)
 {
 	size_t				word_len;
 	t_expander_word		word_copy;
 	t_expander_loader	loader_state;
 
+	state->assignement_offset = args->assignment_offset;
 	expander_loader_init(&loader_state);
-	state->err = expander_loader_load(&loader_state, stack, word);
+	state->err = expander_loader_load(&loader_state, args->contexts, args->value);
 	if (state->err.type)
 		return (expander_loader_free(&loader_state), state->err);
 	word_len = str_len(loader_state.word);

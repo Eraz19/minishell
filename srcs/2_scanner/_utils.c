@@ -6,14 +6,15 @@
 
 static t_error	scanner_stdin_input(char **res)
 {
+	t_error	err;
 	t_buff	buf;
 
 	buff_init(&buf, 0, NULL, 0);
 	if (!buff_read_all(&buf, STDIN_FILENO))
-		return (buff_free(&buf), error_sys());
+		return (err = error_sys(), buff_free(&buf), err);
 	*res = buff_get_string(&buf);
 	if (*res == NULL)
-		return (buff_free(&buf), error_sys());
+		return (err = error_sys(), buff_free(&buf), err);
 	return (buff_free(&buf), error(ERR_NO));
 }
 
@@ -67,7 +68,8 @@ t_error	scanner_alias_expand(t_scanner *state, t_token *token)
 		return (input_parser_stack_item_free(&item), state->err);
 	input_stack_push(&state->lexer.input_stack, item);
 	token_free(token);
-	if (lexer_next_token(&state->lexer, token).type)
+	if (lexer_get_next_token(&state->lexer, token,
+			scanner_lexer_rules(state)).type)
 		return (state->err = state->lexer.err);
 	return (state->err);
 }

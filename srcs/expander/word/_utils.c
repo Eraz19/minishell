@@ -23,11 +23,16 @@ t_error	expander_word_dup(t_expander_word *dst, t_expander_word *src)
 	return (error(ERR_NO));
 }
 
-t_error	expander_word_peek(t_expander_word *word, t_expander_word_item *item)
+t_error	expander_word_peek(
+	t_expander_word *word,
+	t_expander_word_item *item,
+	size_t i)
 {
 	if (word->len == 0)
 		return (error(ERR_EMPTY_STACK));
-	return (*item = ((t_expander_word_item *)word->data)[0], error(ERR_NO));
+	else if (i >= word->len)
+		return (error(ERR_INDEX_OUT_OF_BOUND));
+	return (*item = ((t_expander_word_item *)word->data)[i], error(ERR_NO));
 }
 
 t_error	expander_word_get(
