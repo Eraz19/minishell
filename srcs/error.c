@@ -72,6 +72,8 @@ const char	*error_to_string(t_error err)
 		return ("invalid syntax");
 	else if (err.type == ERR_EMPTY_STACK)
 		return ("empty stack");
+	else if (err.type == ERR_HEREDOC_MAX_ID_REACHED)
+		return ("no available file name");
 	else if (err.type == ERR_VEOF)
 		return ("unexpected end of input");
 	else if (err.type == ERR_INCOHERENT_STATE)

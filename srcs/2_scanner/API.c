@@ -18,8 +18,10 @@ t_error	scanner_get_next_token(t_token *token)
 		return (scanner_alias_expand(state, token));
 	return (state->err);
 }
-
-t_error	scanner_report_io_here(t_buff *path, char *delim, t_heredoc_mode mode)
+t_error	scanner_report_io_here(
+			t_string *out_path,
+			t_token *delim,
+			t_heredoc_mode mode)
 {
 	bool		is_tty;
 	t_scanner	*state;
@@ -28,7 +30,7 @@ t_error	scanner_report_io_here(t_buff *path, char *delim, t_heredoc_mode mode)
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	is_tty = state->mode == SCAN_STDIN_TTY;
-	state->err = heredoc_add_to_queue(path, delim, mode, is_tty);
+	state->err = heredoc_add_to_queue(out_path, delim, mode, is_tty);
 	return (state->err);
 }
 

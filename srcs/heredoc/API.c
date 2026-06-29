@@ -41,12 +41,12 @@ t_error	heredoc_store_all(char *input, size_t *start)
 	return (state->err);
 }
 
-#include <stdio.h>
+# include <stdio.h>	// DEBUG
 t_error	heredoc_add_to_queue(
-	t_buff *path,
-	char *delim,
-	t_heredoc_mode mode,
-	bool is_tty)
+			t_string *out_path,
+			t_token *delim,
+			t_heredoc_mode mode,
+			bool is_tty)
 {
 	t_heredoc_queue_item	item;
 	t_heredoc				*state;
@@ -54,20 +54,22 @@ t_error	heredoc_add_to_queue(
 	state = shell_get_heredoc();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	if (heredoc_create_file(state, path).type)
+	if (heredoc_create_file(state, out_path).type)
 		return (state->err);
 	item.is_tty = is_tty;
-	item.path = buff_get_string(path);
+	item.path = str_dup(out_path->data);
 	if (item.path == NULL)
-		return (buff_free(path), state->err = error_sys());
-	item.delim = str_dup(delim);
+		return (string_free(out_path), state->err = error_sys());
+	item.delim = str_dup(delim->value.data);
 	if (item.delim == NULL)
-		return (buff_free(path), free(item.path), state->err = error_sys());
+		return (string_free(out_path), free(item.path), state->err = error_sys());
+	// TODO
 	//if (heredoc_build_delimiter(state, &item.delim).type)
-	//	return (buff_free(path), heredoc_queue_item_free(&item), state->err);
+	//	return (string_free(path), heredoc_queue_item_free(&item), state->err);
 	item.mode = mode;
 	state->err = heredoc_queue_push(&state->queue, item);
 	if (state->err.type)
-		return (buff_free(path), heredoc_queue_item_free(&item), state->err);
+		return (string_free(out_path),
+			heredoc_queue_item_free(&item), state->err);
 	return (state->err);
 }

@@ -1,12 +1,11 @@
 #include "heredoc.h"
 #include "heredoc_queue_.h"
-#include "utils.h"
 
 void	heredoc_init(t_heredoc *state)
 {
 	*(state) = (t_heredoc){0};
 	heredoc_queue_init(&state->queue);
-	state->file_id = (size_t)get_now_unix_seconds();
+	state->file_id = -1;
 }
 
 void	heredoc_free(t_heredoc *state)

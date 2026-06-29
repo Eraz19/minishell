@@ -3,6 +3,7 @@
 
 # include "error.h"
 # include "libft.h"
+# include "token.h"
 
 /** @defgroup heredoc Heredoc API
  *  @brief POSIX here-documents collected into owned temporary files.
@@ -63,7 +64,7 @@ typedef struct s_heredoc
 {
 	t_error			err;
 	t_heredoc_queue	queue;
-	size_t			file_id;
+	int				file_id;
 }	t_heredoc;
 
 /**
@@ -92,7 +93,10 @@ void	heredoc_free(t_heredoc *state);
 
 t_error	heredoc_store_all(char *input, size_t *start);
 
-t_error	heredoc_add_to_queue(t_buff *path, char *delim, t_heredoc_mode mode,
+t_error	heredoc_add_to_queue(
+			t_string *path,
+			t_token *delim,
+			t_heredoc_mode mode,
 			bool is_tty);
 
 #endif
