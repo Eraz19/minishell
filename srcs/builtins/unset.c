@@ -51,15 +51,19 @@ static t_error	unset_process_options(int argc, char **argv, t_getopt_out *out)
 // 		ERR_INDEX_OUT_OF_BOUND
 static t_error	unset_var(size_t first_operand_index, int argc, char **argv)
 {
-	int		i;
-	t_error	last_exit_code;
-	t_error	exit_code;
+	int			i;
+	t_string	tmp;
+	t_error		last_exit_code;
+	t_error		exit_code;
 
 	exit_code = error(ERR_NO);
 	i = (int)first_operand_index;
 	while (i < argc)
 	{
-		last_exit_code = params_unset_variable(argv[i]);
+		tmp.data = argv[i];
+		tmp.len = (str_len(tmp.data));
+		tmp.cap = 0;
+		last_exit_code = params_unset_variable(&tmp);
 		if (last_exit_code.type != ERR_NO)
 		{
 			exit_code = error_print(

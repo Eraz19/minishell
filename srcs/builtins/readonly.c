@@ -57,19 +57,18 @@ static t_error	readonly_process_options(int argc, char **argv, t_getopt_out *out
 // 		ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC
 static t_error	readonly_add_one(const char *builtin_name, const char *string)
 {
-	char	*name;
-	char	*value;
+	t_string	name;
+	t_string	value;
 	t_error	err;
 
 	err = assignment_split(string, &name, &value);
 	if (err.type != ERR_NO)
 		return (error_print(err, builtin_name, string, NULL, NULL));
-	err = params_set_variable(name, value, false, true);
+	err = params_set_variable(&name, &value, false, true);
 	if (err.type != ERR_NO)
 		err = error_print(err, builtin_name, string, NULL, NULL);
-	free(name);
-	if (value)
-		free(value);
+	string_free(&name);
+	string_free(&value);
 	return (err);
 }
 
