@@ -6,9 +6,9 @@
 static t_error	history_prepare_entry(
 					t_history *state,
 					t_string *content,
-					char *entry)
+					const t_string *entry)
 {
-	state->err = serialize(entry, content);
+	state->err = serialize(entry->data, content);
 	if (state->err.type)
 		return (state->err);
 	if (!string_append_n(content, "\n", 1))
@@ -18,8 +18,6 @@ static t_error	history_prepare_entry(
 
 static t_error	history_build_from_current(t_history *state, t_string *content)
 {
-	char	*entry;
-
 	if (state->current_input.len == 0)
 		return (state->err);
 	else if (state->current_input.data[state->current_input.len - 1] == '\n')
@@ -28,13 +26,7 @@ static t_error	history_build_from_current(t_history *state, t_string *content)
 		if (state->current_input.len == 0)
 			return (state->err);
 	}
-	entry = buff_get_string(&state->current_input);
-	if (entry == NULL)
-		return (state->err = error_sys());
-	if (history_prepare_entry(state, content, entry).type)
-		return (free(entry), state->err);
-	free(entry);
-	return (state->err);
+	return (history_prepare_entry(state, content, &state->current_input));
 }
 
 static t_error	history_build_from_list(
@@ -42,8 +34,8 @@ static t_error	history_build_from_list(
 					t_string *content,
 					size_t start)
 {
-	size_t	i;
-	char	*entry;
+	size_t			i;
+	const t_string	*entry;
 
 	i = start;
 	while (i < state->list.len)
@@ -52,9 +44,7 @@ static t_error	history_build_from_list(
 		if (state->err.type)
 			return (state->err);
 		if (history_prepare_entry(state, content, entry).type)
-			return (free(entry), state->err);
-		free(entry);
-		entry = NULL;
+			return (state->err);
 		i++;
 	}
 	return (state->err);

@@ -58,14 +58,10 @@ static t_error	tilde_resolve_path(
 					char *username)
 {
 	struct passwd	*password;
-<<<<<<< HEAD
 	t_string		home;
-=======
->>>>>>> f843f0a41dcb7bddc3dea44c6b6f10443b37282d
 
 	*path = NULL;
 	if (username[0] == '\0')
-<<<<<<< HEAD
 	{
 		state->err = params_get_from_const("HOME", &home);
 		if (state->err.type)
@@ -75,22 +71,13 @@ static t_error	tilde_resolve_path(
 	}
 	else
 	{
-		password = ft_getpwnam(username);
-		if (password == NULL)
-			return (state->err = error_sys());
-		return (*path = password->pw_dir, state->err);
-	}
-=======
-		return (state->err = params_get("HOME", path));
-	state->err = ft_getpwnam(username, &password);
-	if (state->err.type == ERR_INTERRUPTED)
+		state->err = ft_getpwnam(username, &password);
+		if (state->err.type)
+			return (state->err);
+		if (password)
+			*path = password->pw_dir;
 		return (state->err);
-	if (state->err.type)
-		return (state->err = error(ERR_NO));
-	if (password != NULL)
-		*path = password->pw_dir;
-	return (state->err);
->>>>>>> f843f0a41dcb7bddc3dea44c6b6f10443b37282d
+	}
 }
 
 t_error	tilde_expansion(

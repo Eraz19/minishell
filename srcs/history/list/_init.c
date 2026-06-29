@@ -3,16 +3,12 @@
 
 void	history_list_clean(void *item)
 {
-	char	*str;
-
-	str = *(char **)item;
-	if (str)
-		free(str);
+	string_free(item);
 }
 
 void	history_list_init(t_history_list *list)
 {
-	vector_init(list, sizeof(char *), 0);
+	vector_init(list, sizeof(t_string), 0);
 }
 
 void	history_list_free(t_history_list *list)

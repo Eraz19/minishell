@@ -4,33 +4,25 @@
 #include "reader_.h"
 #include "scanner_.h"
 
-static t_error	scanner_stdin_input(char **res)
+static t_error	scanner_stdin_input(t_string *res)
 {
 	t_error	err;
-	t_buff	buf;
 
-	buff_init(&buf, 0, NULL, 0);
-	if (!buff_read_all(&buf, STDIN_FILENO))
-		return (err = error_sys(), buff_free(&buf), err);
-	*res = buff_get_string(&buf);
-	if (*res == NULL)
-		return (err = error_sys(), buff_free(&buf), err);
-	return (buff_free(&buf), error(ERR_NO));
+	string_init(res, 0, NULL, 0);
+	if (!string_read_all(res, STDIN_FILENO))
+		return (err = error_sys(), string_free(res), err);
+	return (error(ERR_NO));
 }
 
 static t_error	scanner_dup_command_input(
-	t_scanner *state,
-	t_input_lexer_stack_item *item)
+					t_scanner *state,
+					t_input_lexer_stack_item *item)
 {
-	char	*command;
-
-	command = str_dup(state->source);
-	if (command == NULL)
-		state->err = error_sys();
-	item->str = str_join(command, "\n");
-	if (item->str == NULL)
-		state->err = error_sys();
-	return (free(command), state->err);
+	if (!string_init(&item->str, 0, state->source, -1))
+		return (state->err = error_sys());
+	if (!string_append_n(&item->str, "\n", 1))
+		return (state->err = error_sys(), string_free(&item->str), state->err);
+	return (state->err);
 }
 
 t_error	scanner_read_input(t_scanner *state) 
@@ -51,7 +43,7 @@ t_error	scanner_read_input(t_scanner *state)
 		state->err = scanner_stdin_input(&item->str);
 	else if (state->mode == SCAN_STDIN_TTY)
 		state->err = reader_new_input(&item->str); 
-	if (state->err.type || item->str == NULL)
+	if (state->err.type || item->str.len < 2)
 		return (input_parser_stack_item_free(&item), state->err);
 	return (state->err = input_stack_push(&state->lexer.input_stack, item));
 }
@@ -64,7 +56,7 @@ t_error	scanner_alias_expand(t_scanner *state, t_token *token)
 	if (state->err.type)
 		return (state->err);
 	state->err = alias_expand_token(&item->str, &token->value);
-	if (state->err.type || item->str == NULL)
+	if (state->err.type || item->str.len < 2)
 		return (input_parser_stack_item_free(&item), state->err);
 	input_stack_push(&state->lexer.input_stack, item);
 	token_free(token);

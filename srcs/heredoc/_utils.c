@@ -5,19 +5,16 @@
 #include <unistd.h>
 #include "libft.h"
 #include "heredoc_.h"
-#include "posix_helpers.h"
+#include "heredoc_queue_.h"
+#include "heredoc_body_.h"
 #include "posix_helpers.h"
 //#include "expander.h"
 
-t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
+t_error	heredoc_build_delimiter(t_heredoc *state, t_string *delim)
 {
 	//t_expander_args	args;
-	char			*delim_;
-	t_buff			delim_buff;
 	//char			**delim_exp;
 
-	if (!buff_init(&delim_buff, 0, *delim, (long)str_len(*delim)))
-		return (state->err = error_sys());
 	//args.value = delim_buff;
 	//args.role = EXPANDER_HEREDOC_DELIMITER;
 	//args.contexts = NULL;
@@ -27,11 +24,9 @@ t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
 	//buff_free(&delim_buff);
 	//if (delim_exp[0] == NULL)
 	//	return (free(*delim), str_array_free(&delim_exp), state->err);
-	delim_ = str_join(/*delim_exp[0]*/*delim, "\n");
-	if (delim_ == NULL)
-		state->err = error_sys();
-	//str_array_free(&delim_exp);
-	return (free(*delim), *delim = delim_, state->err);
+	if (!string_append_n(delim, "\n", 1))
+		return (state->err = error_sys());
+	return (state->err);
 }
 
 static inline t_error	heredoc_handle_error(t_heredoc *state, t_string *path)
@@ -44,6 +39,32 @@ static inline t_error	heredoc_handle_error(t_heredoc *state, t_string *path)
 		state->err = error(ERR_HEREDOC_MAX_ID_REACHED);
 	error_print(state->err, "heredoc", "unable to create tmp file", NULL, NULL);
 	return (state->err);
+}
+
+t_error    heredoc_store_body(t_heredoc *state, t_string *input, size_t *start)
+{
+	size_t					i;
+	t_heredoc_queue_item   	item;
+
+	i = 0;
+	state->err = heredoc_queue_pop(&state->queue, &item);
+	if (state->err.type)
+		return (state->err);
+	if (input == NULL)
+	{
+		if (!string_init(&item.input, 1, "", -1))
+			return (state->err = error_sys());
+	}
+	else
+		if (!string_init(&item.input, 0, input->data, (long)input->len))
+			return (state->err = error_sys());
+	if (start == NULL || *start > item.input.len)
+		item.i = &i;
+	else 
+		item.i = start;
+	if (heredoc_body_read(state, &item).type)
+		return (heredoc_queue_item_free(&item), state->err);
+	return (heredoc_queue_item_free(&item), state->err);
 }
 
 t_error	heredoc_create_file(t_heredoc *state, t_string *path)

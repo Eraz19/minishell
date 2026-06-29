@@ -1,10 +1,10 @@
 #include "tilde_expansion_.h"
-#include "param_expansion_.h"
 #include "cmd_substitution_.h"
 #include "arith_substitution_.h"
 #include "expander_substitutions_.h"
 #include "backtick_substitution_.h"
 #include "dollar_squote_expansion_.h"
+#include "param_expansion_.h"
 
 t_error	substitution_char(
 	t_expander *state,

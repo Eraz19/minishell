@@ -8,14 +8,14 @@ void	history_init(t_history *state)
 	history_list_init(&state->list);
 	history_file_init(&state->file);
 	history_rl_init(&state->rl_history);
-	buff_init(&state->current_input, 0, NULL, 0);
+	string_init(&state->current_input, 0, NULL, 0);
 }
 
 void	history_free(t_history *state)
 {
 	history_list_free(&state->list);
 	history_file_free(&state->file);
-	buff_free(&state->current_input);
+	string_free(&state->current_input);
 	history_rl_free(&state->rl_history);
 	*state = (t_history){0};
 }

@@ -7,13 +7,13 @@
 #include "heredoc_body_.h"
 #include "heredoc_queue_.h"
 
-t_error	heredoc_body_save_content(char *path, t_buff *content)
+t_error	heredoc_body_save_content(t_string *path, t_string *content)
 {
 	int		fd;
 	t_error	err;
 
 	err = posix_open_with_mode(
-			path, O_WRONLY | O_CREAT | O_TRUNC, 0600, &fd);
+			path->data, O_WRONLY | O_CREAT | O_TRUNC, 0600, &fd);
 	if (err.type)
 		return (err);
 	err = posix_write(fd, content->data, content->len);
@@ -22,7 +22,7 @@ t_error	heredoc_body_save_content(char *path, t_buff *content)
 	return (posix_close(fd), err);
 }
 
-t_error	heredoc_store_all(char *input, size_t *start)
+t_error	heredoc_store_all(t_string *input, size_t *start)
 {
 	t_heredoc	*state;
 
@@ -52,12 +52,11 @@ t_error	heredoc_add_to_queue(
 	if (heredoc_create_file(state, path).type)
 		return (state->err);
 	item.is_tty = is_tty;
-	item.path = str_dup(path->data);
-	if (item.path == NULL)
-		return (string_free(path), state->err = error_sys());
-	item.delim = str_dup(delim->value.data);
-	if (item.delim == NULL)
-		return (string_free(path), free(item.path), state->err = error_sys());
+	if (!string_init(&item.path, 0, path->data, (long)path->len))
+		return (state->err = error_sys(), string_free(path), state->err);
+	if (!string_init(&item.delim, 0, delim->value.data, (long)delim->value.len))
+		return (state->err = error_sys(), string_free(path),
+			string_free(&item.path), state->err);
 	if (heredoc_build_delimiter(state, &item.delim).type)
 		return (string_free(path), heredoc_queue_item_free(&item), state->err);
 	item.mode = mode;
@@ -79,17 +78,13 @@ bool	heredoc_is_delim_quoted(t_string *delim)
 	return (false);
 }
 
-t_error	heredoc_track_body_context(t_buff *body, t_context_stack *stack)
+t_error	heredoc_track_body_context(t_string *body, t_context_stack *stack)
 {
 	t_error	err;
 	t_lexer	lexer;
-	char	*input;
 
-	input = buff_get_string(body);
-	if (input == NULL)
-		return (error_sys());
 	lexer_init(&lexer);
-	err = lexer_push_input(&lexer, input);
+	err = lexer_push_input(&lexer, body);
 	if (!err.type)
 		err = lexer_track_context(&lexer, stack, heredoc_body_context_rules());
 	return (lexer_free(&lexer), err);

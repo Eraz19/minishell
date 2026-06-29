@@ -33,8 +33,4 @@ t_error	posix_open_with_mode(
 // @ret ERR_LIBC
 t_error	posix_close(int fd);
 
-// @warning ENOENT / ENOTDIR are reported as success with *ok == false.
-// @ret ERR_INTERRUPTED / ERR_LIBC
-t_error	posix_access(const char *path, int amode, bool *ok);
-
 #endif

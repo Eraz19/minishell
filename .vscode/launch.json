@@ -6,11 +6,15 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
-			"args": [],
+			"args": [
+				"-c",
+				"cat << EOF cmd << SECOND lol\nbody\nEOF\nbody2\nSECOND\necho"
+			],
 			"cwd": "${workspaceFolder}",
 			"stopAtEntry": false,
 			"MIMode": "lldb",
-			"preLaunchTask": "make debug"
+			"preLaunchTask": "make debug",
+			"externalConsole": false
 		}
 	]
 }

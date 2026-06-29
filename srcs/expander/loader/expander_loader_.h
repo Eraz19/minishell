@@ -8,26 +8,30 @@
 
 typedef struct s_expander_loader
 {
-	size_t					i;
-	t_error					err;
-	char					*word;
-	t_context_stack			stack;
-	t_context				quoting;
-	t_expander_word			loaded_word;
-	t_context_stack			loading_stack;
+	size_t						i;
+	t_error						err;
+	t_string					word;
+	t_context_stack				stack;
+	t_context					quoting;
+	t_expander_word				loaded_word;
+	t_context_stack				loading_stack;
 	t_context_parser_stack_item	*context_item;
 }	t_expander_loader;
 
 void	expander_loader_init(t_expander_loader *state);
 void	expander_loader_free(t_expander_loader *state);
-t_error	expander_loader_load(t_expander_loader *state, t_context_stack *stack,
-			t_buff word);
+t_error	expander_loader_load(
+			t_expander_loader *state,
+			t_context_stack *stack,
+			t_string *word);
 
 bool	is_char_escaped(t_expander_loader *state);
 bool	is_substitution_start(t_expander_loader *state);
 t_error	expander_loader_pop_context(t_expander_loader *state);
 t_error	expander_loader_push_context(t_expander_loader *state);
-t_error	expander_loader_consume(t_expander_loader *state, size_t count,
+t_error	expander_loader_consume(
+			t_expander_loader *state,
+			size_t count,
 			bool escaped);
 
 t_error	expander_loader_quoted(t_expander_loader *state);

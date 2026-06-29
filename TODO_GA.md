@@ -1,6 +1,7 @@
 # A REPARER
 
-- `ft_getpwnam()`
+- ⚠️ mode `-c` => lire jusqu'à `EOF`, pas un seul tour de boucle !
+- replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
 # WIP
 

@@ -1,4 +1,3 @@
-#include "utils.h"
 #include "heredoc.h"
 #include "heredoc_queue_.h"
 

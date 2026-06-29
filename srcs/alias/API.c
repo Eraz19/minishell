@@ -74,9 +74,10 @@ t_error	alias_add(const char *name, const char *value)
 	return (state->err);
 }
 
-t_error	alias_expand_token(char **expansion, t_string *token_value)
+t_error	alias_expand_token(t_string *expansion, const t_string *token_value)
 {
 	t_alias	*state;
+	char	*raw;
 
 	state = shell_get_alias();
 	if (state == NULL)
@@ -86,13 +87,12 @@ t_error	alias_expand_token(char **expansion, t_string *token_value)
 		state->err = alias_stack_push(&state->stack, token_value->data);
 		if (state->err.type)
 			return (state->err);
-		*expansion = hashmap_get(&state->map, token_value->data)->value;
-		if (*expansion == NULL)
+		raw = hashmap_get(&state->map, token_value->data)->value;
+		if (raw == NULL)
 			return (state->err = error(ERR_INCOHERENT_STATE));
-		*expansion = str_dup(*expansion);
-		if (*expansion == NULL)
-			return (state->err = error_sys());
-		return (set_position_for_next_word(state, *expansion), state->err);
+		if (!string_init(expansion, 0, raw, -1))
+			return (error_sys());
+		return (set_position_for_next_word(state, expansion), state->err);
 	}
 	return (state->err);
 }

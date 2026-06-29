@@ -6,8 +6,7 @@ void	input_parser_stack_item_free(void *item)
 	t_input_lexer_stack_item	**item_;
 
 	item_ = (t_input_lexer_stack_item **)item;
-	if ((*item_)->str != NULL)
-		free((*item_)->str);
+	string_free(&(*item_)->str);
 	ft_bzero((*item_)->context.data, (*item_)->context.cap);
 	vector_free(&(*item_)->context, NULL);
 	**item_ = (t_input_lexer_stack_item){0};

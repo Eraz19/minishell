@@ -24,7 +24,7 @@ void	alias_print_all(t_key_value **pairs);
  * @param state Pointer to the alias state (borrowed).
  * @param expansion Expansion text just produced (borrowed), may be NULL.
  */
-void	set_position_for_next_word(t_alias *state, char *expansion);
+void	set_position_for_next_word(t_alias *state, t_string *expansion);
 
 /**
  * @ingroup alias

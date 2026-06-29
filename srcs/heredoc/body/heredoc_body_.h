@@ -10,8 +10,8 @@ typedef struct s_heredoc_body
 	size_t					i;
 	t_error					err;
 	t_heredoc_queue_item	*item;
-	char					*line;
-	t_buff					content;
+	t_string				line;
+	t_string				content;
 	t_context_stack			contexts;
 }	t_heredoc_body;
 

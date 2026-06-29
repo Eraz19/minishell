@@ -13,14 +13,15 @@ void	lexer_free(t_lexer *state)
 	*state = (t_lexer){0};
 }
 
-t_error	lexer_push_input(t_lexer *state, char *str)
+t_error	lexer_push_input(t_lexer *state, t_string *str)
 {
 	t_input_lexer_stack_item	*item;
 
 	state->err = input_parser_stack_item_init(&item);
 	if (state->err.type)
 		return (free(str), state->err);
-	item->str = str;
+	string_take(&item->str, str->data, str->cap, str->len);
+	string_init(str, 0, NULL, 0);
 	state->err = input_stack_push(&state->input_stack, item);
 	if (state->err.type)
 		return (input_parser_stack_item_free(&item), state->err);

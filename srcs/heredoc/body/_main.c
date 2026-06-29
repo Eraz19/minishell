@@ -25,12 +25,12 @@ static t_error	heredoc_body_get_content(t_heredoc_body *state)
 	used_continuation = false;
 	while (true)
 	{
-		if (state->item->input[state->i] == '\0')
+		if (state->item->input.data[state->i] == '\0')
 		{
 			if (heredoc_body_continuation(state, &used_continuation).type)
 				return (state->err);
 		}
-		match_EOL = str_chr(state->item->input + state->i, '\n');
+		match_EOL = str_chr(state->item->input.data + state->i, '\n');
 		if (heredoc_body_extract_line(state, match_EOL, &state->i).type)
 			return (state->err);
 		if (is_line_delimiter(state))
@@ -53,6 +53,6 @@ t_error	heredoc_body_read(t_heredoc *state, t_heredoc_queue_item *item)
 	state->err = heredoc_body_get_content(&body);
 	if (state->err.type)
 		return (heredoc_body_free(&body), state->err);
-	state->err = heredoc_body_save_content(body.item->path, &body.content);
+	state->err = heredoc_body_save_content(&body.item->path, &body.content);
 	return (heredoc_body_free(&body), state->err);
 }

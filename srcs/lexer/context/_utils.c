@@ -25,7 +25,7 @@ static t_error	context_end(t_lexer *state, t_lexer_context_args args)
 
 t_error	lexer_context_unescape(t_lexer *state, t_unescape_args args)
 {
-	if (state->input->str[state->input->i] == '\0')
+	if (state->input->str.data[state->input->i] == '\0')
 		return (context_EOI(state));
 	else if (args.special_handler != NULL)
 		return (args.special_handler(state, args.special_args));
@@ -37,13 +37,13 @@ t_error	lexer_context_escape(t_lexer *state, t_escape_args args)
 {
 	state->token->type = TOKEN_TOKEN;
 	if (args.enable_line_continuation &&
-		state->input->str[state->input->i + 1] == '\n')
+		state->input->str.data[state->input->i + 1] == '\n')
 	{
 		lexer_advance(state, 2);
-		if (state->input->str[state->input->i] == '\0')
+		if (state->input->str.data[state->input->i] == '\0')
 			return (context_EOI(state));
 	}
-	else if (state->input->str[state->input->i] == '\0')
+	else if (state->input->str.data[state->input->i] == '\0')
 		return (context_EOI(state));
 	else
 	{
@@ -66,7 +66,7 @@ t_error	lexer_context_scan(t_lexer *state, t_lexer_context_args args)
 	{
 		if (state->err.type)
 			return (state->err);
-		str = state->input->str + state->input->i;
+		str = state->input->str.data + state->input->i;
 		if (args.is_end != NULL && args.is_end(*str, args.unescaped_args))
 			return (context_end(state, args));
 		else if (*str == '\\')

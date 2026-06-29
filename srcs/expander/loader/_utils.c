@@ -7,8 +7,8 @@ bool	is_char_escaped(t_expander_loader *state)
 	char	current_char;
 	bool	is_in_whitelist;
 
-	current_char = state->word[state->i];
-	next_char = state->word[state->i + 1];
+	current_char = state->word.data[state->i];
+	next_char = state->word.data[state->i + 1];
 	if (state->quoting != CONTEXT_NONE)
 		is_in_whitelist = is_in_quoting_whitelist(next_char, state->quoting);
 	else
@@ -85,7 +85,7 @@ t_error	expander_loader_consume(
 	while (i < count)
 	{
 		opt.i = state->i;
-		current_char = state->word[state->i++];
+		current_char = state->word.data[state->i++];
 		item = expander_word_item_init(current_char, opt);
 		state->err = expander_word_push(&state->loaded_word, item);
 		if (state->err.type)

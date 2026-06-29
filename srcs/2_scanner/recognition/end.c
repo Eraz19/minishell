@@ -2,7 +2,7 @@
 
 bool	is_end(t_lexer *state)
 {
-	return (state->input->str[state->input->i] == '\0');
+	return (state->input->str.data[state->input->i] == '\0');
 }
 
 t_error	lexer_rule_end(t_lexer *state)

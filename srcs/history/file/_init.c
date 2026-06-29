@@ -25,7 +25,7 @@ static inline t_error	history_file_take_entry(
 	t_string	*entry;
 
 	entry = &((t_string *)file_entries->data)[index];
-	state->err = history_list_push(list, entry->data);
+	state->err = history_list_push(list, entry);
 	if (state->err.type)
 		return (state->err);
 	entry->cap = 0;

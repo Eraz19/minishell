@@ -14,7 +14,7 @@ t_error	lexer_consume(t_lexer *state, t_token_type type, size_t iter)
 	i = 0;
 	while (i < iter)
 	{
-		current_char = state->input->str[state->input->i];
+		current_char = state->input->str.data[state->input->i];
 		if (!string_append_n(&state->token->value, &current_char, 1))
 			return (state->err = error_sys());
 		state->token->type = type;

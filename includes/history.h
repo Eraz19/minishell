@@ -38,7 +38,7 @@ typedef struct s_history
 	t_history_file	file;
 	t_history_list	list;
 	t_history_rl	rl_history;
-	t_buff			current_input;
+	t_string		current_input;
 }	t_history;
 
 /**
@@ -118,6 +118,6 @@ t_error	history_save_entry(void);
  * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell history is
  *         unavailable, or ERR_LIBC on allocation failure.
  */
-t_error	history_append_to_entry(char *entry);
+t_error	history_append_to_entry(t_string *entry);
 
 #endif

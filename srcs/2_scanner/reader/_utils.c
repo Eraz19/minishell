@@ -5,28 +5,23 @@
 #include "shell.h"
 #include "reader_.h"
 
-t_error	readline_(char **res, const char *prompt)
+t_error	readline_(t_string *res, const char *prompt)
 {
 	t_error	err;
 	char	*input;
 
-	*res = readline(prompt);
-	while (*res == NULL)
+	input = readline(prompt);
+	while (input == NULL)
 	{
 		err = shell_should_exit_on_veof();
 		if (err.type)
 			return (err);
-		*res = readline(prompt);
+		input = readline(prompt);
 	}
-	if (**res == '\0')
-	{
-		free(*res);
-		*res = str_dup("");
-		if (*res == NULL)
-			return (error_sys());
-	}
-	input = str_join(*res, "\n");
-	if (input == NULL)
-		return (err = error_sys(), free(*res), err);
-	return (free(*res), *res = input, error(ERR_NO));
+	if (!string_init(res, 0, input, -1))
+		return (free(input), error_sys());
+	free(input);
+	if (!string_append_n(res, "\n", 1))
+		return (err = error_sys(), string_free(res), err);
+	return (error(ERR_NO));
 }

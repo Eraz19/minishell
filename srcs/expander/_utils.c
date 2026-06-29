@@ -27,22 +27,17 @@ t_error	expander_expand(char ***expansion, t_expander_args *args)
 	return (expander_free(&state), state.err);
 }
 
-t_error	read_heredoc_body(t_buff *heredoc_file_path, t_buff *heredoc_body)
+t_error	read_heredoc_body(t_string *heredoc_file_path, t_string *heredoc_body)
 {
 	int		fd;
 	t_error	err;
-	char	*path_str;
 
-	if (!buff_init(heredoc_body, 0, NULL, 0))
+	if (!string_init(heredoc_body, 0, NULL, 0))
 		return (error_sys());
-	path_str = buff_get_string(heredoc_file_path);
-	if (path_str == NULL)
-		return (error_sys());
-	err = posix_open(path_str, O_RDONLY, &fd);
+	err = posix_open(heredoc_file_path->data, O_RDONLY, &fd);
 	if (err.type)
-		return (free(path_str), err);
-	free(path_str);
-	if (!buff_read_all(heredoc_body, fd))
+		return (err);
+	if (!string_read_all(heredoc_body, fd))
 		return (err = error_sys(), posix_close(fd), err);
 	return (posix_close(fd), err);
 }

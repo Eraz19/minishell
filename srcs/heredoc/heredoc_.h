@@ -23,7 +23,7 @@
  */
 t_error	heredoc_create_file(t_heredoc *state, t_string *out_path);
 
-t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start);
+t_error	heredoc_store_body(t_heredoc *state, t_string *input, size_t *start);
 
 /**
  * @ingroup heredoc
@@ -39,6 +39,6 @@ t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start);
  *              string, on failure it is left untouched.
  * @return ERR_NO on success, or ERR_LIBC on allocation failure.
  */
-t_error	heredoc_build_delimiter(t_heredoc *state, char **delim);
+t_error	heredoc_build_delimiter(t_heredoc *state, t_string *delim);
 
 #endif

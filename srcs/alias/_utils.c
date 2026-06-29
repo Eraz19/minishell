@@ -81,15 +81,8 @@ bool	is_token_alias_expandable(t_alias *state, char *word)
 	return (true);
 }
 
-void	set_position_for_next_word(t_alias *state, char *expansion)
+void	set_position_for_next_word(t_alias *state, t_string *expansion)
 {
-	size_t	expansion_len;
-	
-	if (expansion == NULL)
-		return ;
-	expansion_len = str_len(expansion);
-	if (expansion != NULL && is_blank(expansion[expansion_len - 1]))
-		state->disable_position = true;
-	else
-		state->disable_position = false;
+	state->disable_position = expansion != NULL
+		&& is_blank(expansion->data[expansion->len - 1]);
 }

@@ -2,13 +2,13 @@
 
 static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
 {
-	if (state->input->str[state->input->i] == '(')
+	if (state->input->str.data[state->input->i] == '(')
 	{
 		(*((size_t *)nesting_depth))++;
 		if (lexer_consume(state, state->token->type, 1).type)
 			return (state->err);
 	}
-	else if (state->input->str[state->input->i] == ')')
+	else if (state->input->str.data[state->input->i] == ')')
 	{
 		(*((size_t *)nesting_depth))--;
 		if (lexer_consume(state, state->token->type, 1).type)
@@ -78,7 +78,7 @@ t_error	lexer_context_arith(t_lexer *state)
 	args = context_arith_rules(&nesting_depth, item);
 	if (lexer_context_scan(state, args).type)
 		return (state->err);
-	if (state->input->str[state->input->i] != ')')
+	if (state->input->str.data[state->input->i] != ')')
 	{
 		if (lexer_restore(state, backup).type)
 			return (state->err);

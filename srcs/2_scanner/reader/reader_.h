@@ -2,6 +2,7 @@
 # define READER__H
 
 # include "error.h"
+# include "libft.h"
 
 /**
  * @ingroup scanner
@@ -17,12 +18,12 @@
  * @return ERR_NO on success, ERR_VEOF at a non-interactive end-of-input, or
  *         ERR_LIBC on allocation failure.
  */
-t_error	readline_(char **res, const char *prompt);
+t_error	readline_(t_string *res, const char *prompt);
 
-t_error	reader_new_input(char **res);
+t_error	reader_new_input(t_string *res);
 
-t_error	reader_continuation(char **res);
+t_error	reader_continuation(t_string *res);
 
-t_error	reader_file_input(char **res, const char *path);
+t_error	reader_file_input(t_string *res, const char *path);
 
 #endif

@@ -55,10 +55,10 @@ typedef struct s_heredoc_queue_item
 {
 	size_t			*i;
 	t_heredoc_mode	mode;
-	char			*path;
+	t_string		path;
 	bool			is_tty;
-	char			*delim;
-	char			*input;
+	t_string		delim;
+	t_string		input;
 }	t_heredoc_queue_item;
 
 typedef struct s_heredoc
@@ -94,7 +94,7 @@ void	heredoc_free(t_heredoc *state);
 
 bool	heredoc_is_delim_quoted(t_string *delim);
 
-t_error	heredoc_store_all(char *input, size_t *start);
+t_error	heredoc_store_all(t_string *input, size_t *start);
 
 t_error	heredoc_add_to_queue(
 			t_string *path,
@@ -102,7 +102,7 @@ t_error	heredoc_add_to_queue(
 			t_heredoc_mode mode,
 			bool is_tty);
 
-t_error	heredoc_body_save_content(char *path, t_buff *content);
+t_error	heredoc_body_save_content(t_string *path, t_string *content);
 
 /**
  * @ingroup heredoc
@@ -117,7 +117,7 @@ t_error	heredoc_body_save_content(char *path, t_buff *content);
  * @param stack Already-initialised stack receiving the recorded contexts.
  * @return ERR_NO on success, or the recorded error on failure.
  */
-t_error	heredoc_track_body_context(t_buff *body, t_context_stack *stack);
+t_error	heredoc_track_body_context(t_string *body, t_context_stack *stack);
 
 
 #endif

@@ -1,6 +1,6 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2	# -DNDEBUG (disable assert())
+CFLAGS			:= -Wall -Wextra -Werror -O0 -g3	# -O2 -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
@@ -61,14 +61,22 @@ INCLUDES		:= \
 	-Iincludes \
 	-Ilogs \
 	-Ilibft \
-	-Ilibft/buff \
-	-Ilibft/buff/format \
+	-Ilibft/src/buff \
+	-Ilibft/src/buff/format \
+	-Isrcs/0_context \
+	-Isrcs/0_context/expansion \
+	-Isrcs/0_context/quoting \
+	-Isrcs/0_context/stack \
 	-Isrcs/0_posix_helpers \
 	-Isrcs/0_posix_helpers/posix_open \
+	-Isrcs/0_utils \
 	-Isrcs/0_utils/1_ft_getopt \
 	-Isrcs/0_utils/2_serializer \
+	-Isrcs/0_utils/ft_getpwnam \
 	-Isrcs/1_shell \
 	-Isrcs/lexer \
+	-Isrcs/lexer/context \
+	-Isrcs/lexer/input_stack \
 	-Isrcs/2_scanner \
 	-Isrcs/2_scanner/recognition \
 	-Isrcs/2_scanner/recognition/operator \
@@ -88,6 +96,7 @@ INCLUDES		:= \
 	-Isrcs/3_builder/2_parser/2_stack \
 	-Isrcs/3_builder/2_parser/3_cst \
 	-Isrcs/3_builder/3_converter \
+	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \

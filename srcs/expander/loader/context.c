@@ -49,14 +49,14 @@ t_error	expander_loader_quoted(t_expander_loader *state)
 		expander_loader_consume(state, 2, false);
 	if (state->err.type)
 		return (state->err);
-	current = state->word[state->i];
+	current = state->word.data[state->i];
 	while (current != '\0' && !is_quoting_ending(current, state->quoting))
 	{
 		if (expander_loader_context(state).type)
 			return (state->err);
-		current = state->word[state->i];
+		current = state->word.data[state->i];
 	}
-	if (state->word[state->i] == '\0')
+	if (state->word.data[state->i] == '\0')
 		return (state->err);
 	return (expander_loader_consume(state, 1, false));
 }

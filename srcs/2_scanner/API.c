@@ -49,12 +49,12 @@ t_error	scanner_heredoc_read(void)
 	else
 	{
 		item = state->lexer.input;
-		state->err = heredoc_store_all(item->str, &item->i);
+		state->err = heredoc_store_all(&item->str, &item->i);
 	}
 	return (state->err);
 }
 
-t_error	scanner_read_continuation(char **res)
+t_error	scanner_read_continuation(t_string *res)
 {
 	return (reader_continuation(res));
 }

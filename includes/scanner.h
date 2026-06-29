@@ -73,6 +73,6 @@ t_error	scanner_report_io_here(
 
 t_error	scanner_heredoc_read(void);
 
-t_error	scanner_read_continuation(char **res);
+t_error	scanner_read_continuation(t_string *res);
 
 #endif

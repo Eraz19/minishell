@@ -16,12 +16,13 @@ t_error	context_escape_next_char(t_lexer *state, t_escape_args args)
 		in_special_context = args.is_in_special_context(state);
 	if (in_special_context && args.is_in_special_whitelist != NULL)
 	{
-		if (args.is_in_special_whitelist(state->input->str[state->input->i]))
+		if (args.is_in_special_whitelist(
+				state->input->str.data[state->input->i]))
 			lexer_consume(state, state->token->type, 1);
 	}
 	else if (!in_special_context && args.is_in_whitelist != NULL)
 	{
-		if (args.is_in_whitelist(state->input->str[state->input->i]))
+		if (args.is_in_whitelist(state->input->str.data[state->input->i]))
 			lexer_consume(state, state->token->type, 1);
 	}
 	else

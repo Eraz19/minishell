@@ -1,6 +1,6 @@
 #include "error.h"
 #include "posix_helpers.h"
-#include "posix_helpers_priv.h"
+#include "shell.h"
 #include <errno.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -27,7 +27,7 @@ t_error	posix_read(int fd, void *buff, size_t len, size_t *bytes_read)
 		}
 		if (errno == EINTR)
 		{
-			err = posix_handle_eintr();
+			err = shell_should_interrupt();
 			if (err.type)
 				return (err);
 			continue ;

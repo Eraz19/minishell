@@ -3,8 +3,8 @@
 
 static bool	is_next_char_redirection(t_lexer *state)
 {
-	return (state->input->str[state->input->i] == '>' ||
-		state->input->str[state->input->i] == '<');
+	return (state->input->str.data[state->input->i] == '>' ||
+		state->input->str.data[state->input->i] == '<');
 }
 
 static bool	is_token_io_number(t_lexer *state)

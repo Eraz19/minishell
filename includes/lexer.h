@@ -50,7 +50,7 @@ typedef t_vector	t_input_stack;
 typedef struct s_input_lexer_stack_item
 {
 	size_t			i;
-	char			*str;
+	t_string		str;
 	t_context_stack	context;
 }	t_input_lexer_stack_item;
 
@@ -213,7 +213,7 @@ void			lexer_reset(t_lexer *state);
  * @param str Input text to scan (ownership transferred on success).
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error			lexer_push_input(t_lexer *state, char *str);
+t_error			lexer_push_input(t_lexer *state, t_string *str);
 
 /* ------------------------------------------------------------------------- */
 /* Public entry points                                                       */

@@ -6,9 +6,9 @@
 
 t_error	history_rl_add(t_history_rl *state, t_history_list *list, size_t count)
 {
-	ssize_t	i;
-	char	*entry;
-	ssize_t	entries_to_add;
+	ssize_t			i;
+	const t_string	*entry;
+	ssize_t			entries_to_add;
 
 	if (count == 0)
 		return (state->err);
@@ -26,8 +26,7 @@ t_error	history_rl_add(t_history_rl *state, t_history_list *list, size_t count)
 		state->err = history_list_get(list, &entry, (size_t)i++);
 		if (state->err.type)
 			return (state->err);
-		add_history(entry);
-		free(entry);
+		add_history(entry->data);
 		state->count++;
 	}
 	return (state->err);

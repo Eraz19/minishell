@@ -45,7 +45,7 @@ void	history_list_free(t_history_list *list);
  * @param item Entry string whose ownership is transferred to the list.
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error	history_list_push(t_history_list *list, char *item);
+t_error	history_list_push(t_history_list *list, const t_string *item);
 
 /**
  * @ingroup history
@@ -61,6 +61,6 @@ t_error	history_list_push(t_history_list *list, char *item);
  *         ERR_INDEX_OUT_OF_BOUND if @p i is past the end, or ERR_LIBC on
  *         allocation failure.
  */
-t_error	history_list_get(t_history_list *list, char **item, size_t i);
+t_error	history_list_get(t_history_list *list, const t_string **item, size_t i);
 
 #endif

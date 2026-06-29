@@ -140,6 +140,6 @@ t_error	alias_add(const char *name, const char *value);
  *         ERR_SHELL_NOT_FOUND if the shell alias state is unavailable, or
  *         ERR_LIBC on allocation failure.
  */
-t_error	alias_expand_token(char **expansion, t_string *token_value);
+t_error	alias_expand_token(t_string *expansion, const t_string *token_value);
 
 #endif

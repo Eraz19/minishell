@@ -4,7 +4,7 @@ bool	is_operator_char(t_lexer *state)
 {
 	const char	*input_ptr;
 
-	input_ptr = state->input->str + state->input->i;
+	input_ptr = state->input->str.data + state->input->i;
 	if (input_ptr[0] == '\n' && !is_in_middle_of_operator(state))
 		return (true);
 	else if (input_ptr[0] == '(' && !is_in_middle_of_operator(state))
@@ -30,7 +30,7 @@ t_error	lexer_add_char_into_token_operator(t_lexer *state)
 {
 	const char	*input_ptr;
 
-	input_ptr = state->input->str + state->input->i;
+	input_ptr = state->input->str.data + state->input->i;
 	if (input_ptr[0] == '\n')
 		return (lexer_consume(state, TOKEN_NEWLINE, 1));
 	else if (input_ptr[0] == '(')
