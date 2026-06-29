@@ -33,7 +33,7 @@ t_error	params_get(const t_string *name, t_string *dst)
 	return (var_get(name, dst));
 }
 
-t_error	params_get_positionals(t_positionals *dst)
+t_error	params_get_positionals(const t_positionals **dst)
 {
 	t_params	*params;
 

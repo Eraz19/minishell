@@ -98,14 +98,12 @@ t_error	params_build_envp(char ***dst_envp);
 t_error	params_get(const t_string *name, t_string *dst);
 
 /**
- * @brief Copy the current positional frame into a borrowed vector view.
+ * @brief Borrow the current positional frame as a read-only vector view.
  *
- * @warning The returned vector aliases internal storage.
- *
- * @param dst Destination vector view (borrowed, caller must NOT modify it).
+ * @param dst Destination pointer to the borrowed read-only frame view.
  * @return `ERR_SHELL_NOT_FOUND` or `ERR_VAR_NOT_FOUND` on failure.
  */
-t_error	params_get_positionals(t_positionals *dst);
+t_error	params_get_positionals(const t_positionals **dst);
 
 /**
  * @brief Print shell parameters in the requested builtin format.

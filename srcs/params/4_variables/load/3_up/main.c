@@ -19,9 +19,9 @@ static inline void	up_build_ps1(t_string *out_name, t_string *out_value)
 
 	assert(out_name != NULL);
 	assert(out_value != NULL);
-	len = str_len(name);
+	len = sizeof(PS1_NAME);
 	string_take(out_name, name, len + 1, len);
-	len = str_len(value);
+	len = sizeof(PS1_VALUE);
 	string_take(out_value, value, len + 1, len);
 }
 
@@ -33,9 +33,9 @@ static inline void	up_build_ps2(t_string *out_name, t_string *out_value)
 
 	assert(out_name != NULL);
 	assert(out_value != NULL);
-	len = str_len(name);
+	len = sizeof(PS2_NAME);
 	string_take(out_name, name, len + 1, len);
-	len = str_len(value);
+	len = sizeof(PS2_VALUE);
 	string_take(out_value, value, len + 1, len);
 }
 
@@ -47,9 +47,9 @@ static inline void	up_build_ps4(t_string *out_name, t_string *out_value)
 
 	assert(out_name != NULL);
 	assert(out_value != NULL);
-	len = str_len(name);
+	len = sizeof(PS4_NAME);
 	string_take(out_name, name, len + 1, len);
-	len = str_len(value);
+	len = sizeof(PS4_VALUE);
 	string_take(out_value, value, len + 1, len);
 }
 

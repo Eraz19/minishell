@@ -54,15 +54,15 @@ void	positionals_free_stack(t_positionals_stack *stack);
 /* ************************************************************************* */
 
 /**
- * @brief Borrow the current positional frame.
- *
- * @warning The returned vector aliases internal storage.
+ * @brief Borrow the current positional frame as a read-only vector view.
  *
  * @param stack Source stack (borrowed, read-only).
- * @param dst Destination frame view (borrowed, caller must NOT modify it).
+ * @param dst Destination pointer to the borrowed read-only frame view.
  * @return `ERR_NO` or `ERR_VAR_NOT_FOUND`.
  */
-t_error	positionals_get(const t_positionals_stack *stack, t_positionals *dst);
+t_error	positionals_get(
+			const t_positionals_stack *stack,
+			const t_positionals **dst);
 
 /**
  * @brief Read a single positional parameter into a fresh string.

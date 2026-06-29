@@ -3,13 +3,15 @@
 #include <stdlib.h>
 # include <assert.h>
 
-t_error	positionals_get(const t_positionals_stack *stack, t_positionals *dst)
+t_error	positionals_get(
+	const t_positionals_stack *stack,
+	const t_positionals **dst)
 {
 	assert(stack != NULL);
 	assert(dst != NULL);
 	if (stack->len == 0)
 		return (error(ERR_VAR_NOT_FOUND));
-	*dst = ((t_positionals *)stack->data)[stack->len - 1];
+	*dst = &((t_positionals *)stack->data)[stack->len - 1];
 	return (error(ERR_NO));
 }
 

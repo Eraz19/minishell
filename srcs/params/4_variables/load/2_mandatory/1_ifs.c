@@ -1,5 +1,5 @@
 #include "variables.h"
-# include "logs.h"	// DEBUG
+# include "logs.h"		// DEBUG
 # include <assert.h>	// DEBUG
 
 #define IFS_NAME	"IFS"
@@ -11,7 +11,7 @@ static inline void	ifs_build_name(t_string *out)
 	size_t		len;
 
 	assert(out != NULL);
-	len = str_len(name);
+	len = sizeof(IFS_NAME);
 	string_take(out, name, len + 1, len);
 }
 
@@ -21,7 +21,7 @@ static inline void	ifs_build_value(t_string *out)
 	size_t		len;
 
 	assert(out != NULL);
-	len = str_len(value);
+	len = sizeof(IFS_VALUE);
 	string_take(out, value, len + 1, len);
 }
 
