@@ -7,6 +7,7 @@
 #include "rule_state_type.h"
 #include "cst_type.h"
 #include "ast_type.h"
+#include "heredoc.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -20,6 +21,71 @@ const char	*bool_to_string(bool value)
 	if (value)
 		return ("true");
 	return ("false");
+}
+
+static const char	*heredoc_mode_to_string(t_heredoc_mode mode)
+{
+	if (mode == HEREDOC_MODE_NORMAL)
+		return ("HEREDOC_MODE_NORMAL");
+	if (mode == HEREDOC_MODE_TAB_STRIP)
+		return ("HEREDOC_MODE_TAB_STRIP");
+	return ("unknown");
+}
+
+static void	debug_dump_string_value(const t_string *value)
+{
+	size_t	i;
+	char	c;
+
+	fprintf(stderr, "\"");
+	if (value == NULL || value->data == NULL)
+		return ((void)fprintf(stderr, "\""));
+	i = 0;
+	while (i < value->len)
+	{
+		c = value->data[i];
+		if (c == '\n')
+			fprintf(stderr, "\\n");
+		else if (c == '\t')
+			fprintf(stderr, "\\t");
+		else if (c == '\r')
+			fprintf(stderr, "\\r");
+		else if (c == '\\')
+			fprintf(stderr, "\\\\");
+		else if (c == '"')
+			fprintf(stderr, "\\\"");
+		else if (c >= 32 && c <= 126)
+			fprintf(stderr, "%c", c);
+		else
+			fprintf(stderr, "\\x%02x", (unsigned char)c);
+		i++;
+	}
+	fprintf(stderr, "\"");
+}
+
+void	debug_dump_heredoc_queue_item(t_heredoc_queue_item *item)
+{
+	if (item == NULL)
+		return ((void)fprintf(stderr, "[HEREDOC_QUEUE_ITEM] (null)\n"));
+	fprintf(stderr, "[HEREDOC_QUEUE_ITEM] %p\n", (void *)item);
+	fprintf(stderr, "  i=%p", (void *)item->i);
+	if (item->i != NULL)
+		fprintf(stderr, " (*i=%zu)", *item->i);
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  mode=%s\n", heredoc_mode_to_string(item->mode));
+	fprintf(stderr, "  is_tty=%s\n", bool_to_string(item->is_tty));
+	fprintf(stderr, "  path={len=%zu cap=%zu data=",
+		item->path.len, item->path.cap);
+	debug_dump_string_value(&item->path);
+	fprintf(stderr, "}\n");
+	fprintf(stderr, "  delim={len=%zu cap=%zu data=",
+		item->delim.len, item->delim.cap);
+	debug_dump_string_value(&item->delim);
+	fprintf(stderr, "}\n");
+	fprintf(stderr, "  input={len=%zu cap=%zu data=",
+		item->input.len, item->input.cap);
+	debug_dump_string_value(&item->input);
+	fprintf(stderr, "}\n");
 }
 
 /* ************************************************************************* */

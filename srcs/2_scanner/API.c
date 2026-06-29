@@ -45,7 +45,9 @@ t_error	scanner_heredoc_read(void)
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->lexer.input == NULL)
+	{
 		state->err = heredoc_store_all(NULL, NULL);
+	}
 	else
 	{
 		item = state->lexer.input;

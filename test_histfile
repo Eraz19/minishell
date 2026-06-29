@@ -1,0 +1,129 @@
+'echo 3
+'test 1'
+'test 2'
+'test 3'
+bhjfd
+'echo bdkjebsjhkf
+'cette fois ça marche'
+git add includes/error.h
+git add includes/token.h includes/utils.h
+git add srcs/0_token/
+git add srcs/0_utils/ srcs/3_builder/ srcs/error.c
+git commit -m "refactor(converter): use t_token * instead of t_buff"
+cd libft/src/buff/
+norminette buff_cmp.c
+cd ../..
+git add src/buff/
+git add src/buff/buff_internal.h
+git add libft.h
+git commit -m "feat(buff): buff_read_until_*() variants"
+norminette src/buff/
+git add src/buff/ libft.h
+git commit -m "feat(buff): add ops *_n() variants"
+git commit -m "feat(string): add string module"
+git commit -m "libft:feat(string): add string module"
+make fclean
+git commit -m "wip(runner): before refactor all codebase to use t_string"
+git add Makefile
+git commit -m "feat(error): use __FILE__, __LINE__ and DEBUG_ERROR_TRACE flag"
+cd libft
+norminette src/buff
+norminette src/string/
+norminette
+norminette src/
+norminette libft.h
+git commit -m "feat(string): add string_take() + norminetted all repo"
+git add libft/
+git commit -m "libft:feat(string): add string_take() + norminetted all repo"
+git log
+norminette srcs/params/4_variables/load/2_mandatory/2_pwd_set.c
+norminette srcs/params/2_load.c
+git add Makefile TODO_GA.md
+git commit -m "refactor(params): use t_string"
+code ~/.codex/skills/doc-docs/agents/openai.yaml
+code ~/.codex/skills/doc-docs/references/ownership.md
+git commit -m "doc(params): finalize Doxygen comments"
+git commit -m "feat(main): use environ instead of envp and use assert"
+git add includes/posix_helpers.h srcs/0_posix_helpers/
+git commit -m "refactor(posix_helpers): posix_getcwd() use t_string"
+git add includes/utils.h includes/ft_getopt.h srcs/0_utils
+git commit -m "refactor(utils): use t_string"
+git add includes/params.h srcs/params/ includes/shell.h srcs/1_shell/
+git commit -m "refactor(shell): use t_string"
+git add includes/shell.h srcs/1_shell/
+git add srcs/main.c
+git commit -m "doc(shell)"
+git add includes/token.h srcs/0_token/
+git commit -m "refactor(token): use t_string"
+norminette srcs/heredoc/_utils.c
+git add includes/scanner.h includes/heredoc.h srcs/2_scanner/ srcs/heredoc/
+git add includes/error.h srcs/error.c
+git commit -m "refactor(scanner + heredoc): scanner_report_io_here() use t_string and t_token"
+git add includes/params.h srcs/params/
+git commit -m "refactor(params): params_get_positionals() gives a read-only pointer to t_positionals"
+git add includes/utils.h srcs/0_utils/
+git reset --soft HEAD~1
+git add srcs/params/ srcs/1_shell/
+git commit -m "refactor(utils): name_is_valid() use t_string"
+git add srcs/3_builder/
+git status
+git add TODO_GA.md
+git commit -m "refactor(builder): use t_string"
+git add includes/context.h srcs/0_context/ srcs/0_token/
+git commit -m "fix(context): use const properly in context_stack_get() and context_stack_dup()"
+git add includes/params.h includes/utils.h includes/alias.h srcs/0_utils/ srcs/1_shell/ srcs/3_builder/ srcs/params/ TODO_GA.md
+git commit -m "feat(params): add getters variants using const char* instead of t_string for name"
+cd srcs/history/
+codebase
+git add srcs/history/ srcs/error.c includes/error.h
+git commit -m "refactor(history): use t_string and fix various bugs"
+code ~/.codex/skills/doc-docs/SKILL.md
+git add srcs/history/ includes/history.h
+git commit -m "doc(history): update doc after refactor"
+git add srcs/builtins/
+git commit -m "refactor(builtins): use t_string"
+git add .vscode/ srcs/expander/
+git commit -m "refactor(expander): use t_string"
+git add srcs/alias/ srcs/2_scanner/
+git add includes/
+git commit -m "refactor(scanner + alias): use t_string"
+git commit -m "fix: fix various bugs post-refactor"
+git commit -m "wip: before merge with Alexander"
+git pull origin Alexander
+git checkout -m -- srcs/2_scanner/reader/_main.c
+cd libft/
+git add libft.h src/
+git commit -m "feat(string): add string_trim_leading() for Alexander <3"
+cd ..
+git add libft
+git commit -m "libft:feat(string): add string_trim_leading() for Alexander <3"
+make re
+cat << EOF cmd << SECOND lol\
+body\
+EOF\
+body2\
+SECOND\
+echo
+git add .
+git commit -m "wip: debugging after massive merge and refactor"
+git push
+clear
+./minishell
+cat /tmp/minishell_heredoc_71
+cat /tmp/minishell_heredoc_72
+cat /tmp/minishell_heredoc_73
+./minishell -c "cat << EOF cmd << SECOND lol\
+body\
+EOF\
+body2\
+SECOND\
+echo"
+make && ./minishell -c "cat << EOF cmd << SECOND lol\
+body\
+EOF\
+body2\
+SECOND\
+echo"
+cat $HISTFILE
+export HISTFILE="/Users/gui/repos/minishell/test_histfile" && ./minishell
+make && ./minishell

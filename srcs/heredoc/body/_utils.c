@@ -28,5 +28,5 @@ bool	is_line_delimiter(t_heredoc_body *state)
 {
 	if (state->item->mode == HEREDOC_MODE_TAB_STRIP)
 		string_trim_leading(&state->line, '\t');
-	return (!string_cmp(&state->line, &state->item->delim));
+	return (string_cmp(&state->line, &state->item->delim));
 }

@@ -17,6 +17,7 @@ static t_error	heredoc_body_continuation(
 		return (state->err = error(ERR_NO_DELIM));
 }
 
+#include <stdio.h>
 static t_error	heredoc_body_get_content(t_heredoc_body *state)
 {
 	char	*match_EOL;
@@ -40,7 +41,9 @@ static t_error	heredoc_body_get_content(t_heredoc_body *state)
 			return (state->err);
 		}
 		else if (heredoc_body_line_to_content(state).type)
+		{
 			return (state->err);
+		}
 	}
 }
 
