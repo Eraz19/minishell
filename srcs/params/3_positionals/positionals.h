@@ -34,7 +34,7 @@ void	positionals_init_stack(t_positionals_stack *stack);
  * @param argc Argument count.
  * @param argv Argument array (borrowed, read-only).
  * @param start_index Index of the first positional argument.
- * @return `ERR_NO` or `ERR_LIBC`.
+ * @return @c ERR_NO or @c ERR_LIBC.
  */
 t_error	positionals_load_stack(
 			t_positionals_stack *stack,
@@ -58,7 +58,7 @@ void	positionals_free_stack(t_positionals_stack *stack);
  *
  * @param stack Source stack (borrowed, read-only).
  * @param dst Destination pointer to the borrowed read-only frame view.
- * @return `ERR_NO` or `ERR_VAR_NOT_FOUND`.
+ * @return @c ERR_NO or @c ERR_VAR_NOT_FOUND.
  */
 t_error	positionals_get(
 			const t_positionals_stack *stack,
@@ -67,13 +67,15 @@ t_error	positionals_get(
 /**
  * @brief Read a single positional parameter into a fresh string.
  *
- * The caller owns @p dst on success and must release it with @ref string_free().
+ * The name @c # returns the current positional count.
+ * The caller owns @p dst on success and must release it with
+ * @ref string_free().
  *
  * @param stack Source stack (borrowed, read-only).
  * @param name Requested positional name (borrowed, read-only).
  * @param dst Initialized destination string (borrowed).
- * @return `ERR_NO`, `ERR_VAR_NOT_FOUND`, `ERR_VAR_INVALID_NAME` or
- *         `ERR_LIBC`.
+ * @return @c ERR_NO, @c ERR_VAR_NOT_FOUND, @c ERR_VAR_INVALID_NAME or
+ *         @c ERR_LIBC.
  */
 t_error	positionals_get_one(
 			const t_positionals_stack *stack,
@@ -81,10 +83,28 @@ t_error	positionals_get_one(
 			t_string *dst);
 
 /**
+ * @brief Const-name variant of @ref positionals_get_one().
+ *
+ * The name @c # returns the current positional count.
+ * The caller owns @p dst on success and must release it with
+ * @ref string_free().
+ *
+ * @param stack Source stack (borrowed, read-only).
+ * @param name Requested positional name (borrowed, read-only).
+ * @param dst Destination string initialized by the function (borrowed).
+ * @return @c ERR_NO, @c ERR_VAR_NOT_FOUND, @c ERR_VAR_INVALID_NAME or
+ *         @c ERR_LIBC.
+ */
+t_error	positionals_get_one_cst(
+			const t_positionals_stack *stack,
+			const char *name,
+			t_string *dst);
+
+/**
  * @brief Pop the current positional frame from the @p stack .
  *
  * @param stack Stack to modify (borrowed).
- * @return `ERR_NO` or `ERR_LIBC`.
+ * @return @c ERR_NO or @c ERR_LIBC.
  */
 t_error	positionals_pop(t_positionals_stack *stack);
 
@@ -94,8 +114,8 @@ t_error	positionals_pop(t_positionals_stack *stack);
  * Ownership transfers to the stack on success.
  *
  * @param stack Destination stack (borrowed).
- * @param positionals Frame to push (ownership taken by @p stack ).
- * @return `ERR_NO` or `ERR_LIBC`.
+ * @param positionals Frame to push (ownership taken by @p stack).
+ * @return @c ERR_NO or @c ERR_LIBC.
  */
 t_error	positionals_push(
 			t_positionals_stack *stack,
@@ -110,7 +130,7 @@ t_error	positionals_push(
  *
  * @param stack Destination stack (borrowed).
  * @param positionals Replacement frame (ownership taken by stack).
- * @return `ERR_NO`, `ERR_VAR_NOT_FOUND` or `ERR_LIBC`.
+ * @return @c ERR_NO, @c ERR_VAR_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	positionals_replace(
 			t_positionals_stack *stack,
@@ -121,7 +141,7 @@ t_error	positionals_replace(
  *
  * @param stack Stack to modify (borrowed).
  * @param n Number of leading arguments to remove.
- * @return `ERR_NO`, `ERR_VAR_NOT_FOUND` or `ERR_SHIFT_INVALID_VALUE`.
+ * @return @c ERR_NO, @c ERR_VAR_NOT_FOUND or @c ERR_SHIFT_INVALID_VALUE.
  */
 t_error	positionals_shift(t_positionals_stack *stack, size_t n);
 

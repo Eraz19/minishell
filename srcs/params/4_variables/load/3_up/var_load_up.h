@@ -4,9 +4,9 @@
 # include "error.h"
 
 /**
- * @brief Load variables from the parent shell state.
+ * @brief Load or init @c PS1 @c PS2 and @c PS4 POSIX variables.
  *
- * @return `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY` or `ERR_LIBC`.
+ * @return @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY or @c ERR_LIBC.
  */
 t_error	var_load_up(void);
 

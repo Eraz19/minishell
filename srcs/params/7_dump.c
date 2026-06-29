@@ -28,12 +28,24 @@ static void	params_dump_scalar(const t_string *name)
 
 static void	params_dump_scalar_cst(const char *name_cst)
 {
-	t_string	name;
+	t_string	value;
+	t_error		err;
 
 	assert(name_cst != NULL);
-	string_init(&name, 0, name_cst, -1);
-	params_dump_scalar(&name);
-	string_free(&name);
+	assert(name_cst[0] != '\0');
+	err = params_get_from_const(name_cst, &value);
+	if (err.type != ERR_NO)
+	{
+		fprintf(stderr, "PARAMS '%s'=[ERROR: '%s']\n", name_cst, error_to_string(err));
+		return ;
+	}
+	if (value.data)
+	{
+		fprintf(stderr, "PARAMS '%s'='%s'\n", name_cst, value.data);
+		string_free(&value);
+	}
+	else
+		fprintf(stderr, "PARAMS '%s'=NULL\n", name_cst);
 }
 
 static void	params_dump_variables(void)

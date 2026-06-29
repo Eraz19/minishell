@@ -4,7 +4,7 @@
 /**
  * @brief Free a positional frame for vector_free() callbacks.
  *
- * The `void *` signature matches vector_free().
+ * The @c void* signature matches @ref vector_free().
  *
  * @param positionals Positional frame to release (borrowed).
  */

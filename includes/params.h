@@ -80,28 +80,42 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp);
  * The returned array and each entry are owned by the caller.
  *
  * @param dst_envp Destination array pointer (borrowed).
- * @return `ERR_SHELL_NOT_FOUND` or `ERR_LIBC` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC on failure.
  */
 t_error	params_build_envp(char ***dst_envp);
 
 /**
  * @brief Read a scalar parameter by name into a fresh string.
  *
- * The caller owns `dst` on success and must release it with `string_free()`.
- * `dst->data` may be `NULL` when the parameter exists but has no value.
+ * The caller owns @p dst on success and must release it with
+ * @ref string_free(). @p dst->data may be @c NULL when the parameter exists
+ * but has no value.
  *
  * @param name Parameter name (borrowed, read-only).
- * @param dst Uninitialized destination string (borrowed).
- * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_NOT_FOUND`
- *         or `ERR_LIBC` on failure.
+ * @param dst Destination string initialized by the function (borrowed).
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_NOT_FOUND
+ *         or @c ERR_LIBC on failure.
  */
 t_error	params_get(const t_string *name, t_string *dst);
+
+/**
+ * @brief Const-name variant of @ref params_get().
+ *
+ * The caller owns the resulting string on success and must release it with
+ * @ref string_free().
+ *
+ * @param name Parameter name (borrowed, read-only).
+ * @param dst Destination string initialized by the function (borrowed).
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_NOT_FOUND
+ *         or @c ERR_LIBC on failure.
+ */
+t_error	params_get_from_const(const char *name, t_string *dst);
 
 /**
  * @brief Borrow the current positional frame as a read-only vector view.
  *
  * @param dst Destination pointer to the borrowed read-only frame view.
- * @return `ERR_SHELL_NOT_FOUND` or `ERR_VAR_NOT_FOUND` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND or @c ERR_VAR_NOT_FOUND on failure.
  */
 t_error	params_get_positionals(const t_positionals **dst);
 
@@ -109,7 +123,7 @@ t_error	params_get_positionals(const t_positionals **dst);
  * @brief Print shell parameters in the requested builtin format.
  *
  * @param mode Output mode.
- * @return `ERR_SHELL_NOT_FOUND` or `ERR_LIBC` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC on failure.
  */
 t_error	params_print(t_params_print_mode mode);
 
@@ -117,14 +131,14 @@ t_error	params_print(t_params_print_mode mode);
  * @brief Push a new positional frame on the stack.
  *
  * @param src Positional frame (ownership taken by params).
- * @return `ERR_SHELL_NOT_FOUND` or `ERR_LIBC` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC on failure.
  */
 t_error	params_push_positionals(t_positionals *src);
 
 /**
  * @brief Remove the current positional frame from the stack.
  *
- * @return `ERR_SHELL_NOT_FOUND` or `ERR_LIBC` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC on failure.
  */
 t_error	params_pop_positionals(void);
 
@@ -132,10 +146,10 @@ t_error	params_pop_positionals(void);
  * @brief Replace the current positional frame with a new one.
  *
  * Ownership transfers to the params module on success.
- * `src` must not alias an already stored frame.
+ * @p src must not alias an already stored frame.
  *
  * @param src Replacement positional frame (ownership taken by params).
- * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_NOT_FOUND` or `ERR_LIBC` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_NOT_FOUND or @c ERR_LIBC on failure.
  */
 t_error	params_replace_positionals(t_positionals *src);
 
@@ -144,7 +158,7 @@ t_error	params_replace_positionals(t_positionals *src);
  *
  * @param option Option bit to modify.
  * @param on True to enable the option, false to clear it.
- * @return `ERR_SHELL_NOT_FOUND` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND on failure.
  */
 t_error	params_set_option(t_option option, bool on);
 
@@ -152,7 +166,7 @@ t_error	params_set_option(t_option option, bool on);
  * @brief Update the last background process identifier.
  *
  * @param value New PID value.
- * @return `ERR_SHELL_NOT_FOUND` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND on failure.
  */
 t_error	params_set_last_bg_pid(pid_t value);
 
@@ -160,24 +174,24 @@ t_error	params_set_last_bg_pid(pid_t value);
  * @brief Update the last command exit status.
  *
  * @param value New status value.
- * @return `ERR_SHELL_NOT_FOUND` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND on failure.
  */
 t_error	params_set_last_status(int value);
 
 /**
  * @brief Create or update a shell variable.
  *
- * `value` may be `NULL`. When the variable already exists, `export` and
- * `readonly` only affect the stored flags when the function is allowed to
- * update them. If the variable is new and `OPT_EXPORT_ALL` is active, the
- * variable is exported even when `export` is false.
+ * @p value may be @c NULL. When the variable already exists, @p export and
+ * @p readonly only affect the stored flags when the function updates them. If
+ * the variable is new and @c OPT_EXPORT_ALL is active, it becomes exported
+ * even when @p export is false.
  *
  * @param name Variable name (borrowed, read-only).
  * @param value Variable value (borrowed, read-only).
  * @param export Export flag to apply.
  * @param readonly Read-only flag to apply.
- * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY`
- *         or `ERR_LIBC` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY
+ *         or @c ERR_LIBC on failure.
  */
 t_error	params_set_variable(
 	const t_string *name,
@@ -186,11 +200,11 @@ t_error	params_set_variable(
 	bool readonly);
 
 /**
- * @brief Remove the first `n` positional arguments from the current frame.
+ * @brief Remove the first @p n positional arguments from the current frame.
  *
  * @param n Number of leading positional arguments to remove.
- * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_NOT_FOUND` or
- *         `ERR_SHIFT_INVALID_VALUE` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_NOT_FOUND or
+ *         @c ERR_SHIFT_INVALID_VALUE on failure.
  */
 t_error	params_shift_positionals(size_t n);
 
@@ -198,8 +212,8 @@ t_error	params_shift_positionals(size_t n);
  * @brief Remove a shell variable by name.
  *
  * @param name Variable name (borrowed, read-only).
- * @return `ERR_SHELL_NOT_FOUND`, `ERR_VAR_INVALID_NAME`, `ERR_VAR_READ_ONLY`
- *         or `ERR_INDEX_OUT_OF_BOUND` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY
+ *         or @c ERR_INDEX_OUT_OF_BOUND on failure.
  */
 t_error	params_unset_variable(const t_string *name);
 

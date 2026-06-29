@@ -29,8 +29,8 @@
  * @ingroup rule_state_pub
  * @brief Compares two rule states for exact equality.
  *
- * Two @ref t_rule_state values are considered equal when their `rule_id`,
- * `pos`, and `lookahead` fields are all equal.
+ * Two @ref t_rule_state values are considered equal when their @c rule_id,
+ * @c pos, and @c lookahead fields are all equal.
  *
  * @note This function does not access external state.
  *
@@ -50,7 +50,7 @@ bool		rule_state_equal(t_rule_state a, t_rule_state b);
  *
  * @warning @p rules must NOT be NULL.
  * @warning @p rule_state.rule_id must designate a valid rule index in the
- *          range `[0, @ref RULE_COUNT)`.
+ *          range [0, @ref RULE_COUNT).
  * @warning This function performs no parameter validation.
  *
  * @param rules Rule table to inspect (borrowed, must NOT be NULL).
@@ -71,7 +71,7 @@ bool		rule_state_is_complete(t_rule *rules, t_rule_state rule_state);
  *
  * @warning @p rules must NOT be NULL.
  * @warning @p rule_state.rule_id must designate a valid rule index in the
- *          range `[0, @ref RULE_COUNT)`.
+ *          range [0, @ref RULE_COUNT).
  * @warning This function performs no parameter validation.
  *
  * @param rules Rule table to inspect (borrowed, must NOT be NULL).

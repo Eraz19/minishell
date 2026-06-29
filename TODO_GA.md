@@ -127,6 +127,7 @@
 
 ## QUESTION
 - ⚠️ signature de `positionals_get()` modifiée pour renvoyer un pointeur read-only
+- ⚠️ `params_get()` use `t_string`, `params_get_from_const()` use `const char *`
 - ⚠️ J'ai vu plein de `error_sys()` après des `free*()` dans ton code
 - use `string_append_format()` / `buff_append_format()` pour pas avoir à `ft_itoa()` + `free()`
 - use `t_string` everywhere instead of `t_buff` (NUL-terminé donc évite plein d'allocs / manips manuelles, je peux refacto si besoin)

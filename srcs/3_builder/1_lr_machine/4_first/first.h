@@ -78,9 +78,9 @@ typedef struct s_first_param
  *          already have been called successfully on @p machine before calling
  *          this function.
  * @warning Every symbol stored in @p param->symbols must be a valid
- *          @ref t_symbol value in the range `[0, @ref SYM_COUNT)`.
+ *          @ref t_symbol value in the range [0, @ref SYM_COUNT).
  * @warning When @p param->has_lookahead is true, @p param->lookahead must be
- *          a terminal symbol in the range `[0, @ref SYM_TERMINAL_MAX]`.
+ *          a terminal symbol in the range [0, @ref SYM_TERMINAL_MAX].
  * @warning This function performs no parameter validation.
  *
  * @param machine LR machine providing the precomputed FIRST and nullable
@@ -94,7 +94,7 @@ void	first(t_lr_machine *machine, t_first_param *param);
  * @ingroup first_pub
  * @brief Builds the FIRST table stored in an LR machine.
  *
- * This function resets the whole `first` table stored in @p machine, marks
+ * This function resets the whole @c first table stored in @p machine, marks
  * each terminal symbol as belonging to its own FIRST set, then computes a
  * fixed point over the grammar rules stored in @p machine->rules.
  *
@@ -103,11 +103,11 @@ void	first(t_lr_machine *machine, t_first_param *param);
  * left-hand side FIRST set, and the scan continues only while the current
  * symbol is nullable according to @ref symbol_is_nullable.
  *
- * @note This function updates only the `first` table stored in @p machine.
+ * @note This function updates only the @c first table stored in @p machine.
  * @note FIRST sets for terminal symbols are initialized so that each terminal
  *       contains itself.
  * @note This function stores only terminal membership. Nullable-symbol
- *       information remains stored separately in `nullable_symbols`.
+ *       information remains stored separately in @c nullable_symbols.
  *
  * @warning @p machine must NOT be NULL.
  * @warning @p machine->rules must already contain a valid grammar, typically

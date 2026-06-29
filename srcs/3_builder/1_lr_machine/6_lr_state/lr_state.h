@@ -37,8 +37,8 @@
  * @note Equality is tested with @ref lr_state_equal.
  * @note If the state already exists, this function returns true and leaves
  *       @p did_add unchanged.
- * @note If a new state is inserted and @p did_add is not NULL, `*did_add` is
- *       set to true.
+ * @note If a new state is inserted and @p did_add is not @c NULL, @p *did_add
+ *       is set to true.
  * @note Insertion copies the @ref t_lr_state structure into @p lr_states but
  *       does not duplicate the underlying rule-state buffer. After a
  *       successful insertion, that underlying storage must be considered owned
@@ -75,8 +75,8 @@ t_error	lr_state_add(t_vector *lr_states, t_lr_state *lr_state, bool *did_add);
  *       @ref rule_state_equal.
  * @note If @p rule_state is already present, this function returns true and
  *       leaves @p did_add unchanged.
- * @note If a new rule state is inserted and @p did_add is not NULL,
- *       `*did_add` is set to true.
+ * @note If a new rule state is inserted and @p did_add is not @c NULL,
+ *        @p *did_add is set to true.
  *
  * @warning @p lr_state must NOT be NULL.
  * @warning @p lr_state must be a valid vector storing @ref t_rule_state items.
@@ -116,7 +116,7 @@ t_error	lr_state_add_rule_state(t_lr_state *lr_state, t_rule_state rule_state,
  *          already have been built with @ref symbols_build_nullables_table and
  *          @ref first_build_table.
  * @warning Every rule state already stored in @p lr_state must contain a valid
- *          `rule_id`, `pos`, and `lookahead`.
+ *          @c rule_id, @c pos, and @c lookahead.
  * @warning On failure, rule states added before the error remain stored in
  *          @p lr_state. This function does not roll back partial progress.
  * @warning This function performs no parameter validation.
@@ -159,7 +159,7 @@ bool	lr_state_equal(t_lr_state *a, t_lr_state *b);
  * This function scans the LR-state registry stored in @p lr_states and
  * compares each entry with @p lr_state using @ref lr_state_equal.
  *
- * @note When the state is found and @p id is not NULL, `*id` receives the
+ * @note When the state is found and @p id is not @c NULL, @p *id receives the
  *       matching index.
  * @note When the state is not found, @p id is left unmodified.
  *
@@ -231,8 +231,8 @@ void	lr_state_init(t_lr_state *lr_state);
  * @warning The nullable-symbol table and FIRST table stored in @p machine must
  *          already have been built with @ref symbols_build_nullables_table and
  *          @ref first_build_table.
- * @warning Every rule state stored in @p src must contain a valid `rule_id`,
- *          `pos`, and `lookahead`.
+ * @warning Every rule state stored in @p src must contain a valid @c rule_id,
+ *          @c pos, and @c lookahead.
  * @warning This function performs no parameter validation.
  *
  * @param machine LR machine providing grammar, nullable-symbol and FIRST data

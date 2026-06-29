@@ -45,7 +45,7 @@ void	first_add(bool *dst, bool *did_add);
  * @ingroup first_priv
  * @brief Merges terminal entries from one FIRST set into another.
  *
- * For each terminal index in the range `[0, @ref SYM_TERMINAL_MAX]`, this
+ * For each terminal index in the range [0, @ref SYM_TERMINAL_MAX], this
  * helper checks whether the corresponding entry in @p src is true and, if so,
  * marks the matching entry in @p dst by calling @ref first_add.
  *
@@ -54,7 +54,7 @@ void	first_add(bool *dst, bool *did_add);
  *
  * @warning @p dst and @p src must NOT be NULL.
  * @warning @p dst and @p src must each reference an array of at least
- *          `@ref SYM_TERMINAL_MAX + 1` boolean entries.
+ *           @ref SYM_TERMINAL_MAX + 1 boolean entries.
  * @warning This function performs no parameter validation.
  *
  * @param dst Destination FIRST-set array receiving terminal entries

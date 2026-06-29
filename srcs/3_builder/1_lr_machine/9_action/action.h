@@ -52,16 +52,16 @@
  * @note This function mutates the ACTION table stored in @p machine.
  * @note On success, ownership of the allocated ACTION table remains with
  *       @p machine and the table must later be released with @ref action_free.
- * @note The current implementation stores `rule_state.rule_id` as the payload
+ * @note The current implementation stores @c rule_state.rule_id as the payload
  *       of @ref ACTION_ACCEPT entries.
  *
  * @warning @p machine must NOT be NULL.
- * @warning `@p machine->rules`, `@p machine->lr_states`, and
- *          `@p machine->transitions` must already contain valid data,
+ * @warning @p machine->rules, @p machine->lr_states, and
+ *          @p machine->transitions must already contain valid data,
  *          typically produced by @ref rules_build and
  *          @ref transition_build_table.
  * @warning This function does not free a previously allocated ACTION table
- *          before overwriting `@p machine->actions`.
+ *          before overwriting @p machine->actions.
  * @warning On failure, entries added before the error remain stored in
  *          @p machine. This function does not roll back partial progress.
  * @warning This function also fails on shift/reduce, reduce/reduce, or
@@ -79,13 +79,13 @@ t_error	action_build_table(t_lr_machine *machine);
  * @ingroup action_pub
  * @brief Releases a previously allocated ACTION table.
  *
- * This function frees each row referenced by `*actions`, then frees the outer
- * table pointer and sets `*actions` to NULL.
+ * This function frees each row referenced by @p *actions, then frees the outer
+ * table pointer and sets @p *actions to @c NULL.
  *
- * @note If @p actions is NULL or if `*actions` is NULL, this function does
- *       nothing.
+ * @note If @p actions is @c NULL or if @p *actions is @c NULL, this function
+ *       does nothing.
  *
- * @warning When `*actions` is not NULL, @p lr_states_count must match the
+ * @warning When @p *actions is not @c NULL, @p lr_states_count must match the
  *          number of allocated rows in the table.
  *
  * @param lr_states_count Number of rows allocated in the table.
@@ -98,9 +98,9 @@ void	action_free(size_t lr_states_count, t_action ***actions);
  * @ingroup action_pub
  * @brief Initializes an ACTION table pointer to an empty state.
  *
- * This function sets `*actions` to NULL.
+ * This function sets @p *actions to @c NULL.
  *
- * @warning @p actions must NOT be NULL.
+ * @warning @p actions must NOT be @c NULL.
  *
  * @param actions Address of the ACTION table pointer to initialize (borrowed,
  *                must NOT be NULL).

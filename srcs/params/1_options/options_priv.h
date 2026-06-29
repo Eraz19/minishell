@@ -9,8 +9,8 @@
  * @param options Bitset to modify (borrowed).
  * @param flag Short flag character.
  * @param on True to enable, false to disable.
- * @param explicit_plus_m Tracks explicit `+m` usage (borrowed).
- * @return `ERR_OPT_INVALID` on failure.
+ * @param explicit_plus_m Tracks explicit @c +m usage (borrowed).
+ * @return @c ERR_OPT_INVALID on failure.
  */
 t_error	options_process_flag(
 	t_option *options,
@@ -24,8 +24,8 @@ t_error	options_process_flag(
  * @param options Bitset to modify (borrowed).
  * @param arg Long option name (borrowed, read-only).
  * @param on True to enable, false to disable.
- * @param explicit_plus_m Tracks explicit `+m` usage (borrowed).
- * @return `ERR_OPT_INVALID_ARG` on failure.
+ * @param explicit_plus_m Tracks explicit @c +m usage (borrowed).
+ * @return @c ERR_OPT_INVALID_ARG on failure.
  */
 t_error	options_process_name(
 	t_option *options,

@@ -66,23 +66,23 @@ bool	go_to(size_t **gotos, size_t current_lr_state_id, t_symbol symbol,
  * @brief Builds the GOTO table stored in an LR machine.
  *
  * This function allocates a two-dimensional table whose row count equals
- * `@p machine->lr_states.len` and whose column count equals the number of
+ * @p machine->lr_states.len and whose column count equals the number of
  * non-terminal symbols from @ref SYM_NON_TERMINAL_MIN to
  * @ref SYM_NON_TERMINAL_MAX, inclusive. Every entry is first initialized to
  * @ref GOTO_EMPTY. The table is then populated from the transitions stored in
- * `@p machine->transitions`: only transitions labeled with non-terminal
+ * @p machine->transitions: only transitions labeled with non-terminal
  * symbols are copied into the resulting GOTO table.
  *
  * @note On success, ownership of the allocated table remains with @p machine
  *       and the table must later be released with @ref goto_free.
  * @note On allocation failure, this function frees any partially allocated
- *       rows and leaves `@p machine->gotos` set to NULL.
+ *       rows and leaves @p machine->gotos set to NULL.
  *
  * @warning @p machine must NOT be NULL.
- * @warning `@p machine->lr_states` and `@p machine->transitions` must already
+ * @warning @p machine->lr_states and @p machine->transitions must already
  *          have been built, typically by @ref transition_build_table.
  * @warning This function does not free a previously allocated GOTO table
- *          before overwriting `@p machine->gotos`.
+ *          before overwriting @p machine->gotos.
  * @warning This function performs no parameter validation.
  *
  * @param machine LR machine whose GOTO table must be allocated and populated
@@ -95,14 +95,14 @@ t_error	goto_build_table(t_lr_machine *machine);
  * @ingroup goto_pub
  * @brief Releases a previously allocated GOTO table.
  *
- * This function frees each row referenced by `*gotos`, then frees the outer
- * table pointer and sets `*gotos` to NULL.
+ * This function frees each row referenced by @p *gotos, then frees the outer
+ * table pointer and sets @p *gotos to @c NULL.
  *
- * @note If @p gotos is NULL or if `*gotos` is NULL, this function does
+ * @note If @p gotos is @c NULL or if @p *gotos is @c NULL, this function does
  *       nothing.
  *
- * @warning When `*gotos` is not NULL, @p lr_states_count must match the number
- *          of allocated rows in the table.
+ * @warning When @p *gotos is not @c NULL, @p lr_states_count must match the
+ *          number of allocated rows in the table.
  *
  * @param lr_states_count Number of rows allocated in the table.
  * @param gotos Address of the GOTO table pointer to release (borrowed, can be
@@ -114,9 +114,9 @@ void	goto_free(size_t lr_states_count, size_t ***gotos);
  * @ingroup goto_pub
  * @brief Initializes a GOTO table pointer to an empty state.
  *
- * This function sets `*gotos` to NULL.
+ * This function sets @p *gotos to @c NULL.
  *
- * @warning @p gotos must NOT be NULL.
+ * @warning @p gotos must NOT be @c NULL.
  *
  * @param gotos Address of the GOTO table pointer to initialize (borrowed,
  *              must NOT be NULL).

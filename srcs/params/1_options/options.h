@@ -56,8 +56,8 @@ void		options_init(t_option *options);
  * @param argc Argument count.
  * @param argv Argument vector (borrowed, read-only).
  * @param start_index Output index of the first non-option operand (borrowed).
- * @return `ERR_OPT_INVALID`, `ERR_OPT_MISSING_ARG`, `ERR_OPT_INVALID_ARG`
- *         or `ERR_LIBC` on failure.
+ * @return @c ERR_OPT_INVALID, @c ERR_OPT_MISSING_ARG, @c ERR_OPT_INVALID_ARG
+ *         or @c ERR_LIBC on failure.
  */
 t_error		options_load(
 				t_option *options,
@@ -83,7 +83,7 @@ void		option_set(t_option *options, t_option option, bool on);
  *
  * @param option Option bit to query.
  * @param out Receives the active state (borrowed).
- * @return `ERR_SHELL_NOT_FOUND` on failure.
+ * @return @c ERR_SHELL_NOT_FOUND on failure.
  */
 t_error		option_is_active(t_option option, bool *out);
 
@@ -99,11 +99,12 @@ bool		option_is_active_in(t_option options, t_option option);
 /**
  * @brief Serialize active options into a fresh string.
  *
- * The caller owns `dst` on success and must release it with `string_free()`.
+ * The caller owns @p dst on success and must release it with
+ * @ref string_free().
  *
  * @param options Bitset to serialize.
  * @param dst Initialized destination string (borrowed).
- * @return `ERR_NO` or `ERR_LIBC`.
+ * @return @c ERR_NO or @c ERR_LIBC.
  */
 t_error		options_get(t_option options, t_string *dst);
 
@@ -120,7 +121,7 @@ void		options_dump(void);
  * @brief Convert a single option bit to its canonical textual name.
  *
  * @param option Option bit to convert.
- * @return Static string representation, or `"unknown"` when unsupported.
+ * @return Static string representation, or @c "unknown" when unsupported.
  */
 const char	*option_to_string(t_option option);
 

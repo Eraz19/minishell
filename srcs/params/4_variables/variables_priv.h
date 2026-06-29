@@ -59,6 +59,19 @@ bool	var_find(
 			const t_string *name,
 			size_t *res);
 
+/**
+ * @brief Const-name variant of @ref var_find().
+ *
+ * @param variables Variable list to inspect (borrowed, read-only).
+ * @param name Variable name (borrowed, read-only).
+ * @param res Receives the found index (borrowed).
+ * @return True when a matching variable is found.
+ */
+bool	var_find_from_const(
+			const t_var_list *variables,
+			const char *name,
+			size_t *res);
+
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
 /* ************************************************************************* */

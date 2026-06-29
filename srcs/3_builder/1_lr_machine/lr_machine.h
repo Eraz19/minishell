@@ -36,8 +36,8 @@
  * @ref action_build_table.
  *
  * @note This function mutates multiple fields of @p machine in place,
- *       including `rules`, `nullable_symbols`, `first`, `lr_states`,
- *       `transitions`, `gotos`, and `actions`.
+ *       including @c rules, @c nullable_symbols, @c first, @c lr_states,
+ *       @c transitions, @c gotos, and @c actions.
  * @note This function is intended to be called after @ref lr_machine_init.
  *
  * @warning @p machine must NOT be NULL.
@@ -73,7 +73,7 @@ t_error	lr_machine_build_tables(t_lr_machine *machine);
  * @warning @p machine must previously have been initialized with
  *          @ref lr_machine_init.
  * @warning The row count passed internally to @ref action_free and
- *          @ref goto_free is taken from `@p machine->lr_states.len`.
+ *          @ref goto_free is taken from @p machine->lr_states.len.
  *          Corrupting that registry before cleanup would make this call
  *          unsafe.
  * @warning This function performs no parameter validation.

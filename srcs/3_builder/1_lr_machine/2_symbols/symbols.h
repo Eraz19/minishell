@@ -54,7 +54,7 @@ bool	symbol_is_non_terminal(t_symbol symbol);
  *       previously computed by @ref symbols_build_nullables_table.
  *
  * @warning @p machine must NOT be NULL.
- * @warning @p symbol must be a valid index in the range `[0, @ref SYM_COUNT)`.
+ * @warning @p symbol must be a valid index in the range [0, @ref SYM_COUNT).
  * @warning This function performs no parameter validation.
  *
  * @param machine LR machine holding the nullable-symbol table (borrowed, must
@@ -94,7 +94,7 @@ bool	symbol_is_terminal(t_symbol symbol);
  * @warning @p machine must NOT be NULL.
  * @warning When @p count is greater than zero, @p symbols must NOT be NULL.
  * @warning Each symbol in the sequence must be a valid index in the range
- *          `[0, @ref SYM_COUNT)`.
+ *           [0, @ref SYM_COUNT).
  * @warning This function performs no parameter validation.
  *
  * @param machine LR machine holding the nullable-symbol table (borrowed, must
@@ -116,7 +116,7 @@ bool	symbols_are_nullable(t_lr_machine *machine, t_symbol *symbols, size_t count
  * symbol as left-hand side has an empty right-hand side or a right-hand side
  * composed entirely of nullable symbols.
  *
- * @note This function updates only the `nullable_symbols` table stored in
+ * @note This function updates only the @c nullable_symbols table stored in
  *       @p machine.
  * @note The computation iterates until no new nullable symbol is discovered.
  *

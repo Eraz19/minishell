@@ -15,11 +15,15 @@ t_error	positionals_get(
 	return (error(ERR_NO));
 }
 
-static inline bool	positionals_name_is_digits_only(const char *name)
+static inline bool	positionals_name_is_digits_only(
+						const char *name,
+						size_t name_len)
 {
 	size_t	i;
 
 	assert(name != NULL);
+	assert(name[0] != '\0');
+	assert(name_len > 0);
 	i = 0;
 	while (name[i])
 	{
@@ -27,13 +31,14 @@ static inline bool	positionals_name_is_digits_only(const char *name)
 			return (false);
 		i++;
 	}
-	return (true);
+	return (i != 0);
 }
 
-t_error	positionals_get_one(
-			const t_positionals_stack *stack,
-			const t_string *name,
-			t_string *dst)
+static inline t_error	positionals_get_one_priv(
+							const t_positionals_stack *stack,
+							const char *name,
+							size_t name_len,
+							t_string *dst)
 {
 	t_positionals	*positionals;
 	size_t			index;
@@ -42,18 +47,18 @@ t_error	positionals_get_one(
 	assert(stack != NULL);
 	assert(stack->len > 0);
 	assert(name != NULL);
-	assert(name->len > 0);
+	assert(name_len > 0);
 	assert(dst != NULL);
 	positionals = &((t_positionals *)stack->data)[stack->len - 1];
-	if (name->data[0] == '#' && name->data[1] == '\0')
+	if (name[0] == '#' && name[1] == '\0')
 	{
 		if (!string_append_format(dst, "%i", (int)positionals->len))
 			return (error_sys());
 		return (error(ERR_NO));
 	}
-	if (!positionals_name_is_digits_only(name->data))
+	if (!positionals_name_is_digits_only(name, name_len))
 		return (error(ERR_VAR_INVALID_NAME));
-	index = ft_atozu(name->data);
+	index = ft_atozu(name);
 	if (index == SIZE_MAX)
 		return (error_sys());
 	if (index == 0 || index > positionals->len)
@@ -62,4 +67,20 @@ t_error	positionals_get_one(
 	if (!string_dup(dst, string))
 		return (error_sys());
 	return (error(ERR_NO));
+}
+
+t_error	positionals_get_one(
+			const t_positionals_stack *stack,
+			const t_string *name,
+			t_string *dst)
+{
+	return (positionals_get_one_priv(stack, name->data, name->len, dst));
+}
+
+t_error	positionals_get_one_cst(
+			const t_positionals_stack *stack,
+			const char *name,
+			t_string *dst)
+{
+	return (positionals_get_one_priv(stack, name, str_len(name), dst));
 }

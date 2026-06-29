@@ -2,7 +2,7 @@
 # define ALIAS_H
 
 # include "error.h"
-# include "token.h"
+# include "libft.h"
 
 /** @defgroup alias Alias API
  *  @brief Shell command aliases with recursion-guarded expansion.

@@ -6,22 +6,11 @@
 
 #define ENV_NAME	"ENV"
 
-static inline void	env_build_name(t_string *out)
-{
-	static char	name[] = ENV_NAME;
-	size_t		len;
-
-	assert(out != NULL);
-	len = sizeof(ENV_NAME);
-	string_take(out, name, len + 1, len);
-}
-
 // TODO
 t_error	shell_exec_env(void)
 {
 	bool		is_interactive;
 	bool		read_from_stdin;
-	t_string	env_name;
 	t_string	raw_env;
 	t_error		err;
 
@@ -35,8 +24,7 @@ t_error	shell_exec_env(void)
 		print_result("shell_exec_env()");
 		return (error(ERR_NO));
 	}
-	env_build_name(&env_name);
-	err = params_get(&env_name, &raw_env);
+	err = params_get_from_const(ENV_NAME, &raw_env);
 	if (err.type != ERR_NO && err.type != ERR_VAR_NOT_FOUND)
 		return (error_print(error_sys(), "internal error", NULL, NULL));
 	if (!raw_env.data)
