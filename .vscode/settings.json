@@ -53,6 +53,7 @@
 		"-I${workspaceFolder}/srcs/expander/quote_removal",
 		"-I${workspaceFolder}/srcs/expander/quote_removal/context",
 		"-I${workspaceFolder}/srcs/expander/substitutions",
+		"-I${workspaceFolder}/srcs/expander/substitutions/tilde",
 		"-I${workspaceFolder}/srcs/expander/word",
 		"-I${workspaceFolder}/srcs/heredoc",
 		"-I${workspaceFolder}/srcs/heredoc/body",

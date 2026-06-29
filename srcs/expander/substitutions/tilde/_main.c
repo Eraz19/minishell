@@ -37,14 +37,21 @@ static t_error	tilde_extract_username(t_expander *state, char **username)
 }
 
 static t_error	tilde_resolve_path(
-	t_expander *state,
-	char **path,
-	char *username)
+					t_expander *state,
+					char **path,
+					char *username)
 {
-	struct passwd *password;
+	struct passwd	*password;
+	t_string		home;
 
 	if (username[0] == '\0')
-		return (state->err = params_get("HOME", path));
+	{
+		state->err = params_get_from_const("HOME", &home);
+		if (state->err.type)
+			return (state->err);
+		*path = home.data;
+		return (state->err);
+	}
 	else
 	{
 		password = ft_getpwnam(username);
