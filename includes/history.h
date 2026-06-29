@@ -82,8 +82,9 @@ t_error	history_load(t_history *state);
  * @ingroup history
  * @brief Appends to the file the entries added since the last load.
  *
- * Serialises every list entry recorded after the loaded prefix and appends
- * them to the history file. Operates on the global shell history.
+ * Serialises every list entry recorded after the loaded prefix, appends the
+ * currently typed line when it is non-empty, then writes the result to the
+ * history file. Operates on the global shell history.
  *
  * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell history is
  *         unavailable, or the recorded error on failure.
@@ -94,10 +95,11 @@ t_error	history_save(void);
  * @ingroup history
  * @brief Commits the line being assembled as a new history entry.
  *
- * Turns the accumulated current-input buffer into a freshly owned entry,
- * pushes it onto the list, resets the buffer and mirrors the entry into
- * readline. Does nothing when the current input is empty. Operates on the
- * global shell history.
+ * Trims a trailing newline from the current-input buffer, turns the
+ * remaining text into a freshly owned entry, pushes it onto the list,
+ * resets the buffer and mirrors the entry into readline. Does nothing when
+ * the current input is empty or becomes empty after trimming. Operates on
+ * the global shell history.
  *
  * @return ERR_NO on success, ERR_SHELL_NOT_FOUND if the shell history is
  *         unavailable, or the recorded error on failure.

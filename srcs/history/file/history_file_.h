@@ -35,7 +35,10 @@ void	history_file_init(t_history_file *state);
 
 /**
  * @ingroup history
- * @brief Frees the content buffer and resets the file backing.
+ * @brief Frees the path and content @ref t_string, then resets the file backing.
+ *
+ * Frees both the path and content @ref t_string, then resets the structure to
+ * zero.
  *
  * @param state Pointer to the file backing to free (borrowed).
  */
@@ -45,10 +48,11 @@ void	history_file_free(t_history_file *state);
  * @ingroup history
  * @brief Reads and parses the history file into @p list.
  *
- * Reads the whole file, then extracts entries from newest to oldest,
- * inserting each at the front of @p list so chronological order is preserved,
- * keeping at most @p max entries (@p max < 0 means no limit). Records the
- * resulting count in state->loaded_count.
+ * Reads the whole file, deserialises its entries in stored order and appends
+ * the last @p max entries to @p list while preserving chronological order
+ * (@p max < 0 means no limit). If the file is missing, unreadable or empty,
+ * leaves @p list unchanged and returns @c ERR_NO. The number of entries
+ * actually loaded is recorded in state->loaded_count.
  *
  * @param state Pointer to the file backing (borrowed).
  * @param list Destination entry list, which takes ownership of each entry.
@@ -75,10 +79,12 @@ t_error	history_file_open(t_history_file *state, int *fd, int flags);
  * @ingroup history
  * @brief Reads the whole history file into state->content.
  *
- * Leaves state->content NULL when the file is empty.
+ * Leaves state->content empty when the file cannot be opened, cannot be
+ * read or is empty. Open/read failures are downgraded to ERR_NO after a
+ * warning so persistent history can be disabled without aborting the shell.
  *
  * @param state Pointer to the file backing (borrowed).
- * @return ERR_NO on success, ERR_LIBC on failure.
+ * @return ERR_NO on success or when persistence is disabled.
  */
 t_error	history_file_read(t_history_file *state);
 
@@ -86,8 +92,12 @@ t_error	history_file_read(t_history_file *state);
  * @ingroup history
  * @brief Appends state->content to the history file on disk.
  *
+ * Does nothing when the path or the content buffer is empty. Open/write
+ * failures are downgraded to ERR_NO after a warning so persistent history
+ * can be disabled without aborting the shell.
+ *
  * @param state Pointer to the file backing (borrowed).
- * @return ERR_NO on success, ERR_LIBC on failure.
+ * @return ERR_NO on success or when persistence is disabled.
  */
 t_error	history_file_write(t_history_file *state);
 

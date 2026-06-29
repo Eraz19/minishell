@@ -49,10 +49,10 @@ t_error	history_list_push(t_history_list *list, char *item);
 
 /**
  * @ingroup history
- * @brief Returns a serialised copy of the entry at index @p i.
+ * @brief Returns a fresh copy of the entry at index @p i.
  *
- * Duplicates the stored entry and encodes it for storage; the returned
- * *item is freshly allocated and owned by the caller.
+ * Duplicates the stored entry string; the returned *item is freshly
+ * allocated and owned by the caller.
  *
  * @param list Pointer to the list (borrowed).
  * @param item Out-parameter receiving the freshly allocated copy.
