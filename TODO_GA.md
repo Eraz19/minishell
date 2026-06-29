@@ -1,6 +1,6 @@
 # WIP
 
-- ⚠️ Complete les `TODO (GA)`
+- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
 
 - 🚧 **ALL REPO**:
 	- 🚧 `const` partout
@@ -16,7 +16,7 @@
 - 🚧 `runner`:
 	- 🚧 unlink heredoc path after use
 - 🚧 `posix_read()`:
-	- 🚧 implement it using `string_read_*()` API ? (⚠️ remove auto retry ?!)
+	- 🚧 implement it using `string_read_*()` API ? (⚠️ remove auto retry on EINTR in libft !)
 - 🚧 `assignment_split()`:
 	- 🚧 refactor
 - 🚧 `libft`:
@@ -126,6 +126,10 @@
 # ALEXANDER
 
 ## QUESTION
+- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
+- `history`:
+	- Désactiver l'historique persistant si l'ouverture du fichier échoue mais ne pas faire remonter l'erreur dans le caller
+	- `history_file_open()`: pourquoi pas directement essayer avec `O_CREAT` ?
 - ⚠️ signature de `positionals_get()` modifiée pour renvoyer un pointeur read-only
 - ⚠️ `params_get()` use `t_string`, `params_get_from_const()` use `const char *`
 - ⚠️ J'ai vu plein de `error_sys()` après des `free*()` dans ton code

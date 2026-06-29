@@ -8,7 +8,7 @@ t_error	heredoc_body_line_to_content(t_heredoc_body *state)
 	size_t	line_len;
 
 	line_len = str_len(state->line);
-	if (!buff_append(&state->content, state->line, (long)line_len))
+	if (!buff_append_n(&state->content, state->line, (long)line_len))
 		return (state->err = error_sys());
 	return (free(state->line), state->line = NULL, state->err);
 }

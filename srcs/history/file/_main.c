@@ -13,14 +13,14 @@ t_error	history_file_read(t_history_file *state)
 	{
 		(void)error_print(state->err,
 			"history", "unable to open history file",
-			"persistent history disabled", NULL, NULL);
+			"persistent history disabled", NULL, "%s", state->path);
 		return (state->err = error(ERR_NO));
 	}
 	if (!string_read_all(&state->content, fd))
 	{
 		(void)error_print(error_sys(),
 			"history", "unable to read history file",
-			"persistent history disabled", NULL, NULL);
+			"persistent history disabled", NULL, "%s", state->path);
 		string_free(&state->content);
 		state->err = error(ERR_NO);
 	}
@@ -38,7 +38,7 @@ t_error	history_file_write(t_history_file *state)
 	{
 		(void)error_print(state->err,
 			"history", "unable to open history file",
-			"persistent history disabled", NULL, NULL);
+			"persistent history disabled", NULL, "%s", state->path);
 		return (state->err = error(ERR_NO));
 	}
 	state->err = posix_write(fd, state->content.data, state->content.len);
@@ -46,7 +46,7 @@ t_error	history_file_write(t_history_file *state)
 	{
 		(void)error_print(state->err,
 			"history", "unable to write to history file",
-			"persistent history disabled", NULL, NULL);
+			"persistent history disabled", NULL, "%s", state->path);
 		state->err = error(ERR_NO);
 	}
 	close(fd);

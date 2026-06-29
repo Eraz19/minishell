@@ -25,7 +25,7 @@ t_error assignment_split(
 	if (len == 0)
 		return (error(ERR_ASSIGNMENT_MISSING_NAME));
 	has_equal = src[len] == '=';
-	if (!string_append_n(dst_name, src, (long)len + 1))
+	if (!string_append_n(dst_name, src, (long)len))
 		return (error_sys());
 	if (!has_equal)
 		return (error(ERR_NO));

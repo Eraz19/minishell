@@ -17,7 +17,7 @@ static inline void	pwd_build_name(t_string *out)
 	size_t		len;
 
 	assert(out != NULL);
-	len = sizeof(PWD_NAME);
+	len = sizeof(PWD_NAME) - 1;
 	string_take(out, name, len + 1, len);
 }
 

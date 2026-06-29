@@ -1,11 +1,13 @@
 #include "libft.h"
 # include <assert.h>	// DEBUG
+# include <stdio.h>	// DEBUG
 
 bool	name_is_valid(const t_string *name)
 {
 	size_t	i;
 
 	assert(name != NULL);
+	fprintf(stderr, "[%s()] checking name [%s]\n", __func__, name->data);
 	if (name->len == 0)
 		return (false);
 	if (!ft_isalpha(name->data[0]) && name->data[0] != '_')
@@ -17,6 +19,7 @@ bool	name_is_valid(const t_string *name)
 			return (false);
 		i++;
 	}
+	fprintf(stderr, "[%s()] => VALID\n", __func__);
 	return (true);
 }
 

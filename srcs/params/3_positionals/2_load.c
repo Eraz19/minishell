@@ -35,7 +35,7 @@ t_error	positionals_load_stack(
 
 	assert(stack != NULL);
 	assert(argv != NULL);
-	assert((size_t)argc > start_i);
+	assert((size_t)argc >= start_i);
 	print_title("positionals_load()");
 	if (!vector_init(&positionals, sizeof(t_string), (size_t)argc - start_i))
 		return (error_sys());

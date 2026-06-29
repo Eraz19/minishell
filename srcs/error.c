@@ -102,7 +102,7 @@ t_error	error_priv(t_error_type type, const char *file, int line, const char *ca
 		err.printed = false;
 #ifdef DEBUG_ERROR_TRACE
 	if (type != ERR_NO)
-		fprintf(stderr, RED "===> [ERROR] %s:%i:%s => %s\n" NC, 
+		fprintf(stderr, RED "===> [ERROR] %s:%i [%s()] => %s\n" NC, 
 			file, line, caller, error_to_string(err));
 # else
 	(void)file;
@@ -121,7 +121,7 @@ t_error	error_sys_priv(const char *file, int line, const char *caller)
 	err.saved_errno = errno;
 	err.printed = false;
 #ifdef DEBUG_ERROR_TRACE
-	fprintf(stderr, RED "===> [ERROR] %s:%i:%s => ERR_LIBC (%s)\n" NC, 
+	fprintf(stderr, RED "===> [ERROR] %s:%i [%s()] => ERR_LIBC (%s)\n" NC, 
 		file, line, caller, error_to_string(err));
 # else
 	(void)file;

@@ -34,7 +34,7 @@ t_error	hook_3(
 	if (len != 2)
 		return (error_print(error(ERR_HOOK_INVALID_RHS_LEN), __func__, NULL,
 			"expected 2 received %i", (int)len));
-	err = parser_get_token(__func__, parser, rhs->tokens_start_id, &delim);
+	err = parser_get_token(__func__, parser, rhs->tokens_start_id + 1, &delim);
 	if (err.type)
 		return (err);
 	if (rhs[0].symbol == SYM_DLESSDASH)

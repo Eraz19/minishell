@@ -14,7 +14,7 @@ bool	var_find(const t_var_list *variables, const t_string *name, size_t *res)
 	while (i < variables->len)
 	{
 		curr = &((t_var *)variables->data)[i];
-		if (string_cmp(name, &curr->name) == 0)
+		if (string_cmp(name, &curr->name))
 		{
 			*res = i;
 			return (true);

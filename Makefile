@@ -3,7 +3,7 @@ CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror -O2	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Werror \
-	-g3 -fsanitize=address,undefined \
+	-O0 -g3 -fsanitize=address,undefined \
 	-DDEBUG_ERROR_TRACE \
 	-DDEBUG_DUMP
 

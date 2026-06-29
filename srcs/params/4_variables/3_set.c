@@ -5,7 +5,7 @@
 #include "options.h"
 #include "utils.h"
 #include <stdlib.h>
-# include <assert.h>
+# include <assert.h>	// DEBUG
 
 // value can be NULL
 // @ret ERR_VAR_READ_ONLY / ERR_LIBC

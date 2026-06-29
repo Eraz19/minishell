@@ -40,7 +40,6 @@ t_error	cst_node_new(
 	t_error		err;
 
 	assert(lhs != NULL);
-	assert(rhs != NULL);
 	node = malloc(sizeof(*node));
 	if (!node)
 		return (error_sys());
