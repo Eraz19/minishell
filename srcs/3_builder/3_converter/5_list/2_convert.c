@@ -2,11 +2,12 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 static inline t_error	add_and_or(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_list *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_list *out)
 {
 	t_ast_and_or	and_or;
 	t_error			err;
@@ -16,14 +17,14 @@ static inline t_error	add_and_or(
 	if (err.type)
 		return (err);
 	if (!vector_push(&out->and_ors, &and_or))
-		return (ast_and_or_free(&and_or), error_sys());
+		return (err = error_sys(), ast_and_or_free(&and_or), err);
 	default_async = false;
 	if (!vector_push(&out->asyncs, &default_async))
 		return (error_sys());
 	return (error(ERR_NO));
 }
 
-static inline void	set_last_async(bool async, t_ast_list *out)
+static inline void	set_last_async(bool async, const t_ast_list *out)
 {
 	bool	*raw_asyncs;
 
@@ -35,13 +36,13 @@ static inline void	set_last_async(bool async, t_ast_list *out)
 
 // input = compound_list / complete_command / list
 static inline t_error	parse_rec(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_list *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_list *out)
 {
-	size_t		i;
-	t_cst_node	*child;
-	t_error		err;
+	const t_cst_node	*child;
+	size_t				i;
+	t_error				err;
 
 	err = error(ERR_NO);
 	i = 0;
@@ -62,12 +63,15 @@ static inline t_error	parse_rec(
 }
 
 t_error	convert_list_add(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_list *out)
+			const t_parser *parser,
+			const t_cst_node *node,
+			t_ast_list *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(node != NULL);
+	assert(out != NULL);
 	if (node->symbol == SYM_subshell)
 	{
 		out->subshell = true;
@@ -104,10 +108,13 @@ separator_op     : '&'
 */
 // input = subshell / compound_list / complete_command
 t_error	convert_list(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_list *out)
+			const t_parser *parser,
+			const t_cst_node *node,
+			t_ast_list *out)
 {
+	assert(parser != NULL);
+	assert(node != NULL);
+	assert(out != NULL);
 	ast_list_init(out);
 	return (convert_list_add(parser, node, out));
 }

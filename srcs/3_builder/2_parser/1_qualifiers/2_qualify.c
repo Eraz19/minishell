@@ -1,10 +1,13 @@
 #include "parser_type.h"
+#include "qualifiers_priv.h"
+# include <assert.h>	// DEBUG
 
-t_error		qualify_2(void *parser, const char *token_value)
+t_error		qualify_2(void *parser, const t_token *token)
 {
 	t_parser	*parser_;
 
-	(void)token_value;
+	assert(parser != NULL);
+	(void)token;
 	parser_ = (t_parser *)parser;
 	/*
 	TODO:

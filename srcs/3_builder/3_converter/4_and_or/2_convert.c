@@ -2,11 +2,12 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 static inline t_error	add_pipeline(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_and_or *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_and_or *out)
 {
 	t_ast_pipeline	pipeline;
 	t_error			err;
@@ -15,7 +16,7 @@ static inline t_error	add_pipeline(
 	if (err.type)
 		return (err);
 	if (!vector_push(&out->pipelines, &pipeline))
-		return (ast_pipeline_free(&pipeline), error_sys());
+		return (err = error_sys(), ast_pipeline_free(&pipeline), err);
 	return (error(ERR_NO));
 }
 
@@ -27,9 +28,9 @@ static inline t_error	add_operator(bool operator, t_ast_and_or *out)
 }
 
 static inline t_error	parse_rec(
-	t_parser *parser,
-	t_cst_node *and_or,
-	t_ast_and_or *out)
+							const t_parser *parser,
+							const t_cst_node *and_or,
+							t_ast_and_or *out)
 {
 	size_t		i;
 	t_cst_node	*child;
@@ -60,12 +61,15 @@ and_or           :                         pipeline
                  ;
 */
 t_error	convert_and_or(
-	t_parser *parser,
-	t_cst_node *and_or,
-	t_ast_and_or *out)
+			const t_parser *parser,
+			const t_cst_node *and_or,
+			t_ast_and_or *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(and_or != NULL);
+	assert(out != NULL);
 	ast_and_or_init(out);
 	err = parse_rec(parser, and_or, out);
 	if (err.type)

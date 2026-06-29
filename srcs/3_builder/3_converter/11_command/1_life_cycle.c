@@ -1,8 +1,10 @@
 #include "converter_priv.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 void	ast_command_init(t_ast_command *command)
 {
+	assert(command != NULL);
 	command->type = AST_CMD_TYPE_COUNT;
 	ast_redir_list_init(&command->redirs);
 	command->data = (t_ast_command_data){ 0 };
@@ -10,6 +12,7 @@ void	ast_command_init(t_ast_command *command)
 
 static inline void	ast_command_free_data(t_ast_command *command)
 {
+	assert(command != NULL);
 	if (command->type == AST_CMD_SIMPLE)
 		ast_simple_command_free(&command->data.simple);
 	else if (command->type == AST_CMD_LIST)
@@ -30,6 +33,7 @@ void	ast_command_free(void *command)
 {
 	t_ast_command	*cmd;
 
+	assert(command != NULL);
 	cmd = (t_ast_command *)command;
 	ast_redir_list_free(&cmd->redirs);
 	if (cmd->type < AST_CMD_TYPE_COUNT)

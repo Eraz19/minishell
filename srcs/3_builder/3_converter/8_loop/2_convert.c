@@ -2,6 +2,7 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 /*
 while_clause     : While compound_list do_group
@@ -12,12 +13,15 @@ do_group         : Do compound_list Done
                  ;
 */
 t_error	convert_loop(
-	t_parser *parser,
-	t_cst_node *loop,
-	t_ast_loop *out)
+			const t_parser *parser,
+			const t_cst_node *loop,
+			t_ast_loop *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(loop != NULL);
+	assert(out != NULL);
 	ast_loop_init(out);
 	if (loop->children[0]->symbol == SYM_While)
 		out->condition_must_be_true = true;

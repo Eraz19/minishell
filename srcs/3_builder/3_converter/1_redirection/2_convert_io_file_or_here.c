@@ -1,9 +1,11 @@
 #include "converter_priv.h"
+#include "convert_io_priv.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 static inline t_error	convert_io_operator(
-	t_symbol symbol,
-	t_ast_redir_op *out_op)
+							t_symbol symbol,
+							t_ast_redir_op *out_op)
 {
 	if (symbol == SYM_LESS)
 		*out_op = AST_REDIR_READ;
@@ -26,7 +28,7 @@ static inline t_error	convert_io_operator(
 	return (error(ERR_NO));
 }
 
-static inline bool	heredoc_should_expand(t_token *delim_token)
+static inline bool	heredoc_should_expand(const t_token *delim_token)
 {
 	size_t	i;
 	char	c;
@@ -34,7 +36,7 @@ static inline bool	heredoc_should_expand(t_token *delim_token)
 	i = 0;
 	while (i < delim_token->value.len)
 	{
-		c = ((char *)delim_token->value.data)[i];
+		c = delim_token->value.data[i];
 		if (c == '\'' || c == '"' || c == '\\')
 			return (false);
 		i++;
@@ -43,9 +45,9 @@ static inline bool	heredoc_should_expand(t_token *delim_token)
 }
 
 static inline t_error	convert_here_end(
-	t_parser *parser,
-	t_cst_node *here_end,
-	t_ast_redirection *out)
+							const t_parser *parser,
+							const t_cst_node *here_end,
+							t_ast_redirection *out)
 {
 	t_token	*delim;
 	t_error	err;
@@ -58,14 +60,14 @@ static inline t_error	convert_here_end(
 }
 
 static inline t_error	convert_io_here(
-	t_cst_node *io_here,
-	t_ast_redirection *out)
+							const t_cst_node *io_here,
+							t_ast_redirection *out)
 {
 	out->word = malloc(sizeof(*out->word));
 	if (!out->word)
 		return (error_sys());
 	token_init(out->word);
-	out->word->value = *((t_buff *)io_here->data);
+	out->word->value = *((t_string *)io_here->data);
 	return (error(ERR_NO));
 }
 
@@ -86,14 +88,17 @@ io_here          : DLESS     here_end
 here_end         : WORD
 */
 t_error	convert_io_file_or_here(
-	t_parser *parser,
-	t_cst_node *io_file_node,
-	t_ast_redirection *out)
+			const t_parser *parser,
+			const t_cst_node *io_file_node,
+			t_ast_redirection *out)
 {
 	t_symbol	symbol;
 	t_cst_node	*filename_node;
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(io_file_node != NULL);
+	assert(out != NULL);
 	symbol = io_file_node->children[0]->symbol;
 	err = convert_io_operator(symbol, &out->operation);
 	if (err.type)

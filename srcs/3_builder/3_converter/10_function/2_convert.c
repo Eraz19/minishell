@@ -3,6 +3,7 @@
 #include "ast_type.h"
 #include "converter_priv.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 /*
 function_body    : compound_command
@@ -10,12 +11,12 @@ function_body    : compound_command
                  ;
 */
 static inline t_error	convert_function_body(
-	t_parser *parser,
-	t_cst_node *body,
-	t_ast_function_def *out)
+							const t_parser *parser,
+							const t_cst_node *body,
+							t_ast_function_def *out)
 {
-	t_cst_node	*redir;
-	t_error		err;
+	const t_cst_node	*redir;
+	t_error				err;
 
 	out->body = malloc(sizeof(*out->body));
 	if (!out->body)
@@ -36,14 +37,17 @@ fname            : NAME
                  ;
 */
 t_error	convert_function(
-	t_parser *parser,
-	t_cst_node *function_definition,
-	t_ast_function_def *out)
+			const t_parser *parser,
+			const t_cst_node *function_definition,
+			t_ast_function_def *out)
 {
 	t_cst_node	*fname;
 	t_cst_node	*body;
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(function_definition != NULL);
+	assert(out != NULL);
 	ast_function_def_init(out);
 	fname = function_definition->children[0];
 	err = converter_get_token(parser, fname, 0, &out->name);

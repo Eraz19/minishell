@@ -1,8 +1,9 @@
 #include "parser_type.h"
+#include "qualifiers_priv.h"
 
-t_error		qualify_word(void *parser, const char *token_value)
+t_error		qualify_word(void *parser, const t_token *token)
 {
-	(void)token_value;
+	(void)token;
 	((t_parser *)parser)->lookahead_symbol = SYM_WORD;
 	return (error(ERR_NO));
 }

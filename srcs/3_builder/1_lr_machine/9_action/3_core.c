@@ -6,24 +6,23 @@
 // DEBUG (always return ERR_LR_CONFLICT)
 static t_error	print_conflict(t_action *action, size_t lr_state_id, t_symbol symbol, t_action_type target_type, size_t target_payload)
 {
-	t_buff	buff;
-	char	*format_string;
+	t_string	string;
+	char		*format_string;
 
-	buff_init(&buff, 0, NULL, 0);
+	string_init(&string, 0, NULL, 0);
 	if (action->type == ACTION_SHIFT)
-		buff_append(&buff, " SHIFT-", -1);
+		string_append_n(&string, " SHIFT-", -1);
 	else if (action->type == ACTION_REDUCE)
-		buff_append(&buff, " REDUCE-", -1);
+		string_append_n(&string, " REDUCE-", -1);
 	else if (action->type == ACTION_ACCEPT)
-		buff_append(&buff, " ACCEPT-", -1);
+		string_append_n(&string, " ACCEPT-", -1);
 	if (target_type == ACTION_SHIFT)
-		buff_append(&buff, "SHIFT", -1);
+		string_append_n(&string, "SHIFT", -1);
 	else if (target_type == ACTION_REDUCE)
-		buff_append(&buff, "REDUCE", -1);
+		string_append_n(&string, "REDUCE", -1);
 	else if (target_type == ACTION_ACCEPT)
-		buff_append(&buff, "ACCEPT", -1);
-	buff_append(&buff, " for lr_state %i and symbol %i (current payload = %i vs target = %i)", -1);
-	format_string = buff_get_string(&buff);
+		string_append_n(&string, "ACCEPT", -1);
+	string_append_n(&string, " for lr_state %i and symbol %i (current payload = %i vs target = %i)", -1);
 	fprint_err(false, "⚠️ conflict", format_string,
 		(int)lr_state_id, (int)symbol,
 		(int)action->payload, (int)target_payload);

@@ -2,11 +2,12 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 static inline t_error	convert_add_pattern_word(
-	t_parser *parser,
-	t_cst_node *word,
-	t_vector *out)
+							const t_parser *parser,
+							const t_cst_node *word,
+							t_vector *out)
 {
 	t_token	*token;
 	t_error	err;
@@ -26,12 +27,12 @@ pattern_list     :                  WORD
                  ;
 */
 static inline t_error	convert_pattern_list(
-	t_parser *parser,
-	t_cst_node *pattern_list,
-	t_vector *out)
+							const t_parser *parser,
+							const t_cst_node *pattern_list,
+							t_vector *out)
 {
-	t_cst_node	*word;
-	t_error		err;
+	const t_cst_node	*word;
+	t_error				err;
 
 	if (pattern_list->child_count == 3)
 	{
@@ -54,9 +55,9 @@ case_item        : pattern_list ')' linebreak     DSEMI linebreak
                  ;
 */
 static inline t_error	convert_case_item(
-	t_parser *parser,
-	t_cst_node *case_item,
-	t_ast_case *out)
+							const t_parser *parser,
+							const t_cst_node *case_item,
+							t_ast_case *out)
 {
 	t_vector	pattern_list;
 	t_ast_list	list;
@@ -66,9 +67,10 @@ static inline t_error	convert_case_item(
 	(void)vector_init(&pattern_list, sizeof(t_token *), 0);
 	err = convert_pattern_list(parser, case_item->children[0], &pattern_list);
 	if (err.type)
-		return (vector_free(&pattern_list, buff_free_void), err);
+		return (vector_free(&pattern_list, NULL), err);
 	if (!vector_push(&out->patterns, &pattern_list))
-		return (vector_free(&pattern_list, buff_free_void), error_sys());
+		return (err = error_sys(),
+			vector_free(&pattern_list, NULL), err);
 	if (case_item->children[2]->symbol == SYM_compound_list)
 		err = convert_list(parser, case_item->children[2], &list);
 	else
@@ -76,11 +78,11 @@ static inline t_error	convert_case_item(
 	if (err.type)
 		return (err);
 	if (!vector_push(&out->bodies, &list))
-		return (ast_list_free(&list), error_sys());
+		return (err = error_sys(), ast_list_free(&list), err);
 	fallthrough = case_item->child_count >= 4
 		&& case_item->children[3]->symbol == SYM_SEMI_AND;
 	if (!vector_push(&out->fallthrough, &fallthrough))
-		return (error_sys());
+		return (err = error_sys(), ast_list_free(&list), err);
 	return (err);
 }
 
@@ -93,9 +95,9 @@ case_list        : case_list case_item
                  ;
 */
 static inline t_error	convert_case_list(
-	t_parser *parser,
-	t_cst_node *case_list,
-	t_ast_case *out)
+							const t_parser *parser,
+							const t_cst_node *case_list,
+							t_ast_case *out)
 {
 	t_error	err;
 
@@ -116,12 +118,15 @@ case_clause      : Case WORD linebreak in linebreak case_list    Esac
                  ;
 */
 t_error	convert_case(
-	t_parser *parser,
-	t_cst_node *case_clause,
-	t_ast_case *out)
+			const t_parser *parser,
+			const t_cst_node *case_clause,
+			t_ast_case *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(case_clause != NULL);
+	assert(out != NULL);
 	ast_case_init(out);
 	err = converter_get_token(parser, case_clause->children[1], 0, &out->word);
 	if (err.type == ERR_NO && case_clause->child_count == 7)

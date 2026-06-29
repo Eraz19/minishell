@@ -2,11 +2,12 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 static inline t_error	add_token_to(
-	t_parser *parser,
-	t_cst_node *node,
-	t_vector *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_vector *out)
 {
 	t_token	*token;
 	t_error	err;
@@ -20,13 +21,13 @@ static inline t_error	add_token_to(
 }
 
 static inline t_error	parse_rec(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_simple_command *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_simple_command *out)
 {
-	size_t		i;
-	t_cst_node	*child;
-	t_error		err;
+	const t_cst_node	*child;
+	size_t				i;
+	t_error				err;
 
 	err = error(ERR_NO);
 	i = 0;
@@ -71,12 +72,15 @@ cmd_suffix       :            io_redirect
                  ;
 */
 t_error	convert_simple_command(
-	t_parser *parser,
-	t_cst_node *simple_command,
-	t_ast_simple_command *out)
+			const t_parser *parser,
+			const t_cst_node *simple_command,
+			t_ast_simple_command *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(simple_command != NULL);
+	assert(out != NULL);
 	ast_simple_command_init(out);
 	err = parse_rec(parser, simple_command, out);
 	if (err.type)

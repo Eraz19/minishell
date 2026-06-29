@@ -1,8 +1,10 @@
 #include "converter_priv.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 void	ast_for_init(t_ast_for *for_node)
 {
+	assert(for_node != NULL);
 	for_node->var_name = NULL;
 	vector_init(&for_node->words, sizeof(t_token *), 0);
 	ast_list_init(&for_node->body);
@@ -13,6 +15,7 @@ void	ast_for_free(t_ast_for *for_node)
 {
 	t_token	*default_word_token;
 
+	assert(for_node != NULL);
 	for_node->var_name = NULL;
 	if (for_node->word_token_is_owned)
 	{

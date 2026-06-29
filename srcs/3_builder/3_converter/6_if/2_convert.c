@@ -2,11 +2,12 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 static inline t_error	add_to_list(
-	t_parser *parser,
-	t_cst_node *compound_list,
-	t_vector *out)
+							const t_parser *parser,
+							const t_cst_node *compound_list,
+							t_vector *out)
 {
 	t_ast_list	list;
 	t_error		err;
@@ -15,14 +16,14 @@ static inline t_error	add_to_list(
 	if (err.type)
 		return (err);
 	if (!vector_push(out, &list))
-		return (ast_list_free(&list), error_sys());
+		return (err = error_sys(), ast_list_free(&list), err);
 	return (error(ERR_NO));
 }
 
 static inline t_error	parse_rec(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_if *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_if *out)
 {
 	t_error	err;
 
@@ -51,12 +52,15 @@ else_part        : Elif compound_list Then compound_list
                  ;
 */
 t_error	convert_if(
-	t_parser *parser,
-	t_cst_node *if_clause,
-	t_ast_if *out)
+			const t_parser *parser,
+			const t_cst_node *if_clause,
+			t_ast_if *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(if_clause != NULL);
+	assert(out != NULL);
 	ast_if_init(out);
 	err = parse_rec(parser, if_clause, out);
 	if (err.type)

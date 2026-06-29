@@ -1,8 +1,12 @@
 #include "parser_type.h"
+#include "qualifiers_priv.h"
+# include <assert.h>	// DEBUG
 
-t_error		qualify_6a(void *parser, const char *token_value)
+t_error		qualify_6a(void *parser, const t_token *token)
 {
-	if (str_cmp("in", token_value) == 0)
+	assert(parser != NULL);
+	assert(token != NULL);
+	if (str_cmp("in", token->value.data) == 0)
 		((t_parser *)parser)->lookahead_symbol = SYM_In;
 	else
 		((t_parser *)parser)->lookahead_symbol = SYM_WORD;

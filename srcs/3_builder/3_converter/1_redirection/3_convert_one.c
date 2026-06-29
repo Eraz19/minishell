@@ -2,34 +2,33 @@
 #include "convert_io_priv.h"
 #include <stdlib.h>
 #include <unistd.h>
+# include <assert.h>	// DEBUG
 
 static inline t_error	convert_io_number(
-	t_parser *parser,
-	t_cst_node *io_number_node,
-	t_ast_redirection *out)
+							const t_parser *parser,
+							const t_cst_node *io_number_node,
+							t_ast_redirection *out)
 {
 	t_error	err;
-	char	*token_string;
+	t_token	*token;
 
-	err = converter_get_string(parser, io_number_node, 0, &token_string);
+	err = converter_get_token(parser, io_number_node, 0, &token);
 	if (err.type)
 		return (err);
-	if (!parse_int(token_string, &out->fd))
+	if (!parse_int(token->value.data, &out->fd))
 	{
 		err = error(ERR_FD_INVALID);
-		err = error_print(err, "converter", NULL, "%s", token_string);
-		free(token_string);
+		err = error_print(err, "converter", NULL, "%s", token->value.data);
 		return (err);
 	}
 	// TODO: Disallow range of fd used for backuped fds
-	free(token_string);
 	return (err);
 }
 
 static inline t_error	convert_io_location(
-	t_parser *parser,
-	t_cst_node *io_location_node,
-	t_ast_redirection *out)
+							const t_parser *parser,
+							const t_cst_node *io_location_node,
+							t_ast_redirection *out)
 {
 	t_error	err;
 
@@ -65,12 +64,15 @@ here_end         : WORD
                  ;
 */
 t_error	convert_redirection(
-	t_parser *parser,
-	t_cst_node *io_redirect,
-	t_ast_redirection *out)
+			const t_parser *parser,
+			const t_cst_node *io_redirect,
+			t_ast_redirection *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(io_redirect != NULL);
+	assert(out != NULL);
 	ast_redirection_init(out);
 	if (io_redirect->child_count == 1)
 	{
@@ -87,17 +89,20 @@ t_error	convert_redirection(
 }
 
 t_error	convert_redirection_add(
-	t_parser *parser,
-	t_cst_node *io_redirect,
-	t_ast_redir_list *out)
+			const t_parser *parser,
+			const t_cst_node *io_redirect,
+			t_ast_redir_list *out)
 {
 	t_ast_redirection	redir;
 	t_error				err;
 
+	assert(parser != NULL);
+	assert(io_redirect != NULL);
+	assert(out != NULL);
 	err = convert_redirection(parser, io_redirect, &redir);
 	if (err.type)
 		return (err);
 	if (!vector_push(out, &redir))
-		return (ast_redirection_free(&redir), error_sys());
+		return (err = error_sys(), ast_redirection_free(&redir), err);
 	return (error(ERR_NO));
 }

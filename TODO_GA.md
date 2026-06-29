@@ -1,15 +1,20 @@
 # WIP
 
+- ⚠️ Complete les `TODO (GA)`
+
 - 🚧 **ALL REPO**:
 	- 🚧 `const` partout
 	- 🚧 `inline` partout
 	- 🚧 `assert` partout
+	- 🚧 **include** prototype header
 
 - **TODO**: convert `posix_helpers` (coûterait trop cher avec ChatGPT)
 - `5_exec_env` => Utilise `params_get()` donc à update après avoir update le module `params`
 - `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
 - `specials->zero` convert to `t_string` to avoid multiple `str_len()` when accessing it ?
 
+- 🚧 `runner`:
+	- 🚧 unlink heredoc path after use
 - 🚧 `posix_read()`:
 	- 🚧 implement it using `string_read_*()` API ? (⚠️ remove auto retry ?!)
 - 🚧 `assignment_split()`:
@@ -121,12 +126,20 @@
 # ALEXANDER
 
 ## QUESTION
-- ⚠️ **ALEXANDER** => use `lexer` to do `assignment_split()` ? (cf `export`, `readonly`, `variables/load/envp`)
+- ⚠️ signature de `positionals_get()` modifiée pour renvoyer un pointeur read-only
+- ⚠️ J'ai vu plein de `error_sys()` après des `free*()` dans ton code
+- use `string_append_format()` / `buff_append_format()` pour pas avoir à `ft_itoa()` + `free()`
+- use `t_string` everywhere instead of `t_buff` (NUL-terminé donc évite plein d'allocs / manips manuelles, je peux refacto si besoin)
 - `scanner_reset()`:
 	- ⚠️ free un pointeur qui n'a pas été malloc (reproduce with syntax error)
-	- ne devrait pas prendre d'argument car c'est le runner qui l'appelle donc il n'est pas sensé connaître sa struct
+	- J'ai remove son argument car c'est le `runner` qui l'appelle donc il n'est pas sensé connaître sa struct
 - `ft_getpwnam`:
 	- Besoin forcément d'un `static buff` ou on peut convertir pour utiliser `t_string` et `posix_read()` ?
+- `scanner_report_io_here()`:
+	- ✅ j'ai refacto pour utiliser `t_string *path` et `t_token *delim`
+	- ✅ du coup j'ai aussi refacto `heredoc_add_to_queue()`, `heredoc_create_file()` et `heredoc_build_path()` (opti + fix)
+- `scanner_heredoc_read()`:
+	- print bien une erreur dans le cas du delim manquant en non interactif ? (impossible pour le `parser` de savoir quel heredoc était en train d'être lu à ce moment là)
 
 ## TODO
 - use `posix_write()` instead of `write()`
@@ -247,6 +260,9 @@
 	- `fcntl()` -> `ioctl()`: set `stdin` to blocking mode for `stdin` management
 		- all OS and archs: via `ioctl()` (non-POSIX function) instead of `fcntl()`
 - ⚠️ as `OpenBSD` sends `SIGABRT` when `syscalls` are sent from unauthorized memory addresses, this `shell` is not fully POSIX compliant on this Operating System. A next version of this program may use all the real `libc` functions to enable full POSIX compliance.
+- `heredoc`:
+	- as `mkdir()` and `mktmp()` is forbidden, we can't properly create a tmp file, so we just iterate over an 0-INT_MAX file_name suffix to find an available filename to create directly in `tmp/`
+	- as `lseek()` is forbidden, we can't keep the `fd` open, so we `open()`/`close()` the tmp file several times to re-roll it
 
 ## lr_machine.md
 

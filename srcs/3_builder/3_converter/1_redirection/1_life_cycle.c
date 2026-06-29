@@ -1,8 +1,11 @@
 #include "ast_type.h"
+#include "converter_priv.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 void	ast_redirection_init(t_ast_redirection *redirection)
 {
+	assert(redirection != NULL);
 	redirection->operation = AST_REDIR_COUNT;
 	redirection->fd = -1;
 	redirection->is_location = false;
@@ -15,6 +18,7 @@ void	ast_redirection_free(void *redirection)
 {
 	t_ast_redirection	*redir;
 
+	assert(redirection != NULL);
 	redir = (t_ast_redirection *)redirection;
 	redir->operation = AST_REDIR_COUNT;
 	redir->fd = -1;
@@ -31,10 +35,12 @@ void	ast_redirection_free(void *redirection)
 
 void	ast_redir_list_init(t_ast_redir_list *redir_list)
 {
+	assert(redir_list != NULL);
 	vector_init(redir_list, sizeof(t_ast_redirection), 0);
 }
 
 void	ast_redir_list_free(t_ast_redir_list *redir_list)
 {
+	assert(redir_list != NULL);
 	vector_free(redir_list, ast_redirection_free);
 }

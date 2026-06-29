@@ -1,12 +1,13 @@
 #include "parser_priv.h"
 #include "cst.h"
+# include <assert.h>	// DEBUG
 
-# include <stdio.h>
 t_error	parser_shift(t_parser *parser, size_t lr_state_id)
 {
 	t_parser_stack_item	item;
-	t_error			err;
+	t_error				err;
 
+	assert(parser != NULL);
 	err = parser_read_heredoc(parser);
 	if (err.type)
 		return (err);
@@ -17,15 +18,11 @@ t_error	parser_shift(t_parser *parser, size_t lr_state_id)
 	err = cst_node_new(&item, NULL, 0, RULE_NONE);
 	if (err.type != ERR_NO)
 		return (err);
-	// fprintf(stderr, "[PARSER] SHIFT symbol=%s to_state=%zu token_start=%zu token_count=%zu\n",
-	// 	symbol_to_string(item.symbol),
-	// 	item.lr_state_id,
-	// 	item.tokens_start_id,
-	// 	item.tokens_count);
 	if (!vector_push(&parser->stack, &item))
 	{
+		err = error_sys();
 		cst_node_free(&item.cst_node);
-		return (parser_internal_error());
+		return (parser_internal_error(err));
 	}
 	return (parser_read_next_symbol(parser));
 }

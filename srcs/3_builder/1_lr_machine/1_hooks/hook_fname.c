@@ -1,31 +1,9 @@
-#include "parser_type.h"
+#include "parser.h"
 #include "token.h"
 #include "utils.h"
 #include "hooks.h"
-#include <stdlib.h>
-
-# include "debug.h"	// DEBUG
-static t_error	check_name(const char *hook_name, t_token *token)
-{
-	char		*token_value;
-	bool		valid_name;
-	t_error		err;
-
-	err = error(ERR_NO);
-	token_value = buff_get_string(&token->value);
-	if (!token_value)
-		return (error_print(error_sys(), "parser", hook_name,
-			"unable to get token value", NULL, NULL));
-	valid_name = name_is_valid(token_value);
-	fprintf(stderr, "[PARSER] %sfunction_name_is_valid = %s%s\n", YELLOW, bool_to_string(valid_name), NC);
-	if (!valid_name)
-	{
-		err = error_print(error(ERR_SYNTAX_INVALID),
-			"parser", "invalid function name", NULL, "%s", token_value);
-	}
-	free(token_value);
-	return (err);
-}
+# include "logs.h"	// DEBUG
+# include <assert.h>
 
 t_error	hook_fname(
 	t_parser *parser,
@@ -36,11 +14,21 @@ t_error	hook_fname(
 	t_token		*token;
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(lhs != NULL);
+	assert(rhs != NULL);
+	assert(len == 1);
 	if (len != 1)
 		return (error_print(error(ERR_HOOK_INVALID_RHS_LEN), __func__,
 			NULL, "expected 1 received %i", (int)len));
-	token = &((t_token *)parser->tokens.data)[rhs[0].tokens_start_id];
-	err = check_name(__func__, token);
+	err = parser_get_token(__func__, parser, rhs[0].tokens_start_id, &token);
+	if (err.type)
+		return (err);
+	if (!name_is_valid(&token->value))
+		err = error_print(error(ERR_SYNTAX_INVALID),
+			"parser", "invalid function name", NULL, "%s", token->value.data);
+	else
+		fprintf(stderr, "[PARSER] %sfunction name is valid%s\n", YELLOW, NC);
 	if (err.type != ERR_NO)
 		return (err);
 	return (hook_9_increment(parser, rhs, len, lhs));

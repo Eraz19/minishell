@@ -2,11 +2,12 @@
 #include "parser_stack_type.h"
 #include "cst_type.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 static inline t_error	cst_node_set_children(
-	t_cst_node *node,
-	t_parser_stack_item *rhs,
-	size_t rhs_len)
+							t_cst_node *node,
+							t_parser_stack_item *rhs,
+							size_t rhs_len)
 {
 	size_t	i;
 
@@ -30,14 +31,16 @@ static inline t_error	cst_node_set_children(
 }
 
 t_error	cst_node_new(
-	t_parser_stack_item *lhs,
-	t_parser_stack_item *rhs,
-	size_t rhs_len,
-	t_rule_id rule_id)
+			t_parser_stack_item *lhs,
+			t_parser_stack_item *rhs,
+			size_t rhs_len,
+			t_rule_id rule_id)
 {
 	t_cst_node	*node;
 	t_error		err;
 
+	assert(lhs != NULL);
+	assert(rhs != NULL);
 	node = malloc(sizeof(*node));
 	if (!node)
 		return (error_sys());
@@ -56,12 +59,8 @@ t_error	cst_node_new(
 
 static inline void	cst_node_free_data(t_cst_node *node)
 {
-	if (!node->data)
-		return ;
-	if (node->free_func)
+	if (node->data && node->free_func)
 		node->free_func(node->data);
-	else
-		free(node->data);
 	node->data = NULL;
 }
 
@@ -79,6 +78,8 @@ void	cst_node_free(t_cst_node **node)
 	t_cst_node	*tmp;
 	size_t		i;
 
+	assert(node != NULL);
+	assert(node != NULL);
 	if (!node || !*node)
 		return ;
 	tmp = *node;

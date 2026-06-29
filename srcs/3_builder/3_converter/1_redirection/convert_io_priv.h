@@ -5,8 +5,8 @@
 # include "ast_type.h"
 
 t_error	convert_io_file_or_here(
-	t_parser *parser,
-	t_cst_node *io_file_node,
-	t_ast_redirection *out);
+			const t_parser *parser,
+			const t_cst_node *io_file_node,
+			t_ast_redirection *out);
 
 #endif

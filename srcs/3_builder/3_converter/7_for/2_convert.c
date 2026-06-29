@@ -3,11 +3,12 @@
 #include "ast_type.h"
 #include "converter_priv.h"
 #include <stdlib.h>
+# include <assert.h>	// DEBUG
 
 static inline t_error	convert_for_add_word(
-	t_parser *parser,
-	t_cst_node *word,
-	t_ast_for *out)
+							const t_parser *parser,
+							const t_cst_node *word,
+							t_ast_for *out)
 {
 	t_token	*token;
 	t_error	err;
@@ -26,9 +27,9 @@ wordlist         : wordlist WORD
                  ;
 */
 static inline t_error	convert_for_wordlist(
-	t_parser *parser,
-	t_cst_node *wordlist,
-	t_ast_for *out)
+							const t_parser *parser,
+							const t_cst_node *wordlist,
+							t_ast_for *out)
 {
 	t_error	err;
 
@@ -50,7 +51,7 @@ static inline t_error	convert_for_build_default_word(t_ast_for *out)
 	if (default_word)
 		return (error_sys());
 	token_init(default_word);
-	if (!buff_append(&default_word->value, "\"$@\"", -1))
+	if (!string_append_n(&default_word->value, "\"$@\"", -1))
 	{
 		err = error_sys();
 		free(default_word);
@@ -71,12 +72,12 @@ do_group         : Do compound_list Done
                  ;
 */
 static inline t_error	convert_for_clause(
-	t_parser *parser,
-	t_cst_node *for_clause,
-	t_ast_for *out)
+							const t_parser *parser,
+							const t_cst_node *for_clause,
+							t_ast_for *out)
 {
-	t_cst_node	*do_group;
-	t_error		err;
+	const t_cst_node	*do_group;
+	t_error				err;
 
 	err = converter_get_token(
 		parser, for_clause->children[1], 0, &out->var_name);
@@ -104,12 +105,15 @@ in               : In
                  ;
 */
 t_error	convert_for(
-	t_parser *parser,
-	t_cst_node *for_clause,
-	t_ast_for *out)
+			const t_parser *parser,
+			const t_cst_node *for_clause,
+			t_ast_for *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(for_clause != NULL);
+	assert(out != NULL);
 	ast_for_init(out);
 	err = convert_for_clause(parser, for_clause, out);
 	if (err.type)

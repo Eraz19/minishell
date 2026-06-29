@@ -2,15 +2,16 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 /*
 brace_group      : Lbrace compound_list Rbrace
                  ;
 */
 static inline t_error	convert_to_list(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_command *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_command *out)
 {
 	out->type = AST_CMD_LIST;
 	if (node->symbol == SYM_brace_group)
@@ -31,9 +32,9 @@ compound_command : brace_group
                  ;
 */
 static inline t_error	convert_compound_command_priv(
-	t_parser *parser,
-	t_cst_node *compound_command,
-	t_ast_command *out)
+							const t_parser *parser,
+							const t_cst_node *compound_command,
+							t_ast_command *out)
 {
 	t_cst_node	*child;
 
@@ -63,30 +64,33 @@ static inline t_error	convert_compound_command_priv(
 }
 
 static inline t_error	convert_to_simple(
-	t_parser *parser,
-	t_cst_node *simple,
-	t_ast_command *out)
+							const t_parser *parser,
+							const t_cst_node *simple,
+							t_ast_command *out)
 {
 	out->type = AST_CMD_SIMPLE;
 	return (convert_simple_command(parser, simple, &out->data.simple));
 }
 
 static inline t_error	convert_to_function(
-	t_parser *parser,
-	t_cst_node *func,
-	t_ast_command *out)
+							const t_parser *parser,
+							const t_cst_node *func,
+							t_ast_command *out)
 {
 	out->type = AST_CMD_FUNCTION_DEF;
 	return (convert_function(parser, func, &out->data.function_def));
 }
 
 t_error	convert_compound_command(
-	t_parser *parser,
-	t_cst_node *compound_command,
-	t_ast_command *out)
+			const t_parser *parser,
+			const t_cst_node *compound_command,
+			t_ast_command *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(compound_command != NULL);
+	assert(out != NULL);
 	ast_command_init(out);
 	err = error(ERR_NO);
 	err = convert_compound_command_priv(parser, compound_command, out);
@@ -103,14 +107,17 @@ command          : simple_command
                  ;
 */
 t_error	convert_command(
-	t_parser *parser,
-	t_cst_node *command,
-	t_ast_command *out)
+			const t_parser *parser,
+			const t_cst_node *command,
+			t_ast_command *out)
 {
 	size_t		i;
 	t_cst_node	*child;
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(command != NULL);
+	assert(out != NULL);
 	ast_command_init(out);
 	err = error(ERR_NO);
 	i = 0;

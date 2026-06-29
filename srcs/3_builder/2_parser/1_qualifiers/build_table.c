@@ -3,120 +3,15 @@
 #include "rule_state_type.h"
 #include "lr_state_type.h"
 #include "qualifiers_priv.h"
+#include "qualifiers.h"
 #include <stdlib.h>
-
-// TODO: split in multiple_files
-
-/* ---------- DEBUG (START) ---------- */
-
-# include <stdio.h>	// DEBUG
-
-static inline size_t	qualifier_current_priority(t_qualifier_id qualifier_id)
-{
-	if (qualifier_id == QUALIFIER_7A || qualifier_id == QUALIFIER_7B)
-		return (7);
-	else if (qualifier_id == QUALIFIER_6A || qualifier_id == QUALIFIER_6B)
-		return (6);
-	return (0);
-}
-
-static inline void	detect_qualifier_conflict(t_qualifier_id current, t_qualifier_id new)
-{
-	size_t	current_priority;
-
-	if (current == new)
-		return ;
-	current_priority = qualifier_current_priority(current);
-	if (current_priority == 0)
-		return ;
-	if (qualifier_current_priority(new) == current_priority)
-	{
-		fprintf(stderr, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-		fprintf(stderr, "[ERROR] conflict of qualifiers %zu\n", current_priority);
-		fprintf(stderr, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	}
-}
-
-/* ---------- DEBUG (END) ---------- */
-
-static inline bool	should_apply_qualifier_word(
-	t_lr_machine *machine,
-	size_t lr_state_id)
-{
-	return (machine->actions[lr_state_id][SYM_WORD].type != ACTION_ERROR);
-}
-
-static inline bool should_apply_qualifier_1(
-	t_lr_machine *machine,
-	size_t lr_state_id)
-{
-	if (machine->actions[lr_state_id][SYM_WORD].type != ACTION_ERROR)
-		return (false);
-	if (machine->actions[lr_state_id][SYM_NAME].type != ACTION_ERROR)
-		return (false);
-	if (machine->actions[lr_state_id][SYM_ASSIGNMENT_WORD].type != ACTION_ERROR)
-		return (false);
-	return (true);
-}
-
-static inline bool	rule_is_at_target(
-	t_rule_state *rule_state,
-	t_rule_id rule_id,
-	size_t target_pos)
-{
-	return (rule_state->rule_id == rule_id && rule_state->pos == target_pos);
-}
-
-static inline t_qualifier_id	qualifier_default_id(
-	t_lr_machine *machine,
-	t_rule_state *rule_state)
-{
-	t_rule	*rule;
-
-	rule = &machine->rules[rule_state->rule_id];
-	if (rule_state->pos >= rule->rhs_len)
-		return (QUALIFIER_NONE);
-	if (rule->rhs[rule_state->pos] == SYM_WORD)
-		return (QUALIFIER_WORD);
-	return (QUALIFIER_NONE);
-}
-
-static inline t_qualifier_id	qualifier_6_choose_variant(
-	t_lr_machine *machine,
-	size_t lr_state_id)
-{
-	t_lr_state		*lr_state;
-	t_rule_state	*rule_state;
-	t_rule			*rule;
-	size_t			i;
-
-	lr_state = &((t_lr_state *)machine->lr_states.data)[lr_state_id];
-	i = 0;
-	while (i < lr_state->len)
-	{
-		rule_state = &((t_rule_state *)lr_state->data)[i];
-		rule = &machine->rules[rule_state->rule_id];
-		if (rule_state->pos < rule->rhs_len)
-		{
-			if (rule->lhs == SYM_case_clause && rule->rhs[rule_state->pos] == SYM_in)
-				return (QUALIFIER_6A);
-			else if (rule->lhs == SYM_for_clause && rule->rhs[rule_state->pos] == SYM_in)
-				return (QUALIFIER_6B);
-			else if (rule->lhs == SYM_for_clause && rule->rhs[rule_state->pos] == SYM_do_group)
-				return (QUALIFIER_6B);
-		}
-		i++;
-	}
-	return (QUALIFIER_NONE);
-}
+# include <assert.h>	// DEBUG
 
 static inline t_qualifier_id	qualifiers_get_id(
-	t_lr_machine *machine,
-	size_t lr_state_id,
-	t_rule_state *rule_state)
+									const t_lr_machine *machine,
+									size_t lr_state_id,
+									const t_rule_state *rule_state)
 {
-	// if (rule_is_at_target(rule_state, RULE_FNAME_1, 0))
-	// 	return (QUALIFIER_8);
 	if (rule_is_at_target(rule_state, RULE_CMD_NAME_1, 0))
 		return (QUALIFIER_7A);
 	else if (rule_is_at_target(rule_state, RULE_CMD_WORD_1, 0))
@@ -141,19 +36,12 @@ static inline t_qualifier_id	qualifiers_get_id(
 }
 
 static inline void	qualifiers_set_entry_func(
-	t_parser *parser,
-	t_lr_machine *machine,
-	size_t lr_state_id,
-	t_qualifier_id qualifier_id)
+						const t_parser *parser,
+						const t_lr_machine *machine,
+						size_t lr_state_id,
+						t_qualifier_id qualifier_id)
 {
 	parser->qualifiers[lr_state_id] = NULL;
-	/*
-	** @note	qualify_8 has been disabled since fname has been replaced by 
-	**			WORD in grammar (name validation is now applied on 
-	**			function_definition reduction)
-	*/
-	// if (qualifier_id == QUALIFIER_8)
-	// 	parser->qualifiers[lr_state_id] = qualify_8;
 	if (qualifier_id == QUALIFIER_7A)
 		parser->qualifiers[lr_state_id] = qualify_7a;
 	else if (qualifier_id == QUALIFIER_7B)
@@ -179,9 +67,9 @@ static inline void	qualifiers_set_entry_func(
 }
 
 static inline void	qualifiers_build_entry(
-	t_parser *parser,
-	t_lr_machine *machine,
-	size_t lr_state_id)
+						const t_parser *parser,
+						const t_lr_machine *machine,
+						size_t lr_state_id)
 {
 	t_lr_state		*lr_state;
 	t_rule_state	*rule_state;
@@ -196,7 +84,6 @@ static inline void	qualifiers_build_entry(
 	{
 		rule_state = &((t_rule_state *)lr_state->data)[i];
 		curr_qualifier_id = qualifiers_get_id(machine, lr_state_id, rule_state);
-		detect_qualifier_conflict(qualifier_id, curr_qualifier_id);
 		if (curr_qualifier_id > qualifier_id)
 			qualifier_id = curr_qualifier_id;
 		i++;
@@ -204,11 +91,13 @@ static inline void	qualifiers_build_entry(
 	qualifiers_set_entry_func(parser, machine, lr_state_id, qualifier_id);
 }
 
-t_error	qualifiers_build_table(t_parser *parser, t_lr_machine *machine)
+t_error	qualifiers_build_table(t_parser *parser, const t_lr_machine *machine)
 {
 	size_t		state_count;
 	size_t		lr_state_id;
 
+	assert(parser != NULL);
+	assert(machine != NULL);
 	state_count = machine->lr_states.len;
 	parser->qualifiers = malloc(state_count * sizeof(*parser->qualifiers));
 	if (!parser->qualifiers)

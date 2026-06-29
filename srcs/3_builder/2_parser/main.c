@@ -2,7 +2,8 @@
 #include "parser_priv.h"
 #include "qualifiers.h"
 #include "cst.h"
-# include "debug.h"	// DEBUG
+# include "debug.h"		// DEBUG
+# include <assert.h>	// DEBUG
 
 static inline t_error	parser_push_initial_state(t_parser *parser)
 {
@@ -14,18 +15,19 @@ static inline t_error	parser_push_initial_state(t_parser *parser)
 	item.tokens_count = 0;
 	item.cst_node = NULL;
 	if (!vector_push(&parser->stack, &item))
-		return (parser_internal_error());
+		return (parser_internal_error(error_sys()));
 	return (error(ERR_NO));
 }
 
 static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 {
-	t_error		err;
+	t_error	err;
 	size_t	i;
 
 	i = 0;
 	while (i < parser->stack.len)
-		parser_free_stack_item(&((t_parser_stack_item *)parser->stack.data)[i++]);
+		parser_free_stack_item(
+			&((t_parser_stack_item *)parser->stack.data)[i++]);
 	parser->stack.len = 0;
 	err = parser_push_initial_state(parser);
 	if (err.type == ERR_NO && parser->lookahead_raw_symbol == SYM_NONE)
@@ -41,6 +43,8 @@ static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 
 t_error	parser_store_cst(t_parser *parser, t_parser_stack_item *main_item)
 {
+	assert(parser != NULL);
+	assert(main_item != NULL);
 	fprintf(stderr, "[PARSER] ACCEPT =======> %s%s%s (token_start=%zu token_count=%zu)\n",
 		GREEN, symbol_to_string(main_item->symbol), NC,
 		main_item->tokens_start_id,
@@ -62,13 +66,15 @@ static inline t_error	parser_accept(t_parser *parser)
 	return (parser_store_cst(parser, main_item));
 }
 
-t_error	parser_build_cst(t_parser *parser, t_lr_machine *machine)
+t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 {
-	size_t		lr_state_id;
-	t_token		*token;
-	t_action	action;
-	t_error		err;
+	size_t			lr_state_id;
+	const t_token	*token;
+	t_action		action;
+	t_error			err;
 
+	assert(parser != NULL);
+	assert(machine != NULL);
 	err = parser_prepare_to_build_cst(parser);
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{

@@ -1,5 +1,6 @@
 #include "libft.h"
-#include "symbols_type.h"
+#include "qualifiers_priv.h"
+# include <assert.h>	// DEBUG
 
 static inline t_symbol	str_to_reserved_word_2(const char *token_value)
 {
@@ -43,11 +44,13 @@ static inline t_symbol	str_to_reserved_word(const char *token_value)
 	return (str_to_reserved_word_2(token_value));
 }
 
-bool	qualify_try_reserved_word(const char *token_value, t_symbol *dst_symbol)
+bool	qualify_try_reserved_word(const t_token *token, t_symbol *dst_symbol)
 {
 	t_symbol	symbol;
 
-	symbol = str_to_reserved_word(token_value);
+	assert(token != NULL);
+	assert(dst_symbol != NULL);
+	symbol = str_to_reserved_word(token->value.data);
 	if (symbol == SYM_error)
 		return false;
 	*dst_symbol = symbol;

@@ -3,15 +3,19 @@
 #include "ast_type.h"
 #include "converter_priv.h"
 #include "builder.h"
+# include <assert.h>	// DEBUG
 
 static inline t_error	convert_complete_commands(
-	t_parser *parser,
-	t_cst_node *complete_commands,
-	t_ast_root *out)
+							t_parser *parser,
+							t_cst_node *complete_commands,
+							t_ast_root *out)
 {
 	t_cst_node	*first_node;
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(complete_commands != NULL);
+	assert(out != NULL);
 	first_node = complete_commands->children[0];
 	if (complete_commands->child_count == 1)
 		return (convert_list_add(parser, first_node, out));
@@ -22,13 +26,16 @@ static inline t_error	convert_complete_commands(
 }
 
 t_error	convert_cst_to_ast(
-	t_parser *parser,
-	t_cst_node *cst_root,
-	t_ast_root *ast_root)
+			t_parser *parser,
+			t_cst_node *cst_root,
+			t_ast_root *ast_root)
 {
 	t_cst_node	*node;
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(cst_root != NULL);
+	assert(ast_root != NULL);
 	ast_root_init(ast_root);
 	node = cst_root;
 	if (node->symbol == SYM_start)

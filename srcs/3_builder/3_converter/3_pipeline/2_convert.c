@@ -2,11 +2,12 @@
 #include "parser_type.h"
 #include "ast_type.h"
 #include "converter_priv.h"
+# include <assert.h>	// DEBUG
 
 static inline t_error	add_command(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_pipeline *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_pipeline *out)
 {
 	t_ast_command	command;
 	t_error			err;
@@ -15,18 +16,18 @@ static inline t_error	add_command(
 	if (err.type)
 		return (err);
 	if (!vector_push(&out->commands, &command))
-		return (ast_command_free(&command), error_sys());
+		return (err = error_sys(), ast_command_free(&command), err);
 	return (error(ERR_NO));
 }
 
 static inline t_error	parse_rec(
-	t_parser *parser,
-	t_cst_node *node,
-	t_ast_pipeline *out)
+							const t_parser *parser,
+							const t_cst_node *node,
+							t_ast_pipeline *out)
 {
-	size_t		i;
-	t_cst_node	*child;
-	t_error		err;
+	const t_cst_node	*child;
+	size_t				i;
+	t_error				err;
 
 	err = error(ERR_NO);
 	i = 0;
@@ -53,12 +54,15 @@ pipe_sequence    :                             command
                  ;
 */
 t_error	convert_pipeline(
-	t_parser *parser,
-	t_cst_node *pipeline,
-	t_ast_pipeline *out)
+			const t_parser *parser,
+			const t_cst_node *pipeline,
+			t_ast_pipeline *out)
 {
 	t_error		err;
 
+	assert(parser != NULL);
+	assert(pipeline != NULL);
+	assert(out != NULL);
 	ast_pipeline_init(out);
 	err = parse_rec(parser, pipeline, out);
 	if (err.type)
