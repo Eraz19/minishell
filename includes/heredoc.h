@@ -3,6 +3,7 @@
 
 # include "error.h"
 # include "libft.h"
+# include "context.h"
 
 /** @defgroup heredoc Heredoc API
  *  @brief POSIX here-documents collected into owned temporary files.
@@ -96,6 +97,23 @@ t_error	heredoc_store_all(char *input, size_t *start);
 
 t_error	heredoc_add_to_queue(t_buff *path, char *delim, t_heredoc_mode mode,
 			bool is_tty);
+
+t_error	heredoc_body_save_content(char *path, t_buff *content);
+
+/**
+ * @ingroup heredoc
+ * @brief Records the expansion contexts found in a here-document body.
+ *
+ * Scans @p body at the top level detecting parameter, command and arithmetic
+ * expansions (quotes stay literal), and deep-copies each construct found, with
+ * its [start, end) range inside the body, into @p stack. Used by the expander
+ * to locate every construct in an unquoted here-document without rescanning.
+ *
+ * @param body The fully collected here-document body (borrowed).
+ * @param stack Already-initialised stack receiving the recorded contexts.
+ * @return ERR_NO on success, or the recorded error on failure.
+ */
+t_error	heredoc_track_body_context(t_buff *body, t_context_stack *stack);
 
 
 #endif

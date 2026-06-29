@@ -23,6 +23,8 @@
  */
 t_error	heredoc_create_file(t_heredoc *state, t_buff *path);
 
+t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start);
+
 /**
  * @ingroup heredoc
  * @brief Turns a raw delimiter word into the string body lines match against.

@@ -29,9 +29,9 @@ t_error	expander_expand(char ***expansion, t_expander_args *args)
 
 t_error	read_heredoc_body(t_buff *heredoc_file_path, t_buff *heredoc_body)
 {
-	int				fd;
-	t_error			err;
-	char			*path_str;
+	int		fd;
+	t_error	err;
+	char	*path_str;
 
 	if (!buff_init(heredoc_body, 0, NULL, 0))
 		return (error_sys());

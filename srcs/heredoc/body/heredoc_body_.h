@@ -1,6 +1,7 @@
 #ifndef HEREDOC_BODY__H
 # define HEREDOC_BODY__H
 
+# include "lexer.h"
 # include "heredoc.h"
 # include "context.h"
 
@@ -64,18 +65,6 @@ bool	is_line_delimiter(t_heredoc_body *state);
 
 /**
  * @ingroup heredoc
- * @brief Writes the accumulated body to the heredoc's temporary file.
- *
- * Truncates and opens the item's path, writes the collected content and
- * closes the file.
- *
- * @param state Pointer to the body state (borrowed).
- * @return ERR_NO on success, or ERR_LIBC on open or write failure.
- */
-t_error	heredoc_body_save_content(t_heredoc_body *state);
-
-/**
- * @ingroup heredoc
  * @brief Appends the current line to the body content and clears it.
  *
  * Copies the current line into the content buffer, then frees it and sets the
@@ -101,5 +90,7 @@ t_error	heredoc_body_extract_line(t_heredoc_body *state, char *match_EOL,
 			size_t *i);
 
 t_error	heredoc_body_read(t_heredoc *state, t_heredoc_queue_item *item);
+
+t_lexer_context_args	heredoc_body_context_rules(void);
 
 #endif

@@ -1,30 +1,25 @@
 #include <stdlib.h>
+#include "fcntl.h"
 #include "shell.h"
 #include "heredoc.h"
 #include "heredoc_.h"
+#include "posix_helpers.h"
 #include "heredoc_body_.h"
 #include "heredoc_queue_.h"
 
-static t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start)
+t_error	heredoc_body_save_content(char *path, t_buff *content)
 {
-	size_t					i;
-	t_heredoc_queue_item	item;
+	int		fd;
+	t_error	err;
 
-	i = 0;
-	state->err = heredoc_queue_pop(&state->queue, &item);
-	if (state->err.type)
-		return (state->err);
-	if (input == NULL)
-		item.input = str_dup("");
-	else
-		item.input = str_dup(input);
-	if (start == NULL || *start > str_len(item.input))
-		item.i = &i;
-	else 
-		item.i = start;
-	if (heredoc_body_read(state, &item).type)
-		return (heredoc_queue_item_free(&item), state->err);
-	return (heredoc_queue_item_free(&item), state->err);
+	err = posix_open_with_mode(
+			path, O_WRONLY | O_CREAT | O_TRUNC, 0600, &fd);
+	if (err.type)
+		return (err);
+	err = posix_write(fd, content->data, content->len);
+	if (err.type)
+		return (posix_close(fd), err);
+	return (posix_close(fd), err);
 }
 
 t_error	heredoc_store_all(char *input, size_t *start)
@@ -88,5 +83,16 @@ bool	heredoc_is_delim_quoted(t_buff *delim)
 
 t_error	heredoc_track_body_context(t_buff *body, t_context_stack *stack)
 {
+	t_error	err;
+	t_lexer	lexer;
+	char	*input;
 
+	input = buff_get_string(body);
+	if (input == NULL)
+		return (error_sys());
+	lexer_init(&lexer);
+	err = lexer_push_input(&lexer, input);
+	if (!err.type)
+		err = lexer_track_context(&lexer, stack, heredoc_body_context_rules());
+	return (lexer_free(&lexer), err);
 }

@@ -1,21 +1,6 @@
 #include <fcntl.h>
 #include "scanner.h"
 #include "heredoc_body_.h"
-#include "posix_helpers.h"
-
-t_error	heredoc_body_save_content(t_heredoc_body *state)
-{
-	int	fd;
-
-	state->err = posix_open_with_mode(
-			state->item->path, O_WRONLY | O_CREAT | O_TRUNC, 0600, &fd);
-	if (state->err.type)
-		return (state->err);
-	state->err = posix_write(fd, state->content.data, state->content.len);
-	if (state->err.type)
-		return (posix_close(fd), state->err);
-	return (state->err = posix_close(fd), state->err);
-}
 
 static t_error	heredoc_body_continuation(
 	t_heredoc_body *state,
@@ -65,9 +50,9 @@ t_error	heredoc_body_read(t_heredoc *state, t_heredoc_queue_item *item)
 
 	heredoc_body_init(&body);
 	heredoc_body_load(&body, item);
-	if (heredoc_body_get_content(&body).type)
-		state->err = body.err;
-	else if (heredoc_body_save_content(&body).type)
-		state->err = body.err;
+	state->err = heredoc_body_get_content(&body);
+	if (state->err.type)
+		return (heredoc_body_free(&body), state->err);
+	state->err = heredoc_body_save_content(body.item->path, &body.content);
 	return (heredoc_body_free(&body), state->err);
 }

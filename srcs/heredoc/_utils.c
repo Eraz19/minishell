@@ -6,6 +6,8 @@
 #include "libft.h"
 #include "heredoc_.h"
 #include "posix_helpers.h"
+#include "heredoc_body_.h"
+#include "heredoc_queue_.h"
 //#include "expander.h"
 
 t_error	heredoc_build_delimiter(t_heredoc *state, char **delim)
@@ -98,4 +100,26 @@ t_error	heredoc_create_file(t_heredoc *state, t_buff *path)
 		state->file_id++;
 	}
 	return (posix_close(fd), state->err);
+}
+
+t_error	heredoc_store_body(t_heredoc *state, char *input, size_t *start)
+{
+	size_t					i;
+	t_heredoc_queue_item	item;
+
+	i = 0;
+	state->err = heredoc_queue_pop(&state->queue, &item);
+	if (state->err.type)
+		return (state->err);
+	if (input == NULL)
+		item.input = str_dup("");
+	else
+		item.input = str_dup(input);
+	if (start == NULL || *start > str_len(item.input))
+		item.i = &i;
+	else 
+		item.i = start;
+	if (heredoc_body_read(state, &item).type)
+		return (heredoc_queue_item_free(&item), state->err);
+	return (heredoc_queue_item_free(&item), state->err);
 }

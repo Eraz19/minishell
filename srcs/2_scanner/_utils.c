@@ -68,7 +68,8 @@ t_error	scanner_alias_expand(t_scanner *state, t_token *token)
 		return (input_parser_stack_item_free(&item), state->err);
 	input_stack_push(&state->lexer.input_stack, item);
 	token_free(token);
-	if (lexer_next_token(&state->lexer, token).type)
+	if (lexer_get_next_token(&state->lexer, token,
+			scanner_lexer_rules(state)).type)
 		return (state->err = state->lexer.err);
 	return (state->err);
 }

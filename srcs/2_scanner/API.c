@@ -13,7 +13,8 @@ t_error	scanner_get_next_token(t_token *token)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->lexer.input_stack.len == 0 && scanner_read_input(state).type)
 		return (state->err);
-	if (lexer_next_token(&state->lexer, token).type)
+	if (lexer_get_next_token(&state->lexer, token,
+			scanner_lexer_rules(state)).type)
 		return (state->err = state->lexer.err, state->err);
 	if (token->type == TOKEN_TOKEN)
 		return (scanner_alias_expand(state, token));

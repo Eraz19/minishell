@@ -4,7 +4,7 @@
 # include "error.h"
 # include "token.h"
 # include "heredoc.h"
-# include "lexer_.h"
+# include "lexer.h"
 
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
