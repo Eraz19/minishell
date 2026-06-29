@@ -73,23 +73,19 @@ t_error	alias_add(const char *name, const char *value)
 	return (state->err);
 }
 
-t_error	alias_expand_token(char **expansion, t_buff *token_value)
+t_error	alias_expand_token(char **expansion, t_string *token_value)
 {
 	t_alias	*state;
-	char	*token_str;
 
 	state = shell_get_alias();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	token_str = buff_get_string(token_value);
-	if (token_str == NULL)
-		return (state->err = error_sys());
-	if (is_token_alias_expandable(state, token_str))
+	if (is_token_alias_expandable(state, token_value->data))
 	{
-		state->err = alias_stack_push(&state->stack, token_str);
+		state->err = alias_stack_push(&state->stack, token_value->data);
 		if (state->err.type)
-			return (free(token_str), state->err);
-		*expansion = hashmap_get(&state->map, token_str)->value;
+			return (state->err);
+		*expansion = hashmap_get(&state->map, token_value->data)->value;
 		if (*expansion == NULL)
 			return (state->err = error(ERR_INCOHERENT_STATE));
 		*expansion = str_dup(*expansion);
@@ -97,5 +93,5 @@ t_error	alias_expand_token(char **expansion, t_buff *token_value)
 			return (state->err = error_sys());
 		return (set_position_for_next_word(state, *expansion), state->err);
 	}
-	return (free(token_str), state->err);
+	return (state->err);
 }

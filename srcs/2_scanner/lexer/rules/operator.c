@@ -11,16 +11,10 @@ static bool	is_next_char_redirection(t_lexer *state)
 static bool	is_token_io_number(t_lexer *state)
 {
 	int		io_number;
-	char	*token_str;
 
 	if (is_next_char_redirection(state))
 	{
-		token_str = buff_get_string(&state->token->value);
-		if (token_str == NULL)
-			return (state->err = error_sys(), false);
-		if (!parse_int(token_str, &io_number))
-			return (free(token_str), false);
-		return (free(token_str), true);
+		return (parse_int(state->token->value.data, &io_number));
 	}
 	return (false);
 }

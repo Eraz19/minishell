@@ -135,11 +135,11 @@ t_error	alias_add(const char *name, const char *value);
  *
  * @param expansion Out-parameter receiving the freshly allocated expansion
  *                  string (owned by the caller) on a successful expansion.
- * @param token_value Buffer holding the token text to test (borrowed).
+ * @param token_value t_string holding the token text to test (borrowed).
  * @return ERR_NO on success (whether or not the token expanded),
  *         ERR_SHELL_NOT_FOUND if the shell alias state is unavailable, or
  *         ERR_LIBC on allocation failure.
  */
-t_error	alias_expand_token(char **expansion, t_buff *token_value);
+t_error	alias_expand_token(char **expansion, t_string *token_value);
 
 #endif
