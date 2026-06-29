@@ -171,10 +171,4 @@ t_error	convert_compound_command(
 			t_ast_command *out);
 void	ast_command_free(void *command);
 
-/* ************************************************************************* */
-/*                                   ROOT                                    */
-/* ************************************************************************* */
-
-void	ast_root_init(t_ast_root *root);
-
 #endif

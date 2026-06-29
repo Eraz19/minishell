@@ -32,9 +32,9 @@ void	shell_run(int argc, char **argv, char **envp)
 		error_print(err, NULL, NULL);
 		return ;
 	}
-	err = runner_run(&shell->runner);
+	err = runner_run();
 	if (err.type)
-		error_print(err, NULL, NULL);
+		error_print(err, "runner", NULL, NULL);
 	history_err = history_save();
 	if (history_err.type)
 		(void)error_print(history_err, "history", NULL, NULL);

@@ -31,7 +31,6 @@ t_error	lexer_push_input(t_lexer *state, t_string *str)
 void	lexer_reset(t_lexer *state)
 {
 	state->input = NULL;
-	token_free(state->token);
 	state->token = NULL;
 	state->emited_token = false;
 	while (state->input_stack.len > 0)

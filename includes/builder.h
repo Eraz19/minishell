@@ -18,6 +18,7 @@ t_error	builder_reset(void);
 void	builder_free(t_builder *builder);
 
 t_error	builder_get_ast(t_ast_root *dst_ast);
+void	ast_root_init(t_ast_root *root);
 void	ast_root_free(t_ast_root *root);
 
 // @ret ERR_SHELL_NOT_FOUND

@@ -10,7 +10,7 @@ void	shell_init(t_shell *shell)
 	heredoc_init(&shell->heredoc);
 	history_init(&shell->history);
 	builder_init(&shell->builder);
-	runner_init(&shell->runner);
+	// runner_init(&shell->runner);
 }
 
 void	shell_free(t_shell *shell)
@@ -21,7 +21,7 @@ void	shell_free(t_shell *shell)
 	heredoc_free(&shell->heredoc);
 	history_free(&shell->history);
 	builder_free(&shell->builder);
-	runner_free(&shell->runner);
+	// runner_free(&shell->runner);
 	free(shell);
 	shell_set(NULL);
 }
