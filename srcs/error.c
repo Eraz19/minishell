@@ -74,6 +74,8 @@ const char	*error_to_string(t_error err)
 		return ("empty stack");
 	else if (err.type == ERR_HEREDOC_MAX_ID_REACHED)
 		return ("no available file name");
+	else if (err.type == ERR_HISTORY_DISABLED)
+		return ("persistent history disabled");
 	else if (err.type == ERR_VEOF)
 		return ("unexpected end of input");
 	else if (err.type == ERR_INCOHERENT_STATE)

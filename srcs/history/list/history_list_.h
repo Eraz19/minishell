@@ -63,15 +63,4 @@ t_error	history_list_push(t_history_list *list, char *item);
  */
 t_error	history_list_get(t_history_list *list, char **item, size_t i);
 
-/**
- * @ingroup history
- * @brief Inserts an entry at @p index, taking ownership of @p item.
- *
- * @param list Pointer to the list (borrowed).
- * @param item Entry string whose ownership is transferred to the list.
- * @param index Position at which to insert the entry.
- * @return ERR_NO on success, ERR_LIBC on allocation failure.
- */
-t_error	history_list_insert(t_history_list *list, char *item, size_t index);
-
 #endif

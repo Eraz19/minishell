@@ -19,10 +19,10 @@
  */
 typedef struct s_history_file
 {
-	t_error	err;
-	char 	*path;
-	char	*content;
-	size_t	loaded_count;
+	t_error		err;
+	t_string 	path;
+	t_string	content;
+	size_t		loaded_count;
 }	t_history_file;
 
 /**

@@ -1,33 +1,54 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "history_file_.h"
+#include "posix_helpers.h"
 
 t_error	history_file_read(t_history_file *state)
 {
 	int		fd;
-	t_buff	content_buff;
 
-	if (history_file_open(state, &fd, O_RDONLY).type)
+	if (state->path.len == 0)
 		return (state->err);
-	buff_init(&content_buff, 0, NULL, 0);
-	if (!buff_read_all(&content_buff, fd))
-		return (buff_free(&content_buff), state->err = error_sys());
+	if (history_file_open(state, &fd, O_RDONLY).type)
+	{
+		(void)error_print(state->err,
+			"history", "unable to open history file",
+			"persistent history disabled", NULL, NULL);
+		return (state->err = error(ERR_NO));
+	}
+	if (!string_read_all(&state->content, fd))
+	{
+		(void)error_print(error_sys(),
+			"history", "unable to read history file",
+			"persistent history disabled", NULL, NULL);
+		string_free(&state->content);
+		state->err = error(ERR_NO);
+	}
 	close(fd);
-	if (content_buff.len == 0)
-		return (buff_free(&content_buff), state->err);
-	state->content = buff_get_string(&content_buff);
-	if (state->content == NULL)
-		return (buff_free(&content_buff), state->err = error_sys());
-	return (buff_free(&content_buff), state->err);
+	return (state->err);
 }
 
 t_error	history_file_write(t_history_file *state)
 {
 	int	fd;
 
-	if (history_file_open(state, &fd, O_WRONLY | O_APPEND).type)
+	if (state->path.len == 0 || state->content.len == 0)
 		return (state->err);
-	if (write(fd, state->content, str_len(state->content)) == -1)
-		return (close(fd), state->err = error_sys());
-	return (close(fd), state->err);
+	if (history_file_open(state, &fd, O_WRONLY | O_APPEND).type)
+	{
+		(void)error_print(state->err,
+			"history", "unable to open history file",
+			"persistent history disabled", NULL, NULL);
+		return (state->err = error(ERR_NO));
+	}
+	state->err = posix_write(fd, state->content.data, state->content.len);
+	if (state->err.type)
+	{
+		(void)error_print(state->err,
+			"history", "unable to write to history file",
+			"persistent history disabled", NULL, NULL);
+		state->err = error(ERR_NO);
+	}
+	close(fd);
+	return (state->err);
 }

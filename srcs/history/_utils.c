@@ -3,44 +3,43 @@
 #include "history.h"
 
 static t_error	history_prepare_entry(
-	t_history *state,
-	t_buff *content,
-	char *entry)
+					t_history *state,
+					t_string *content,
+					char *entry)
 {
-	char 	*serial_entry;
-
-	state->err = serialize(entry, &serial_entry);
+	state->err = serialize(entry, content);
 	if (state->err.type)
-		return (free(entry), state->err);
-	if (!buff_append(content, serial_entry, (long)str_len(serial_entry)))
-		return (free(serial_entry), free(entry), state->err = error_sys());
-	if (!buff_append(content, "\n", 1))
-		return (free(serial_entry), free(entry), state->err = error_sys());
-	return (free(serial_entry), serial_entry = NULL, state->err);
+		return (state->err);
+	if (!string_append_n(content, "\n", 1))
+		return (state->err = error_sys(), state->err);
+	return (state->err);
 }
 
-static t_error	history_build_from_current(t_history *state, t_buff *content)
+static t_error	history_build_from_current(t_history *state, t_string *content)
 {
 	char	*entry;
 
-	if (state->current_input.len != 0)
+	if (state->current_input.len == 0)
+		return (state->err);
+	else if (state->current_input.data[state->current_input.len - 1] == '\n')
 	{
-		if (state->current_input.data[state->current_input.len - 1] == '\n')
-			state->current_input.len--;
-		entry = buff_get_string(&state->current_input);
-		if (entry == NULL)
-			return (error_sys());
-		if (history_prepare_entry(state, content, entry).type)
-			return (free(entry), state->err);
-		free(entry);
+		state->current_input.len--;
+		if (state->current_input.len == 0)
+			return (state->err);
 	}
+	entry = buff_get_string(&state->current_input);
+	if (entry == NULL)
+		return (state->err = error_sys());
+	if (history_prepare_entry(state, content, entry).type)
+		return (free(entry), state->err);
+	free(entry);
 	return (state->err);
 }
 
 static t_error	history_build_from_list(
-	t_history *state,
-	t_buff *content,
-	size_t start)
+					t_history *state,
+					t_string *content,
+					size_t start)
 {
 	size_t	i;
 	char	*entry;
@@ -62,16 +61,11 @@ static t_error	history_build_from_list(
 
 t_error	history_build_file_content(t_history *state, size_t start)
 {
-	t_buff	content;
-
-	free(state->file.content);
-	buff_init(&content, 0, NULL, 0);
-	if (history_build_from_list(state, &content, start).type)
-		return (buff_free(&content), state->err);
-	if (history_build_from_current(state, &content).type)
-		return (buff_free(&content), state->err);
-	state->file.content = buff_get_string(&content);
-	if (state->file.content == NULL)
-		return (buff_free(&content), state->err = error_sys());
-	return (buff_free(&content), state->err);
+	string_free(&state->file.content);
+	string_init(&state->file.content, 0, NULL, 0);
+	if (history_build_from_list(state, &state->file.content, start).type)
+		return (string_free(&state->file.content), state->err);
+	if (history_build_from_current(state, &state->file.content).type)
+		return (string_free(&state->file.content), state->err);
+	return (state->err);
 }

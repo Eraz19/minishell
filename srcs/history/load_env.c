@@ -4,37 +4,39 @@
 
 t_error	history_load_path_env(t_history *state)
 {
-	char	*path;
-
-	state->err = params_get("HISTFILE", &state->file.path);
+	state->err = params_get_from_const("HISTFILE", &state->file.path);
+	if (state->err.type == ERR_NO && state->file.path.len > 0)
+		return (state->err);
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
-	if (state->err.type == ERR_VAR_NOT_FOUND || state->file.path == NULL)
+	state->err = params_get_from_const("HOME", &state->file.path);
+	if (state->err.type == ERR_NO && state->file.path.len > 0)
 	{
-		state->err = params_get("HOME", &path);
-		if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
-			return (state->err);
-		state->file.path = str_join(path, "/.sh_history");
-		if (state->file.path == NULL)
-			return (free(path), state->err = error_sys());
-		free(path);
+		if (!string_append_n(&state->file.path, "/.sh_history", -1))
+			return (state->err = error_sys());
+		return (state->err);
 	}
+	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
+		return (state->err);
+	(void)error_print(error(ERR_HISTORY_DISABLED),
+		"history", "no valid history file path found", NULL, NULL);
 	return (state->err = error(ERR_NO));
 }
 
 t_error	history_load_size_env(t_history *state)
 {
-	ssize_t	max;
-	char	*max_str;
+	ssize_t		max;
+	t_string	max_str;
 	
-	state->err = params_get("HISTSIZE", &max_str);
+	state->err = params_get_from_const("HISTSIZE", &max_str);
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
-	if (state->err.type == ERR_VAR_NOT_FOUND || max_str == NULL)
+	if (state->err.type == ERR_VAR_NOT_FOUND || max_str.len == 0)
 		state->rl_history.max = -1;
 	else
 	{
-		max = (ssize_t)ft_atol(max_str);
+		max = (ssize_t)ft_atol(max_str.data);
+		string_free(&max_str);
 		state->rl_history.max = max;
 		if (max >= 0 && max < 128)
 			state->rl_history.max = 128;

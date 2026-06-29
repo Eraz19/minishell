@@ -16,6 +16,8 @@ t_error	history_save_entry(void)
 		return (state->err);
 	if (state->current_input.data[state->current_input.len - 1] == '\n')
 		state->current_input.len--;
+	if (state->current_input.len == 0)
+		return (state->err);
 	entry = buff_get_string(&state->current_input);
 	if (entry == NULL)
 		return (state->err = error_sys());
@@ -36,7 +38,7 @@ t_error	history_append_to_entry(char *entry)
 	state = shell_get_history();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	if (!buff_append(&state->current_input, entry, (long)str_len(entry)))
+	if (!buff_append_n(&state->current_input, entry, -1))
 		return (state->err = error_sys());
 	return (state->err);
 }

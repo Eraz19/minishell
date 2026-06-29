@@ -8,13 +8,6 @@ t_error	history_list_push(t_history_list *list, char *item)
 	return (error(ERR_NO));
 }
 
-t_error	history_list_insert(t_history_list *list, char *item, size_t index)
-{
-	if (!vector_insert(list, index, &item))
-		return (error_sys());
-	return (error(ERR_NO));
-}
-
 t_error	history_list_get(t_history_list *list, char **item, size_t i)
 {
 	char	*item_;
