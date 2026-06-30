@@ -45,22 +45,4 @@ t_error	expansion_push(t_expansion *expansion, t_string *str);
  */
 t_error	expansion_pop(t_expansion *expansion, t_string *str);
 
-/**
- * @ingroup expander
- * @brief Reads the field at @p index without removing it.
- *
- * @p str receives a shallow copy whose buffer is still owned by the
- * expansion; do not free it.
- *
- * @param expansion Pointer to the expansion (borrowed).
- * @param index Position to read.
- * @param str Out-parameter receiving the borrowed field.
- * @return ERR_NO on success, ERR_INDEX_OUT_OF_BOUND if @p index is past the
- *         last field.
- */
-t_error	expansion_get(
-			const t_expansion *expansion,
-			size_t index,
-			t_string *str);
-
 #endif

@@ -1,8 +1,8 @@
 #include "ast_type.h"
-#include "expander.h"
 #include "options.h"
 #include "posix_helpers.h"
 #include "redirect.h"
+#include "redirect_priv.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
@@ -64,8 +64,7 @@ static inline t_error	redirect_get_source_fd(
 		err = error(ERR_REDIRECTION_FAILED);
 		return (error_print(err, "redirector", "fd is not open", NULL, NULL));
 	}
-	// TODO:
-	if (*out == -1 && op == AST_REDIR_WRITE && no_clobber_is_active)
+	else if (*out == -1 && op == AST_REDIR_WRITE && no_clobber_is_active)
 	{
 		if (errno == EEXIST)
 		{
@@ -104,12 +103,7 @@ t_error	redirect_apply(t_ast_redirection *redirection, t_redir_frame *frame)
 	int		new_fd;
 	t_error	err;
 
-	redirect_normalize_fd(redirection);
-	err = redirect_expand(redirection);
-	if (err.type == ERR_NO)
-		err = redirect_check_word(redirection);
-	if (err.type == ERR_NO)
-		err = redirect_create_backup_fd(redirection->fd, &backup_fd);
+	err = redirect_prepare(redirection, &backup_fd);
 	if (err.type == ERR_NO)
 		err = redirect_get_source_fd(redirection, &source_fd);
 	if (err.type)

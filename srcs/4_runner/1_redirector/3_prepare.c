@@ -22,15 +22,18 @@ static inline void	redirect_normalize_fd(t_ast_redirection *redirection)
 
 static inline t_error	redirect_expand(t_ast_redirection *redirection)
 {
-	t_vector	out;
+	t_expansion	out;
+	int			flags;
+	t_string	*expanded_word;
 	t_error		err;
 
+	flags = EXP_TILDE | EXP_PARAM | EXP_CMD_SUB | EXP_ARITHM_SUB | EXP_QUOTE;
 	if (redirection->operation == AST_REDIR_HEREDOC
 		&& redirection->expand_heredoc_body)
-		err = expander_expand_heredoc_body(&redirection->word->value);
+		err = heredoc_expand(&redirection->word->value);
 	else
 	{
-		err = expander_expand_filename(redirection->word, &out);
+		err = expander_expand(redirection->word, flags, &out);
 		if (err.type)
 			return (err);
 		if (out.len > 1)
@@ -39,7 +42,14 @@ static inline t_error	redirect_expand(t_ast_redirection *redirection)
 			return (error_print(error(ERR_REDIRECTION_FAILED), "runner",
 				"redirection word expands to more than one field", NULL, NULL));
 		}
-		// TODO
+		err = expansion_get(&out, 0, &expanded_word);
+		if (err.type)
+			return (err);
+		string_take(
+			&redirection->expanded_word,
+			expanded_word->data,
+			expanded_word->cap,
+			(ssize_t)expanded_word->len);
 	}
 	if (err.type == ERR_NO && redirection->is_location)
 		err = expander_expand_filename(redirection->location, &out);

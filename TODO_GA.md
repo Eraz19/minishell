@@ -1,5 +1,6 @@
 # ALEXANDER
 
+- ⚠️ `expander_expand_filename()` (for `redirection`): "Pathname expansion shall not be performed on the word by a non-interactive shell; an interactive shell may perform it"
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
 # WIP

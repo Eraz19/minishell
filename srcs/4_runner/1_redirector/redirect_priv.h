@@ -14,6 +14,6 @@ void	redirect_frame_free(void *frame);
 // redirection
 
 t_error	redirect_prepare(t_ast_redirection *redirection, int *backup_fd);
-t_error	redirect_apply(t_redir_stack *stack, t_redir_frame *frame);
+t_error	redirect_apply(t_ast_redirection *redirection, t_redir_frame *frame);
 
 #endif

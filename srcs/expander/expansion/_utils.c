@@ -26,3 +26,10 @@ t_error	expansion_get(
 	*str = ((t_string *)expansion->data)[index];
 	return (error(ERR_NO));
 }
+
+t_error expansion_take(t_expansion *exp, size_t i, t_string *out)
+{
+	if (!vector_remove(exp, i, out))
+		return (error(ERR_INDEX_OUT_OF_BOUND));
+	return (error(ERR_NO));
+}

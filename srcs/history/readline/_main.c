@@ -22,7 +22,6 @@ t_error	history_rl_add(t_history_rl *state, t_history_list *list, size_t count)
 		state->err = history_list_get(list, &entry, (size_t)i++);
 		if (state->err.type)
 			return (state->err);
-		print_warn("entry = %p [%s]\n", entry, entry->data);
 		add_history(entry->data);
 #ifdef DEBUG_HISTORY
 		print_pass("[HISTORY] entry added = [%s]\n", entry->data);

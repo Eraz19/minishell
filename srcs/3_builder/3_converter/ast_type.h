@@ -28,11 +28,13 @@ typedef enum e_ast_redir_op
 typedef struct s_ast_redirection
 {
 	t_ast_redir_op	operation;
-	int				fd;					// -1 if [n] not specified in input
-	bool			is_location;
-	t_token			*location;			// only if is_location == true (borrowed)
-	t_token			*word;				// word (borrowed) / heredoc file path (⚠️ owned)
 	bool			expand_heredoc_body;
+	int				fd;					// -1 if [n] not specified in input
+	t_token			*word;				// word (borrowed, ⚠️ owned if heredoc)
+	t_string		expanded_word;		// (⚠️ owned)
+	bool			is_location;
+	t_token			*location;			// only if is_location = true (borrowed)
+	t_string		expanded_location;	// only if is_location = true (⚠️ owned)
 }	t_ast_redirection;
 
 typedef t_vector	t_ast_redir_list;	// vector of t_ast_redirection
