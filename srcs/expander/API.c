@@ -59,13 +59,14 @@ t_error	expander_expand_heredoc_body(const t_string *heredoc_file_path)
 	t_expander_args	args;
 	t_expansion		expansion;
 	t_string		heredoc_body;
+	t_context_stack	stack;
 
 	err = read_heredoc_body(heredoc_file_path, &heredoc_body);
 	if (err.type)
 		return (err);
 	args.value = heredoc_body;
-	context_stack_init(args.contexts);
-	err = heredoc_track_body_context(&heredoc_body, args.contexts);
+	context_stack_init(&stack);
+	err = heredoc_track_body_context(&heredoc_body, &stack);
 	if (err.type)
 		return (string_free(&heredoc_body), err);
 	args.assignment_offset = -1;
@@ -74,6 +75,7 @@ t_error	expander_expand_heredoc_body(const t_string *heredoc_file_path)
 	if (err.type)
 		return (string_free(&heredoc_body), err);
 	err = store_expansion_result_in_heredoc_file(heredoc_file_path, &expansion);
+	context_stack_free(&stack);
 	return (expansion_free(&expansion), string_free(&heredoc_body), err);
 }
 
