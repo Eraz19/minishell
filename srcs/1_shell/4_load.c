@@ -34,7 +34,7 @@ t_error	shell_set_stdin_to_blocking(void)
 
 static t_error	shell_load_scanner(t_shell *shell)
 {
-	return (scanner_load(&shell->scanner, shell->params.specials.source));
+	return (scanner_load(&shell->scanner, shell->params.specials.source.data));
 }
 
 t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)

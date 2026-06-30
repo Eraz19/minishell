@@ -51,6 +51,6 @@ t_error deserialize(const char *src, t_string *dst)
 	err = copy_and_remove_escape(src, buff, src_len, &dst_len);
 	if (err.type)
 		return (free(buff), err);
-	string_take(dst, buff, src_len + 1, dst_len);
+	string_take(dst, buff, src_len + 1, (ssize_t)dst_len);
 	return (error(ERR_NO));
 }

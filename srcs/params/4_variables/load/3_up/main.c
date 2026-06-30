@@ -20,9 +20,9 @@ static inline void	up_build_ps1(t_string *out_name, t_string *out_value)
 	assert(out_name != NULL);
 	assert(out_value != NULL);
 	len = sizeof(PS1_NAME) - 1;
-	string_take(out_name, name, len + 1, len);
+	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS1_VALUE) - 1;
-	string_take(out_value, value, len + 1, len);
+	string_take(out_value, value, len + 1, (ssize_t)len);
 }
 
 static inline void	up_build_ps2(t_string *out_name, t_string *out_value)
@@ -34,9 +34,9 @@ static inline void	up_build_ps2(t_string *out_name, t_string *out_value)
 	assert(out_name != NULL);
 	assert(out_value != NULL);
 	len = sizeof(PS2_NAME) - 1;
-	string_take(out_name, name, len + 1, len);
+	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS2_VALUE) - 1;
-	string_take(out_value, value, len + 1, len);
+	string_take(out_value, value, len + 1, (ssize_t)len);
 }
 
 static inline void	up_build_ps4(t_string *out_name, t_string *out_value)
@@ -48,9 +48,9 @@ static inline void	up_build_ps4(t_string *out_name, t_string *out_value)
 	assert(out_name != NULL);
 	assert(out_value != NULL);
 	len = sizeof(PS4_NAME) - 1;
-	string_take(out_name, name, len + 1, len);
+	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS4_VALUE) - 1;
-	string_take(out_value, value, len + 1, len);
+	string_take(out_value, value, len + 1, (ssize_t)len);
 }
 
 // @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.

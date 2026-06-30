@@ -30,7 +30,7 @@ static inline void copy_and_add_escape(
 	}
 	buff[j] = '\'';
 	buff[j + 1] = '\0';
-	string_take(dst, buff, buff_cap, j + 1);
+	string_take(dst, buff, buff_cap, (ssize_t)j + 1);
 }
 
 t_error serialize(const char *src, t_string *dst)

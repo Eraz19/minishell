@@ -80,6 +80,6 @@ t_error	options_get(t_option options, t_string *dst)
 	options_add_to_string(options, buff, &len);
 	assert(len <= cap);
 	buff[len] = '\0';
-	string_take(dst, buff, cap, len);
+	string_take(dst, buff, cap, (ssize_t)len);
 	return (error(ERR_NO));
 }

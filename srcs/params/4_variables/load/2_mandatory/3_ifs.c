@@ -12,7 +12,7 @@ static inline void	ifs_build_name(t_string *out)
 
 	assert(out != NULL);
 	len = sizeof(IFS_NAME) - 1;
-	string_take(out, name, len + 1, len);
+	string_take(out, name, len + 1, (ssize_t)len);
 }
 
 static inline void	ifs_build_value(t_string *out)
@@ -22,7 +22,7 @@ static inline void	ifs_build_value(t_string *out)
 
 	assert(out != NULL);
 	len = sizeof(IFS_VALUE) - 1;
-	string_take(out, value, len + 1, len);
+	string_take(out, value, len + 1, (ssize_t)len);
 }
 
 /*

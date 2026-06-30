@@ -15,9 +15,9 @@ static t_error	specials_load_cmd_string(
 	if ((size_t)argc < *operand_index + 1)
 		return (error_print(error(ERR_OPT_INVALID),
 			"-c needs an argument", NULL, NULL));
-	specials->source = argv[(*operand_index)++];
+	string_take(&specials->source, argv[(*operand_index)++], 0, -1);
 	if ((size_t)argc >= *operand_index + 1)
-		specials->zero = argv[(*operand_index)++];
+		string_take(&specials->zero, argv[(*operand_index)++], 0, -1);
 	print_pass("mode initialized                       command_string (-c)\n");
 	return (error(ERR_NO));
 }
@@ -33,8 +33,7 @@ static t_error	specials_load_source_and_zero(
 	bool	is_stdin;
 	t_error	err;
 
-	specials->source = NULL;
-	specials->zero = argv[0];
+	string_take(&specials->zero, argv[0], 0, -1);
 	err = option_is_active(OPT_CMD_STRING, &is_cmd_string);
 	if (err.type == ERR_NO)
 		err = option_is_active(OPT_STDIN_INPUT, &is_stdin);
@@ -47,13 +46,13 @@ static t_error	specials_load_source_and_zero(
 	else if ((size_t)argc >= *operand_index + 1)
 	{
 		print_pass("mode initialized                       command_file\n");
-		specials->source = argv[(*operand_index)++];
+		string_take(&specials->source, argv[(*operand_index)++], 0, -1);
 		specials->zero = specials->source;
 	}
 	if (err.type == ERR_NO)
 	{
-		print_pass("zero initialized                       '%s'\n", specials->zero);
-		print_pass("source initialized                     '%s'\n", specials->source);
+		print_pass("zero initialized                       '%s'\n", specials->zero.data);
+		print_pass("source initialized                     '%s'\n", specials->source.data);
 	}
 	return (err);
 }

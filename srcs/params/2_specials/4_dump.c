@@ -11,12 +11,12 @@ void	specials_dump(void)
 	if (!shell)
 		error_print(error(ERR_SHELL_NOT_FOUND), "specials_dump()", NULL, NULL);
 	specials = &shell->params.specials;
-	if (specials->source)
-		fprintf(stderr, "SPECIAL source='%s'\n", specials->source);
+	if (specials->source.len > 0)
+		fprintf(stderr, "SPECIAL source='%s'\n", specials->source.data);
 	else
 		fprintf(stderr, "SPECIAL source=NULL\n");
-	if (specials->zero)
-		fprintf(stderr, "SPECIAL 0='%s'\n", specials->zero);
+	if (specials->zero.len > 0)
+		fprintf(stderr, "SPECIAL 0='%s'\n", specials->zero.data);
 	else
 		fprintf(stderr, "SPECIAL 0=NULL\n");
 	fprintf(stderr, "SPECIAL $=%jd\n", (intmax_t)specials->pid);

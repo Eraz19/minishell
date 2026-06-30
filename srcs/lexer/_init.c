@@ -20,7 +20,7 @@ t_error	lexer_push_input(t_lexer *state, t_string *str)
 	state->err = input_parser_stack_item_init(&item);
 	if (state->err.type)
 		return (free(str), state->err);
-	string_take(&item->str, str->data, str->cap, str->len);
+	string_take(&item->str, str->data, str->cap, (ssize_t)str->len);
 	string_init(str, 0, NULL, 0);
 	state->err = input_stack_push(&state->input_stack, item);
 	if (state->err.type)

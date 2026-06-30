@@ -18,7 +18,7 @@ static inline void	pwd_build_name(t_string *out)
 
 	assert(out != NULL);
 	len = sizeof(PWD_NAME) - 1;
-	string_take(out, name, len + 1, len);
+	string_take(out, name, len + 1, (ssize_t)len);
 }
 
 // ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY /
