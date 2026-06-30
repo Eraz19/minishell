@@ -61,6 +61,7 @@
 		"-I${workspaceFolder}/srcs/expander/substitutions/dollar_squote",
 		"-I${workspaceFolder}/srcs/expander/substitutions/param",
 		"-I${workspaceFolder}/srcs/expander/substitutions/tilde",
+		"-I${workspaceFolder}/srcs/expander/expansion",
 		"-I${workspaceFolder}/srcs/expander/word",
 		"-I${workspaceFolder}/srcs/heredoc",
 		"-I${workspaceFolder}/srcs/heredoc/body",
@@ -78,6 +79,5 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up"
-	],
-	"explorer.sortOrder": "modified"
+	]
 }

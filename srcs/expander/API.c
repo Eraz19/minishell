@@ -4,7 +4,7 @@
 #include "expander_.h"
 #include "expander_expansion_.h"
 
-t_error	expander_expand_word(t_token *word, t_expansion *out)
+t_error	expander_expand_word(const t_token *word, t_expansion *out)
 {
 	t_expander_args	args;
 
@@ -15,7 +15,7 @@ t_error	expander_expand_word(t_token *word, t_expansion *out)
 	return (expander_expand(out, &args));
 }
 
-t_error	expander_expand_filename(t_token *filename, t_expansion *out)
+t_error	expander_expand_filename(const t_token *filename, t_expansion *out)
 {
 	t_expander_args	args;
 
@@ -26,7 +26,7 @@ t_error	expander_expand_filename(t_token *filename, t_expansion *out)
 	return (expander_expand(out, &args));
 }
 
-t_error	expander_expand_heredoc_delim(t_string *heredoc_delim, t_string *out)
+t_error	expander_expand_heredoc_delim(const t_string *heredoc_delim, t_string *out)
 {
 	t_error			err;
 	t_string		src;
@@ -51,7 +51,7 @@ t_error	expander_expand_heredoc_delim(t_string *heredoc_delim, t_string *out)
 	return (expansion_free(&expansion), err);
 }
 
-t_error	expander_expand_heredoc_body(t_string *heredoc_file_path)
+t_error	expander_expand_heredoc_body(const t_string *heredoc_file_path)
 {
 	t_error			err;
 	t_expander_args	args;
@@ -75,7 +75,7 @@ t_error	expander_expand_heredoc_body(t_string *heredoc_file_path)
 	return (expansion_free(&expansion), string_free(&heredoc_body), err);
 }
 
-t_error	expander_expand_assignment(t_token *assignment, t_string *out)
+t_error	expander_expand_assignment(const t_token *assignment, t_string *out)
 {
 	t_error			err;
 	t_string		src;
