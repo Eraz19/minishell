@@ -3,8 +3,19 @@
 
 # include "error.h"
 # include "libft.h"
-# include "context.h"
 # include "token.h"
+
+typedef enum e_exp_flags
+{
+	EXP_TILDE			= (1u << 0),
+	EXP_DOLLAR_SQUOTE	= (1u << 1),
+	EXP_PARAM			= (1u << 2),
+	EXP_CMD_SUB			= (1u << 3),
+	EXP_ARITH			= (1u << 4),
+	EXP_FIELD_SPLIT		= (1u << 5),
+	EXP_PATH_NAME		= (1u << 6),
+	EXP_QUOTE_REMOVAL	= (1u << 7),
+}	t_exp_flags;
 
 /**
  * @ingroup expander
@@ -14,25 +25,6 @@
  * elements and releases them with string_free on expansion_free().
  */
 typedef t_vector	t_expansion;
-
-typedef enum e_expander_flags
-{
-	EXP_TILDE			= (1u << 0),
-	EXP_PARAM			= (1u << 1),
-	EXP_CMD_SUB			= (1u << 2),
-	EXP_ARITH			= (1u << 3),
-	EXP_FIELD_SPLIT		= (1u << 4),
-	EXP_PATH_NAME		= (1u << 5),
-	EXP_QUOTE_REMOVAL	= (1u << 6),
-}	t_expander_flags;
-
-typedef	struct s_expander_args
-{
-	t_string				value;
-	t_expander_flags		flags;
-	const t_context_stack	*contexts;
-	ssize_t					assignment_offset;
-}	t_expander_args;
 
 /**
  * @ingroup expander
@@ -60,14 +52,7 @@ t_error	expansion_get(
 			size_t index,
 			t_string *str);
 
-/* ---------------------- TMP ---------------------- */
-
-t_error	expand_token(t_expansion *out, t_token *src, t_expander_flags flags);
-
-t_error	expand_heredoc(t_string *src, t_expander_flags flags);
-
-t_error expansion_take(t_expansion *exp, size_t i, t_string *out);
-
-/* ------------------------------------------------- */
+t_error	expand_word(t_string *src, t_exp_flags flags);
+t_error	expand_token(t_expansion *out, t_token *src, t_exp_flags flags);
 
 #endif
