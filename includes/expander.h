@@ -3,18 +3,9 @@
 
 # include "error.h"
 # include "libft.h"
-# include "context.h"
+# include "token.h"
 
-/**
- * @ingroup expander
- * @brief Result of a word expansion: a vector of t_string fields.
- *
- * Each element is an owned t_string (one expanded field); the vector owns its
- * elements and releases them with string_free on expansion_free().
- */
-typedef t_vector	t_expansion;
-
-typedef enum e_expander_flags
+typedef enum e_exp_flags
 {
 	EXP_TILDE			= (1u << 0),
 	EXP_DOLLAR_SQUOTE	= (1u << 1),
@@ -24,16 +15,16 @@ typedef enum e_expander_flags
 	EXP_FIELD_SPLIT		= (1u << 5),
 	EXP_PATH_NAME		= (1u << 6),
 	EXP_QUOTE_REMOVAL	= (1u << 7),
-}	t_expander_flags;
+}	t_exp_flags;
 
-typedef	struct s_expander_args
-{
-	t_string				value;
-	t_expander_flags		flags;
-	const t_context_stack	*contexts;
-	ssize_t					assignment_offset;
-}	t_expander_args;
-
+/**
+ * @ingroup expander
+ * @brief Result of a word expansion: a vector of t_string fields.
+ *
+ * Each element is an owned t_string (one expanded field); the vector owns its
+ * elements and releases them with string_free on expansion_free().
+ */
+typedef t_vector	t_expansion;
 
 /**
  * @ingroup expander
@@ -61,7 +52,7 @@ t_error	expansion_get(
 			size_t index,
 			t_string *str);
 
-
-t_error	expander_expand(t_expansion *expansion, t_expander_args *args);
+t_error	expand_word(t_string *src, t_exp_flags flags);
+t_error	expand_token(t_expansion *out, t_token *src, t_exp_flags flags);
 
 #endif
