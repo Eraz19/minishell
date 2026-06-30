@@ -72,12 +72,7 @@ static inline t_error	parser_accept(t_parser *parser)
 	if (err.type)
 		return (err);
 	else if (is_EOF)
-	{
-#ifdef DEBUG_PARSING
-		fprintf(stderr, "[PARSER] ============================> IS EOF <============================\n");
-#endif
 		return (error(ERR_EOF));
-	}
 	return (err);
 }
 

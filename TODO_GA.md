@@ -3,8 +3,6 @@
 - `history`:
 	- ⚠️ Historique se supprime si on y accède puis on delete puis revient au prochain input mais des lignes vides sont alors dans l'historique
 	- Les entries sont all delete + all add to readline au lieu de juste ajouter la nouvelle entrée ?!
-- `scanner`:
-	- ⚠️ `EOF` jamais reçu
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
 # WIP
