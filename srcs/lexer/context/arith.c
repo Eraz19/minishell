@@ -41,7 +41,7 @@ static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
 
 static t_lexer_context_args	context_arith_rules(
 	size_t *nesting_depth,
-	t_context_parser_stack_item *item)
+	t_context_stack_item *item)
 {
 	t_lexer_context_args	res;
 
@@ -56,20 +56,20 @@ static t_lexer_context_args	context_arith_rules(
 	res.is_end = is_context_arith_ending;
 	res.expansion = lexer_rule_expansion;
 	res.unescaped = context_arith_unescape;
-	res.is_expansion = is_expansion_context;
+	res.is_expansion = is_substitution_context;
 	return (res);
 }
 
 t_error	lexer_context_arith(t_lexer *state)
 {
 	t_lexer_context_args			args;
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 	t_lexer_backup			backup;
 	size_t					nesting_depth;
 
 	nesting_depth = 0;
 	backup = lexer_backup(state);
-	state->err = context_parser_stack_item_init(&item, CONTEXT_ARITH);
+	state->err = context_stack_item_init(&item, CONTEXT_ARITH);
 	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);

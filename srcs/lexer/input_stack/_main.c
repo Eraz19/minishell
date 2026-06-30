@@ -1,25 +1,29 @@
 #include "lexer.h"
 
-t_error	input_stack_pop(t_input_stack *stack)
+t_error	lexer_input_stack_pop(t_lexer_input_stack *stack)
 {
-	t_input_lexer_stack_item	*last_item;
+	t_lexer_input_stack_item	*last_item;
 
 	if (!vector_remove(stack, stack->len - 1, (void **)&last_item))
 		return (error_sys());
-	return (input_parser_stack_item_free(&last_item), error(ERR_NO));
+	return (lexer_input_stack_item_free(&last_item), error(ERR_NO));
 }
 
-t_error	input_stack_push(t_input_stack *stack, t_input_lexer_stack_item *item)
+t_error	lexer_input_stack_push(
+			t_lexer_input_stack *stack,
+			t_lexer_input_stack_item *item)
 {
 	if (!vector_push(stack, &item))
 		return (error_sys());
 	return (error(ERR_NO));
 }
 
-t_error	input_stack_get_last(t_input_stack *stack, t_input_lexer_stack_item **item)
+t_error	lexer_input_stack_get_last(
+			t_lexer_input_stack *stack,
+			t_lexer_input_stack_item **item)
 {
 	if (stack->len == 0)
 		return (error(ERR_EMPTY_STACK));
-	*item = ((t_input_lexer_stack_item **)stack->data)[stack->len - 1];
+	*item = ((t_lexer_input_stack_item **)stack->data)[stack->len - 1];
 	return (error(ERR_NO));
 }

@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include "expander_loader_.h"
+#include "expander_expansion_.h"
 
 t_error	expander_loader_build(t_expander_loader *state)
 {
@@ -11,57 +11,54 @@ t_error	expander_loader_build(t_expander_loader *state)
 		expander_loader_consume(state, 1, false);
 		expander_loader_consume(state, 1, true);
 	}
-	else if (is_quoting_context(state->word.data + state->i, &state->quoting))
+	else if (is_quoting_start(state))
 		expander_loader_quoted(state);
 	else
 		expander_loader_consume(state, 1, false);
 	return (state->err);
 }
 
-static t_error	expander_loader_word_extract(t_expander_word word, char **str)
+static t_error	expander_loader_word_extract(
+					t_expander_word word,
+					t_string *str)
 {
-	size_t					i;
 	t_error					err;
 	t_expander_word_item	item;
 
-	i = 0;
-	*str = malloc(sizeof(char) * (word.len + 1));
-	if (*str == NULL)
+	if (!string_init(str, 1, NULL, 0))
 		return (error_sys());
 	while (word.len > 0)
 	{
 		err = expander_word_pop(&word, &item);
 		if (err.type)
-			return (free(*str), *str = NULL, err);
+			return (string_free(str), err);
 		if (item.c == '\0' && word.len > 0)
 			continue ;
-		(*str)[i++] = item.c;
+		if (!string_append_n(str, &item.c, 1))
+			return (string_free(str), error_sys());
 	}
-	return ((*str)[i] = '\0', error(ERR_NO));
+	return (error(ERR_NO));
 }
 
-t_error	expander_loader_extract(t_expander_fields *fields, char ***words)
+t_error	expander_loader_extract(t_expander_fields *fields, t_expansion *out)
 {
-	size_t			i;
 	t_error			err;
 	t_expander_word	word;
-	char 			*str;
+	t_string		str;
 
-	i = 0;
-	*words = malloc(sizeof(char *) * (fields->len + 1));
-	if (!*words)
-		return (error_sys());
-	ft_bzero(*words, sizeof(char *) * (fields->len + 1));
+	expansion_init(out);
 	while (fields->len > 0)
 	{
 		err = expander_fields_pop(fields, &word);
 		if (err.type)
-			return (str_array_free(words), err);
+			return (expansion_free(out), err);
 		err = expander_loader_word_extract(word, &str);
-		if (err.type)
-			return (str_array_free(words), expander_word_free(&word), err);
-		(*words)[i++] = str;
 		expander_word_free(&word);
+		if (err.type)
+			return (expansion_free(out), err);
+		err = expansion_push(out, &str);
+		if (err.type)
+			return (string_free(&str), expansion_free(out), err);
 	}
 	return (error(ERR_NO));
 }

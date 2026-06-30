@@ -11,8 +11,8 @@ void	expander_word_free(t_expander_word *word)
 }
 
 t_expander_word_item	expander_word_item_init(
-	char c,
-	t_expander_word_item_opt opt)
+							char c,
+							t_expander_word_item_opt opt)
 {
 	t_expander_word_item	item;
 

@@ -21,6 +21,8 @@ bool	is_in_quoting_whitelist(char c, t_context context)
 		return (is_in_context_dquote_whitelist(c));
 	else if (context == CONTEXT_DOLLAR_SQUOTE)
 		return (is_in_context_dollar_squote_whitelist(c));
+	else if (context == CONTEXT_HEREDOC)
+		return (is_in_context_heredoc_whitelist(c));
 	else
 		return (false);
 }

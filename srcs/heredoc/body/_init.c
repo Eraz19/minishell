@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "heredoc_body_.h"
 
 void	heredoc_body_init(t_heredoc_body *state)

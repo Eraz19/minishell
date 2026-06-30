@@ -1,47 +1,56 @@
 #include <fcntl.h>
-#include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <asm-generic/errno-base.h>
 #include "libft.h"
 #include "heredoc_.h"
-#include "heredoc_queue_.h"
 #include "heredoc_body_.h"
 #include "posix_helpers.h"
+#include "heredoc_queue_.h"
 //#include "expander.h"
 
-t_error	heredoc_build_delimiter(t_heredoc *state, t_string *delim)
+static inline bool	max_id_reached(t_error err, int file_id)
 {
-	//t_expander_args	args;
-	//char			**delim_exp;
+	int	errno;
 
-	//args.value = delim_buff;
-	//args.role = EXPANDER_HEREDOC_DELIMITER;
-	//args.contexts = NULL;
-	//state->err = expander_expand_word(&delim_exp, &args);
-	//if (state->err.type || delim_exp == NULL)
-	//	return (buff_free(&delim_buff), free(*delim), state->err);
-	//buff_free(&delim_buff);
-	//if (delim_exp[0] == NULL)
-	//	return (free(*delim), str_array_free(&delim_exp), state->err);
-	if (!string_append_n(delim, "\n", 1))
-		return (state->err = error_sys());
-	return (state->err);
+	errno = err.saved_errno;
+	return (err.type == ERR_LIBC && errno == EEXIST && file_id == INT_MAX);
 }
 
-static inline t_error	heredoc_handle_error(t_heredoc *state, t_string *path)
+t_error	create_heredoc_file(t_heredoc *state, t_string *path)
 {
-	string_free(path);
-	if (state->err.type == ERR_NO
-		|| (state->err.type == ERR_LIBC
-			&& state->err.saved_errno == EEXIST
-			&& state->file_id == INT_MAX))
+	int		fd;
+	int		o_flag;
+	size_t	initial_len;
+
+	o_flag = O_CREAT | O_EXCL | O_WRONLY;
+	if (!string_init(path, 0, HEREDOC_TMP_PATH, sizeof(HEREDOC_TMP_PATH) - 1))
+		return (state->err = error_sys());
+	fd = -1;
+	initial_len = path->len;
+	while (state->file_id < INT_MAX)
+	{
+		state->file_id++;
+		if (!string_append_format(path, "%i", (int)state->file_id))
+			return (state->err = error_sys(), string_free(path), state->err);
+		state->err = posix_open_with_mode(path->data, o_flag, 0600, &fd);
+		if (state->err.type == ERR_NO)
+			return (close(fd), state->err);
+		if (state->err.type != ERR_LIBC || state->err.saved_errno != EEXIST)
+			break ;
+		path->len = initial_len;
+	}
+	if (state->err.type == ERR_NO || max_id_reached(state->err, state->file_id))
 		state->err = error(ERR_HEREDOC_MAX_ID_REACHED);
 	error_print(state->err, "heredoc", "unable to create tmp file", NULL, NULL);
-	return (state->err);
+	return (string_free(path), state->err);
 }
 
-t_error    heredoc_store_body(t_heredoc *state, t_string *input, size_t *start)
+t_error	heredoc_read_queue_heredoc_body(
+			t_heredoc *state,
+			t_string *input,
+			size_t *start)
 {
 	size_t					i;
 	t_heredoc_queue_item   	item;
@@ -62,34 +71,26 @@ t_error    heredoc_store_body(t_heredoc *state, t_string *input, size_t *start)
 		item.i = &i;
 	else 
 		item.i = start;
-	if (heredoc_body_read(state, &item).type)
+	if (read_heredoc_body_from_input(state, &item).type)
 		return (heredoc_queue_item_free(&item), state->err);
 	return (heredoc_queue_item_free(&item), state->err);
 }
 
-t_error	heredoc_create_file(t_heredoc *state, t_string *path)
+t_error	format_heredoc_delimiter(t_heredoc *state, t_string *delim)
 {
-	int		fd;
-	int		oflag;
-	size_t	initial_len;
+	//t_expander_args	args;
+	//char			**delim_exp;
 
-	oflag = O_CREAT | O_EXCL | O_WRONLY;
-	if (!string_init(path, 0, HEREDOC_TMP_PATH, sizeof(HEREDOC_TMP_PATH) - 1))
+	//args.value = delim_buff;
+	//args.role = EXPANDER_HEREDOC_DELIMITER;
+	//args.contexts = NULL;
+	//state->err = expander_expand_word(&delim_exp, &args);
+	//if (state->err.type || delim_exp == NULL)
+	//	return (buff_free(&delim_buff), free(*delim), state->err);
+	//buff_free(&delim_buff);
+	//if (delim_exp[0] == NULL)
+	//	return (free(*delim), str_array_free(&delim_exp), state->err);
+	if (!string_append_n(delim, "\n", 1))
 		return (state->err = error_sys());
-	initial_len = path->len;
-	fd = -1;
-	while (state->file_id < INT_MAX)
-	{
-		state->file_id++;
-		if (!string_append_format(path, "%i", (int)state->file_id))
-			return (state->err = error_sys(), string_free(path), state->err);
-		state->err = posix_open_with_mode(path->data, oflag, 0600, &fd);
-		if (state->err.type == ERR_NO)
-			return (close(fd), state->err);
-		else if (state->err.type != ERR_LIBC
-			|| state->err.saved_errno != EEXIST)
-			break ;
-		path->len = initial_len;
-	}
-	return (heredoc_handle_error(state, path));
+	return (state->err);
 }

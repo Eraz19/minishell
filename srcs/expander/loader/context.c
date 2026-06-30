@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "expander_loader_.h"
 
 static t_error	expander_loader_char(t_expander_loader *state)
@@ -16,6 +17,8 @@ static t_error	expander_loader_context(t_expander_loader *state)
 {
 	if (is_substitution_start(state))
 		return (expander_loader_substitution(state));
+	else if (is_quoting_start(state))
+		return (expander_loader_quoted(state));
 	else
 		return (expander_loader_char(state));
 }
@@ -30,6 +33,11 @@ t_error	expander_loader_substitution(t_expander_loader *state)
 		{
 			if (is_substitution_start(state))
 				return (expander_loader_substitution(state));
+			else if (is_quoting_start(state))
+			{
+				if (expander_loader_quoted(state).type)
+					return (state->err);
+			}
 			else if (expander_loader_char(state).type)
 				return (state->err);
 		}
@@ -41,22 +49,16 @@ t_error	expander_loader_substitution(t_expander_loader *state)
 
 t_error	expander_loader_quoted(t_expander_loader *state)
 {
-	char	current;
+	t_context_stack_item	*item;
+	t_context				previous_quoting;
 
-	if (state->quoting != CONTEXT_DOLLAR_SQUOTE)
-		expander_loader_consume(state, 1, false);
-	else
-		expander_loader_consume(state, 2, false);
+	state->err = context_stack_fpop(&state->stack, &item);
 	if (state->err.type)
 		return (state->err);
-	current = state->word.data[state->i];
-	while (current != '\0' && !is_quoting_ending(current, state->quoting))
-	{
-		if (expander_loader_context(state).type)
-			return (state->err);
-		current = state->word.data[state->i];
-	}
-	if (state->word.data[state->i] == '\0')
-		return (state->err);
-	return (expander_loader_consume(state, 1, false));
+	previous_quoting = state->quoting;
+	state->quoting = item->context;
+	while (state->i < item->end && !state->err.type)
+		expander_loader_context(state);
+	state->quoting = previous_quoting;
+	return (free(item), state->err);
 }

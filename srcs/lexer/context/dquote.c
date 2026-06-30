@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "lexer.h"
 
 static t_error	context_dquote_escape(t_lexer *state)
@@ -21,7 +20,7 @@ static t_error	context_dquote_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_lexer_context_args	context_dquote_rules(t_context_parser_stack_item *item)
+static t_lexer_context_args	context_dquote_rules(t_context_stack_item *item)
 {
 	t_lexer_context_args	res;
 
@@ -36,17 +35,19 @@ static t_lexer_context_args	context_dquote_rules(t_context_parser_stack_item *it
 	res.expansion = lexer_rule_expansion;
 	res.is_end = is_context_dquote_ending;
 	res.unescaped = context_dquote_unescape;
-	res.is_expansion = is_expansion_context;
+	res.is_expansion = is_substitution_context;
 	return (res);
 }
 
 t_error	lexer_context_dquote(t_lexer *state)
 {
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 
-	state->err = context_parser_stack_item_init(&item, CONTEXT_DQUOTE);
+	state->err = context_stack_item_init(&item, CONTEXT_DQUOTE);
 	if (state->err.type)
 		return (state->err);
-	state->err = lexer_context_scan(state, context_dquote_rules(item));
-	return (free(item), state->err);
+	state->err = context_stack_push(&state->token->contexts, item);
+	if (state->err.type)
+		return (state->err);
+	return (lexer_context_scan(state, context_dquote_rules(item)));
 }

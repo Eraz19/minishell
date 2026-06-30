@@ -1,17 +1,27 @@
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include "heredoc_body_.h"
-#include "libft.h"
 
-t_error	heredoc_body_line_to_content(t_heredoc_body *state)
+t_error	heredoc_body_escape(t_lexer *state)
 {
-	if (!string_append(&state->content, &state->line))
-		return (state->err = error_sys());
-	return (string_free(&state->line), state->err);
+	t_escape_args	args;
+
+	args.is_in_special_context = NULL;
+	args.is_in_special_whitelist = NULL;
+	args.enable_line_continuation = true;
+	args.is_in_whitelist = is_in_context_dquote_whitelist;
+	return (lexer_context_escape(state, args));
 }
 
-t_error	heredoc_body_extract_line(t_heredoc_body *state, char *EOL, size_t *i)
+t_error	heredoc_body_unescape(t_lexer *state, void *unused)
+{
+	t_unescape_args	args;
+
+	(void)unused;
+	args.special_args = NULL;
+	args.special_handler = NULL;
+	return (lexer_context_unescape(state, args));
+}
+
+t_error	get_heredoc_body_line(t_heredoc_body *state, char *EOL, size_t *i)
 {
 	char	*start;
 	size_t	line_len;

@@ -102,6 +102,7 @@ INCLUDES		:= \
 	-Isrcs/alias/stack \
 	-Isrcs/builtins \
 	-Isrcs/expander \
+	-Isrcs/expander/expansion \
 	-Isrcs/expander/field \
 	-Isrcs/expander/field_splitting \
 	-Isrcs/expander/loader \

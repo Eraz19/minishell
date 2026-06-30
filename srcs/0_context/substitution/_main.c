@@ -1,6 +1,6 @@
 #include "context.h"
 
-bool	is_expansion_context(char *str, t_context *context)
+bool	is_substitution_context(char *str, t_context *context)
 {
 	if (is_context_param_start(str))
 		return (*context = CONTEXT_PARAM, true);
@@ -13,7 +13,7 @@ bool	is_expansion_context(char *str, t_context *context)
 	return (false);
 }
 
-bool	is_in_expansion_whitelist(char c, t_context context)
+bool	is_in_substitution_whitelist(char c, t_context context)
 {
 	if (context == CONTEXT_NONE)
 		return (is_in_context_none_whitelist(c));

@@ -16,14 +16,14 @@ bool	is_tilde_expansion(
 		return (false);
 	if (current_item->opt.i == 0 && current_item->c == '~')
 		return (true);
-	else if (state->assignement_offset > 0
-		&& item.opt.i == (size_t)state->assignement_offset + 1
+	else if (state->assignment_offset > 0
+		&& item.opt.i == (size_t)state->assignment_offset + 1
 		&& current_item->c == '='
 		&& item.c == '~')
 		return (true);
 	else if (state->role == EXPANDER_ASSIGNMENT
-		&& state->assignement_offset > 0
-		&& current_item->opt.i > (size_t)state->assignement_offset
+		&& state->assignment_offset > 0
+		&& current_item->opt.i > (size_t)state->assignment_offset
 		&& current_item->c == ':'
 		&& item.c == '~')
 		return (true);

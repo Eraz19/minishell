@@ -4,6 +4,15 @@
 # include "error.h"
 # include "token.h"
 
+/**
+ * @ingroup expander
+ * @brief Result of a word expansion: a vector of t_string fields.
+ *
+ * Each element is an owned t_string (one expanded field); the vector owns its
+ * elements and releases them with string_free on expansion_free().
+ */
+typedef t_vector	t_expansion;
+
 t_error	expander_expand_word(t_token *word, t_vector *out);
 
 t_error	expander_expand_filename(t_token *filename, t_vector *out);

@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "lexer.h"
 
 static t_error	context_squote_escape(t_lexer *state)
@@ -21,7 +20,7 @@ static t_error	context_squote_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_lexer_context_args	context_squote_rules(t_context_parser_stack_item *item)
+static t_lexer_context_args	context_squote_rules(t_context_stack_item *item)
 {
 	t_lexer_context_args	res;
 
@@ -42,11 +41,13 @@ static t_lexer_context_args	context_squote_rules(t_context_parser_stack_item *it
 
 t_error	lexer_context_squote(t_lexer *state)
 {
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 
-	state->err = context_parser_stack_item_init(&item, CONTEXT_SQUOTE);
+	state->err = context_stack_item_init(&item, CONTEXT_SQUOTE);
 	if (state->err.type)
 		return (state->err);
-	state->err = lexer_context_scan(state, context_squote_rules(item));
-	return (free(item), state->err);
+	state->err = context_stack_push(&state->token->contexts, item);
+	if (state->err.type)
+		return (state->err);
+	return (lexer_context_scan(state, context_squote_rules(item)));
 }

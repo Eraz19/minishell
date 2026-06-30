@@ -3,17 +3,17 @@
 
 t_error	quote_removal_quoted(
 	t_expander *state,
-	t_context context,
+	t_expander_word_item item,
 	t_expander_word *word,
 	t_expander_word *word_expanded)
 {
-	t_expander_word_item	item;
-
-	if (context == CONTEXT_SQUOTE)
+	if (item.opt.quoted == CONTEXT_SQUOTE)
 		context_squote(state, word, word_expanded);
-	else if (context == CONTEXT_DQUOTE)
+	else if (item.opt.quoted == CONTEXT_DQUOTE)
 		context_dquote(state, word, word_expanded);
-	else if (context == CONTEXT_DOLLAR_SQUOTE)
+	else if (item.opt.quoted == CONTEXT_HEREDOC)
+		context_heredoc(state, item, word, word_expanded);
+	else if (item.opt.quoted == CONTEXT_DOLLAR_SQUOTE)
 	{
 		state->err = expander_word_pop(word, &item);
 		if (state->err.type)
@@ -50,7 +50,7 @@ t_error	quote_remove_char(
 		}
 	}
 	else
-		quote_removal_quoted(state, item.opt.quoted, word, word_exp);
+		quote_removal_quoted(state, item, word, word_exp);
 	return (state->err);
 }
 

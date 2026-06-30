@@ -6,6 +6,7 @@
 # include <pwd.h>
 # include <time.h>
 # include "error.h"
+# include "scanner.h"
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -99,5 +100,13 @@ bool	name_is_valid_from_const(const char *name);
  * @return @c ERR_NO or @c ERR_LIBC.
  */
 t_error	serialize(const char *src, t_string *dst);
+
+/**
+ * @brief Set the scanner mode based on shell options.
+ *
+ * @param mode Scanner mode to set (borrowed, read-only).
+ * @return @c ERR_NO or @c ERR_LIBC.
+ */
+t_error	scan_set_mode(t_scanner_mode *mode);
 
 #endif

@@ -3,8 +3,8 @@
 #include "heredoc_body_.h"
 
 static t_error	heredoc_body_continuation(
-	t_heredoc_body *state,
-	bool *used_continuation)
+					t_heredoc_body *state,
+					bool *used_continuation)
 {
 	if (state->item->is_tty)
 	{
@@ -17,8 +17,7 @@ static t_error	heredoc_body_continuation(
 		return (state->err = error(ERR_NO_DELIM));
 }
 
-#include <stdio.h>
-static t_error	heredoc_body_get_content(t_heredoc_body *state)
+static t_error	get_heredoc_body_content(t_heredoc_body *state)
 {
 	char	*match_EOL;
 	bool	used_continuation;
@@ -32,7 +31,7 @@ static t_error	heredoc_body_get_content(t_heredoc_body *state)
 				return (state->err);
 		}
 		match_EOL = str_chr(state->item->input.data + state->i, '\n');
-		if (heredoc_body_extract_line(state, match_EOL, &state->i).type)
+		if (get_heredoc_body_line(state, match_EOL, &state->i).type)
 			return (state->err);
 		if (is_line_delimiter(state))
 		{
@@ -40,22 +39,38 @@ static t_error	heredoc_body_get_content(t_heredoc_body *state)
 				*state->item->i = state->i;
 			return (state->err);
 		}
-		else if (heredoc_body_line_to_content(state).type)
-		{
-			return (state->err);
-		}
+		if (!string_append(&state->content, &state->line))
+			return (state->err = error_sys());
+		string_free(&state->line);
 	}
 }
 
-t_error	heredoc_body_read(t_heredoc *state, t_heredoc_queue_item *item)
+t_error	read_heredoc_body_from_input(
+			t_heredoc *state,
+			t_heredoc_queue_item *item)
 {
 	t_heredoc_body	body;
 
 	heredoc_body_init(&body);
 	heredoc_body_load(&body, item);
-	state->err = heredoc_body_get_content(&body);
+	state->err = get_heredoc_body_content(&body);
 	if (state->err.type)
 		return (heredoc_body_free(&body), state->err);
-	state->err = heredoc_body_save_content(&body.item->path, &body.content);
+	state->err = heredoc_save_body_in_file(&body.item->path, &body.content);
 	return (heredoc_body_free(&body), state->err);
+}
+
+t_lexer_context_args	heredoc_body_context_rules(void)
+{
+	t_lexer_context_args	res;
+
+	res.quoting = NULL;
+	res.is_quoting = NULL;
+	res.unescaped_args = NULL;
+	res.escape = heredoc_body_escape;
+	res.is_end = is_context_none_ending;
+	res.unescaped = heredoc_body_unescape;
+	res.expansion = lexer_rule_expansion;
+	res.is_expansion = is_substitution_context;
+	return (res);
 }

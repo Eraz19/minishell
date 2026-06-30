@@ -86,6 +86,8 @@ const char	*error_to_string(t_error err)
 		return ("unexpected end of input");
 	else if (err.type == ERR_NO_DELIM)
 		return ("missing delimiter");
+	else if (err.type == ERR_EXP_TOO_MANY_FIELDS)
+		return ("Expansion generated more fields than expacted");
 	return ("unknown");
 }
 

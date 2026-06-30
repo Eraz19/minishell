@@ -35,7 +35,7 @@
  * are pushed on top and popped when exhausted, so the lexer always reads from
  * the topmost item.
  */
-typedef t_vector	t_input_stack;
+typedef t_vector	t_lexer_input_stack;
 
 /**
  * @ingroup lexer
@@ -47,22 +47,25 @@ typedef t_vector	t_input_stack;
  * @var s_input_lexer_stack_item::context Per-input stack of open quoting/
  *                                        expansion contexts.
  */
-typedef struct s_input_lexer_stack_item
+typedef struct s_lexer_input_stack_item
 {
 	size_t			i;
 	t_string		str;
 	t_context_stack	context;
-}	t_input_lexer_stack_item;
+}	t_lexer_input_stack_item;
 
-void	input_stack_init(t_input_stack *stack);
-void	input_stack_free(t_input_stack *stack);
-void	input_parser_stack_item_free(void *item);
-t_error	input_parser_stack_item_init(t_input_lexer_stack_item **item);
+void			lexer_input_stack_item_free(void *item);
+void			lexer_input_stack_init(t_lexer_input_stack *stack);
+void			lexer_input_stack_free(t_lexer_input_stack *stack);
+t_error			lexer_input_stack_item_init(t_lexer_input_stack_item **item);
 
-t_error	input_stack_pop(t_input_stack *stack);
-t_error	input_stack_push(t_input_stack *stack, t_input_lexer_stack_item *item);
-t_error	input_stack_get_last(t_input_stack *stack,
-			t_input_lexer_stack_item **item);
+t_error			lexer_input_stack_pop(t_lexer_input_stack *stack);
+t_error			lexer_input_stack_push(
+					t_lexer_input_stack *stack,
+					t_lexer_input_stack_item *item);
+t_error			lexer_input_stack_get_last(
+					t_lexer_input_stack *stack,
+					t_lexer_input_stack_item **item);
 
 /* ------------------------------------------------------------------------- */
 /* Lexer state and injected rules                                            */
@@ -125,9 +128,9 @@ struct s_lexer
 {
 	t_error						err;
 	t_lexer_rules				rules;
-	t_input_lexer_stack_item	*input;
+	t_lexer_input_stack_item	*input;
 	t_token						*token;
-	t_input_stack				input_stack;
+	t_lexer_input_stack				input_stack;
 	bool						emited_token;
 };
 
@@ -166,18 +169,18 @@ typedef struct s_unescape_args
  */
 typedef struct s_lexer_context_args
 {
-	t_context					context;
-	size_t						opening_len;
-	size_t						closing_len;
-	t_context_parser_stack_item	*stack_item;
-	void						*unescaped_args;
-	t_error						(*escape)(t_lexer *);
-	bool						(*is_end)(char, void *);
-	t_error						(*unescaped)(t_lexer *, void *);
-	t_error						(*quoting)(t_lexer *, t_context);
-	bool						(*is_quoting)(char *, t_context *);
-	t_error						(*expansion)(t_lexer *, t_context);
-	bool						(*is_expansion)(char *, t_context *);
+	t_context				context;
+	size_t					opening_len;
+	size_t					closing_len;
+	t_context_stack_item	*stack_item;
+	void					*unescaped_args;
+	t_error					(*escape)(t_lexer *);
+	bool					(*is_end)(char, void *);
+	t_error					(*unescaped)(t_lexer *, void *);
+	t_error					(*quoting)(t_lexer *, t_context);
+	bool					(*is_quoting)(char *, t_context *);
+	t_error					(*expansion)(t_lexer *, t_context);
+	bool					(*is_expansion)(char *, t_context *);
 }	t_lexer_context_args;
 
 /* ------------------------------------------------------------------------- */
@@ -232,7 +235,9 @@ t_error			lexer_push_input(t_lexer *state, t_string *str);
  * @return ERR_NO on success, ERR_EMPTY_STACK if no input remains, or the
  *         recorded error on failure.
  */
-t_error			lexer_get_next_token(t_lexer *state, t_token *token,
+t_error			lexer_get_next_token(
+					t_lexer *state,
+					t_token *token,
 					t_lexer_rules rules);
 
 /**
@@ -249,7 +254,9 @@ t_error			lexer_get_next_token(t_lexer *state, t_token *token,
  * @param args Detection configuration for the top-level scan.
  * @return ERR_NO on success, or the recorded error on failure.
  */
-t_error			lexer_track_context(t_lexer *state, t_context_stack *out,
+t_error			lexer_track_context(
+					t_lexer *state,
+					t_context_stack *out,
 					t_lexer_context_args args);
 
 /* ------------------------------------------------------------------------- */

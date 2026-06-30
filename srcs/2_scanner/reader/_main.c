@@ -1,11 +1,10 @@
 #include "libft.h"
-#include "posix_helpers.h"
 #include <fcntl.h>
 #include <stdlib.h>
 #include "reader_.h"
 #include "history.h"
-#include "posix_helpers.h"
 #include "params.h"
+#include "posix_helpers.h"
 
 t_error	reader_new_input(t_string *res)
 {

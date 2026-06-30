@@ -12,25 +12,50 @@ bool	is_char_escaped(t_expander_loader *state)
 	if (state->quoting != CONTEXT_NONE)
 		is_in_whitelist = is_in_quoting_whitelist(next_char, state->quoting);
 	else
-		is_in_whitelist = is_in_expansion_whitelist(next_char, state->quoting);
+		is_in_whitelist = is_in_substitution_whitelist(next_char, state->quoting);
 	return (current_char == '\\' && next_char != '\0' && is_in_whitelist);
+}
+
+static bool	is_quoting_type(t_context context)
+{
+	return (context == CONTEXT_SQUOTE
+		|| context == CONTEXT_DQUOTE
+		|| context == CONTEXT_DOLLAR_SQUOTE
+		|| context == CONTEXT_HEREDOC);
+}
+
+static bool	is_context_start(t_expander_loader *state,
+		t_context_stack_item **item)
+{
+	if (state->stack.len == 0)
+		return (false);
+	state->err = context_stack_get(&state->stack, item, 0);
+	if (state->err.type || *item == NULL)
+		return (false);
+	return (state->i == (*item)->start);
 }
 
 bool	is_substitution_start(t_expander_loader *state)
 {
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 
-	if (state->stack.len == 0)
+	if (!is_context_start(state, &item))
 		return (false);
-	state->err = context_stack_get(&state->stack, &item, 0);
-	if (state->err.type || item == NULL)
+	return (!is_quoting_type(item->context));
+}
+
+bool	is_quoting_start(t_expander_loader *state)
+{
+	t_context_stack_item	*item;
+
+	if (!is_context_start(state, &item))
 		return (false);
-	return (state->i == item->start);
+	return (is_quoting_type(item->context));
 }
 
 t_error	expander_loader_push_context(t_expander_loader *state)
 {
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 
 	if (state->stack.len == 0)
 		return (state->err);
@@ -45,7 +70,7 @@ t_error	expander_loader_push_context(t_expander_loader *state)
 
 t_error	expander_loader_pop_context(t_expander_loader *state)
 {
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 	size_t					last_i;
 	
 	state->err = context_stack_bpop(&state->loading_stack, &item);

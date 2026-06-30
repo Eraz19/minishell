@@ -43,6 +43,7 @@ typedef enum e_error_type
 	ERR_NOT_IMPLEMENTED,
 	ERR_UNEXPECTED_EOI,
 	ERR_VEOF,
+	ERR_EXP_TOO_MANY_FIELDS,
 	ERR_COUNT
 }	t_error_type;
 

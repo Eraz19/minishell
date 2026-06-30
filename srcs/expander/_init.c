@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "expander_.h"
 #include "expander_loader_.h"
 
@@ -24,7 +23,7 @@ t_error	expander_load(t_expander *state, t_expander_args *args)
 	t_expander_word		word_copy;
 	t_expander_loader	loader_state;
 
-	state->assignement_offset = args->assignment_offset;
+	state->assignment_offset = args->assignment_offset;
 	expander_loader_init(&loader_state);
 	state->err = expander_loader_load(
 		&loader_state, args->contexts, &args->value);

@@ -1,6 +1,6 @@
-#include "options.h"
-#include "scanner.h"
 #include "shell.h"
+#include "utils.h"
+#include "scanner.h"
 
 t_error	scanner_init(t_scanner *state)
 {
@@ -15,46 +15,16 @@ void	scanner_free(t_scanner *state)
 	*state = (t_scanner){0};
 }
 
-static inline t_error	scanner_compute_options(
-	bool *is_stdin,
-	bool *is_interactive,
-	bool *is_cmd_string)
-{
-	t_error	err;
-
-	err = option_is_active(OPT_STDIN_INPUT, is_stdin);
-	if (err.type == ERR_NO)
-		err = option_is_active(OPT_INTERACTIVE, is_interactive);
-	if (err.type == ERR_NO)
-		err = option_is_active(OPT_CMD_STRING, is_cmd_string);
-	return (err);
-}
-
 t_error	scanner_load(t_scanner *state, const char *source)
 {
-	bool	is_stdin;
-	bool	is_interactive;
-	bool	is_cmd_string;
 	t_error	err;
 
 	state->mode = SCAN_NONE;
-	err = scanner_compute_options(&is_stdin, &is_interactive, &is_cmd_string);
-	if (err.type)
+	err = scan_set_mode(&state->mode);
+	if (err.type != ERR_NO)
 		return (err);
-	if (is_stdin && is_interactive)
-		state->mode = SCAN_STDIN_TTY;
-	else if (is_stdin)
-		state->mode = SCAN_STDIN_PIPE;
-	else if (is_cmd_string)
-	{
-		state->mode = SCAN_STRING;
+	if (state->mode == SCAN_STRING || state->mode == SCAN_FILE)
 		state->source = source;
-	}
-	else
-	{
-		state->mode = SCAN_FILE;
-		state->source = source;
-	}
 	return (state->err);
 }
 

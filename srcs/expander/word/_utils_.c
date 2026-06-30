@@ -19,10 +19,10 @@ t_error	expander_word_remove(t_expander_word *word, size_t start, size_t len)
 }
 
 t_error	expander_word_to_str(
-	t_expander_word *word,
-	char **str,
-	size_t start,
-	size_t len)
+			t_expander_word *word,
+			char **str,
+			size_t start,
+			size_t len)
 {
 	size_t					i;
 	t_error					err;
@@ -45,9 +45,9 @@ t_error	expander_word_to_str(
 }
 
 t_error	expander_word_from_str(
-	t_expander_word *word,
-	const char *str,
-	t_expander_word_item_opt opt)
+			t_expander_word *word,
+			const char *str,
+			t_expander_word_item_opt opt)
 {
 	size_t						i;
 	t_error						err;

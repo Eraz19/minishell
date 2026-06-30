@@ -1,10 +1,14 @@
-#include <stdlib.h>
 #include "params.h"
 #include "history.h"
 #include "history_.h"
 
 t_error	history_load_path_env(t_history *state)
 {
+	const char	*module;
+	const char	*err_message;
+	
+	module = "history";
+	err_message = "no valid history file path found";
 	state->err = params_get_from_const("HISTFILE", &state->file.path);
 	if (state->err.type == ERR_NO && state->file.path.len > 0)
 		return (state->err);
@@ -19,8 +23,7 @@ t_error	history_load_path_env(t_history *state)
 	}
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
-	(void)error_print(error(ERR_HISTORY_DISABLED),
-		"history", "no valid history file path found", NULL, NULL);
+	error_print(error(ERR_HISTORY_DISABLED), module, err_message, NULL, NULL);
 	return (state->err = error(ERR_NO));
 }
 

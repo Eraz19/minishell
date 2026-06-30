@@ -67,7 +67,6 @@ typedef struct s_token
 	ssize_t			assignment_offset;
 }	t_token;
 
-// TODO: doc: add warning to specify that token.value.data == NULL after token_init(), owner must NULL-check its access to token.value.data if he's not sure that token.value.data has been allocated by a further call
 /**
  * @ingroup token
  * @brief Initialises a token to an empty word with an empty value string.

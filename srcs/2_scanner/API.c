@@ -4,6 +4,7 @@
 #include "scanner.h"
 #include "scanner_.h"
 
+#include <stdio.h>
 t_error	scanner_get_next_token(t_token *token)
 {
 	t_scanner	*state;
@@ -11,8 +12,11 @@ t_error	scanner_get_next_token(t_token *token)
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
+	printf("GET NEXT TOKEN called\n");
 	if (state->lexer.input_stack.len == 0 && scanner_read_input(state).type)
 		return (state->err);
+	if (state->lexer.input != NULL)
+		printf("GET NEXT TOKEN on [%s] with index [%zu]\n", state->lexer.input->str.data, state->lexer.input->i);
 	if (lexer_get_next_token(&state->lexer, token,
 			scanner_lexer_rules(state)).type)
 		return (state->err = state->lexer.err, state->err);
@@ -25,20 +29,18 @@ t_error	scanner_report_io_here(
 			t_token *delim,
 			t_heredoc_mode mode)
 {
-	bool		is_tty;
 	t_scanner	*state;
 
 	state = shell_get_scanner();
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	is_tty = state->mode == SCAN_STDIN_TTY;
-	state->err = heredoc_add_to_queue(out_path, delim, mode, is_tty);
+	state->err = heredoc_register(out_path, delim, mode);
 	return (state->err);
 }
 
 t_error	scanner_heredoc_read(void)
 {
-	t_input_lexer_stack_item	*item;
+	t_lexer_input_stack_item	*item;
 	t_scanner					*state;
 
 	state = shell_get_scanner();
@@ -46,12 +48,12 @@ t_error	scanner_heredoc_read(void)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->lexer.input == NULL)
 	{
-		state->err = heredoc_store_all(NULL, NULL);
+		state->err = heredoc_read_queue_heredoc_bodies(NULL, NULL);
 	}
 	else
 	{
 		item = state->lexer.input;
-		state->err = heredoc_store_all(&item->str, &item->i);
+		state->err = heredoc_read_queue_heredoc_bodies(&item->str, &item->i);
 	}
 	return (state->err);
 }

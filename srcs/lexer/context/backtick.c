@@ -2,7 +2,7 @@
 
 static bool	is_backtick_squote_surrounded(t_lexer *state)
 {
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 	
 	if (state->input->context.len < 2)
 		return (false);
@@ -35,7 +35,7 @@ static t_error	context_backtick_unescape(t_lexer *state, void *_)
 	return (lexer_context_unescape(state, args));
 }
 
-static t_lexer_context_args	context_backtick_rules(t_context_parser_stack_item *item)
+static t_lexer_context_args	context_backtick_rules(t_context_stack_item *item)
 {
 	t_lexer_context_args	res;
 
@@ -48,7 +48,7 @@ static t_lexer_context_args	context_backtick_rules(t_context_parser_stack_item *
 	res.is_quoting = is_quoting_context;
 	res.escape = context_backtick_escape;
 	res.expansion = lexer_rule_expansion;
-	res.is_expansion = is_expansion_context;
+	res.is_expansion = is_substitution_context;
 	res.is_end = is_context_backtick_ending;
 	res.unescaped = context_backtick_unescape;
 	return (res);
@@ -56,9 +56,9 @@ static t_lexer_context_args	context_backtick_rules(t_context_parser_stack_item *
 
 t_error	lexer_context_backtick(t_lexer *state)
 {
-	t_context_parser_stack_item	*item;
+	t_context_stack_item	*item;
 
-	state->err = context_parser_stack_item_init(&item, CONTEXT_BACKTICK);
+	state->err = context_stack_item_init(&item, CONTEXT_BACKTICK);
 	if (state->err.type)
 		return (state->err);
 	state->err = context_stack_push(&state->token->contexts, item);

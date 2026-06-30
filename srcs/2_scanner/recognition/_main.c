@@ -9,7 +9,7 @@ t_error	scanner_recognize(t_lexer *state, t_context *context)
 	else if (is_quoting_context(
 			state->input->str.data + state->input->i, context))
 		return (lexer_rule_quoting(state, *context));
-	else if (is_expansion_context(
+	else if (is_substitution_context(
 			state->input->str.data + state->input->i, context))
 		return (lexer_rule_expansion(state, *context));
 	else if (is_new_operator(state))

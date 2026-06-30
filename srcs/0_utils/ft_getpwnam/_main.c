@@ -42,8 +42,8 @@ static int	ft_pw_split(char *line, struct passwd *pw, const char *name)
 static t_error	ft_pw_slurp(char **out)
 {
 	int		fd;
-	t_buff	buffer;
 	t_error	err;
+	t_buff	buffer;
 
 	err = posix_open("/etc/passwd", O_RDONLY, &fd);
 	if (err.type)

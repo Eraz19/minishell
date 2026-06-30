@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "scanner_recognition_.h"
 
 static bool	is_next_char_redirection(t_lexer *state)
