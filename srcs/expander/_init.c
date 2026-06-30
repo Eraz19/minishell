@@ -1,10 +1,9 @@
 #include "expander_.h"
 #include "expander_loader_.h"
 
-void	expander_init(t_expander *state, t_expander_role role)
+void	expander_init(t_expander *state)
 {
 	*state = (t_expander){0};
-	state->role = role;
 	expander_fields_init(&state->fields);
 	expander_word_init(&state->word_exp);
 	expander_fields_init(&state->fields_exp);
@@ -23,6 +22,7 @@ t_error	expander_load(t_expander *state, t_expander_args *args)
 	t_expander_word		word_copy;
 	t_expander_loader	loader_state;
 
+	state->flags = args->flags;
 	state->assignment_offset = args->assignment_offset;
 	expander_loader_init(&loader_state);
 	state->err = expander_loader_load(

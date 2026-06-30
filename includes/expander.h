@@ -2,7 +2,8 @@
 # define EXPANDER_H
 
 # include "error.h"
-# include "token.h"
+# include "libft.h"
+# include "context.h"
 
 /**
  * @ingroup expander
@@ -13,6 +14,26 @@
  */
 typedef t_vector	t_expansion;
 
+typedef enum e_expander_flags
+{
+	EXP_TILDE			= (1u << 0),
+	EXP_PARAM			= (1u << 1),
+	EXP_CMD_SUB			= (1u << 2),
+	EXP_ARITH			= (1u << 3),
+	EXP_FIELD_SPLIT		= (1u << 4),
+	EXP_PATH_NAME		= (1u << 5),
+	EXP_QUOTE_REMOVAL	= (1u << 6),
+}	t_expander_flags;
+
+typedef	struct s_expander_args
+{
+	t_string				value;
+	t_expander_flags		flags;
+	const t_context_stack	*contexts;
+	ssize_t					assignment_offset;
+}	t_expander_args;
+
+
 /**
  * @ingroup expander
  * @brief Frees every field's buffer and the backing array.
@@ -21,16 +42,25 @@ typedef t_vector	t_expansion;
  */
 void	expansion_free(t_expansion *expansion);
 
-t_error	expander_expand_word(const t_token *word, t_expansion *out);
+/**
+ * @ingroup expander
+ * @brief Reads the field at @p index without removing it.
+ *
+ * @p str receives a shallow copy whose buffer is still owned by the
+ * expansion; do not free it.
+ *
+ * @param expansion Pointer to the expansion (borrowed).
+ * @param index Position to read.
+ * @param str Out-parameter receiving the borrowed field.
+ * @return ERR_NO on success, ERR_INDEX_OUT_OF_BOUND if @p index is past the
+ *         last field.
+ */
+t_error	expansion_get(
+			const t_expansion *expansion,
+			size_t index,
+			t_string *str);
 
-t_error	expander_expand_filename(const t_token *filename, t_expansion *out);
 
-t_error	expander_expand_heredoc_delim(
-			const t_string *heredoc_delim,
-			t_string *out);
-
-t_error	expander_expand_heredoc_body(const t_string *heredoc_file_path);
-
-t_error	expander_expand_assignment(const t_token *assignment, t_string *out);
+t_error	expander_expand(t_expansion *expansion, t_expander_args *args);
 
 #endif
