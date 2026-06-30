@@ -48,11 +48,13 @@ t_error	runner_run(void)
 		if (err.type == ERR_EOF)
 		{
 			if (is_interactive == false)
-				return (error(ERR_NO));	
+				return (error(ERR_NO));
+			err = error(ERR_NO);
 		} 
 		else if (err.type && (err.type != ERR_SYNTAX_INVALID || is_interactive == false))
 			return (err);
-		err = reset_scanner_and_builder();
+		if (err.type == ERR_SYNTAX_INVALID)
+			err = reset_scanner_and_builder();
 	}
 	return (err);
 }
