@@ -20,7 +20,7 @@ void	expander_loader_free(t_expander_loader *state)
 
 t_error	expander_loader_load(
 			t_expander_loader *state,
-			t_context_stack *stack,
+			const t_context_stack *stack,
 			t_string *word)
 {
 	if (!string_dup(&state->word, word))

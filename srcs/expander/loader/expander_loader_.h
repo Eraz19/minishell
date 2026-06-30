@@ -3,9 +3,9 @@
 
 # include "error.h"
 # include "context.h"
+# include "expander.h"
 # include "expander_word_.h"
 # include "expander_field_.h"
-# include "expander_expansion_.h"
 
 typedef struct s_expander_loader
 {
@@ -23,7 +23,7 @@ void	expander_loader_init(t_expander_loader *state);
 void	expander_loader_free(t_expander_loader *state);
 t_error	expander_loader_load(
 			t_expander_loader *state,
-			t_context_stack *stack,
+			const t_context_stack *stack,
 			t_string *word);
 
 bool	is_char_escaped(t_expander_loader *state);

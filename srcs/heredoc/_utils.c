@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <asm-generic/errno-base.h>
+#include <errno.h>
 #include "libft.h"
 #include "heredoc_.h"
 #include "heredoc_body_.h"

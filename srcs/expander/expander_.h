@@ -15,10 +15,10 @@ typedef enum e_expander_role
 
 typedef	struct s_expander_args
 {
-	t_string		value;
-	t_expander_role role;
-	t_context_stack *contexts;
-	ssize_t			assignment_offset;
+	t_string				value;
+	t_expander_role 		role;
+	const t_context_stack	*contexts;
+	ssize_t					assignment_offset;
 }	t_expander_args;
 
 typedef struct s_expander

@@ -5,6 +5,7 @@
 #include "quote_removal_.h"
 #include "expander_loader_.h"
 #include "field_splitting_.h"
+#include "expander_expansion_.h"
 #include "path_name_expansion_.h"
 #include "expander_substitutions_.h"
 
