@@ -14,7 +14,9 @@ int	main(int argc, char **argv)
 	assert(environ != NULL);
 	setlocale(LC_NUMERIC, "de_DE");	// DEBUG
 	shell_run(argc, argv, environ);
+// #ifdef DDEBUG_LOADING
 	print_stop();
+	// #endif
 	setlocale(LC_NUMERIC, "");	// DEBUG
 	return ((int)err.type);
 }

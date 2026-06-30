@@ -11,10 +11,10 @@ t_error	var_load_mandatory(void)
 {
 	t_error	err;
 
-	err = var_set_ifs();
+	err = var_set_pwd();
 	if (err.type != ERR_NO)
 		return (err);
-	err = var_set_pwd();
+	err = var_set_ifs();
 	if (err.type != ERR_NO)
 		return (err);
 	return (var_set_ppid());

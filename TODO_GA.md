@@ -1,6 +1,7 @@
 # A REPARER
 
-- ⚠️ mode `-c` => lire jusqu'à `EOF`, pas un seul tour de boucle !
+- ⚠️ Historique se supprime si on y accède puis on delete puis revient au prochain input mais des lignes vides sont alors dans l'historique
+- ⚠️ mode `-c` => `EOF` jamais reçu
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
 # WIP

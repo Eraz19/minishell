@@ -9,16 +9,17 @@ void	shell_run(int argc, char **argv, char **envp)
 	t_error				err;
 	t_error				history_err;
 
+// #ifdef DDEBUG_LOADING
 	print_start(99, "shell_run()");
+// #endif
 	shell = malloc(sizeof(*shell));
 	if (!shell)
 	{
 		error_print(error_sys(), message, NULL, NULL);
 		return ;
 	}
-	print_title("shell_init()");
 	shell_init(shell);
-	print_result("shell_init()");
+	print_pass("shell initialized\n");
 	shell_set(shell);
 	err = shell_load(shell, argc, argv, envp);
 	if (err.type != ERR_NO)

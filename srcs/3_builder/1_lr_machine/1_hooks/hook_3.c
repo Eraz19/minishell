@@ -45,7 +45,9 @@ t_error	hook_3(
 	if (!path)
 		return (error_print(error_sys(), __func__,
 			"unable to malloc heredoc path buff", NULL, NULL));
+#ifdef DEBUG_PARSING
 	fprintf(stderr, "[PARSER] %sscanner_report_io_here(%p, %s%s%s, %i)%s\n", YELLOW, &path, BLUE, delim->value.data, YELLOW, (int)mode, NC);
+#endif
 	err = scanner_report_io_here(path, delim, mode);
 	if (err.type)
 		return (err);

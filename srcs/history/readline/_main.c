@@ -28,8 +28,11 @@ t_error	history_rl_add(t_history_rl *state, t_history_list *list, size_t count)
 		if (state->err.type)
 			return (state->err);
 		add_history(entry->data);
+#ifdef DEBUG_HISTORY
 		print_pass("[HISTORY] entry added = [%s]\n", entry->data);
+#endif
 		state->count++;
 	}
+	print_pass("entries uploaded to readline           %i\n", (int)state->count);
 	return (state->err);
 }

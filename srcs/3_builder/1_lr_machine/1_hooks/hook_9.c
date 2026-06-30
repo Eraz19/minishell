@@ -20,7 +20,9 @@ t_error	hook_9_increment(
 	(void)lhs;
 	parser->function_body_depth++;
 	update_parser_bools(parser);
+#ifdef DEBUG_PARSING
 	fprintf(stderr, "[PARSER] %sfunction_body_depth = %zu%s\n", YELLOW, parser->function_body_depth, NC);
+#endif
 	return (error(ERR_NO));
 }
 
@@ -42,6 +44,8 @@ t_error	hook_9_decrement(
 			NULL));
 	parser->function_body_depth--;
 	update_parser_bools(parser);
+#ifdef DEBUG_PARSING
 	fprintf(stderr, "[PARSER] %sfunction_body_depth = %zu%s\n", YELLOW, parser->function_body_depth, NC);
+#endif
 	return (error(ERR_NO));
 }

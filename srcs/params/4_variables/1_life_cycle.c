@@ -31,21 +31,17 @@ t_error	var_load(t_var_list *variables, char **envp)
 
 	assert(variables != NULL);
 	assert(envp != NULL);
-	print_title("var_load_envp()");
+	print_title("%s()", __func__);
 	err = var_load_envp(envp);
 	if (err.type != ERR_NO)
 		return (err);
-	print_result("var_load_envp()            => (entries: %'6zu)", variables->len);
-	print_title("var_load_mandatory()");
 	err = var_load_mandatory();
 	if (err.type != ERR_NO)
 		return (err);
-	print_result("var_load_mandatory()       => (entries: %'6zu)", variables->len);
-	print_title("var_load_up()");
 	err = var_load_up();
 	if (err.type != ERR_NO)
 		return (err);
-	print_result("var_load_up()              => (entries: %'6zu)", variables->len);
+	print_result("%s()", __func__);
 	return (error(ERR_NO));
 }
 

@@ -27,8 +27,10 @@ t_error	hook_fname(
 	if (!name_is_valid(&token->value))
 		err = error_print(error(ERR_SYNTAX_INVALID),
 			"parser", "invalid function name", NULL, "%s", token->value.data);
+#ifdef DEBUG_PARSING
 	else
 		fprintf(stderr, "[PARSER] %sfunction name is valid%s\n", YELLOW, NC);
+#endif
 	if (err.type != ERR_NO)
 		return (err);
 	return (hook_9_increment(parser, rhs, len, lhs));

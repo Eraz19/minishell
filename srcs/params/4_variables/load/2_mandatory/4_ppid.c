@@ -35,7 +35,7 @@ t_error	var_set_ppid(void)
 		return (err = error_sys(), free(value_str), err);
 	free(value_str);
 	err = var_set(&name, &value, false, false);
-	print_pass("'PPID' has been set to '%s'\n", value.data);
+	print_pass("'PPID' initialized                     '%s'\n", value.data);
 	string_free(&value);
 	return (err);
 }

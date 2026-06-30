@@ -12,6 +12,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#ifndef MAGENTA
+# define MAGENTA "\033[35m"
+#endif
+#ifndef CYAN
+# define CYAN "\033[36m"
+#endif
+
 /* ************************************************************************* */
 /*                                   BOOL                                    */
 /* ************************************************************************* */
@@ -310,6 +317,7 @@ const char	*action_type_to_string(t_action_type action_type)
 /*                                    CST                                    */
 /* ************************************************************************* */
 
+#ifdef DEBUG_CST
 static inline void	cst_log_prefix(bool *lasts, size_t depth)
 {
 	size_t	i;
@@ -381,26 +389,29 @@ static void	cst_log_node(t_cst_node *node, size_t depth, bool *lasts, bool is_la
 		i++;
 	}
 }
+#endif
 
-void	debug_dump_cst_node(t_cst_node *node)
+void	debug_dump_cst(t_cst_node *node)
 {
+#ifdef DEBUG_CST
 	bool	lasts[256];
+
 	if (!node)
 		return ;
+	fprintf(stderr, "--------------------------------------------------\n");
+	fprintf(stderr, "[BUILDER] CST built:\n");
 	cst_log_node(node, 0, lasts, true);
+	fprintf(stderr, "--------------------------------------------------\n");
+#else
+	(void)node;
+#endif
 }
 
 /* ************************************************************************* */
 /*                                    AST                                    */
 /* ************************************************************************* */
 
-#ifndef MAGENTA
-# define MAGENTA "\033[35m"
-#endif
-#ifndef CYAN
-# define CYAN "\033[36m"
-#endif
-
+#ifdef DEBUG_AST
 #define AST_AT(type, vec, i) (&((type *)(vec)->data)[i])
 
 static inline const char	*ast_bool(bool value)
@@ -880,12 +891,20 @@ static void	ast_log_command(
 		ast_log_redir_list("COMMAND_REDIRS", &command->redirs,
 			depth + 1, lasts, true);
 }
+#endif
 
 void	debug_dump_ast(t_ast_root *root)
 {
+#ifdef DEBUG_AST
 	bool	lasts[256];
 
 	if (!root)
 		return ;
+	fprintf(stderr, "--------------------------------------------------\n");
+	fprintf(stderr, "[BUILDER] AST built:\n");
 	ast_log_list("AST_ROOT", root, 0, lasts, true);
+	fprintf(stderr, "--------------------------------------------------\n");
+#else
+	(void)root;
+#endif
 }

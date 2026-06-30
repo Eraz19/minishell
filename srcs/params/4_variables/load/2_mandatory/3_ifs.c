@@ -39,6 +39,6 @@ t_error	var_set_ifs(void)
 	ifs_build_value(&value);
 	err = var_set(&name, &value, false, false);
 	if (err.type == ERR_NO)
-		print_pass("'IFS' has been set to '%s'\n", IFS_VALUE);
+		print_pass("'IFS'  initialized                     ' \\t\\n\\0'\n");
 	return (err);
 }

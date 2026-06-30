@@ -50,7 +50,7 @@ t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp)
 	if (err.type == ERR_NO)
 		err = builder_load(&shell->builder);
 	if (err.type == ERR_NO)
-		print_warn("Runner not implemented yet              => skipping loading\n");	// TODO: runner_load(&shell->runner);
+		print_warn("Runner not implemented yet                   => %srunner loading skept%s\n", YELLOW, NC);	// TODO: runner_load(&shell->runner);
 	if (err.type == ERR_NO)
 		err = shell_set_stdin_to_blocking();
 	if (err.type != ERR_NO)

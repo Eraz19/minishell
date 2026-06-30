@@ -20,7 +20,7 @@ static inline t_error	positionals_load_string(
 		string_free(&string);
 		return (err);
 	}
-	print_pass("$%zu = '%s'\n", positionals->len, string.data);
+	print_pass("$%-3zu                                   '%s'\n", positionals->len, string.data);
 	return (error(ERR_NO));
 }
 
@@ -52,7 +52,7 @@ t_error	positionals_load_stack(
 		vector_free(&positionals, string_free_void);
 		return (err);
 	}
-	print_pass("$# = %zu\n", positionals.len);
+	print_pass("$#                                     %zu\n", positionals.len);
 	print_result("positionals_load()");
 	return (error(ERR_NO));
 }

@@ -70,7 +70,7 @@ static t_error	var_init_target_up(t_string *name, t_string *value)
 	if (err.type == ERR_VAR_NOT_FOUND)
 		err = var_set(name, value, false, false);
 	if (err.type == ERR_NO)
-		print_pass("'%s' has been set to '%s'\n", name->data, value->data);
+		print_pass("'%s'  initialized                     '%s'\n", name->data, value->data);
 	return (err);
 }
 

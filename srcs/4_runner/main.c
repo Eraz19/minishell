@@ -34,8 +34,6 @@ static inline t_error	runner_loop_cycle(void)
 	return (err);
 }
 
-# include <stdio.h>	// DEBUG
-# include "logs.h"	// DEBUG
 t_error	runner_run(void)
 {
 	bool	is_interactive;
@@ -44,14 +42,9 @@ t_error	runner_run(void)
 	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
 	if (err.type)
 		return (err);
-	if (is_interactive)
-		print_warn("[RUNNER] starting loop (interactive)\n");
-	else
-		print_warn("[RUNNER] starting loop (non-interactive)\n");
 	while (err.type == ERR_NO)
 	{
 		err = runner_loop_cycle();
-		fprintf(stderr, "[RUNNER] runner_loop_cycle() = %s\n", error_to_string(err));
 		if (err.type == ERR_EOF)
 		{
 			if (is_interactive == false)
@@ -60,7 +53,6 @@ t_error	runner_run(void)
 		else if (err.type && (err.type != ERR_SYNTAX_INVALID || is_interactive == false))
 			return (err);
 		err = reset_scanner_and_builder();
-		fprintf(stderr, "[RUNNER] reset_scanner_and_builder() = %s\n", error_to_string(err));
 	}
 	return (err);
 }

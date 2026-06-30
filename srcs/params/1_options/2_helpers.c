@@ -23,12 +23,12 @@ void	option_set(t_option *options, t_option option, bool on)
 {
 	if (on)
 	{
-		print_pass("Setting ON  option %s\n", option_to_string(option));
+		print_pass("option activated                       %s\n", option_to_string(option));
 		*options |= option;
 	}
 	else
 	{
-		print_pass("Setting OFF option %s\n", option_to_string(option));
+		print_pass("option disabled                        %s\n", option_to_string(option));
 		*options &= ~option;
 	}
 }
