@@ -9,9 +9,9 @@ void	shell_run(int argc, char **argv, char **envp)
 	t_error				err;
 	t_error				history_err;
 
-// #ifdef DDEBUG_LOADING
+#ifdef DEBUG_LOGS
 	print_start(99, "shell_run()");
-// #endif
+#endif
 	shell = malloc(sizeof(*shell));
 	if (!shell)
 	{

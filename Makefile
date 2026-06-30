@@ -1,11 +1,11 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2 -DDEBUG_LOADING -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
+CFLAGS			:= -Wall -Wextra -Werror -O2 -DDEBUG_LOGS -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
 	-DDEBUG_ERROR_TRACE \
-	-DDEBUG_LOADING \
+	-DDEBUG_LOGS \
 	-DDEBUG_PARAMS \
 	-DDEBUG_HISTORY \
 	-DDEBUG_PARSING \
