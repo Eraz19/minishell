@@ -19,6 +19,6 @@ void	expander_free(t_expander *state);
 void	expander_init(t_expander *state);
 t_error	expander_load(t_expander *state, t_expander_args *args);
 
-bool    flag_is_active(int bitset, int flag);
+bool    flag_is_active(uint bitset, uint flag);
 
 #endif

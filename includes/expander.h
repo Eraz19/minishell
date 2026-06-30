@@ -17,12 +17,13 @@ typedef t_vector	t_expansion;
 typedef enum e_expander_flags
 {
 	EXP_TILDE			= (1u << 0),
-	EXP_PARAM			= (1u << 1),
-	EXP_CMD_SUB			= (1u << 2),
-	EXP_ARITH			= (1u << 3),
-	EXP_FIELD_SPLIT		= (1u << 4),
-	EXP_PATH_NAME		= (1u << 5),
-	EXP_QUOTE_REMOVAL	= (1u << 6),
+	EXP_DOLLAR_SQUOTE	= (1u << 1),
+	EXP_PARAM			= (1u << 2),
+	EXP_CMD_SUB			= (1u << 3),
+	EXP_ARITH			= (1u << 4),
+	EXP_FIELD_SPLIT		= (1u << 5),
+	EXP_PATH_NAME		= (1u << 6),
+	EXP_QUOTE_REMOVAL	= (1u << 7),
 }	t_expander_flags;
 
 typedef	struct s_expander_args
