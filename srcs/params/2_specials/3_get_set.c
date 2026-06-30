@@ -20,7 +20,8 @@ t_error	specials_get(const t_specials *specials, char name, t_string *dst)
 {
 	if (name == '0')
 	{
-		if (!string_init(dst, 0, specials->zero, -1))
+		if (!string_init(
+			dst, 0, specials->zero.data, (ssize_t)specials->zero.len))
 			return (error_sys());
 	}
 	else if (name == '$')

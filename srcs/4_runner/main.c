@@ -5,18 +5,10 @@
 #include "options.h"
 #include <stdbool.h>
 
-void	runner_init(t_runner *runner)
+static inline t_error	reset_scanner_and_builder(void)
 {
-	(void)runner;
-	// TODO;
-}
-
-static inline t_error	runner_handle_builder_error(t_runner *runner, t_error err)
-{
-	(void)runner;
-	// TODO
-	if (err.type != ERR_SYNTAX_INVALID)
-		return (err);
+	t_error	err;
+	
 	err = scanner_reset();
 	if (err.type)
 		return (error_print(err, "runner", "unable to reset scanner",
@@ -28,25 +20,21 @@ static inline t_error	runner_handle_builder_error(t_runner *runner, t_error err)
 	return (err);
 }
 
-t_error	runner_loop_cycle(t_runner *runner)
+static inline t_error	runner_loop_cycle(void)
 {
 	t_ast_root	ast_root;
 	t_error		err;
 
+	ast_root_init(&ast_root);
 	err = builder_get_ast(&ast_root);
-	if (err.type != ERR_NO)
-	{
-		err = runner_handle_builder_error(runner, err);
-		if (err.type)
-			return (ast_root_free(&ast_root), err);
-	}
+	// TODO: check error
 	// TODO: err = walk_ast(&ast_root);
 	// TODO: err = runner_handle_walker_error(runner, err);
 	ast_root_free(&ast_root);
 	return (err);
 }
 
-t_error	runner_run(t_runner *runner)
+t_error	runner_run(void)
 {
 	bool	is_interactive;
 	t_error	err;
@@ -54,18 +42,18 @@ t_error	runner_run(t_runner *runner)
 	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
 	if (err.type)
 		return (err);
-	if (is_interactive == false)
-		return (runner_loop_cycle(runner));
-	while (true)
+	while (err.type == ERR_NO)
 	{
-		err = runner_loop_cycle(runner);
-		if (err.type)
+		err = runner_loop_cycle();
+		if (err.type == ERR_EOF)
+		{
+			if (is_interactive == false)
+				return (error(ERR_NO));	
+		} 
+		else if (err.type && (err.type != ERR_SYNTAX_INVALID || is_interactive == false))
 			return (err);
+		if (err.type == ERR_SYNTAX_INVALID)
+			err = reset_scanner_and_builder();
 	}
-}
-
-void	runner_free(t_runner *runner)
-{
-	(void)runner;
-	// TODO
+	return (err);
 }

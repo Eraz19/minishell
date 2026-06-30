@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "history_file_.h"
+# include "logs.h"	// DEBUG
 
 void	history_file_init(t_history_file *state)
 {
@@ -45,7 +46,10 @@ t_error	history_file_load(
 	if (history_file_read(state).type)
 		return (state->err);
 	if (state->content.len == 0)
+	{
+		print_warn("entries loaded from history file       %s0%s\n", YELLOW, NC);
 		return (state->err);
+	}
 	state->err = deserialize_all(state->content.data, &file_entries);
 	if (state->err.type)
 		return (state->err);
@@ -63,5 +67,6 @@ t_error	history_file_load(
 	}
 	vector_free(&file_entries, string_free_void);
 	string_free(&state->content);
+	print_pass("entries loaded from history file       %i\n", (int)state->loaded_count);
 	return (state->err);
 }

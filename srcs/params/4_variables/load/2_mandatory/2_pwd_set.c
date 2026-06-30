@@ -18,7 +18,7 @@ static inline void	pwd_build_name(t_string *out)
 
 	assert(out != NULL);
 	len = sizeof(PWD_NAME) - 1;
-	string_take(out, name, len + 1, len);
+	string_take(out, name, len + 1, (ssize_t)len);
 }
 
 // ERR_SHELL_NOT_FOUND / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY /
@@ -40,7 +40,7 @@ static inline t_error	set_default_pwd(t_string *name, bool export)
 		return (string_free(&value), err);
 	err = var_set(name, &value, export, false);
 	if (err.type == ERR_NO)
-		print_pass("'PWD' has been set to '%s'\n", value.data);
+		print_pass("'PWD'  initialized                     '%s'\n", value.data);
 	string_free(&value);
 	return (err);
 }
@@ -57,7 +57,7 @@ static inline t_error	process_existing_pwd(t_string *name, t_string *value)
 	if (err.type)
 		return (err);
 	else if (is_valid)
-		return (print_pass("'PWD' is already valid\n"), error(ERR_NO));
+		return (print_pass("'PWD'  is already valid                '%s%s%s'\n", BLUE, value->data, GREY), error(ERR_NO));
 	return (set_default_pwd(name, true));
 }
 

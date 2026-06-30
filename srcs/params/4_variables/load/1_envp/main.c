@@ -14,8 +14,6 @@ static inline t_error	process_entry(t_string *name, t_string *value)
 	err = var_set(name, value, true, false);
 	if (err.type == ERR_VAR_INVALID_NAME)
 		return (error(ERR_NO));
-	if (err.type == ERR_NO)
-		print_pass("'%s' = '%s'\n", name->data, value->data);
 	return (err);
 }
 
@@ -46,5 +44,6 @@ t_error	var_load_envp(char **envp)
 		string_free(&value);
 		i++;
 	}
+	print_pass("variables loaded from env              %i\n", (int)i);
 	return (err);
 }

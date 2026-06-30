@@ -1,10 +1,15 @@
-# A REPARER
+# ALEXANDER
 
-- ⚠️ mode `-c` => lire jusqu'à `EOF`, pas un seul tour de boucle !
+- `history`:
+	- ⚠️ Historique se supprime si on y accède puis on delete puis revient au prochain input mais des lignes vides sont alors dans l'historique
+	- Les entries sont all delete + all add to readline au lieu de juste ajouter la nouvelle entrée ?!
+- `scanner`:
+	- ⚠️ `EOF` jamais reçu
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
 # WIP
 
+- ⚠️ fix `string_take()` usages for `ssize_t len` new signature
 - ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
 
 - 🚧 **ALL REPO**:
@@ -13,10 +18,9 @@
 	- 🚧 `assert` partout
 	- 🚧 **include** prototype header
 
-- **TODO**: convert `posix_helpers` (coûterait trop cher avec ChatGPT)
-- `5_exec_env` => Utilise `params_get()` donc à update après avoir update le module `params`
 - `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
 - `specials->zero` convert to `t_string` to avoid multiple `str_len()` when accessing it ?
+- `specials->source` convert to `t_string` to avoid multiple `str_len()` when accessing it ?
 
 - 🚧 `runner`:
 	- 🚧 unlink heredoc path after use

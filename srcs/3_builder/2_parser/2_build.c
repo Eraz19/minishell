@@ -12,7 +12,7 @@ t_error	parser_build_qualifiers_table(
 	assert(parser != NULL);
 	print_title(__func__, "()");
 	err = qualifiers_build_table(parser, machine);
-	print_pass("qualifiers table built       (entries: %zu)\n", machine->lr_states.len);
+	print_pass("qualifiers table built                 (entries: %'6zu)\n", machine->lr_states.len);
 	print_result(__func__, "()");
 	return (err);
 }

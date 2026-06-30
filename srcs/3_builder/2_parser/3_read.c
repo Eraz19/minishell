@@ -80,12 +80,12 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		return (err);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
 	parser->lookahead_id = parser->tokens.len - 1;
-	// DEBUG (START)
+#ifdef DEBUG_PARSING
 	fprintf(stderr, "[PARSER] READ   => [%3zu] %s%s%s",
 		parser->lookahead_id, RED, token_type_to_string(token.type), NC);
 	if (token.type == TOKEN_TOKEN)
 		fprintf(stderr, " (%s%s%s)", BLUE, token.value.data, NC);
 	fprintf(stderr, "\n");
-	// DEBUG (END)
+#endif
 	return (err);
 }

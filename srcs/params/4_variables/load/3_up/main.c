@@ -20,9 +20,9 @@ static inline void	up_build_ps1(t_string *out_name, t_string *out_value)
 	assert(out_name != NULL);
 	assert(out_value != NULL);
 	len = sizeof(PS1_NAME) - 1;
-	string_take(out_name, name, len + 1, len);
+	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS1_VALUE) - 1;
-	string_take(out_value, value, len + 1, len);
+	string_take(out_value, value, len + 1, (ssize_t)len);
 }
 
 static inline void	up_build_ps2(t_string *out_name, t_string *out_value)
@@ -34,9 +34,9 @@ static inline void	up_build_ps2(t_string *out_name, t_string *out_value)
 	assert(out_name != NULL);
 	assert(out_value != NULL);
 	len = sizeof(PS2_NAME) - 1;
-	string_take(out_name, name, len + 1, len);
+	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS2_VALUE) - 1;
-	string_take(out_value, value, len + 1, len);
+	string_take(out_value, value, len + 1, (ssize_t)len);
 }
 
 static inline void	up_build_ps4(t_string *out_name, t_string *out_value)
@@ -48,9 +48,9 @@ static inline void	up_build_ps4(t_string *out_name, t_string *out_value)
 	assert(out_name != NULL);
 	assert(out_value != NULL);
 	len = sizeof(PS4_NAME) - 1;
-	string_take(out_name, name, len + 1, len);
+	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS4_VALUE) - 1;
-	string_take(out_value, value, len + 1, len);
+	string_take(out_value, value, len + 1, (ssize_t)len);
 }
 
 // @ret ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC.
@@ -62,18 +62,15 @@ static t_error	var_init_target_up(t_string *name, t_string *value)
 	assert(name != NULL);
 	assert(value != NULL);
 	err = var_get(name, &current_value);
-	fprintf(stderr, "[%s()] after var_get() => err.type = %s\n", __func__, error_to_string(err));
 	if (err.type == ERR_NO)
 	{
 		string_free(&current_value);
 		return (error(ERR_NO));
 	}
-	fprintf(stderr, "[%s()] before var_set() => err.type = %s\n", __func__, error_to_string(err));
 	if (err.type == ERR_VAR_NOT_FOUND)
 		err = var_set(name, value, false, false);
-	fprintf(stderr, "[%s()] after var_set() => err.type = %s\n", __func__, error_to_string(err));
 	if (err.type == ERR_NO)
-		print_pass("'%s' has been set to '%s'\n", name->data, value->data);
+		print_pass("'%s'  initialized                     '%s'\n", name->data, value->data);
 	return (err);
 }
 

@@ -89,13 +89,12 @@ t_error	options_load(
 	if (err.type != ERR_NO)
 		return (err);
 	*start_index = out.first_operand_index;
-	print_result("options_load()");
-	print_title("options_finalize()");
+	print_info("finalizing options...\n");
 	if (*start_index >= (size_t)argc)
 		remaining_args = 0;
 	else
 		remaining_args = (size_t)argc - *start_index;
 	options_finalize(options, remaining_args, explicit_plus_m);
-	print_result("options_finalize()");
+	print_result("options_load()");
 	return (error(ERR_NO));
 }

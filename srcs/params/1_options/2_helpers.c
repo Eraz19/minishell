@@ -23,12 +23,12 @@ void	option_set(t_option *options, t_option option, bool on)
 {
 	if (on)
 	{
-		print_pass("Setting ON  option %s\n", option_to_string(option));
+		print_pass("option activated                       %s\n", option_to_string(option));
 		*options |= option;
 	}
 	else
 	{
-		print_pass("Setting OFF option %s\n", option_to_string(option));
+		print_pass("option disabled                        %s\n", option_to_string(option));
 		*options &= ~option;
 	}
 }
@@ -80,6 +80,6 @@ t_error	options_get(t_option options, t_string *dst)
 	options_add_to_string(options, buff, &len);
 	assert(len <= cap);
 	buff[len] = '\0';
-	string_take(dst, buff, cap, len);
+	string_take(dst, buff, cap, (ssize_t)len);
 	return (error(ERR_NO));
 }

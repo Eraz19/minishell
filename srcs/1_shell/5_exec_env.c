@@ -20,7 +20,7 @@ t_error	shell_exec_env(void)
 		return (err);
 	if (is_interactive == false)
 	{
-		print_warn("non-interactive mode => skipping ENV execution\n");
+		print_warn("non-interactive mode                         => %sENV execution skept%s\n", YELLOW, NC);
 		print_result("shell_exec_env()");
 		return (error(ERR_NO));
 	}
@@ -29,7 +29,7 @@ t_error	shell_exec_env(void)
 		return (error_print(error_sys(), "internal error", NULL, NULL));
 	if (!raw_env.data)
 	{
-		print_warn("no ENV file to execute => skipping.\n");
+		print_warn("no ENV file to execute                       => %sENV execution skept%s\n", YELLOW, NC);
 		print_result("shell_exec_env()");
 		return (error(ERR_NO));
 	}
@@ -38,12 +38,12 @@ t_error	shell_exec_env(void)
 		return (string_free(&raw_env), err);
 	if (read_from_stdin == true)
 	{
-		print_warn("Expander and Runner not implemented yet => skipping ENV execution\n");
+		print_warn("Expander and Runner not implemented yet      => %sENV execution skept%s\n", YELLOW, NC);
 		// TODO: expand ENV
 		// TODO: exec ENV
 	}
 	else
-		print_warn("OPT_STDIN_INPUT is not active => skipping ENV execution\n");
+		print_warn("OPT_STDIN_INPUT is not active                => %sENV execution skept%s\n", YELLOW, NC);
 	print_result("shell_exec_env()");
 	return (string_free(&raw_env), error(ERR_NO));
 }

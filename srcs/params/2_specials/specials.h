@@ -19,15 +19,15 @@
 typedef struct s_specials
 {
 	/** @brief Source string, used for @c $0 input context (borrowed). */
-	char	*source;
+	t_string	source;
 	/** @brief @c $0 value (borrowed). */
-	char	*zero;
+	t_string	zero;
 	/** @brief Current shell PID. */
-	pid_t	pid;
+	pid_t		pid;
 	/** @brief Last background PID, or @c -1 when unset. */
-	pid_t	last_bg_pid;
+	pid_t		last_bg_pid;
 	/** @brief Last command status. */
-	int		last_status;
+	int			last_status;
 }	t_specials;
 
 /* ************************************************************************* */

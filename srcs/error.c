@@ -18,6 +18,8 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
+	else if (err.type == ERR_EOF)
+		return ("unexpected end of file");
 	else if (err.type == ERR_FD_INVALID)
 		return ("invalid file descriptor");
 	else if (err.type == ERR_HOOK_INVALID_RHS_LEN)

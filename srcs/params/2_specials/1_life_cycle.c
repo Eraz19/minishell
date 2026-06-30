@@ -3,8 +3,8 @@
 
 void	specials_init(t_specials *specials)
 {
-	specials->zero = NULL;
-	specials->source = NULL;
+	string_init(&specials->zero, 0, NULL, 0);
+	string_init(&specials->source, 0, NULL, 0);
 	specials->pid = -1;
 	specials->last_bg_pid = -1;
 	specials->last_status = 0;

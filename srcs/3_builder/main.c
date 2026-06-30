@@ -38,14 +38,9 @@ t_error	builder_get_ast(t_ast_root *dst_ast)
 	err = parser_build_cst(&builder->parser, &builder->lr_machine);
 	if (err.type != ERR_NO)
 		return (err);
-	fprintf(stderr, "--------------------------------------------------\n");
-	fprintf(stderr, "[BUILDER] CST built:\n");
-	debug_dump_cst_node(builder->parser.cst);
-	fprintf(stderr, "--------------------------------------------------\n");
+	debug_dump_cst(builder->parser.cst);
 	convert_cst_to_ast(&builder->parser, builder->parser.cst, dst_ast);
-	fprintf(stderr, "[BUILDER] AST built:\n");
 	debug_dump_ast(dst_ast);
-	fprintf(stderr, "--------------------------------------------------\n");
 	return (error(ERR_NO));
 }
 

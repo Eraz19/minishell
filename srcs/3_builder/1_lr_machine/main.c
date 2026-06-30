@@ -45,27 +45,27 @@ t_error	lr_machine_build_tables(t_lr_machine *machine)
 
 	print_title("lr_machine_build_tables()");
 	rules_build(machine->rules);
-	print_pass("rules table built            (entries: %'6i)\n", RULE_COUNT);
+	print_pass("rules table built                      (entries: %'6i)\n", RULE_COUNT);
 	symbols_build_nullables_table(machine);
-	print_pass("nullable symbols table built (entries: %'6i)\n", SYM_COUNT);
+	print_pass("nullable symbols table built           (entries: %'6i)\n", SYM_COUNT);
 	first_build_table(machine);
-	print_pass("first table built            (entries: %'6i)\n", SYM_COUNT * (SYM_TERMINAL_MAX + 1));
+	print_pass("first table built                      (entries: %'6i)\n", SYM_COUNT * (SYM_TERMINAL_MAX + 1));
 	err = lr_machine_alloc_tables(machine);
 	if (err.type != ERR_NO)
 		return (lr_machine_build_error(err, "unable to malloc tables"));
 	err = transition_build_table(machine);
 	if (err.type != ERR_NO)
 		return (lr_machine_build_error(err, LR_MACHINE_ERROR_MESSAGE));
-	print_pass("transitions table built      (entries: %'6zu)\n", machine->transitions.len);
-	print_pass("lr_states table built        (entries: %'6zu)\n", machine->lr_states.len);
+	print_pass("transitions table built                (entries: %'6zu)\n", machine->transitions.len);
+	print_pass("lr_states table built                  (entries: %'6zu)\n", machine->lr_states.len);
 	err = goto_build_table(machine);
 	if (err.type != ERR_NO)
 		return (lr_machine_build_error(err, LR_MACHINE_ERROR_MESSAGE));
-	print_pass("gotos table built            (entries: %'6zu)\n", machine->lr_states.len * (SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1));
+	print_pass("gotos table built                      (entries: %'6zu)\n", machine->lr_states.len * (SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1));
 	err = action_build_table(machine);
 	if (err.type != ERR_NO)
 		return (lr_machine_build_error(err, LR_MACHINE_ERROR_MESSAGE));
-	print_pass("actions table built          (entries: %'6zu)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
+	print_pass("actions table built                    (entries: %'6zu)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
 	print_result("lr_machine_build_tables()");
 	return (error(ERR_NO));
 }
