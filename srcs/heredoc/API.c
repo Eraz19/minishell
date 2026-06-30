@@ -63,23 +63,29 @@ t_error	heredoc_save_body_in_file(const t_string *path, t_string *content)
 	return (posix_close(fd), err);
 }
 
-t_error	heredoc_track_body_context(t_string *body, t_context_stack *stack)
+t_error	heredoc_expand(const t_string *heredoc_file_path)
 {
-	t_error					err;
-	t_lexer					lexer;
-	t_context_stack_item	*body_ctx;
+	t_error			err;
+	t_expander_args	args;
+	t_context_stack contexts;
+	t_expansion		expansion;
+	t_string		heredoc_body;
 
-	err = context_stack_item_init(&body_ctx, CONTEXT_HEREDOC);
+	err = read_heredoc_body(heredoc_file_path, &heredoc_body);
 	if (err.type)
 		return (err);
-	body_ctx->start = 0;
-	body_ctx->end = body->len;
-	err = context_stack_push(stack, body_ctx);
+	args.value = heredoc_body;
+	context_stack_init(&contexts);
+	err = heredoc_track_body_context(&heredoc_body, &contexts);
 	if (err.type)
-		return (free(body_ctx), err);
-	lexer_init(&lexer);
-	err = lexer_push_input(&lexer, body);
-	if (!err.type)
-		err = lexer_track_context(&lexer, stack, heredoc_body_context_rules());
-	return (lexer_free(&lexer), err);
+		return (string_free(&heredoc_body), err);
+	args.assignment_offset = -1;
+	args.role = EXPANDER_HEREDOC_BODY;
+	args.contexts = &contexts;
+	err = expander_expand(&expansion, &args);
+	if (err.type)
+		return (context_stack_free(&contexts), string_free(&heredoc_body), err);
+	err = store_expansion_result_in_heredoc_file(heredoc_file_path, &expansion);
+	context_stack_free(&contexts);
+	return (expansion_free(&expansion), string_free(&heredoc_body), err);
 }

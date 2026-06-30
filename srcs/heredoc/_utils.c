@@ -94,3 +94,24 @@ t_error	format_heredoc_delimiter(t_heredoc *state, t_string *delim)
 		return (state->err = error_sys());
 	return (state->err);
 }
+
+t_error	heredoc_track_body_context(t_string *body, t_context_stack *stack)
+{
+	t_error					err;
+	t_lexer					lexer;
+	t_context_stack_item	*body_ctx;
+
+	err = context_stack_item_init(&body_ctx, CONTEXT_HEREDOC);
+	if (err.type)
+		return (err);
+	body_ctx->start = 0;
+	body_ctx->end = body->len;
+	err = context_stack_push(stack, body_ctx);
+	if (err.type)
+		return (free(body_ctx), err);
+	lexer_init(&lexer);
+	err = lexer_push_input(&lexer, body);
+	if (!err.type)
+		err = lexer_track_context(&lexer, stack, heredoc_body_context_rules());
+	return (lexer_free(&lexer), err);
+}

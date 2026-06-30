@@ -8,6 +8,7 @@
 
 t_error	substitution_char(
 	t_expander *state,
+	t_expander_fields *fields,
 	t_expander_word *word,
 	t_expander_word *word_exp)
 {
@@ -25,7 +26,7 @@ t_error	substitution_char(
 	else if (is_dollar_squote_expansion(&item))
 		dollar_squote_expansion(state, word, word_exp);
 	else if (is_param_expansion(state, word, &item))
-		param_expansion(state, word, word_exp);
+		param_expansion(state, fields, word, word_exp);
 	else if (is_cmd_substitution(&item))
 		cmd_substitution(state, word, word_exp);
 	else if (is_backtick_substitution(&item))
@@ -48,7 +49,7 @@ t_error	substitution_word(t_expander *state, t_expander_fields *fields)
 	expander_word_init(&word_exp);
 	while (word.len > 0)
 	{
-		if (substitution_char(state, &word, &word_exp).type)
+		if (substitution_char(state, fields, &word, &word_exp).type)
 		{
 			expander_word_free(&word);
 			expander_word_free(&word_exp);
