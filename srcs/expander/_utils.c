@@ -28,7 +28,7 @@ t_error	expander_expand(t_expansion *expansion, t_expander_args *args)
 	return (expander_free(&state), state.err);
 }
 
-t_error	read_heredoc_body(t_string *heredoc_file_path, t_string *heredoc_body)
+t_error	read_heredoc_body(const t_string *heredoc_file_path, t_string *heredoc_body)
 {
 	int		fd;
 	t_error	err;
@@ -44,7 +44,7 @@ t_error	read_heredoc_body(t_string *heredoc_file_path, t_string *heredoc_body)
 }
 
 t_error store_expansion_result_in_heredoc_file(
-			t_string *path,
+			const t_string *path,
 			t_expansion *expansion)
 {
 	t_error		err;

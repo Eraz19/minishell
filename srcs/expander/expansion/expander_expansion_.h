@@ -22,14 +22,6 @@ void	expansion_init(t_expansion *expansion);
 
 /**
  * @ingroup expander
- * @brief Frees every field's buffer and the backing array.
- *
- * @param expansion Pointer to the expansion to free (borrowed).
- */
-void	expansion_free(t_expansion *expansion);
-
-/**
- * @ingroup expander
  * @brief Appends a field to the expansion.
  *
  * The t_string is stored by value and the expansion takes ownership of its

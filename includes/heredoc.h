@@ -38,7 +38,7 @@ t_error	heredoc_load(t_heredoc *state);
 
 // ============= API FUNCTIONS ================
 
-t_error	heredoc_save_body_in_file(t_string *path, t_string *content);
+t_error	heredoc_save_body_in_file(const t_string *path, t_string *content);
 t_error	heredoc_read_queue_heredoc_bodies(t_string *input, size_t *start);
 t_error	heredoc_track_body_context(t_string *body, t_context_stack *stack);
 t_error	heredoc_register(t_string *path ,t_token *delim, t_heredoc_mode mode);

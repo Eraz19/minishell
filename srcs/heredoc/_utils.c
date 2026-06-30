@@ -12,10 +12,10 @@
 
 static inline bool	max_id_reached(t_error err, int file_id)
 {
-	int	errno;
+	int	errno_;
 
-	errno = err.saved_errno;
-	return (err.type == ERR_LIBC && errno == EEXIST && file_id == INT_MAX);
+	errno_ = err.saved_errno;
+	return (err.type == ERR_LIBC && errno_ == EEXIST && file_id == INT_MAX);
 }
 
 t_error	create_heredoc_file(t_heredoc *state, t_string *path)

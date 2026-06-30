@@ -37,9 +37,11 @@ void	expander_init(t_expander *state, t_expander_role role);
 t_error	expander_load(t_expander *state, t_expander_args *args);
 
 t_error	expander_expand(t_expansion *expansion, t_expander_args *args);
-t_error	read_heredoc_body(t_string *heredoc_file_path, t_string *heredoc_body);
+t_error	read_heredoc_body(
+			const t_string *heredoc_file_path,
+			t_string *heredoc_body);
 t_error store_expansion_result_in_heredoc_file(
-			t_string *path,
+			const t_string *path,
 			t_expansion *expansion);
 
 #endif

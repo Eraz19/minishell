@@ -49,7 +49,7 @@ t_error	heredoc_read_queue_heredoc_bodies(t_string *input, size_t *start)
 	return (state->err);
 }
 
-t_error	heredoc_save_body_in_file(t_string *path, t_string *content)
+t_error	heredoc_save_body_in_file(const t_string *path, t_string *content)
 {
 	int		fd;
 	t_error	err;

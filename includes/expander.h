@@ -13,11 +13,20 @@
  */
 typedef t_vector	t_expansion;
 
-t_error	expander_expand_word(const t_token *word, t_vector *out);
+/**
+ * @ingroup expander
+ * @brief Frees every field's buffer and the backing array.
+ *
+ * @param expansion Pointer to the expansion to free (borrowed).
+ */
+void	expansion_free(t_expansion *expansion);
 
-t_error	expander_expand_filename(const t_token *filename, t_vector *out);
+t_error	expander_expand_word(const t_token *word, t_expansion *out);
 
-t_error	expander_expand_heredoc_delim(const t_string *heredoc_delim,
+t_error	expander_expand_filename(const t_token *filename, t_expansion *out);
+
+t_error	expander_expand_heredoc_delim(
+			const t_string *heredoc_delim,
 			t_string *out);
 
 t_error	expander_expand_heredoc_body(const t_string *heredoc_file_path);
