@@ -5,12 +5,6 @@
 # include "ast_type.h"
 # include "error.h"
 
-typedef struct s_redir_frame
-{
-	t_vector	fds;		// vector of int
-	t_vector	backup_fds;	// vector of int (-1 if fd was closed before redirection)
-}	t_redir_frame;
-
 typedef t_vector	t_redir_stack;
 
 /* ---------- PUBLIC ---------- */

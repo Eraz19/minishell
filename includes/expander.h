@@ -26,6 +26,10 @@ typedef enum e_exp_flags
  */
 typedef t_vector	t_expansion;
 
+t_error expansion_take(t_expansion *exp, size_t i, t_string *out);
+t_error	expand_word(t_string *src, t_exp_flags flags);
+t_error	expand_token(t_expansion *out, t_token *src, t_exp_flags flags);
+
 /**
  * @ingroup expander
  * @brief Frees every field's buffer and the backing array.
@@ -51,8 +55,5 @@ t_error	expansion_get(
 			const t_expansion *expansion,
 			size_t index,
 			t_string *str);
-
-t_error	expand_word(t_string *src, t_exp_flags flags);
-t_error	expand_token(t_expansion *out, t_token *src, t_exp_flags flags);
 
 #endif

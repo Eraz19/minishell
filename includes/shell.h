@@ -131,6 +131,7 @@ void		shell_run(int argc, char **argv, char **envp);
  */
 t_error		shell_should_exit_on_veof(void);
 
+// TODO
 /**
  * @brief Reports a pending interrupt.
  *

@@ -1,5 +1,15 @@
+# REDIRECTOR
+
+- ⚠️ Avoid `fd` collisions
+- ⚠️ Implement full no-clobber conditions in `redirect_open_and_convert_error()`
+
 # ALEXANDER
 
+- ⚠️ `shell_should_interrupt()`:
+	- update callers to pass `err` (avoiding `errno` modification while processing)
+- ⚠️ `posix_close()`:
+	- should retry on other platforms than Linux ?
+	- Or retry anyway but ignore EBADF when retrying ?
 - ⚠️ `expander_expand_filename()` (for `redirection`): "Pathname expansion shall not be performed on the word by a non-interactive shell; an interactive shell may perform it"
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
@@ -255,6 +265,8 @@
 - `heredoc`:
 	- as `mkdir()` and `mktmp()` is forbidden, we can't properly create a tmp file, so we just iterate over an 0-INT_MAX file_name suffix to find an available filename to create directly in `tmp/`
 	- as `lseek()` is forbidden, we can't keep the `fd` open, so we `open()`/`close()` the tmp file several times to re-roll it
+- `redirections`:
+	- as `fcntl()` is forbidden, we simply check if `>&` / `<&` rhs fd is open but we d'ont check if there are open for respectively writing or reading. This still is POSIX compliant because POSIX says "a redirection error **may** result".
 
 ## lr_machine.md
 

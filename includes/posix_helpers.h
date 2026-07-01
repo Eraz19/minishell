@@ -30,7 +30,13 @@ t_error	posix_open_with_mode(
 
 // @warning on Linux the fd is released even on EINTR, which is reported as
 //			success; never call close() on the same fd afterwards.
-// @ret ERR_LIBC
+// @ret ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_close(int fd);
+
+// @ret ERR_INTERRUPTED / ERR_LIBC
+t_error	posix_dup(int fd, int *out);
+
+// @ret ERR_INTERRUPTED / ERR_LIBC
+t_error	posix_dup2(int fd_from, int fd_to);
 
 #endif

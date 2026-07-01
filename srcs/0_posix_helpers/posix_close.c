@@ -1,5 +1,6 @@
 #include "error.h"
 #include "posix_helpers.h"
+#include "shell.h"
 #include <errno.h>
 #include <unistd.h>
 
@@ -10,9 +11,12 @@
 */
 t_error	posix_close(int fd)
 {
+	t_error	err;
+
 	if (close(fd) == 0)
 		return (error(ERR_NO));
-	if (errno == EINTR)
-		return (error(ERR_NO));
-	return (error_sys());
+	err = error_sys();
+	if (err.saved_errno == EINTR)
+		return (shell_should_interrupt());
+	return (err);
 }
