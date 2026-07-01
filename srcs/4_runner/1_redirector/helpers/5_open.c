@@ -7,25 +7,6 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-static inline t_error	redirect_handle_open_error(
-							t_ast_redirection *redir,
-							const char *path,
-							t_error err)
-{
-	if (err.type == ERR_NO)
-		return (err);
-	if (redir->operation == AST_REDIR_HEREDOC)
-		(void)error_print(err, REDIRECT_MODULE_NAME,
-			"redirection failed", "unable to open heredoc file", NULL, NULL);
-	else
-		(void)error_print(err, REDIRECT_MODULE_NAME,
-			"redirection failed", "unable to open file", NULL,
-			"'%s' expanded from '%s'", path, redir->word->value.data);
-	err = error(ERR_REDIRECTION_FAILED);
-	err.printed = true;
-	return (err);
-}
-
 static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
 {
 	int	oflag;
@@ -46,53 +27,71 @@ static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
 	return (oflag);
 }
 
-static inline t_error	redirect_open_with_flags_and_mode(
+static inline t_error	redirect_handle_noclobber_eexist(
 							t_ast_redirection *redir,
 							const char *path,
-							bool no_clobber,
 							int *out_fd)
 {
-	int				oflag;
-	mode_t			mode;
+	struct stat	st;
+	int			oflag;
+	mode_t		mode;
+	t_error		err;
 
-	oflag = redirect_get_oflag(redir->operation, no_clobber);
-	if (redir->operation == AST_REDIR_WRITE
-		|| redir->operation == AST_REDIR_CLOBBER
-		|| redir->operation == AST_REDIR_APPEND
-		|| redir->operation == AST_REDIR_READ_WRITE)
+	if (stat(path, &st) == -1)
 	{
-		mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-		return (posix_open_with_mode(path, oflag, mode, out_fd));
+		(void)error_print(error_sys(), REDIRECT_MODULE_NAME,
+			"no clobber is active and file exists", "unable to stat file", NULL,
+			"'%s' expanded from '%s'", path, redir->word->value.data);
+		err = error(ERR_REDIRECTION_FAILED);
+		err.printed = true;
+		return (err);
 	}
-	return (posix_open(path, oflag, out_fd));
+	else if (S_ISREG(st.st_mode))
+		return (error_print(error(ERR_REDIRECTION_FAILED), REDIRECT_MODULE_NAME,
+			"no clobber is active and file is regular", NULL,
+			"'%s' expanded from '%s'", path, redir->word->value.data));
+	oflag = O_WRONLY | O_CREAT | O_TRUNC;
+	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
+	return (posix_open_with_mode(path, oflag, mode, out_fd));
 }
 
-static inline t_error	redirect_open_and_convert_error(
+static inline t_error	redirect_handle_open_error(
 							t_ast_redirection *redir,
-							const char *path,
 							bool no_clobber,
-							int *out_fd)
+							int *out_fd,
+							t_error err)
 {
-	t_error	err;
+	const char	*path;
 
-	err = redirect_open_with_flags_and_mode(redir, path, no_clobber, out_fd);
-	if (err.type == ERR_LIBC && err.saved_errno == EEXIST
+	if (err.type == ERR_NO)
+		return (err);
+	else if (redir->operation == AST_REDIR_HEREDOC)
+	{
+		(void)error_print(err, REDIRECT_MODULE_NAME, "redirection failed",
+			"unable to open heredoc file", NULL, NULL);
+		return (err = error(ERR_REDIRECTION_FAILED), err.printed = true, err);
+	}
+	else if (err.type == ERR_LIBC && err.saved_errno == EEXIST
 		&& redir->operation == AST_REDIR_WRITE && no_clobber)
 	{
-		// TODO: check if path is a regular file or a symlink to regular file
-		//			=> if true	=> redirection error
-		//			=> else		=> retry open without O_EXCL
-		return (error_print(error(ERR_REDIRECTION_FAILED),
-			REDIRECT_MODULE_NAME, "no clobber is active and file exists", NULL,
-			"%s", redir->expanded_word.data));
+		path = redir->expanded_word.data;
+		err = redirect_handle_noclobber_eexist(redir, path, out_fd);
+		if (err.type == ERR_NO)
+			return (err);
 	}
-	return (redirect_handle_open_error(redir, path, err));
+	if (err.type && err.printed == false)
+		(void)error_print(err, REDIRECT_MODULE_NAME, "redirection failed",
+			"unable to open file", NULL, "'%s' expanded from '%s'",
+			redir->expanded_word.data, redir->word->value.data);
+	return (err = error(ERR_REDIRECTION_FAILED), err.printed = true, err);
 }
 
 t_error	redirect_open(t_ast_redirection *redir, int *out_fd)
 {
 	bool		no_clobber;
 	const char	*path;
+	int			oflag;
+	mode_t		mode;
 	t_error		err;
 
 	err = option_is_active(OPT_NOCLOBBER, &no_clobber);
@@ -102,5 +101,16 @@ t_error	redirect_open(t_ast_redirection *redir, int *out_fd)
 		path = redir->word->value.data;
 	else
 		path = redir->expanded_word.data;
-	return (redirect_open_and_convert_error(redir, path, no_clobber, out_fd));
+	oflag = redirect_get_oflag(redir->operation, no_clobber);
+	if (redir->operation == AST_REDIR_WRITE
+		|| redir->operation == AST_REDIR_CLOBBER
+		|| redir->operation == AST_REDIR_APPEND
+		|| redir->operation == AST_REDIR_READ_WRITE)
+	{
+		mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
+		err = posix_open_with_mode(path, oflag, mode, out_fd);
+	}
+	else
+		err = posix_open(path, oflag, out_fd);
+	return (redirect_handle_open_error(redir, no_clobber, out_fd, err));
 }
