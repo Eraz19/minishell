@@ -1,10 +1,11 @@
 # REDIRECTOR
 
 - ⚠️ Avoid `fd` collisions
-- ⚠️ Implement full no-clobber conditions in `redirect_open_and_convert_error()`
+- rename `ERR_LIBC` -> `ERR_SYS`
 
 # ALEXANDER
 
+- Ajout de `posix_close_if_open()` pour ignorer `EBADF`
 - ⚠️ `shell_should_interrupt()`:
 	- update callers to pass `err` (avoiding `errno` modification while processing)
 - ⚠️ `posix_close()`:
@@ -16,13 +17,14 @@
 # WIP
 
 - ⚠️ fix `string_take()` usages for `ssize_t len` new signature
-- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
 
 - 🚧 **ALL REPO**:
 	- 🚧 `const` partout
 	- 🚧 `inline` partout
 	- 🚧 `assert` partout
 	- 🚧 **include** prototype header
+	- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
+	- Vérifier que les retours des `error_print()` ne sont pas ignorés car c'est cette fonction qui update `err.printed`
 
 - `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
 - `specials->zero` convert to `t_string` to avoid multiple `str_len()` when accessing it ?
@@ -266,7 +268,11 @@
 	- as `mkdir()` and `mktmp()` is forbidden, we can't properly create a tmp file, so we just iterate over an 0-INT_MAX file_name suffix to find an available filename to create directly in `tmp/`
 	- as `lseek()` is forbidden, we can't keep the `fd` open, so we `open()`/`close()` the tmp file several times to re-roll it
 - `redirections`:
-	- as `fcntl()` is forbidden, we simply check if `>&` / `<&` rhs fd is open but we d'ont check if there are open for respectively writing or reading. This still is POSIX compliant because POSIX says "a redirection error **may** result".
+	- as `fcntl()` is forbidden, we check whether the rhs fd of `>&` / `<&` is open, but we do not check whether it is open respectively for writing or reading. This is still POSIX-compliant because POSIX says that a redirection error "may" result in that case.
+	- as `fcntl()` is forbidden, we cannot allocate redirection backup fds atomically with `F_DUPFD`. We use `fstat()` + `dup2()` instead. This is considered safe enough for `minishell` because it is single-threaded and its signal handlers do not open file descriptors.
+	- as `sysconf()` / `getrlimit()` are forbidden, we cannot query the actual file descriptor limit of the host process. POSIX only requires shell redirections to support user file descriptors 0 through 9. By default, `minishell` uses 0..128 as its user fd range and reserves 129..256 for internal redirection backups. If the backup range is exhausted or unsupported by the host system, the redirection fails with a redirection error. A MAX_COMPAT build option can restrict the layout to 0..9 for user fds and 10..19 for backup fds, which is a more conservative POSIX-minimum layout but still does not guarantee that backup fds are available.
+- `expander`:
+	- as `fn_match()` is forbidden, regex matching is not implemented.
 
 ## lr_machine.md
 

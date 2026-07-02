@@ -1,4 +1,4 @@
-#include "redirect_priv.h"
+#include "redirector_priv.h"
 #include "ast_type.h"
 #include "options.h"
 #include "posix_helpers.h"
@@ -27,6 +27,8 @@ static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
 	return (oflag);
 }
 
+// @ret ERR_REDIRECTION_FAILED / ERR_OPEN_INVALID_USAGE / ERR_INTERRUPTED
+// 		/ ERR_LIBC
 static inline t_error	redirect_handle_noclobber_eexist(
 							t_ast_redirection *redir,
 							const char *path,
@@ -39,15 +41,17 @@ static inline t_error	redirect_handle_noclobber_eexist(
 
 	if (stat(path, &st) == -1)
 	{
-		(void)error_print(error_sys(), REDIRECT_MODULE_NAME,
-			"no clobber is active and file exists", "unable to stat file", NULL,
+		(void)error_print(error_sys(), REDIRECTOR_MODULE_NAME,
+			"redirection failed", "no clobber is active and file exists",
+			"unable to stat file", NULL,
 			"'%s' expanded from '%s'", path, redir->word->value.data);
 		err = error(ERR_REDIRECTION_FAILED);
 		err.printed = true;
 		return (err);
 	}
 	else if (S_ISREG(st.st_mode))
-		return (error_print(error(ERR_REDIRECTION_FAILED), REDIRECT_MODULE_NAME,
+		return (error_print(error(ERR_REDIRECTION_FAILED),
+			REDIRECTOR_MODULE_NAME,
 			"no clobber is active and file is regular", NULL,
 			"'%s' expanded from '%s'", path, redir->word->value.data));
 	oflag = O_WRONLY | O_CREAT | O_TRUNC;
@@ -55,6 +59,7 @@ static inline t_error	redirect_handle_noclobber_eexist(
 	return (posix_open_with_mode(path, oflag, mode, out_fd));
 }
 
+// @ret ERR_REDIRECTION_FAILED
 static inline t_error	redirect_handle_open_error(
 							t_ast_redirection *redir,
 							bool no_clobber,
@@ -67,7 +72,7 @@ static inline t_error	redirect_handle_open_error(
 		return (err);
 	else if (redir->operation == AST_REDIR_HEREDOC)
 	{
-		(void)error_print(err, REDIRECT_MODULE_NAME, "redirection failed",
+		(void)error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
 			"unable to open heredoc file", NULL, NULL);
 		return (err = error(ERR_REDIRECTION_FAILED), err.printed = true, err);
 	}
@@ -80,13 +85,13 @@ static inline t_error	redirect_handle_open_error(
 			return (err);
 	}
 	if (err.type && err.printed == false)
-		(void)error_print(err, REDIRECT_MODULE_NAME, "redirection failed",
+		(void)error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
 			"unable to open file", NULL, "'%s' expanded from '%s'",
 			redir->expanded_word.data, redir->word->value.data);
 	return (err = error(ERR_REDIRECTION_FAILED), err.printed = true, err);
 }
 
-t_error	redirect_open(t_ast_redirection *redir, int *out_fd)
+t_error	redirect_open(t_ast_redirection *redirection, int *out_fd)
 {
 	bool		no_clobber;
 	const char	*path;
@@ -97,20 +102,20 @@ t_error	redirect_open(t_ast_redirection *redir, int *out_fd)
 	err = option_is_active(OPT_NOCLOBBER, &no_clobber);
 	if (err.type)
 		return (err);
-	if (redir->operation == AST_REDIR_HEREDOC)
-		path = redir->word->value.data;
+	if (redirection->operation == AST_REDIR_HEREDOC)
+		path = redirection->word->value.data;
 	else
-		path = redir->expanded_word.data;
-	oflag = redirect_get_oflag(redir->operation, no_clobber);
-	if (redir->operation == AST_REDIR_WRITE
-		|| redir->operation == AST_REDIR_CLOBBER
-		|| redir->operation == AST_REDIR_APPEND
-		|| redir->operation == AST_REDIR_READ_WRITE)
+		path = redirection->expanded_word.data;
+	oflag = redirect_get_oflag(redirection->operation, no_clobber);
+	if (redirection->operation == AST_REDIR_WRITE
+		|| redirection->operation == AST_REDIR_CLOBBER
+		|| redirection->operation == AST_REDIR_APPEND
+		|| redirection->operation == AST_REDIR_READ_WRITE)
 	{
 		mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 		err = posix_open_with_mode(path, oflag, mode, out_fd);
 	}
 	else
 		err = posix_open(path, oflag, out_fd);
-	return (redirect_handle_open_error(redir, no_clobber, out_fd, err));
+	return (redirect_handle_open_error(redirection, no_clobber, out_fd, err));
 }

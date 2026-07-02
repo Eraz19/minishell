@@ -1,7 +1,8 @@
-#include "redirect_priv.h"
+#include "redirector_priv.h"
 #include "expander.h"
 #include "heredoc.h"
 
+// @ret TODO (heredoc_expand() has no doc yet)
 static inline t_error	redirect_expand_heredoc_body(t_ast_redirection *redir)
 {
 	if (redir->expand_heredoc_body)
@@ -9,6 +10,7 @@ static inline t_error	redirect_expand_heredoc_body(t_ast_redirection *redir)
 	return (error(ERR_NO));
 }
 
+// @ret TODO (expander has no doc yet)
 static inline t_error	redirect_expand_word(
 							const char *param_name,
 							t_token *token,
@@ -24,7 +26,7 @@ static inline t_error	redirect_expand_word(
 	else if (expansion.len == 0 || expansion.len > 1)
 	{
 		expansion_free(&expansion);
-		return (error_print(error(ERR_REDIRECTION_FAILED), REDIRECT_MODULE_NAME,
+		return (error_print(error(ERR_REDIRECTION_FAILED), REDIRECTOR_MODULE_NAME,
 			param_name, " does not expand to exactly one field",
 			NULL, "%s", token->value.data));
 	}

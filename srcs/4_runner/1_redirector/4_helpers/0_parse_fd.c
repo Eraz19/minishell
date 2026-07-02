@@ -1,4 +1,4 @@
-#include "redirect_priv.h"
+#include "redirector_priv.h"
 #include <limits.h>
 
 bool	redirect_parse_fd(const char *s, int *out_fd)

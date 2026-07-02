@@ -45,6 +45,8 @@ SRCS			:= \
 	$(wildcard srcs/3_builder/*/*/*.c) \
 	$(wildcard srcs/3_builder/*/*/*/*.c) \
 	$(wildcard srcs/4_runner/*.c) \
+	$(wildcard srcs/4_runner/*/*.c) \
+	$(wildcard srcs/4_runner/*/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
@@ -103,6 +105,10 @@ INCLUDES		:= \
 	-Isrcs/3_builder/3_converter \
 	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \
+	-Isrcs/4_runner/1_redirector \
+	-Isrcs/4_runner/1_redirector/1_stack_and_frame \
+	-Isrcs/4_runner/1_redirector/2_tracker \
+	-Isrcs/4_runner/1_redirector/3_fd_manager \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \
 	-Isrcs/builtins \
