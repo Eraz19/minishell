@@ -33,6 +33,9 @@ t_error	posix_open_with_mode(
 // @ret ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_close(int fd);
 
+// uses posix_close() and ignore EBADF errors
+t_error	posix_close_if_open(int fd);
+
 // @ret ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_dup(int fd, int *out);
 
