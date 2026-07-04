@@ -3,8 +3,7 @@
 
 # include "expander_.h"
 
-bool	is_cmd_substitution(t_expander_word_item *current_item);
-t_error	cmd_substitution(t_expander *state, t_expander_word *word,
-			t_expander_word *word_exp);
+t_error	cmd_substitution(t_expander *expander);
+bool	is_cmd_substitution(t_word_item *current_item, uint flags);
 
 #endif

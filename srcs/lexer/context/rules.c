@@ -1,21 +1,21 @@
 #include "lexer.h"
 
-t_error	lexer_rule_quoting(t_lexer *state, t_context context)
+t_error	lexer_rule_quoting(t_lexer *lexer, t_context context)
 {
-	return (lexer_context(state, context));
+	return (lexer_context(lexer, context));
 }
 
-t_error	lexer_rule_expansion(t_lexer *state, t_context context)
+t_error	lexer_rule_expansion(t_lexer *lexer, t_context context)
 {
 	if (context != CONTEXT_ARITH)
-		return (lexer_context(state, context));
+		return (lexer_context(lexer, context));
 	else
 	{
-		if (lexer_context(state, CONTEXT_ARITH).type == ERR_CTX_END_NOT_FOUND)
+		if (lexer_context(lexer, CONTEXT_ARITH).type == ERR_CTX_END_NOT_FOUND)
 		{
-			state->err = error(ERR_NO);
-			return (lexer_context(state, CONTEXT_CMD_SUB));
+			lexer->err = error(ERR_NO);
+			return (lexer_context(lexer, CONTEXT_CMD_SUB));
 		}
-		return (state->err);
+		return (lexer->err);
 	}
 }

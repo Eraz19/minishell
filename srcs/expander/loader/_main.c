@@ -1,64 +1,79 @@
-#include "expander_loader_.h"
-#include "expander_expansion_.h"
+#include <stdlib.h>
+#include "loader_.h"
+#include "loader_context_.h"
 
-t_error	expander_loader_build(t_expander_loader *state)
+t_error	loader_char(t_loader *state)
 {
-	state->quoting = CONTEXT_NONE;
-	if (is_substitution_start(state))
-		expander_loader_substitution(state);
-	else if (is_char_escaped(state))
+	if (is_char_escaped(state))
 	{
-		expander_loader_consume(state, 1, false);
-		expander_loader_consume(state, 1, true);
+		if (loader_consume(state, false).type)
+			return (state->err);
+		return (loader_consume(state, true));
 	}
-	else if (is_quoting_start(state))
-		expander_loader_quoted(state);
 	else
-		expander_loader_consume(state, 1, false);
-	return (state->err);
+		return (loader_consume(state, false));
 }
 
-static t_error	expander_loader_word_extract(
-					t_expander_word word,
-					t_string *str)
+t_error	loader_substitution(t_loader *state)
 {
-	t_error					err;
-	t_expander_word_item	item;
-
-	if (!string_init(str, 1, NULL, 0))
-		return (error_sys());
-	while (word.len > 0)
+	if (loader_push_context(state).type)
+		return (state->err);
+	while (state->i < state->context_item->end)
 	{
-		err = expander_word_pop(&word, &item);
-		if (err.type)
-			return (string_free(str), err);
-		if (item.c == '\0' && word.len > 0)
-			continue ;
-		if (!string_append_n(str, &item.c, 1))
-			return (string_free(str), error_sys());
+		if (state->i != state->context_item->start)
+		{
+			if (is_substitution_start(state))
+				return (loader_substitution(state));
+			else if (is_quoting_start(state))
+			{
+				if (loader_quoted(state).type)
+					return (state->err);
+			}
+			else if (loader_char(state).type)
+				return (state->err);
+		}
+		else if (loader_char(state).type)
+			return (state->err);
 	}
-	return (error(ERR_NO));
+	return (loader_pop_context(state));
 }
 
-t_error	expander_loader_extract(t_expander_fields *fields, t_expansion *out)
+t_error	loader_quoted(t_loader *loader)
 {
-	t_error			err;
-	t_expander_word	word;
-	t_string		str;
+	t_context_stack_item	*item;
+	t_context				previous_quoting;
 
-	expansion_init(out);
-	while (fields->len > 0)
+	loader->err = context_stack_fpop(&loader->stack, &item);
+	if (loader->err.type)
+		return (loader->err);
+	previous_quoting = loader->quoting;
+	loader->quoting = item->context;
+	while (loader->i < item->end && !loader->err.type)
 	{
-		err = expander_fields_pop(fields, &word);
-		if (err.type)
-			return (expansion_free(out), err);
-		err = expander_loader_word_extract(word, &str);
-		expander_word_free(&word);
-		if (err.type)
-			return (expansion_free(out), err);
-		err = expansion_push(out, &str);
-		if (err.type)
-			return (string_free(&str), expansion_free(out), err);
+		if (is_substitution_start(loader))
+			loader_substitution(loader);
+		else if (is_quoting_start(loader))
+			loader_quoted(loader);
+		else
+			loader_char(loader);
 	}
-	return (error(ERR_NO));
+	loader->quoting = previous_quoting;
+	return (free(item), loader->err);
+}
+
+t_error	loader_prepare_word(t_loader *loader)
+{
+	loader->quoting = CONTEXT_NONE;
+	if (is_substitution_start(loader))
+		loader_substitution(loader);
+	else if (is_char_escaped(loader))
+	{
+		loader_consume(loader, false);
+		loader_consume(loader, true);
+	}
+	else if (is_quoting_start(loader))
+		loader_quoted(loader);
+	else
+		loader_consume(loader, false);
+	return (loader->err);
 }

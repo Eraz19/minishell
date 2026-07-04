@@ -1,95 +1,77 @@
 #include "quote_removal_.h"
 #include "quote_removal_context_.h"
 
-t_error	quote_removal_quoted(
-	t_expander *state,
-	t_expander_word_item item,
-	t_expander_word *word,
-	t_expander_word *word_expanded)
+t_error	quote_removal_quoted(t_expander *expander, t_word_item item)
 {
 	if (item.opt.quoted == CONTEXT_SQUOTE)
-		context_squote(state, word, word_expanded);
+		context_squote(expander);
 	else if (item.opt.quoted == CONTEXT_DQUOTE)
-		context_dquote(state, word, word_expanded);
+		context_dquote(expander);
 	else if (item.opt.quoted == CONTEXT_HEREDOC)
-		context_heredoc(state, item, word, word_expanded);
+		context_heredoc(expander, item);
 	else if (item.opt.quoted == CONTEXT_DOLLAR_SQUOTE)
 	{
-		state->err = expander_word_pop(word, &item);
-		if (state->err.type)
-			return (state->err);
-		context_dollar_squote(state, word, word_expanded);
+		expander->err = word_fpop(&item, &expander->word);
+		if (expander->err.type)
+			return (expander->err);
+		context_dollar_squote(expander);
 	}
-	return (state->err);
+	return (expander->err);
 }
 
-t_error	quote_remove_char(
-	t_expander *state,
-	t_expander_word *word,
-	t_expander_word *word_exp)
+t_error	quote_remove_char(t_expander *expander)
 {
-	t_expander_word_item	item;
+	t_word_item	item;
 
-	state->err = expander_word_pop(word, &item);
-	if (state->err.type)
-		return (state->err);
+	expander->err = word_fpop(&item, &expander->word);
+	if (expander->err.type)
+		return (expander->err);
 	if (item.opt.is_expand_res)
-		state->err = expander_word_push(word_exp, item);
+		expander->err = word_push(&expander->word_exp, item);
 	else if (item.opt.quoted == CONTEXT_NONE)
 	{
 		if (item.c != '\\')
-			state->err = expander_word_push(word_exp, item);
+			expander->err = word_push(&expander->word_exp, item);
 		else
 		{
-			if (word->len == 0)
-				return (state->err = error(ERR_NO));
-			state->err = expander_word_pop(word, &item);
-			if (state->err.type)
-				return (state->err);
-			state->err = expander_word_push(word_exp, item);
+			if (expander->word.len == 0)
+				return (expander->err = error(ERR_NO));
+			expander->err = word_fpop(&item, &expander->word);
+			if (expander->err.type)
+				return (expander->err);
+			expander->err = word_push(&expander->word_exp, item);
 		}
 	}
 	else
-		quote_removal_quoted(state, item, word, word_exp);
-	return (state->err);
+		quote_removal_quoted(expander, item);
+	return (expander->err);
 }
 
-t_error	quote_removal_word(t_expander *state, t_expander_fields *fields)
+t_error	quote_removal_word(t_expander *expander)
 {
-	t_expander_word	word;
-	t_expander_word	word_exp;
-
-	state->err = expander_fields_pop(&state->fields, &word);
-	if (state->err.type)
-		return (state->err);
-	expander_word_init(&word_exp);
-	while (word.len > 0)
+	expander->err = fields_fpop(&expander->word, &expander->fields);
+	if (expander->err.type)
+		return (expander->err);
+	word_init(&expander->word_exp);
+	while (expander->word.len > 0)
 	{
-		if (quote_remove_char(state, &word, &word_exp).type)
-		{
-			expander_word_free(&word);
-			expander_word_free(&word_exp);
-			return (state->err);
-		}
+		if (quote_remove_char(expander).type)
+			return (expander->err);
 	}
-	expander_word_free(&word);
-	state->err = expander_fields_push(fields, word_exp);
-	if (state->err.type)
-		expander_word_free(&word_exp);
-	return (state->err);
+	word_free(&expander->word);
+	expander->err = fields_push(&expander->fields_exp, expander->word_exp);
+	return (expander->err);
 }
 
-t_error	quote_removal(t_expander *state)
+t_error	quote_removal(t_expander *expander)
 {
-	t_expander_fields	fields;
-
-	expander_fields_init(&fields);
-	while (state->fields.len > 0)
+	fields_init(&expander->fields_exp);
+	while (expander->fields.len > 0)
 	{
-		if (quote_removal_word(state, &fields).type)
-			return (expander_fields_free(&fields), state->err);
+		if (quote_removal_word(expander).type)
+			return (fields_free(&expander->fields_exp), expander->err);
 	}
-	expander_fields_free(&state->fields);
-	state->fields = fields;
-	return (state->err);
+	fields_free(&expander->fields);
+	expander->fields = expander->fields_exp;
+	return (expander->err);
 }

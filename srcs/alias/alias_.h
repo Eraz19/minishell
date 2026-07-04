@@ -21,10 +21,10 @@ void	alias_print_all(t_key_value **pairs);
  * Sets state->disable_position when @p expansion ends with a blank, so the
  * next word is expanded too (mirroring the shell's trailing-blank rule).
  *
- * @param state Pointer to the alias state (borrowed).
+ * @param alias Pointer to the alias state (borrowed).
  * @param expansion Expansion text just produced (borrowed), may be NULL.
  */
-void	set_position_for_next_word(t_alias *state, t_string *expansion);
+void	set_position_for_next_word(t_alias *alias, t_string *expansion);
 
 /**
  * @ingroup alias
@@ -35,10 +35,10 @@ void	set_position_for_next_word(t_alias *state, t_string *expansion);
  * in command position, unless a previous expansion's trailing blank lifted
  * the position requirement.
  *
- * @param state Pointer to the alias state (borrowed).
+ * @param alias Pointer to the alias state (borrowed).
  * @param word Candidate token text (borrowed).
  * @return true if the token should be expanded, false otherwise.
  */
-bool	is_token_alias_expandable(t_alias *state, char *word);
+bool	is_token_alias_expandable(t_alias *alias, char *word);
 
 #endif

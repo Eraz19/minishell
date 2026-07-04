@@ -69,6 +69,7 @@ bool	is_context_none_ending(char c, void *_);
 
 // ============= QUOTING CONTEXT FUNCTIONS ================
 
+bool	is_context_quoting(t_context context);
 bool	is_quoting_ending(char c, t_context context);
 bool	is_quoting_context(char *str, t_context *context);
 bool	is_in_quoting_whitelist(char c, t_context context);

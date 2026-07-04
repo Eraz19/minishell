@@ -6,74 +6,56 @@
 #include "expander_substitutions_.h"
 #include "dollar_squote_expansion_.h"
 
-t_error	substitution_char(
-	t_expander *state,
-	t_expander_fields *fields,
-	t_expander_word *word,
-	t_expander_word *word_exp)
+t_error	substitution_char(t_expander *expander)
 {
-	t_expander_word_item	item;
+	t_word_item	item;
 
-	state->err = expander_word_pop(word, &item);
-	if (state->err.type)
-		return (state->err);
-	if (is_tilde_expansion(state, word, &item))
-	{
-		if (item.c == '=' || item.c == ':')
-			state->err = expander_word_push(word_exp, item);
-		tilde_expansion(state, word, word_exp);
-	}
-	else if (is_dollar_squote_expansion(&item))
-		dollar_squote_expansion(state, word, word_exp);
-	else if (is_param_expansion(state, word, &item))
-		param_expansion(state, fields, word, word_exp);
-	else if (is_cmd_substitution(&item))
-		cmd_substitution(state, word, word_exp);
-	else if (is_backtick_substitution(&item))
-		backtick_substitution(state, word, word_exp);
-	else if (is_arith_substitution(&item))
-		arith_substitution(state, word, word_exp);
-	else
-		state->err = expander_word_push(word_exp, item);
-	return (state->err);
+	expander->err = word_get(&item, &expander->word, 0);
+	if (expander->err.type)
+		return (expander->err);
+	if (is_tilde_expansion(expander, &item))
+		return (tilde_expansion(expander));
+	else if (is_dollar_squote_expansion(&item, expander->flags))
+			return (dollar_squote_expansion(expander));
+	else if (is_param_expansion(expander, &item))
+			return (param_expansion(expander));
+	else if (is_cmd_substitution(&item, expander->flags))
+		return (cmd_substitution(expander));
+	else if (is_backtick_substitution(&item, expander->flags))
+		return (backtick_substitution(expander));
+	else if (is_arith_substitution(&item, expander->flags))
+		return (arith_substitution(expander));
+	expander->err = word_push(&expander->word_exp, item);
+	if (expander->err.type)
+		return (expander->err);
+	return (expander->err = word_remove(&expander->word, 0, 1));
 }
 
-t_error	substitution_word(t_expander *state, t_expander_fields *fields)
+t_error	substitution_word(t_expander *expander)
 {
-	t_expander_word	word;
-	t_expander_word	word_exp;
-
-	state->err = expander_fields_pop(&state->fields, &word);
-	if (state->err.type)
-		return (state->err);
-	expander_word_init(&word_exp);
-	while (word.len > 0)
+	expander->err = fields_fpop(&expander->word, &expander->fields);
+	if (expander->err.type)
+		return (expander->err);
+	word_init(&expander->word_exp);
+	while (expander->word.len > 0)
 	{
-		if (substitution_char(state, fields, &word, &word_exp).type)
-		{
-			expander_word_free(&word);
-			expander_word_free(&word_exp);
-			return (state->err);
-		}
+		if (substitution_char(expander).type)
+			return (expander->err);
 	}
-	expander_word_free(&word);
-	state->err = expander_fields_push(fields, word_exp);
-	if (state->err.type)
-		expander_word_free(&word_exp);
-	return (state->err);
+	word_free(&expander->word);
+	expander->err = fields_push(&expander->fields_exp, expander->word_exp);
+	return (expander->err);
 }
 
-t_error	substitutions(t_expander *state)
-{	
-	t_expander_fields	fields;
-
-	expander_fields_init(&fields);
-	while (state->fields.len > 0)
+t_error	substitutions(t_expander *expander)
+{
+	fields_init(&expander->fields_exp);
+	while (expander->fields.len > 0)
 	{
-		if (substitution_word(state, &fields).type)
-			return (expander_fields_free(&fields), state->err);
+		if (substitution_word(expander).type)
+			return (fields_free(&expander->fields_exp), expander->err);
 	}
-	expander_fields_free(&state->fields);
-	state->fields = fields;
-	return (state->err);
+	fields_free(&expander->fields);
+	expander->fields = expander->fields_exp;
+	return (expander->err);
 }

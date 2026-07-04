@@ -1,25 +1,25 @@
 #include "lexer.h"
 
-static t_error	context_arith_unescape_(t_lexer *state, void *nesting_depth)
+static t_error	context_arith_unescape_(t_lexer *lexer, void *nesting_depth)
 {
-	if (state->input->str.data[state->input->i] == '(')
+	if (lexer->input->str.data[lexer->input->i] == '(')
 	{
 		(*((size_t *)nesting_depth))++;
-		if (lexer_consume(state, state->token->type, 1).type)
-			return (state->err);
+		if (lexer_consume(lexer, lexer->token->type, 1).type)
+			return (lexer->err);
 	}
-	else if (state->input->str.data[state->input->i] == ')')
+	else if (lexer->input->str.data[lexer->input->i] == ')')
 	{
 		(*((size_t *)nesting_depth))--;
-		if (lexer_consume(state, state->token->type, 1).type)
-			return (state->err);
+		if (lexer_consume(lexer, lexer->token->type, 1).type)
+			return (lexer->err);
 	}
 	else
-		return (lexer_consume(state, state->token->type, 1));
-	return (state->err);
+		return (lexer_consume(lexer, lexer->token->type, 1));
+	return (lexer->err);
 }
 
-static t_error	context_arith_escape(t_lexer *state)
+static t_error	context_arith_escape(t_lexer *lexer)
 {
 	t_escape_args	args;
 
@@ -27,21 +27,21 @@ static t_error	context_arith_escape(t_lexer *state)
 	args.is_in_special_whitelist = NULL;
 	args.enable_line_continuation = true;
 	args.is_in_whitelist = is_in_context_dquote_whitelist;
-	return (lexer_context_escape(state, args));
+	return (lexer_context_escape(lexer, args));
 }
 
-static t_error	context_arith_unescape(t_lexer *state, void *nesting_depth)
+static t_error	context_arith_unescape(t_lexer *lexer, void *nesting_depth)
 {
 	t_unescape_args	args;
 	
 	args.special_args = nesting_depth;
 	args.special_handler = context_arith_unescape_;
-	return (lexer_context_unescape(state, args));
+	return (lexer_context_unescape(lexer, args));
 }
 
 static t_lexer_context_args	context_arith_rules(
-	size_t *nesting_depth,
-	t_context_stack_item *item)
+								size_t *nesting_depth,
+								t_context_stack_item *item)
 {
 	t_lexer_context_args	res;
 
@@ -60,7 +60,7 @@ static t_lexer_context_args	context_arith_rules(
 	return (res);
 }
 
-t_error	lexer_context_arith(t_lexer *state)
+t_error	lexer_context_arith(t_lexer *lexer)
 {
 	t_lexer_context_args			args;
 	t_context_stack_item	*item;
@@ -68,23 +68,23 @@ t_error	lexer_context_arith(t_lexer *state)
 	size_t					nesting_depth;
 
 	nesting_depth = 0;
-	backup = lexer_backup(state);
-	state->err = context_stack_item_init(&item, CONTEXT_ARITH);
-	if (state->err.type)
-		return (state->err);
-	state->err = context_stack_push(&state->token->contexts, item);
-	if (state->err.type)
-		return (state->err);
+	backup = lexer_backup(lexer);
+	lexer->err = context_stack_item_init(&item, CONTEXT_ARITH);
+	if (lexer->err.type)
+		return (lexer->err);
+	lexer->err = context_stack_push(&lexer->token->contexts, item);
+	if (lexer->err.type)
+		return (lexer->err);
 	args = context_arith_rules(&nesting_depth, item);
-	if (lexer_context_scan(state, args).type)
-		return (state->err);
-	if (state->input->str.data[state->input->i] != ')')
+	if (lexer_context_scan(lexer, args).type)
+		return (lexer->err);
+	if (lexer->input->str.data[lexer->input->i] != ')')
 	{
-		if (lexer_restore(state, backup).type)
-			return (state->err);
-		return (state->err = error(ERR_CTX_END_NOT_FOUND), state->err);
+		if (lexer_restore(lexer, backup).type)
+			return (lexer->err);
+		return (lexer->err = error(ERR_CTX_END_NOT_FOUND), lexer->err);
 	}
-	if (lexer_consume(state, state->token->type, 1).type)
-		return (state->err);
-	return (item->end = state->token->value.len, state->err);
+	if (lexer_consume(lexer, lexer->token->type, 1).type)
+		return (lexer->err);
+	return (item->end = lexer->token->value.len, lexer->err);
 }

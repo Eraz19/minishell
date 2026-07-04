@@ -1,115 +1,47 @@
 #include <fcntl.h>
-#include "scanner.h"
-#include "heredoc_body_.h"
+#include "body_.h"
+#include "posix_helpers.h"
 
-static t_error	heredoc_body_continuation(
-					t_heredoc_body *state,
-					bool *used_continuation)
-{
-	if (state->item->is_tty)
-	{
-		if (*used_continuation == false)
-			*state->item->i = state->i;
-		*used_continuation = true;
-		return (scanner_read_continuation(&state->item->input), state->err);
-	}
-	else
-		return (state->err = error(ERR_NO_DELIM));
-}
-
-static t_error	get_heredoc_body_content(t_heredoc_body *state)
-{
-	char	*match_EOL;
-	bool	used_continuation;
-
-	used_continuation = false;
-	while (true)
-	{
-		if (state->item->input.data[state->i] == '\0')
-		{
-			if (heredoc_body_continuation(state, &used_continuation).type)
-				return (state->err);
-		}
-		match_EOL = str_chr(state->item->input.data + state->i, '\n');
-		if (get_heredoc_body_line(state, match_EOL, &state->i).type)
-			return (state->err);
-		if (is_line_delimiter(state))
-		{
-			if (!used_continuation)
-				*state->item->i = state->i;
-			return (state->err);
-		}
-		if (!string_append(&state->content, &state->line))
-			return (state->err = error_sys());
-		string_free(&state->line);
-	}
-}
-
-t_error	read_heredoc_body_from_input(
-			t_heredoc *state,
-			t_heredoc_queue_item *item)
-{
-	t_heredoc_body	body;
-
-	heredoc_body_init(&body);
-	heredoc_body_load(&body, item);
-	state->err = get_heredoc_body_content(&body);
-	if (state->err.type)
-		return (heredoc_body_free(&body), state->err);
-	state->err = heredoc_save_body_in_file(&body.item->path, &body.content);
-	return (heredoc_body_free(&body), state->err);
-}
-
-t_lexer_context_args	heredoc_body_context_rules(void)
+t_lexer_context_args	body_context_rules(void)
 {
 	t_lexer_context_args	res;
 
 	res.quoting = NULL;
 	res.is_quoting = NULL;
 	res.unescaped_args = NULL;
-	res.escape = heredoc_body_escape;
+	res.escape = body_escape;
 	res.is_end = is_context_none_ending;
-	res.unescaped = heredoc_body_unescape;
+	res.unescaped = body_unescape;
 	res.expansion = lexer_rule_expansion;
 	res.is_expansion = is_substitution_context;
 	return (res);
 }
 
-t_error	read_heredoc_body(
-			const t_string *heredoc_file_path,
-			t_string *heredoc_body)
+t_error	read_body_file(t_string *out, const t_string *path)
 {
 	int		fd;
 	t_error	err;
 
-	if (!string_init(heredoc_body, 0, NULL, 0))
+	if (!string_init(out, 0, NULL, 0))
 		return (error_sys());
-	err = posix_open(heredoc_file_path->data, O_RDONLY, &fd);
+	err = posix_open(path->data, O_RDONLY, &fd);
 	if (err.type)
 		return (err);
-	if (!string_read_all(heredoc_body, fd))
+	if (!string_read_all(out, fd))
 		return (err = error_sys(), posix_close(fd), err);
 	return (posix_close(fd), err);
 }
 
-t_error store_expansion_result_in_heredoc_file(
-			const t_string *path,
-			t_expansion *expansion)
+t_error	save_body_in_file(const t_string *path, t_string *body)
 {
-	t_error		err;
-	t_string	src;
-	t_string	heredoc_body;
+	int		fd;
+	t_error	err;
+	int		o_flags;
 
-	if (expansion->len == 1)
-	{
-		expansion_get(expansion, 0, &src);
-		if (!string_init(&heredoc_body, 0, src.data, (long)src.len))
-			return (error_sys());
-		err = heredoc_save_body_in_file(path, &heredoc_body);
-		if (err.type != ERR_NO)
-			return (err);
-	}
-	else
-		return (error(ERR_EXP_TOO_MANY_FIELDS));
-	return (error(ERR_NO));
+	o_flags = O_WRONLY | O_CREAT | O_TRUNC;
+	err = posix_open_with_mode(path->data, o_flags, 0600, &fd);
+	if (err.type)
+		return (err);
+	err = posix_write(fd, body->data, body->len);
+	return (posix_close(fd), err);
 }

@@ -11,11 +11,11 @@
  * duplicated command string, or one stdin line), then pushes it; on error the
  * item is freed and not pushed. Called only when the input stack is empty.
  *
- * @param state Pointer to the scanner state (borrowed).
+ * @param scanner Pointer to the scanner state (borrowed).
  * @return ERR_NO on success, ERR_LIBC on allocation failure, or the reader's
  *         error.
  */
-t_error		scanner_read_input(t_scanner *state);
+t_error		scanner_read_input(t_scanner *scanner);
 
 /**
  * @ingroup scanner
@@ -25,10 +25,10 @@ t_error		scanner_read_input(t_scanner *state);
  * the end-of-input behaviour: an interactive terminal reads a continuation
  * line, every other source surfaces ERR_UNEXPECTED_EOI.
  *
- * @param state Pointer to the scanner state (borrowed).
+ * @param scanner Pointer to the scanner state (borrowed).
  * @return The assembled lexer rules.
  */
-t_lexer_rules	scanner_lexer_rules(t_scanner *state);
+t_lexer_rules	scanner_lexer_rules(t_scanner *scanner);
 
 /**
  * @ingroup scanner
@@ -38,10 +38,10 @@ t_lexer_rules	scanner_lexer_rules(t_scanner *state);
  * stack and re-runs the lexer so the next token comes from the expanded text;
  * otherwise leaves @p token unchanged.
  *
- * @param state Pointer to the scanner state (borrowed).
+ * @param scanner Pointer to the scanner state (borrowed).
  * @param token Word token to expand and replace (borrowed).
  * @return ERR_NO on success, or the recorded error on failure.
  */
-t_error		scanner_alias_expand(t_scanner *state, t_token *token);
+t_error		scanner_alias_expand(t_scanner *scanner, t_token *token);
 
 #endif

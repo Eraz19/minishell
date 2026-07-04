@@ -15,7 +15,7 @@ typedef enum e_exp_flags
 	EXP_FIELD_SPLIT		= (1u << 5),
 	EXP_PATH_NAME		= (1u << 6),
 	EXP_QUOTE_REMOVAL	= (1u << 7),
-}	t_exp_flags;
+}	t_exp_flag;
 
 /**
  * @ingroup expander
@@ -47,12 +47,9 @@ void	expansion_free(t_expansion *expansion);
  * @return ERR_NO on success, ERR_INDEX_OUT_OF_BOUND if @p index is past the
  *         last field.
  */
-t_error	expansion_get(
-			const t_expansion *expansion,
-			size_t index,
-			t_string *str);
+t_error	expansion_get(t_string *out, const t_expansion *expansion, size_t i);
 
-t_error	expand_word(t_string *src, t_exp_flags flags);
-t_error	expand_token(t_expansion *out, t_token *src, t_exp_flags flags);
+t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags);
+t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags);
 
 #endif

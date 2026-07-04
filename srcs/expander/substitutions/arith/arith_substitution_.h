@@ -3,8 +3,7 @@
 
 # include "expander_.h"
 
-bool	is_arith_substitution(t_expander_word_item *current_item);
-t_error	arith_substitution(t_expander *state, t_expander_word *word,
-			t_expander_word *word_exp);
+t_error	arith_substitution(t_expander *expander);
+bool	is_arith_substitution(t_word_item *current_item, uint flags);
 
 #endif

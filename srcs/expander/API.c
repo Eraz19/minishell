@@ -1,46 +1,67 @@
 #include "error.h"
+#include "heredoc.h"
 #include "expander.h"
 #include "expander_.h"
+#include "expansion_.h"
 #include "quote_removal_.h"
 #include "field_splitting_.h"
-#include "expander_loader_.h"
 #include "path_name_expansion_.h"
 #include "expander_substitutions_.h"
 
-static t_error	expand_word(t_expansion *expansion, t_expander_args *args)
+t_error	expand_word(t_expansion *expansion, t_expander_args *args)
 {
-	t_expander	state;
+	t_expander	expander;
 
-	expander_init(&state);
-	if (expander_load(&state, args).type)
-		return (expander_free(&state), state.err);
-	if (substitutions(&state).type)
-		return (expander_free(&state), state.err);
-	if (flag_is_active((uint)state.flags, EXP_FIELD_SPLIT))
+	expander_init(&expander);
+	expansion_init(expansion);
+	if (expander_load(&expander, args).type)
+		return (expander_free(&expander), expander.err);
+	if (substitutions(&expander).type)
+		return (expander_free(&expander), expander.err);
+	if (flag_is_active((uint)expander.flags, EXP_FIELD_SPLIT))
 	{
-		if (field_splitting(&state).type)
-			return (expander_free(&state), state.err);
+		if (field_splitting(&expander).type)
+			return (expander_free(&expander), expander.err);
 	}
-	if (flag_is_active((uint)state.flags, EXP_PATH_NAME))
+	if (flag_is_active((uint)expander.flags, EXP_PATH_NAME))
 	{
-		if (path_name_expansion(&state).type)
-			return (expander_free(&state), state.err);
+		if (path_name_expansion(&expander).type)
+			return (expander_free(&expander), expander.err);
 	}
-	if (flag_is_active((uint)state.flags, EXP_QUOTE_REMOVAL))
+	if (flag_is_active((uint)expander.flags, EXP_QUOTE_REMOVAL))
 	{
-		if (quote_removal(&state).type)
-			return (expander_free(&state), state.err);
+		if (quote_removal(&expander).type)
+			return (expander_free(&expander), expander.err);
 	}
-	state.err = expander_loader_extract(&state.fields, expansion);
-	return (expander_free(&state), state.err);
+	expander.err = expansion_load(&expander.fields, expansion);
+	return (expander_free(&expander), expander.err);
 }
 
-t_error	expander_expand_token(t_expansion *out, t_token *src, t_exp_flags flags)
+t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
 {
+	t_expander_args	args;
 
+	args.flags = flags;
+	args.value = src->value;
+	args.contexts = &src->contexts;
+	args.assignment_offset = src->assignment_offset;
+	return (expand_word(out, &args));
 }
 
-t_error	expander_expand_word(t_string *src, t_exp_flags flags)
+t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
 {
-	
+	t_error			err;
+	t_expander_args	args;
+	t_context_stack	contexts;
+
+	context_stack_init(&contexts);
+	err = heredoc_get_body_contexts(&contexts, src);
+	if (err.type)
+		return (context_stack_free(&contexts), err);
+	args.value = *src;
+	args.flags = flags;
+	args.contexts = &contexts;
+	args.assignment_offset = -1;
+	err = expand_word(out, &args);
+	return (context_stack_free(&contexts), err);
 }

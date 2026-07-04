@@ -59,7 +59,7 @@ void	alias_print_all(t_key_value **pairs)
 	free(pairs);
 }
 
-bool	is_token_alias_expandable(t_alias *state, char *word)
+bool	is_token_alias_expandable(t_alias *alias, char *word)
 {
 	bool	can_next_token_be_a_cmd_name;
 
@@ -67,11 +67,11 @@ bool	is_token_alias_expandable(t_alias *state, char *word)
 		return (false);
 	else if (!is_valid_alias_name(word))
 		return (false);
-	else if (!hashmap_contains(&state->map, word))
+	else if (!hashmap_contains(&alias->map, word))
 		return (false);
-	else if (alias_stack_contains(&state->stack, word))
+	else if (alias_stack_contains(&alias->stack, word))
 		return (false);
-	else if (!state->disable_position)
+	else if (!alias->disable_position)
 	{
 		// TODO: handle error
 		(void)builder_can_next_word_be_a_cmd_name(&can_next_token_be_a_cmd_name);
@@ -81,8 +81,8 @@ bool	is_token_alias_expandable(t_alias *state, char *word)
 	return (true);
 }
 
-void	set_position_for_next_word(t_alias *state, t_string *expansion)
+void	set_position_for_next_word(t_alias *alias, t_string *expansion)
 {
-	state->disable_position = expansion != NULL
+	alias->disable_position = expansion != NULL
 		&& is_blank(expansion->data[expansion->len - 1]);
 }

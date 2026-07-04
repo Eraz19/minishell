@@ -4,6 +4,8 @@
 # include "error.h"
 # include "expander_.h"
 
-t_error	substitutions(t_expander *state);
+t_error	substitutions(t_expander *expander);
+
+t_error	substitution_char(t_expander *expander);
 
 #endif

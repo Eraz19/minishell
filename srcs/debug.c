@@ -30,7 +30,7 @@ const char	*bool_to_string(bool value)
 	return ("false");
 }
 
-static const char	*heredoc_mode_to_string(t_heredoc_mode mode)
+static const char	*heredoc_mode_to_string(t_here_mode mode)
 {
 	if (mode == HEREDOC_MODE_NORMAL)
 		return ("HEREDOC_MODE_NORMAL");
@@ -70,7 +70,7 @@ static void	debug_dump_string_value(const t_string *value)
 	fprintf(stderr, "\"");
 }
 
-void	debug_dump_heredoc_queue_item(t_heredoc_queue_item *item)
+void	debug_dump_heredoc_queue_item(t_heredoc_item *item)
 {
 	if (item == NULL)
 		return ((void)fprintf(stderr, "[HEREDOC_QUEUE_ITEM] (null)\n"));

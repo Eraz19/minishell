@@ -1,13 +1,13 @@
 #include "scanner_recognition_.h"
 
-bool	is_comment(t_lexer *state)
+bool	is_comment(t_lexer *lexer)
 {
-	return (state->input->str.data[state->input->i] == '#');
+	return (lexer->input->str.data[lexer->input->i] == '#');
 }
 
-void	lexer_rule_comment(t_lexer *state)
+void	lexer_rule_comment(t_lexer *lexer)
 {
-	while (state->input->str.data[state->input->i] != '\0' &&
-		state->input->str.data[state->input->i] != '\n')
-		state->input->i++;
+	while (lexer->input->str.data[lexer->input->i] != '\0' &&
+		lexer->input->str.data[lexer->input->i] != '\n')
+		lexer->input->i++;
 }
