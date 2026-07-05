@@ -85,6 +85,8 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		parser->lookahead_id, RED, token_type_to_string(token.type), NC);
 	if (token.type == TOKEN_TOKEN)
 		fprintf(stderr, " (%s%s%s)", BLUE, token.value.data, NC);
+	if (token.assignment_offset >= 0)
+		fprintf(stderr, " assignment_offset=%s%zu%s", YELLOW, token.assignment_offset, NC);
 	fprintf(stderr, "\n");
 #endif
 	return (err);
