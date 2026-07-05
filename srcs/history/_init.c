@@ -1,6 +1,7 @@
 #include "error.h"
 #include "history.h"
 #include "history_.h"
+# include "logs.h"	// DEBUG
 
 void	history_init(t_history *state)
 {
@@ -24,6 +25,7 @@ t_error	history_load(t_history *state)
 {
 	ssize_t	max;
 
+	print_title("%s()", __func__);
 	if (history_load_path_env(state).type)
 		return (state->err);
 	if (history_load_size_env(state).type)
@@ -33,5 +35,6 @@ t_error	history_load(t_history *state)
 		return (state->err = state->file.err);
 	if (history_rl_load(&state->rl_history, &state->list).type)
 		return (state->err = state->rl_history.err);
+	print_result("%s()", __func__);
 	return (state->err);
 }

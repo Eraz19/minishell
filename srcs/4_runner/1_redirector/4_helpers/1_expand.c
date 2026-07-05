@@ -6,7 +6,7 @@
 static inline t_error	redirect_expand_heredoc_body(t_ast_redirection *redir)
 {
 	if (redir->expand_heredoc_body)
-		return (heredoc_expand(&redir->word->value));
+		return (heredoc_expand_body(&redir->word->value));
 	return (error(ERR_NO));
 }
 
@@ -14,7 +14,7 @@ static inline t_error	redirect_expand_heredoc_body(t_ast_redirection *redir)
 static inline t_error	redirect_expand_word(
 							const char *param_name,
 							t_token *token,
-							t_exp_flags flags,
+							t_exp_flag flags,
 							t_string *out_string)
 {
 	t_expansion	expansion;
@@ -37,7 +37,7 @@ static inline t_error	redirect_expand_word(
 
 t_error	redirect_expand(t_ast_redirection *redirection)
 {
-	t_exp_flags	flags;
+	t_exp_flag	flags;
 	t_error		err;
 
 	flags = EXP_TILDE | EXP_PARAM | EXP_CMD_SUB | EXP_ARITH | EXP_QUOTE_REMOVAL;

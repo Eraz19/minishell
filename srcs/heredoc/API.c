@@ -28,7 +28,10 @@ t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode)
 	return (heredoc->err);
 }
 
-t_error	heredoc_read_body(t_heredoc *heredoc, const t_string *src, ulong *start)
+t_error	heredoc_read_body(
+			t_heredoc *heredoc,
+			const t_string *src,
+			unsigned long *start)
 {
 	size_t			i;
 	t_heredoc_item	item;
