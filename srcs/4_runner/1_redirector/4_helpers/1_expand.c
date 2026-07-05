@@ -40,7 +40,8 @@ t_error	redirect_expand(t_ast_redirection *redirection)
 	t_exp_flag	flags;
 	t_error		err;
 
-	flags = EXP_TILDE | EXP_PARAM | EXP_CMD_SUB | EXP_ARITH | EXP_QUOTE_REMOVAL;
+	flags = EXP_TILDE_NORMAL | EXP_PARAM | EXP_CMD_SUB | EXP_ARITH
+		| EXP_QUOTE_REMOVAL;
 	if (redirection->operation == AST_REDIR_HEREDOC)
 		err = redirect_expand_heredoc_body(redirection);
 	else
