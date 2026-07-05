@@ -12,6 +12,11 @@ void	expansion_free(t_expansion *expansion)
 	*expansion = (t_expansion){0};
 }
 
+void	expansion_free_void(void *expansion)
+{
+	expansion_free(expansion);
+}
+
 t_error	expansion_load(t_expansion *out, t_fields *src)
 {
 	t_error		err;
