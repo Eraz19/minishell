@@ -38,3 +38,10 @@ bool	is_quoting_ending(char c, t_context context)
 	else
 		return (false);
 }
+
+bool	is_context_quoting(t_context context)
+{
+	return (context == CONTEXT_SQUOTE
+		|| context == CONTEXT_DQUOTE
+		|| context == CONTEXT_DOLLAR_SQUOTE);
+}

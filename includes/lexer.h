@@ -130,7 +130,7 @@ struct s_lexer
 	t_lexer_rules				rules;
 	t_lexer_input_stack_item	*input;
 	t_token						*token;
-	t_lexer_input_stack				input_stack;
+	t_lexer_input_stack			input_stack;
 	bool						emited_token;
 };
 
@@ -191,19 +191,19 @@ typedef struct s_lexer_context_args
  * @ingroup lexer
  * @brief Initialises the lexer to an empty, ready-to-use value.
  */
-void			lexer_init(t_lexer *state);
+void			lexer_init(t_lexer *lexer);
 
 /**
  * @ingroup lexer
  * @brief Releases the lexer's input stack and resets it to zero.
  */
-void			lexer_free(t_lexer *state);
+void			lexer_free(t_lexer *lexer);
 
 /**
  * @ingroup lexer
  * @brief Drops every input and the token in progress, ready for a fresh drive.
  */
-void			lexer_reset(t_lexer *state);
+void			lexer_reset(t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -216,7 +216,7 @@ void			lexer_reset(t_lexer *state);
  * @param str Input text to scan (ownership transferred on success).
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
-t_error			lexer_push_input(t_lexer *state, t_string *str);
+t_error			lexer_push_input(t_lexer *lexer, t_string *str);
 
 /* ------------------------------------------------------------------------- */
 /* Public entry points                                                       */
@@ -236,7 +236,7 @@ t_error			lexer_push_input(t_lexer *state, t_string *str);
  *         recorded error on failure.
  */
 t_error			lexer_get_next_token(
-					t_lexer *state,
+					t_lexer *lexer,
 					t_token *token,
 					t_lexer_rules rules);
 
@@ -255,7 +255,7 @@ t_error			lexer_get_next_token(
  * @return ERR_NO on success, or the recorded error on failure.
  */
 t_error			lexer_track_context(
-					t_lexer *state,
+					t_lexer *lexer,
 					t_context_stack *out,
 					t_lexer_context_args args);
 
@@ -267,31 +267,31 @@ t_error			lexer_track_context(
  * @ingroup lexer
  * @brief Advances the input cursor by @p offset characters (no consumption).
  */
-void			lexer_advance(t_lexer *state, size_t offset);
+void			lexer_advance(t_lexer *lexer, size_t offset);
 
 /**
  * @ingroup lexer
  * @brief Appends @p iter input characters to the token and advances.
  */
-t_error			lexer_consume(t_lexer *state, t_token_type type, size_t iter);
+t_error			lexer_consume(t_lexer *lexer, t_token_type type, size_t iter);
 
 /**
  * @ingroup lexer
  * @brief Marks the token currently being built as complete.
  */
-void			lexer_delimit_token(t_lexer *state);
+void			lexer_delimit_token(t_lexer *lexer);
 
 /**
  * @ingroup lexer
  * @brief Snapshots the lexer for a possible later rollback.
  */
-t_lexer_backup	lexer_backup(t_lexer *state);
+t_lexer_backup	lexer_backup(t_lexer *lexer);
 
 /**
  * @ingroup lexer
  * @brief Restores the lexer to a previously captured backup.
  */
-t_error			lexer_restore(t_lexer *state, t_lexer_backup backup);
+t_error			lexer_restore(t_lexer *lexer, t_lexer_backup backup);
 
 /* ------------------------------------------------------------------------- */
 /* Context toolkit                                                           */
@@ -304,43 +304,43 @@ t_error			lexer_restore(t_lexer *state, t_lexer_backup backup);
  * Delegates to the injected rules.on_eoi (continuation or error); reports
  * ERR_UNEXPECTED_EOI when no handler is provided.
  */
-t_error			context_EOI(t_lexer *state);
+t_error			context_EOI(t_lexer *lexer);
 
 /**
  * @ingroup lexer
  * @brief Consumes the character following a backslash when whitelisted.
  */
-t_error			context_escape_next_char(t_lexer *state, t_escape_args args);
+t_error			context_escape_next_char(t_lexer *lexer, t_escape_args args);
 
 /**
  * @ingroup lexer
  * @brief Generic scan loop for one quoting/expansion context.
  */
-t_error			lexer_context_scan(t_lexer *state, t_lexer_context_args args);
+t_error			lexer_context_scan(t_lexer *lexer, t_lexer_context_args args);
 
 /**
  * @ingroup lexer
  * @brief Handles a backslash inside a context (line continuation or escape).
  */
-t_error			lexer_context_escape(t_lexer *state, t_escape_args args);
+t_error			lexer_context_escape(t_lexer *lexer, t_escape_args args);
 
 /**
  * @ingroup lexer
  * @brief Consumes one plain character of a context (or end-of-input/handler).
  */
-t_error			lexer_context_unescape(t_lexer *state, t_unescape_args args);
+t_error			lexer_context_unescape(t_lexer *lexer, t_unescape_args args);
 
 /**
  * @ingroup lexer
  * @brief Scans a quoting or expansion construct of the given context.
  */
-t_error			lexer_context(t_lexer *state, t_context context);
+t_error			lexer_context(t_lexer *lexer, t_context context);
 
 /**
  * @ingroup lexer
  * @brief Scans a quoting construct, keeping it in the token (POSIX rule 4).
  */
-t_error			lexer_rule_quoting(t_lexer *state, t_context context);
+t_error			lexer_rule_quoting(t_lexer *lexer, t_context context);
 
 /**
  * @ingroup lexer
@@ -349,13 +349,13 @@ t_error			lexer_rule_quoting(t_lexer *state, t_context context);
  * For an arithmetic context, falls back to command substitution when the
  * "$((" turns out not to close as arithmetic.
  */
-t_error			lexer_rule_expansion(t_lexer *state, t_context context);
+t_error			lexer_rule_expansion(t_lexer *lexer, t_context context);
 
-t_error			lexer_context_param(t_lexer *state);
-t_error			lexer_context_arith(t_lexer *state);
-t_error			lexer_context_dquote(t_lexer *state);
-t_error			lexer_context_backtick(t_lexer *state);
-t_error			lexer_context_squote(t_lexer *state);
-t_error			lexer_context_dollar_squote(t_lexer *state);
+t_error			lexer_context_param(t_lexer *lexer);
+t_error			lexer_context_arith(t_lexer *lexer);
+t_error			lexer_context_dquote(t_lexer *lexer);
+t_error			lexer_context_backtick(t_lexer *lexer);
+t_error			lexer_context_squote(t_lexer *lexer);
+t_error			lexer_context_dollar_squote(t_lexer *lexer);
 
 #endif

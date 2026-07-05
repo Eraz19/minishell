@@ -1,46 +1,45 @@
 #include "expander_.h"
-#include "expander_loader_.h"
+#include "loader_.h"
 
-void	expander_init(t_expander *state)
+void	expander_init(t_expander *expander)
 {
-	*state = (t_expander){0};
-	expander_fields_init(&state->fields);
-	expander_word_init(&state->word_exp);
-	expander_fields_init(&state->fields_exp);
+	*expander = (t_expander){0};
+	fields_init(&expander->fields);
 }
 
-void	expander_free(t_expander *state)
+void	expander_free(t_expander *expander)
 {
-	expander_fields_free(&state->fields);
-	expander_word_free(&state->word_exp);
-	expander_fields_free(&state->fields_exp);
-	*state = (t_expander){0};
+	string_free(&expander->ifs);
+	fields_free(&expander->fields);
+	fields_free(&expander->fields_exp);
+	word_free(&expander->word);
+	word_free(&expander->word_exp);
+	*expander = (t_expander){0};
 }
 
-t_error	expander_load(t_expander *state, t_expander_args *args)
+t_error	expander_load(t_expander *expander, t_expander_args *args)
 {
-	t_expander_word		word_copy;
-	t_expander_loader	loader_state;
+	t_loader	loader;
+	t_word		word_copy;
 
-	state->flags = args->flags;
-	state->assignment_offset = args->assignment_offset;
-	expander_loader_init(&loader_state);
-	state->err = expander_loader_load(
-		&loader_state, args->contexts, &args->value);
-	if (state->err.type)
-		return (expander_loader_free(&loader_state), state->err);
-	while (loader_state.i < loader_state.word.len)
+	expander->flags = args->flags;
+	expander->assignment_offset = args->assignment_offset;
+	expander->err = get_ifs(expander, &expander->ifs);
+	if (expander->err.type)
+		return (expander->err);
+	loader_init(&loader);
+	expander->err = loader_load(&loader, args);
+	if (expander->err.type)
+		return (loader_free(&loader), expander->err);
+	while (loader.i < loader.word.len)
 	{
-		state->err = expander_loader_build(&loader_state);
-		if (state->err.type)
-			return (expander_loader_free(&loader_state), state->err);
+		expander->err = loader_prepare_word(&loader);
+		if (expander->err.type)
+			return (loader_free(&loader), expander->err);
 	}
-	state->err = expander_word_dup(&word_copy, &loader_state.loaded_word);
-	if (state->err.type)
-	{
-		expander_loader_free(&loader_state);
-		return (expander_word_free(&word_copy), state->err);
-	}
-	state->err = expander_fields_push(&state->fields, word_copy);
-	return (expander_loader_free(&loader_state), state->err);
+	expander->err = word_dup(&word_copy, &loader.loaded_word);
+	if (expander->err.type)
+		return (loader_free(&loader), word_free(&word_copy), expander->err);
+	expander->err = fields_push(&expander->fields, word_copy);
+	return (loader_free(&loader), expander->err);
 }

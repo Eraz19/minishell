@@ -23,7 +23,7 @@ t_error	hook_3(
 	t_parser_stack_item *lhs)
 {
 	t_token			*delim;
-	t_heredoc_mode	mode;
+	t_here_mode	mode;
 	t_string		*path;
 	t_error			err;
 

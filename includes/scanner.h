@@ -56,11 +56,11 @@ typedef struct s_scanner
 	const char		*source;
 }	t_scanner;
 
-t_error	scanner_init(t_scanner *state);
+t_error	scanner_init(t_scanner *scanner);
 
-void	scanner_free(t_scanner *state);
+void	scanner_free(t_scanner *scanner);
 
-t_error	scanner_load(t_scanner *state, const char *source);
+t_error	scanner_load(t_scanner *scanner, const char *source);
 
 t_error	scanner_reset(void);
 
@@ -69,7 +69,7 @@ t_error	scanner_get_next_token(t_token *token);
 t_error	scanner_report_io_here(
 			t_string *out_path,
 			t_token *delim,
-			t_heredoc_mode mode);
+			t_here_mode mode);
 
 t_error	scanner_heredoc_read(void);
 

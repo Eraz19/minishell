@@ -6,13 +6,13 @@
 
 # define HEREDOC_TMP_PATH "/tmp/minishell_heredoc_"
 
-// ============= UTILS FUNCTIONS ================
+// ============= FILE FUNCTIONS ================
 
-t_error	create_heredoc_file(t_heredoc *state, t_string *path);
-t_error	format_heredoc_delimiter(t_heredoc *state, t_string *delim);
-t_error	heredoc_read_queue_heredoc_body(
-			t_heredoc *state,
-			t_string *input,
-			size_t *start);
+t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path);
+
+// ============= EXPANSION FUNCTIONS ================
+
+uint	generate_heredoc_body_expand_flags(void);
+t_error	expand_delim(t_heredoc *heredoc, t_string *out, const t_token *delim);
 
 #endif

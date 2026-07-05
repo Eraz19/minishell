@@ -46,7 +46,7 @@ typedef struct s_alias
  *
  * @param state Pointer to the alias state to initialise (borrowed).
  */
-void	alias_init(t_alias *state);
+void	alias_init(t_alias *alias);
 
 /**
  * @ingroup alias
@@ -57,7 +57,7 @@ void	alias_init(t_alias *state);
  *
  * @param state Pointer to the alias state to free (borrowed).
  */
-void	alias_free(t_alias *state);
+void	alias_free(t_alias *alias);
 
 /**
  * @ingroup alias

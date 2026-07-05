@@ -1,121 +1,45 @@
-#include <stdlib.h>
-#include "expander_loader_.h"
+#include "loader_.h"
 
-bool	is_char_escaped(t_expander_loader *state)
+bool	is_char_escaped(t_loader *loader)
 {
-	char	next_char;
-	char	current_char;
-	bool	is_in_whitelist;
+	t_context	quoting;
+	char		next_char;
+	char		current_char;
+	bool		is_in_whitelist;
 
-	current_char = state->word.data[state->i];
-	next_char = state->word.data[state->i + 1];
-	if (state->quoting != CONTEXT_NONE)
-		is_in_whitelist = is_in_quoting_whitelist(next_char, state->quoting);
+	quoting = loader->quoting;
+	current_char = loader->word.data[loader->i];
+	next_char = loader->word.data[loader->i + 1];
+	if (quoting != CONTEXT_NONE)
+		is_in_whitelist = is_in_quoting_whitelist(next_char, quoting);
 	else
-		is_in_whitelist = is_in_substitution_whitelist(next_char, state->quoting);
+		is_in_whitelist = is_in_substitution_whitelist(next_char, quoting);
 	return (current_char == '\\' && next_char != '\0' && is_in_whitelist);
 }
 
-static bool	is_quoting_type(t_context context)
+t_error	loader_consume(t_loader *loader, bool escaped)
 {
-	return (context == CONTEXT_SQUOTE
-		|| context == CONTEXT_DQUOTE
-		|| context == CONTEXT_DOLLAR_SQUOTE
-		|| context == CONTEXT_HEREDOC);
-}
-
-static bool	is_context_start(t_expander_loader *state,
-		t_context_stack_item **item)
-{
-	if (state->stack.len == 0)
-		return (false);
-	state->err = context_stack_get(&state->stack, item, 0);
-	if (state->err.type || *item == NULL)
-		return (false);
-	return (state->i == (*item)->start);
-}
-
-bool	is_substitution_start(t_expander_loader *state)
-{
-	t_context_stack_item	*item;
-
-	if (!is_context_start(state, &item))
-		return (false);
-	return (!is_quoting_type(item->context));
-}
-
-bool	is_quoting_start(t_expander_loader *state)
-{
-	t_context_stack_item	*item;
-
-	if (!is_context_start(state, &item))
-		return (false);
-	return (is_quoting_type(item->context));
-}
-
-t_error	expander_loader_push_context(t_expander_loader *state)
-{
-	t_context_stack_item	*item;
-
-	if (state->stack.len == 0)
-		return (state->err);
-	state->err = context_stack_fpop(&state->stack, &item);
-	if (state->err.type)
-		return (state->err);
-	state->err = context_stack_push(&state->loading_stack, item);
-	if (state->err.type)
-		return (free(item), state->err);
-	return (state->context_item = item, state->err);
-}
-
-t_error	expander_loader_pop_context(t_expander_loader *state)
-{
-	t_context_stack_item	*item;
-	size_t					last_i;
+	t_word_item_opt	opt;
+	t_word_item		item;
+	size_t			context_len;
+	char			current_char;
 	
-	state->err = context_stack_bpop(&state->loading_stack, &item);
-	if (state->err.type)
-		return (state->err);
-	free(item);
-	if (state->loading_stack.len > 0)
-	{
-		last_i = state->loading_stack.len - 1;
-		state->err = context_stack_get(&state->loading_stack, &item, last_i);
-		if (state->err.type)
-			return (state->err);
-		state->context_item = item;
-	}
-	else
-		state->context_item = NULL;
-	return (state->err);
-}
-
-t_error	expander_loader_consume(
-	t_expander_loader *state,
-	size_t count,
-	bool escaped)
-{
-	size_t						i;
-	t_expander_word_item_opt	opt;
-	t_expander_word_item		item;
-	char						current_char;
-	
-	i = 0;
 	opt.escaped = escaped;
-	opt.quoted = state->quoting;
-	if (state->context_item == NULL)
-		opt.context = CONTEXT_NONE;
-	else
-		opt.context = state->context_item->context;
-	while (i < count)
+	opt.quoted = loader->quoting;
+	if (loader->context_item == NULL)
 	{
-		opt.i = state->i;
-		current_char = state->word.data[state->i++];
-		item = expander_word_item_init(current_char, opt);
-		state->err = expander_word_push(&state->loaded_word, item);
-		if (state->err.type)
-			return (state->err);
-		i++;
+		opt.context = CONTEXT_NONE;
+		opt.context_len = 0;
 	}
-	return (state->err);
+	else
+	{
+		opt.context = loader->context_item->context;
+		context_len = loader->context_item->end - loader->context_item->start;
+		opt.context_len = context_len;
+	}
+	opt.i = loader->i;
+	current_char = loader->word.data[loader->i++];
+	item = word_item_init(current_char, opt);
+	loader->err = word_push(&loader->loaded_word, item);
+	return (loader->err);
 }

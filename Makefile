@@ -51,6 +51,7 @@ SRCS			:= \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
 	$(wildcard srcs/expander/*/*/*.c) \
+	$(wildcard srcs/expander/*/*/*/*.c) \
 	$(wildcard srcs/history/*.c) \
 	$(wildcard srcs/history/*/*.c) \
 	$(wildcard srcs/params/*.c) \
@@ -117,12 +118,15 @@ INCLUDES		:= \
 	-Isrcs/expander/field \
 	-Isrcs/expander/field_splitting \
 	-Isrcs/expander/loader \
+	-Isrcs/expander/loader/context \
 	-Isrcs/expander/path_name_expansion \
 	-Isrcs/expander/quote_removal \
 	-Isrcs/expander/quote_removal/context \
 	-Isrcs/expander/substitutions \
 	-Isrcs/expander/substitutions/tilde \
 	-Isrcs/expander/substitutions/param \
+	-Isrcs/expander/substitutions/param/unbraced \
+	-Isrcs/expander/substitutions/param/braced \
 	-Isrcs/expander/substitutions/cmd_sub \
 	-Isrcs/expander/substitutions/dollar_squote \
 	-Isrcs/expander/substitutions/arith \

@@ -4,6 +4,6 @@
 # include "error.h"
 # include "expander_.h"
 
-t_error	quote_removal(t_expander *state);
+t_error	quote_removal(t_expander *expander);
 
 #endif

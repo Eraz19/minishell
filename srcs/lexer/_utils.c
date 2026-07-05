@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include "lexer.h"
 
-void	lexer_advance(t_lexer *state, size_t offset)
+void	lexer_advance(t_lexer *lexer, size_t offset)
 {
-	state->input->i += offset;
+	lexer->input->i += offset;
 }
 
-t_error	lexer_consume(t_lexer *state, t_token_type type, size_t iter)
+t_error	lexer_consume(t_lexer *lexer, t_token_type type, size_t iter)
 {
 	size_t	i;
 	char	current_char;
@@ -14,51 +14,51 @@ t_error	lexer_consume(t_lexer *state, t_token_type type, size_t iter)
 	i = 0;
 	while (i < iter)
 	{
-		current_char = state->input->str.data[state->input->i];
-		if (!string_append_n(&state->token->value, &current_char, 1))
-			return (state->err = error_sys());
-		state->token->type = type;
-		lexer_advance(state, 1);
+		current_char = lexer->input->str.data[lexer->input->i];
+		if (!string_append_n(&lexer->token->value, &current_char, 1))
+			return (lexer->err = error_sys());
+		lexer->token->type = type;
+		lexer_advance(lexer, 1);
 		i++;
 	}
-	return (state->err);
+	return (lexer->err);
 }
 
-t_lexer_backup	lexer_backup(t_lexer *state)
+t_lexer_backup	lexer_backup(t_lexer *lexer)
 {
 	t_lexer_backup res;
 
-    res.i = state->input->i;
-    res.token_type = state->token->type;
-    res.context_len = state->input->context.len;
-    res.token_value_len = state->token->value.len;
-    res.token_contexts_len = state->token->contexts.len;
+    res.i = lexer->input->i;
+    res.token_type = lexer->token->type;
+    res.context_len = lexer->input->context.len;
+    res.token_value_len = lexer->token->value.len;
+    res.token_contexts_len = lexer->token->contexts.len;
 	return (res);
 }
 
-t_error	lexer_restore(t_lexer *state, t_lexer_backup backup)
+t_error	lexer_restore(t_lexer *lexer, t_lexer_backup backup)
 {
 	t_context_stack_item	*item;
 
-	while (state->input->context.len > backup.context_len)
+	while (lexer->input->context.len > backup.context_len)
     {
-		if (context_stack_bpop(&state->input->context, NULL).type)
-			return (state->err);
+		if (context_stack_bpop(&lexer->input->context, NULL).type)
+			return (lexer->err);
 	}
-	while (state->token->contexts.len > backup.token_contexts_len)
+	while (lexer->token->contexts.len > backup.token_contexts_len)
 	{
-		if (context_stack_bpop(&state->token->contexts, &item).type)
-			return (state->err);
+		if (context_stack_bpop(&lexer->token->contexts, &item).type)
+			return (lexer->err);
 		free(item);
 	}
-    state->input->i = backup.i;
-    state->token->type = backup.token_type;
-    state->token->value.len = backup.token_value_len;
-	return (state->err);
+    lexer->input->i = backup.i;
+    lexer->token->type = backup.token_type;
+    lexer->token->value.len = backup.token_value_len;
+	return (lexer->err);
 }
 
-void	lexer_delimit_token(t_lexer *state)
+void	lexer_delimit_token(t_lexer *lexer)
 {
-	state->emited_token = true;
-	state->token->index.end = (ssize_t)state->input->i;
+	lexer->emited_token = true;
+	lexer->token->index.end = (ssize_t)lexer->input->i;
 }

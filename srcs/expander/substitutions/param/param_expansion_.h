@@ -3,14 +3,10 @@
 
 # include "expander_.h"
 
-bool	is_param_expansion(
-			t_expander *state,
-			t_expander_word *word,
-			t_expander_word_item *current_item);
-t_error	param_expansion(
-			t_expander *state,
-			t_expander_fields *fields,
-			t_expander_word *word,
-			t_expander_word *word_exp);
+t_error	param_expansion(t_expander *expander);
+
+bool	is_param_expansion(t_expander *expander, t_word_item *current_item);
+t_error	emit_positionals(t_expander *expander, char c, t_word_item_opt opt);
+t_error	get_param_name(t_expander *expander, t_string *param_name, bool braced);
 
 #endif
