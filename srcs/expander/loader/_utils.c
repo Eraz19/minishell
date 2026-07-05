@@ -26,6 +26,8 @@ t_error	loader_consume(t_loader *loader, bool escaped)
 	
 	opt.escaped = escaped;
 	opt.quoted = loader->quoting;
+	opt.local_quoted = loader->local_quoting;
+	opt.is_expand_res = false;
 	if (loader->context_item == NULL)
 	{
 		opt.context = CONTEXT_NONE;

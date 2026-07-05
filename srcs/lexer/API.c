@@ -69,3 +69,34 @@ t_error	lexer_track_context(
 	lexer->err = context_stack_dup(out, &token.contexts);
 	return (free(item), token_free(&token), lexer->err);
 }
+
+t_error	lexer_remove_escaped_newlines(
+	t_string *word,
+	t_lexer_context_args args)
+{
+	t_token					token;
+	t_lexer					lexer;
+	t_context_stack_item	*item;
+
+	lexer_init(&lexer);
+	lexer.err = lexer_push_input(&lexer, word);
+	if (lexer.err.type)
+		return (lexer_free(&lexer), lexer.err);
+	lexer.err = lexer_input_stack_get_last(&lexer.input_stack, &lexer.input);
+	if (lexer.err.type)
+		return (lexer_free(&lexer), lexer.err);
+	lexer.err = context_stack_item_init(&item, CONTEXT_NONE);
+	if (lexer.err.type)
+		return (lexer_free(&lexer), lexer.err);
+	token_init(&token);
+	lexer.token = &token;
+	args.context = CONTEXT_NONE;
+	args.opening_len = 0;
+	args.closing_len = 0;
+	args.stack_item = item;
+	if (lexer_context_scan(&lexer, args).type)
+		return (free(item), token_free(&token), lexer_free(&lexer), lexer.err);
+	if (!string_dup(word, &token.value))
+		lexer.err = error_sys();
+	return (free(item), token_free(&token), lexer_free(&lexer), lexer.err);
+}

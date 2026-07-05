@@ -6,6 +6,20 @@ bool    flag_is_active(uint bitset, uint flag)
     return ((bitset & flag) != 0);
 }
 
+t_error	forward_word_item(t_word *word_exp, t_word *word)
+{
+	t_error		err;
+	t_word_item	item;
+
+	err = word_fpop(&item, word);
+	if (err.type)
+		return (err);
+	err = word_push(word_exp, item);
+	if (err.type)
+		return (err);
+	return (error(ERR_NO));
+}
+
 t_error	get_ifs(t_expander *expander, t_string	*ifs)
 {
 	string_init(ifs, 0, NULL, 0);

@@ -11,6 +11,7 @@ void	loader_init(t_loader *loader)
 
 void	loader_free(t_loader *loader)
 {
+	string_free(&loader->word);
 	context_stack_free(&loader->stack);
 	word_free(&loader->loaded_word);
 	context_stack_free(&loader->loading_stack);

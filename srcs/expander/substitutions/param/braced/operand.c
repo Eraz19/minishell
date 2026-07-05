@@ -14,6 +14,8 @@ t_error	parse_braced_op(
 	if (expander->err.type)
 		return (expander->err);
 	*colon = (first.c == ':');
+	*op = first.c;
+	*op_items = 1;
 	if (*colon)
 	{
 		expander->err = word_get(&second, &expander->word, 1);
@@ -22,12 +24,9 @@ t_error	parse_braced_op(
 		*op = second.c;
 		*op_items = 2;
 	}
-	else
-	{
-		*op = first.c;
-		*op_items = 1;
-	}
-	if (*op != '-' && *op != '=' && *op != '?' && *op != '+')
+	else if (braced_op_is_doubled(&expander->word, first.c))
+		*op_items = 2;
+	if (!is_valid_braced_op(*op))
 		return (expander->err = error(ERR_NOT_IMPLEMENTED));
 	return (expander->err = word_remove(&expander->word, 0, *op_items));
 }
@@ -59,10 +58,13 @@ t_error	expand_operand(t_expander *expander, t_word *operand, t_word *out)
 {
 	t_word	saved_word;
 	t_word	saved_word_exp;
+	bool	saved_in_operand;
 
 	saved_word = expander->word;
 	saved_word_exp = expander->word_exp;
+	saved_in_operand = expander->in_operand;
 	expander->word = *operand;
+	expander->in_operand = true;
 	word_init(&expander->word_exp);
 	while (expander->word.len > 0)
 	{
@@ -73,6 +75,7 @@ t_error	expand_operand(t_expander *expander, t_word *operand, t_word *out)
 	*out = expander->word_exp;
 	expander->word = saved_word;
 	expander->word_exp = saved_word_exp;
+	expander->in_operand = saved_in_operand;
 	return (expander->err);
 }
 
@@ -86,18 +89,4 @@ t_error	braced_operand_str(t_expander *expander, t_word *operand,
 		return (word_free(&expanded), expander->err);
 	expander->err = to_str(out, &expanded, 0, expanded.len);
 	return (word_free(&expanded), expander->err);
-}
-
-t_error	braced_use_operand(
-	t_expander *expander,
-	t_word *operand,
-	t_word_item_opt opt)
-{
-	t_string	operand_str;
-
-	expander->err = braced_operand_str(expander, operand, &operand_str);
-	if (expander->err.type)
-		return (expander->err);
-	expander->err = braced_push_value(expander, &operand_str, opt);
-	return (string_free(&operand_str), expander->err);
 }

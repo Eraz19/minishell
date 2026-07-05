@@ -6,7 +6,6 @@ static t_context_args	context_dollar_squote_rules(t_expander *expander)
 	t_context_args	args;
 
 	args.word = &expander->word;
-	args.context = CONTEXT_DOLLAR_SQUOTE;
 	args.word_expanded = &expander->word_exp;
 	args.is_end = is_context_dollar_squote_ending;
 	args.is_in_whitelist = is_in_context_dollar_squote_whitelist;

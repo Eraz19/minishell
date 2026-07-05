@@ -31,7 +31,7 @@ t_error	alias_print(const char *name)
 	{
 		pair = hashmap_get(&alias->map, name);
 		if (pair == NULL)
-			return (alias->err);
+			return (alias->err = error(ERR_ALIAS_NOT_FOUND));
 		pairs = malloc(sizeof(t_key_value *) * 2);
 		if (pairs == NULL)
 			return (alias->err = error_sys());

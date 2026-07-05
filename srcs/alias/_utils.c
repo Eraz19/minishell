@@ -84,5 +84,6 @@ bool	is_token_alias_expandable(t_alias *alias, char *word)
 void	set_position_for_next_word(t_alias *alias, t_string *expansion)
 {
 	alias->disable_position = expansion != NULL
+		&& expansion->len > 0
 		&& is_blank(expansion->data[expansion->len - 1]);
 }

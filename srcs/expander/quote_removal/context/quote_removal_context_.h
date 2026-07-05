@@ -6,7 +6,6 @@
 typedef struct s_context_args
 {
 	t_word		*word;
-	t_context	context;
 	t_word		*word_expanded;
 	bool		(*is_end)(char, void *);
 	bool		(*is_in_whitelist)(char);

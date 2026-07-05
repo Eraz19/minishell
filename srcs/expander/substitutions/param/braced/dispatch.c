@@ -36,6 +36,8 @@ static t_error	braced_untriggered_action(
 
 t_error	braced_dispatch(t_expander *expander, t_param_exp *param_exp)
 {
+	if (param_exp->op_char == '#' || param_exp->op_char == '%')
+		return (braced_remove(expander, param_exp));
 	if (braced_triggered(param_exp))
 		return (braced_triggered_action(expander, param_exp));
 	return (braced_untriggered_action(expander, param_exp));

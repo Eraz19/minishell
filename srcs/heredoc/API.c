@@ -97,25 +97,30 @@ t_error	heredoc_expand_body(const t_string *path)
 	return (expansion_free(&expansion), string_free(&body), err);
 }
 
-t_error	heredoc_get_body_contexts(t_context_stack *out, const t_string *body)
+t_error	heredoc_prepare_for_expansion(
+			t_context_stack *out,
+			t_string *body)
 {
 	t_error					err;
 	t_lexer					lexer;
 	t_context_stack_item	*item;
-	t_string				body_dup;
+	t_string				lexer_body;
 
-	if (!string_dup(&body_dup, body))
-		return (error_sys());
+	err = lexer_remove_escaped_newlines(body, body_context_rules());
+	if (err.type)
+		return (err);
 	err = context_stack_item_init(&item, CONTEXT_HEREDOC);
 	if (err.type)
-		return (string_free(&body_dup), err);
+		return (err);
 	item->start = 0;
-	item->end = body_dup.len;
+	item->end = body->len;
 	err = context_stack_push(out, item);
 	if (err.type)
-		return (free(item), string_free(&body_dup), err);
+		return (free(item), err);
+	if (!string_dup(&lexer_body, body))
+		return (error_sys());
 	lexer_init(&lexer);
-	err = lexer_push_input(&lexer, &body_dup);
+	err = lexer_push_input(&lexer, &lexer_body);
 	if (!err.type)
 		err = lexer_track_context(&lexer, out, body_context_rules());
 	return (lexer_free(&lexer), err);

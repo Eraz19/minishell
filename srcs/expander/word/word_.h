@@ -11,6 +11,7 @@ typedef struct s_word_item_opt
 {
 	size_t		i;
 	t_context	quoted;
+	t_context	local_quoted;
 	t_context	context;
 	bool		escaped;
 	size_t		context_len;

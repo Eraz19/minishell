@@ -11,16 +11,11 @@ t_error	expand_positional_single(t_expander *expander, t_word_item_opt opt)
 	if (expander->err.type)
 		return (expander->err);
 	expander->err = params_get_from_const(param_name.data, &param_exp);
-	if (expander->err.type == ERR_VAR_NOT_FOUND || param_exp.len == 0)
-	{
-		if (!string_init(&param_exp, 0, "", -1))
-		{
-			expander->err = error_sys();
-			return (string_free(&param_name), expander->err);
-		}
-	}
-	else if (expander->err.type)
-		return (expander->err);
+	if (expander->err.type != ERR_NO && expander->err.type != ERR_VAR_NOT_FOUND)
+		return (string_free(&param_name), expander->err);
+	expander->err = error(ERR_NO);
+	if (param_exp.len == 0 && !string_init(&param_exp, 0, "", -1))
+		return (string_free(&param_name), expander->err = error_sys());
 	string_free(&param_name);
 	expander->err = from_str(&word_exp, &param_exp, opt);
 	if (expander->err.type)

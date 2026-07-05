@@ -24,7 +24,7 @@ t_error	word_remove(t_word *word, size_t start, size_t len)
 	i = 0;
 	while (i < len)
 	{
-		if (word->len <= start + i)
+		if (word->len <= start)
 			return (error(ERR_NO));
 		if (!vector_remove(word, start, &item))
 			return (error(ERR_NO));

@@ -7,8 +7,11 @@ t_error	get_body_line(t_body *body, char *EOL, size_t *i)
 	size_t	line_len;
 
 	start = body->item->input.data + *i;
-	*i += (size_t)(EOL - start) + 1;
-	line_len = (size_t)(EOL - start) + 1;
+	if (EOL == NULL)
+		line_len = str_len(start);
+	else
+		line_len = (size_t)(EOL - start) + 1;
+	*i += line_len;
 	if (!string_init(&body->line, 0, start, (long)line_len))
 		return (body->err = error_sys());
 	return (body->err);

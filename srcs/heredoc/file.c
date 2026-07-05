@@ -5,7 +5,7 @@
 #include "heredoc_.h"
 #include "posix_helpers.h"
 
-inline bool	max_id_reached(t_heredoc *heredoc)
+static inline bool	max_id_reached(t_heredoc *heredoc)
 {
 	t_error	err;
 	int		errno_;
@@ -45,8 +45,13 @@ t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path)
 			break ;
 		path->len = initial_len;
 	}
-	if (heredoc->err.type == ERR_NO || max_id_reached(heredoc))
+	if (max_id_reached(heredoc))
 		heredoc->err = error(ERR_HEREDOC_MAX_ID_REACHED);
-	error_print(heredoc->err, "heredoc", "unable to create file", NULL, NULL);
-	return (string_free(path), heredoc->err);
+	if (heredoc->err.type)
+	{
+		error_print(heredoc->err, "heredoc", "unable to create file",
+			NULL, NULL);
+		return (string_free(path), heredoc->err);
+	}
+	return (heredoc->err);
 }

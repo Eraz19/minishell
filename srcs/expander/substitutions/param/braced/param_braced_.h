@@ -20,6 +20,9 @@
  * @var s_param_exp::param_is_set True when the parameter is set, even if its
  *                                value is null.
  * @var s_param_exp::operand_word The unexpanded "word" following the operator.
+ * @var s_param_exp::op_span Number of items the operator spans (1 or 2); for
+ *                           the '#'/'%' operators, 2 marks the greedy '##'/'%%'
+ *                           form.
  */
 typedef struct s_param_exp
 {
@@ -30,6 +33,7 @@ typedef struct s_param_exp
 	bool			has_colon;
 	bool			param_is_set;
 	t_word			operand_word;
+	size_t			op_span;
 }	t_param_exp;
 
 /**
@@ -270,5 +274,61 @@ t_error	braced_assign(t_expander *expander,
 t_error	braced_error(t_expander *expander,
 			const t_string *name,
 			t_word *operand);
+
+/**
+ * @brief Recursively expands an operand word into a fresh result word.
+ *
+ * @param expander Expander state used to perform the sub-expansion.
+ * @param operand Operand word to expand (freed by this call).
+ * @param out Receives the expanded word.
+ * @return The resulting error descriptor (expander->err); .type is ERR_NO on
+ *         success.
+ */
+t_error	expand_operand(t_expander *expander, t_word *operand, t_word *out);
+
+/**
+ * @brief Tells whether a character is a supported ${name op word} operator.
+ *
+ * @param op Candidate operator character.
+ * @return true for '-', '=', '?', '+', '#' or '%', false otherwise.
+ */
+bool	is_valid_braced_op(char op);
+
+/**
+ * @brief Tells whether the operator at the word head is a doubled '##' / '%%'
+ *        (greedy) prefix/suffix removal operator.
+ *
+ * @param word Input word positioned on the first operator item.
+ * @param op The operator character read at index 0.
+ * @return true when op is '#' or '%' and the next item repeats it.
+ */
+bool	braced_op_is_doubled(const t_word *word, char op);
+
+/**
+ * @brief Expands the operand word into a shell pattern string, escaping any
+ *        quoted or backslash-escaped pattern metacharacter so it stays literal.
+ *
+ * @param expander Expander state used to perform the sub-expansion.
+ * @param operand Operand word to expand (freed by this call).
+ * @param out Receives the built, NUL-terminated pattern string.
+ * @return The resulting error descriptor (expander->err); .type is ERR_NO on
+ *         success.
+ */
+t_error	braced_build_pattern(
+			t_expander *expander,
+			t_word *operand,
+			t_string *out);
+
+/**
+ * @brief Applies the '#', '##', '%' or '%%' operator: removes the matching
+ *        prefix or suffix from the parameter value and pushes the result.
+ *
+ * @param expander Expander state whose result word is extended.
+ * @param param_exp Fully parsed working state of the expansion (its operand is
+ *                  freed by this call).
+ * @return The resulting error descriptor (expander->err); .type is ERR_NO on
+ *         success.
+ */
+t_error	braced_remove(t_expander *expander, t_param_exp *param_exp);
 
 #endif

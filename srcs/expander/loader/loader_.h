@@ -13,6 +13,7 @@ typedef struct s_loader
 	t_string				word;
 	t_context_stack			stack;
 	t_context				quoting;
+	t_context				local_quoting;
 	t_word					loaded_word;
 	t_context_stack			loading_stack;
 	t_context_stack_item	*context_item;
