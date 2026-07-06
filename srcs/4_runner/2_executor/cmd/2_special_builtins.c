@@ -25,7 +25,7 @@ bool	cmd_name_is_special_builtin(const char *name, t_builtin *out_builtin)
 		return (*out_builtin = builtin_colon, true);
 	else if (str_cmp(name, "continue") == 0)
 		return (*out_builtin = builtin_continue, true);
-	else if (str_cmp(name, "dot") == 0)
+	else if (str_cmp(name, ".") == 0)
 		return (*out_builtin = builtin_dot, true);
 	else if (str_cmp(name, "eval") == 0)
 		return (*out_builtin = builtin_eval, true);
