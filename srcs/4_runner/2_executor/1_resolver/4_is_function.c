@@ -1,5 +1,5 @@
 #include "libft.h"
-#include "cmd_priv.h"
+#include "cmd_resolver_priv.h"
 #include "functions.h"
 
 bool	cmd_name_is_function(

@@ -1,5 +1,5 @@
 #include "libft.h"
-#include "cmd_priv.h"
+#include "cmd_resolver_priv.h"
 #include "builtins.h"
 
 static inline bool	cmd_name_is_intrinsic_builtin2(

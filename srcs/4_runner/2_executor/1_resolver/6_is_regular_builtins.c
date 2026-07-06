@@ -1,5 +1,5 @@
 #include "libft.h"
-#include "cmd_priv.h"
+#include "cmd_resolver_priv.h"
 #include "builtins.h"
 
 bool	cmd_name_is_regular_builtin(const char *name, t_builtin *out_builtin)

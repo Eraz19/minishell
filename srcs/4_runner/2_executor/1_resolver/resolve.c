@@ -1,19 +1,7 @@
-#include "cmd.h"
-#include "cmd_priv.h"
+#include "cmd_resolver.h"
+#include "cmd_resolver_priv.h"
 #include "tokens.h"
 #include "expander.h"
-
-static inline t_exp_flag	cmd_regular_expansion_flags(void)
-{
-	return (EXP_TILDE_NORMAL | EXP_PARAM | EXP_CMD_SUB | EXP_ARITH
-		| EXP_FIELD_SPLIT | EXP_PATH_NAME | EXP_QUOTE_REMOVAL);
-}
-
-static inline t_exp_flag	cmd_assignment_expansion_flags(void)
-{
-	return (EXP_TILDE_ASSIGNMENT | EXP_PARAM | EXP_CMD_SUB | EXP_ARITH
-		| EXP_QUOTE_REMOVAL);
-}
 
 static inline void	cmd_compute_name(
 						t_functions *functions,

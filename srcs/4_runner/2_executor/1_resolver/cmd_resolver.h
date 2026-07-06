@@ -1,8 +1,8 @@
-#ifndef CMD_H
-# define CMD_H
+#ifndef CMD_RESOLVER_H
+# define CMD_RESOLVER_H
 
 # include "error.h"
-# include "cmd_priv.h"
+# include "cmd_resolver_priv.h"
 # include "tokens.h"
 
 t_error	cmd_resolve(

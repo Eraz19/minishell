@@ -1,7 +1,7 @@
-#ifndef CMD_PRIV_H
-# define CMD_PRIV_H
+#ifndef CMD_RESOLVER_PRIV_H
+# define CMD_RESOLVER_PRIV_H
 
-# include "libft.h"
+# include "cmd_expansion.h"
 # include "builtins.h"
 # include "functions.h"
 # include <stdbool.h>
@@ -15,9 +15,6 @@ typedef enum e_cmd_type
 	CMD_BUILTIN,
 	CMD_EXTERNAL
 }	t_cmd_type;
-
-// vector of t_expansion (t_expansion is a vector of t_string)
-typedef t_vector	t_cmd_expansions;
 
 typedef struct s_cmd_resolution
 {
