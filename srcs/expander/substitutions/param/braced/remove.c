@@ -24,20 +24,20 @@ static t_error	remove_prefix(
 	bool largest,
 	t_string *out)
 {
-	size_t	k;
+	size_t	i;
 	size_t	cut;
 
 	cut = 0;
-	k = 0;
-	while (k <= value->len)
+	i = 0;
+	while (i <= value->len)
 	{
-		if (match_pattern(pattern, value->data, k))
+		if (match_pattern(pattern, value->data, i))
 		{
-			cut = k;
+			cut = i;
 			if (!largest)
 				break ;
 		}
-		k++;
+		i++;
 	}
 	if (!string_init(out, 0, value->data + cut, (long)(value->len - cut)))
 		return (error_sys());
@@ -50,20 +50,20 @@ static t_error	remove_suffix(
 	bool largest,
 	t_string *out)
 {
-	size_t	k;
+	size_t	i;
 	size_t	cut;
 
 	cut = 0;
-	k = 0;
-	while (k <= value->len)
+	i = 0;
+	while (i <= value->len)
 	{
-		if (match_pattern(pattern, value->data + value->len - k, k))
+		if (match_pattern(pattern, value->data + value->len - i, i))
 		{
-			cut = k;
+			cut = i;
 			if (!largest)
 				break ;
 		}
-		k++;
+		i++;
 	}
 	if (!string_init(out, 0, value->data, (long)(value->len - cut)))
 		return (error_sys());

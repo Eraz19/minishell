@@ -4,6 +4,7 @@
 #include "heredoc.h"
 #include "heredoc_.h"
 #include "expander.h"
+#include "expansion_.h"
 #include "heredoc_queue_.h"
 
 t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode)
@@ -88,12 +89,14 @@ t_error	heredoc_expand_body(const t_string *path)
 	string_free(&body);
 	string_init(&body, 0, NULL, 0);
 	if (expansion.len != 1)
-		err = error(ERR_EXP_RESULT_INCOHERENT);
-	else
-		err = expansion_get(&body, &expansion, 0);
+		return (expansion_free(&expansion), string_free(&body),
+			error(ERR_EXP_RESULT_INCOHERENT));
+	err = expansion_fpop(&body, &expansion);
 	if (err.type)
-		return (string_free(&body), expansion_free(&expansion), err);
+		return (expansion_free(&expansion), string_free(&body), err);
 	err = save_body_in_file(path, &body);
+	if (err.type)
+		return (expansion_free(&expansion), string_free(&body), err);
 	return (expansion_free(&expansion), string_free(&body), err);
 }
 

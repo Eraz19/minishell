@@ -66,10 +66,7 @@ t_error	scanner_reset(void);
 
 t_error	scanner_get_next_token(t_token *token);
 
-t_error	scanner_report_io_here(
-			t_string *out_path,
-			t_token *delim,
-			t_here_mode mode);
+t_error	scanner_report_io_here(t_string *out, t_token *delim, t_here_mode mode);
 
 t_error	scanner_heredoc_read(void);
 

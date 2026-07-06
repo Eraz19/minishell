@@ -4,9 +4,9 @@
 #include "param_expansion_.h"
 
 static t_error	braced_length_finish(
-	t_expander *expander,
-	t_string *value,
-	t_word_item_opt opt)
+					t_expander *expander,
+					t_string *value,
+					t_word_item_opt opt)
 {
 	char		*digits;
 	t_string	len_str;
@@ -36,9 +36,9 @@ static t_error	braced_count(t_expander *expander, t_word_item_opt opt)
 }
 
 static t_error	braced_length_named(
-	t_expander *expander,
-	size_t body_len,
-	t_word_item_opt opt)
+					t_expander *expander,
+					size_t body_len,
+					t_word_item_opt opt)
 {
 	t_string	name;
 	t_string	value;

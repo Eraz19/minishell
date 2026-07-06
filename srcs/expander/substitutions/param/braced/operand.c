@@ -2,10 +2,10 @@
 #include "expander_substitutions_.h"
 
 t_error	parse_braced_op(
-	t_expander *expander,
-	bool *colon,
-	char *op,
-	size_t *op_items)
+			t_expander *expander,
+			bool *colon,
+			char *op,
+			size_t *op_items)
 {
 	t_word_item	first;
 	t_word_item	second;
@@ -32,9 +32,9 @@ t_error	parse_braced_op(
 }
 
 t_error	braced_take_operand(
-	t_expander *expander,
-	size_t operand_len,
-	t_word *operand)
+			t_expander *expander,
+			size_t operand_len,
+			t_word *operand)
 {
 	size_t		i;
 	t_word_item	item;
@@ -79,8 +79,10 @@ t_error	expand_operand(t_expander *expander, t_word *operand, t_word *out)
 	return (expander->err);
 }
 
-t_error	braced_operand_str(t_expander *expander, t_word *operand,
-		t_string *out)
+t_error	braced_operand_str(
+			t_expander *expander,
+			t_word *operand,
+			t_string *out)
 {
 	t_word	expanded;
 

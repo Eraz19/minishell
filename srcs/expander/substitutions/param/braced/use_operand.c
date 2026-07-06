@@ -12,9 +12,9 @@ static t_error	collect_operand_field(t_expander *expander)
 }
 
 static t_error	operand_to_fields(
-	t_expander *expander,
-	t_word *operand,
-	t_fields *out)
+					t_expander *expander,
+					t_word *operand,
+					t_fields *out)
 {
 	t_word		saved_word;
 	t_word		saved_word_exp;
@@ -50,9 +50,9 @@ static t_error	emit_field_break(t_expander *expander)
 }
 
 static t_error	emit_operand_fields(
-	t_expander *expander,
-	t_fields *fields,
-	t_word_item_opt opt)
+					t_expander *expander,
+					t_fields *fields,
+					t_word_item_opt opt)
 {
 	size_t		i;
 	t_word		field;
@@ -77,9 +77,9 @@ static t_error	emit_operand_fields(
 }
 
 t_error	braced_use_operand(
-	t_expander *expander,
-	t_word *operand,
-	t_word_item_opt opt)
+			t_expander *expander,
+			t_word *operand,
+			t_word_item_opt opt)
 {
 	t_fields	fields;
 
