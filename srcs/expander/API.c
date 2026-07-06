@@ -8,6 +8,15 @@
 #include "path_name_expansion_.h"
 #include "expander_substitutions_.h"
 
+static t_error	expander_cleanup(t_expander *expander)
+{
+	t_error	err;
+
+	err = expander->err;
+	expander_free(expander);
+	return (err);
+}
+
 t_error	expand_word(t_expansion *expansion, t_expander_args *args)
 {
 	t_expander	expander;
@@ -15,26 +24,26 @@ t_error	expand_word(t_expansion *expansion, t_expander_args *args)
 	expander_init(&expander);
 	expansion_init(expansion);
 	if (expander_load(&expander, args).type)
-		return (expander_free(&expander), expander.err);
+		return (expander_cleanup(&expander));
 	if (substitutions(&expander).type)
-		return (expander_free(&expander), expander.err);
+		return (expander_cleanup(&expander));
 	if (flag_is_active((uint)expander.flags, EXP_FIELD_SPLIT))
 	{
 		if (field_splitting(&expander).type)
-			return (expander_free(&expander), expander.err);
+			return (expander_cleanup(&expander));
 	}
 	if (flag_is_active((uint)expander.flags, EXP_PATH_NAME))
 	{
 		if (path_name_expansion(&expander).type)
-			return (expander_free(&expander), expander.err);
+			return (expander_cleanup(&expander));
 	}
 	if (flag_is_active((uint)expander.flags, EXP_QUOTE_REMOVAL))
 	{
 		if (quote_removal(&expander).type)
-			return (expander_free(&expander), expander.err);
+			return (expander_cleanup(&expander));
 	}
-	expander.err = expansion_load(&expander.fields, expansion);
-	return (expander_free(&expander), expander.err);
+	expander.err = expansion_load(expansion, &expander.fields);
+	return (expander_cleanup(&expander));
 }
 
 t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
@@ -51,17 +60,20 @@ t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
 t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
 {
 	t_error			err;
+	t_string		body;
 	t_expander_args	args;
 	t_context_stack	contexts;
 
 	context_stack_init(&contexts);
-	err = heredoc_get_body_contexts(&contexts, src);
+	if (!string_dup(&body, src))
+		return (context_stack_free(&contexts), error_sys());
+	err = heredoc_prepare_for_expansion(&contexts, &body);
 	if (err.type)
-		return (context_stack_free(&contexts), err);
-	args.value = *src;
+		return (context_stack_free(&contexts), string_free(&body), err);
+	args.value = body;
 	args.flags = flags;
 	args.contexts = &contexts;
 	args.assignment_offset = -1;
 	err = expand_word(out, &args);
-	return (context_stack_free(&contexts), err);
+	return (context_stack_free(&contexts), string_free(&body), err);
 }

@@ -20,17 +20,15 @@ t_error	scanner_get_next_token(t_token *token)
 		return (scanner_alias_expand(scanner, token));
 	return (scanner->err);
 }
-t_error	scanner_report_io_here(
-			t_string *out_path,
-			t_token *delim,
-			t_here_mode mode)
+
+t_error	scanner_report_io_here(t_string *out, t_token *delim, t_here_mode mode)
 {
 	t_scanner	*scanner;
 
 	scanner = shell_get_scanner();
 	if (scanner == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	scanner->err = heredoc_register(out_path, delim, mode);
+	scanner->err = heredoc_register(out, delim, mode);
 	return (scanner->err);
 }
 
@@ -43,9 +41,7 @@ t_error	scanner_heredoc_read(void)
 	if (scanner == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (scanner->lexer.input == NULL)
-	{
 		scanner->err = heredoc_read_body_from_input(NULL, NULL);
-	}
 	else
 	{
 		item = scanner->lexer.input;

@@ -22,6 +22,7 @@ static t_error	history_build_from_current(t_history *state, t_string *content)
 		return (state->err);
 	else if (state->current_input.data[state->current_input.len - 1] == '\n')
 	{
+		state->current_input.data[state->current_input.len - 1] = '\0';
 		state->current_input.len--;
 		if (state->current_input.len == 0)
 			return (state->err);

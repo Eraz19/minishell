@@ -16,7 +16,7 @@ t_word_item	word_item_init(char c, t_word_item_opt opt)
 	t_word_item	item;
 
 	item.c = c;
-	if (is_context_quoting(opt.quoted))
+	if (!is_context_quoting(opt.quoted) && opt.quoted != CONTEXT_HEREDOC)
 		opt.quoted = CONTEXT_NONE;
 	item.opt = opt;
 	return (item);

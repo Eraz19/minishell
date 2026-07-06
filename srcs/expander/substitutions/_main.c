@@ -44,7 +44,9 @@ t_error	substitution_word(t_expander *expander)
 	}
 	word_free(&expander->word);
 	expander->err = fields_push(&expander->fields_exp, expander->word_exp);
-	return (expander->err);
+	if (expander->err.type)
+		return (expander->err);
+	return (word_init(&expander->word_exp), expander->err);
 }
 
 t_error	substitutions(t_expander *expander)
@@ -57,5 +59,6 @@ t_error	substitutions(t_expander *expander)
 	}
 	fields_free(&expander->fields);
 	expander->fields = expander->fields_exp;
+	fields_init(&expander->fields_exp);
 	return (expander->err);
 }

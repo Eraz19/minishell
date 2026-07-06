@@ -259,6 +259,10 @@ t_error			lexer_track_context(
 					t_context_stack *out,
 					t_lexer_context_args args);
 
+t_error			lexer_remove_escaped_newlines(
+					t_string *word,
+					t_lexer_context_args args);
+
 /* ------------------------------------------------------------------------- */
 /* Engine primitives (for caller-provided rules)                            */
 /* ------------------------------------------------------------------------- */

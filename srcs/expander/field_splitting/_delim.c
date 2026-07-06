@@ -2,7 +2,14 @@
 
 bool	is_delim(t_word_item item, const t_string *ifs)
 {
-	return (item.opt.is_expand_res && string_get_index_c(ifs, item.c) >= 0);
+	bool	is_ifs_char;
+	bool	is_unquoted;
+	bool	is_expand_res;
+
+	is_unquoted = !item.opt.quoted;
+	is_expand_res = item.opt.is_expand_res;
+	is_ifs_char = string_get_index_c(ifs, item.c) >= 0;
+	return (is_expand_res && is_ifs_char && is_unquoted);
 }
 
 t_error	delim_field(t_expander *expander)

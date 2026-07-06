@@ -10,9 +10,9 @@ static t_word_item_opt	braced_result_opt(t_word_item_opt in)
 }
 
 t_error	braced_push_value(
-	t_expander *expander,
-	const t_string *val,
-	t_word_item_opt opt)
+			t_expander *expander,
+			const t_string *val,
+			t_word_item_opt opt)
 {
 	t_word	word_exp;
 
@@ -53,9 +53,9 @@ t_error	braced_lookup(t_expander *expander, const t_string *name, t_string *out)
 }
 
 t_error	braced_finish(
-	t_expander *expander,
-	t_string *value,
-	t_word_item_opt opt)
+			t_expander *expander,
+			t_string *value,
+			t_word_item_opt opt)
 {
 	expander->err = braced_push_value(expander, value, opt);
 	string_free(value);

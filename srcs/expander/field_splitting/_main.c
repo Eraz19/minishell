@@ -41,6 +41,9 @@ t_error	field_splitting_word(t_expander *expander)
 		if (!last_delim_white_space && expander->word_exp.len > 0)
 			return (delim_field(expander));
 		expander->err = fields_push(&expander->fields_exp, expander->word_exp);
+		if (expander->err.type)
+			return (expander->err);
+		word_init(&expander->word_exp);
 	}
 	return (expander->err);
 }
@@ -55,5 +58,6 @@ t_error	field_splitting(t_expander *expander)
 	}
 	fields_free(&expander->fields);
 	expander->fields = expander->fields_exp;
+	fields_init(&expander->fields_exp);
 	return (expander->err);
 }

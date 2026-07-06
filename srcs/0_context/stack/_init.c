@@ -7,9 +7,14 @@ void	context_stack_init(t_context_stack *stack)
 	vector_init(stack, sizeof(t_context_stack_item *), 0);
 }
 
+static void	free_stack_item(void *item)
+{
+	free(*(t_context_stack_item **)item);
+}
+
 void	context_stack_free(t_context_stack *stack)
 {
-	vector_free(stack, free);
+	vector_free(stack, free_stack_item);
 	*stack = (t_context_stack){0};
 }
 

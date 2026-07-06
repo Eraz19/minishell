@@ -2,18 +2,19 @@
 #include "param_braced_.h"
 
 t_error	braced_use_value(
-	t_expander *expander,
-	const t_string *value,
-	t_word_item_opt opt, t_word *operand)
+			t_expander *expander,
+			const t_string *value,
+			t_word_item_opt opt,
+			t_word *operand)
 {
 	word_free(operand);
 	return (braced_push_value(expander, value, opt));
 }
 
 t_error	braced_error(
-	t_expander *expander,
-	const t_string *name,
-	t_word *operand)
+			t_expander *expander,
+			const t_string *name,
+			t_word *operand)
 {
 	t_string	msg;
 
@@ -48,10 +49,10 @@ static bool	is_assignable_name(const t_string *name)
 }
 
 t_error	braced_assign(
-	t_expander *expander,
-	const t_string *name,
-	t_word_item_opt opt,
-	t_word *operand)
+			t_expander *expander,
+			const t_string *name,
+			t_word_item_opt opt,
+			t_word *operand)
 {
 	t_string	operand_str;
 

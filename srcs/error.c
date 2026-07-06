@@ -102,6 +102,8 @@ const char	*error_to_string(t_error err)
 		return ("param bad substitution");
 	else if (err.type == ERR_BAD_SUBSTITUTION)
 		return ("bad substitution");
+	else if (err.type == ERR_ALIAS_NOT_FOUND)
+		return ("not found");
 	return ("unknown");
 }
 

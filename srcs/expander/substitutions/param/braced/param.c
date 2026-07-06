@@ -46,17 +46,15 @@ static t_error	braced_operator(
 	t_param_exp *param_exp,
 	size_t remaining)
 {
-	size_t	op_items;
-
 	expander->err = parse_braced_op(expander,
 						&param_exp->has_colon,
 						&param_exp->op_char,
-						&op_items);
+						&param_exp->op_span);
 	if (expander->err.type)
 		return (string_free(&param_exp->param_name), expander->err);
 	expander->err = braced_take_operand(
 						expander,
-						remaining - op_items,
+						remaining - param_exp->op_span,
 						&param_exp->operand_word);
 	if (expander->err.type)
 		return (string_free(&param_exp->param_name), expander->err);

@@ -39,7 +39,9 @@ t_error	heredoc_load(t_heredoc *heredoc);
 
 t_error	heredoc_expand_body(const t_string *path);
 t_error	heredoc_read_body_from_input(const t_string *input, size_t *start);
-t_error	heredoc_get_body_contexts(t_context_stack *out, const t_string *body);
 t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode);
+t_error	heredoc_prepare_for_expansion(
+			t_context_stack *out,
+			t_string *body);
 
 #endif
