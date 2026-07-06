@@ -49,6 +49,9 @@ bool	eval_char_class_exp(const char *pattern, char c, size_t *i)
 
 bool	eval_col_symbol_exp(const char *pattern, char c, size_t *i)
 {
+	if (pattern[*i + 2] == '\0' || pattern[*i + 3] != '.'
+		|| pattern[*i + 4] != ']')
+		return (eval_bracket_char(pattern, c, i));
 	if (pattern[*i + 2] == c)
 		return ((*i) += 5, true);
 	else
@@ -57,6 +60,9 @@ bool	eval_col_symbol_exp(const char *pattern, char c, size_t *i)
 
 bool	eval_equ_class_exp(const char *pattern, char c, size_t *i)
 {
+	if (pattern[*i + 2] == '\0' || pattern[*i + 3] != '='
+		|| pattern[*i + 4] != ']')
+		return (eval_bracket_char(pattern, c, i));
 	if (pattern[*i + 2] == c)
 		return ((*i) += 5, true);
 	else

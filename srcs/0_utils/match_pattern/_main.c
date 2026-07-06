@@ -11,9 +11,15 @@ bool	match_bracket_c(const char *pattern, size_t len, char c)
 	is_negated = set_negation(pattern + 1, &i);
 	while (i <= len)
 	{
-		if (pattern[i + 1] == '-' && pattern[i + 2] != ']')
+		if (pattern[i] == '\\')
 		{
-			if (eval_range(pattern, c, &i))	
+			if (eval_escaped_char(pattern, c, &i))
+				return (!is_negated);
+		}
+		else if (pattern[i + 1] == '-' && pattern[i + 2] != ']'
+			&& pattern[i + 2] != '\\')
+		{
+			if (eval_range(pattern, c, &i))
 				return (!is_negated);
 		}
 		else if (pattern[i] == '[')
@@ -35,7 +41,9 @@ bool	valid_bracket_exp_len(const char *pattern, size_t *len)
 		(*len)++;
 	while (pattern[*len] != '\0' && pattern[*len] != ']')
 	{
-		if (match_char(pattern[*len], '[', len))
+		if (pattern[*len] == '\\' && pattern[(*len) + 1] != '\0')
+			(*len) += 2;
+		else if (match_char(pattern[*len], '[', len))
 			valid_sub_exp_len(pattern, len);
 		else
 			(*len)++;
