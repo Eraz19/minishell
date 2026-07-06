@@ -36,7 +36,7 @@ t_error	heredoc_read_body(
 {
 	size_t			i;
 	t_heredoc_item	item;
-	t_body	body;
+	t_body			body;
 
 	i = 0;
 	heredoc->err = heredoc_queue_pop(&heredoc->queue, &item);

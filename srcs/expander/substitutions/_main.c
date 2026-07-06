@@ -16,9 +16,9 @@ t_error	substitution_char(t_expander *expander)
 	if (is_tilde_expansion(expander, &item))
 		return (tilde_expansion(expander));
 	else if (is_dollar_squote_expansion(&item, expander->flags))
-			return (dollar_squote_expansion(expander));
+		return (dollar_squote_expansion(expander));
 	else if (is_param_expansion(expander, &item))
-			return (param_expansion(expander));
+		return (param_expansion(expander));
 	else if (is_cmd_substitution(&item, expander->flags))
 		return (cmd_substitution(expander));
 	else if (is_backtick_substitution(&item, expander->flags))
