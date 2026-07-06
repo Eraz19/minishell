@@ -1,59 +1,47 @@
+# TODO
+
+- path search
+- ⚠️ `function_set()` + `function_unset()`
+- Move `t_tokens` from `runner` to `token` module ?
+- Use `t_tokens` instead of `t_vector` of `t_token *`
+
 # REDIRECTOR
 
-- ⚠️ Avoid `fd` collisions
-- rename `ERR_LIBC` -> `ERR_SYS`
+1. `cmd_expander` avec une API du style `t_error cmd_expand(t_vector *words, bool *out_has_cmd_name, char ***out_argv)`
+2. `cmd_resolver` avec une API du style `t_error cmd_resolve(const char *cmd_name, t_cmd_type *out_cmd_type)` avec t_cmd_type qui est une enum CMD_NONE / CMD_SPECIAL_BUILTIN / CMD_FUNCTION / CMD_OTHER
+3. `cmd_assignator` avec une API du style `t_error cmd_assign(t_vector *assignments)` ici j'ai du mal à saisir ce que signifie "environnement temporaire/exporté" : temporaire je comprends "revert assignment after command execution" mais "exporté" je vois pas du tout à quoi ça correspond ? Ça veut dire qu'on ajoute les assignments à envp / environ mais on n'effectue pas les assignments dans les params du shell ??
+4. `redirector` : déjà implémenté, l'orchestrator aura juste à le call le moment venu (on pourra si besoin le renommer `cmd_redirector` pour uniformiser le naming)
+5. `cmd_invoker` à faire en dernier mais ça j'ai pas trop de question dessus pour l'instant à priori
+6. `cmd_orchestrator` qui appelle tous les sous-modules des points précédents dans le bon ordre
 
 # ALEXANDER
 
-- Ajout de `posix_close_if_open()` pour ignorer `EBADF`
+- `token`:
+	- ⚠️ `assignment_offset`: incorrect value (computed from input start instead of token start, e.g. `A=1 B=2`)
+- `expander`:
+	- ⚠️ `tilde prefix`:
+		- commence au `~` reconnu selon le contexte
+		- s'arrête au **prochain unquoted** `/` ou à la fin du word (ou **prochain unquoted** `:` uniquement si `EXP_TILDE_ASSIGNMENT`)
+		- si `tilde prefix` == `~` => home du user **courant**
+		- si `tilde prefix` == `~user` => home du user **spécifié** (ex: `~root` = home du user `root`)
+		- `UB` si les caractères entre `~` et la fin du `tilde prefix` ne forment pas un `portable login name`, ou si le user n’existe pas
+	- ⚠️ `EXP_TILDE_NORMAL` :
+		- expand le `tilde prefix` si `~` est le **premier** caractère du word (et **unquoted**)
+	- ⚠️ `EXP_TILDE_ASSIGNMENT` :
+		- expand le `tilde prefix` si le caractère précédent est le `=` de l'assignment (cf `token->assignment_offset`)
+		- expand le `tilde prefix` si le caractère précédent est un **unquoted** `:`
 - ⚠️ `shell_should_interrupt()`:
 	- update callers to pass `err` (avoiding `errno` modification while processing)
-- ⚠️ `posix_close()`:
-	- should retry on other platforms than Linux ?
-	- Or retry anyway but ignore EBADF when retrying ?
-- ⚠️ `expander_expand_filename()` (for `redirection`): "Pathname expansion shall not be performed on the word by a non-interactive shell; an interactive shell may perform it"
+- `hashmap_get()`:
+	- devrait renvoyer uniquement la value (read-only) sinon le caller risque de modifier la `key` et donc de casser la map
+- Ajout de `posix_close_if_open()` pour ignorer `EBADF`
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
 # WIP
 
-- ⚠️ fix `string_take()` usages for `ssize_t len` new signature
-
-- 🚧 **ALL REPO**:
-	- 🚧 `const` partout
-	- 🚧 `inline` partout
-	- 🚧 `assert` partout
-	- 🚧 **include** prototype header
-	- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
-	- Vérifier que les retours des `error_print()` ne sont pas ignorés car c'est cette fonction qui update `err.printed`
-
-- `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
-- `specials->zero` convert to `t_string` to avoid multiple `str_len()` when accessing it ?
-- `specials->source` convert to `t_string` to avoid multiple `str_len()` when accessing it ?
-
 - 🚧 `runner`:
 	- 🚧 unlink heredoc path after use
-- 🚧 `posix_read()`:
-	- 🚧 implement it using `string_read_*()` API ? (⚠️ remove auto retry on EINTR in libft !)
-- 🚧 `libft`:
-	- 🚧 update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
-	- 🚧 update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
-- 🚧 `params`:
-	- 🚧 `options`:
-		- 🚧 `options_get()`: `char *` => `t_buff`
-	- 🚧 `specials`:
-		- 🚧 `source`: `char *` => `t_buff`
-		- 🚧 `zero`: `char *` => `t_buff`
-	- 🚧 `positionals`:
-		- 🚧 `params`: `char **` => `t_vector(t_buff)`
-	- 🚧 `variables`:
-		- 🚧 `var.name`: `char *` => `t_buff`
-		- 🚧 `var.value`: `char *` => `t_buff`
-		- 🚧 `var.has_value`: add it to make difference before set without value and set with empty value
-	- 🚧 `params`:
-		- 🚧 update all API from `char *` to `t_buff` (and from `char **` to `t_vector(t_buff)`)
 - 🚧 `parser`:
-	- 🚧 use `token->assignment_offset` (-1 if missing) in `ASSIGNMENT_WORD` qualifier
-	- 🚧 call `scanner_reset()` (+ `parser_reset()` ?) on syntax errors
 	- 🚧 add `t_token *closing_par` argument:
 		- 🚧 if `closing_par == NULL` => normal mode
 		- 🚧 else:
@@ -61,13 +49,24 @@
 			- 🚧 on `subshell` reduction => shallow copy last token in `closing_par` + `return`
 - 🚧 `subshell`:
 	- 🚧 create module (must be compatible with `command_substitution` search)
-- 🚧 `redirector`:
-	- 🚧 finish module (need `t_token` in `AST`)
-- 🚧 Split `builder/parser/qualifiers/build_table.c` into multiple files
-- 🚧 Include prototypes `.h` in all `.c`
-- 🚧 Check all `error_sys()`:
-	- 🚧 must be called before any `free()` / `libc` call
-- 🚧 **ALL**: add doc
+- 🚧 `builder`:
+	- 🚧 Split `builder/parser/qualifiers/build_table.c` into multiple files
+- 🚧 `posix_read()`:
+	- 🚧 implement it using `string_read_*()` API ? (⚠️ remove auto retry on EINTR in libft !)
+- 🚧 `libft`:
+	- 🚧 update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
+	- 🚧 update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
+- `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
+- 🚧 **ALL REPO**:
+	- 🚧 `const` partout
+	- 🚧 `inline` partout
+	- 🚧 `assert` partout
+	- 🚧 `error_sys()` must be called before any `free()` / `libc` call
+	- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
+	- 🚧 `error_print()` return value must **NOT** be ignored (for `err.printed` update)
+	- 🚧 add doc
+	- 🚧 **include** prototype header
+	- rename `ERR_LIBC` -> `ERR_SYS`
 
 ## RESOURCES
 
@@ -82,13 +81,6 @@
 - [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
 - [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
 - [2.9.2 Pipelines](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_02)
-
-1. Expand `words` (see 2.9.1.1:2)
-2. Redirect (see 2.7)
-3. Expand `assignments`
-> ⚠️ Steps `2` and `3` **may** be reversed if :
->	- no command name results from step 1
->	- the command name matches the name of a special built-in utility (see 2.15)
 
 ## IMPLEMENTATION ORDER
 
