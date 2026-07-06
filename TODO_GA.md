@@ -16,8 +16,6 @@
 
 # ALEXANDER
 
-- `token`:
-	- ⚠️ `assignment_offset`: incorrect value (computed from input start instead of token start, e.g. `A=1 B=2`)
 - `expander`:
 	- ⚠️ `tilde prefix`:
 		- commence au `~` reconnu selon le contexte
@@ -30,10 +28,11 @@
 	- ⚠️ `EXP_TILDE_ASSIGNMENT` :
 		- expand le `tilde prefix` si le caractère précédent est le `=` de l'assignment (cf `token->assignment_offset`)
 		- expand le `tilde prefix` si le caractère précédent est un **unquoted** `:`
-- ⚠️ `shell_should_interrupt()`:
-	- update callers to pass `err` (avoiding `errno` modification while processing)
-- `hashmap_get()`:
-	- devrait renvoyer uniquement la value (read-only) sinon le caller risque de modifier la `key` et donc de casser la map
+- `t_hashmap`:
+	- `hashmap_get()`:
+		- devrait renvoyer uniquement la value
+	- `hashmap_get_all()`:
+		- devrait renvoyer un `t_vector` de `t_key_value`
 - Ajout de `posix_close_if_open()` pour ignorer `EBADF`
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 
@@ -42,11 +41,12 @@
 - 🚧 `runner`:
 	- 🚧 unlink heredoc path after use
 - 🚧 `parser`:
-	- 🚧 add `t_token *closing_par` argument:
-		- 🚧 if `closing_par == NULL` => normal mode
-		- 🚧 else:
-			- 🚧 input contains `(`
-			- 🚧 on `subshell` reduction => shallow copy last token in `closing_par` + `return`
+	- 🚧 implement `runner_find_cmd_sub_closing()` (see `TODO.c`)
+		- 🚧 add `t_token *closing_par` argument:
+			- 🚧 if `closing_par == NULL` => normal mode
+			- 🚧 else:
+				- 🚧 input contains `(`
+				- 🚧 on `subshell` reduction => shallow copy last token in `closing_par` + `return`
 - 🚧 `subshell`:
 	- 🚧 create module (must be compatible with `command_substitution` search)
 - 🚧 `builder`:
@@ -66,6 +66,7 @@
 	- 🚧 `error_print()` return value must **NOT** be ignored (for `err.printed` update)
 	- 🚧 add doc
 	- 🚧 **include** prototype header
+	- ⚠️ don't call `undefined_behaviour()` when it's `unspecified`
 	- rename `ERR_LIBC` -> `ERR_SYS`
 
 ## RESOURCES

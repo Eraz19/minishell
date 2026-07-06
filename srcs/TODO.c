@@ -14,7 +14,7 @@ t_error		shell_should_interrupt(void)
 /* ---------- TODO: runner/subshell ---------- */
 
 // Voici les cas possibles
-//	- EOI avant cmd_sub closing tokan.end == -1
+//	- EOI avant cmd_sub closing token.end == -1
 //	- cmd_sub closing detected token.end == lexer_i du lexer interne
 t_error	runner_find_cmd_sub_closing(t_token *out, t_string *input)
 {
