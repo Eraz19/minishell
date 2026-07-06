@@ -1,6 +1,6 @@
 #include "tokens.h"
 
-t_error	tokens_get(t_tokens *tokens, size_t i, t_token **out_token_ptr)
+t_error	tokens_get(const t_tokens *tokens, size_t i, t_token **out_token_ptr)
 {
 	if (i >= tokens->len)
 		return (error(ERR_INDEX_OUT_OF_BOUND));
