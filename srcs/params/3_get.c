@@ -69,7 +69,7 @@ t_error	params_get_positionals(const t_positionals **dst)
 	return (positionals_get(&params->positionals_stack, dst));
 }
 
-t_error	params_build_envp(char ***dst_envp)
+t_error	params_build_envp(t_vector *dst_envp)
 {
 	t_params	*params;
 

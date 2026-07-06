@@ -75,14 +75,22 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp);
 /* ************************************************************************* */
 
 /**
- * @brief Build a process environment array from exported variables.
+ * @brief Build the exported environment as a @ref t_vector of C-strings.
  *
- * The returned array and each entry are owned by the caller.
+ * Only exported variables with a non-NULL value are emitted.
  *
- * @param dst_envp Destination array pointer (borrowed).
+ * @warning The resulting array is not NUL-terminated.
+ *
+ * @note @p dst_envp is initialized by the function with @c sizeof(char *)
+ *       items.
+ * @note The caller owns each generated C-string and must free @p dst_envp with
+ *       @ref vector_free() using @ref free_char_ptr_void() as callback.
+ *
+ * @param dst_envp Destination vector receiving owned @c char* items
+ *                 (borrowed, initialized by the function).
  * @return @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC on failure.
  */
-t_error	params_build_envp(char ***dst_envp);
+t_error	params_build_envp(t_vector *dst_envp);
 
 /**
  * @brief Read a scalar parameter by name into a fresh string.
