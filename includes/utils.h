@@ -54,14 +54,34 @@ t_error	deserialize(const char *src, t_string *dst);
  */
 t_error	deserialize_all(const char *src, t_vector *dst);
 
+/**
+ * @brief Free a @c char* item through a generic @c void* callback signature.
+ *
+ * Wrapper around @c free() intended for containers storing @c char* items,
+ * such as @ref t_vector.
+ *
+ * @warning @p ptr must point to a valid @c char* slot.
+ *
+ * @param ptr Pointer to a @c char* item passed as @c void* (borrowed).
+ */
+void	free_char_ptr_void(void *ptr);
 
-// home/user lookup reimplemented over /etc/passwd (getpwnam is forbidden).
-// On success returns ERR_NO and sets *out_pw either to a pointer to static
-// storage (invalidated by the next call) when a matching entry is found, or to
-// NULL when name is NULL or no entry matches (not an error: the caller leaves
-// the tilde literal). On a read failure returns ERR_LIBC, or ERR_INTERRUPTED if
-// a signal interrupted the open; *out_pw is set to NULL in both cases.
-// @ret ERR_INTERRUPTED / ERR_LIBC
+/**
+ * @brief Look up a passwd entry by login name using @c /etc/passwd.
+ *
+ * On success, @p out_pw receives either a borrowed pointer to internal static
+ * storage when a matching entry exists, or @c NULL when @p name is @c NULL or
+ * no entry matches.
+ *
+ * @warning The returned passwd structure is invalidated by the next call to
+ *          @ref ft_getpwnam().
+ *
+ * @param name Login name to search, or @c NULL to skip lookup
+ *             (borrowed, read-only).
+ * @param out_pw Destination receiving the borrowed passwd entry or @c NULL
+ *               (borrowed).
+ * @return @c ERR_NO, @c ERR_INTERRUPTED or @c ERR_LIBC.
+ */
 t_error	ft_getpwnam(const char *name, struct passwd **out_pw);
 
 /**
@@ -109,6 +129,18 @@ t_error	serialize(const char *src, t_string *dst);
  */
 t_error	scan_set_mode(t_scanner_mode *mode);
 
+/**
+ * @brief Match a shell-style pattern against a bounded character sequence.
+ *
+ * Supported metacharacters are @c * @c ? @c [] and backslash escaping.
+ * Matching consumes exactly @p len bytes from @p str .
+ *
+ * @param pattern NUL-terminated pattern to evaluate (borrowed, read-only).
+ * @param str Character sequence to match (borrowed, read-only).
+ * @param len Number of bytes available in @p str.
+ * @return True when @p pattern matches exactly the first @p len bytes of
+ *         @p str, false otherwise.
+ */
 bool	match_pattern(const char *pattern, const char *str, size_t len);
 
 #endif
