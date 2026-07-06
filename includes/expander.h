@@ -7,9 +7,8 @@
 
 typedef enum e_exp_flags
 {
-	EXP_TILDE				= (1u << 0),	// TODO: remove
-	EXP_TILDE_NORMAL		= (1u << 0),	// TODO: implement
-	EXP_TILDE_ASSIGNMENT	= (1u << 1),	// TODO: implement
+	EXP_TILDE_NORMAL		= (1u << 0),
+	EXP_TILDE_ASSIGNMENT	= (1u << 1),
 	EXP_DOLLAR_SQUOTE		= (1u << 2),
 	EXP_PARAM				= (1u << 3),
 	EXP_CMD_SUB				= (1u << 4),
