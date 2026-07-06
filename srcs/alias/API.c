@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include "libft.h"
 #include "alias.h"
 #include "shell.h"
 #include "alias_.h"
@@ -18,9 +18,7 @@ t_error	alias_on_expansion_end(void)
 
 t_error	alias_print(const char *name)
 {
-	t_key_value	*pair;
 	t_alias		*alias;
-	t_key_value	**pairs;
 
 	alias = shell_get_alias();
 	if (alias == NULL)
@@ -28,17 +26,7 @@ t_error	alias_print(const char *name)
 	if (name == NULL)
 		return (alias_print_all(hashmap_get_all(&alias->map)), alias->err);
 	else
-	{
-		pair = hashmap_get(&alias->map, name);
-		if (pair == NULL)
-			return (alias->err = error(ERR_ALIAS_NOT_FOUND));
-		pairs = malloc(sizeof(t_key_value *) * 2);
-		if (pairs == NULL)
-			return (alias->err = error_sys());
-		pairs[0] = pair;
-		pairs[1] = NULL;
-		return (alias_print_all(pairs), alias->err);
-	}
+		return (alias_print_one(alias, name), alias->err);
 }
 
 t_error	alias_remove(const char *name)
@@ -87,7 +75,7 @@ t_error	alias_expand_token(t_string *expansion, const t_string *token_value)
 		alias->err = alias_stack_push(&alias->stack, token_value->data);
 		if (alias->err.type)
 			return (alias->err);
-		raw = hashmap_get(&alias->map, token_value->data)->value;
+		raw = hashmap_get(&alias->map, token_value->data);
 		if (raw == NULL)
 			return (alias->err = error(ERR_INCOHERENT_STATE));
 		if (!string_init(expansion, 0, raw, -1))

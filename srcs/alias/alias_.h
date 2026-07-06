@@ -14,6 +14,8 @@
  */
 void	alias_print_all(t_key_value **pairs);
 
+t_error	alias_print_one(t_alias *alias, const char *name);
+
 /**
  * @ingroup alias
  * @brief Updates the position rule from a just-produced expansion.

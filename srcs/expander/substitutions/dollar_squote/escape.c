@@ -22,15 +22,15 @@ bool	dollar_squote_build_map(t_hashmap *escapes)
 
 static bool	dollar_squote_simple_escape(char c, char *out, t_hashmap *escapes)
 {
-	t_key_value	*pair;
-	char		key[2];
+	char	key[2];
+	char	*value;
 
 	key[0] = c;
 	key[1] = '\0';
-	pair = hashmap_get(escapes, key);
-	if (pair == NULL)
+	value = hashmap_get(escapes, key);
+	if (value == NULL)
 		return (false);
-	*out = (char)(intptr_t)pair->value;
+	*out = (char)(intptr_t)value;
 	return (true);
 }
 
