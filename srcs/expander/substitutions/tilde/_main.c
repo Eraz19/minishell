@@ -7,7 +7,8 @@ bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item)
 	bool		escaped;
 	size_t		assign_offset;
 
-	if (!flag_is_active((uint)expander->flags, EXP_TILDE))
+	if (!flag_is_active((uint)expander->flags, EXP_TILDE_NORMAL)
+		&& !flag_is_active((uint)expander->flags, EXP_TILDE_ASSIGNMENT))
 		return (false);
 	escaped = current_item->opt.escaped;
 	if (current_item->opt.i == 0 && current_item->c == '~')
