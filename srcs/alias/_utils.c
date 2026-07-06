@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "alias_.h"
 #include "builder.h"
 #include "context.h"
@@ -39,24 +38,6 @@ static bool	is_valid_alias_name(char *word)
 		i++;
 	}
 	return (true);
-}
-
-void	alias_print_all(t_key_value **pairs)
-{
-	size_t	i;
-
-	if (pairs == NULL)
-		return ;
-	i = 0;
-	while (pairs[i] != NULL)
-	{
-		if (pairs[i]->value == NULL)
-			ft_printf("%s=''\n", pairs[i]->key);
-		else
-			ft_printf("%s='%s'\n", pairs[i]->key, (char *)pairs[i]->value);
-		i++;	
-	}
-	free(pairs);
 }
 
 bool	is_token_alias_expandable(t_alias *alias, char *word)

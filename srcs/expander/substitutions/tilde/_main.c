@@ -1,19 +1,30 @@
 #include "error.h"
+#include "expander.h"
 #include "tilde_expansion_.h"
+
+bool	is_tilde_flag_set(t_expander *expander, t_exp_flag *tilde_flag)
+{
+	if (flag_is_active((uint)expander->flags, EXP_TILDE_NORMAL))
+		return (*tilde_flag = EXP_TILDE_NORMAL, true);
+	else if (flag_is_active((uint)expander->flags, EXP_TILDE_ASSIGNMENT))
+		return (*tilde_flag = EXP_TILDE_ASSIGNMENT, true);
+	else
+		return (false);
+}
 
 bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item)
 {
 	t_word_item	item;
 	bool		escaped;
+	t_exp_flag	tilde_flag;
 	size_t		assign_offset;
 
-	if (!flag_is_active((uint)expander->flags, EXP_TILDE_NORMAL)
-		&& !flag_is_active((uint)expander->flags, EXP_TILDE_ASSIGNMENT))
+	if (!is_tilde_flag_set(expander, &tilde_flag))
 		return (false);
 	escaped = current_item->opt.escaped;
 	if (current_item->opt.i == 0 && current_item->c == '~')
 		return (current_item->opt.quoted == CONTEXT_NONE && !escaped);
-	if (expander->assignment_offset <= 0)
+	if (tilde_flag == EXP_TILDE_NORMAL)
 		return (false);
 	expander->err = word_get(&item, &expander->word, 1);
 	if (expander->err.type)
