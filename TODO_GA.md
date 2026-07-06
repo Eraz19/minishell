@@ -4,6 +4,8 @@
 - ⚠️ `function_set()` + `function_unset()`
 - Move `t_tokens` from `runner` to `token` module ?
 - Use `t_tokens` instead of `t_vector` of `t_token *`
+- `hashmap_get()`: renvoit maintenant uniquement la value => edit calls
+- update expander calls to new `TILDE` flags
 
 # REDIRECTOR
 
@@ -16,25 +18,8 @@
 
 # ALEXANDER
 
-- `expander`:
-	- ⚠️ `tilde prefix`:
-		- commence au `~` reconnu selon le contexte
-		- s'arrête au **prochain unquoted** `/` ou à la fin du word (ou **prochain unquoted** `:` uniquement si `EXP_TILDE_ASSIGNMENT`)
-		- si `tilde prefix` == `~` => home du user **courant**
-		- si `tilde prefix` == `~user` => home du user **spécifié** (ex: `~root` = home du user `root`)
-		- `UB` si les caractères entre `~` et la fin du `tilde prefix` ne forment pas un `portable login name`, ou si le user n’existe pas
-	- ⚠️ `EXP_TILDE_NORMAL` :
-		- expand le `tilde prefix` si `~` est le **premier** caractère du word (et **unquoted**)
-	- ⚠️ `EXP_TILDE_ASSIGNMENT` :
-		- expand le `tilde prefix` si le caractère précédent est le `=` de l'assignment (cf `token->assignment_offset`)
-		- expand le `tilde prefix` si le caractère précédent est un **unquoted** `:`
-- `t_hashmap`:
-	- `hashmap_get()`:
-		- devrait renvoyer uniquement la value
-	- `hashmap_get_all()`:
-		- devrait renvoyer un `t_vector` de `t_key_value`
-- Ajout de `posix_close_if_open()` pour ignorer `EBADF`
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
+- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
 
 # WIP
 
@@ -130,15 +115,6 @@
 7. walk_command() call redirect_pop()
 
 ---
-
-# ALEXANDER
-
-## QUESTION
-- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
-- `scanner_reset()`:
-	- ⚠️ free un pointeur qui n'a pas été malloc (reproduce with syntax error)
-- `scanner_heredoc_read()`:
-	- print bien une erreur dans le cas du delim manquant en non interactif ? (impossible pour le `parser` de savoir quel heredoc était en train d'être lu à ce moment là)
 
 ## TODO
 - use `posix_write()` instead of `write()`

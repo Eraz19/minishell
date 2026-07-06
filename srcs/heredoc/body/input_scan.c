@@ -34,7 +34,12 @@ t_error	body_continuation(t_body *body, bool *continuation)
 		return (scanner_read_continuation(&body->item->input), body->err);
 	}
 	else
-		return (body->err = error(ERR_NO_DELIM));
+	{
+		body->item->delim.data[body->item->delim.len - 1] = '\0';
+		body->err = error_print(error(ERR_REDIRECTION_FAILED), "heredoc",
+			"missing delimiter", NULL, "'%s'", body->item->delim.data);
+		return (body->err);
+	}
 }
 
 t_error	get_body_content(t_body *body)

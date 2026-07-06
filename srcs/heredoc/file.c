@@ -21,7 +21,6 @@ t_error	try_create_heredoc_file(t_heredoc *heredoc,t_string *path, int *fd)
 {
 	int	o_flag;
 
-	heredoc->file_id++;
 	o_flag = O_CREAT | O_EXCL | O_WRONLY;
 	if (!string_append_format(path, "%i", (int)heredoc->file_id))
 		return (heredoc->err = error_sys(), string_free(path), heredoc->err);
@@ -35,11 +34,12 @@ t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path)
 	size_t	initial_len;
 
 	fd = -1;
-	initial_len = path->len;
 	if (!string_init(path, 0, HEREDOC_TMP_PATH, sizeof(HEREDOC_TMP_PATH) - 1))
 		return (heredoc->err = error_sys());
+	initial_len = path->len;
 	while (heredoc->file_id < INT_MAX)
 	{
+		heredoc->file_id++;
 		try_create_heredoc_file(heredoc, path, &fd);
 		if (heredoc->err.type != ERR_LIBC || heredoc->err.saved_errno != EEXIST)
 			break ;

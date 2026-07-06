@@ -36,7 +36,7 @@ t_error	builder_get_ast(t_ast_root *dst_ast)
 	if (!builder)
 		return (error(ERR_SHELL_NOT_FOUND));
 	err = parser_build_cst(&builder->parser, &builder->lr_machine);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
 	debug_dump_cst(builder->parser.cst);
 	convert_cst_to_ast(&builder->parser, builder->parser.cst, dst_ast);

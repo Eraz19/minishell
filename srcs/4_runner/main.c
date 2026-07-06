@@ -55,6 +55,8 @@ t_error	runner_run(void)
 			return (err);
 		if (err.type == ERR_SYNTAX_INVALID)
 			err = reset_scanner_and_builder();
+		else if (err.type)
+			return (err);
 	}
 	return (err);
 }
