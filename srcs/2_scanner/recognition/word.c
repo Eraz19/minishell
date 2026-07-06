@@ -24,7 +24,7 @@ t_error	lexer_rule_in_middle_of_word(t_lexer *lexer)  // Rule 8
 	{
 		if (lexer->input->str.data[lexer->input->i] == '='
 			&& lexer->token->assignment_offset == -1)
-			lexer->token->assignment_offset = (ssize_t)lexer->input->i;
+			lexer->token->assignment_offset = (ssize_t)lexer->token->value.len;
 		return (lexer_consume(lexer, TOKEN_TOKEN, 1));
 	}
 }
