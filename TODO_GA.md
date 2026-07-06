@@ -6,6 +6,9 @@
 - Use `t_tokens` instead of `t_vector` of `t_token *`
 - `hashmap_get()`: renvoit maintenant uniquement la value => edit calls
 - update expander calls to new `TILDE` flags
+- handle `options`:
+	- `-n` flag (`OPT_NOEXEC`)
+	- ...
 
 # REDIRECTOR
 
@@ -18,6 +21,11 @@
 
 # ALEXANDER
 
+- `doc`: share doc `SKILL`
+- `utils`:
+	- `scan_set_mode()` n'a rien à faire dans `utils` car c'est propre au `scanner`
+	- doc ajoutée pour `ft_getpwnam()` et `match_pattern()`
+	- ajout de `free_char_ptr_void()` pour `free` les `vector` contenant des `char *`
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 - Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
 
