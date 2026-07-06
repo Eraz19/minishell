@@ -136,6 +136,18 @@ t_error	params_get_positionals(const t_positionals **dst);
 t_error	params_print(t_params_print_mode mode);
 
 /**
+ * @brief Report whether a variable is marked read-only.
+ *
+ * When @p name does not match any stored variable, @p out_is_readonly receives
+ * @c false.
+ *
+ * @param name Variable name to inspect (borrowed, read-only).
+ * @param out_is_readonly Destination receiving the read-only flag (borrowed).
+ * @return @c ERR_NO or @c ERR_SHELL_NOT_FOUND.
+ */
+t_error	params_is_readonly(const char *name, bool *out_is_readonly);
+
+/**
  * @brief Push a new positional frame on the stack.
  *
  * @param src Positional frame (ownership taken by params).

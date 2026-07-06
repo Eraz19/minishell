@@ -104,6 +104,18 @@ t_error	var_get(const t_string *name, t_string *dst_val);
 t_error	var_get_from_const(const char *name, t_string *dst_val);
 
 /**
+ * @brief Report whether a variable is marked read-only.
+ *
+ * Returns @c false when @p name does not match any stored variable.
+ *
+ * @param variables Source variable list (borrowed, read-only).
+ * @param name Variable name to inspect (borrowed, read-only).
+ * @return True when the matching variable exists and is read-only, false
+ *         otherwise.
+ */
+bool	var_is_readonly(const t_var_list *variables, const char *name);
+
+/**
  * @brief Print variables in export or readonly format.
  *
  * @param mode Output mode.
