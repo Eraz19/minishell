@@ -64,23 +64,22 @@ t_error	cmd_cache_get(
 /**
  * @brief Store a command path in the cache.
  *
- * When the @c OPT_CMD_HASH option is enabled, the cache stores a shallow copy
- * of @p cmd_path and takes ownership of its internal data on success. The
- * function then resets @p cmd_path to an empty zeroed @ref t_string.
+ * When the @c OPT_CMD_HASH option is enabled, the cache stores a deep copy of
+ * @p cmd_path. The caller keeps ownership of @p cmd_path in every case.
  *
- * @note After a successful call, calling @ref string_free() on @p cmd_path is
- *       unnecessary but remains safe.
+ * @note When command hashing is disabled, the function returns @c ERR_NO and
+ *       leaves @p cache unchanged.
  *
  * @param cache Cache to update (borrowed).
  * @param cmd_name Command name used as cache key (borrowed, read-only).
- * @param cmd_path Command path to cache (borrowed).
- * @return @c ERR_NO on success, @c ERR_CMD_HASH_DISABLED when command hashing
- *         is disabled, or @c ERR_SHELL_NOT_FOUND / @c ERR_LIBC on failure.
+ * @param cmd_path Command path to cache (borrowed, read-only).
+ * @return @c ERR_NO on success or when command hashing is disabled, or
+ *         @c ERR_SHELL_NOT_FOUND / @c ERR_LIBC on failure.
  */
 t_error	cmd_cache_set(
 			t_cmd_cache *cache,
 			const t_string *cmd_name,
-			t_string *cmd_path);
+			const t_string *cmd_path);
 
 /**
  * @brief Remove a cached command path.
