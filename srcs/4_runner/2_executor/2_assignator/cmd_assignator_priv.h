@@ -6,11 +6,56 @@
 # include "expander.h"
 # include "cmd_resolution_type.h"
 
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
+
+/**
+ * @brief Reject an assignment targeting a read-only shell variable.
+ *
+ * @param token Assignment token to validate (borrowed, read-only).
+ * @return @c ERR_NO, @c ERR_VAR_READ_ONLY or @c ERR_SHELL_NOT_FOUND.
+ */
 t_error	cmd_assignment_check(const t_token *token);
+
+/**
+ * @brief Expand one assignment token into a single owned string.
+ *
+ * @note @p out_expanded is initialized by the function on success.
+ *
+ * @param token Assignment token to expand (borrowed, read-only).
+ * @param flags Expansion flags to apply.
+ * @param out_expanded Destination string initialized by the function
+ *                     (borrowed).
+ * @return @c ERR_NO, @c ERR_INDEX_OUT_OF_BOUND, @c ERR_VAR_INVALID_NAME,
+ *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
+ *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
+ *         @c ERR_INCOHERENT_STATE, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
+ */
 t_error	cmd_assignment_expand(
 			const t_token *token,
 			t_exp_flag flags,
 			t_string *out_expanded);
+
+/**
+ * @brief Apply one expanded assignment according to the command kind.
+ *
+ * For declarations, special builtins and functions, the assignment updates the
+ * shell variable store. Otherwise, it is converted into one owned @c char*
+ * entry inside @p out_envp .
+ *
+ * @note @p expanded is consumed by the function whether it succeeds or fails.
+ * @note @p out_envp must already be initialized by the caller.
+ *
+ * @param cmd_type Resolution kind of the command receiving the assignment.
+ * @param token Original assignment token (borrowed, read-only).
+ * @param expanded Expanded assignment string consumed by the function
+ *                 (borrowed).
+ * @param out_envp Destination environment vector already initialized by the
+ *                 caller (borrowed).
+ * @return @c ERR_NO, @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
+ *         @c ERR_VAR_READ_ONLY or @c ERR_LIBC.
+ */
 t_error	cmd_assignment_process(
 			t_cmd_type cmd_type,
 			const t_token *token,

@@ -5,6 +5,7 @@
 	- `EACCES` / `ELOOP` / `ENAMETOOLONG` => `ERR_CMD_NOT_EXECUTABLE`
 	- `ENOEXEC` => ⚠️ lancer un shell avec ce pathname comme script (sauf si heuristic de rejet)
 	- Autres => `ERR_LIBC`
+- ⚠️ new expansion flag `EXP_DOLLAR_SQUOTE` => implement in `expand_token()` callers
 - ⚠️ `string_plit_on_*()`: add `bool skip_empty_entries` => update callers
 - ⚠️ `function_set()` + `function_unset()`
 - Move `t_tokens` from `runner` to `token` module ?
