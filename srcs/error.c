@@ -18,6 +18,8 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
+	else if (err.type == ERR_CMD_HASH_DISABLED)
+		return ("command location memorization is disabled");
 	else if (err.type == ERR_CMD_NOT_EXECUTABLE)
 		return ("Permission denied");
 	else if (err.type == ERR_CMD_NOT_FOUND)
