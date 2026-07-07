@@ -13,7 +13,7 @@ static inline bool	options_process_flag1(t_option *options, char flag, bool on)
 	else if (flag == 'f')
 		option_set(options, OPT_NOGLOB, on);
 	else if (flag == 'h')
-		option_set(options, OPT_HASH_CMDS, on);
+		option_set(options, OPT_CMD_HASH, on);
 	else if (flag == 'i')
 		option_set(options, OPT_INTERACTIVE, on);
 	else

@@ -41,7 +41,7 @@ static void	options_add_to_string(t_option options, char *buff, size_t *len)
 		buff[(*len)++] = 'e';
 	if (option_is_active_in(options, OPT_NOGLOB))
 		buff[(*len)++] = 'f';
-	if (option_is_active_in(options, OPT_HASH_CMDS))
+	if (option_is_active_in(options, OPT_CMD_HASH))
 		buff[(*len)++] = 'h';
 	if (option_is_active_in(options, OPT_INTERACTIVE))
 		buff[(*len)++] = 'i';
