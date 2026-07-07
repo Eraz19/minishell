@@ -287,6 +287,17 @@ t_error	braced_error(t_expander *expander,
 t_error	expand_operand(t_expander *expander, t_word *operand, t_word *out);
 
 /**
+ * @brief Applies quote removal to the just-produced operand result held in
+ *        expander->word_exp (expansion results are passed through, the
+ *        operand's own quote delimiters are stripped). Expects expander->word
+ *        to be empty/freed on entry.
+ *
+ * @param expander Expander state whose word_exp holds the expanded operand.
+ * @return The resulting error descriptor (expander->err).
+ */
+t_error	braced_quote_remove_result(t_expander *expander);
+
+/**
  * @brief Tells whether a character is a supported ${name op word} operator.
  *
  * @param op Candidate operator character.

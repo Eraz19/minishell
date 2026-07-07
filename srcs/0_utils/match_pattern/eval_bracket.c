@@ -20,3 +20,9 @@ bool	eval_bracket_char(const char *pattern, char c, size_t *i)
 	else
 		return ((*i)++, false);
 }
+
+bool	eval_escaped_char(const char *pattern, char c, size_t *i)
+{
+	(*i)++;
+	return (eval_bracket_char(pattern, c, i));
+}

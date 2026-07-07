@@ -32,6 +32,7 @@ static t_error	operand_to_fields(
 	while (expander->word.len > 0 && !expander->err.type)
 		substitution_char(expander);
 	word_free(&expander->word);
+	braced_quote_remove_result(expander);
 	collect_operand_field(expander);
 	*out = expander->fields_exp;
 	expander->word = saved_word;

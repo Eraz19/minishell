@@ -19,10 +19,10 @@ bool	braced_op_is_doubled(const t_word *word, char op)
 }
 
 static t_error	remove_prefix(
-	const t_string *value,
-	const char *pattern,
-	bool largest,
-	t_string *out)
+					const t_string *value,
+					const char *pattern,
+					bool largest,
+					t_string *out)
 {
 	size_t	i;
 	size_t	cut;
@@ -45,10 +45,10 @@ static t_error	remove_prefix(
 }
 
 static t_error	remove_suffix(
-	const t_string *value,
-	const char *pattern,
-	bool largest,
-	t_string *out)
+					const t_string *value,
+					const char *pattern,
+					bool largest,
+					t_string *out)
 {
 	size_t	i;
 	size_t	cut;

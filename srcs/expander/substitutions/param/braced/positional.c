@@ -3,8 +3,8 @@
 #include "param_expansion_.h"
 
 static t_error	braced_positional_bare(
-	t_expander *expander,
-	t_positional_exp *positional_exp)
+					t_expander *expander,
+					t_positional_exp *positional_exp)
 {
 	expander->err = emit_positionals(
 		expander,
@@ -18,8 +18,8 @@ static t_error	braced_positional_bare(
 }
 
 static t_error	braced_positional_error(
-	t_expander *expander,
-	t_positional_exp *positional_exp)
+					t_expander *expander,
+					t_positional_exp *positional_exp)
 {
 	t_string	name;
 	char		symbol[2];
@@ -39,8 +39,8 @@ static t_error	braced_positional_error(
 }
 
 static t_error	braced_positional_apply(
-	t_expander *expander,
-	t_positional_exp *positional_exp)
+					t_expander *expander,
+					t_positional_exp *positional_exp)
 {
 	if (positional_exp->op_char == '=')
 	{
@@ -69,9 +69,9 @@ static t_error	braced_positional_apply(
 }
 
 static t_error	braced_positional_op(
-	t_expander *expander,
-	t_positional_exp *positional_exp,
-	size_t body_len)
+					t_expander *expander,
+					t_positional_exp *positional_exp,
+					size_t body_len)
 {
 	bool				colon;
 	size_t				op_items;

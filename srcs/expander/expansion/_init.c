@@ -31,7 +31,7 @@ t_error	expansion_load(t_expansion *out, t_fields *src)
 			return (expansion_free(out), err);
 		err = to_str(&str, &word, 0, word.len);
 		if (err.type)
-			return (expansion_free(out), err);
+			return (word_free(&word), expansion_free(out), err);
 		word_free(&word);
 		err = expansion_push(out, &str);
 		if (err.type)

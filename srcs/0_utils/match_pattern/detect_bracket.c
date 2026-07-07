@@ -45,16 +45,21 @@ bool	valid_char_class_exp_len(const char *pattern, size_t *len)
 
 bool	valid_col_symbol_exp_len(const char *pattern, size_t *len)
 {
-	while (!(pattern[*len] != '\0' && pattern[*len] == '.'
-		&& pattern[(*len) + 1] != '\0' && pattern[(*len) + 1] == ']'))
-		(*len)++;
 	if (pattern[*len] == '\0')
 		return (false);
-	return ((*len) += 2, true);
+	(*len)++;
+	if (pattern[*len] != '\0' && match_char(pattern[*len], '.', len))
+	{
+		if (pattern[*len] != '\0' && match_char(pattern[*len], ']', len))
+			return (true);
+	}
+	return (false);
 }
 
 bool	valid_equ_class_exp_len(const char *pattern, size_t *len)
 {
+	if (pattern[*len] == '\0')
+		return (false);
 	(*len)++;
 	if (pattern[*len] != '\0' && match_char(pattern[*len], '=', len))
 	{

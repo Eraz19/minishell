@@ -32,12 +32,12 @@ t_error	extract_username(t_expander *expander, t_string *out)
 		expander->err = word_get(&item, &expander->word, i + 1);
 		if (expander->err.type)
 			return (expander->err);
+		if (item.opt.quoted != CONTEXT_NONE)
+			return (expander->err = error(ERR_QUOTED_TILDE));
 		if (item.c == '/')
 			break ;
-		else if (expander->assignment_offset > 0 && item.c == ':')
+		if (expander->assignment_offset > 0 && item.c == ':')
 			break ;
-		else if (item.opt.quoted != CONTEXT_NONE)
-			return (expander->err = error(ERR_QUOTED_TILDE));
 		i++;
 	}
 	return (expander->err = to_str(out, &expander->word, 1, i));
@@ -79,15 +79,24 @@ t_error	replace_with_path(
 {
 	t_word_item_opt	opt;
 	t_word_item		item;
+	t_word			path_word;
 
 	expander->err = word_fpop(&item, &expander->word);
 	if (expander->err.type)
 		return (expander->err);
 	opt = item.opt;
-	opt.is_expand_res = false;
-	expander->err = from_str(&expander->word_exp, path, opt);
+	opt.quoted = CONTEXT_DQUOTE;
+	opt.is_expand_res = true;
+	expander->err = from_str(&path_word, path, opt);
 	if (expander->err.type)
 		return (expander->err);
+	while (path_word.len > 0)
+	{
+		expander->err = forward_word_item(&expander->word_exp, &path_word);
+		if (expander->err.type)
+			return (word_free(&path_word), expander->err);
+	}
+	word_free(&path_word);
 	expander->err = word_remove(&expander->word, 0, username->len);
 	return (expander->err);
 }

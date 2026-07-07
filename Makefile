@@ -124,6 +124,9 @@ INCLUDES		:= \
 	-Isrcs/expander/loader \
 	-Isrcs/expander/loader/context \
 	-Isrcs/expander/path_name_expansion \
+	-Isrcs/expander/path_name_expansion/path_comps \
+	-Isrcs/expander/path_name_expansion/globbing \
+	-Isrcs/expander/path_name_expansion/path_matches \
 	-Isrcs/expander/quote_removal \
 	-Isrcs/expander/quote_removal/context \
 	-Isrcs/expander/substitutions \

@@ -5,6 +5,9 @@
 # include "libft.h"
 # include "context.h"
 
+// Forward type
+typedef t_vector	t_fields;
+
 typedef t_vector	t_word;
 
 typedef struct s_word_item_opt

@@ -12,6 +12,7 @@ bool	is_tilde_flag_set(t_expander *expander, t_exp_flag *tilde_flag)
 
 bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item)
 {
+	t_error		err;
 	t_word_item	item;
 	bool		escaped;
 	t_exp_flag	tilde_flag;
@@ -24,8 +25,8 @@ bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item)
 		return (current_item->opt.quoted == CONTEXT_NONE && !escaped);
 	if (tilde_flag == EXP_TILDE_NORMAL)
 		return (false);
-	expander->err = word_get(&item, &expander->word, 1);
-	if (expander->err.type)
+	err = word_get(&item, &expander->word, 1);
+	if (err.type)
 		return (false);
 	if (item.c != '~' || item.opt.escaped || item.opt.quoted != CONTEXT_NONE)
 		return (false);
