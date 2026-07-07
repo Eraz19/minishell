@@ -1,5 +1,10 @@
 # TODO
 
+- `execve()`
+	- `ENOENT` / `ENOTDIR` => `ERR_CMD_NOT_FOUND`
+	- `EACCES` / `ELOOP` / `ENAMETOOLONG` => `ERR_CMD_NOT_EXECUTABLE`
+	- `ENOEXEC` => ⚠️ lancer un shell avec ce pathname comme script (sauf si heuristic de rejet)
+	- Autres => `ERR_LIBC`
 - ⚠️ `string_plit_on_*()`: add `bool skip_empty_entries` => update callers
 - ⚠️ `function_set()` + `function_unset()`
 - Move `t_tokens` from `runner` to `token` module ?
@@ -23,14 +28,9 @@
 
 - `EXP_DSQUOTE`:
 	- process first, then apply all other expansions from the beginning of `word`
-- `hashmap`:
-	- ⚠️ `hashmap_clear()` to `free` all content but not the `hashmap` itself (avoid useless `free` + `malloc`):
-		- **AFTER IMPLEMENTATION** (GA): remove temp patch in `srcs/cmd_cache/5_clear.c`
-- `doc`: share doc `SKILL`
 - `utils`:
-	- `scan_set_mode()` n'a rien à faire dans `utils` car c'est propre au `scanner`
-	- doc ajoutée pour `ft_getpwnam()` et `match_pattern()`
-	- ajout de `free_char_ptr_void()` pour `free` les `vector` contenant des `char *`
+	- `scan_set_mode()` à déplacer dans un module `input_mode`
+	- Utiliser `free_char_ptr_void()` au lieu de `free` comme callback pour les `vector_fre()` contenant des `char *`
 - replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 - Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
 
