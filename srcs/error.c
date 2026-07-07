@@ -18,6 +18,10 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
+	else if (err.type == ERR_CMD_NOT_EXECUTABLE)
+		return ("Permission denied");
+	else if (err.type == ERR_CMD_NOT_FOUND)
+		return ("command not found");
 	else if (err.type == ERR_EOF)
 		return ("unexpected end of file");
 	else if (err.type == ERR_FD_INVALID)
