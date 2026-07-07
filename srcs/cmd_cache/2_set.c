@@ -11,11 +11,11 @@ t_error	cmd_cache_set(
 	t_string	*allocd_string;
 	t_error		err;
 
-	err = option_is_active(OPT_HASH_CMDS, &hash_cmds_is_active);
+	err = option_is_active(OPT_CMD_HASH, &hash_cmds_is_active);
 	if (err.type)
 		return (err);
 	if (hash_cmds_is_active == false)
-		return (error(ERR_NO));
+		return (error(ERR_CMD_HASH_DISABLED));
 	allocd_string = malloc(sizeof(*allocd_string));
 	if (allocd_string == NULL)
 		return (error_sys());
