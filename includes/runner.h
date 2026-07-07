@@ -4,11 +4,13 @@
 # include "error.h"
 # include "redirector_type.h"
 # include "functions.h"
+# include "cmd_cache.h"
 
 typedef struct s_runner
 {
 	t_redirector	redirector;
 	t_functions		functions;
+	t_cmd_cache		cmd_cache;
 }	t_runner;
 
 void	runner_init(t_runner *runner);

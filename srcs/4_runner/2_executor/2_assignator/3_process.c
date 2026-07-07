@@ -1,18 +1,7 @@
 #include "cmd_assignator_priv.h"
 #include "params.h"
+#include "entry_is_target.h"
 #include <stdlib.h>
-
-static inline bool	cmd_assignment_is_target(
-							const char *target,
-							const char *entry)
-{
-	size_t	i;
-
-	i = 0;
-	while (target[i] == entry[i] && target[i] != '=')
-		i++;
-	return (target[i] == entry[i]);
-}
 
 static inline t_error	cmd_assignment_add_to_envp(
 							t_string *expanded,
@@ -26,7 +15,7 @@ static inline t_error	cmd_assignment_add_to_envp(
 	while (i < out_envp->len)
 	{
 		entry = &((char **)out_envp->data)[i];
-		if (cmd_assignment_is_target(expanded->data, *entry))
+		if (cmd_entry_is_target(expanded->data, *entry))
 		{
 			free(*entry);
 			*entry = expanded->data;

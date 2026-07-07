@@ -5,10 +5,12 @@ void	runner_init(t_runner *runner)
 {
 	redirect_init(&runner->redirector);
 	functions_init(&runner->functions);
+	cmd_cache_init(&runner->cmd_cache);
 }
 
 void	runner_free(t_runner *runner)
 {
 	redirect_free(&runner->redirector);
 	functions_free(&runner->functions);
+	cmd_cache_free(&runner->cmd_cache);
 }
