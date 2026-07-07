@@ -1,10 +1,10 @@
 # TODO
 
-- path search
+- ⚠️ `string_plit_on_*()`: add `bool skip_empty_entries` => update callers
 - ⚠️ `function_set()` + `function_unset()`
 - Move `t_tokens` from `runner` to `token` module ?
 - Use `t_tokens` instead of `t_vector` of `t_token *`
-- `hashmap_get()`: renvoit maintenant uniquement la value => edit calls
+- `hashmap`: signatures updated => update callers
 - update expander calls to new `TILDE` flags
 - handle `options`:
 	- `-n` flag (`OPT_NOEXEC`)
@@ -21,6 +21,11 @@
 
 # ALEXANDER
 
+- `EXP_DSQUOTE`:
+	- process first, then apply all other expansions from the beginning of `word`
+- `hashmap`:
+	- ⚠️ `hashmap_clear()` to `free` all content but not the `hashmap` itself (avoid useless `free` + `malloc`):
+		- **AFTER IMPLEMENTATION** (GA): remove temp patch in `srcs/cmd_cache/5_clear.c`
 - `doc`: share doc `SKILL`
 - `utils`:
 	- `scan_set_mode()` n'a rien à faire dans `utils` car c'est propre au `scanner`
@@ -54,6 +59,8 @@
 	- 🚧 `const` partout
 	- 🚧 `inline` partout
 	- 🚧 `assert` partout
+	- 🚧 `out_` prefix de tous les args qui sont **générés** par une fonction (cf `C#` syntax)
+	- 🚧 `ref_` prefix de tous les args qui sont **potentiellement modifiés** par une fonction (cf `C#` syntax)
 	- 🚧 `error_sys()` must be called before any `free()` / `libc` call
 	- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
 	- 🚧 `error_print()` return value must **NOT** be ignored (for `err.printed` update)
