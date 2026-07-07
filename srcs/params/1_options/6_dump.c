@@ -14,7 +14,7 @@ const char	*option_to_string(t_option option)
 		return ("e");
 	else if (option == OPT_NOGLOB)
 		return ("f");
-	else if (option == OPT_HASHALL)
+	else if (option == OPT_CMD_HASH)
 		return ("h");
 	else if (option == OPT_INTERACTIVE)
 		return ("i");

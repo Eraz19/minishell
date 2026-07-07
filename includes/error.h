@@ -5,7 +5,9 @@
 
 typedef enum e_error_type
 {
+	// Success
 	ERR_NO,
+	// Failures
 	ERR_ASSIGNMENT_MISSING_NAME,
 	ERR_BUILTIN_INVALID_USAGE,
 	ERR_EOF,
@@ -34,7 +36,7 @@ typedef enum e_error_type
 	ERR_VAR_MISSING_EQUAL,
 	ERR_VAR_NOT_FOUND,
 	ERR_VAR_READ_ONLY,
-	// Lexer
+	// Lexer failures
 	ERR_CMD_SUB_CLOSING_NOT_FOUND,
 	ERR_CTX_END_NOT_FOUND,
 	ERR_EMPTY_STACK,
@@ -52,6 +54,10 @@ typedef enum e_error_type
 	ERR_PARAM_BAD_SUBSTITUTION,
 	ERR_BAD_SUBSTITUTION,
 	ERR_ALIAS_NOT_FOUND,
+	// POSIX EXIT CODES
+	ERR_CMD_NOT_EXECUTABLE = 126,
+	ERR_CMD_NOT_FOUND = 127,
+	// Sentinel
 	ERR_COUNT
 }	t_error_type;
 

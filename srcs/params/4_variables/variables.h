@@ -57,15 +57,23 @@ void	var_free(t_var_list *variables);
 /* ************************************************************************* */
 
 /**
- * @brief Build an envp array from exported variables.
+ * @brief Build the exported environment as a @ref t_vector of C-strings.
  *
- * The returned array and entries are owned by the caller.
+ * Only variables marked for export and holding a non-NULL value are emitted.
  *
- * @param variables Source list (borrowed, read-only).
- * @param dst_envp Destination envp pointer (borrowed).
- * @return @c ERR_LIBC.
+ * @warning The resulting array is not NUL-terminated.
+ *
+ * @note @p dst_envp is initialized by the function with @c sizeof(char*)
+ *       items.
+ * @note The caller owns each generated C-string and must free @p dst_envp with
+ *       @ref vector_free() using @ref free_char_ptr_void() as callback.
+ *
+ * @param variables Source variable list (borrowed, read-only).
+ * @param dst_envp Destination vector receiving owned @c char* items
+ *                 (borrowed, initialized by the function).
+ * @return @c ERR_NO or @c ERR_LIBC.
  */
-t_error	var_build_envp(const t_var_list *variables, char ***dst_envp);
+t_error	var_build_envp(const t_var_list *variables, t_vector *dst_envp);
 
 /**
  * @brief Read a variable value into a fresh string.
@@ -94,6 +102,18 @@ t_error	var_get(const t_string *name, t_string *dst_val);
  *         or @c ERR_LIBC.
  */
 t_error	var_get_from_const(const char *name, t_string *dst_val);
+
+/**
+ * @brief Report whether a variable is marked read-only.
+ *
+ * Returns @c false when @p name does not match any stored variable.
+ *
+ * @param variables Source variable list (borrowed, read-only).
+ * @param name Variable name to inspect (borrowed, read-only).
+ * @return True when the matching variable exists and is read-only, false
+ *         otherwise.
+ */
+bool	var_is_readonly(const t_var_list *variables, const char *name);
 
 /**
  * @brief Print variables in export or readonly format.

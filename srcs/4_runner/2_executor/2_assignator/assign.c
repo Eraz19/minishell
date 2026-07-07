@@ -1,43 +1,62 @@
+#include "cmd_assignator_priv.h"
 #include "cmd_assignator.h"
-#include "cmd_expansion.h"
+#include "params.h"
+#include "utils.h"
 
-/*
-TODO: replace params_build_envp() by params_get_all_exported_variables() -> t_vector(<t_string name> + <t_string value>)
-*/
-
-/*
-1. `expand` assignment values
-2. check `readonly`
-3. `CMD_NONE` / `CMD_SPECIAL_BUILTIN` / `CMD_FUNCTION` => commit assignments to variables
-4. `CMD_BUILTIN` / `CMD_EXTERNAL`:
-	- build `envp` from exported variables
-	- add assignments to `envp`
-*/
-
-static inline t_error	cmd_expand_assignment(t_tokens *assignments, size_t index, char ***envp)
+static inline t_error	cmd_assignment_build_envp(
+							t_cmd_type cmd_type,
+							t_vector *out_envp)
 {
-
+	if (cmd_type == CMD_NONE
+		|| cmd_type == CMD_SPECIAL_BUILTIN
+		|| cmd_type == CMD_FUNCTION)
+	{
+		(void)vector_init(out_envp, sizeof(char *), 0);
+		return (error(ERR_NO));
+	}
+	return (params_build_envp(out_envp));
 }
 
-t_error	cmd_assign(t_cmd_type cmd_type, t_tokens *assignments, char ***envp)
+static inline t_error	cmd_assignment_finalize_envp(t_vector *envp)
 {
-	t_exp_flag			flags;
-	size_t				i;
-	t_token				*assignment;
-	t_cmd_expansions	expansions;
-	t_error				err;
+	char	*null;
+	t_error	err;
 
-	cmd_expansions_init(&expansions);
-	flags = cmd_assignment_expansion_flags();
-	err = error(ERR_NO);
-	i = 0;
-	while (i < assignments->len)
+	null = NULL;
+	if (!vector_push(envp, &null))
 	{
-		err = tokens_get(assignments, i, &assignment);
-		if (err.type)
-			return (err);
-		expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
-		i++;
+		err = error_sys();
+		vector_free(envp, free_char_ptr_void);
+		return (err);
 	}
-	return (err);
+	return (error(ERR_NO));
+}
+
+t_error	cmd_assign(
+			t_cmd_type cmd_type,
+			const t_tokens *assignments,
+			t_vector *out_envp)
+{
+	size_t		i;
+	t_exp_flag	flags;
+	t_token		*token;
+	t_string	expanded;
+	t_error		err;
+
+	flags = cmd_assignment_expansion_flags();
+	err = cmd_assignment_build_envp(cmd_type, out_envp);
+	i = 0;
+	while (err.type == ERR_NO && i < assignments->len)
+	{
+		err = tokens_get(assignments, i++, &token);
+		if (err.type == ERR_NO)
+			err = cmd_assignment_check(token);
+		if (err.type == ERR_NO)
+			err = cmd_assignment_expand(token, flags, &expanded);
+		if (err.type == ERR_NO)
+			err = cmd_assignment_process(cmd_type, token, &expanded, out_envp);
+	}
+	if (err.type)
+		return (vector_free(out_envp, free_char_ptr_void), err);
+	return (cmd_assignment_finalize_envp(out_envp));
 }

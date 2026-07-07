@@ -12,7 +12,7 @@
 # define OPT_NOCLOBBER		(1u << 2)	// -C: prevent file overwrite with '>'
 # define OPT_ERREXIT		(1u << 3)	// -e: exit on command error
 # define OPT_NOGLOB			(1u << 4)	// -f: disable pathname expansion (globbing)
-# define OPT_HASHALL		(1u << 5)	// -h: remember command locations (hashing)
+# define OPT_CMD_HASH		(1u << 5)	// -h: remember command locations (hashing)
 # define OPT_INTERACTIVE	(1u << 6)	// -i: shell is interactive (not settable via 'set')
 # define OPT_MONITOR		(1u << 7)	// -m: enable job control
 # define OPT_NOEXEC			(1u << 8)	// -n: read commands but do not execute

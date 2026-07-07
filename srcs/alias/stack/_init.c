@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include "utils.h"
 #include "alias.h"
 #include "alias_stack_.h"
 
@@ -9,5 +9,5 @@ void	alias_stack_init(t_alias_stack *stack)
 
 void	alias_stack_free(t_alias_stack *stack)
 {
-	vector_free(stack, free);
+	vector_free(stack, free_char_ptr_void);
 }
