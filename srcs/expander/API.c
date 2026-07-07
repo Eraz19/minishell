@@ -13,8 +13,7 @@ static t_error	expander_cleanup(t_expander *expander)
 	t_error	err;
 
 	err = expander->err;
-	expander_free(expander);
-	return (err);
+	return (expander_free(expander), err);
 }
 
 t_error	expand_word(t_expansion *expansion, t_expander_args *args)
@@ -25,6 +24,9 @@ t_error	expand_word(t_expansion *expansion, t_expander_args *args)
 	expansion_init(expansion);
 	if (expander_load(&expander, args).type)
 		return (expander_cleanup(&expander));
+	// check if DOLLAR_SQUOTE FLAG is active
+	//  - remove from flags
+	//	- call subsitutions() with the DOLLAR_SQUOTE flag active
 	if (substitutions(&expander).type)
 		return (expander_cleanup(&expander));
 	if (flag_is_active((uint)expander.flags, EXP_FIELD_SPLIT))
