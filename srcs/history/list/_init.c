@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "history_list_.h"
 
 void	history_list_clean(void *item)

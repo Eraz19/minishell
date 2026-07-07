@@ -13,18 +13,21 @@ t_error	substitution_char(t_expander *expander)
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type)
 		return (expander->err);
-	if (is_tilde_expansion(expander, &item))
-		return (tilde_expansion(expander));
-	else if (is_dollar_squote_expansion(&item, expander->flags))
-		return (dollar_squote_expansion(expander));
-	else if (is_param_expansion(expander, &item))
-		return (param_expansion(expander));
-	else if (is_cmd_substitution(&item, expander->flags))
-		return (cmd_substitution(expander));
-	else if (is_backtick_substitution(&item, expander->flags))
-		return (backtick_substitution(expander));
-	else if (is_arith_substitution(&item, expander->flags))
-		return (arith_substitution(expander));
+	if (!item.opt.is_expand_res)
+	{
+		if (is_tilde_expansion(expander, &item))
+			return (tilde_expansion(expander));
+		else if (is_dollar_squote_expansion(&item, expander->flags))
+			return (dollar_squote_expansion(expander));
+		else if (is_param_expansion(expander, &item))
+			return (param_expansion(expander));
+		else if (is_cmd_substitution(&item, expander->flags))
+			return (cmd_substitution(expander));
+		else if (is_backtick_substitution(&item, expander->flags))
+			return (backtick_substitution(expander));
+		else if (is_arith_substitution(&item, expander->flags))
+			return (arith_substitution(expander));
+	}
 	expander->err = word_push(&expander->word_exp, item);
 	if (expander->err.type)
 		return (expander->err);

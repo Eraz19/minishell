@@ -34,16 +34,16 @@ t_error	scanner_read_input(t_scanner *scanner)
 	scanner->err = lexer_input_stack_item_init(&item);
 	if (scanner->err.type)
 		return (scanner->err);
-	if (scanner->mode == SCAN_FILE)
+	if (scanner->mode == INPUT_MODE_FILE)
 		scanner->err = reader_file_input(&item->str, scanner->source);
-	else if (scanner->mode == SCAN_STRING)
+	else if (scanner->mode == INPUT_MODE_STRING)
 	{
 		if (scanner_dup_command_input(scanner, item).type)
 			return (lexer_input_stack_item_free(&item), scanner->err);
 	}
-	else if (scanner->mode == SCAN_STDIN_PIPE)
+	else if (scanner->mode == INPUT_MODE_STDIN_PIPE)
 		scanner->err = scanner_stdin_input(&item->str);
-	else if (scanner->mode == SCAN_STDIN_TTY)
+	else if (scanner->mode == INPUT_MODE_STDIN_TTY)
 		scanner->err = reader_new_input(&item->str); 
 	if (scanner->err.type || item->str.len < 2)
 		return (lexer_input_stack_item_free(&item), scanner->err);

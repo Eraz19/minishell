@@ -3,7 +3,7 @@
 #include "error.h"
 #include "alias.h"
 
-void	alias_print_all(t_key_value **pairs)
+void	alias_print_all(const t_key_value **pairs)
 {
 	size_t	i;
 
@@ -23,9 +23,14 @@ void	alias_print_all(t_key_value **pairs)
 
 t_error	alias_print_one(t_alias *alias, const char *name)
 {
-	char		*value;
-	t_key_value	**pairs;
-	t_key_value	*new_key_value;
+	const char			*value;
+	const t_key_value	**pairs;
+	t_key_value			*new_key_value;
+	union ptr_discalifier
+	{
+		void *ptr;
+		const char *str;
+	}	discalifier;
 
 	value = hashmap_get(&alias->map, name);
 	if (value == NULL)
@@ -33,12 +38,12 @@ t_error	alias_print_one(t_alias *alias, const char *name)
 	pairs = malloc(sizeof(t_key_value *) * 2);
 	if (pairs == NULL)
 		return (alias->err = error_sys());
-	new_key_value = key_value_new(name, value);
+	discalifier.str = value;
+	new_key_value = key_value_new(name, discalifier.ptr);
 	if (new_key_value == NULL)
 	{
 		alias->err = error_sys();
-		key_value_free(&new_key_value, NULL);
-		return (free(pairs), alias->err);
+		return (key_value_free(&new_key_value, NULL), free(pairs), alias->err);
 	}
 	pairs[0] = new_key_value;
 	pairs[1] = NULL;

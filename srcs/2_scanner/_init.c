@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "utils.h"
 #include "scanner.h"
 
 t_error	scanner_init(t_scanner *scanner)
@@ -19,11 +18,11 @@ t_error	scanner_load(t_scanner *scanner, const char *source)
 {
 	t_error	err;
 
-	scanner->mode = SCAN_NONE;
-	err = scan_set_mode(&scanner->mode);
+	scanner->mode = INPUT_MODE_NONE;
+	err = input_mode_set(&scanner->mode);
 	if (err.type != ERR_NO)
 		return (err);
-	if (scanner->mode == SCAN_STRING || scanner->mode == SCAN_FILE)
+	if (scanner->mode == INPUT_MODE_STRING || scanner->mode == INPUT_MODE_FILE)
 		scanner->source = source;
 	return (scanner->err);
 }
