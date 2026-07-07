@@ -1,69 +1,59 @@
 #include "options.h"
-#include "path_name_expansion_.h"
+#include "globbing_.h"
+#include "path_comps_.h"
+#include "quote_removal_.h"
 
-bool string_split_on_char(t_string *src, char c, t_vector *out);
-
-bool	is_globbing(t_string *path_comp)
+static t_error	prepare_path_name_word(t_expander *expander, t_word *original)
 {
-	bool	is_quoted;
-	size_t	i;
-
-	if (path_comp->len == 0)
-		return (false);
-	i = 0;
-	while (i < path_comp->len)
+	expander->err = word_dup(original, &expander->word);
+	if (expander->err.type)
+		return (expander->err);
+	word_init(&expander->word_exp);
+	while (expander->word.len > 0)
 	{
-		if (path_comp->str[i] == '*' || path_comp->str[i] == '?')
-			return (true);
-		i++;
+		if (quote_remove_char(expander).type)
+		{
+			word_free(&expander->word_exp);
+			return (word_free(&expander->word), expander->err);
+		}
 	}
+	return (word_free(&expander->word), expander->err);
 }
 
-t_error path_name_expansion_comps(t_expander *expander, t_fields *path_comps)
+static t_error	on_failure(t_error err, t_path_comps *comps, t_word *original)
 {
-	size_t		i;
-	t_string	path_comp;
-	t_word		path_word;
-	t_vector	matching_paths;
-
-	i = 0;
-	fields_init(&matching_paths);
-	while (i < path_comps->len)
-	{
-		if (!vector_remove(path_comps, i, &path_comp))
-		{
-			expander->err = error_sys();
-			return (string_free(&path_comp), expander->err);
-		}
-		if (is_globbing(&path_comp))
-		{
-
-		}
-		else
-		{
-
-		}
-		i++;
-	}
+	return (path_comps_free(comps), word_free(original), err);
 }
 
 t_error	path_name_expansion_word(t_expander *expander)
 {
-	t_fields	path_comps;
+	bool			globbed;
+	t_word			original;
+	t_path_comps	path_comps;
 
+	globbed = false;
 	expander->err = fields_fpop(&expander->word, &expander->fields);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = word_split(&path_comps, &expander->word, '/');
+	if (prepare_path_name_word(expander, &original).type)
+		return (word_free(&original), expander->err);
+	path_comps_init(&path_comps);
+	expander->err = path_comps_load(&path_comps, &expander->word_exp);
+	word_free(&expander->word_exp);
 	if (expander->err.type)
-		return (expander->err);
-	path_name_expansion_comps(expander, &path_comps);
-	return (word_free(&expander->word), expander->err);
+		return (word_free(&original), expander->err);
+	expander->err = path_globbing(expander, &path_comps, &globbed);
+	if (expander->err.type || globbed)
+		return (on_failure(expander->err, &path_comps, &original));
+	expander->err = fields_push(&expander->fields_exp, original);
+	if (expander->err.type)
+		return (on_failure(expander->err, &path_comps, &original));
+	return (expander->err);
 }
 
 t_error	path_name_expansion(t_expander *expander)
 {
-	bool is_noglob;
+	bool	is_noglob;
 
 	expander->err = option_is_active(OPT_NOGLOB, &is_noglob);
 	if (expander->err.type || is_noglob)

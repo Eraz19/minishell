@@ -1,4 +1,5 @@
 #include "param_braced_.h"
+#include "quote_removal_.h"
 #include "expander_substitutions_.h"
 
 t_error	parse_braced_op(
@@ -54,6 +55,15 @@ t_error	braced_take_operand(
 	return (expander->err = word_remove(&expander->word, 0, operand_len));
 }
 
+t_error	braced_quote_remove_result(t_expander *expander)
+{
+	expander->word = expander->word_exp;
+	word_init(&expander->word_exp);
+	while (expander->word.len > 0 && !expander->err.type)
+		quote_remove_char(expander);
+	return (word_free(&expander->word), expander->err);
+}
+
 t_error	expand_operand(t_expander *expander, t_word *operand, t_word *out)
 {
 	t_word	saved_word;
@@ -72,6 +82,7 @@ t_error	expand_operand(t_expander *expander, t_word *operand, t_word *out)
 			break ;
 	}
 	word_free(&expander->word);
+	braced_quote_remove_result(expander);
 	*out = expander->word_exp;
 	expander->word = saved_word;
 	expander->word_exp = saved_word_exp;

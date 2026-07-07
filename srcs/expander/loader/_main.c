@@ -79,7 +79,11 @@ t_error	loader_prepare_word(t_loader *loader)
 	else if (is_char_escaped(loader))
 	{
 		loader_consume(loader, false);
+		if (loader->err.type)
+			return (loader->err);
 		loader_consume(loader, true);
+		if (loader->err.type)
+			return (loader->err);
 	}
 	else if (is_quoting_start(loader))
 		loader_quoted(loader);

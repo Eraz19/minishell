@@ -31,12 +31,14 @@ t_error	from_str(t_word *out, const t_string *src, t_word_item_opt opt)
 
 	i = 0;
 	word_init(out);
+	if (!src || src->len == 0)
+		return (error(ERR_NO));
 	while (src->data[i] != '\0')
 	{
 		item = word_item_init(src->data[i], opt);
 		err = word_push(out, item);
 		if (err.type)
-			return (err);
+			return (word_free(out), err);
 		i++;
 	}
 	return (error(ERR_NO));

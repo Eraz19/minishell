@@ -27,9 +27,9 @@ static bool	pattern_push_item(t_string *out, t_word_item item)
 }
 
 t_error	braced_build_pattern(
-	t_expander *expander,
-	t_word *operand,
-	t_string *out)
+			t_expander *expander,
+			t_word *operand,
+			t_string *out)
 {
 	size_t		i;
 	t_word		expanded;

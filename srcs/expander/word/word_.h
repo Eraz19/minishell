@@ -44,9 +44,5 @@ t_error		word_get(t_word_item *out, const t_word *word, size_t index);
 t_error		from_str(t_word *out, const t_string *src, t_word_item_opt opt);
 t_error		to_str(t_string *out, const t_word *src, size_t start, size_t len);
 
-// ============= SPLIT FUNCTIONS ================
-
-t_error		word_split(t_fields *out, t_word *word, char c);
-
 #endif
 	

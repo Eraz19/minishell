@@ -5,5 +5,6 @@
 # include "expander_.h"
 
 t_error	quote_removal(t_expander *expander);
+t_error	quote_remove_char(t_expander *expander);
 
 #endif

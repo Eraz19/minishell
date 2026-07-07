@@ -110,5 +110,6 @@ t_error	serialize(const char *src, t_string *dst);
 t_error	scan_set_mode(t_scanner_mode *mode);
 
 bool	match_pattern(const char *pattern, const char *str, size_t len);
+bool	valid_bracket_exp_len(const char *pattern, size_t *len);
 
 #endif

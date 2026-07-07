@@ -43,7 +43,7 @@ t_error	quote_remove_char(t_expander *expander)
 		}
 	}
 	else
-		quote_removal_quoted(expander, item);
+		expander->err = quote_removal_quoted(expander, item);
 	return (expander->err);
 }
 

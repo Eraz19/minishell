@@ -37,14 +37,7 @@ t_error	field_splitting_word(t_expander *expander)
 	}
 	word_free(&expander->word);
 	if (expander->word_exp.len > 0)
-	{
-		if (!last_delim_white_space && expander->word_exp.len > 0)
-			return (delim_field(expander));
-		expander->err = fields_push(&expander->fields_exp, expander->word_exp);
-		if (expander->err.type)
-			return (expander->err);
-		word_init(&expander->word_exp);
-	}
+		return (delim_field(expander));
 	return (expander->err);
 }
 

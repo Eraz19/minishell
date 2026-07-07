@@ -61,6 +61,9 @@
 		"-I${workspaceFolder}/srcs/expander/loader",
 		"-I${workspaceFolder}/srcs/expander/loader/context",
 		"-I${workspaceFolder}/srcs/expander/path_name_expansion",
+		"-I${workspaceFolder}/srcs/expander/path_name_expansion/path_comps",
+		"-I${workspaceFolder}/srcs/expander/path_name_expansion/globbing",
+		"-I${workspaceFolder}/srcs/expander/path_name_expansion/path_matches",
 		"-I${workspaceFolder}/srcs/expander/field_splitting",
 		"-I${workspaceFolder}/srcs/expander/quote_removal",
 		"-I${workspaceFolder}/srcs/expander/quote_removal/context",
@@ -91,5 +94,6 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up"
-	]
+	],
+	"explorer.sortOrder": "modified"
 }

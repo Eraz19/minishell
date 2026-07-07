@@ -41,5 +41,7 @@ t_error	expander_load(t_expander *expander, t_expander_args *args)
 	if (expander->err.type)
 		return (loader_free(&loader), word_free(&word_copy), expander->err);
 	expander->err = fields_push(&expander->fields, word_copy);
+	if (expander->err.type)
+		return (loader_free(&loader), word_free(&word_copy), expander->err);
 	return (loader_free(&loader), expander->err);
 }

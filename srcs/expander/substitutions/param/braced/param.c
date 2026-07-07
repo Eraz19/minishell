@@ -3,10 +3,10 @@
 #include "param_expansion_.h"
 
 static t_error	braced_param_state(
-	t_expander *expander,
-	const t_string *name,
-	t_string *value,
-	bool *is_set)
+					t_expander *expander,
+					const t_string *name,
+					t_string *value,
+					bool *is_set)
 {
 	*is_set = true;
 	expander->err = params_get_from_const(name->data, value);
@@ -25,9 +25,9 @@ static t_error	braced_param_state(
 }
 
 static t_error	braced_param_simple(
-	t_expander *expander,
-	t_string *name,
-	t_word_item_opt opt)
+					t_expander *expander,
+					t_string *name,
+					t_word_item_opt opt)
 {
 	t_string	value;
 
@@ -42,9 +42,9 @@ static t_error	braced_param_simple(
 }
 
 static t_error	braced_operator(
-	t_expander *expander,
-	t_param_exp *param_exp,
-	size_t remaining)
+					t_expander *expander,
+					t_param_exp *param_exp,
+					size_t remaining)
 {
 	expander->err = parse_braced_op(expander,
 						&param_exp->has_colon,
