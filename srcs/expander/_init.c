@@ -4,6 +4,7 @@
 void	expander_init(t_expander *expander)
 {
 	*expander = (t_expander){0};
+	expander->assignment_offset = -1;
 	fields_init(&expander->fields);
 }
 
