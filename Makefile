@@ -46,6 +46,7 @@ SRCS			:= \
 	$(wildcard srcs/3_builder/*/*/*.c) \
 	$(wildcard srcs/3_builder/*/*/*/*.c) \
 	$(wildcard srcs/4_runner/*.c) \
+	$(wildcard srcs/4_runner/0_cmd_expansion/*.c) \
 	$(wildcard srcs/4_runner/0_functions/*.c) \
 	$(wildcard srcs/4_runner/0_tokens/*.c) \
 	$(wildcard srcs/4_runner/1_redirector/*.c) \
@@ -54,6 +55,7 @@ SRCS			:= \
 	$(wildcard srcs/4_runner/2_executor/*/*.c) \
 	$(wildcard srcs/4_runner/3_walker/*.c) \
 	$(wildcard srcs/builtins/*.c) \
+	$(wildcard srcs/cmd_cache/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
 	$(wildcard srcs/expander/*/*/*.c) \

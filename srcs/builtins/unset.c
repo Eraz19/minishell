@@ -83,7 +83,7 @@ static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 	return (error(ERR_NO));
 }
 
-int	unset(int argc, char **argv, char **envp)
+int	builtin_unset(int argc, char **argv, char **envp)
 {
 	t_getopt_out	out;
 	t_error			exit_status;
