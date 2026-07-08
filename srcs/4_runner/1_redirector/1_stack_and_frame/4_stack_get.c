@@ -2,7 +2,7 @@
 #include "redirector_priv.h"
 
 t_error	redirect_stack_get_frame(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			size_t index,
 			t_redir_frame **out_frame)
 {
@@ -13,7 +13,7 @@ t_error	redirect_stack_get_frame(
 }
 
 t_error	redirect_stack_get_current_frame(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			t_redir_frame **out_current_frame)
 {
 	if (stack->len == 0)
@@ -23,7 +23,7 @@ t_error	redirect_stack_get_current_frame(
 }
 
 t_error	redirect_stack_get_current_backup(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			t_redir_backup **out_current_backup)
 {
 	t_redir_frame	*frame;
@@ -36,7 +36,7 @@ t_error	redirect_stack_get_current_backup(
 }
 
 t_error	redirect_stack_get_backup(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			size_t frame_index,
 			size_t backup_index,
 			t_redir_backup **out_backup)

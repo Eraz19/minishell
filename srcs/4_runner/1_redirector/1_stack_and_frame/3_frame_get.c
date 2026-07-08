@@ -2,7 +2,7 @@
 #include "redirector_priv.h"
 
 t_error	redirect_frame_get_backup(
-			t_redir_frame *frame,
+			const t_redir_frame *frame,
 			size_t index,
 			t_redir_backup **out_backup)
 {
@@ -13,7 +13,7 @@ t_error	redirect_frame_get_backup(
 }
 
 t_error	redirect_frame_get_current_backup(
-			t_redir_frame *frame,
+			const t_redir_frame *frame,
 			t_redir_backup **out_current_backup)
 {
 	if (frame->len == 0)

@@ -16,26 +16,31 @@ t_error	redirect_stack_push(t_redir_stack *stack, t_redir_frame *frame);
 
 // @ret ERR_INDEX_OUT_OF_BOUND
 t_error	redirect_stack_get_frame(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			size_t index,
 			t_redir_frame **out_frame);
 
 // @ret ERR_INDEX_OUT_OF_BOUND
 t_error	redirect_stack_get_current_frame(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			t_redir_frame **out_current_frame);
 
 // @ret ERR_INDEX_OUT_OF_BOUND
 t_error	redirect_stack_get_backup(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			size_t frame_index,
 			size_t backup_index,
 			t_redir_backup **out_backup);
 
 // @ret ERR_INDEX_OUT_OF_BOUND
 t_error	redirect_stack_get_current_backup(
-			t_redir_stack *stack,
+			const t_redir_stack *stack,
 			t_redir_backup **out_current_backup);
+
+// 42 constraint: fcntl() is forbidden, so backup fds cannot be marked
+// FD_CLOEXEC. Best-effort cleanup in the child before execve().
+// This should be replaced by FD_CLOEXEC when fcntl() is available.
+void	redirect_stack_close_backups(const t_redir_stack *redir_stack);
 
 /* ************************************************************************* */
 /*                                   FRAME                                   */
@@ -49,13 +54,13 @@ t_error	redirect_frame_push(t_redir_stack *stack, t_redir_backup *backup);
 
 // @ret ERR_INDEX_OUT_OF_BOUND
 t_error	redirect_frame_get_backup(
-			t_redir_frame *frame,
+			const t_redir_frame *frame,
 			size_t index,
 			t_redir_backup **out_backup);
 
 // @ret ERR_INDEX_OUT_OF_BOUND
 t_error	redirect_frame_get_current_backup(
-			t_redir_frame *frame,
+			const t_redir_frame *frame,
 			t_redir_backup **out_current_backup);
 
 #endif
