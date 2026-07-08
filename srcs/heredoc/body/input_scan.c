@@ -36,7 +36,7 @@ t_error	body_continuation(t_body *body, bool *continuation)
 	else
 	{
 		body->item->delim.data[body->item->delim.len - 1] = '\0';
-		body->err = error_print(error(ERR_REDIRECTION_FAILED), "heredoc",
+		body->err = error_print(error(ERR_POSIX_REDIRECTION), "heredoc",
 			"missing delimiter", NULL, "'%s'", body->item->delim.data);
 		return (body->err);
 	}

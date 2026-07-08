@@ -10,7 +10,7 @@
 /*                                  HELPERS                                  */
 /* ************************************************************************* */
 
-// @ret ERR_REDIRECTION_FAILED / ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_POSIX_REDIRECTION / ERR_INTERRUPTED / ERR_LIBC
 t_error	fd_tracker_backup_priv(
 			t_fd_tracker *tracker,
 			int fd,

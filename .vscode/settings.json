@@ -55,6 +55,7 @@
 		"-I${workspaceFolder}/srcs/4_runner/2_executor/1_resolver",
 		"-I${workspaceFolder}/srcs/4_runner/2_executor/2_assignator",
 		"-I${workspaceFolder}/srcs/4_runner/2_executor/3_searcher",
+		"-I${workspaceFolder}/srcs/4_runner/2_executor/4_dispatcher",
 		"-I${workspaceFolder}/srcs/alias",
 		"-I${workspaceFolder}/srcs/alias/stack",
 		"-I${workspaceFolder}/srcs/builtins",

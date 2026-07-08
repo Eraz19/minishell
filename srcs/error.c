@@ -18,9 +18,9 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
-	else if (err.type == ERR_CMD_NOT_EXECUTABLE)
+	else if (err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
 		return ("Permission denied");
-	else if (err.type == ERR_CMD_NOT_FOUND)
+	else if (err.type == ERR_POSIX_CMD_NOT_FOUND)
 		return ("command not found");
 	else if (err.type == ERR_EOF)
 		return ("unexpected end of file");
@@ -54,7 +54,7 @@ const char	*error_to_string(t_error err)
 		return ("invalid function name");
 	else if (err.type == ERR_PARSER_INVALID_STATE)
 		return ("invalid state");
-	else if (err.type == ERR_REDIRECTION_FAILED)
+	else if (err.type == ERR_POSIX_REDIRECTION)
 		return ("redirection failed");
 	else if (err.type == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");

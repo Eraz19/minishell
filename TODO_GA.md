@@ -52,8 +52,8 @@
 ```
 
 - `execve()`
-	- `ENOENT` / `ENOTDIR` => `ERR_CMD_NOT_FOUND`
-	- `EACCES` / `ELOOP` / `ENAMETOOLONG` => `ERR_CMD_NOT_EXECUTABLE`
+	- `ENOENT` / `ENOTDIR` => `ERR_POSIX_CMD_NOT_FOUND`
+	- `EACCES` / `ELOOP` / `ENAMETOOLONG` => `ERR_POSIX_CMD_NOT_EXECUTABLE`
 	- `ENOEXEC` => ⚠️ lancer un shell avec ce pathname comme script (sauf si heuristic de rejet)
 	- Autres => `ERR_LIBC`
 - ⚠️ `builtins` must be associated with a `directory` to know when to recognize them during `PATH` exploration
@@ -78,6 +78,9 @@
 
 # ALEXANDER
 
+- `expander`:
+	- `error_print()` before return
+	- If error != `ERR_LIBC` => requalify `ERR_POSIX_EXPANSION`
 - `libft`: add `string_take_string()`
 - `EXP_DSQUOTE`:
 	- process first, then apply all other expansions from the beginning of `word`

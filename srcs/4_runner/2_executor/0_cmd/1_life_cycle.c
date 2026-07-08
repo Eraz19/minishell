@@ -12,6 +12,7 @@ void	cmd_init(t_cmd *cmd)
 	cmd->builtin = NULL;
 	cmd->function = NULL;
 	cmd->path_is_temporary = false;
+	cmd->exit_status = (int)ERR_NO;
 }
 
 void	cmd_free(t_cmd *cmd)
@@ -25,4 +26,5 @@ void	cmd_free(t_cmd *cmd)
 	cmd->builtin = NULL;
 	cmd->function = NULL;
 	cmd->path_is_temporary = false;
+	cmd->exit_status = (int)ERR_NO;
 }

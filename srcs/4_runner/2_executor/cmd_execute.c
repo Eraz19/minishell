@@ -5,6 +5,8 @@
 #include "redirector.h"
 #include "cmd_assignator.h"
 #include "cmd_searcher.h"
+#include "cmd_dispatcher.h"
+#include "params.h"
 
 static inline t_error	cmd_redirect_start(
 							const t_cmd *cmd,
@@ -30,30 +32,20 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 	return (cmd_search(cmd, cache));
 }
 
-static inline t_error	cmd_handle_error(
-							t_cmd *cmd,
-							t_redirector *redirector,
-							t_error err)
+// TODO: implement
+// TODO: requalify error but let runner loop decide if shell must exit or not
+t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied)
 {
-	t_error	redirect_err;
-
-	redirect_err = cmd_redirect_stop(cmd, redirector);
+	(void)params_set_last_status(cmd->exit_status);
+	if (redir_applied == true)
+		(void)cmd_redirect_stop(cmd, &runner->redirector);
+	(void)runner;
+	(void)error_print(error(ERR_NOT_IMPLEMENTED), "runner", __func__, NULL, NULL);
 	cmd_free(cmd);
-	if (redirect_err.type
-		&& (err.type == ERR_VAR_READ_ONLY
-		|| err.type == ERR_CMD_NOT_FOUND
-		|| err.type == ERR_CMD_NOT_EXECUTABLE))
-	{
-		(void)error_print(err, NULL, NULL);
-		return (redirect_err);
-	}
 	return (err);
 }
 
-t_error cmd_execute(
-			t_runner *runner,
-			t_ast_simple_command *simple_command,
-			int *exit_status)
+t_error cmd_execute(t_runner *runner, t_ast_simple_command *simple_command)
 {
 	t_cmd	cmd;
 	t_error	err;
@@ -61,17 +53,19 @@ t_error cmd_execute(
 	cmd_init(&cmd);
 	err = cmd_resolve(&cmd, &runner->functions, &simple_command->words);
 	if (err.type)
-		return (cmd_free(&cmd), err);
+		return (cmd_finalize(&cmd, runner, err, false));
 	err = cmd_redirect_start(&cmd, &runner->redirector, simple_command);
 	if (err.type)
-		return (cmd_free(&cmd), err);
+		return (cmd_finalize(&cmd, runner, err, false));
 	err = cmd_assign(&cmd, &simple_command->assignments);
-	if (err.type == ERR_NO && cmd.type == CMD_EXTERNAL)
-		err = cmd_search_(&cmd, &runner->cmd_cache);
 	if (err.type)
-		return (cmd_handle_error(&cmd, &runner->redirector, err));
-	// TODO: execute (fork, close_backups, execve, wait, set $?)
-	err = cmd_redirect_stop(&cmd, &runner->redirector);
-	cmd_free(&cmd);
-	return (err);
+		return (cmd_finalize(&cmd, runner, err, true));
+	if (cmd.type == CMD_EXTERNAL)
+	{
+		err = cmd_search_(&cmd, &runner->cmd_cache);
+		if (err.type)
+			return (cmd_finalize(&cmd, runner, err, true));
+	}
+	cmd_dispatch(&cmd);
+	return (cmd_finalize(&cmd, runner, err, true));
 }

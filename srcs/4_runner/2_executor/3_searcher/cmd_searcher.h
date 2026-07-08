@@ -25,7 +25,7 @@
  * @param cache Optional command cache, can be @c NULL (borrowed).
  * @param out_cmd_path Destination string initialized by the function
  *                     (borrowed).
- * @return @c ERR_NO, @c ERR_CMD_NOT_FOUND, @c ERR_CMD_NOT_EXECUTABLE,
+ * @return @c ERR_NO, @c ERR_POSIX_CMD_NOT_FOUND, @c ERR_POSIX_CMD_NOT_EXECUTABLE,
  *         @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	cmd_search(t_cmd *cmd, t_cmd_cache *cache);

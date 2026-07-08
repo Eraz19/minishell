@@ -35,7 +35,7 @@ t_error	cmd_check(
  *
  * @param cmd_name Command name to inspect (borrowed, read-only).
  * @param ref_cmd_path Destination string updated in place (borrowed).
- * @return @c ERR_NO, @c ERR_CMD_NOT_FOUND or @c ERR_LIBC.
+ * @return @c ERR_NO, @c ERR_POSIX_CMD_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	cmd_try_absolute_path(const t_string *cmd_name, t_string *ref_cmd_path);
 
@@ -54,7 +54,7 @@ t_error	cmd_try_absolute_path(const t_string *cmd_name, t_string *ref_cmd_path);
  *                                     (borrowed).
  * @param ref_cmd_path Destination string updated in place on success
  *                     (borrowed).
- * @return @c ERR_NO, @c ERR_CMD_NOT_FOUND, @c ERR_CMD_NOT_EXECUTABLE,
+ * @return @c ERR_NO, @c ERR_POSIX_CMD_NOT_FOUND, @c ERR_POSIX_CMD_NOT_EXECUTABLE,
  *         @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	cmd_try_cache(
@@ -76,7 +76,7 @@ t_error	cmd_try_cache(
  *             items (borrowed, read-only).
  * @param ref_cmd_path Destination string updated in place on success
  *                     (borrowed).
- * @return @c ERR_NO, @c ERR_CMD_NOT_FOUND, @c ERR_CMD_NOT_EXECUTABLE,
+ * @return @c ERR_NO, @c ERR_POSIX_CMD_NOT_FOUND, @c ERR_POSIX_CMD_NOT_EXECUTABLE,
  *         @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	cmd_try_envp_path(

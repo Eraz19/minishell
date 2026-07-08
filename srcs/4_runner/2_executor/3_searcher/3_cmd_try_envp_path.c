@@ -4,7 +4,7 @@
 #define PATH_NAME				"PATH"
 #define PATH_VALUE_START_INDEX	5
 
-// @ret ERR_CMD_NOT_FOUND
+// @ret ERR_POSIX_CMD_NOT_FOUND
 static inline t_error	cmd_find_path_in_envp(
 							const t_vector *envp,
 							t_string *ref_path)
@@ -21,7 +21,7 @@ static inline t_error	cmd_find_path_in_envp(
 		if (cmd_entry_is_target(PATH_NAME, entry))
 		{
 			if (entry[PATH_VALUE_START_INDEX] == '\0')
-				return (error(ERR_CMD_NOT_FOUND));
+				return (error(ERR_POSIX_CMD_NOT_FOUND));
 			ref_path->data = entry + PATH_VALUE_START_INDEX;
 			ref_path->cap = 0;
 			ref_path->len = str_len(ref_path->data);
@@ -29,7 +29,7 @@ static inline t_error	cmd_find_path_in_envp(
 		}
 		i++;
 	}
-	return (error(ERR_CMD_NOT_FOUND));
+	return (error(ERR_POSIX_CMD_NOT_FOUND));
 }
 
 // @ret ERR_LIBC
@@ -57,7 +57,7 @@ static inline t_error	cmd_build_path(
 	return (error(ERR_NO));
 }
 
-// @ret ERR_CMD_NOT_EXECUTABLE / ERR_CMD_NOT_FOUND / ERR_LIBC
+// @ret ERR_POSIX_CMD_NOT_EXECUTABLE / ERR_POSIX_CMD_NOT_FOUND / ERR_LIBC
 static inline t_error	cmd_find(
 							const t_string *cmd_name,
 							t_vector *path_entries,
@@ -86,8 +86,8 @@ static inline t_error	cmd_find(
 	}
 	string_free(ref_cmd_path);
 	if (found_but_not_executable == true)
-		return (error(ERR_CMD_NOT_EXECUTABLE));
-	return (error(ERR_CMD_NOT_FOUND));
+		return (error(ERR_POSIX_CMD_NOT_EXECUTABLE));
+	return (error(ERR_POSIX_CMD_NOT_FOUND));
 }
 
 t_error	cmd_try_envp_path(

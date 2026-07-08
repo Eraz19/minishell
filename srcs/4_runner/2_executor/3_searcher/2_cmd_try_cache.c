@@ -14,7 +14,7 @@ t_error	cmd_try_cache(
 
 	*out_found_but_not_executable = false;
 	if (cache == NULL)
-		return (error(ERR_CMD_NOT_FOUND));
+		return (error(ERR_POSIX_CMD_NOT_FOUND));
 	err = cmd_cache_get(cache, cmd_name, &cmd_path_from_cache);
 	if (err.type)
 		return (err);
@@ -24,9 +24,9 @@ t_error	cmd_try_cache(
 	if (is_valid == false)
 		cmd_cache_unset(cache, cmd_name);
 	if (*out_found_but_not_executable == true)
-		return (error(ERR_CMD_NOT_EXECUTABLE));
+		return (error(ERR_POSIX_CMD_NOT_EXECUTABLE));
 	else if (is_valid == false)
-		return (error(ERR_CMD_NOT_FOUND));
+		return (error(ERR_POSIX_CMD_NOT_FOUND));
 	if (!string_dup(ref_cmd_path, cmd_path_from_cache))
 		return (error_sys());
 	return (err);

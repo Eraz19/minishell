@@ -77,39 +77,39 @@ static t_error	export_add_one(const char *builtin_name, const char *string)
 static t_error	export_add(size_t first_operand_index, int argc, char **argv)
 {
 	int		i;
-	t_error	last_exit_code;
-	t_error	exit_code;
+	t_error	last_exit_status;
+	t_error	exit_status;
 
-	exit_code = error(ERR_NO);
+	exit_status = error(ERR_NO);
 	i = (int)first_operand_index;
 	while (i < argc)
 	{
-		last_exit_code = export_add_one(argv[0], argv[i++]);
-		if (last_exit_code.type != ERR_NO)
-			exit_code = last_exit_code;
+		last_exit_status = export_add_one(argv[0], argv[i++]);
+		if (last_exit_status.type != ERR_NO)
+			exit_status = last_exit_status;
 	}
-	return (exit_code);
+	return (exit_status);
 }
 
 int	export(int argc, char **argv, char **envp)
 {
 	t_getopt_out	out;
-	t_error			exit_code;
+	t_error			exit_status;
 
 	(void)envp;
-	exit_code = export_process_options(argc, argv, &out);
-	if (exit_code.type == ERR_LIBC)
-		return ((int)error_print(exit_code, argv[0], "options parsing failed", NULL, NULL).type);
-	if (exit_code.type != ERR_NO)
-		return ((int)exit_code.type);
+	exit_status = export_process_options(argc, argv, &out);
+	if (exit_status.type == ERR_LIBC)
+		return ((int)error_print(exit_status, argv[0], "options parsing failed", NULL, NULL).type);
+	if (exit_status.type != ERR_NO)
+		return ((int)exit_status.type);
 	if (out.options.len > 0)
 	{
-		exit_code = params_print(PARAMS_PRINT_EXPORT);
-		if (exit_code.type != ERR_NO)
-			(void)error_print(exit_code, argv[0], "variables write failed", NULL, NULL);
+		exit_status = params_print(PARAMS_PRINT_EXPORT);
+		if (exit_status.type != ERR_NO)
+			(void)error_print(exit_status, argv[0], "variables write failed", NULL, NULL);
 	}
 	else
-		exit_code = export_add(out.first_operand_index, argc, argv);
+		exit_status = export_add(out.first_operand_index, argc, argv);
 	vector_free(&out.options, NULL);
-	return ((int)exit_code.type);
+	return ((int)exit_status.type);
 }

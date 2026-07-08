@@ -16,7 +16,7 @@ static inline void	fd_tracker_update_next_available_fd(
 	tracker->next_available = (size_t)fd;
 }
 
-// @ret ERR_REDIRECTION_FAILED / ERR_LIBC
+// @ret ERR_POSIX_REDIRECTION / ERR_LIBC
 static inline t_error	fd_tracker_get_candidate(
 							t_fd_tracker *tracker,
 							int *out_candidate)

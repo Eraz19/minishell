@@ -53,25 +53,25 @@ static t_error	unset_var(size_t first_operand_index, int argc, char **argv)
 {
 	int			i;
 	t_string	tmp;
-	t_error		last_exit_code;
-	t_error		exit_code;
+	t_error		last_exit_status;
+	t_error		exit_status;
 
-	exit_code = error(ERR_NO);
+	exit_status = error(ERR_NO);
 	i = (int)first_operand_index;
 	while (i < argc)
 	{
 		tmp.data = argv[i];
 		tmp.len = (str_len(tmp.data));
 		tmp.cap = 0;
-		last_exit_code = params_unset_variable(&tmp);
-		if (last_exit_code.type != ERR_NO)
+		last_exit_status = params_unset_variable(&tmp);
+		if (last_exit_status.type != ERR_NO)
 		{
-			exit_code = error_print(
-				last_exit_code, argv[0], argv[i], NULL, NULL);
+			exit_status = error_print(
+				last_exit_status, argv[0], argv[i], NULL, NULL);
 		}
 		i++;
 	}
-	return (exit_code);
+	return (exit_status);
 }
 
 static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
@@ -86,18 +86,18 @@ static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 int	unset(int argc, char **argv, char **envp)
 {
 	t_getopt_out	out;
-	t_error			exit_code;
+	t_error			exit_status;
 
 	(void)envp;
-	exit_code = unset_process_options(argc, argv, &out);
-	if (exit_code.type == ERR_LIBC)
-		return ((int)error_print(exit_code, argv[0], "options parsing failed", NULL, NULL).type);
-	if (exit_code.type != ERR_NO)
-		return ((int)exit_code.type);
+	exit_status = unset_process_options(argc, argv, &out);
+	if (exit_status.type == ERR_LIBC)
+		return ((int)error_print(exit_status, argv[0], "options parsing failed", NULL, NULL).type);
+	if (exit_status.type != ERR_NO)
+		return ((int)exit_status.type);
 	if (unset_has_option(&out, 'f'))
-		exit_code = unset_fun(out.first_operand_index, argc, argv);
+		exit_status = unset_fun(out.first_operand_index, argc, argv);
 	else
-		exit_code = unset_var(out.first_operand_index, argc, argv);
+		exit_status = unset_var(out.first_operand_index, argc, argv);
 	vector_free(&out.options, NULL);
-	return ((int)exit_code.type);
+	return ((int)exit_status.type);
 }

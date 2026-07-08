@@ -59,7 +59,7 @@ t_error	cmd_cache_clear_void(void);
  * @param cmd_name Command name to look up (borrowed, read-only).
  * @param out_cmd_path Destination receiving the borrowed cached path or
  *                     @c NULL (borrowed).
- * @return @c ERR_NO when a cached path is found, @c ERR_CMD_NOT_FOUND when
+ * @return @c ERR_NO when a cached path is found, @c ERR_POSIX_CMD_NOT_FOUND when
  *         command hashing is disabled or when @p cmd_name is not cached, or
  *         @c ERR_SHELL_NOT_FOUND / @c ERR_LIBC on option lookup failure.
  */

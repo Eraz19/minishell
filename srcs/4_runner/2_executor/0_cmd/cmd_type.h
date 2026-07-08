@@ -60,6 +60,7 @@ typedef struct s_cmd
 	 *         (borrowed, read-only). */
 	const t_function	*function;
 	bool				path_is_temporary;
+	int					exit_status;
 }	t_cmd;
 
 #endif
