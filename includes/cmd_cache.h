@@ -43,6 +43,13 @@ void	cmd_cache_free(t_cmd_cache *cache);
 void	cmd_cache_clear(t_cmd_cache *cache);
 
 /**
+ * @brief Clear the command cache stored in the current shell runner.
+ *
+ * @return @c ERR_NO or @c ERR_SHELL_NOT_FOUND.
+ */
+t_error	cmd_cache_clear_void(void);
+
+/**
  * @brief Read a cached command path.
  *
  * @note The returned path is borrowed from @p cache and becomes invalid if the
