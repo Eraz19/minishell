@@ -6,6 +6,8 @@ bool	path_comp_is_special(const char *pattern)
 	size_t	i;
 	size_t	len;
 
+	if (pattern == NULL)
+		return (false);
 	i = 0;
 	while (pattern[i] != '\0')
 	{

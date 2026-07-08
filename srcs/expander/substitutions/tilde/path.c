@@ -113,6 +113,7 @@ t_error	expand_user_path(t_expander *expander)
 		return (string_free(&username), expander->err);
 	if (expander->err.type != ERR_NO)
 	{
+		expander->err = error(ERR_NO);
 		keep_tilde_prefix_literal(expander, &username);
 		return (string_free(&username), expander->err);
 	}
