@@ -21,6 +21,7 @@ t_error	expand_positional_single(t_expander *expander, t_word_item_opt opt)
 			return (string_free(&param_name), expander->err = error_sys());
 	}
 	string_free(&param_name);
+	opt.is_expand_res = true;
 	expander->err = from_str(&word_exp, &param_exp, opt);
 	if (expander->err.type)
 		return (string_free(&param_exp), expander->err);

@@ -52,6 +52,7 @@ t_error	expand_positional_star(t_expander *expander, t_word_item_opt opt)
 	expander->err = join_param(&param_exp, params, &sep);
 	if (expander->err.type)
 		return (string_free(&sep), string_free(&param_exp), expander->err);
+	opt.is_expand_res = true;
 	expander->err = from_str(&word_exp, &param_exp, opt);
 	if (expander->err.type)
 		return (string_free(&sep), string_free(&param_exp), expander->err);
@@ -75,6 +76,7 @@ t_error	expand_positional_at(t_expander *expander, t_word_item_opt opt)
 	while (i < params->len)
 	{
 		param = ((t_string *)params->data)[i];
+		opt.is_expand_res = true;
 		expander->err = from_str(&word_exp, &param, opt);
 		if (expander->err.type)
 			return (expander->err);

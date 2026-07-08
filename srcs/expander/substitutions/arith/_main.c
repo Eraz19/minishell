@@ -24,12 +24,16 @@ t_error	extract_arith_word(t_expander *expander, t_word *word)
 	word_init(word);
 	while (i < len)
 	{
-		if (i > 2 && i < len - 2)
-			expander->err = forward_word_item(word, &expander->word);
-		else
-			expander->err = word_fpop(&item, &expander->word);
+		expander->err = word_fpop(&item, &expander->word);
 		if (expander->err.type)
 			return (word_free(word), expander->err);
+		if (i > 2 && i < len - 2)
+		{
+			item.opt.quoted = CONTEXT_DQUOTE;
+			expander->err = word_push(word, item);
+			if (expander->err.type)
+				return (word_free(word), expander->err);
+		}
 		++i;
 	}
 	return (expander->err);
@@ -51,6 +55,9 @@ t_error	arith_substitution(t_expander *expander)
 	if (extract_arith_word(expander, &arith_word).type)
 		return (expander->err);
 	expander_init(&arith_expander);
+	fields_push(&arith_expander.fields, arith_word);
+	if (expander->err.type)
+		return (expander_free(&arith_expander), expander->err);
 	arith_expander.word = arith_word;
 	arith_expander.ifs = expander->ifs;
 	arith_expander.flags = EXP_PARAM | EXP_CMD_SUB | EXP_QUOTE_REMOVAL;
