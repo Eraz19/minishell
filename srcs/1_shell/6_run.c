@@ -33,7 +33,7 @@ void	shell_run(int argc, char **argv, char **envp)
 		error_print(err, NULL, NULL);
 		return ;
 	}
-	err = runner_run();
+	err = runner_run(&shell->runner);
 	if (err.type)
 		error_print(err, "runner", NULL, NULL);
 	history_err = history_save();

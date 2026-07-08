@@ -2,7 +2,6 @@
 # define AST_TYPE_H
 
 # include "libft.h"
-# include "error.h"
 # include "token.h"
 # include <stddef.h>
 
@@ -150,27 +149,5 @@ typedef struct s_ast_command
 }	t_ast_command;
 
 typedef t_ast_list	t_ast_root;
-
-/* ************************************************************************* */
-/*                                    WALKER                                 */
-/* ************************************************************************* */
-
-/* --- LIST WALKER (INTERNAL) --- */
-t_error	walk_command(t_ast_command *command);
-t_error	walk_pipeline(t_ast_pipeline *pipeline);
-t_error	walk_and_or(t_ast_and_or *and_or);
-
-/* --- LIST WALKER (PRIVATE) --- */
-t_error	walk_list(t_ast_list *list);
-
-/* --- CONTROL WALKER (PRIVATE) --- */
-t_error	walk_if(t_ast_if *if_clause);
-t_error	walk_for(t_ast_for *for_clause);
-t_error	walk_loop(t_ast_loop *loop);
-t_error	walk_case(t_ast_case *case_clause);
-t_error	walk_func(t_ast_function_def *function_def, t_ast_redir_list *redirs);
-
-/* --- MAIN WALKER (PRIVATE) --- */
-t_error walk_ast(t_ast_root *root_ast_node);
 
 #endif

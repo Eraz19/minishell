@@ -3,6 +3,7 @@
 #include "builder.h"
 #include "runner.h"
 #include "options.h"
+#include "walker.h"
 #include <stdbool.h>
 
 static inline t_error	reset_scanner_and_builder(void)
@@ -20,21 +21,20 @@ static inline t_error	reset_scanner_and_builder(void)
 	return (err);
 }
 
-static inline t_error	runner_loop_cycle(void)
+static inline t_error	runner_loop_cycle(t_runner *runner)
 {
 	t_ast_root	ast_root;
 	t_error		err;
 
 	ast_root_init(&ast_root);
 	err = builder_get_ast(&ast_root);
-	// TODO: check error
-	// TODO: err = walk_ast(&ast_root);
-	// TODO: err = runner_handle_walker_error(runner, err);
+	if (err.type == ERR_NO)
+		err = walk(runner, &ast_root);
 	ast_root_free(&ast_root);
 	return (err);
 }
 
-t_error	runner_run(void)
+t_error	runner_run(t_runner *runner)
 {
 	bool	is_interactive;
 	t_error	err;
@@ -44,7 +44,7 @@ t_error	runner_run(void)
 		return (err);
 	while (err.type == ERR_NO)
 	{
-		err = runner_loop_cycle();
+		err = runner_loop_cycle(runner);
 		if (err.type == ERR_EOF)
 		{
 			if (is_interactive == false)
