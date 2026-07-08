@@ -24,21 +24,27 @@ typedef enum e_cmd_type
  * @struct s_cmd
  * @brief Expanded and classified command descriptor used by the executor.
  *
- * @var s_cmd::name Command name view borrowed from the first entry of
- *                  @ref s_cmd::argv.
- * @var s_cmd::type Resolved command kind.
- * @var s_cmd::is_declaration_utility Whether the command name is a declaration
- *                                    utility such as @c export or
- *                                    @c readonly.
- * @var s_cmd::argv Expanded argument vector as a NUL-terminated array of owned
- *                  @c char * items.
- * @var s_cmd::envp Environment array built for command execution as a
- *                  NUL-terminated array of owned @c char * items.
- * @var s_cmd::path Resolved executable path for @c CMD_EXTERNAL commands
- *                  managed as a @ref t_string.
- * @var s_cmd::builtin Builtin entry point selected for builtin command kinds.
- * @var s_cmd::function Shell function selected for @c CMD_FUNCTION commands
- *                      (borrowed, read-only).
+ * @var s_cmd::name Command name view into the first expanded argument,
+ *                  managed by the @c cmd_resolver submodule.
+ * @var s_cmd::type Command kind selected by the @c cmd_resolver submodule.
+ * @var s_cmd::is_declaration_utility Whether the resolved name behaves as a
+ *                                    declaration utility, managed by the
+ *                                    @c cmd_resolver submodule.
+ * @var s_cmd::argv Expanded argument vector stored as owned @c char * items,
+ *                  managed by the @c cmd_resolver submodule.
+ * @var s_cmd::envp Execution environment stored as owned @c char * items,
+ *                  managed by the @c cmd_assignator submodule.
+ * @var s_cmd::path Executable path for @c CMD_EXTERNAL commands, managed by
+ *                  the @c cmd_searcher submodule.
+ * @var s_cmd::builtin Builtin entry point selected by the @c cmd_resolver
+ *                     submodule.
+ * @var s_cmd::function Shell function selected by the @c cmd_resolver
+ *                      submodule (borrowed, read-only).
+ * @var s_cmd::path_is_temporary Whether @c PATH was overridden by assignment
+ *                               words for the current command, managed by the
+ *                               @c cmd_assignator submodule.
+ * @var s_cmd::exit_status Command status produced by the
+ *                         @c cmd_dispatcher submodule.
  */
 typedef struct s_cmd
 {
@@ -59,7 +65,9 @@ typedef struct s_cmd
 	/** @brief Resolved shell function for @c CMD_FUNCTION commands
 	 *         (borrowed, read-only). */
 	const t_function	*function;
+	/** @brief Whether assignment words override @c PATH for this command. */
 	bool				path_is_temporary;
+	/** @brief Exit status produced when the command is dispatched. */
 	int					exit_status;
 }	t_cmd;
 

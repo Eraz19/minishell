@@ -1,7 +1,7 @@
 #include "cmd_searcher_priv.h"
 #include "entry_is_target.h"
 
-#define PATH_NAME				"PATH"
+#define PATH_TARGET				"PATH="
 #define PATH_VALUE_START_INDEX	5
 
 // @ret ERR_POSIX_CMD_NOT_FOUND
@@ -18,7 +18,7 @@ static inline t_error	cmd_find_path_in_envp(
 		entry = ((char **)envp->data)[i];
 		if (entry == NULL)
 			break ;
-		if (cmd_entry_is_target(PATH_NAME, entry))
+		if (cmd_entry_is_target(PATH_TARGET, entry))
 		{
 			if (entry[PATH_VALUE_START_INDEX] == '\0')
 				return (error(ERR_POSIX_CMD_NOT_FOUND));

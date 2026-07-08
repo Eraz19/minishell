@@ -24,12 +24,14 @@ static inline t_error	cmd_assignment_add_to_envp(
 		{
 			free(*entry);
 			*entry = expanded->data;
+			expanded->cap = 0;
 			return (error(ERR_NO));
 		}
 		i++;
 	}
 	if (!vector_push(&cmd->envp, &expanded->data))
 		return (err = error_sys(), string_free(expanded), err);
+	expanded->cap = 0;
 	return (error(ERR_NO));
 }
 

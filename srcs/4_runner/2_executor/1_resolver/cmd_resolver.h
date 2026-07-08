@@ -19,11 +19,11 @@
  * @note On success, the caller owns the resources stored in @p cmd and must
  *       later release them with @ref cmd_free().
  *
+ * @param cmd Destination command object already initialized by the caller
+ *            (borrowed).
  * @param functions Shell function table used for function lookup
  *                  (borrowed, read-only).
  * @param words Command words to resolve (borrowed).
- * @param cmd Destination command object already initialized by the caller
- *            (borrowed).
  * @return @c ERR_NO, @c ERR_INDEX_OUT_OF_BOUND, @c ERR_SHELL_NOT_FOUND,
  *         @c ERR_VAR_INVALID_NAME, @c ERR_VAR_NOT_FOUND,
  *         @c ERR_PARAM_BAD_SUBSTITUTION, @c ERR_PARAM_NULL_OR_UNSET,

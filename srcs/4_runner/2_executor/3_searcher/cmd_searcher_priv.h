@@ -31,6 +31,9 @@ t_error	cmd_check(
 /**
  * @brief Accept an explicit command path containing a slash.
  *
+ * The function only duplicates the explicit path. File existence and
+ * executability are checked later by @ref cmd_check().
+ *
  * @note @p ref_cmd_path must already be initialized by the caller.
  *
  * @param cmd_name Command name to inspect (borrowed, read-only).
@@ -66,7 +69,7 @@ t_error	cmd_try_cache(
 /**
  * @brief Search a command through the directories listed in @c PATH .
  *
- * Successful resolutions are inserted into @p cache when it is not @c NULL .
+ * Successful resolutions are inserted into @p cache when it is not @c NULL.
  *
  * @note @p ref_cmd_path must already be initialized by the caller.
  *

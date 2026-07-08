@@ -87,6 +87,7 @@ t_error	cmd_resolve(
 			const t_tokens *words)
 {
 	size_t	index;
+	char	*null;
 	t_error	err;
 
 	index = 0;
@@ -95,6 +96,12 @@ t_error	cmd_resolve(
 	{
 		err = cmd_expand_word(cmd, functions, words, index);
 		index++;
+	}
+	if (err.type == ERR_NO)
+	{
+		null = NULL;
+		if (!vector_push(&cmd->argv, &null))
+			return (error_sys());
 	}
 	return (err);
 }

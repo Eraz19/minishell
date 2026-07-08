@@ -49,6 +49,9 @@ SRCS			:= \
 	$(wildcard srcs/4_runner/0_tokens/*.c) \
 	$(wildcard srcs/4_runner/1_redirector/*.c) \
 	$(wildcard srcs/4_runner/1_redirector/*/*.c) \
+	$(wildcard srcs/4_runner/2_executor/*.c) \
+	$(wildcard srcs/4_runner/2_executor/*/*.c) \
+	$(wildcard srcs/4_runner/3_walker/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
@@ -108,12 +111,21 @@ INCLUDES		:= \
 	-Isrcs/3_builder/3_converter \
 	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \
+	-Isrcs/4_runner/0_cmd_expansion \
 	-Isrcs/4_runner/0_functions \
 	-Isrcs/4_runner/0_tokens \
 	-Isrcs/4_runner/1_redirector \
 	-Isrcs/4_runner/1_redirector/1_stack_and_frame \
 	-Isrcs/4_runner/1_redirector/2_tracker \
 	-Isrcs/4_runner/1_redirector/3_fd_manager \
+	-Isrcs/4_runner/2_executor \
+	-Isrcs/4_runner/2_executor/0_cmd \
+	-Isrcs/4_runner/2_executor/0_entry_is_target \
+	-Isrcs/4_runner/2_executor/1_resolver \
+	-Isrcs/4_runner/2_executor/2_assignator \
+	-Isrcs/4_runner/2_executor/3_searcher \
+	-Isrcs/4_runner/2_executor/4_dispatcher \
+	-Isrcs/4_runner/3_walker \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \
 	-Isrcs/builtins \

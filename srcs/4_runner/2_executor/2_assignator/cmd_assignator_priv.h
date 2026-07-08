@@ -40,19 +40,17 @@ t_error	cmd_assignment_expand(
 /**
  * @brief Apply one expanded assignment according to the command kind.
  *
- * For declarations, special builtins and functions, the assignment updates the
- * shell variable store. Otherwise, it is converted into one owned @c char*
- * entry inside @p out_envp .
+ * For @c CMD_NONE, special builtins and functions, the assignment updates the
+ * shell variable store. Otherwise, it is merged into @p cmd->envp and may mark
+ * @p cmd->path_is_temporary when it overrides @c PATH.
  *
  * @note @p expanded is consumed by the function whether it succeeds or fails.
- * @note @p out_envp must already be initialized by the caller.
+ * @note @p cmd->envp must already be initialized by the caller.
  *
- * @param cmd_type Resolution kind of the command receiving the assignment.
+ * @param cmd Command receiving the assignment (borrowed).
  * @param token Original assignment token (borrowed, read-only).
  * @param expanded Expanded assignment string consumed by the function
- *                 (borrowed).
- * @param out_envp Destination environment vector already initialized by the
- *                 caller (borrowed).
+ *                 (ownership taken by @c cmd_assignment_process).
  * @return @c ERR_NO, @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
  *         @c ERR_VAR_READ_ONLY or @c ERR_LIBC.
  */
