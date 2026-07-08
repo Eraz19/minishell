@@ -1,4 +1,5 @@
 #include "variables_priv.h"
+#include "utils.h"
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
@@ -44,7 +45,7 @@ t_error	var_build_envp(const t_var_list *variables, t_vector *dst_envp)
 			continue ;
 		err = var_add_entry(&var->name, &var->value, dst_envp);
 		if (err.type)
-			return (vector_free(dst_envp, free), err);
+			return (vector_free(dst_envp, free_char_ptr_void), err);
 	}
 	return (error(ERR_NO));
 }

@@ -64,8 +64,8 @@ t_error	alias_add(const char *name, const char *value)
 
 t_error	alias_expand_token(t_string *expansion, const t_string *token_value)
 {
-	t_alias	*alias;
-	char	*raw;
+	t_alias		*alias;
+	const char	*raw;
 
 	alias = shell_get_alias();
 	if (alias == NULL)

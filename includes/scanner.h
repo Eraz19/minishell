@@ -3,8 +3,9 @@
 
 # include "error.h"
 # include "token.h"
-# include "heredoc.h"
 # include "lexer.h"
+# include "heredoc.h"
+# include "input_mode.h"
 
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
@@ -25,20 +26,6 @@
 
 /**
  * @ingroup scanner
- * @enum e_scanner_mode
- * @brief Where the scanner reads its input from.
- */
-typedef enum e_scanner_mode
-{
-	SCAN_NONE,		/**< Unset / not yet loaded. */
-	SCAN_FILE,		/**< Read the whole input from a file path. */
-	SCAN_STRING,	/**< Read the input from an in-memory command string. */
-	SCAN_STDIN_TTY,	/**< Read input line-by-line from standard input, with a terminal. */
-	SCAN_STDIN_PIPE	/**< Read input line-by-line from standard input. */
-}	t_scanner_mode;
-
-/**
- * @ingroup scanner
  * @struct s_scanner
  * @brief Aggregate state of the scanner module.
  *
@@ -51,7 +38,7 @@ typedef enum e_scanner_mode
 typedef struct s_scanner
 {
 	t_error			err;
-	t_scanner_mode	mode;
+	t_input_mode	mode;
 	t_lexer			lexer;
 	const char		*source;
 }	t_scanner;

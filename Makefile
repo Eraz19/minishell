@@ -29,6 +29,7 @@ SRCS			:= \
 	$(wildcard srcs/0_asm_stubs/*/*.c) \
 	$(wildcard srcs/0_context/*.c) \
 	$(wildcard srcs/0_context/*/*.c) \
+	$(wildcard srcs/0_input_mode/*.c) \
 	$(wildcard srcs/0_posix_helpers/*.c) \
 	$(wildcard srcs/0_posix_helpers/*/*.c) \
 	$(wildcard srcs/0_token/*.c) \

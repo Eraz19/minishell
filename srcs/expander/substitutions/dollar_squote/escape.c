@@ -23,7 +23,7 @@ bool	dollar_squote_build_map(t_hashmap *escapes)
 static bool	dollar_squote_simple_escape(char c, char *out, t_hashmap *escapes)
 {
 	char	key[2];
-	char	*value;
+	const char	*value;
 
 	key[0] = c;
 	key[1] = '\0';

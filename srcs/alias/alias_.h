@@ -12,7 +12,7 @@
  *
  * @param pairs NULL-terminated array of pairs (owned; freed by this call).
  */
-void	alias_print_all(t_key_value **pairs);
+void	alias_print_all(const t_key_value **pairs);
 
 t_error	alias_print_one(t_alias *alias, const char *name);
 

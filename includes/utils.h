@@ -6,7 +6,6 @@
 # include <pwd.h>
 # include <time.h>
 # include "error.h"
-# include "scanner.h"
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -121,26 +120,6 @@ bool	name_is_valid_from_const(const char *name);
  */
 t_error	serialize(const char *src, t_string *dst);
 
-/**
- * @brief Set the scanner mode based on shell options.
- *
- * @param mode Scanner mode to set (borrowed, read-only).
- * @return @c ERR_NO or @c ERR_LIBC.
- */
-t_error	scan_set_mode(t_scanner_mode *mode);
-
-/**
- * @brief Match a shell-style pattern against a bounded character sequence.
- *
- * Supported metacharacters are @c * @c ? @c [] and backslash escaping.
- * Matching consumes exactly @p len bytes from @p str .
- *
- * @param pattern NUL-terminated pattern to evaluate (borrowed, read-only).
- * @param str Character sequence to match (borrowed, read-only).
- * @param len Number of bytes available in @p str.
- * @return True when @p pattern matches exactly the first @p len bytes of
- *         @p str, false otherwise.
- */
 bool	match_pattern(const char *pattern, const char *str, size_t len);
 bool	valid_bracket_exp_len(const char *pattern, size_t *len);
 

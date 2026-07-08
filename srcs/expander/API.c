@@ -8,44 +8,48 @@
 #include "path_name_expansion_.h"
 #include "expander_substitutions_.h"
 
-static t_error	expander_cleanup(t_expander *expander)
+t_error	expand_word(t_expander *expander)
 {
-	t_error	err;
-
-	err = expander->err;
-	return (expander_free(expander), err);
+	if (substitutions(expander).type)
+		return (expander->err);
+	if (flag_is_active((uint)expander->flags, EXP_FIELD_SPLIT))
+	{
+		if (field_splitting(expander).type)
+			return (expander->err);
+	}
+	if (flag_is_active((uint)expander->flags, EXP_PATH_NAME))
+	{
+		if (path_name_expansion(expander).type)
+			return (expander->err);
+	}
+	if (flag_is_active((uint)expander->flags, EXP_QUOTE_REMOVAL))
+	{
+		if (quote_removal(expander).type)
+			return (expander->err);
+	}
+	return (expander->err);
 }
 
-t_error	expand_word(t_expansion *expansion, t_expander_args *args)
+t_error	run_expansion(t_expansion *expansion, t_expander_args *args)
 {
+	t_error		err;
 	t_expander	expander;
 
 	expander_init(&expander);
 	expansion_init(expansion);
 	if (expander_load(&expander, args).type)
-		return (expander_cleanup(&expander));
-	// check if DOLLAR_SQUOTE FLAG is active
-	//  - remove from flags
-	//	- call subsitutions() with the DOLLAR_SQUOTE flag active
-	if (substitutions(&expander).type)
-		return (expander_cleanup(&expander));
-	if (flag_is_active((uint)expander.flags, EXP_FIELD_SPLIT))
+		return (err = expander.err, expander_free(&expander), err);
+	if (flag_is_active(expander.flags, EXP_DOLLAR_SQUOTE))
 	{
-		if (field_splitting(&expander).type)
-			return (expander_cleanup(&expander));
+		expander.flags = EXP_DOLLAR_SQUOTE;
+		if (substitutions(&expander).type)
+			return (err = expander.err, expander_free(&expander), err);
 	}
-	if (flag_is_active((uint)expander.flags, EXP_PATH_NAME))
-	{
-		if (path_name_expansion(&expander).type)
-			return (expander_cleanup(&expander));
-	}
-	if (flag_is_active((uint)expander.flags, EXP_QUOTE_REMOVAL))
-	{
-		if (quote_removal(&expander).type)
-			return (expander_cleanup(&expander));
-	}
+	expander.flags = args->flags & (uint)~EXP_DOLLAR_SQUOTE;
+	if (expand_word(&expander).type)
+		return (err = expander.err, expander_free(&expander), err);
 	expander.err = expansion_load(expansion, &expander.fields);
-	return (expander_cleanup(&expander));
+	return (expander_free(&expander), expander.err);
 }
 
 t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
@@ -56,7 +60,7 @@ t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
 	args.value = src->value;
 	args.contexts = &src->contexts;
 	args.assignment_offset = src->assignment_offset;
-	return (expand_word(out, &args));
+	return (run_expansion(out, &args));
 }
 
 t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
@@ -76,6 +80,6 @@ t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
 	args.flags = flags;
 	args.contexts = &contexts;
 	args.assignment_offset = -1;
-	err = expand_word(out, &args);
+	err = run_expansion(out, &args);
 	return (context_stack_free(&contexts), string_free(&body), err);
 }

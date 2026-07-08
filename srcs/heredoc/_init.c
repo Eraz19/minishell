@@ -1,5 +1,5 @@
-#include "utils.h"
 #include "heredoc.h"
+#include "input_mode.h"
 #include "heredoc_queue_.h"
 
 void	heredoc_init(t_heredoc *state)
@@ -17,10 +17,10 @@ void	heredoc_free(t_heredoc *state)
 
 t_error	heredoc_load(t_heredoc *state)
 {
-	t_scanner_mode	mode;
+	t_input_mode	mode;
 
-	state->err = scan_set_mode(&mode);
+	state->err = input_mode_set(&mode);
 	if (state->err.type != ERR_NO)
 		return (state->err);
-	return (state->is_tty = mode == SCAN_STDIN_TTY, state->err);
+	return (state->is_tty = mode == INPUT_MODE_STDIN_TTY, state->err);
 }
