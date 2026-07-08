@@ -70,6 +70,7 @@ t_error	var_set(
 	t_var_list	*list;
 	size_t		var_index;
 	t_var		*current_var;
+	t_error		err;
 
 	assert(name != NULL);
 	if (!name_is_valid(name))
@@ -81,7 +82,11 @@ t_error	var_set(
 	if (var_find(list, name, &var_index))
 	{
 		current_var = &((t_var *)list->data)[var_index];
-		return (var_update_value(current_var, value, export, readonly));
+		err = var_update_value(current_var, value, export, readonly);
 	}
-	return (var_create(name, value, export, readonly));
+	else
+		err = var_create(name, value, export, readonly);
+	if (err.type == ERR_NO && str_cmp(name->data, "PATH") == 0)
+		err = cmd_cache_clear_void();
+	return (err);
 }
