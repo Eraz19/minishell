@@ -1,8 +1,8 @@
 #ifndef CMD_SEARCHER_H
 # define CMD_SEARCHER_H
 
-# include "libft.h"
 # include "error.h"
+# include "cmd_type.h"
 # include "cmd_cache.h"
 
 /* ************************************************************************* */
@@ -28,10 +28,6 @@
  * @return @c ERR_NO, @c ERR_CMD_NOT_FOUND, @c ERR_CMD_NOT_EXECUTABLE,
  *         @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
  */
-t_error	cmd_search(
-			const t_string *cmd_name,
-			const t_vector *envp,
-			t_cmd_cache *cache,
-			t_string *out_cmd_path);
+t_error	cmd_search(t_cmd *cmd, t_cmd_cache *cache);
 
 #endif

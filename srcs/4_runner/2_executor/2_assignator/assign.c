@@ -1,20 +1,19 @@
 #include "cmd_assignator_priv.h"
 #include "cmd_assignator.h"
+#include "cmd_expansion.h"
 #include "params.h"
 #include "utils.h"
 
-static inline t_error	cmd_assignment_build_envp(
-							t_cmd_type cmd_type,
-							t_vector *out_envp)
+static inline t_error	cmd_assignment_build_envp(t_cmd *cmd)
 {
-	if (cmd_type == CMD_NONE
-		|| cmd_type == CMD_SPECIAL_BUILTIN
-		|| cmd_type == CMD_FUNCTION)
+	if (cmd->type == CMD_NONE
+		|| cmd->type == CMD_SPECIAL_BUILTIN
+		|| cmd->type == CMD_FUNCTION)
 	{
-		(void)vector_init(out_envp, sizeof(char *), 0);
+		(void)vector_init(&cmd->envp, sizeof(char *), 0);
 		return (error(ERR_NO));
 	}
-	return (params_build_envp(out_envp));
+	return (params_build_envp(&cmd->envp));
 }
 
 static inline t_error	cmd_assignment_finalize_envp(t_vector *envp)
@@ -32,10 +31,7 @@ static inline t_error	cmd_assignment_finalize_envp(t_vector *envp)
 	return (error(ERR_NO));
 }
 
-t_error	cmd_assign(
-			t_cmd_type cmd_type,
-			const t_tokens *assignments,
-			t_vector *out_envp)
+t_error	cmd_assign(t_cmd *cmd, const t_tokens *assignments)
 {
 	size_t		i;
 	t_exp_flag	flags;
@@ -44,7 +40,7 @@ t_error	cmd_assign(
 	t_error		err;
 
 	flags = cmd_assignment_expansion_flags();
-	err = cmd_assignment_build_envp(cmd_type, out_envp);
+	err = cmd_assignment_build_envp(cmd);
 	i = 0;
 	while (err.type == ERR_NO && i < assignments->len)
 	{
@@ -54,9 +50,9 @@ t_error	cmd_assign(
 		if (err.type == ERR_NO)
 			err = cmd_assignment_expand(token, flags, &expanded);
 		if (err.type == ERR_NO)
-			err = cmd_assignment_process(cmd_type, token, &expanded, out_envp);
+			err = cmd_assignment_process(cmd, token, &expanded);
 	}
 	if (err.type)
-		return (vector_free(out_envp, free_char_ptr_void), err);
-	return (cmd_assignment_finalize_envp(out_envp));
+		return (vector_free(&cmd->envp, free_char_ptr_void), err);
+	return (cmd_assignment_finalize_envp(&cmd->envp));
 }

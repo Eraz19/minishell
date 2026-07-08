@@ -3,18 +3,23 @@
 #include "entry_is_target.h"
 #include <stdlib.h>
 
+#define PATH_TARGET		"PATH="
+#define PATH_TARGET_LEN	5
+
 static inline t_error	cmd_assignment_add_to_envp(
 							t_string *expanded,
-							t_vector *out_envp)
+							t_cmd *cmd)
 {
 	size_t	i;
 	char	**entry;
 	t_error	err;
 
+	if (str_ncmp(expanded->data, PATH_TARGET, PATH_TARGET_LEN) == 0)
+		cmd->path_is_temporary = true;
 	i = 0;
-	while (i < out_envp->len)
+	while (i < cmd->envp.len)
 	{
-		entry = &((char **)out_envp->data)[i];
+		entry = &((char **)cmd->envp.data)[i];
 		if (cmd_entry_is_target(expanded->data, *entry))
 		{
 			free(*entry);
@@ -23,7 +28,7 @@ static inline t_error	cmd_assignment_add_to_envp(
 		}
 		i++;
 	}
-	if (!vector_push(out_envp, &expanded->data))
+	if (!vector_push(&cmd->envp, &expanded->data))
 		return (err = error_sys(), string_free(expanded), err);
 	return (error(ERR_NO));
 }
@@ -54,18 +59,17 @@ static inline t_error	cmd_assignment_split(
 }
 
 t_error	cmd_assignment_process(
-			t_cmd_type cmd_type,
+			t_cmd *cmd,
 			const t_token *token,
-			t_string *expanded,
-			t_vector *out_envp)
+			t_string *expanded)
 {
 	t_string	name;
 	t_string	value;
 	t_error		err;
 
-	if (cmd_type == CMD_NONE
-		|| cmd_type == CMD_SPECIAL_BUILTIN
-		|| cmd_type == CMD_FUNCTION)
+	if (cmd->type == CMD_NONE
+		|| cmd->type == CMD_SPECIAL_BUILTIN
+		|| cmd->type == CMD_FUNCTION)
 	{
 		err = cmd_assignment_split(
 				expanded,
@@ -80,5 +84,5 @@ t_error	cmd_assignment_process(
 		string_free(&value);
 		return (err);
 	}
-	return (cmd_assignment_add_to_envp(expanded, out_envp));
+	return (cmd_assignment_add_to_envp(expanded, cmd));
 }

@@ -1,31 +1,9 @@
 #ifndef CMD_RESOLVER_PRIV_H
 # define CMD_RESOLVER_PRIV_H
 
-# include "cmd_resolution_type.h"
 # include "builtins.h"
 # include "functions.h"
 # include <stdbool.h>
-
-/* ************************************************************************* */
-/*                                LIFE CYCLE                                 */
-/* ************************************************************************* */
-
-/**
- * @brief Initialize an empty command resolution object.
- *
- * @note @p cmd_resolution is initialized by the function.
- *
- * @param cmd_resolution Destination resolution (borrowed, initialized by the
- *                       function).
- */
-void	cmd_resolution_init(t_cmd_resolution *cmd_resolution);
-
-/**
- * @brief Release every resource stored in a command resolution object.
- *
- * @param cmd_resolution Resolution to free (borrowed).
- */
-void	cmd_resolution_free(t_cmd_resolution *cmd_resolution);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -59,11 +37,11 @@ bool	cmd_name_is_unspecified(const char *name);
  * @param functions Function table to query (borrowed).
  * @param name Command name to classify (borrowed, read-only).
  * @param out_function Destination receiving the borrowed function or left
- *                     unchanged when not found (borrowed).
+ *                     unchanged when not found (borrowed, read-only).
  * @return True when @p name resolves to a shell function, false otherwise.
  */
 bool	cmd_name_is_function(
-			t_functions *functions,
+			const t_functions *functions,
 			const char *name,
 			const t_function **out_function);
 

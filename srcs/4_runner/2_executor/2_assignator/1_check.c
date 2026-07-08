@@ -11,7 +11,7 @@ t_error	cmd_assignment_check(const t_token *token)
 	token->value.data[token->assignment_offset] = '\0';
 	err = params_is_readonly(token->value.data, &is_readonly);
 	if (err.type == ERR_NO && is_readonly == true)
-		err = error_print(error(ERR_VAR_READ_ONLY), "executor", NULL,
+		err = error_print(error(ERR_VAR_READ_ONLY), "runner", NULL,
 				"%s", token->value.data);
 	token->value.data[token->assignment_offset] = c;
 	return (err);

@@ -7,10 +7,8 @@
 # include <stddef.h>
 
 /* ************************************************************************* */
-/*                                 REDIRECTOR                                */
+/*                                REDIRECTIONS                               */
 /* ************************************************************************* */
-
-/* ---------- REDIRECT NODE (IN CONVERTER) ---------- */
 
 typedef enum e_ast_redir_op
 {
@@ -40,10 +38,8 @@ typedef struct s_ast_redirection
 typedef t_vector	t_ast_redir_list;	// vector of t_ast_redirection
 
 /* ************************************************************************* */
-/*                                   EXECUTOR                                */
+/*                               SIMPLE COMMANDS                             */
 /* ************************************************************************* */
-
-/* ---------- SIMPLE COMMAND NODE (IN CONVERTER) ---------- */
 
 typedef struct s_ast_simple_command
 {
@@ -52,15 +48,9 @@ typedef struct s_ast_simple_command
 	t_ast_redir_list	redirs;			// vector of t_ast_redirection
 }	t_ast_simple_command;
 
-/* ---------- EXECUTOR (IN RUNNER) ---------- */
-
-t_error	execute(t_ast_simple_command *cmd, int *exit_status);
-
 /* ************************************************************************* */
-/*                                    WALKER                                 */
+/*                                    LISTS                                  */
 /* ************************************************************************* */
-
-/* ---------- LIST NODE (IN CONVERTER) ---------- */
 
 typedef struct s_ast_pipeline
 {
@@ -81,7 +71,9 @@ typedef struct s_ast_list
 	bool		subshell;
 }	t_ast_list;
 
-/* ---------- CONTROL NODES (IN CONVERTER) ---------- */
+/* ************************************************************************* */
+/*                                   CONTROLS                                */
+/* ************************************************************************* */
 
 typedef struct s_ast_if
 {
@@ -123,7 +115,9 @@ typedef struct s_ast_function_def
 	t_ast_redir_list	redirs;		// vector of t_ast_redirection
 }	t_ast_function_def;
 
-/* ---------- MAIN COMMAND (IN CONVERTER) ---------- */
+/* ************************************************************************* */
+/*                                 MAIN COMMAND                              */
+/* ************************************************************************* */
 
 typedef enum e_ast_command_type
 {
@@ -157,7 +151,9 @@ typedef struct s_ast_command
 
 typedef t_ast_list	t_ast_root;
 
-/* ---------- WALKER (IN RUNNER) ---------- */
+/* ************************************************************************* */
+/*                                    WALKER                                 */
+/* ************************************************************************* */
 
 /* --- LIST WALKER (INTERNAL) --- */
 t_error	walk_command(t_ast_command *command);

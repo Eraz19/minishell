@@ -2,42 +2,63 @@
 #include "cmd_resolver_priv.h"
 #include "tokens.h"
 #include "expander.h"
+#include "cmd_expansion.h"
 
-static inline void	cmd_compute_name(
-						t_functions *functions,
-						t_cmd_resolution *resolution)
+static inline void	cmd_compute_name(t_cmd *cmd, const t_functions *functions)
 {
-	t_expansion	*first_expansion;
-	t_string	*cmd_name;
-	const char	*name;
-
-	first_expansion = &((t_expansion *)resolution->expansions.data)[0];
-	cmd_name = &((t_string *)first_expansion->data)[0];
-	name = cmd_name->data;
-	resolution->is_declaration_utility = 
-		str_cmp(name, "export") == 0
-		|| str_cmp(name, "readonly") == 0;
-	if (string_get_index_c(cmd_name, '/') >= 0)
-		resolution->type = CMD_EXTERNAL;
-	else if (cmd_name_is_special_builtin(name, &resolution->builtin))
-		resolution->type = CMD_SPECIAL_BUILTIN;
-	else if (cmd_name_is_unspecified(name))
-		resolution->type = CMD_UNSPECIFIED;
-	else if (cmd_name_is_function(functions, name, &resolution->function))
-		resolution->type = CMD_FUNCTION;
-	else if (cmd_name_is_intrinsic_builtin(name, &resolution->builtin))
-		resolution->type = CMD_BUILTIN;
-	else if (cmd_name_is_regular_builtin(name, &resolution->builtin))
-		resolution->type = CMD_BUILTIN;
+	cmd->is_declaration_utility = 
+		str_cmp(cmd->name.data, "export") == 0
+		|| str_cmp(cmd->name.data, "readonly") == 0;
+	if (string_get_index_c(&cmd->name, '/') >= 0)
+		cmd->type = CMD_EXTERNAL;
+	else if (cmd_name_is_special_builtin(cmd->name.data, &cmd->builtin))
+		cmd->type = CMD_SPECIAL_BUILTIN;
+	else if (cmd_name_is_unspecified(cmd->name.data))
+		cmd->type = CMD_UNSPECIFIED;
+	else if (cmd_name_is_function(functions, cmd->name.data, &cmd->function))
+		cmd->type = CMD_FUNCTION;
+	else if (cmd_name_is_intrinsic_builtin(cmd->name.data, &cmd->builtin))
+		cmd->type = CMD_BUILTIN;
+	else if (cmd_name_is_regular_builtin(cmd->name.data, &cmd->builtin))
+		cmd->type = CMD_BUILTIN;
 	else
-		resolution->type = CMD_EXTERNAL;
+		cmd->type = CMD_EXTERNAL;
 }
 
+// @ret ERR_LIBC
+static inline t_error	cmd_add_to_argv(
+							t_cmd *cmd,
+							const t_functions *functions,
+							const t_expansion *expansion)
+{
+	t_string	*expanded_word;
+	size_t		i;
+
+	i = 0;
+	while (i < expansion->len)
+	{
+		expanded_word = &((t_string *)expansion->data)[i];
+		if (!vector_push(&cmd->argv, &expanded_word->data))
+			return (error_sys());
+		expanded_word->cap = 0;
+		i++;
+	}
+	if (expansion->len > 0 && cmd->type == CMD_NONE)
+	{
+		expanded_word = &((t_string *)expansion->data)[0];
+		cmd->name.data = expanded_word->data;
+		cmd->name.len = expanded_word->len;
+		cmd_compute_name(cmd, functions);
+	}
+	return (error(ERR_NO));
+}
+
+// @ret TODO
 static inline t_error	cmd_expand_word(
-							t_functions *functions,
-							t_tokens *words,
-							size_t index,
-							t_cmd_resolution *resolution)
+							t_cmd *cmd,
+							const t_functions *functions,
+							const t_tokens *words,
+							size_t index)
 {
 	t_token		*word;
 	t_exp_flag	flags;
@@ -47,7 +68,7 @@ static inline t_error	cmd_expand_word(
 	err = tokens_get(words, index, &word);
 	if (err.type)
 		return (err);
-	if (resolution->is_declaration_utility == true
+	if (cmd->is_declaration_utility == true
 		&& word->assignment_offset >= 0)
 		flags = cmd_assignment_expansion_flags();
 	else
@@ -55,29 +76,24 @@ static inline t_error	cmd_expand_word(
 	err = expand_token(&expansion, word, flags);
 	if (err.type)
 		return (err);
-	if (expansion.len == 0)
-		return (expansion_free(&expansion), err);
-	if (!vector_push(&resolution->expansions, &expansion))
-		return (expansion_free(&expansion), error_sys());
-	if (resolution->expansions.len == 1)
-		cmd_compute_name(functions, resolution);
-	return (error(ERR_NO));
+	err = cmd_add_to_argv(cmd, functions, &expansion);
+	expansion_free(&expansion);
+	return (err);
 }
 
 t_error	cmd_resolve(
-			t_functions *functions,
-			t_tokens *words,
-			t_cmd_resolution *out_resolution)
+			t_cmd *cmd,
+			const t_functions *functions,
+			const t_tokens *words)
 {
-	size_t		index;
-	t_error		err;
+	size_t	index;
+	t_error	err;
 
-	cmd_resolution_init(out_resolution);
 	index = 0;
 	err = error(ERR_NO);
 	while (index < words->len && err.type == ERR_NO)
 	{
-		err = cmd_expand_word(functions, words, index, out_resolution);
+		err = cmd_expand_word(cmd, functions, words, index);
 		index++;
 	}
 	return (err);

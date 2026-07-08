@@ -1,11 +1,62 @@
 # TODO
 
+```md
+1. cmd_resolve_words
+   - expand les words non-assignment/non-redirection
+   - produire argv
+   - déterminer CMD_NONE / special builtin / function / builtin / external-candidate
+   - gérer declaration utility context
+
+2. redirector
+   - appliquer les redirections
+   - avec save/restore si ça s’exécute dans le shell courant
+
+3. cmd_assign
+   - expand les assignment words
+   - CMD_NONE / special builtin / function : appliquer aux variables du shell
+   - builtin normal / external : construire envp temporaire
+   - si PATH persistant change : clear cache
+   - si PATH temporaire : search avec cache = NULL
+
+4. cmd_search
+   - seulement si CMD_EXTERNAL
+   - utilise envp déjà construit
+   - utilise le cache seulement si PATH non temporaire
+   - si command name contient "/" : pas de PATH search
+
+5. execute
+	- CMD_NONE:
+		- pas de fork
+		- pas de execve
+		- status = 0, sauf command substitution selon POSIX
+	- special builtin:
+		- pas de fork en simple foreground
+		- exécuter dans le shell courant
+		- assignments persistants
+	- function:
+		- pas de fork en simple foreground
+		- exécuter dans le shell courant
+		- assignments selon votre politique actuelle
+	- non-special builtin:
+		- pas de fork en simple foreground
+		- utiliser envp temporaire si besoin
+		- assignments non persistants
+	- external:
+		- fork
+		- child: execve(cmd_path, argv, envp)
+		- parent: wait
+
+6. restore redirections
+
+7. set `stdin` to blocking mode (`runner` main loop ?)
+```
+
 - `execve()`
 	- `ENOENT` / `ENOTDIR` => `ERR_CMD_NOT_FOUND`
 	- `EACCES` / `ELOOP` / `ENAMETOOLONG` => `ERR_CMD_NOT_EXECUTABLE`
 	- `ENOEXEC` => ⚠️ lancer un shell avec ce pathname comme script (sauf si heuristic de rejet)
 	- Autres => `ERR_LIBC`
-- ⚠️ new expansion flag `EXP_DOLLAR_SQUOTE` => implement in `expand_token()` callers
+- ⚠️ `builtins` must be associated with a `directory` to know when to recognize them during `PATH` exploration
 - ⚠️ `string_plit_on_*()`: add `bool skip_empty_entries` => update callers
 - ⚠️ `function_set()` + `function_unset()`
 - Move `t_tokens` from `runner` to `token` module ?
@@ -27,6 +78,7 @@
 
 # ALEXANDER
 
+- `libft`: add `string_take_string()`
 - `EXP_DSQUOTE`:
 	- process first, then apply all other expansions from the beginning of `word`
 - `utils`:
@@ -83,35 +135,6 @@
 - [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
 - [2.9.1.6 Non-built-in Utility Execution](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_01_06)
 - [2.9.2 Pipelines](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_09_02)
-
-## IMPLEMENTATION ORDER
-
-1. Module `redirection` :
-	- Créer une redirection
-	- Push une redirection sur la stack
-	- Restaurer une redirection
-	- Pop une redirection de la stack
-2. Module `function_registry` :
-	- `t_function` = `char *name` + `t_ast_command body` + `t_ast_redir_list redirs`
-	- Save une fonction
-	- Retrieve une fonction
-	- Delete une fonction
-3. Module `command_search`
-	- Check if command name contains `\`
-	- Check if the command name matches the name of a `special built-in utility`
-	- Check if the command name matches the name of an `utility` for which results are `unspecified`
-	- Ask `function_registry` to know if the command name matches a `function` name (+ path search)
-	- Check if the command name matches the name of an `intrinsic utility`
-	- Search for command using `PATH` variable content :
-		> ⚠️ `builtins` must be associated with a `directory` to know when to recognize them during `PATH` exploration
-	- Remember `PATH` value to **NOT** search again while `PATH` is not `re-assigned` and the remembered command location is still valid
-2. Module `executor`
-	- Chercher une commande (function, builtin, path resolution) => Quelle section POSIX ?
-3. Vérifier que ce système minimal fonctionne
-3. Implémenter le module qui créé un subshell et y exécute une commande
-4. Implémenter le module qui gère les pipeline:
-	- `pipefail option` behaviour to check
-5. TODO...
 
 ---
 
@@ -258,6 +281,8 @@
 	- as `sysconf()` / `getrlimit()` are forbidden, we cannot query the actual file descriptor limit of the host process. POSIX only requires shell redirections to support user file descriptors 0 through 9. By default, `minishell` uses 0..128 as its user fd range and reserves 129..256 for internal redirection backups. If the backup range is exhausted or unsupported by the host system, the redirection fails with a redirection error. A MAX_COMPAT build option can restrict the layout to 0..9 for user fds and 10..19 for backup fds, which is a more conservative POSIX-minimum layout but still does not guarantee that backup fds are available.
 - `expander`:
 	- as `fn_match()` is forbidden, regex matching is not implemented.
+- `runner/redirector/tracker`:
+	- as `fcntl()` is forbidden, backup fds cannot be marked as `FD_CLOEXEC`; therefore, whenever a child is forked to execute a command, the shell explicitly closes each tracked backup fd before calling `execve()`.
 
 ## lr_machine.md
 

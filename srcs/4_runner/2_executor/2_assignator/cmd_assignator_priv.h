@@ -4,7 +4,7 @@
 # include "error.h"
 # include "token.h"
 # include "expander.h"
-# include "cmd_resolution_type.h"
+# include "cmd_type.h"
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -57,9 +57,8 @@ t_error	cmd_assignment_expand(
  *         @c ERR_VAR_READ_ONLY or @c ERR_LIBC.
  */
 t_error	cmd_assignment_process(
-			t_cmd_type cmd_type,
+			t_cmd *cmd,
 			const t_token *token,
-			t_string *expanded,
-			t_vector *out_envp);
+			t_string *expanded);
 
 #endif
