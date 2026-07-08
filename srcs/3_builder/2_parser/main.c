@@ -85,6 +85,7 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 
 	assert(parser != NULL);
 	assert(machine != NULL);
+	fprintf(stderr, "--------------------------------------------------\n");
 	err = parser_prepare_to_build_cst(parser);
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{
@@ -92,16 +93,17 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 		token = &((t_token *)parser->tokens.data)[parser->lookahead_id];
 		err = parser_qualify_symbol(parser, lr_state_id, token);
 		if (err.type != ERR_NO)
-			return (err);
+			return (fprintf(stderr, "--------------------------------------------------\n"), err);
 		action = machine->actions[lr_state_id][parser->lookahead_symbol];
 		if (action.type == ACTION_ERROR)
-			return (parser_invalid_syntax());
+			return (fprintf(stderr, "--------------------------------------------------\n"), parser_invalid_syntax());
 		else if (action.type == ACTION_ACCEPT)
-			return (parser_accept(parser));
+			return (fprintf(stderr, "--------------------------------------------------\n"), parser_accept(parser));
 		else if (action.type == ACTION_SHIFT)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)
 			err = parser_reduce(parser, machine, action.payload);
 	}
+	fprintf(stderr, "--------------------------------------------------\n");
 	return (err);
 }

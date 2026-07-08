@@ -24,7 +24,7 @@ static void	print_argv(int argc, char **argv)
 	i = 0;
 	while (i < argc)
 	{
-		test_print("argv[%i]=%s\n", i, argv[i]);
+		test_print("argv[%i] => [%s]\n", i, argv[i]);
 		i++;
 	}
 }
@@ -36,7 +36,7 @@ static void	print_envp(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		test_print("envp[%i]=%s\n", i, envp[i]);
+		test_print("envp[%i] => [%s]\n", i, envp[i]);
 		i++;
 	}
 }
@@ -44,7 +44,7 @@ static void	print_envp(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	test_print("----------------------------------\n");
-	test_print("argc=%i\n", argc);
+	test_print("argc => %i\n", argc);
 	test_print("----------------------------------\n");
 	print_argv(argc, argv);
 	test_print("----------------------------------\n");

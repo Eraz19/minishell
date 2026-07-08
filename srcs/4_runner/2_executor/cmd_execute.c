@@ -149,17 +149,33 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 	return (cmd_search(cmd, cache));
 }
 
+# include <stdio.h>
 // TODO: implement
-// TODO: requalify error but let runner loop decide if shell must exit or not
+// TODO: requalify error but let runner loop decide if shell must exit or not ?
 t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied)
 {
-	// TODO: ensure cmd->exit_status is properly set if err.type != ERR_NO
+	if (err.type && cmd->exit_status == 0)
+		cmd->exit_status = (int)err.type;
+	if (err.type == ERR_POSIX_CMD_NOT_FOUND
+		|| err.type == ERR_POSIX_CMD_NOT_EXECUTABLE
+		|| err.type == ERR_POSIX_CMD_FAILED
+		|| err.type == ERR_POSIX_ASSIGNMENT
+		|| err.type == ERR_POSIX_BUILTIN_INTERNAL
+		|| err.type == ERR_POSIX_EXPANSION
+		|| err.type == ERR_POSIX_REDIRECTION)
+		err = error(ERR_NO);
 	(void)params_set_last_status(cmd->exit_status);
 	if (redir_applied == true)
 		(void)cmd_redirect_stop(cmd, &runner->redirector);
-	(void)runner;
-	if (err.type)
-		(void)error_print(error(ERR_NOT_IMPLEMENTED), "runner", __func__, NULL, NULL);
+	/* ---------- DEBUG (START) ---------- */
+	fprintf(stderr, "--------------------------------------------------\n");
+	fprintf(stderr, "[EXECUTOR] [%s()] cmd.exit_status = %i\n", __func__, cmd->exit_status);
+	t_string saved_status;
+	(void)params_get_from_const("?", &saved_status);
+	fprintf(stderr, "[EXECUTOR] [%s()] $?              = %s\n", __func__, saved_status.data);
+	fprintf(stderr, "[EXECUTOR] [%s()] error           = %s\n", __func__, error_to_string(err));
+	fprintf(stderr, "--------------------------------------------------\n");
+	/* ---------- DEBUG (END) ---------- */
 	cmd_free(cmd);
 	return (err);
 }

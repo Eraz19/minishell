@@ -81,7 +81,9 @@
 - `expander`:
 	- `error_print()` before return
 	- If error != `ERR_LIBC` => requalify `ERR_POSIX_EXPANSION`
-- `libft`: add `string_take_string()`
+- `libft`:
+	- add `string_take_string()`
+	- `Makefile` fixed
 - `EXP_DSQUOTE`:
 	- process first, then apply all other expansions from the beginning of `word`
 - `utils`:
