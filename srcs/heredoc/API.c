@@ -15,6 +15,7 @@ t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode)
 	heredoc = shell_get_heredoc();
 	if (heredoc == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
+	item = (t_heredoc_item){0};
 	if (create_heredoc_file(heredoc, out).type)
 		return (heredoc->err);
 	item.is_tty = heredoc->is_tty;
@@ -85,22 +86,22 @@ t_error	heredoc_expand_body(const t_string *path)
 	flags = generate_heredoc_body_expand_flags();
 	err = read_body_file(&body, path);
 	if (err.type)
-		return (err);
+		return (heredoc_error_qualify(err));
 	err = expand_heredoc(&expansion, &body, flags);
 	if (err.type)
-		return (string_free(&body), err);
+		return (string_free(&body), heredoc_error_qualify(err));
 	string_free(&body);
 	string_init(&body, 0, NULL, 0);
 	if (expansion.len != 1)
 		return (expansion_free(&expansion), string_free(&body),
-			error(ERR_EXP_RESULT_INCOHERENT));
+			heredoc_error_qualify(error(ERR_EXP_RESULT_INCOHERENT)));
 	err = expansion_fpop(&body, &expansion);
 	if (err.type)
-		return (expansion_free(&expansion), string_free(&body), err);
+		return (expansion_free(&expansion), string_free(&body),
+			heredoc_error_qualify(err));
 	err = save_body_in_file(path, &body);
-	if (err.type)
-		return (expansion_free(&expansion), string_free(&body), err);
-	return (expansion_free(&expansion), string_free(&body), err);
+	return (expansion_free(&expansion), string_free(&body),
+		heredoc_error_qualify(err));
 }
 
 t_error	heredoc_prepare_for_expansion(

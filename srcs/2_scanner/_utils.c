@@ -9,7 +9,8 @@ static t_error	scanner_stdin_input(t_string *res)
 
 	string_init(res, 0, NULL, 0);
 	if (!string_read_all(res, STDIN_FILENO))
-		return (err = error_sys(), string_free(res), err);
+		return (err = reader_read_error("standard input"),
+			string_free(res), err);
 	return (error(ERR_NO));
 }
 
@@ -61,7 +62,9 @@ t_error	scanner_alias_expand(t_scanner *scanner, t_token *token)
 	scanner->err = alias_expand_token(&item->str, &token->value);
 	if (scanner->err.type || item->str.len < 2)
 		return (lexer_input_stack_item_free(&item), scanner->err);
-	lexer_input_stack_push(&scanner->lexer.input_stack, item);
+	scanner->err = lexer_input_stack_push(&scanner->lexer.input_stack, item);
+	if (scanner->err.type)
+		return (lexer_input_stack_item_free(&item), scanner->err);
 	token_free(token);
 	if (lexer_get_next_token(&scanner->lexer, token,
 			scanner_lexer_rules(scanner)).type)

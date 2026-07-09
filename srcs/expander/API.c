@@ -52,6 +52,11 @@ t_error	run_expansion(t_expansion *expansion, t_expander_args *args)
 	return (expander_free(&expander), expander.err);
 }
 
+t_error expand_str(t_expansion *out, const t_string *src, t_exp_flag flags)
+{
+	return (expand_heredoc(out, src, flags));
+}
+
 t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
 {
 	t_expander_args	args;
@@ -70,6 +75,8 @@ t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
 	t_expander_args	args;
 	t_context_stack	contexts;
 
+	if (src->data == NULL || src->len == 0)
+		return (expansion_load_empty(out));
 	context_stack_init(&contexts);
 	if (!string_dup(&body, src))
 		return (context_stack_free(&contexts), error_sys());

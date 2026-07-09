@@ -10,7 +10,8 @@ t_error	expand_delim(t_heredoc *heredoc, t_string *out, const t_token *delim)
 	if (heredoc->err.type)
 		return (heredoc->err);
 	if (exp.len != 1)
-		return (expansion_free(&exp), error(ERR_EXP_RESULT_INCOHERENT));
+		return (expansion_free(&exp),
+			heredoc->err = error(ERR_EXP_RESULT_INCOHERENT));
 	heredoc->err = expansion_get(&delim_exp, &exp, 0);
 	if (heredoc->err.type)
 		return (expansion_free(&exp), heredoc->err);

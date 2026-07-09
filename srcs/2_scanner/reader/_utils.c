@@ -10,6 +10,8 @@ t_error	readline_(t_string *res, const char *prompt)
 	t_error	err;
 	char	*input;
 
+	if (prompt == NULL)
+		prompt = "";
 	input = readline(prompt);
 	while (input == NULL)
 	{
@@ -24,4 +26,13 @@ t_error	readline_(t_string *res, const char *prompt)
 	if (!string_append_n(res, "\n", 1))
 		return (err = error_sys(), string_free(res), err);
 	return (error(ERR_NO));
+}
+
+t_error	reader_read_error(const char *source)
+{
+	t_error	err;
+
+	err = error_print(error_sys(), "scanner", source, NULL, NULL);
+	err.type = ERR_POSIX_READ;
+	return (err);
 }

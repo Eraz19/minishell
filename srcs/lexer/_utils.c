@@ -41,13 +41,15 @@ t_error	lexer_restore(t_lexer *lexer, t_lexer_backup backup)
 	t_context_stack_item	*item;
 
 	while (lexer->input->context.len > backup.context_len)
-    {
-		if (context_stack_bpop(&lexer->input->context, NULL).type)
+	{
+		lexer->err = context_stack_bpop(&lexer->input->context, NULL);
+		if (lexer->err.type)
 			return (lexer->err);
 	}
 	while (lexer->token->contexts.len > backup.token_contexts_len)
 	{
-		if (context_stack_bpop(&lexer->token->contexts, &item).type)
+		lexer->err = context_stack_bpop(&lexer->token->contexts, &item);
+		if (lexer->err.type)
 			return (lexer->err);
 		free(item);
 	}

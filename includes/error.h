@@ -30,23 +30,23 @@ typedef enum e_error_type
 	ERR_VAR_NOT_FOUND,
 	ERR_VAR_READ_ONLY,
 	// Lexer failures
-	ERR_CMD_SUB_CLOSING_NOT_FOUND,
-	ERR_CTX_END_NOT_FOUND,
+	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_CTX_END_NOT_FOUND,					// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_EMPTY_STACK,
 	ERR_HEREDOC_MAX_ID_REACHED,
 	ERR_HISTORY_DISABLED,
 	ERR_INCOHERENT_STATE,
-	ERR_NO_DELIM,
+	ERR_NO_DELIM,							// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_NOT_IMPLEMENTED,
-	ERR_UNEXPECTED_EOI,
-	ERR_VEOF,
+	ERR_UNEXPECTED_EOI,						// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_VEOF,								// [RUNNER]		Top-level end of input: exit decision belongs to the shell loop (never printed). Mid-construct: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed)
 	ERR_NO_INPUT_TO_LEX,
 	ERR_EXP_RESULT_INCOHERENT,
 	ERR_QUOTED_TILDE,
 	ERR_PARAM_NULL_OR_UNSET,
 	ERR_PARAM_BAD_SUBSTITUTION,
 	ERR_BAD_SUBSTITUTION,
-	ERR_ALIAS_NOT_FOUND,
+	ERR_ALIAS_NOT_FOUND,					// [BUILTINS]	alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
 	// FT_GETOPT
 	ERR_OPT_INVALID,						// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
 	ERR_OPT_INVALID_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
@@ -57,7 +57,7 @@ typedef enum e_error_type
 	// OPTIONS (produced by ft_getopt() + posix_open*())
 	ERR_INVALID_USAGE,						// [CALLER]		Options and / or arguments are invalid
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION,						// [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
+	ERR_REDIRECTION,						// [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
 	ERR_BUILTIN,							// [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL / ERR_POSIX_UTILITY
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */

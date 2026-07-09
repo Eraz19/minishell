@@ -53,12 +53,14 @@ t_error	history_file_write(t_history_file *state)
 		return (state->err = error(ERR_NO));
 	}
 	state->err = posix_write(fd, state->content.data, state->content.len);
+	if (state->err.type == ERR_INTERRUPTED)
+		return (posix_close(fd), state->err);
 	if (state->err.type)
 	{
 		(void)error_print(state->err,
 			"history", "unable to write to history file",
 			"persistent history disabled", NULL, "%s", state->path.data);
-		return (state->err = error(ERR_NO));
+		return (posix_close(fd), state->err = error(ERR_NO));
 	}
 	print_pass("[HISTORY] History saved to = %s%s%s\n", BLUE, state->path.data, NC);	// DEBUG
 	return (state->err = posix_close(fd));

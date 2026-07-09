@@ -1,9 +1,9 @@
 #include "libft.h"
+#include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include "reader_.h"
 #include "history.h"
-#include "params.h"
 #include "posix_helpers.h"
 
 t_error	reader_new_input(t_string *res)
@@ -18,9 +18,10 @@ t_error	reader_new_input(t_string *res)
 	while (res->len < 2)
 	{
 		res->len = 0;
-		err = params_get_from_const("PS1", &ps1);
+		err = reader_prompt("PS1", &ps1);
 		if (err.type == ERR_NO)
 			err = readline_(res, ps1.data);
+		string_free(&ps1);
 		if (err.type)
 			return (err);
 	}
@@ -40,9 +41,10 @@ t_error	reader_continuation(t_string *res)
 	while (continuation.len < 2)
 	{
 		continuation.len = 0;
-		err = params_get_from_const("PS2", &ps2);
+		err = reader_prompt("PS2", &ps2);
 		if (err.type == ERR_NO)
 			err = readline_(&continuation, ps2.data);
+		string_free(&ps2);
 		if (err.type)
 			return (string_free(&continuation), err);
 	}
@@ -54,18 +56,33 @@ t_error	reader_continuation(t_string *res)
 	return (string_free(&continuation), err);
 }
 
+static t_error	reader_open_source(const char *path, int *fd)
+{
+	t_error	err;
+
+	err = posix_open(path, O_RDONLY, fd);
+	if (err.type != ERR_LIBC)
+		return (err);
+	err = error_print(err, "scanner", path, NULL, NULL);
+	if (err.saved_errno == ENOENT)
+		err.type = ERR_POSIX_CMD_NOT_FOUND;
+	else
+		err.type = ERR_POSIX_CMD_NOT_EXECUTABLE;
+	return (err);
+}
+
 t_error	reader_file_input(t_string *res, const char *path)
 {
 	int			fd;
 	t_error		err;
 
-	err = posix_open(path, O_RDONLY, &fd);
+	err = reader_open_source(path, &fd);
 	if (err.type)
-		return (error_print(error_sys(), "reader", "unable to open source file",
-			NULL, "%s", path));
+		return (err);
 	string_init(res, 0, NULL, 0);
 	if (!string_read_all(res, fd))
-		return (err = error_sys(), posix_close(fd), string_free(res), err);
+		return (err = reader_read_error(path), posix_close(fd),
+			string_free(res), err);
 	err = posix_close(fd);
 	if (err.type)
 		return (string_free(res), err);

@@ -25,10 +25,13 @@ t_error	read_body_file(t_string *out, const t_string *path)
 	if (!string_init(out, 0, NULL, 0))
 		return (error_sys());
 	err = posix_open(path->data, O_RDONLY, &fd);
+	if (err.type == ERR_LIBC)
+		return (error_print(err, "heredoc", path->data, NULL, NULL));
 	if (err.type)
 		return (err);
 	if (!string_read_all(out, fd))
-		return (err = error_sys(), posix_close(fd), err);
+		return (err = error_print(error_sys(), "heredoc", path->data,
+				NULL, NULL), posix_close(fd), string_free(out), err);
 	return (posix_close(fd), err);
 }
 
@@ -40,8 +43,16 @@ t_error	save_body_in_file(const t_string *path, t_string *body)
 
 	o_flags = O_WRONLY | O_CREAT | O_TRUNC;
 	err = posix_open_with_mode(path->data, o_flags, 0600, &fd);
+	if (err.type == ERR_LIBC)
+		return (error_print(err, "heredoc", path->data, NULL, NULL));
 	if (err.type)
 		return (err);
 	err = posix_write(fd, body->data, body->len);
-	return (posix_close(fd), err);
+	if (err.type == ERR_POSIX_WRITE)
+		err = error_print(err, "heredoc", path->data, NULL, NULL);
+	if (err.type == ERR_NO)
+		err = posix_close(fd);
+	else
+		(void)posix_close(fd);
+	return (err);
 }

@@ -54,7 +54,9 @@ void	expansion_free_void(void *expansion);
  */
 t_error	expansion_get(t_string *out, const t_expansion *expansion, size_t i);
 
+t_error expand_str(t_expansion *out, const t_string *src, t_exp_flag flags);
 t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags);
 t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags);
+
 
 #endif
