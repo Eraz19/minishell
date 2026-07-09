@@ -35,6 +35,12 @@ typedef struct s_shell
 }	t_shell;
 
 /* ************************************************************************* */
+/*                                LIFE_CYCLE                                 */
+/* ************************************************************************* */
+
+void	shell_free_void(void);
+
+/* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
@@ -120,7 +126,7 @@ t_scanner	*shell_get_scanner(void);
  * @param argv Argument array (borrowed, read-only).
  * @param envp Environment array (borrowed, read-only).
  */
-void		shell_run(int argc, char **argv, char **envp);
+int		shell_run(int argc, char **argv, char **envp);
 
 /**
  * @brief Reports whether interactive EOF should terminate the shell.

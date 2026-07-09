@@ -26,6 +26,15 @@ void	shell_free(t_shell *shell)
 	shell_set(NULL);
 }
 
+void	shell_free_void(void)
+{
+	t_shell	*shell;
+
+	shell = shell_get();
+	if (shell != NULL)
+		shell_free(shell);
+}
+
 t_error		shell_should_exit_on_veof(void)
 {
 	bool	is_interactive;

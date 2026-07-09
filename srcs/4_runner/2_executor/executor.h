@@ -18,7 +18,7 @@
  *
  * @param runner Runner state providing shell services and caches (borrowed).
  * @param simple_command Simple command to execute (borrowed).
- * @return @c ERR_NO, @c ERR_INDEX_OUT_OF_BOUND, @c ERR_POSIX_REDIRECTION,
+ * @return @c ERR_NO, @c ERR_INDEX_OUT_OF_BOUND, @c ERR_REDIRECTION,
  *         @c ERR_OPEN_INVALID_USAGE, @c ERR_INTERRUPTED,
  *         @c ERR_POSIX_CMD_NOT_FOUND, @c ERR_POSIX_CMD_NOT_EXECUTABLE,
  *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,

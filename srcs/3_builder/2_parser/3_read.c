@@ -27,7 +27,7 @@ static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
 	else if (token_type == TOKEN_RPARENTHESIS)
 		return (*dst_symbol = SYM_RPARENTHESIS, error(ERR_NO));
 	*dst_symbol = SYM_error;
-	return (error_print(error(ERR_SYNTAX_INVALID),
+	return (error_print(error(ERR_POSIX_SYNTAX),
 			"parser", "unkown token type", NULL, "%i", token_type));
 }
 

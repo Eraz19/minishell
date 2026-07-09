@@ -55,9 +55,9 @@ t_error	runner_run(t_runner *runner)
 				return (error(ERR_NO));
 			err = error(ERR_NO);
 		} 
-		else if (err.type && (err.type != ERR_SYNTAX_INVALID || is_interactive == false))
+		else if (err.type && (err.type != ERR_POSIX_SYNTAX || is_interactive == false))
 			return (err);
-		if (err.type == ERR_SYNTAX_INVALID)
+		if (err.type == ERR_POSIX_SYNTAX)
 			err = reset_scanner_and_builder();
 		else if (err.type)
 			return (err);

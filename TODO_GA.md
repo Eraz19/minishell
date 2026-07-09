@@ -1,8 +1,5 @@
 # WIP EXECUTOR
 
-- `execve()` + `ENOEXEC`:
-	- insert `minishell` at the beginning of `argv` => `["minishell", path, argv[1], argv[2], ...]`
-	- `exit(shell_entry(argc_fallback, argv_fallback, envp))`
 - `searcher`:
 	- Associer les **regular** builtins à un `bin/` (ex: `echo` match sur `bin/echo`)
 	- update `is_regular_builtin(path)` => si oui requalifier en `CMD_BUILTIN` et set `cmd.builtin`
@@ -13,7 +10,7 @@
 	- `errors`:
 		- `ERR_NO` => pas d'erreur (quel que soit l'exit status)
 		- `ERR_SYS` => erreur libc / system => critique => always exit
-		- `ERR_INTERNAL` => erreur interne du builtin => bug => à décider exit ou non
+		- `ERR_BUILTIN_INTERNAL` => erreur interne du builtin => bug => à décider exit ou non
 		- `ERR_BUILTIN` => erreur POSIX => ignorée par `executor` si intrinsic builtin / remontée au runner si special builtin => runner décide exit ou non selon POSIX consequences of errors
 
 # TODO
@@ -31,6 +28,7 @@
 	- ⚠️ `command` specific flow
 - `walker`:
 	- implement all
+	- handle errors (cf `error.h`)
 - `shell`:
 	- `subshell`:
 		- subshell
@@ -162,8 +160,11 @@
 	- as `sysconf()` / `getrlimit()` are forbidden, we cannot query the actual file descriptor limit of the host process. POSIX only requires shell redirections to support user file descriptors 0 through 9. By default, `minishell` uses 0..128 as its user fd range and reserves 129..256 for internal redirection backups. If the backup range is exhausted or unsupported by the host system, the redirection fails with a redirection error. A MAX_COMPAT build option can restrict the layout to 0..9 for user fds and 10..19 for backup fds, which is a more conservative POSIX-minimum layout but still does not guarantee that backup fds are available.
 - `expander`:
 	- as `fn_match()` is forbidden, regex matching is not implemented.
-- `runner/redirector/tracker`:
-	- as `fcntl()` is forbidden, backup fds cannot be marked as `FD_CLOEXEC`; therefore, whenever a child is forked to execute a command, the shell explicitly closes each tracked backup fd before calling `execve()`.
+- `runner:`
+	- `redirector-tracker`:
+		- as `fcntl()` is forbidden, backup fds cannot be marked as `FD_CLOEXEC`; therefore, whenever a child is forked to execute a command, the shell explicitly closes each tracked backup fd before calling `execve()` (best effort).
+	- `executor`:
+		- as `_exit()` is forbidden, shell child processes use `exit()`, which may flush inherited standard I/O buffers and run inherited exit handlers.
 
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 

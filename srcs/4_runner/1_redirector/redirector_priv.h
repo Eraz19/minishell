@@ -21,7 +21,7 @@
  * @param redirection Redirection to apply (borrowed).
  * @param redirector Redirector state used to track backups (borrowed).
  * @param permanent True for committed redirections, false for restorable ones.
- * @return @c ERR_NO, @c ERR_POSIX_REDIRECTION, @c ERR_INCOHERENT_STATE,
+ * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE,
  *         @c ERR_OPEN_INVALID_USAGE, @c ERR_INTERRUPTED,
  *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
  *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
@@ -55,7 +55,7 @@ bool	redirect_parse_fd(const char *s, int *out_fd);
  *       @p redirection.
  *
  * @param redirection Redirection to expand (borrowed).
- * @return @c ERR_NO, @c ERR_POSIX_REDIRECTION, @c ERR_SHELL_NOT_FOUND,
+ * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_SHELL_NOT_FOUND,
  *         @c ERR_VAR_INVALID_NAME, @c ERR_VAR_NOT_FOUND,
  *         @c ERR_PARAM_BAD_SUBSTITUTION, @c ERR_PARAM_NULL_OR_UNSET,
  *         @c ERR_NOT_IMPLEMENTED, @c ERR_INCOHERENT_STATE,
@@ -67,7 +67,7 @@ t_error	redirect_expand(t_ast_redirection *redirection);
  * @brief Resolve the effective target file descriptor of one redirection.
  *
  * @param redirection Redirection to normalize (borrowed).
- * @return @c ERR_NO or @c ERR_POSIX_REDIRECTION.
+ * @return @c ERR_NO or @c ERR_REDIRECTION.
  */
 t_error	redirect_normalize_fd(t_ast_redirection *redirection);
 
@@ -77,7 +77,7 @@ t_error	redirect_normalize_fd(t_ast_redirection *redirection);
  * @param redirection Redirection being prepared (borrowed).
  * @param redirector Redirector state used to track backups (borrowed).
  * @param permanent True for committed redirections, false for temporary ones.
- * @return @c ERR_NO, @c ERR_POSIX_REDIRECTION, @c ERR_INCOHERENT_STATE or
+ * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE or
  *         @c ERR_LIBC.
  */
 t_error	redirect_prepare(
@@ -90,7 +90,7 @@ t_error	redirect_prepare(
  *
  * @param redirection Redirection describing the path and mode (borrowed).
  * @param out_fd Destination receiving the opened file descriptor (borrowed).
- * @return @c ERR_NO, @c ERR_POSIX_REDIRECTION, @c ERR_OPEN_INVALID_USAGE,
+ * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_OPEN_INVALID_USAGE,
  *         @c ERR_INTERRUPTED, @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	redirect_open(t_ast_redirection *redirection, int *out_fd);
@@ -103,14 +103,14 @@ t_error	redirect_open(t_ast_redirection *redirection, int *out_fd);
  * @brief Print a redirector-scoped error message.
  *
  * @param message Message suffix to print (borrowed, read-only).
- * @return Error descriptor carrying @c ERR_POSIX_REDIRECTION.
+ * @return Error descriptor carrying @c ERR_REDIRECTION.
  */
 t_error	redirect_print_error(const char *message);
 
 /**
  * @brief Print the standard "all file descriptors are already used" error.
  *
- * @return Error descriptor carrying @c ERR_POSIX_REDIRECTION.
+ * @return Error descriptor carrying @c ERR_REDIRECTION.
  */
 t_error	redirect_print_error_all_fd_used(void);
 
