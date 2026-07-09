@@ -60,9 +60,9 @@ static t_error	getopt_catch_ub(t_getopt_out *out)
 				continue ;
 			if (a->sign == b->sign && a->flag == b->flag)
 				return (vector_free(&out->options, NULL),
-					undefined_behaviour("POSIX (XBD 12.1-3): "
-					"If an option that does not have option-arguments is "
-					"repeated, the results are undefined"));
+							undefined_behaviour("POSIX (XBD 12.1-3): "
+								"If an option that does not have option-argum"
+								"ents is repeated, the results are undefined"));
 		}
 	}
 	return (error(ERR_NO));
@@ -82,11 +82,11 @@ t_error	ft_getopt(int argc, char **argv, t_getopt_in *in, t_getopt_out *out)
 	(void)vector_init(&out->options, sizeof(t_getopt_option), 0);
 	out->first_operand_index = 1;
 	err = getopt_process(&state);
-	if (err.type != ERR_NO)
-	{
-		vector_free(&out->options, NULL);
-		return (err);
-	}
+	if (err.type == ERR_LIBC)
+		err = error_print(err, in->builtin_name,
+				"arguments parsing failed", NULL, NULL);
+	if (err.type)
+		return (vector_free(&out->options, NULL), err);
 	if (in->ub_on_repeated_flags)
 		return (getopt_catch_ub(out));
 	return (error(ERR_NO));

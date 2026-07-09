@@ -116,11 +116,7 @@ typedef struct s_getopt_out
  *
  * @note The function initializes @p out->options and, on success, the caller
  *       must release it with @c vector_free(&out->options, NULL).
- * @note When returning @c ERR_OPT_INVALID, @c ERR_OPT_MISSING_ARG,
- *       @c ERR_OPT_INVALID_ARG or @c ERR_UNDEFINED_BEHAVIOUR, the diagnostic
- *       has already been printed by @ref ft_getopt() or one of its helpers.
- * @note When returning @c ERR_LIBC, no diagnostic is printed by
- *       @ref ft_getopt().
+ * @note This function always prints a diagnostic before returning an error.
  *
  * @param argc Argument count.
  * @param argv Argument array to parse, with the command name at index 0
@@ -128,8 +124,7 @@ typedef struct s_getopt_out
  * @param input Parsing specification (borrowed, read-only).
  * @param out Destination initialized by the function on entry and filled on
  *            success (borrowed).
- * @return @c ERR_NO, @c ERR_OPT_INVALID, @c ERR_OPT_MISSING_ARG,
- *         @c ERR_OPT_INVALID_ARG, @c ERR_UNDEFINED_BEHAVIOUR or @c ERR_LIBC.
+ * @return @c ERR_INVALID_USAGE @c ERR_UNDEFINED_BEHAVIOUR or @c ERR_LIBC.
  */
 t_error	ft_getopt(int argc, char **argv, t_getopt_in *input, t_getopt_out *out);
 
