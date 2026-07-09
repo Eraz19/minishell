@@ -119,7 +119,8 @@ bool	var_is_readonly(const t_var_list *variables, const char *name);
  * @brief Print variables in export or readonly format.
  *
  * @param mode Output mode.
- * @return @c ERR_SHELL_NOT_FOUND, @c ERR_INTERRUPTED or @c ERR_LIBC.
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_INTERRUPTED, @c ERR_POSIX_WRITE
+ *			or @c ERR_LIBC.
  */
 t_error	var_print(t_var_print_mode mode);
 

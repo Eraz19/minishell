@@ -12,7 +12,7 @@
 // @ret ERR_SIZE_MAX_REACHED / ERR_LIBC
 t_error	posix_getcwd(t_string *dst);
 
-// @ret ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_INTERRUPTED / ERR_POSIX_WRITE
 t_error	posix_write(int fd, const char *buff, size_t len);
 
 // @ret ERR_INTERRUPTED / ERR_LIBC
