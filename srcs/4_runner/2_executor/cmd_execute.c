@@ -156,14 +156,13 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 {
 	if (err.type && cmd->exit_status == 0)
 		cmd->exit_status = (int)err.type;
-	if (err.type == ERR_POSIX_CMD_NOT_FOUND
-		|| err.type == ERR_POSIX_CMD_NOT_EXECUTABLE
-		|| err.type == ERR_POSIX_CMD_FAILED
-		|| err.type == ERR_POSIX_ASSIGNMENT
-		|| err.type == ERR_POSIX_BUILTIN_INTERNAL
-		|| err.type == ERR_POSIX_EXPANSION
-		|| err.type == ERR_POSIX_REDIRECTION)
+	if (err.type == ERR_POSIX_UTILITY)
 		err = error(ERR_NO);
+	if (ERR_REDIRECTION_OTHER)
+	{
+		(void)error_print(err, "runner", "executor", NULL, NULL);
+		err = error(ERR_NO);
+	}
 	(void)params_set_last_status(cmd->exit_status);
 	if (redir_applied == true)
 		(void)cmd_redirect_stop(cmd, &runner->redirector);

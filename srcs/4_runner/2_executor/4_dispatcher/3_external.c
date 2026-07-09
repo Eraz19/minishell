@@ -7,18 +7,27 @@
 #include <errno.h>
 #include <stdlib.h>
 
-static inline int	cmd_exec_in_shell(t_cmd *cmd)
+static inline void	cmd_exec_in_shell(t_cmd *cmd)
 {
-	/*
-	TODO:
-		reset lexer / parser
-		insert shell_name at args[0]
-		insert command at args[1]
-		set input mode = cmd_file
-		execute
-	*/
-	(void)cmd;
-	return((int)ERR_POSIX_CMD_NOT_EXECUTABLE);
+	const char	*shell_name;
+	char		**cmd_name;
+	int			argc;
+	t_error		err;
+
+	shell_name = shell_get_name();
+	if (!vector_insert(&cmd->argv, 0, &shell_name))
+	{
+		err = error_print(error_sys(), "runner", "executor",
+				"unable to edit argv in execve fallback", NULL, NULL);
+		exit((int)err.type);	
+	}
+	cmd_name = &((char **)cmd->argv.data)[1];
+	free(*cmd_name);
+	*cmd_name = cmd->path.data;
+	cmd->path.cap = 0;
+	argc = (int)cmd->argv.len - 1;
+	shell_free_void();
+	exit(shell_run(argc, cmd->argv.data, cmd->envp.data));
 }
 
 static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
@@ -31,12 +40,18 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 			(char *const *)cmd->argv.data,
 			(char *const *)cmd->envp.data);
 	if (errno == ENOEXEC)
-		exit_status = cmd_exec_in_shell(cmd);
+		cmd_exec_in_shell(cmd);
 	else if (errno == ENOENT || errno == ENOTDIR)
 		exit_status = (int)ERR_POSIX_CMD_NOT_FOUND;
 	else
 		exit_status = (int)ERR_POSIX_CMD_NOT_EXECUTABLE;
-	(void)error_print(error((t_error_type)exit_status), "executor", cmd->name.data, NULL, NULL);
+	(void)error_print(
+		error((t_error_type)exit_status),
+		"runner",
+		"executor",
+		cmd->name.data,
+		NULL,
+		NULL);
 	exit(exit_status);
 }
 
@@ -50,15 +65,12 @@ static inline t_error	cmd_exec_parent(t_cmd *cmd, pid_t child_pid)
 		if (errno == EINTR)
 		{
 			(void)err;
-			/*
-			TODO: implement full signal handling (should kill the child if interrupted)
 			err = shell_should_interrupt();
 			if (err.type)
 			{
 				cmd->exit_status = (int)ERR_POSIX_CMD_NOT_EXECUTABLE;
 				return (err);
 			}
-			*/
 			continue ;
 		}
 		return (error_sys());
@@ -66,7 +78,7 @@ static inline t_error	cmd_exec_parent(t_cmd *cmd, pid_t child_pid)
 	if (WIFEXITED(status))
 		cmd->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		cmd->exit_status = (int)ERR_POSIX_SIGNAL + WTERMSIG(status);
+		cmd->exit_status = ERR_POSIX_SIGNAL_BASE_CODE + WTERMSIG(status);
 	return (error(ERR_NO));
 }
 

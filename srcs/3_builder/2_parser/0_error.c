@@ -9,5 +9,5 @@ t_error	parser_internal_error(t_error err)
 
 t_error	parser_invalid_syntax(void)
 {
-	return (error_print(error(ERR_SYNTAX_INVALID), "parser", NULL, NULL));
+	return (error_print(error(ERR_POSIX_SYNTAX), "parser", NULL, NULL));
 }

@@ -7,7 +7,8 @@
 #include <stdarg.h>
 # include <debug.h>	// DEBUG
 
-#define SEPARATOR		": "
+#define SEPARATOR			": "
+#define WRITE_ERROR_PREFIX	"write error" SEPARATOR
 
 // TODO: split in 2 functions and move to another file
 const char	*error_to_string(t_error err)
@@ -16,12 +17,8 @@ const char	*error_to_string(t_error err)
 		return ("success");
 	else if (err.type == ERR_ASSIGNMENT_MISSING_NAME)
 		return ("missing assignment name");
-	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
+	else if (err.type == ERR_INVALID_USAGE)
 		return ("usage");
-	else if (err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
-		return ("Permission denied");
-	else if (err.type == ERR_POSIX_CMD_NOT_FOUND)
-		return ("command not found");
 	else if (err.type == ERR_EOF)
 		return ("unexpected end of file");
 	else if (err.type == ERR_FD_INVALID)
@@ -40,7 +37,7 @@ const char	*error_to_string(t_error err)
 		return ("LR conflict");
 	else if (err.type == ERR_LR_STATE_NOT_FOUND)
 		return ("LR state not found");
-	else if (err.type == ERR_OPEN_INVALID_USAGE)
+	else if (err.type == ERR_INVALID_USAGE)
 		return ("invalid open() usage");
 	else if (err.type == ERR_OPT_INVALID)
 		return ("invalid option");
@@ -54,7 +51,7 @@ const char	*error_to_string(t_error err)
 		return ("invalid function name");
 	else if (err.type == ERR_PARSER_INVALID_STATE)
 		return ("invalid state");
-	else if (err.type == ERR_POSIX_REDIRECTION)
+	else if (err.type == ERR_REDIRECTION)
 		return ("redirection failed");
 	else if (err.type == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
@@ -62,7 +59,7 @@ const char	*error_to_string(t_error err)
 		return ("shift value is out of range");
 	else if (err.type == ERR_SIZE_MAX_REACHED)
 		return ("SIZE_MAX has been reached");
-	else if (err.type == ERR_UNDEFINED_BEHAVIOUR)
+	else if (err.type == ERR_UB)
 		return ("undefined behaviour 🤪");
 	else if (err.type == ERR_VAR_INVALID_NAME)
 		return ("invalid variable name");
@@ -74,8 +71,6 @@ const char	*error_to_string(t_error err)
 		return ("readonly variable");
 	else if (err.type == ERR_CTX_END_NOT_FOUND)
 		return ("context end not found");
-	else if (err.type == ERR_SYNTAX_INVALID)
-		return ("invalid syntax");
 	else if (err.type == ERR_EMPTY_STACK)
 		return ("empty stack");
 	else if (err.type == ERR_HEREDOC_MAX_ID_REACHED)
@@ -108,6 +103,35 @@ const char	*error_to_string(t_error err)
 		return ("bad substitution");
 	else if (err.type == ERR_ALIAS_NOT_FOUND)
 		return ("not found");
+	// posix_write() error
+	else if (err.type == ERR_POSIX_WRITE)
+		return ("write error");
+	// builtin errors
+	else if (err.type == ERR_INTERNAL)
+		return ("internal builtin error");
+	else if (err.type == ERR_BUILTIN)
+		return ("builtin error");
+	// POSIX errors
+	else if (err.type == ERR_POSIX_SYNTAX)
+		return ("invalid syntax");
+	else if (err.type == ERR_POSIX_BUILTIN_SPECIAL)
+		return ("special builtin error");
+	else if (err.type == ERR_POSIX_UTILITY)
+		return ("utility error");
+	else if (err.type == ERR_REDIRECTION_SPECIAL)
+		return ("redirection error (special built-in)");
+	else if (err.type == ERR_REDIRECTION_OTHER)
+		return ("redirection error (non-special built-in)");
+	else if (err.type == ERR_POSIX_ASSIGNMENT)
+		return ("variable assignment error");
+	else if (err.type == ERR_POSIX_EXPANSION)
+		return ("expansion error");
+	else if (err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
+		return ("command not executable");
+	else if (err.type == ERR_POSIX_CMD_NOT_FOUND)
+		return ("command not found");
+	else if (err.type == ERR_POSIX_READ)
+		return ("Unrecoverable read error");
 	return ("unknown");
 }
 
@@ -117,7 +141,10 @@ t_error	error_priv(t_error_type type, const char *file, int line, const char *ca
 	t_error	err;
 
 	err.type = type;
-	err.saved_errno = 0;
+	if (err.type == ERR_POSIX_WRITE)
+		err.saved_errno = errno;
+	else
+		err.saved_errno = 0;
 	if (type == ERR_VEOF)
 		err.printed = true;
 	else
@@ -199,6 +226,9 @@ t_error	error_print(t_error err, ...)
 	if (string)
 		error_print_format(string, args);
 	va_end(args);
+	if (err.type == ERR_POSIX_WRITE)
+		(void)posix_write(STDERR_FILENO, WRITE_ERROR_PREFIX,
+			str_len(WRITE_ERROR_PREFIX));
 	string = error_to_string(err);
 	(void)posix_write(STDERR_FILENO, string, str_len(string));
 	(void)posix_write(STDERR_FILENO, "\n", 1);

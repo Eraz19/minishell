@@ -131,7 +131,8 @@ t_error	params_get_positionals(const t_positionals **dst);
  * @brief Print shell parameters in the requested builtin format.
  *
  * @param mode Output mode.
- * @return @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC on failure.
+ * @return @c ERR_SHELL_NOT_FOUND, @c ERR_INTERRUPTED, @c ERR_POSIX_WRITE
+ *			or @c ERR_LIBC on failure.
  */
 t_error	params_print(t_params_print_mode mode);
 

@@ -3,34 +3,28 @@
 
 #include <stdbool.h>
 
+# define ERR_POSIX_SIGNAL_BASE_CODE	128
+
 typedef enum e_error_type
 {
 	// Success
 	ERR_NO,
+	/* -------------------- UNQUALIFIED ERRORS -------------------- */
 	// Failures
 	ERR_ASSIGNMENT_MISSING_NAME,
-	ERR_BUILTIN_INVALID_USAGE,
 	ERR_EOF,
 	ERR_FD_INVALID,
 	ERR_FORMAT_INVALID,
 	ERR_HOOK_INVALID_RHS_LEN,
 	ERR_INDEX_OUT_OF_BOUND,
-	ERR_INTERRUPTED,
-	ERR_LIBC,
 	ERR_LR_CONFLICT,
 	ERR_LR_STATE_NOT_FOUND,
-	ERR_OPEN_INVALID_USAGE,
-	ERR_OPT_INVALID,
-	ERR_OPT_INVALID_ARG,
-	ERR_OPT_MISSING_ARG,
 	ERR_PARSER_EMPTY_GOTO,
 	ERR_PARSER_INVALID_FUNCTION_NAME,
 	ERR_PARSER_INVALID_STATE,
 	ERR_SHELL_NOT_FOUND,
 	ERR_SHIFT_INVALID_VALUE,
 	ERR_SIZE_MAX_REACHED,
-	ERR_SYNTAX_INVALID,
-	ERR_UNDEFINED_BEHAVIOUR,
 	ERR_VAR_INVALID_NAME,
 	ERR_VAR_MISSING_EQUAL,
 	ERR_VAR_NOT_FOUND,
@@ -53,23 +47,47 @@ typedef enum e_error_type
 	ERR_PARAM_BAD_SUBSTITUTION,
 	ERR_BAD_SUBSTITUTION,
 	ERR_ALIAS_NOT_FOUND,
+	// FT_GETOPT
+	ERR_OPT_INVALID,						// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_MISSING_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
+	// posix_write()
+	ERR_POSIX_WRITE,						// [CALLER]		write error (special POSIX treatment required)
+	// OPTIONS (produced by ft_getopt() + posix_open*())
+	ERR_INVALID_USAGE,						// [CALLER]		Options and / or arguments are invalid
+	// REDIRECTOR (+ GENERIC ERRORS)
+	ERR_REDIRECTION,						// [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
+	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
+	ERR_BUILTIN,							// [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL / ERR_POSIX_UTILITY
+	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
+	// GENERIC ERRORS (can be returned by any module or builtin)
+	ERR_INTERRUPTED = 115,					// [-]			[Y-Y-?] Shell interrupted by signal
+	ERR_UB = 116,							// [-]			[?-?-Y]	Undefined behaviour
+	ERR_INTERNAL = 117,						// [-]			[Y-Y-Y]	Shell internal error
+	ERR_LIBC = 118,							// [-]			[Y-Y-Y]	System or libc error
 	// POSIX EXIT CODES
-	ERR_POSIX_EXPANSION = 120,
-	ERR_POSIX_REDIRECTION = 121,
-	ERR_POSIX_ASSIGNMENT = 122,
-	ERR_POSIX_BUILTIN_UTILITY = 123,
-	ERR_POSIX_BUILTIN_INTERNAL = 124,
-	ERR_POSIX_CMD_FAILED = 125,
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,
-	ERR_POSIX_CMD_NOT_FOUND = 127,
-	// POSIX SIGNAL CODES
-	ERR_POSIX_SIGNAL = 128,
+	ERR_POSIX_SYNTAX = 119,					// [-]			[Y-N-Y] Shell language syntax error
+	ERR_POSIX_BUILTIN_SPECIAL = 120,		// [-]			[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
+	ERR_POSIX_UTILITY = 121,				// [-]			[N-N-N] Other utility error
+	ERR_REDIRECTION_SPECIAL = 122,			// [-]			[Y-N-Y] Redirection error with special built-in utilities
+	ERR_REDIRECTION_OTHER = 123,			// [-]			[N-N-Y] Redirection error with non-special built-in utilities
+	ERR_POSIX_ASSIGNMENT = 124,				// [-]			[Y-N-Y] Variable assignment error
+	ERR_POSIX_EXPANSION = 125,				// [-]			[Y-N-Y] Expansion error
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [-]			???
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [-]			[?-N-Y] Command not found
+	ERR_POSIX_READ = 128,					// [-]			[Y-Y-Y] Unrecoverable read error when reading commands
+	// POSIX SIGNAL CODES (128 + signal code)
 }	t_error_type;
+/*
+Legend:
+	[<module>]	=> module in charge of error requalification ("-" means fully qualified)
+	[A-B-C]		=> A = shall exit (non-interactive) | B = shall exit (interactive) | C = shall print diagnostic
+	Errors should be printed as they are requalified to avoid losing diagnostic precision
+	Only final error codes are set to specific values => they are the exit status of the shell itself
+*/
 
-# define ERR_POSIX_EXIT_MIN		ERR_POSIX_EXPANSION
-# define ERR_POSIX_EXIT_MAX		ERR_POSIX_CMD_NOT_FOUND
-# define ERR_POSIX_SIGNAL_MIN	ERR_POSIX_SIGNAL
-# define ERR_POSIX_SIGNAL_MAX	ERR_POSIX_SIGNAL
+// ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
 
 #define error(type) error_priv(type, __FILE__, __LINE__, __func__)	//DEBUG
 #define error_sys() error_sys_priv(__FILE__, __LINE__, __func__)	//DEBUG
@@ -132,7 +150,11 @@ t_error	error_print(t_error err, ...);
 
 const char	*error_to_string(t_error err);
 
-// @ret ERR_UNDEFINED_BEHAVIOUR
+// @ret ERR_UB
 t_error	undefined_behaviour(const char *message);
+
+void	print_unspecified_behaviour(
+			const char *posix_citation,
+			const char *implemented_as);
 
 #endif

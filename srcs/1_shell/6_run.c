@@ -1,43 +1,65 @@
 #include "shell_priv.h"
 #include <stdlib.h>
-# include "logs.h"	// DEBUG
 
-void	shell_run(int argc, char **argv, char **envp)
+/* -------------------- DEBUG (START) -------------------- */
+# include <locale.h>	// DEBUG
+# include "logs.h"		// DEBUG
+# include <assert.h>	// DEBUG
+
+static inline void	shell_start_logs(void)
 {
-	static const char	message[] = ": unable to malloc shell data struct: ";
-	t_shell				*shell;
-	t_error				err;
-	t_error				history_err;
-
+	setlocale(LC_NUMERIC, "de_DE");
 #ifdef DEBUG_LOGS
 	print_start(99, "shell_run()");
 #endif
+}
+
+static inline void	shell_stop_logs(void)
+{
+#ifdef DEBUG_LOGS
+	print_stop();
+#endif
+	setlocale(LC_NUMERIC, "");	// DEBUG
+}
+
+/* -------------------- DEBUG (STOP) -------------------- */
+
+t_error	shell_prepare(int argc, char **argv, char **envp, t_shell **out_shell)
+{
+	t_shell	*shell;
+
+	assert(argc > 0);
+	assert(argv != NULL);
+	assert(envp != NULL);
 	shell = malloc(sizeof(*shell));
 	if (!shell)
-	{
-		error_print(error_sys(), message, NULL, NULL);
-		return ;
-	}
+		return (error_print(error_sys(),
+					"unable to malloc shell data struct", NULL, NULL));
 	shell_init(shell);
-	print_pass("shell initialized\n");
 	shell_set(shell);
-	err = shell_load(shell, argc, argv, envp);
-	if (err.type != ERR_NO)
-	{
-		error_print(err, NULL, NULL);
-		return ;
-	}
-	err = shell_exec_env();
-	if (err.type != ERR_NO)
-	{
-		error_print(err, NULL, NULL);
-		return ;
-	}
-	err = runner_run(&shell->runner);
+	*out_shell = shell;
+	print_pass("shell initialized\n");
+	return (shell_load(shell, argc, argv, envp));
+}
+
+int	shell_run(int argc, char **argv, char **envp)
+{
+	t_shell	*shell;
+	t_error	err;
+
+	shell_start_logs();
+	err = shell_prepare(argc, argv, envp, &shell);
+	if (err.type == ERR_NO)
+		err = shell_exec_env();
+	if (err.type == ERR_NO)
+		err = runner_run(&shell->runner);
 	if (err.type)
-		error_print(err, "runner", NULL, NULL);
-	history_err = history_save();
-	if (history_err.type)
-		(void)error_print(history_err, "history", NULL, NULL);
+		(void)history_save();
+	else
+		err = history_save();
+	if (err.type)
+		err = error_print(err, "history", NULL, NULL);
 	shell_free(shell);
+	shell_stop_logs();
+	return ((int)err.type);
 }

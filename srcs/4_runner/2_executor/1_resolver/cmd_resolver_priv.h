@@ -54,15 +54,14 @@ bool	cmd_name_is_regular_builtin(const char *name, t_builtin *out_builtin);
 bool	cmd_name_is_special_builtin(const char *name, t_builtin *out_builtin);
 
 /**
- * @brief Test whether a command name falls into the POSIX unspecified set.
+ * @brief Warn when @p name matches a command name with unspecified POSIX
+ *        resolution semantics.
  *
- * @note When the name matches this set, the function reports undefined
- *       behaviour through the error subsystem before returning.
+ * @note The warning is emitted only for names listed by POSIX 2.9.1.4 as
+ *       producing unspecified results when used as command names.
  *
- * @param name Command name to classify (borrowed, read-only).
- * @return True when the result is specified as unspecified by POSIX, false
- *         otherwise.
+ * @param name Command name to inspect (borrowed, read-only).
  */
-bool	cmd_name_is_unspecified(const char *name);
+void	cmd_warn_if_unspecified(const char *name);
 
 #endif

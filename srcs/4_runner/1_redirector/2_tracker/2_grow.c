@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-// @ret ERR_POSIX_REDIRECTION
+// @ret ERR_REDIRECTION
 static inline t_error	fd_tracker_get_new_cap(
 							size_t current_cap,
 							size_t min_cap,

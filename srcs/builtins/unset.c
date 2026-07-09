@@ -20,8 +20,7 @@ static bool	unset_has_option(t_getopt_out *out, char flag)
 	return (false);
 }
 
-// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG /
-// 		ERR_UNDEFINED_BEHAVIOUR / ERR_LIBC
+// @ret ERR_INVALID_USAGE / ERR_UB / ERR_LIBC
 static t_error	unset_process_options(int argc, char **argv, t_getopt_out *out)
 {
 	t_getopt_in	in;
@@ -35,15 +34,18 @@ static t_error	unset_process_options(int argc, char **argv, t_getopt_out *out)
 	in.options_with_arg = NULL;
 	in.options_with_arg_count = 0;
 	err = ft_getopt(argc, argv, &in, out);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
 	if (out->options.len > 1)
 	{
-		(void)error_print(error(ERR_BUILTIN_INVALID_USAGE), argv[0], UNSET_USAGE, NULL, NULL);
-		vector_free(&out->options, NULL);
+		(void)error_print(error(ERR_INVALID_USAGE), argv[0], UNSET_USAGE,
+				NULL, NULL);
 		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
 			"mutually-exclusive arguments produces undefined results.");
 	}
+	else if (out->first_operand_index >= (size_t)argc)
+		return (error_print(error(ERR_INVALID_USAGE), argv[0], UNSET_USAGE,
+					NULL, NULL));
 	return (err);
 }
 
@@ -74,6 +76,7 @@ static t_error	unset_var(size_t first_operand_index, int argc, char **argv)
 	return (exit_status);
 }
 
+// TODO
 static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 {
 	// TODO
@@ -83,21 +86,30 @@ static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 	return (error(ERR_NO));
 }
 
-int	builtin_unset(int argc, char **argv, char **envp)
+t_error	builtin_unset(int argc, char **argv, char **envp, int *exit_status)
 {
 	t_getopt_out	out;
-	t_error			exit_status;
+	t_error			err;
 
 	(void)envp;
-	exit_status = unset_process_options(argc, argv, &out);
-	if (exit_status.type == ERR_LIBC)
-		return ((int)error_print(exit_status, argv[0], "options parsing failed", NULL, NULL).type);
-	if (exit_status.type != ERR_NO)
-		return ((int)exit_status.type);
+	err = unset_process_options(argc, argv, &out);
+	if (err.type)
+		return (err);
 	if (unset_has_option(&out, 'f'))
-		exit_status = unset_fun(out.first_operand_index, argc, argv);
+		err = unset_fun(out.first_operand_index, argc, argv);
 	else
-		exit_status = unset_var(out.first_operand_index, argc, argv);
+		err = unset_var(out.first_operand_index, argc, argv);
+	*exit_status = (int)err.type;
+	if (err.type)
+		err = error_print(err, argv[0], NULL, NULL);
+	if (err.type == ERR_INVALID_USAGE
+		|| err.type == ERR_VAR_INVALID_NAME
+		|| err.type == ERR_VAR_READ_ONLY
+		|| err.type == ERR_POSIX_WRITE || err.type == ERR_UB)
+		err.type = ERR_BUILTIN;
+	else if (err.type == ERR_SHELL_NOT_FOUND
+		|| err.type == ERR_INDEX_OUT_OF_BOUND)
+		err.type = ERR_INTERNAL;
 	vector_free(&out.options, NULL);
-	return ((int)exit_status.type);
+	return (err);
 }

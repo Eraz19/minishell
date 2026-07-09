@@ -1,7 +1,7 @@
 #include "redirector_priv.h"
 #include <unistd.h>
 
-// @ret ERR_POSIX_REDIRECTION
+// @ret ERR_REDIRECTION
 static inline t_error	redirect_convert_location(t_ast_redirection *redir)
 {
 	char		*content_start;
@@ -18,7 +18,7 @@ static inline t_error	redirect_convert_location(t_ast_redirection *redir)
 	if (res == true)
 		err = error(ERR_NO);
 	else
-		err = error_print(error(ERR_POSIX_REDIRECTION), REDIRECTOR_MODULE_NAME,
+		err = error_print(error(ERR_REDIRECTION), REDIRECTOR_MODULE_NAME,
 			"io_location is not a valid file descriptor", NULL,
 			"'%s' expanded from '%s'",
 			content_start, redir->location->value.data);

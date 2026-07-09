@@ -27,7 +27,7 @@ static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
 	return (oflag);
 }
 
-// @ret ERR_POSIX_REDIRECTION / ERR_OPEN_INVALID_USAGE / ERR_INTERRUPTED
+// @ret ERR_REDIRECTION / ERR_OPEN_INVALID_USAGE / ERR_INTERRUPTED
 // 		/ ERR_LIBC
 static inline t_error	redirect_handle_noclobber_eexist(
 							t_ast_redirection *redir,
@@ -45,12 +45,12 @@ static inline t_error	redirect_handle_noclobber_eexist(
 			"redirection failed", "no clobber is active and file exists",
 			"unable to stat file", NULL,
 			"'%s' expanded from '%s'", path, redir->word->value.data);
-		err = error(ERR_POSIX_REDIRECTION);
+		err = error(ERR_REDIRECTION);
 		err.printed = true;
 		return (err);
 	}
 	else if (S_ISREG(st.st_mode))
-		return (error_print(error(ERR_POSIX_REDIRECTION),
+		return (error_print(error(ERR_REDIRECTION),
 			REDIRECTOR_MODULE_NAME,
 			"no clobber is active and file is regular", NULL,
 			"'%s' expanded from '%s'", path, redir->word->value.data));
@@ -59,7 +59,7 @@ static inline t_error	redirect_handle_noclobber_eexist(
 	return (posix_open_with_mode(path, oflag, mode, out_fd));
 }
 
-// @ret ERR_POSIX_REDIRECTION
+// @ret ERR_REDIRECTION
 static inline t_error	redirect_handle_open_error(
 							t_ast_redirection *redir,
 							bool no_clobber,
@@ -74,7 +74,7 @@ static inline t_error	redirect_handle_open_error(
 	{
 		(void)error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
 			"unable to open heredoc file", NULL, NULL);
-		return (err = error(ERR_POSIX_REDIRECTION), err.printed = true, err);
+		return (err = error(ERR_REDIRECTION), err.printed = true, err);
 	}
 	else if (err.type == ERR_LIBC && err.saved_errno == EEXIST
 		&& redir->operation == AST_REDIR_WRITE && no_clobber)
@@ -88,7 +88,7 @@ static inline t_error	redirect_handle_open_error(
 		(void)error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
 			"unable to open file", NULL, "'%s' expanded from '%s'",
 			redir->expanded_word.data, redir->word->value.data);
-	return (err = error(ERR_POSIX_REDIRECTION), err.printed = true, err);
+	return (err = error(ERR_REDIRECTION), err.printed = true, err);
 }
 
 t_error	redirect_open(t_ast_redirection *redirection, int *out_fd)

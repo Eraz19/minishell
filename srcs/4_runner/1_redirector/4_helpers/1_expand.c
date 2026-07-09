@@ -26,7 +26,7 @@ static inline t_error	redirect_expand_word(
 	else if (expansion.len == 0 || expansion.len > 1)
 	{
 		expansion_free(&expansion);
-		return (error_print(error(ERR_POSIX_REDIRECTION), REDIRECTOR_MODULE_NAME,
+		return (error_print(error(ERR_REDIRECTION), REDIRECTOR_MODULE_NAME,
 			param_name, " does not expand to exactly one field",
 			NULL, "%s", token->value.data));
 	}

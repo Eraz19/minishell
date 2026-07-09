@@ -35,6 +35,17 @@ typedef struct s_shell
 }	t_shell;
 
 /* ************************************************************************* */
+/*                                LIFE_CYCLE                                 */
+/* ************************************************************************* */
+
+/**
+ * @brief Frees the current global shell instance when one is registered.
+ *
+ * @note This is a no-op when @ref shell_get() returns @c NULL.
+ */
+void	shell_free_void(void);
+
+/* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
@@ -110,17 +121,19 @@ t_runner	*shell_get_runner(void);
 t_scanner	*shell_get_scanner(void);
 
 /**
- * @brief Creates, loads, runs and frees the shell.
+ * @brief Allocates, runs and frees the global shell instance.
  *
- * Allocates the shell state, initializes every submodule, loads parameters,
- * history, scanner and builder state, then runs the command loop and handle
- * errors and all data freeing.
+ * @note The function allocates the shell state, initializes and loads all
+ *       submodules, executes the startup @c ENV hook, runs
+ *       @ref runner_run(), saves history, then frees the shell before
+ *       returning.
  *
  * @param argc Argument count.
  * @param argv Argument array (borrowed, read-only).
  * @param envp Environment array (borrowed, read-only).
+ * @return Integer form of the final error type, or @c ERR_NO on success.
  */
-void		shell_run(int argc, char **argv, char **envp);
+int		shell_run(int argc, char **argv, char **envp);
 
 /**
  * @brief Reports whether interactive EOF should terminate the shell.

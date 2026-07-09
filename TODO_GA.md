@@ -1,3 +1,18 @@
+# WIP EXECUTOR
+
+- `searcher`:
+	- Associer les **regular** builtins à un `bin/` (ex: `echo` match sur `bin/echo`)
+	- update `is_regular_builtin(path)` => si oui requalifier en `CMD_BUILTIN` et set `cmd.builtin`
+	- call `is_regular_builtin()` durant `path search` au lieu de `resolve`
+	- ne pas trigger `cmd_cache_set()` si regular builtin matched
+- `builtins`:
+	- update signature to `t_error <builtin>(t_vector *argv, t_vector *envp, int *exit_status)`
+	- `errors`:
+		- `ERR_NO` => pas d'erreur (quel que soit l'exit status)
+		- `ERR_SYS` => erreur libc / system => critique => always exit
+		- `ERR_BUILTIN_INTERNAL` => erreur interne du builtin => bug => à décider exit ou non
+		- `ERR_BUILTIN` => erreur POSIX => ignorée par `executor` si intrinsic builtin / remontée au runner si special builtin => runner décide exit ou non selon POSIX consequences of errors
+
 # TODO
 
 - `functions`:
@@ -5,15 +20,15 @@
 - `executor`:
 	- `dispatcher`:
 		- handle functions
-		- handle execve fallback (need subshell)
 		- handle errors:
 			- Return correct `exit status` (see [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) `EXIT STATUS` section).
 			- Shall use [exit](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#exit) builtin to exit itself ??
 			- Implement correct [2.8.1 Consequences of Shell Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_01).
-	- ⚠️ `searcher`:
-		- `builtins` must be associated with a `directory` to know when to recognize them during `PATH` exploration
+	- ⚠️ `exec` specific flow
+	- ⚠️ `command` specific flow
 - `walker`:
 	- implement all
+	- handle errors (cf `error.h`)
 - `shell`:
 	- `subshell`:
 		- subshell
@@ -48,6 +63,7 @@
 	- `variables`:
 		- Switch `t_vector`s to `t_hashmap` ?
 - **ALL REPO**:
+	- use `print_unspecified_behaviour()`
 	- Move `t_tokens` from `runner` to `token` module ?
 	- Use `t_tokens` instead of `t_vector` of `t_token *` (`ast`...)
 	- handle `options` properly (`-n` flag, ...)
@@ -73,6 +89,7 @@
 
 # ALEXANDER
 
+- `void	print_unspecified_behaviour(const char *condition, const char *implementation)`
 - `EXP_DSQUOTE`:
 	- process first, then apply all other expansions from the beginning of `word`
 - `utils`:
@@ -143,8 +160,23 @@
 	- as `sysconf()` / `getrlimit()` are forbidden, we cannot query the actual file descriptor limit of the host process. POSIX only requires shell redirections to support user file descriptors 0 through 9. By default, `minishell` uses 0..128 as its user fd range and reserves 129..256 for internal redirection backups. If the backup range is exhausted or unsupported by the host system, the redirection fails with a redirection error. A MAX_COMPAT build option can restrict the layout to 0..9 for user fds and 10..19 for backup fds, which is a more conservative POSIX-minimum layout but still does not guarantee that backup fds are available.
 - `expander`:
 	- as `fn_match()` is forbidden, regex matching is not implemented.
-- `runner/redirector/tracker`:
-	- as `fcntl()` is forbidden, backup fds cannot be marked as `FD_CLOEXEC`; therefore, whenever a child is forked to execute a command, the shell explicitly closes each tracked backup fd before calling `execve()`.
+- `runner:`
+	- `redirector-tracker`:
+		- as `fcntl()` is forbidden, backup fds cannot be marked as `FD_CLOEXEC`; therefore, whenever a child is forked to execute a command, the shell explicitly closes each tracked backup fd before calling `execve()` (best effort).
+	- `executor`:
+		- as `_exit()` is forbidden, shell child processes use `exit()`, which may flush inherited standard I/O buffers and run inherited exit handlers.
+
+## POSIX UNSPECIFIED IMPLEMENTATIONS
+
+- `runner/executor/resolver`:
+	- No special treatment is done for `unspecified command names` so it can resolve to a `function` or an `external command`
+- `functions`:
+	- `assignments` persist after execution
+- `utilities`:
+	- unspecified utilities are processed as external utilities
+- `errors`:
+	- shell exists on `command not found` error when shell is not interactive
+- ...
 
 ## lr_machine.md
 

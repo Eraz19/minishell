@@ -5,7 +5,7 @@
 
 #define READONLY_USAGE	"-p || name[=word] ..."
 
-// @ret ERR_UNDEFINED_BEHAVIOUR
+// @ret ERR_UB
 static t_error readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
 {
 	size_t	options_count;
@@ -16,19 +16,19 @@ static t_error readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
 	options_count = out->options.len;
 	operand_count = (size_t)argc - out->first_operand_index;
 	if (options_count == 0 && operand_count == 0)
-		return (undefined_behaviour("POSIX: readonly: DESCRIPTION: When no "
-			"arguments are given, the results are unspecified."));
+		print_unspecified_behaviour("POSIX: readonly: DESCRIPTION: When no "
+			"arguments are given, the results are unspecified", "no-op");
 	if (options_count > 0 && operand_count > 0)
 	{
-		(void)error_print(error(ERR_BUILTIN_INVALID_USAGE), argv[0], READONLY_USAGE, NULL, NULL);
+		(void)error_print(error(ERR_INVALID_USAGE), argv[0], READONLY_USAGE,
+				NULL, NULL);
 		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
 		"mutually-exclusive arguments produces undefined results.");
 	}
 	return (err);
 }
 
-// @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG /
-// 		ERR_UNDEFINED_BEHAVIOUR / ERR_LIBC
+// @ret ERR_INVALID_USAGE / ERR_UB / ERR_LIBC
 static t_error	readonly_process_options(int argc, char **argv, t_getopt_out *out)
 {
 	t_getopt_in	in;
@@ -42,19 +42,16 @@ static t_error	readonly_process_options(int argc, char **argv, t_getopt_out *out
 	in.options_with_arg = NULL;
 	in.options_with_arg_count = 0;
 	err = ft_getopt(argc, argv, &in, out);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
 	err = readonly_catch_ub(argc, argv, out);
 	if (err.type != ERR_NO)
-	{
-		vector_free(&out->options, NULL);
 		return (err);
-	}
 	return (error(ERR_NO));
 }
 
-// @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_SHELL_NOT_FOUND /
-// 		ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC
+// @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
+// 		/ ERR_SHELL_NOT_FOUND / ERR_LIBC
 static t_error	readonly_add_one(const char *builtin_name, const char *string)
 {
 	t_string	name;
@@ -62,54 +59,60 @@ static t_error	readonly_add_one(const char *builtin_name, const char *string)
 	t_error	err;
 
 	err = assignment_split(string, &name, &value);
-	if (err.type != ERR_NO)
-		return (error_print(err, builtin_name, string, NULL, NULL));
+	if (err.type == ERR_ASSIGNMENT_MISSING_NAME)
+		err = error_print(err, builtin_name, string, NULL, NULL);
+	if (err.type)
+		return (err);
 	err = params_set_variable(&name, &value, false, true);
-	if (err.type != ERR_NO)
+	if (err.type == ERR_VAR_INVALID_NAME || err.type == ERR_VAR_READ_ONLY)
 		err = error_print(err, builtin_name, string, NULL, NULL);
 	string_free(&name);
 	string_free(&value);
 	return (err);
 }
 
-// @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_SHELL_NOT_FOUND /
-// 		ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_LIBC
+// @ret ERR_ASSIGNMENT_MISSING_NAME / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
+// 		/ ERR_SHELL_NOT_FOUND / ERR_LIBC
 static t_error	readonly_add(size_t first_operand_index, int argc, char **argv)
 {
 	int		i;
-	t_error	last_exit_status;
-	t_error	exit_status;
+	t_error	last_err;
+	t_error	err;
 
-	exit_status = error(ERR_NO);
+	err = error(ERR_NO);
 	i = (int)first_operand_index;
 	while (i < argc)
 	{
-		last_exit_status = readonly_add_one(argv[0], argv[i++]);
-		if (last_exit_status.type != ERR_NO)
-			exit_status = last_exit_status;
+		last_err = readonly_add_one(argv[0], argv[i++]);
+		if (last_err.type != ERR_NO)
+			err = last_err;
 	}
-	return (exit_status);
+	return (err);
 }
 
-int	builtin_readonly(int argc, char **argv, char **envp)
+t_error	builtin_readonly(int argc, char **argv, char **envp, int *exit_status)
 {
 	t_getopt_out	out;
-	t_error			exit_status;
+	t_error			err;
 
 	(void)envp;
-	exit_status = readonly_process_options(argc, argv, &out);
-	if (exit_status.type == ERR_LIBC)
-		return ((int)error_print(exit_status, argv[0], "options parsing failed", NULL, NULL).type);
-	if (exit_status.type != ERR_NO)
-		return ((int)exit_status.type);
-	if (out.options.len > 0)
-	{
-		exit_status = params_print(PARAMS_PRINT_READONLY);
-		if (exit_status.type != ERR_NO)
-			(void)error_print(exit_status, argv[0], "variables write failed", NULL, NULL);
-	}
-	else
-		exit_status = readonly_add(out.first_operand_index, argc, argv);
+	err = readonly_process_options(argc, argv, &out);
+	if (err.type == ERR_NO && out.options.len > 0)
+		err = params_print(PARAMS_PRINT_READONLY);
+	else if (err.type == ERR_NO)
+		err = readonly_add(out.first_operand_index, argc, argv);
+	*exit_status = (int)err.type;
+	if (err.type)
+		err = error_print(err, argv[0], NULL, NULL);
+	if (err.type == ERR_INVALID_USAGE
+		|| err.type == ERR_ASSIGNMENT_MISSING_NAME
+		|| err.type == ERR_VAR_INVALID_NAME
+		|| err.type == ERR_VAR_READ_ONLY
+		|| err.type == ERR_POSIX_WRITE
+		|| err.type == ERR_UB)
+		err.type = ERR_BUILTIN;
+	else if (err.type == ERR_SHELL_NOT_FOUND)
+		err.type = ERR_INTERNAL;
 	vector_free(&out.options, NULL);
-	return ((int)exit_status.type);
+	return (err);
 }

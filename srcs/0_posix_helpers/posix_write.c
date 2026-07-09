@@ -25,7 +25,7 @@ static inline t_error	write_handle_result(
 		return (error(ERR_NO));
 	}
 	if (ret < 0 || (ret == 0 && requested != 0))
-		return (error_sys());
+		return (error(ERR_POSIX_WRITE));
 	*written = (size_t)ret;
 	return (error(ERR_NO));
 }

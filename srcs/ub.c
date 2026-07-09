@@ -1,8 +1,26 @@
 #include "libft.h"
 #include "posix_helpers.h"
+#include "shell.h"
 #include <unistd.h>
 
+#define COND_PREFIX	": warning: unspecified behaviour: "
+#define IMPL_PREFIX	": implemented as: "
 #define UB_SUFFIX	"\" 🤪\n ╰──▶ Byyye! 👋\n"
+
+void	print_unspecified_behaviour(
+			const char *posix_citation,
+			const char *implemented_as)
+{
+	const char	*shell_name;
+	
+	shell_name = shell_get_name();
+	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));
+	(void)posix_write(STDERR_FILENO, COND_PREFIX, str_len(COND_PREFIX));
+	(void)posix_write(STDERR_FILENO, posix_citation, str_len(posix_citation));
+	(void)posix_write(STDERR_FILENO, IMPL_PREFIX, str_len(IMPL_PREFIX));
+	(void)posix_write(STDERR_FILENO, implemented_as, str_len(implemented_as));
+	(void)posix_write(STDERR_FILENO, "\n", 1);
+}
 
 t_error	undefined_behaviour(const char *message)
 {
@@ -58,8 +76,8 @@ t_error	undefined_behaviour(const char *message)
 	
 // 	posix_write(STDERR_FILENO, ascii, str_len(ascii));
 
-	(void)posix_write(STDOUT_FILENO, "\"", 1);
-	(void)posix_write(STDOUT_FILENO, message, str_len(message));
-	(void)posix_write(STDOUT_FILENO, UB_SUFFIX, str_len(UB_SUFFIX));
-	return (error_print(error(ERR_UNDEFINED_BEHAVIOUR)));
+	(void)posix_write(STDERR_FILENO, "\"", 1);
+	(void)posix_write(STDERR_FILENO, message, str_len(message));
+	(void)posix_write(STDERR_FILENO, UB_SUFFIX, str_len(UB_SUFFIX));
+	return (error_print(error(ERR_UB)));
 }

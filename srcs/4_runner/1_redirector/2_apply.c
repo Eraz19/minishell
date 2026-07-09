@@ -32,7 +32,7 @@ static inline t_error	redirect_dup(t_ast_redirection *redir)
 		(void)redirect_parse_fd(redir->expanded_word.data, &rhs_fd);
 		err = posix_dup2(rhs_fd, redir->fd);
 		if (err.type == ERR_LIBC && err.saved_errno == EBADF)
-			err = error_print(error(ERR_POSIX_REDIRECTION),
+			err = error_print(error(ERR_REDIRECTION),
 				REDIRECTOR_MODULE_NAME, "file descriptor is not valid", NULL,
 				"%i expanded from '%s'", rhs_fd, redir->word->value.data);
 	}

@@ -2,7 +2,7 @@
 #include "fd_manager.h"
 #include <unistd.h>
 
-// @ret ERR_POSIX_REDIRECTION
+// @ret ERR_REDIRECTION
 static inline t_error	redirect_dup_invalid_word(t_ast_redirection *redir)
 {
 	const char	*value;
@@ -15,12 +15,12 @@ static inline t_error	redirect_dup_invalid_word(t_ast_redirection *redir)
 		value = "";
 	else
 		value = redir->expanded_word.data;
-	return (error_print(error(ERR_POSIX_REDIRECTION), REDIRECTOR_MODULE_NAME,
+	return (error_print(error(ERR_REDIRECTION), REDIRECTOR_MODULE_NAME,
 		"invalid word value", NULL, "'%s' expanded from '%s'",
 		value, redir->word->value.data));
 }
 
-// @ret ERR_POSIX_REDIRECTION / ERR_LIBC
+// @ret ERR_REDIRECTION / ERR_LIBC
 static inline t_error	redirect_validate_dup_rhs(
 							t_ast_redirection *redir,
 							t_redirector *redirector)
@@ -34,7 +34,7 @@ static inline t_error	redirect_validate_dup_rhs(
 		|| redirect_parse_fd(redir->expanded_word.data, &rhs_fd) == false)
 		return (redirect_dup_invalid_word(redir));
 	err = fd_check_dup_rhs(redirector, rhs_fd);
-	if (err.type == ERR_POSIX_REDIRECTION)
+	if (err.type == ERR_REDIRECTION)
 		return (error_print(err,
 			REDIRECTOR_MODULE_NAME, "file descriptor is not open", NULL,
 			"%i expanded from '%s'", rhs_fd, redir->word->value.data));
