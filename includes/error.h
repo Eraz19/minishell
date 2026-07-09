@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+# define ERR_POSIX_SIGNAL_BASE_CODE	128
+
 typedef enum e_error_type
 {
 	// Success
@@ -53,23 +55,24 @@ typedef enum e_error_type
 	ERR_PARAM_BAD_SUBSTITUTION,
 	ERR_BAD_SUBSTITUTION,
 	ERR_ALIAS_NOT_FOUND,
+	// BUILTINS EXIT CODES (+ ERR_LIBC + ERR_NO)
+	ERR_INTERNAL,							// erreur interne du builtin => bug => à décider exit ou non
+	ERR_BUILTIN,							// requalified by executor into ERR_POSIX_BUILTIN_SPECIAL / ERR_POSIX_UTILITY
 	// POSIX EXIT CODES
-	ERR_POSIX_EXPANSION = 120,
-	ERR_POSIX_REDIRECTION = 121,
-	ERR_POSIX_ASSIGNMENT = 122,
-	ERR_POSIX_BUILTIN_UTILITY = 123,
-	ERR_POSIX_BUILTIN_INTERNAL = 124,
-	ERR_POSIX_CMD_FAILED = 125,
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,
-	ERR_POSIX_CMD_NOT_FOUND = 127,
-	// POSIX SIGNAL CODES
-	ERR_POSIX_SIGNAL = 128,
+	ERR_POSIX_SYNTAX = 119,					// [Y-N-Y] Shell language syntax error
+	ERR_POSIX_BUILTIN_SPECIAL = 120,		// [Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
+	ERR_POSIX_UTILITY = 121,				// [N-N-N] Other utility error
+	ERR_POSIX_REDIRECTION_SPECIAL = 122,	// [Y-N-Y] Redirection error with special built-in utilities
+	ERR_POSIX_REDIRECTION_OTHER = 123,		// [N-N-Y] Redirection error with special built-in utilities
+	ERR_POSIX_ASSIGNMENT = 124,				// [Y-N-Y] Variable assignment error
+	ERR_POSIX_EXPANSION = 125,				// [Y-N-Y] Expansion error
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// ???
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [?-N-Y] Command not found
+	ERR_POSIX_READ = 128,					// [Y-Y-Y] Unrecoverable read error when reading commands
+	// POSIX SIGNAL CODES (128 + signal code)
 }	t_error_type;
 
-# define ERR_POSIX_EXIT_MIN		ERR_POSIX_EXPANSION
-# define ERR_POSIX_EXIT_MAX		ERR_POSIX_CMD_NOT_FOUND
-# define ERR_POSIX_SIGNAL_MIN	ERR_POSIX_SIGNAL
-# define ERR_POSIX_SIGNAL_MAX	ERR_POSIX_SIGNAL
+// ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
 
 #define error(type) error_priv(type, __FILE__, __LINE__, __func__)	//DEBUG
 #define error_sys() error_sys_priv(__FILE__, __LINE__, __func__)	//DEBUG
@@ -134,5 +137,7 @@ const char	*error_to_string(t_error err);
 
 // @ret ERR_UNDEFINED_BEHAVIOUR
 t_error	undefined_behaviour(const char *message);
+
+void	print_unspecified_behaviour(const char *condition, const char *implementation);
 
 #endif
