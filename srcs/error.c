@@ -16,7 +16,7 @@ const char	*error_to_string(t_error err)
 		return ("success");
 	else if (err.type == ERR_ASSIGNMENT_MISSING_NAME)
 		return ("missing assignment name");
-	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
+	else if (err.type == ERR_INVALID_USAGE)
 		return ("usage");
 	else if (err.type == ERR_EOF)
 		return ("unexpected end of file");
@@ -36,7 +36,7 @@ const char	*error_to_string(t_error err)
 		return ("LR conflict");
 	else if (err.type == ERR_LR_STATE_NOT_FOUND)
 		return ("LR state not found");
-	else if (err.type == ERR_OPEN_INVALID_USAGE)
+	else if (err.type == ERR_INVALID_USAGE)
 		return ("invalid open() usage");
 	else if (err.type == ERR_OPT_INVALID)
 		return ("invalid option");
@@ -58,7 +58,7 @@ const char	*error_to_string(t_error err)
 		return ("shift value is out of range");
 	else if (err.type == ERR_SIZE_MAX_REACHED)
 		return ("SIZE_MAX has been reached");
-	else if (err.type == ERR_UNDEFINED_BEHAVIOUR)
+	else if (err.type == ERR_UB)
 		return ("undefined behaviour 🤪");
 	else if (err.type == ERR_VAR_INVALID_NAME)
 		return ("invalid variable name");
@@ -103,7 +103,7 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_ALIAS_NOT_FOUND)
 		return ("not found");
 	// builtin errors
-	else if (err.type == ERR_BUILTIN_INTERNAL)
+	else if (err.type == ERR_INTERNAL)
 		return ("internal builtin error");
 	else if (err.type == ERR_BUILTIN)
 		return ("builtin error");
