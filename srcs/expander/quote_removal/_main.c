@@ -1,8 +1,23 @@
 #include "quote_removal_.h"
 #include "quote_removal_context_.h"
 
+static bool	is_opening_mark(t_word_item item)
+{
+	if (item.opt.escaped)
+		return (false);
+	if (item.opt.quoted == CONTEXT_SQUOTE)
+		return (item.c == '\'');
+	if (item.opt.quoted == CONTEXT_DQUOTE)
+		return (item.c == '"');
+	if (item.opt.quoted == CONTEXT_DOLLAR_SQUOTE)
+		return (item.c == '$');
+	return (true);
+}
+
 t_error	quote_removal_quoted(t_expander *expander, t_word_item item)
 {
+	if (!is_opening_mark(item))
+		return (expander->err = word_push(&expander->word_exp, item));
 	if (item.opt.quoted == CONTEXT_SQUOTE)
 		context_squote(expander);
 	else if (item.opt.quoted == CONTEXT_DQUOTE)

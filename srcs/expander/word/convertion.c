@@ -9,6 +9,9 @@ t_error	to_str(t_string *out, const t_word *src, size_t start, size_t len)
 
 	i = 0;
 	string_init(out, 0, NULL, 0);
+	if (len == 0)
+		if (!string_append_n(out, "", 1))
+			return (err = error_sys(), string_free(out), err);
 	while (i < len)
 	{
 		if (src->len <= start + i)
@@ -17,7 +20,7 @@ t_error	to_str(t_string *out, const t_word *src, size_t start, size_t len)
 		if (err.type)
 			return (string_free(out), err);
 		if (!string_append_n(out, &item.c, 1))
-			return (string_free(out), error_sys());
+			return (err = error_sys(), string_free(out), err);
 		i++;
 	}
 	return (error(ERR_NO));

@@ -40,6 +40,8 @@ t_error	extract_username(t_expander *expander, t_string *out)
 			break ;
 		i++;
 	}
+	if (i == 0)
+		return (expander->err = error(ERR_NO));
 	return (expander->err = to_str(out, &expander->word, 1, i));
 }
 

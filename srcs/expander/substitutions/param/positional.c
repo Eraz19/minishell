@@ -72,6 +72,8 @@ t_error	expand_positional_at(t_expander *expander, t_word_item_opt opt)
 	expander->err = params_get_positionals(&params);
 	if (expander->err.type)
 		return (expander->err);
+	if (params->len == 0 && opt.quoted == CONTEXT_DQUOTE)
+		return (drop_quoted_null_at(expander));
 	i = 0;
 	while (i < params->len)
 	{
