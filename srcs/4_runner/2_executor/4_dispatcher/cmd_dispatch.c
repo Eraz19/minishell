@@ -8,11 +8,6 @@ t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner)
 		cmd->exit_status = 0;
 		return (error(ERR_NO));
 	}
-	else if (cmd->type == CMD_UNSPECIFIED)
-	{
-		cmd->exit_status = (int)ERR_UNDEFINED_BEHAVIOUR;
-		return (error(ERR_NO));
-	}
 	else if (cmd->type == CMD_SPECIAL_BUILTIN || cmd->type == CMD_BUILTIN)
 		return (cmd_exec_builtin(cmd));
 	else if (cmd->type == CMD_FUNCTION)

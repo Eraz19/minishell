@@ -10,12 +10,17 @@ static inline void	cmd_compute_name(t_cmd *cmd, const t_functions *functions)
 		str_cmp(cmd->name.data, "export") == 0
 		|| str_cmp(cmd->name.data, "readonly") == 0;
 	if (string_get_index_c(&cmd->name, '/') >= 0)
+	{
 		cmd->type = CMD_EXTERNAL;
+		return ;
+	}
 	else if (cmd_name_is_special_builtin(cmd->name.data, &cmd->builtin))
+	{
 		cmd->type = CMD_SPECIAL_BUILTIN;
-	else if (cmd_name_is_unspecified(cmd->name.data))
-		cmd->type = CMD_UNSPECIFIED;
-	else if (cmd_name_is_function(functions, cmd->name.data, &cmd->function))
+		return ;
+	}
+	cmd_warn_if_unspecified(cmd->name.data);
+	if (cmd_name_is_function(functions, cmd->name.data, &cmd->function))
 		cmd->type = CMD_FUNCTION;
 	else if (cmd_name_is_intrinsic_builtin(cmd->name.data, &cmd->builtin))
 		cmd->type = CMD_BUILTIN;

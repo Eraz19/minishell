@@ -66,7 +66,7 @@ static inline t_error	cmd_exec_parent(t_cmd *cmd, pid_t child_pid)
 	if (WIFEXITED(status))
 		cmd->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		cmd->exit_status = (int)ERR_POSIX_SIGNAL + WTERMSIG(status);
+		cmd->exit_status = ERR_POSIX_SIGNAL_BASE_CODE + WTERMSIG(status);
 	return (error(ERR_NO));
 }
 
