@@ -10,12 +10,16 @@
 /* ************************************************************************* */
 
 /**
- * @brief Execute a builtin already selected in @p cmd.
+ * @brief Execute the builtin already selected in @p cmd.
  *
- * The builtin return value is stored into @p cmd->exit_status.
+ * The dispatcher derives @c argc from the NULL-terminated @p cmd->argv, then
+ * forwards @p cmd->argv, @p cmd->envp and @p cmd->exit_status to
+ * @p cmd->builtin.
  *
- * @param cmd Builtin command descriptor (borrowed).
- * @return @c ERR_NO.
+ * @param cmd Builtin command descriptor updated in place (borrowed).
+ * @return The requalified error code returned by @p cmd->builtin() ( @c ERR_NO
+ *			@c ERR_POSIX_BUILTIN_SPECIAL @c ERR_INTERRUPTED @c ERR_INTERNAL
+ *			or @c ERR_LIBC ).
  */
 t_error	cmd_exec_builtin(t_cmd *cmd);
 

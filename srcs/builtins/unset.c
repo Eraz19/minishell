@@ -93,11 +93,9 @@ t_error	builtin_unset(int argc, char **argv, char **envp, int *exit_status)
 
 	(void)envp;
 	err = unset_process_options(argc, argv, &out);
-	if (err.type)
-		return (err);
-	if (unset_has_option(&out, 'f'))
+	if (err.type == ERR_NO && unset_has_option(&out, 'f'))
 		err = unset_fun(out.first_operand_index, argc, argv);
-	else
+	else if (err.type == ERR_NO)
 		err = unset_var(out.first_operand_index, argc, argv);
 	*exit_status = (int)err.type;
 	if (err.type)

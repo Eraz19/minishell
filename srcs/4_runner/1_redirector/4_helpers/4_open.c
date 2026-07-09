@@ -27,8 +27,7 @@ static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
 	return (oflag);
 }
 
-// @ret ERR_REDIRECTION / ERR_OPEN_INVALID_USAGE / ERR_INTERRUPTED
-// 		/ ERR_LIBC
+// @ret ERR_REDIRECTION / ERR_INVALID_USAGE / ERR_INTERRUPTED / ERR_LIBC
 static inline t_error	redirect_handle_noclobber_eexist(
 							t_ast_redirection *redir,
 							const char *path,

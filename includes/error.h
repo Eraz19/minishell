@@ -59,17 +59,16 @@ typedef enum e_error_type
 	// REDIRECTOR (+ GENERIC ERRORS)
 	ERR_REDIRECTION,						// [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
-	ERR_BUILTIN,							// [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL / ERR_POSIX_UTILITY
+	ERR_BUILTIN,							// [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// GENERIC ERRORS (can be returned by any module or builtin)
-	ERR_INTERRUPTED = 115,					// [-]			[Y-Y-?] Shell interrupted by signal
-	ERR_UB = 116,							// [-]			[?-?-Y]	Undefined behaviour
-	ERR_INTERNAL = 117,						// [-]			[Y-Y-Y]	Shell internal error
-	ERR_LIBC = 118,							// [-]			[Y-Y-Y]	System or libc error
+	ERR_INTERRUPTED = 116,					// [-]			[Y-Y-?] Shell interrupted by signal
+	ERR_UB = 117,							// [-]			[?-?-Y]	Undefined behaviour
+	ERR_INTERNAL = 118,						// [-]			[Y-Y-Y]	Shell internal error
+	ERR_LIBC = 119,							// [-]			[Y-Y-Y]	System or libc error
 	// POSIX EXIT CODES
-	ERR_POSIX_SYNTAX = 119,					// [-]			[Y-N-Y] Shell language syntax error
-	ERR_POSIX_BUILTIN_SPECIAL = 120,		// [-]			[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
-	ERR_POSIX_UTILITY = 121,				// [-]			[N-N-N] Other utility error
+	ERR_POSIX_SYNTAX = 120,					// [-]			[Y-N-Y] Shell language syntax error
+	ERR_POSIX_BUILTIN_SPECIAL = 121,		// [-]			[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
 	ERR_REDIRECTION_SPECIAL = 122,			// [-]			[Y-N-Y] Redirection error with special built-in utilities
 	ERR_REDIRECTION_OTHER = 123,			// [-]			[N-N-Y] Redirection error with non-special built-in utilities
 	ERR_POSIX_ASSIGNMENT = 124,				// [-]			[Y-N-Y] Variable assignment error

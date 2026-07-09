@@ -22,7 +22,7 @@
  * @param redirector Redirector state used to track backups (borrowed).
  * @param permanent True for committed redirections, false for restorable ones.
  * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE,
- *         @c ERR_OPEN_INVALID_USAGE, @c ERR_INTERRUPTED,
+ *         @c ERR_INVALID_USAGE, @c ERR_INTERRUPTED,
  *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
  *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
  *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
@@ -90,7 +90,7 @@ t_error	redirect_prepare(
  *
  * @param redirection Redirection describing the path and mode (borrowed).
  * @param out_fd Destination receiving the opened file descriptor (borrowed).
- * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_OPEN_INVALID_USAGE,
+ * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INVALID_USAGE,
  *         @c ERR_INTERRUPTED, @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	redirect_open(t_ast_redirection *redirection, int *out_fd);
