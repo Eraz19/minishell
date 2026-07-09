@@ -7,7 +7,8 @@
 #include <stdarg.h>
 # include <debug.h>	// DEBUG
 
-#define SEPARATOR		": "
+#define SEPARATOR			": "
+#define WRITE_ERROR_PREFIX	"write error" SEPARATOR
 
 // TODO: split in 2 functions and move to another file
 const char	*error_to_string(t_error err)
@@ -102,6 +103,9 @@ const char	*error_to_string(t_error err)
 		return ("bad substitution");
 	else if (err.type == ERR_ALIAS_NOT_FOUND)
 		return ("not found");
+	// posix_write() error
+	else if (err.type == ERR_POSIX_WRITE)
+		return ("write error");
 	// builtin errors
 	else if (err.type == ERR_INTERNAL)
 		return ("internal builtin error");
@@ -137,7 +141,10 @@ t_error	error_priv(t_error_type type, const char *file, int line, const char *ca
 	t_error	err;
 
 	err.type = type;
-	err.saved_errno = 0;
+	if (err.type == ERR_POSIX_WRITE)
+		err.saved_errno = errno;
+	else
+		err.saved_errno = 0;
 	if (type == ERR_VEOF)
 		err.printed = true;
 	else
@@ -219,6 +226,9 @@ t_error	error_print(t_error err, ...)
 	if (string)
 		error_print_format(string, args);
 	va_end(args);
+	if (err.type == ERR_POSIX_WRITE)
+		(void)posix_write(STDERR_FILENO, WRITE_ERROR_PREFIX,
+			str_len(WRITE_ERROR_PREFIX));
 	string = error_to_string(err);
 	(void)posix_write(STDERR_FILENO, string, str_len(string));
 	(void)posix_write(STDERR_FILENO, "\n", 1);

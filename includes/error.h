@@ -53,6 +53,8 @@ typedef enum e_error_type
 	ERR_OPT_INVALID_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
 	ERR_OPT_MISSING_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
+	// posix_write()
+	ERR_POSIX_WRITE,						// [CALLER]		write error (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
 	ERR_INVALID_USAGE,						// [CALLER]		Options and / or arguments are invalid
 	// REDIRECTOR (+ GENERIC ERRORS)
