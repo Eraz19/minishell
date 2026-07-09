@@ -21,7 +21,7 @@ static bool	unset_has_option(t_getopt_out *out, char flag)
 }
 
 // @ret ERR_OPT_INVALID / ERR_OPT_MISSING_ARG / ERR_OPT_INVALID_ARG /
-// 		ERR_UNDEFINED_BEHAVIOUR / ERR_LIBC
+// 		ERR_UB / ERR_LIBC
 static t_error	unset_process_options(int argc, char **argv, t_getopt_out *out)
 {
 	t_getopt_in	in;
@@ -39,7 +39,7 @@ static t_error	unset_process_options(int argc, char **argv, t_getopt_out *out)
 		return (err);
 	if (out->options.len > 1)
 	{
-		(void)error_print(error(ERR_BUILTIN_INVALID_USAGE), argv[0], UNSET_USAGE, NULL, NULL);
+		(void)error_print(error(ERR_INVALID_USAGE), argv[0], UNSET_USAGE, NULL, NULL);
 		vector_free(&out->options, NULL);
 		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
 			"mutually-exclusive arguments produces undefined results.");

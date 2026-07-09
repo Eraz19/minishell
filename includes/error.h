@@ -17,7 +17,6 @@ typedef enum e_error_type
 	ERR_FORMAT_INVALID,
 	ERR_HOOK_INVALID_RHS_LEN,
 	ERR_INDEX_OUT_OF_BOUND,
-	ERR_INTERRUPTED,
 	ERR_LR_CONFLICT,
 	ERR_LR_STATE_NOT_FOUND,
 	ERR_PARSER_EMPTY_GOTO,
@@ -63,6 +62,7 @@ typedef enum e_error_type
 	ERR_BUILTIN,							// [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL / ERR_POSIX_UTILITY
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// GENERIC ERRORS (can be returned by any module or builtin)
+	ERR_INTERRUPTED = 115,					// [-]			[Y-Y-?] Shell interrupted by signal
 	ERR_UB = 116,							// [-]			[?-?-Y]	Undefined behaviour
 	ERR_INTERNAL = 117,						// [-]			[Y-Y-Y]	Shell internal error
 	ERR_LIBC = 118,							// [-]			[Y-Y-Y]	System or libc error

@@ -19,12 +19,17 @@ t_error	builtin_exec(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status);
 
 // @p exit_status ERR_INVALID_USAGE / ERR_ASSIGNMENT_MISSING_NAME
-// 					/ ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
-// 					/ ERR_UB / ERR_INTERNAL / ERR_LIBC
-// @ret ERR_BUILTIN / ERR_UB / ERR_INTERNAL / ERR_LIBC
+// 					/ ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_UB
+// 					/ ERR_SHELL_NOT_FOUND / ERR_INTERNAL / ERR_POSIX_WRITE
+// 					/ ERR_LIBC
+// @ret ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
 t_error	builtin_export(int argc, char **argv, char **envp, int *exit_status);
 
-// TODO
+// @p exit_status ERR_INVALID_USAGE / ERR_ASSIGNMENT_MISSING_NAME
+// 					/ ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_UB
+// 					/ ERR_SHELL_NOT_FOUND / ERR_INTERNAL / ERR_POSIX_WRITE
+// 					/ ERR_LIBC
+// @ret ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
 t_error	builtin_readonly(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_return(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_set(int argc, char **argv, char **envp, int *exit_status);
