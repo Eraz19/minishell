@@ -10,7 +10,7 @@ static inline t_error	open_invalid_args(const char *message)
 {
 	(void)undefined_behaviour(message);
 	return (error_print(
-			error(ERR_OPEN_INVALID_USAGE),
+			error(ERR_INVALID_USAGE),
 			message,
 			NULL,
 			NULL));

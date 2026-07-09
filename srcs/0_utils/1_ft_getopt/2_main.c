@@ -82,6 +82,10 @@ t_error	ft_getopt(int argc, char **argv, t_getopt_in *in, t_getopt_out *out)
 	(void)vector_init(&out->options, sizeof(t_getopt_option), 0);
 	out->first_operand_index = 1;
 	err = getopt_process(&state);
+	if (err.type == ERR_OPT_INVALID
+		|| err.type == ERR_OPT_MISSING_ARG
+		|| err.type == ERR_OPT_INVALID_ARG)
+		err.type = ERR_INVALID_USAGE;
 	if (err.type == ERR_LIBC)
 		err = error_print(err, in->builtin_name,
 				"arguments parsing failed", NULL, NULL);

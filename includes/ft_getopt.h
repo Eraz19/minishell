@@ -124,7 +124,7 @@ typedef struct s_getopt_out
  * @param input Parsing specification (borrowed, read-only).
  * @param out Destination initialized by the function on entry and filled on
  *            success (borrowed).
- * @return @c ERR_INVALID_USAGE @c ERR_UNDEFINED_BEHAVIOUR or @c ERR_LIBC.
+ * @return @c ERR_INVALID_USAGE @c ERR_UB or @c ERR_LIBC.
  */
 t_error	ft_getopt(int argc, char **argv, t_getopt_in *input, t_getopt_out *out);
 
