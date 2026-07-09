@@ -4,8 +4,9 @@
 # include "error.h"
 # include <stdbool.h>
 
-// @p exit_status ERR_NO / ERR_INVALID_USAGE / ERR_UB / ERR_BUILTIN / ERR_LIBC
-// @ret ERR_NO / ERR_BUILTIN / ERR_UB / ERR_INTERNAL / ERR_LIBC
+
+// @p exit_status (see each builtin documentation)
+// @ret ERR_NO / ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
 typedef t_error (*t_builtin)(int argc, char **argv, char **envp, int *exit_status);
 
 // Special builtins (Shell shall exit on error if invoked directly && non-interactive)
@@ -20,16 +21,16 @@ t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status);
 
 // @p exit_status ERR_INVALID_USAGE / ERR_ASSIGNMENT_MISSING_NAME
 // 					/ ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_UB
-// 					/ ERR_SHELL_NOT_FOUND / ERR_INTERNAL / ERR_POSIX_WRITE
+// 					/ ERR_SHELL_NOT_FOUND / ERR_POSIX_WRITE
 // 					/ ERR_LIBC
-// @ret ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
+// @ret ERR_NO / ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
 t_error	builtin_export(int argc, char **argv, char **envp, int *exit_status);
 
 // @p exit_status ERR_INVALID_USAGE / ERR_ASSIGNMENT_MISSING_NAME
 // 					/ ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY / ERR_UB
-// 					/ ERR_SHELL_NOT_FOUND / ERR_INTERNAL / ERR_POSIX_WRITE
+// 					/ ERR_SHELL_NOT_FOUND / ERR_POSIX_WRITE
 // 					/ ERR_LIBC
-// @ret ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
+// @ret ERR_NO / ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
 t_error	builtin_readonly(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_return(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_set(int argc, char **argv, char **envp, int *exit_status);
@@ -37,7 +38,9 @@ t_error	builtin_shift(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_times(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status);
 
-// TODO
+// @p exit_status ERR_INVALID_USAGE / ERR_VAR_INVALID_NAME / ERR_VAR_READ_ONLY
+// 					/ ERR_UB / ERR_SHELL_NOT_FOUND / ERR_INDEX_OUT_OF_BOUND / ERR_LIBC
+// @ret ERR_NO / ERR_BUILTIN / ERR_INTERNAL / ERR_LIBC
 t_error	builtin_unset(int argc, char **argv, char **envp, int *exit_status);
 
 // Intrinsic builtins (Shell shall not exit on error)

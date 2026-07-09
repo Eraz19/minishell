@@ -108,7 +108,8 @@ t_error	builtin_readonly(int argc, char **argv, char **envp, int *exit_status)
 		|| err.type == ERR_ASSIGNMENT_MISSING_NAME
 		|| err.type == ERR_VAR_INVALID_NAME
 		|| err.type == ERR_VAR_READ_ONLY
-		|| err.type == ERR_POSIX_WRITE)
+		|| err.type == ERR_POSIX_WRITE
+		|| err.type == ERR_UB)
 		err.type = ERR_BUILTIN;
 	else if (err.type == ERR_SHELL_NOT_FOUND)
 		err.type = ERR_INTERNAL;
