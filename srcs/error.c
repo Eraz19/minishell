@@ -18,10 +18,6 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_BUILTIN_INVALID_USAGE)
 		return ("usage");
-	else if (err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
-		return ("Permission denied");
-	else if (err.type == ERR_POSIX_CMD_NOT_FOUND)
-		return ("command not found");
 	else if (err.type == ERR_EOF)
 		return ("unexpected end of file");
 	else if (err.type == ERR_FD_INVALID)
@@ -54,7 +50,7 @@ const char	*error_to_string(t_error err)
 		return ("invalid function name");
 	else if (err.type == ERR_PARSER_INVALID_STATE)
 		return ("invalid state");
-	else if (err.type == ERR_POSIX_REDIRECTION)
+	else if (err.type == ERR_REDIRECTION)
 		return ("redirection failed");
 	else if (err.type == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
@@ -74,8 +70,6 @@ const char	*error_to_string(t_error err)
 		return ("readonly variable");
 	else if (err.type == ERR_CTX_END_NOT_FOUND)
 		return ("context end not found");
-	else if (err.type == ERR_SYNTAX_INVALID)
-		return ("invalid syntax");
 	else if (err.type == ERR_EMPTY_STACK)
 		return ("empty stack");
 	else if (err.type == ERR_HEREDOC_MAX_ID_REACHED)
@@ -108,6 +102,32 @@ const char	*error_to_string(t_error err)
 		return ("bad substitution");
 	else if (err.type == ERR_ALIAS_NOT_FOUND)
 		return ("not found");
+	// builtin errors
+	else if (err.type == ERR_BUILTIN_INTERNAL)
+		return ("internal builtin error");
+	else if (err.type == ERR_BUILTIN)
+		return ("builtin error");
+	// POSIX errors
+	else if (err.type == ERR_POSIX_SYNTAX)
+		return ("invalid syntax");
+	else if (err.type == ERR_POSIX_BUILTIN_SPECIAL)
+		return ("special builtin error");
+	else if (err.type == ERR_POSIX_UTILITY)
+		return ("utility error");
+	else if (err.type == ERR_REDIRECTION_SPECIAL)
+		return ("redirection error (special built-in)");
+	else if (err.type == ERR_REDIRECTION_OTHER)
+		return ("redirection error (non-special built-in)");
+	else if (err.type == ERR_POSIX_ASSIGNMENT)
+		return ("variable assignment error");
+	else if (err.type == ERR_POSIX_EXPANSION)
+		return ("expansion error");
+	else if (err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
+		return ("command not executable");
+	else if (err.type == ERR_POSIX_CMD_NOT_FOUND)
+		return ("command not found");
+	else if (err.type == ERR_POSIX_READ)
+		return ("Unrecoverable read error");
 	return ("unknown");
 }
 

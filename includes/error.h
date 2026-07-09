@@ -31,7 +31,6 @@ typedef enum e_error_type
 	ERR_SHELL_NOT_FOUND,
 	ERR_SHIFT_INVALID_VALUE,
 	ERR_SIZE_MAX_REACHED,
-	ERR_SYNTAX_INVALID,
 	ERR_UNDEFINED_BEHAVIOUR,
 	ERR_VAR_INVALID_NAME,
 	ERR_VAR_MISSING_EQUAL,
@@ -55,22 +54,29 @@ typedef enum e_error_type
 	ERR_PARAM_BAD_SUBSTITUTION,
 	ERR_BAD_SUBSTITUTION,
 	ERR_ALIAS_NOT_FOUND,
+	// REDIRECTOR
+	ERR_REDIRECTION,						// [EXECUTOR]
 	// BUILTINS EXIT CODES (+ ERR_LIBC + ERR_NO)
-	ERR_INTERNAL,							// erreur interne du builtin => bug => à décider exit ou non
-	ERR_BUILTIN,							// requalified by executor into ERR_POSIX_BUILTIN_SPECIAL / ERR_POSIX_UTILITY
+	ERR_BUILTIN_INTERNAL,					// [EXECUTOR] erreur interne du builtin => bug => à décider exit ou non
+	ERR_BUILTIN,							// [EXECUTOR] requalified as ERR_POSIX_BUILTIN_SPECIAL / ERR_POSIX_UTILITY
 	// POSIX EXIT CODES
-	ERR_POSIX_SYNTAX = 119,					// [Y-N-Y] Shell language syntax error
-	ERR_POSIX_BUILTIN_SPECIAL = 120,		// [Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
-	ERR_POSIX_UTILITY = 121,				// [N-N-N] Other utility error
-	ERR_POSIX_REDIRECTION_SPECIAL = 122,	// [Y-N-Y] Redirection error with special built-in utilities
-	ERR_POSIX_REDIRECTION_OTHER = 123,		// [N-N-Y] Redirection error with special built-in utilities
-	ERR_POSIX_ASSIGNMENT = 124,				// [Y-N-Y] Variable assignment error
-	ERR_POSIX_EXPANSION = 125,				// [Y-N-Y] Expansion error
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// ???
-	ERR_POSIX_CMD_NOT_FOUND = 127,			// [?-N-Y] Command not found
-	ERR_POSIX_READ = 128,					// [Y-Y-Y] Unrecoverable read error when reading commands
+	ERR_POSIX_SYNTAX = 119,					// [WALKER]   [Y-N-Y] Shell language syntax error
+	ERR_POSIX_BUILTIN_SPECIAL = 120,		// [WALKER]   [Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
+	ERR_POSIX_UTILITY = 121,				// [EXECUTOR] [N-N-N] Other utility error
+	ERR_REDIRECTION_SPECIAL = 122,			// [WALKER]   [Y-N-Y] Redirection error with special built-in utilities
+	ERR_REDIRECTION_OTHER = 123,			// [EXECUTOR] [N-N-Y] Redirection error with non-special built-in utilities
+	ERR_POSIX_ASSIGNMENT = 124,				// [WALKER]   [Y-N-Y] Variable assignment error
+	ERR_POSIX_EXPANSION = 125,				// [WALKER]   [Y-N-Y] Expansion error
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [WALKER]   ???
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [WALKER]   [?-N-Y] Command not found
+	ERR_POSIX_READ = 128,					// [WALKER]   [Y-Y-Y] Unrecoverable read error when reading commands
 	// POSIX SIGNAL CODES (128 + signal code)
 }	t_error_type;
+/*
+Legend:
+	[<module>]	=> module in charge of error treatment / requalification
+	[A-B-C]		=> A = shall exit (non-interactive) | B = shall exit (interactive) | C = shall print diagnostic
+*/
 
 // ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
 
