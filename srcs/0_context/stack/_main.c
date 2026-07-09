@@ -30,9 +30,7 @@ t_error	context_stack_get(
 			t_context_stack_item **item,
 			size_t index)
 {
-	if (stack->len == 0)
-		return (error(ERR_EMPTY_STACK));
-	if (index >= stack->len)
+	if (stack->len == 0 || index >= stack->len)
 		return (error(ERR_INDEX_OUT_OF_BOUND));
 	*item = ((t_context_stack_item **)stack->data)[index];
 	return (error(ERR_NO));

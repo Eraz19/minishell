@@ -10,12 +10,13 @@
  *
  *  A token couples a grammar type with the raw text that produced it. The
  *  text lives in an owned, growable string, so a token owns its value and
- *  token_dup() hands out an independent deep copy.
+ *  @ref token_dup hands out an independent deep copy.
  *
- *  A word token also carries the expansion constructs found while scanning it
- *  (${ }, $(( )), ` `), in the left-to-right order their openings appeared, each
- *  marked with its [start, end) range inside the value string, so the expansion
- *  phase can locate every construct without rescanning the word.
+ *  A word token also carries the quoting and expansion constructs found
+ *  while scanning it (@c ${ @c }, @c $(( @c )), @c ` @c `, quotes, ...), in
+ *  the left-to-right order their openings appeared, each marked with its
+ *  @c [start, @c end) range inside the value string, so the expansion phase
+ *  can locate every construct without rescanning the word.
  */
 
 /**
@@ -25,32 +26,48 @@
  */
 typedef enum e_token_type
 {
-	TOKEN_NONE,			/**< Unset / placeholder type. */
-	TOKEN_TOKEN,		/**< A word token (command name, argument, ...). */
-	TOKEN_NEWLINE,		/**< A newline. */
-	TOKEN_SCOLON,		/**< ';' command separator. */
-	TOKEN_AMPERSAND,	/**< '&' background / async operator. */
-	TOKEN_DSEMI,		/**< ';;' case-list terminator. */
-	TOKEN_SEMI_AND,		/**< ';&' case fall-through terminator. */
-	TOKEN_AND_IF,		/**< '&&' logical AND. */
-	TOKEN_OR_IF,		/**< '||' logical OR. */
-	TOKEN_PIPE,			/**< '|' pipe. */
-	TOKEN_LPARENTHESIS,	/**< '(' subshell open. */
-	TOKEN_RPARENTHESIS,	/**< ')' subshell close. */
-	TOKEN_LESSAND,		/**< '<&' duplicate input descriptor. */
-	TOKEN_GREATAND,		/**< '>&' duplicate output descriptor. */
-	TOKEN_LESS,			/**< '<' input redirection. */
-	TOKEN_GREAT,		/**< '>' output redirection. */
-	TOKEN_CLOBBER,		/**< '>|' forced output redirection. */
-	TOKEN_LESSGREAT,	/**< '<>' open for reading and writing. */
-	TOKEN_DGREAT,		/**< '>>' appending output redirection. */
-	TOKEN_DLESS,		/**< '<<' here-document. */
-	TOKEN_DLESSDASH,	/**< '<<-' tab-stripped here-document. */
-	TOKEN_IO_NUMBER,	/**< Solely digits and the delimiter character is '<' or '>' */
-	TOKEN_IO_LOCATION,	/**< At least three characters, begins with '{' and ends '}', and the delimiter character is '<' or '>' */
-	TOKEN_EOF			/**< End of input. */
+	TOKEN_NONE,
+	TOKEN_TOKEN,
+	TOKEN_NEWLINE,
+	TOKEN_SCOLON,
+	TOKEN_AMPERSAND,
+	TOKEN_DSEMI,
+	TOKEN_SEMI_AND,
+	TOKEN_AND_IF,
+	TOKEN_OR_IF,
+	TOKEN_PIPE,
+	TOKEN_LPARENTHESIS,
+	TOKEN_RPARENTHESIS,
+	TOKEN_LESSAND,
+	TOKEN_GREATAND,
+	TOKEN_LESS,
+	TOKEN_GREAT,
+	TOKEN_CLOBBER,
+	TOKEN_LESSGREAT,
+	TOKEN_DGREAT,
+	TOKEN_DLESS,
+	TOKEN_DLESSDASH,
+	TOKEN_IO_NUMBER,
+	TOKEN_IO_LOCATION,
+	TOKEN_EOF
 }	t_token_type;
 
+/**
+ * @ingroup token
+ * @struct s_token_index
+ * @brief Byte span of a token inside the raw lexer input.
+ *
+ * Every field is @c -1 until the lexer sets it; @c end staying @c -1 marks
+ * a token whose ending was never reached (e.g. an unterminated command
+ * substitution).
+ *
+ * @var s_token_index::end Offset one past the last character of the token
+ *                         in the raw input, @c -1 when unset.
+ * @var s_token_index::start Offset of the first character of the token in
+ *                           the raw input, @c -1 when unset.
+ * @var s_token_index::error Offset of the character associated with a
+ *                           lexing error, @c -1 when none.
+ */
 typedef struct s_token_index
 {
 	ssize_t	end;
@@ -58,6 +75,26 @@ typedef struct s_token_index
 	ssize_t	error;
 }	t_token_index;
 
+/**
+ * @ingroup token
+ * @struct s_token
+ * @brief One lexical token: its grammar type, text and scanning metadata.
+ *
+ * @var s_token::type Grammar type of the token.
+ * @var s_token::value Raw text of the token, a @ref t_string owned by the
+ *                     token (initialized by @ref token_init, released by
+ *                     @ref token_free).
+ * @var s_token::index Span of the token in the raw lexer input, managed by
+ *                     the lexer submodule.
+ * @var s_token::contexts Constructs recorded while scanning the word, in
+ *                        left-to-right opening order, spans relative to
+ *                        @c value; a @ref t_context_stack owned by the
+ *                        token, managed by the context submodule.
+ * @var s_token::assignment_offset Offset in @c value of the @c '=' that
+ *                                 splits an assignment word into name and
+ *                                 value, @c -1 when the word is not an
+ *                                 assignment.
+ */
 typedef struct s_token
 {
 	t_token_type	type;
@@ -67,38 +104,58 @@ typedef struct s_token
 	ssize_t			assignment_offset;
 }	t_token;
 
+/* ************************************************************************* */
+/*                                LIFE_CYCLE                                 */
+/* ************************************************************************* */
+
 /**
  * @ingroup token
- * @brief Initialises a token to an empty word with an empty value string.
+ * @brief Zeroes @p token, giving it an empty value string, an empty context
+ *        stack, type @c TOKEN_NONE, and every index and the assignment
+ *        offset set to @c -1.
  *
- * @param token Pointer to the token to initialise (borrowed).
+ * @param token Token initialized by the function (borrowed).
  */
 void	token_init(t_token *token);
 
 /**
  * @ingroup token
- * @brief Frees the token's value string and resets it to zero.
+ * @brief Frees the value string and context stack of @p token, then resets
+ *        it to the unset state (indexes and assignment offset back to
+ *        @c -1).
  *
- * @param token Pointer to the token to free (borrowed).
+ * @param token Already initialized token (borrowed).
  */
 void	token_free(t_token *token);
 
-// TODO: doc
-// @note used for vector_free() compatibility
-void	token_free_void(void *token);
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
 
 /**
  * @ingroup token
- * @brief Deep copies a token into another.
+ * @brief Deep copies @p src into @p dst: duplicates the value string,
+ *        deep-copies the context stack, and copies the type, index span and
+ *        assignment offset, leaving @p src untouched.
  *
- * Duplicates @p src's value string and deep-copies its context list into
- * @p dst, and copies its type, so @p dst owns an independent copy and @p src is
- * left untouched.
- *
- * @param dst Destination token receiving the copy (borrowed).
- * @param src Source token to copy (borrowed).
- * @return ERR_NO on success, ERR_LIBC on allocation failure.
+ * @warning @p dst must be initialized with @ref token_init and empty: the
+ *          value string of @p dst is overwritten without being freed, and
+ *          the copied context items are appended to its context stack.
+ * @param dst Destination token, already initialized by the caller; its
+ *            value string is initialized by the function (borrowed).
+ * @param src Source token (borrowed, read-only).
+ * @return @c ERR_LIBC if a duplication fails, @c ERR_INDEX_OUT_OF_BOUND if
+ *         a context item lookup fails, @c ERR_NO on success.
  */
 t_error	token_dup(t_token *dst, const t_token *src);
+
+/**
+ * @ingroup token
+ * @brief Frees the token pointed to by @p token, as @ref token_free does.
+ *
+ * @note Signature matches the @c vector_free element destructor callback.
+ * @param token Token to free, as an untyped pointer (borrowed).
+ */
+void	token_free_void(void *token);
 
 #endif

@@ -10,7 +10,7 @@ t_error	scanner_get_next_token(t_token *token)
 
 	scanner = shell_get_scanner();
 	if (scanner == NULL)
-		return (error(ERR_SHELL_NOT_FOUND));
+		return (error(ERR_INTERNAL));
 	if (scanner->lexer.input_stack.len == 0 && scanner_read_input(scanner).type)
 		return (scanner->err);
 	if (lexer_get_next_token(&scanner->lexer, token,
@@ -27,7 +27,7 @@ t_error	scanner_report_io_here(t_string *out, t_token *delim, t_here_mode mode)
 
 	scanner = shell_get_scanner();
 	if (scanner == NULL)
-		return (error(ERR_SHELL_NOT_FOUND));
+		return (error(ERR_INTERNAL));
 	scanner->err = heredoc_register(out, delim, mode);
 	return (scanner->err);
 }
@@ -39,7 +39,7 @@ t_error	scanner_heredoc_read(void)
 
 	scanner = shell_get_scanner();
 	if (scanner == NULL)
-		return (error(ERR_SHELL_NOT_FOUND));
+		return (error(ERR_INTERNAL));
 	if (scanner->lexer.input == NULL)
 		scanner->err = heredoc_read_body_from_input(NULL, NULL);
 	else
