@@ -21,7 +21,8 @@ typedef t_vector	t_var_list;
 typedef enum e_var_print_mode
 {
 	VAR_PRINT_EXPORT,
-	VAR_PRINT_READONLY
+	VAR_PRINT_READONLY,
+	VAR_PRINT_SET
 }	t_var_print_mode;
 
 /* ************************************************************************* */

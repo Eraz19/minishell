@@ -56,6 +56,7 @@ SRCS			:= \
 	$(wildcard srcs/ast/*.c) \
 	$(wildcard srcs/ast/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
+	$(wildcard srcs/builtins/*/*.c) \
 	$(wildcard srcs/cmd_cache/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
@@ -109,6 +110,7 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/8_goto \
 	-Isrcs/3_builder/1_lr_machine/9_action \
 	-Isrcs/3_builder/2_parser \
+	-Isrcs/builtins/set \
 	-Isrcs/3_builder/2_parser/1_qualifiers \
 	-Isrcs/3_builder/2_parser/2_stack \
 	-Isrcs/3_builder/2_parser/3_cst \

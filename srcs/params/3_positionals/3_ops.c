@@ -16,12 +16,15 @@ t_error	positionals_push(
 
 t_error	positionals_pop(t_positionals_stack *stack)
 {
+	t_positionals	removed;
+
 	assert(stack != NULL);
 	assert(stack->len > 1);
 	if (stack->len <= 1)
 		return (error(ERR_NO));
-	if (!vector_pop(stack, positionals_free_item))
+	if (!vector_pop(stack, &removed))
 		return (error_sys());
+	positionals_free_item(&removed);
 	return (error(ERR_NO));
 }
 
@@ -29,13 +32,16 @@ t_error	positionals_replace(
 			t_positionals_stack *stack,
 			t_positionals *positionals)
 {
+	t_positionals	removed;
+
 	assert(stack != NULL);
 	assert(positionals != NULL);
 	assert(stack->len > 0);
 	if (stack->len == 0)
 		return (error(ERR_VAR_NOT_FOUND));
-	if (!vector_pop(stack, positionals_free_item))
+	if (!vector_pop(stack, &removed))
 		return (error_sys());
+	positionals_free_item(&removed);
 	if (!vector_push(stack, positionals))
 		return (error_sys());
 	return (error(ERR_NO));

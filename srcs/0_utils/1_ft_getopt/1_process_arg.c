@@ -31,6 +31,8 @@ static t_error	getopt_process_flags_without_arg(t_getopt_state *state)
 }
 
 // @ret ERR_OPT_INVALID_ARG / ERR_LIBC
+// A detached argument (next argv) is consumed only when it matches the
+// valid list; anything else stays an operand and the option is bare.
 static t_error	getopt_process_flag_optional_arg(
 	t_getopt_state *state,
 	t_getopt_option *option,
@@ -38,24 +40,27 @@ static t_error	getopt_process_flag_optional_arg(
 {
 	const char	*arg;
 	size_t		i;
-	const char	*target_arg;
+	bool		detached;
 
 	arg = state->argv[state->arg_i] + state->char_i;
 	state->arg_i++;
 	state->char_i = 0;
-	if (arg[0] == '\0')
-		return (getopt_add_option(state, option));
+	detached = (arg[0] == '\0' && state->argv[state->arg_i] != NULL);
+	if (detached)
+		arg = state->argv[state->arg_i];
 	i = 0;
-	while (flag_opt->arguments_valids[i])
+	while (arg[0] != '\0' && flag_opt->arguments_valids[i])
 	{
-		target_arg = flag_opt->arguments_valids[i];
-		if (str_cmp(arg, target_arg) == 0)
+		if (str_cmp(arg, flag_opt->arguments_valids[i]) == 0)
 		{
-			option->argument = target_arg;
+			option->argument = flag_opt->arguments_valids[i];
+			state->arg_i += detached;
 			return (getopt_add_option(state, option));
 		}
 		i++;
 	}
+	if (arg[0] == '\0' || detached)
+		return (getopt_add_option(state, option));
 	return (getopt_err(state, option->flag, arg, ERR_OPT_INVALID_ARG));
 }
 
