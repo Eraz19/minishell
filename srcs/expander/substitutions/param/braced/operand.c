@@ -28,7 +28,7 @@ t_error	parse_braced_op(
 	else if (braced_op_is_doubled(&expander->word, first.c))
 		*op_items = 2;
 	if (!is_valid_braced_op(*op))
-		return (expander->err = error(ERR_NOT_IMPLEMENTED));
+		return (expander->err = error(ERR_PARAM_BAD_SUBSTITUTION));
 	return (expander->err = word_remove(&expander->word, 0, *op_items));
 }
 

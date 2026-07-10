@@ -5,14 +5,6 @@
 #include "expander.h"
 #include "reader_.h"
 
-/*
-** POSIX.1-2024 (XCU 2.5.3): PS1 is subjected to parameter expansion and
-** exclamation-mark expansion ('!' -> history number of the next command,
-** "!!" -> a literal '!'), PS2 to parameter expansion only. Whether command
-** substitution and arithmetic expansion also apply is unspecified: they
-** are not applied here.
-*/
-
 static bool	prompt_excl_append(t_string *res, const t_string *val, size_t *i)
 {
 	t_history	*history;

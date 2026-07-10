@@ -46,10 +46,10 @@
  *  @warning The backing files (@c /tmp/minishell_heredoc_N) are never
  *           unlinked: neither after execution nor on a registration that
  *           fails after creating the file. A cleanup design is pending.
- *  @warning The expander has no error contract yet: the expansion errors
- *           crossing @ref heredoc_register and
- *           @ref heredoc_prepare_for_expansion are listed best-effort
- *           until the expander gets its error-system pass.
+ *
+ *  Expansion errors arrive already qualified and printed by the expander
+ *  (@c ERR_POSIX_EXPANSION, @c ERR_POSIX_ASSIGNMENT, @c ERR_INTERNAL,
+ *  @c ERR_LIBC): the scanner lets them through untouched.
  */
 
 /**
@@ -236,10 +236,10 @@ t_error	heredoc_read_body_from_input(const t_string *input, size_t *start);
  *         name is available; @c ERR_EXP_RESULT_INCOHERENT if the
  *         delimiter does not quote-remove to exactly one field;
  *         @c ERR_INTERRUPTED when a signal interrupts the file creation;
- *         @c ERR_LIBC (printed for file failures) on system failure;
- *         @c ERR_SHELL_NOT_FOUND if the shell data is unavailable; any
- *         other error of the delimiter's quote-removal expansion,
- *         verbatim (see the module warning about the expander);
+ *         @c ERR_LIBC (printed) on system failure;
+ *         @c ERR_SHELL_NOT_FOUND if the shell data is unavailable;
+ *         @c ERR_POSIX_EXPANSION or @c ERR_INTERNAL (printed, qualified
+ *         by the expander) if the delimiter's quote removal fails;
  *         @c ERR_NO on success.
  */
 t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode);

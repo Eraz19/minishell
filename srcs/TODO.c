@@ -27,228 +27,259 @@ t_error	runner_find_cmd_sub_closing(t_token *out, t_string *input)
 /* ---------- TODO: builtins ---------- */
 
 // Special builtins
-int	builtin_break(int argc, char **argv, char **envp)
+t_error	builtin_break(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_colon(int argc, char **argv, char **envp)
+t_error	builtin_colon(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_continue(int argc, char **argv, char **envp)
+t_error	builtin_continue(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_dot(int argc, char **argv, char **envp)
+t_error	builtin_dot(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_eval(int argc, char **argv, char **envp)
+t_error	builtin_eval(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_exec(int argc, char **argv, char **envp)
+t_error	builtin_exec(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_exit(int argc, char **argv, char **envp)
+t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_return(int argc, char **argv, char **envp)
+t_error	builtin_return(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_set(int argc, char **argv, char **envp)
+t_error	builtin_set(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_shift(int argc, char **argv, char **envp)
+t_error	builtin_shift(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_times(int argc, char **argv, char **envp)
+t_error	builtin_times(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_trap(int argc, char **argv, char **envp)
+t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
 // Intrinsic builtins
 
-int	builtin_alias(int argc, char **argv, char **envp)
+t_error	builtin_alias(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_bg(int argc, char **argv, char **envp)
+t_error	builtin_bg(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_cd(int argc, char **argv, char **envp)
+t_error	builtin_cd(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_command(int argc, char **argv, char **envp)
+t_error	builtin_command(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_fc(int argc, char **argv, char **envp)
+t_error	builtin_fc(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_fg(int argc, char **argv, char **envp)
+t_error	builtin_fg(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_getopts(int argc, char **argv, char **envp)
+t_error	builtin_getopts(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_hash(int argc, char **argv, char **envp)
+t_error	builtin_hash(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_jobs(int argc, char **argv, char **envp)
+t_error	builtin_jobs(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_kill(int argc, char **argv, char **envp)
+t_error	builtin_kill(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_read(int argc, char **argv, char **envp)
+t_error	builtin_read(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_type(int argc, char **argv, char **envp)
+t_error	builtin_type(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_ulimit(int argc, char **argv, char **envp)
+t_error	builtin_ulimit(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_umask(int argc, char **argv, char **envp)
+t_error	builtin_umask(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_unalias(int argc, char **argv, char **envp)
+t_error	builtin_unalias(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-int	builtin_wait(int argc, char **argv, char **envp)
+t_error	builtin_wait(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
 // Regular builtins
 
-int	builtin_echo(int argc, char **argv, char **envp)
+t_error	builtin_echo(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
-int	builtin_env(int argc, char **argv, char **envp)
+t_error	builtin_env(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
-int	builtin_pwd(int argc, char **argv, char **envp)
+t_error	builtin_pwd(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
+	(void)exit_status;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }

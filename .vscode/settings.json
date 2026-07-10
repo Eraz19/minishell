@@ -100,7 +100,7 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/1_envp",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
-		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up"
+		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up",
 	],
-	"explorer.sortOrder": "modified"
+	"explorer.sortOrder": "modified",
 }

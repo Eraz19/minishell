@@ -41,8 +41,9 @@ t_error	extract_arith_word(t_expander *expander, t_word *word)
 
 t_error	compute_arith_expression(t_expander *expander, t_expansion *expansion)
 {
-	(void)expander;
 	(void)expansion;
+	expander->err = error_print(error(ERR_NOT_IMPLEMENTED),
+			__func__, NULL, NULL);
 	return (expander->err);
 }
 
@@ -55,11 +56,14 @@ t_error	arith_substitution(t_expander *expander)
 	if (extract_arith_word(expander, &arith_word).type)
 		return (expander->err);
 	expander_init(&arith_expander);
-	fields_push(&arith_expander.fields, arith_word);
+	expander->err = fields_push(&arith_expander.fields, arith_word);
 	if (expander->err.type)
+	{
+		word_free(&arith_word);
 		return (expander_free(&arith_expander), expander->err);
-	arith_expander.word = arith_word;
-	arith_expander.ifs = expander->ifs;
+	}
+	if (!string_init(&arith_expander.ifs, 0, expander->ifs.data, -1))
+		return (expander_free(&arith_expander), expander->err);
 	arith_expander.flags = EXP_PARAM | EXP_CMD_SUB | EXP_QUOTE_REMOVAL;
 	expander->err = expand_word(&arith_expander);
 	if (expander->err.type)
@@ -67,7 +71,7 @@ t_error	arith_substitution(t_expander *expander)
 	expansion_init(&expansion);
 	expander->err = expansion_load(&expansion, &arith_expander.fields);
 	if (!expander->err.type)
-		compute_arith_expression(expander, &expansion);
+		expander->err = compute_arith_expression(expander, &expansion);
 	expander_free(&arith_expander);
 	return (expansion_free(&expansion), expander->err);
 }

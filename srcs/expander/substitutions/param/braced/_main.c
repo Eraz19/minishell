@@ -26,9 +26,8 @@ t_error	expand_braced(t_expander *expander)
 		return (expander->err);
 	if (body_len == 0)
 	{
-		expander->err = error(ERR_PARAM_BAD_SUBSTITUTION);
-		error_print(expander->err, "expander",
-			"${}: bad substitution\n", NULL, NULL);
+		expander->err = error_print(error(ERR_PARAM_BAD_SUBSTITUTION),
+				"expander", "${}", NULL, NULL);
 		return (expander->err);
 	}
 	expander->err = word_get(&item, &expander->word, 0);

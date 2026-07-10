@@ -46,8 +46,8 @@ t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path);
  * @param delim Raw delimiter token (borrowed, read-only).
  * @return @c ERR_EXP_RESULT_INCOHERENT if the delimiter does not
  *         quote-remove to exactly one field; @c ERR_LIBC on allocation
- *         failure; any other error of the quote-removal expansion,
- *         verbatim (see the heredoc.h warning about the expander);
+ *         failure; @c ERR_POSIX_EXPANSION or @c ERR_INTERNAL (printed,
+ *         qualified by the expander) if the quote removal fails;
  *         @c ERR_NO on success.
  */
 t_error	expand_delim(t_heredoc *heredoc, t_string *out, const t_token *delim);
