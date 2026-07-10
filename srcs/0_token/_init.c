@@ -33,18 +33,3 @@ void	token_free_owned(void *token)
 	token_free(token);
 	free(token);
 }
-
-t_error	tokens_init(t_tokens *tokens, size_t cap)
-{
-	if (!vector_init(tokens, sizeof(t_token *), cap))
-		return (error_sys());
-	return (error(ERR_NO));
-}
-
-void	tokens_free(t_tokens *tokens, bool owned)
-{
-	if (owned == true)
-		vector_free(tokens, token_free_owned);
-	else
-		vector_free(tokens, NULL);
-}
