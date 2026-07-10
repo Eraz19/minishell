@@ -77,9 +77,10 @@ typedef enum e_here_mode
  * @struct s_heredoc_item
  * @brief One registered here-document waiting for its body.
  *
- * @var s_heredoc_item::i Read cursor of the input the body is read from;
- *                        advanced past the delimiter line once the body is
- *                        consumed (borrowed).
+ * @var s_heredoc_item::i Read cursor into s_heredoc_item::input; advanced
+ *                        past the delimiter line once the body is consumed
+ *                        (owned value, seeded from the caller's cursor and
+ *                        handed back through the API on success).
  * @var s_heredoc_item::mode Body reading mode (@c << or @c <<-).
  * @var s_heredoc_item::path Backing temporary file path, a @ref t_string
  *                           owned by the item.
@@ -89,15 +90,10 @@ typedef enum e_here_mode
  *                            from, a @ref t_string owned by the item.
  * @var s_heredoc_item::is_tty Whether continuation lines may be prompted
  *                             for on a terminal.
- *
- * @warning @c i points into the lexer input item the body was registered
- *          from: it dangles if that input is popped before the body is
- *          read. Bodies are currently read right after the command line
- *          is parsed, which keeps the input alive.
  */
 typedef struct s_heredoc_item
 {
-	size_t		*i;
+	size_t		i;
 	t_here_mode	mode;
 	t_string	path;
 	t_string	delim;
@@ -207,7 +203,10 @@ t_error	heredoc_prepare_for_expansion(
  * @param input Input text holding the bodies, NULL to read them from
  *              prompted lines only (borrowed, read-only).
  * @param start Read cursor into @p input, NULL or out of range to start
- *              from the beginning (borrowed).
+ *              from the beginning; advanced past each consumed body and
+ *              delimiter line on success, so tokenization resumes after
+ *              the here-document (borrowed, only dereferenced during the
+ *              call — never stored).
  * @return @c ERR_REDIRECTION (printed with the delimiter) when the input
  *         ends before a delimiter line, including an interactive end of
  *         file at the continuation prompt: requalified as

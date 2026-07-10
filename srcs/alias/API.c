@@ -13,8 +13,8 @@ t_error	alias_on_expansion_end(void)
 	if (alias == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (alias->stack.len == 0)
-		return (alias->err);
-	return (alias_stack_pop(&alias->stack), alias->err);
+		return (error(ERR_NO));
+	return (alias_stack_pop(&alias->stack), error(ERR_NO));
 }
 
 t_error	alias_print(const char *name)

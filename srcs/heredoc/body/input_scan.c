@@ -37,7 +37,7 @@ t_error	body_continuation(t_body *body, bool *continuation)
 	if (body->item->is_tty)
 	{
 		if (*continuation == false)
-			*body->item->i = body->i;
+			body->item->i = body->i;
 		*continuation = true;
 		body->err = scanner_read_continuation(&body->item->input);
 		if (body->err.type == ERR_VEOF)
@@ -67,7 +67,7 @@ t_error	get_body_content(t_body *body)
 		if (is_line_delimiter(body))
 		{
 			if (!continuation)
-				*body->item->i = body->i;
+				body->item->i = body->i;
 			return (body->err);
 		}
 		if (!string_append(&body->content, &body->line))

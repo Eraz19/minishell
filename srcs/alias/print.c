@@ -7,7 +7,6 @@
 #include "utils.h"
 #include "posix_helpers.h"
 
-// @ret ERR_LIBC / ERR_POSIX_WRITE / ERR_INTERRUPTED / ERR_NO
 static t_error	alias_print_pair(const char *name, const char *value)
 {
 	t_error		err;

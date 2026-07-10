@@ -40,13 +40,12 @@ t_error	heredoc_read_body(
 	t_body			body;
 
 	i = 0;
+	if (start != NULL && src != NULL && *start <= src->len)
+		i = *start;
 	heredoc->err = heredoc_queue_pop(&heredoc->queue, &item);
 	if (heredoc->err.type)
 		return (heredoc->err);
-	if (start == NULL || *start > item.input.len)
-		heredoc->err = heredoc_item_load(&item, src, &i);
-	else 
-		heredoc->err = heredoc_item_load(&item, src, start);
+	heredoc->err = heredoc_item_load(&item, src, i);
 	if (heredoc->err.type)
 		return (heredoc_item_free(&item), heredoc->err);
 	body_init(&body);
@@ -58,6 +57,8 @@ t_error	heredoc_read_body(
 		return (body_free(&body), heredoc->err);
 	}
 	heredoc->err = save_body_in_file(&body.item->path, &body.content);
+	if (!heredoc->err.type && start != NULL)
+		*start = item.i;
 	return (heredoc_item_free(&item), body_free(&body), heredoc->err);
 }
 

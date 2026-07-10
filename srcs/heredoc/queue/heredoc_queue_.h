@@ -51,11 +51,11 @@ void	heredoc_item_free(void *item);
  * @param item Item receiving the input; its input string is initialized
  *             by the function (borrowed).
  * @param src Input text to copy, may be NULL (borrowed, read-only).
- * @param i Read cursor the body consumption will advance; stored, not
- *          copied: it must outlive the body read (borrowed).
+ * @param i Initial read cursor into the copied input; the body
+ *          consumption advances the item's own copy of it.
  * @return @c ERR_LIBC on allocation failure, @c ERR_NO on success.
  */
-t_error	heredoc_item_load(t_heredoc_item *item, const t_string *src, size_t *i);
+t_error	heredoc_item_load(t_heredoc_item *item, const t_string *src, size_t i);
 
 /**
  * @ingroup heredoc_queue

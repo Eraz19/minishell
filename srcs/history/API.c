@@ -11,14 +11,14 @@ t_error	history_save_entry(void)
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->current_input.len == 0)
-		return (state->err);
+		return (error(ERR_NO));
 	if (state->current_input.data[state->current_input.len - 1] == '\n')
 	{
 		state->current_input.data[state->current_input.len - 1] = '\0';
 		state->current_input.len--;
 	}
 	if (state->current_input.len == 0)
-		return (state->err);
+		return (error(ERR_NO));
 	state->err = history_list_push(&state->list, &state->current_input);
 	if (state->err.type)
 		return (state->err);
