@@ -30,15 +30,14 @@ t_error	tokens_deep_copy(t_tokens *dst, const t_tokens *src)
 		dst_token = malloc(sizeof(*dst_token));
 		if (dst_token == NULL)
 			return (err = error_sys(), tokens_free(dst, true), err);
+		token_init(dst_token);
 		err = tokens_get(src, i, &src_token);
-		if (err.type)
-			return (free(dst_token), tokens_free(dst, true), err);
-		err = token_deep_copy(dst_token, src_token);
-		if (err.type)
-			return (free(dst_token), tokens_free(dst, true), err);
+		if (err.type == ERR_NO)
+			err = token_deep_copy(dst_token, src_token);
 		if (err.type == ERR_NO && !vector_push(dst, &dst_token))
-			return (err = error_sys(), token_free_owned(dst_token),
-				tokens_free(dst, true), err);
+			err = error_sys();
+		if (err.type)
+			return (token_free_owned(dst_token), tokens_free(dst, true), err);
 	}
 	return (err);
 }

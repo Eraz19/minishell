@@ -4,7 +4,7 @@
 void	token_init(t_token *token)
 {
 	*token = (t_token){0};
-	string_init(&token->value, 0, NULL, 0);
+	(void)string_init(&token->value, 0, NULL, 0);
 	context_stack_init(&token->contexts);
 	token->index.end = -1;
 	token->index.start = -1;
