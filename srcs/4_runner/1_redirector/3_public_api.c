@@ -27,11 +27,11 @@ static inline t_error	redirect_use_new_frame(t_redirector *redirector)
 	return (err);
 }
 
-t_error	redirect_commit(t_redirector *redirector, t_ast_redir_list *redirections)
+t_error	redirect_commit(t_redirector *redirector, const t_ast_redir_list *redirections)
 {
-	size_t				i;
-	t_ast_redirection	*redirection;
-	t_error				err;
+	size_t					i;
+	const t_ast_redirection	*redirection;
+	t_error					err;
 
 	err = error(ERR_NO);
 	i = 0;
@@ -46,12 +46,12 @@ t_error	redirect_commit(t_redirector *redirector, t_ast_redir_list *redirections
 	return (err);
 }
 
-t_error	redirect_start(t_redirector *redirector, t_ast_redir_list *redirections)
+t_error	redirect_start(t_redirector *redirector, const t_ast_redir_list *redirections)
 {
-	size_t				i;
-	t_ast_redirection	*redirection;
-	t_error				err;
-	t_error				restore_err;
+	size_t					i;
+	const t_ast_redirection	*redirection;
+	t_error					err;
+	t_error					restore_err;
 
 	err = redirect_use_new_frame(redirector);
 	if (err.type)

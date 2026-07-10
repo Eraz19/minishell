@@ -9,10 +9,8 @@ void	ast_redirection_init(t_ast_redirection *redirection)
 	redirection->expand_heredoc_body = false;
 	redirection->fd = -1;
 	token_init(&redirection->word);
-	(void)string_init(&redirection->expanded_word, 0, NULL, 0);
 	redirection->is_location = false;
 	token_init(&redirection->location);
-	(void)string_init(&redirection->expanded_location, 0, NULL, 0);
 }
 
 void	ast_redirection_free(void *redirection)
@@ -24,9 +22,7 @@ void	ast_redirection_free(void *redirection)
 	if (redir->operation == AST_REDIR_HEREDOC && redir->word.value.data != NULL)
 		heredoc_unlink(redir->word.value.data);
 	token_free(&redir->word);
-	string_free(&redir->expanded_word);
 	token_free(&redir->location);
-	string_free(&redir->expanded_location);
 	ast_redirection_init(redir);
 }
 

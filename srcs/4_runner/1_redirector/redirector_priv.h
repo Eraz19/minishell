@@ -7,6 +7,25 @@
 
 # define REDIRECTOR_MODULE_NAME	"runner: redirector"
 
+// Type
+
+typedef struct s_redir
+{
+	t_ast_redir_op	operation;
+	bool			expand_heredoc_body;
+	int				fd;
+	const t_token	*word;				// word (or heredoc path) (borrowed)
+	t_string		expanded_word;
+	bool			is_location;
+	const t_token	*location;			// borrowed
+	t_string		expanded_location;
+}	t_redir;
+
+// Life cycle
+
+void	redir_init(t_redir *redir, const t_ast_redirection *src);
+void	redir_free(t_redir *redir);
+
 /* ************************************************************************* */
 /*                                ENTRY POINT                                */
 /* ************************************************************************* */
@@ -29,7 +48,7 @@
  *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
  */
 t_error	redirect_apply(
-			t_ast_redirection *redirection,
+			const t_ast_redirection *redirection,
 			t_redirector *redirector,
 			bool permanent);
 
@@ -61,15 +80,10 @@ bool	redirect_parse_fd(const char *s, int *out_fd);
  *         @c ERR_NOT_IMPLEMENTED, @c ERR_INCOHERENT_STATE,
  *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
  */
-t_error	redirect_expand(t_ast_redirection *redirection);
+t_error	redirect_expand(t_redir *redirection);
 
-/**
- * @brief Resolve the effective target file descriptor of one redirection.
- *
- * @param redirection Redirection to normalize (borrowed).
- * @return @c ERR_NO or @c ERR_REDIRECTION.
- */
-t_error	redirect_normalize_fd(t_ast_redirection *redirection);
+// @ret ERR_REDIRECTION
+t_error	redirect_resolve_location(t_redir *redir);
 
 /**
  * @brief Prepare backup state before one redirection is applied.
@@ -81,7 +95,7 @@ t_error	redirect_normalize_fd(t_ast_redirection *redirection);
  *         @c ERR_LIBC.
  */
 t_error	redirect_prepare(
-			t_ast_redirection *redirection,
+			t_redir *redirection,
 			t_redirector *redirector,
 			bool permanent);
 
@@ -93,7 +107,7 @@ t_error	redirect_prepare(
  * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INVALID_USAGE,
  *         @c ERR_INTERRUPTED, @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
  */
-t_error	redirect_open(t_ast_redirection *redirection, int *out_fd);
+t_error	redirect_open(t_redir *redirection, int *out_fd);
 
 /* ************************************************************************* */
 /*                                   ERRORS                                  */

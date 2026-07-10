@@ -29,7 +29,7 @@ static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
 
 // @ret ERR_REDIRECTION / ERR_INVALID_USAGE / ERR_INTERRUPTED / ERR_LIBC
 static inline t_error	redirect_handle_noclobber_eexist(
-							t_ast_redirection *redir,
+							t_redir *redir,
 							const char *path,
 							int *out_fd)
 {
@@ -60,7 +60,7 @@ static inline t_error	redirect_handle_noclobber_eexist(
 
 // @ret ERR_REDIRECTION
 static inline t_error	redirect_handle_open_error(
-							t_ast_redirection *redir,
+							t_redir *redir,
 							bool no_clobber,
 							int *out_fd,
 							t_error err)
@@ -90,7 +90,7 @@ static inline t_error	redirect_handle_open_error(
 	return (err = error(ERR_REDIRECTION), err.printed = true, err);
 }
 
-t_error	redirect_open(t_ast_redirection *redirection, int *out_fd)
+t_error	redirect_open(t_redir *redirection, int *out_fd)
 {
 	bool		no_clobber;
 	const char	*path;

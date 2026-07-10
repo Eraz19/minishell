@@ -28,10 +28,8 @@ typedef struct s_ast_redirection
 	bool			expand_heredoc_body;
 	int				fd;					// -1 if [n] not specified in input
 	t_token			word;				// word (or heredoc path)
-	t_string		expanded_word;
 	bool			is_location;
 	t_token			location;
-	t_string		expanded_location;
 }	t_ast_redirection;
 
 // vector of t_ast_redirection

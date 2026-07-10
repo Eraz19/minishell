@@ -3,7 +3,7 @@
 #include "heredoc.h"
 
 // @ret TODO (heredoc_expand() has no doc yet)
-static inline t_error	redirect_expand_heredoc_body(t_ast_redirection *redir)
+static inline t_error	redirect_expand_heredoc_body(t_redir *redir)
 {
 	if (redir->expand_heredoc_body)
 		return (heredoc_expand_body(&redir->word->value));
@@ -13,7 +13,7 @@ static inline t_error	redirect_expand_heredoc_body(t_ast_redirection *redir)
 // @ret TODO (expander has no doc yet)
 static inline t_error	redirect_expand_word(
 							const char *param_name,
-							t_token *token,
+							const t_token *token,
 							t_exp_flag flags,
 							t_string *out_string)
 {
@@ -35,7 +35,7 @@ static inline t_error	redirect_expand_word(
 	return (err);
 }
 
-t_error	redirect_expand(t_ast_redirection *redirection)
+t_error	redirect_expand(t_redir *redirection)
 {
 	t_exp_flag	flags;
 	t_error		err;

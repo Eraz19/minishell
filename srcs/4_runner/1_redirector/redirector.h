@@ -60,7 +60,7 @@ void	redirect_close_backups(t_redirector *redirector);
  *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
  *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
  */
-t_error	redirect_commit(t_redirector *redirector, t_ast_redir_list *redirections);
+t_error	redirect_commit(t_redirector *redirector, const t_ast_redir_list *redirections);
 
 /**
  * @brief Apply redirections temporarily within a new restorable frame.
@@ -77,7 +77,7 @@ t_error	redirect_commit(t_redirector *redirector, t_ast_redir_list *redirections
  *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
  *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
  */
-t_error	redirect_start(t_redirector *redirector, t_ast_redir_list *redirections);
+t_error	redirect_start(t_redirector *redirector, const t_ast_redir_list *redirections);
 
 /**
  * @brief Restore and discard the most recent temporary redirection frame.

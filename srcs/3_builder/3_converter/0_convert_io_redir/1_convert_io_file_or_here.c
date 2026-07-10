@@ -1,8 +1,9 @@
 #include "converter_priv.h"
 #include "convert_io_priv.h"
 #include <stdlib.h>
+#include <unistd.h>
 # include <assert.h>	// DEBUG
-#include "debug.h"
+# include "debug.h"
 
 static inline t_error	convert_io_operator(
 							t_symbol symbol,
@@ -68,6 +69,22 @@ static inline void	convert_io_here(
 	out->expand_heredoc_body = heredoc_should_expand(delim);
 }
 
+static inline void	convert_io_set_default_fd(t_ast_redirection *out)
+{
+	t_ast_redir_op	operation;
+
+	if (out->fd >= 0 || out->is_location == true)
+		return ;
+	operation = out->operation;
+	if (operation == AST_REDIR_READ
+		|| operation == AST_REDIR_HEREDOC
+		|| operation == AST_REDIR_DUP_READ
+		|| operation == AST_REDIR_READ_WRITE)
+		out->fd = STDIN_FILENO;
+	else
+		out->fd = STDOUT_FILENO;
+}
+
 /*
 io_file          : '<'       filename
                  | LESSAND   filename
@@ -100,6 +117,7 @@ t_error	convert_io_file_or_here(
 	err = convert_io_operator(symbol, &out->operation);
 	if (err.type)
 		return (ast_redirection_free(out), err);
+	convert_io_set_default_fd(out);
 	if (out->operation == AST_REDIR_HEREDOC)
 		return (convert_io_here(parser, io_file_node, out), err);
 	filename_node = io_file_node->children[1];

@@ -1,9 +1,11 @@
-# WIP
+# ALEXANDER
 
 - `token`:
 	- should store a ptr / index to `history` to never invalidate `t_token_index`
-	- => `function` simplified
+	- => `function` simplified (évite de parcourir tout l'AST pour update les `token`)
 	- => detailed `errors` always available
+
+# WIP
 
 - `functions`:
 	- ⚠️ `function_set()` + `function_unset()`
