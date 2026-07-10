@@ -11,6 +11,14 @@
 		- `cmd_exec_function()`
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
+- `posix_read_all()`
+
+- `runner`:
+	- `error` handling (exit status, exit or not...)
+- ⚠️ unlink `heredoc` immediatly after opening it (conflict with user `fds`)
+- ⚠️ `heredoc error`:
+	- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
+	- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
 
 # TODO
 

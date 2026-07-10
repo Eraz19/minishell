@@ -3,7 +3,6 @@
 #include "path_comps_.h"
 #include "quote_removal_.h"
 
-# include <stdio.h>
 static t_error	prepare_path_name_word(t_expander *expander, t_word *original)
 {
 	expander->err = word_dup(original, &expander->word);
@@ -36,23 +35,10 @@ t_error	path_name_expansion_word(t_expander *expander)
 	expander->err = fields_fpop(&expander->word, &expander->fields);
 	if (expander->err.type)
 		return (expander->err);
-	fprintf(stderr, "[%s()] expander->word.len = %zu\n", __func__, expander->word.len);
-	for (size_t i = 0; i < expander->word.len; i++)
-	{
-		fprintf(stderr, "%c", ((t_word_item *)expander->word.data)[i].c);
-	}
-	fprintf(stderr, "\n");
-	fprintf(stderr, "[%s()] before prepare_path_name_word()\n", __func__);
 	if (prepare_path_name_word(expander, &original).type)
 		return (word_free(&original), expander->err);
 	path_comps_init(&path_comps);
-	fprintf(stderr, "[%s()] before path_comps_load()\n", __func__);
 	expander->err = path_comps_load(&path_comps, &expander->word_exp);
-	fprintf(stderr, "[%s()] path_comps.len = %zu\n", __func__, path_comps.len);
-	for (size_t i = 0; i < path_comps.len; i++)
-	{
-		fprintf(stderr, "[%s()] path_comps.data->pattern.data = %s\n", __func__, ((t_path_comp *)path_comps.data)->pattern.data);
-	}
 	word_free(&expander->word_exp);
 	if (expander->err.type)
 		return (word_free(&original), expander->err);
@@ -69,7 +55,6 @@ t_error	path_name_expansion(t_expander *expander)
 {
 	bool	is_noglob;
 
-	fprintf(stderr, "[%s()] expander->fields.len = %zu\n", __func__, expander->fields.len);
 	expander->err = option_is_active(OPT_NOGLOB, &is_noglob);
 	if (expander->err.type || is_noglob)
 		return (expander->err);

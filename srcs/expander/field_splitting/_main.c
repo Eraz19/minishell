@@ -41,10 +41,8 @@ t_error	field_splitting_word(t_expander *expander)
 	return (expander->err);
 }
 
-# include <stdio.h>
 t_error	field_splitting(t_expander *expander)
 {
-	fprintf(stderr, "[%s()]\n", __func__);
 	fields_init(&expander->fields_exp);
 	while (expander->fields.len > 0)
 	{
