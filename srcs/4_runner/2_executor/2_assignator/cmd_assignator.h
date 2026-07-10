@@ -32,6 +32,6 @@
  *         @c ERR_NOT_IMPLEMENTED, @c ERR_INCOHERENT_STATE,
  *         @c ERR_QUOTED_TILDE or @c ERR_LIBC.
  */
-t_error	cmd_assign(t_cmd *cmd, const t_tokens *assignments);
+t_error	cmd_assign(t_cmd *cmd, const t_token_pool *assignments);
 
 #endif

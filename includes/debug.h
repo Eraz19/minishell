@@ -7,6 +7,7 @@
 # include "lr_machine_type.h"
 # include "ast.h"
 # include "heredoc.h"
+# include "logs.h"
 
 const char	*bool_to_string(bool value);
 const char	*action_type_to_string(t_action_type type);

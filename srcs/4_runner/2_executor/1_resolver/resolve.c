@@ -60,17 +60,12 @@ static inline t_error	cmd_add_to_argv(
 static inline t_error	cmd_expand_word(
 							t_cmd *cmd,
 							const t_functions *functions,
-							const t_tokens *words,
-							size_t index)
+							const t_token *word)
 {
-	t_token		*word;
-	t_exp_flag	flags;
-	t_expansion	expansion;
-	t_error		err;
+	t_exp_flag		flags;
+	t_expansion		expansion;
+	t_error			err;
 
-	err = tokens_get(words, index, &word);
-	if (err.type)
-		return (err);
 	if (cmd->is_declaration_utility == true
 		&& word->assignment_offset >= 0)
 		flags = cmd_assignment_expansion_flags();
@@ -87,17 +82,19 @@ static inline t_error	cmd_expand_word(
 t_error	cmd_resolve(
 			t_cmd *cmd,
 			const t_functions *functions,
-			const t_tokens *words)
+			const t_token_pool *words)
 {
-	size_t	index;
-	char	*null;
-	t_error	err;
+	size_t			index;
+	char			*null;
+	const t_token	*word;
+	t_error			err;
 
 	index = 0;
 	err = error(ERR_NO);
 	while (index < words->len && err.type == ERR_NO)
 	{
-		err = cmd_expand_word(cmd, functions, words, index);
+		word = token_pool_get(words, index);
+		err = cmd_expand_word(cmd, functions, word);
 		index++;
 	}
 	if (err.type == ERR_NO)

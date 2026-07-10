@@ -4,6 +4,7 @@
 #include "cst.h"
 # include "debug.h"		// DEBUG
 # include <assert.h>	// DEBUG
+# include <stdio.h>
 
 static inline t_error	parser_push_initial_state(t_parser *parser)
 {
@@ -90,7 +91,7 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{
 		lr_state_id = parser_stack_top(&parser->stack)->lr_state_id;
-		token = &((t_token *)parser->tokens.data)[parser->lookahead_id];
+		token = parser_get_token(parser, parser->lookahead_id);
 		err = parser_qualify_symbol(parser, lr_state_id, token);
 		if (err.type != ERR_NO)
 			return (fprintf(stderr, "--------------------------------------------------\n"), err);

@@ -31,22 +31,21 @@ static inline t_error	cmd_assignment_finalize_envp(t_vector *envp)
 	return (error(ERR_NO));
 }
 
-t_error	cmd_assign(t_cmd *cmd, const t_tokens *assignments)
+t_error	cmd_assign(t_cmd *cmd, const t_token_pool *assignments)
 {
-	size_t		i;
-	t_exp_flag	flags;
-	t_token		*token;
-	t_string	expanded;
-	t_error		err;
+	size_t			i;
+	t_exp_flag		flags;
+	const t_token	*token;
+	t_string		expanded;
+	t_error			err;
 
 	flags = cmd_assignment_expansion_flags();
 	err = cmd_assignment_build_envp(cmd);
 	i = 0;
 	while (err.type == ERR_NO && i < assignments->len)
 	{
-		err = tokens_get(assignments, i++, &token);
-		if (err.type == ERR_NO)
-			err = cmd_assignment_check(token);
+		token = token_pool_get(assignments, i++);
+		err = cmd_assignment_check(token);
 		if (err.type == ERR_NO)
 			err = cmd_assignment_expand(token, flags, &expanded);
 		if (err.type == ERR_NO)

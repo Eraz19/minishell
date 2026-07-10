@@ -69,17 +69,14 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	err = scanner_get_next_token(&token);
 	if (err.type != ERR_NO)
 		return (err);
-	if (!vector_push(&parser->tokens, &token))
-	{
-		err = error_sys();
-		token_free(&token);
-		parser_internal_error(err);
-	}
+	err = token_pool_push(&parser->token_pool, &token);
+	if (err.type)
+		return (token_free(&token), parser_internal_error(err));
 	err = sym_conv(token.type, &parser->lookahead_raw_symbol);
 	if (err.type != ERR_NO)
 		return (err);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
-	parser->lookahead_id = parser->tokens.len - 1;
+	parser->lookahead_id = parser->token_pool.len - 1;
 #ifdef DEBUG_PARSING
 	fprintf(stderr, "[PARSER] READ   => [%3zu] %s%s%s",
 		parser->lookahead_id, RED, token_type_to_string(token.type), NC);

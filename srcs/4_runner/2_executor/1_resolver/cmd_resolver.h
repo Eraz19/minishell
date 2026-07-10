@@ -35,6 +35,6 @@
 t_error	cmd_resolve(
 			t_cmd *cmd,
 			const t_functions *functions,
-			const t_tokens *words);
+			const t_token_pool *words);
 
 #endif

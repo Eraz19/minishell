@@ -93,6 +93,7 @@ void	token_free(t_token *token);
 void	token_free_void(void *token);
 
 void	token_pool_init(t_token_pool *pool);
+void	token_pool_clear(t_token_pool *pool);
 void	token_pool_free(t_token_pool *pool);
 void	token_pool_free_void(void *pool);
 

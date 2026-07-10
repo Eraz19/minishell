@@ -8,6 +8,7 @@
 #include "cst_type.h"
 #include "ast.h"
 #include "heredoc.h"
+#include "logs.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -542,9 +543,9 @@ static void	ast_log_redirection(
 	fprintf(stderr, " is_location=%s", ast_bool(redir->is_location));
 	if (redir->is_location)
 	{
-		ast_log_token("location", redir->location);
+		ast_log_token("location", &redir->location);
 	}
-		ast_log_token("word", redir->word);
+		ast_log_token("word", &redir->word);
 	fprintf(stderr, " expand_heredoc_body=%s",
 		ast_bool(redir->expand_heredoc_body));
 	fprintf(stderr, "\n");
@@ -770,7 +771,7 @@ static void	ast_log_for(
 	bool is_last)
 {
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FOR");
-	ast_log_token("var", for_node->var_name);
+	ast_log_token("var", &for_node->var_name);
 	fprintf(stderr, " words=%zu\n", for_node->words.len);
 	ast_log_token_vector("WORDS", "WORD", &for_node->words,
 		depth + 1, lasts, false);
@@ -819,7 +820,7 @@ static void	ast_log_case(
 	size_t	i;
 
 	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE");
-	ast_log_token("word", case_node->word);
+	ast_log_token("word", &case_node->word);
 	fprintf(stderr, " items=%zu\n", case_node->patterns.len);
 	i = 0;
 	while (i < case_node->patterns.len)
@@ -844,7 +845,7 @@ static void	ast_log_function(
 		child_count++;
 	id = 0;
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FUNCTION_DEF");
-	ast_log_token("name", function->name);
+	ast_log_token("name", &function->name);
 	fprintf(stderr, " redirs=%zu\n", function->redirs.len);
 	if (function->body)
 		ast_log_command(function->body, depth + 1, lasts,

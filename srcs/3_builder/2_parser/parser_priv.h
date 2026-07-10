@@ -17,7 +17,6 @@ t_error	parser_invalid_syntax(void);
 /* ************************************************************************* */
 
 void	parser_init(t_parser *parser);
-void	parser_free_token(void *token);
 void	parser_free_stack_item(void *raw_item);
 void	parser_free(t_parser *parser);
 
