@@ -1,0 +1,11 @@
+#include "token.h"
+
+void	token_pool_init(t_token_pool *pool)
+{
+	(void)vector_init(pool, sizeof(t_token), 0);
+}
+
+void	token_pool_free(t_token_pool *pool)
+{
+	vector_free(pool, token_free_void);
+}

@@ -1,24 +1,25 @@
 #include "token.h"
+#include <assert.h>
 
-t_error	token_dup(t_token *const dst, const t_token *src)
-{
-	dst->type = src->type;
-	if (!string_dup(&dst->value, &src->value))
-		return (error_sys());
-	dst->index = src->index;
-	dst->assignment_offset = src->assignment_offset;
-	return (context_stack_dup(&dst->contexts, &src->contexts));
-}
-
-t_error	token_deep_copy(t_token *dst, const t_token *src)
+t_error	token_dup(t_token *dst, const t_token *src)
 {
 	t_error	err;
 
-	err = token_dup(dst, src);
+	if (!string_dup(&dst->value, &src->value))
+		return (error_sys());
+	err = context_stack_dup(&dst->contexts, &src->contexts);
 	if (err.type)
-		return (err);
-	dst->index.start = -1;
-	dst->index.end = -1;
-	dst->index.error = -1;
+		return (string_free(&dst->value), err);
+	dst->type = src->type;
+	dst->index = src->index;
+	dst->assignment_offset = src->assignment_offset;
 	return (err);
+}
+
+void	token_transfer(t_token *dst, t_token *src)
+{
+	assert(dst != NULL);
+	assert(src != NULL);
+	*dst = *src;
+	token_init(src);
 }

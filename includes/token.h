@@ -67,20 +67,10 @@ typedef struct s_token
 	ssize_t			assignment_offset;
 }	t_token;
 
-// vector of t_token* (borrowed)
-typedef t_vector	t_tokens;
+// vector of t_token
+typedef t_vector	t_token_pool;
 
-/* -------------------- WIP (START) -------------------- */
-
-void	token_free_owned(void *token);
-t_error	tokens_init(t_tokens *tokens, size_t cap);
-void	tokens_free(t_tokens *tokens, bool owned);
-
-t_error	token_deep_copy(t_token *dst, const t_token *src);
-t_error	tokens_get(const t_tokens *tokens, size_t i, t_token **out_token_ptr);
-t_error	tokens_deep_copy(t_tokens *dst, const t_tokens *src);
-
-/* -------------------- WIP (END) -------------------- */
+/* -------------------- LIFE CYCLE -------------------- */
 
 /**
  * @ingroup token
@@ -102,6 +92,11 @@ void	token_free(t_token *token);
 // @note used for vector_free() compatibility
 void	token_free_void(void *token);
 
+void	token_pool_init(t_token_pool *pool);
+void	token_pool_free(t_token_pool *pool);
+
+/* -------------------- OPS -------------------- */
+
 /**
  * @ingroup token
  * @brief Deep copies a token into another.
@@ -115,5 +110,14 @@ void	token_free_void(void *token);
  * @return ERR_NO on success, ERR_LIBC on allocation failure.
  */
 t_error	token_dup(t_token *dst, const t_token *src);
+
+t_error	token_pool_push(t_token_pool *pool, t_token *token);
+
+t_token	*token_pool_get(t_token_pool *pool, size_t i);
+
+void	token_pool_take(t_token_pool *pool, size_t i, t_token *dst);
+
+void	token_transfer(t_token *dst, t_token *src);
+
 
 #endif
