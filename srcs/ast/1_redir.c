@@ -1,4 +1,5 @@
 #include "ast.h"
+#include "heredoc.h"
 # include <assert.h>	// DEBUG
 
 void	ast_redirection_init(t_ast_redirection *redirection)
@@ -20,6 +21,8 @@ void	ast_redirection_free(void *redirection)
 
 	assert(redirection != NULL);
 	redir = (t_ast_redirection *)redirection;
+	if (redir->operation == AST_REDIR_HEREDOC && redir->word.value.data != NULL)
+		heredoc_unlink(redir->word.value.data);
 	token_free(&redir->word);
 	string_free(&redir->expanded_word);
 	token_free(&redir->location);

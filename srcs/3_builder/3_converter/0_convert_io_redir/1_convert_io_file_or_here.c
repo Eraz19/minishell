@@ -49,7 +49,7 @@ static inline bool	heredoc_should_expand(const t_token *delim_token)
 
 static inline void	convert_io_here(
 						const t_parser *parser,
-						const t_cst_node *io_here,
+						t_cst_node *io_here,
 						t_ast_redirection *out)
 {
 	t_string			*heredoc_path;
@@ -57,8 +57,12 @@ static inline void	convert_io_here(
 	const t_cst_node	*here_end;
 
 	heredoc_path = (t_string *)io_here->data;
+	assert(heredoc_path != NULL);
+	assert(heredoc_path->len > 0);
 	token_init(&out->word);
-	string_take_string(&out->word.value, heredoc_path);
+	out->word.value = *heredoc_path;
+	free(heredoc_path);
+	io_here->data = NULL;
 	here_end = io_here->children[1];
 	delim = converter_get_token(parser, here_end, 0);
 	out->expand_heredoc_body = heredoc_should_expand(delim);
@@ -82,7 +86,7 @@ here_end         : WORD
 */
 t_error	convert_io_file_or_here(
 			t_parser *parser,
-			const t_cst_node *io_file_node,
+			t_cst_node *io_file_node,
 			t_ast_redirection *out)
 {
 	t_symbol	symbol;

@@ -6,7 +6,7 @@
 
 t_error	convert_io_file_or_here(
 			t_parser *parser,
-			const t_cst_node *io_file_node,
+			t_cst_node *io_file_node,
 			t_ast_redirection *out);
 
 #endif
