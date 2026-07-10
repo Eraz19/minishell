@@ -34,6 +34,7 @@ typedef struct s_heredoc
 void	heredoc_init(t_heredoc *heredoc);
 void	heredoc_free(t_heredoc *heredoc);
 t_error	heredoc_load(t_heredoc *heredoc);
+void	heredoc_unlink(const char *heredoc_path);
 
 // ============= API FUNCTIONS ================
 

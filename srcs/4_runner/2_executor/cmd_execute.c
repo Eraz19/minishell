@@ -156,7 +156,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 {
 	if (err.type && cmd->exit_status == 0)
 		cmd->exit_status = (int)err.type;
-	if (ERR_REDIRECTION_OTHER)
+	if (err.type == ERR_REDIRECTION_OTHER)
 	{
 		(void)error_print(err, "runner", "executor", NULL, NULL);
 		err = error(ERR_NO);

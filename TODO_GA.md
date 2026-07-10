@@ -1,3 +1,29 @@
+# ALEXANDER
+
+- 
+
+# BUGS
+
+```bash
+foo()
+{
+cat << EOF
+bonjour
+EOF
+}
+# Le contenu du heredoc est reçu en tokens
+```
+
+- `runner`:
+	- prints `error` even if success ?!
+- `heredoc`:
+	- is not unlinked if syntax error
+	- should not be unlinked if in a function (actually it is unlinked when cst_node is freed):
+		- tranfer from `cst` to `ast`
+		- unlink in `ast_redir_free()`
+		- transfer from `ast` to `function`
+		- unlink in `function_free()`
+
 # WIP
 
 - `functions`:
@@ -15,13 +41,22 @@
 
 - `runner`:
 	- `error` handling (exit status, exit or not...)
-- ⚠️ unlink `heredoc` immediatly after opening it (conflict with user `fds`)
-- ⚠️ `heredoc error`:
-	- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
-	- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
+- ⚠️ `heredoc`:
+	- use `$TMPDIR` if exists (`params_get_variable()` + `expand_token()`)
+	- ⚠️ conflits avec les `user fd` ?!
+	- `unlink()`:
+		- best effort (no fail)
+		- immediatly after openning it
+		- all error paths
+	- `errors`:
+		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
+		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
+		- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
 
 # TODO
 
+- `error`:
+	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
 - `shell`:
 	- `subshell`:
 		- subshell

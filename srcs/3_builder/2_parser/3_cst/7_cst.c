@@ -65,8 +65,7 @@ static inline void	cst_node_free_data(t_cst_node *node)
 
 void	cst_node_set_data(t_cst_node *node, void *data, t_cst_free_data free_f)
 {
-	if (node->data)
-		cst_node_free_data(node);
+	cst_node_free_data(node);
 	node->data = data;
 	node->free_func = free_f;
 }

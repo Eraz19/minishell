@@ -22,14 +22,11 @@ void	ast_redirection_free(void *redirection)
 
 	assert(redirection != NULL);
 	redir = (t_ast_redirection *)redirection;
+	if (redir->operation == AST_REDIR_HEREDOC)
+		free(redir->word);
 	redir->operation = AST_REDIR_COUNT;
 	redir->expand_heredoc_body = false;
 	redir->fd = -1;
-	if (redir->operation == AST_REDIR_HEREDOC)
-	{
-		token_free(redir->word);
-		free(redir->word);
-	}
 	redir->word = NULL;
 	string_free(&redir->expanded_word);
 	redir->is_location = false;
