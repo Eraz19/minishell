@@ -47,13 +47,14 @@ SRCS			:= \
 	$(wildcard srcs/3_builder/*/*/*/*.c) \
 	$(wildcard srcs/4_runner/*.c) \
 	$(wildcard srcs/4_runner/0_cmd_expansion/*.c) \
-	$(wildcard srcs/4_runner/0_functions/*.c) \
 	$(wildcard srcs/4_runner/0_tokens/*.c) \
 	$(wildcard srcs/4_runner/1_redirector/*.c) \
 	$(wildcard srcs/4_runner/1_redirector/*/*.c) \
 	$(wildcard srcs/4_runner/2_executor/*.c) \
 	$(wildcard srcs/4_runner/2_executor/*/*.c) \
 	$(wildcard srcs/4_runner/3_walker/*.c) \
+	$(wildcard srcs/ast/*.c) \
+	$(wildcard srcs/ast/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/cmd_cache/*.c) \
 	$(wildcard srcs/expander/*.c) \
@@ -115,7 +116,6 @@ INCLUDES		:= \
 	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \
 	-Isrcs/4_runner/0_cmd_expansion \
-	-Isrcs/4_runner/0_functions \
 	-Isrcs/4_runner/0_tokens \
 	-Isrcs/4_runner/1_redirector \
 	-Isrcs/4_runner/1_redirector/1_stack_and_frame \
@@ -131,6 +131,7 @@ INCLUDES		:= \
 	-Isrcs/4_runner/3_walker \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \
+	-Isrcs/ast \
 	-Isrcs/builtins \
 	-Isrcs/expander \
 	-Isrcs/expander/expansion \
@@ -169,7 +170,8 @@ INCLUDES		:= \
 	-Isrcs/params/4_variables/load/1_envp \
 	-Isrcs/params/4_variables/load/2_mandatory \
 	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
-	-Isrcs/params/4_variables/load/3_up
+	-Isrcs/params/4_variables/load/3_up \
+	-Isrcs/params/5_functions
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

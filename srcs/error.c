@@ -116,8 +116,6 @@ const char	*error_to_string(t_error err)
 		return ("invalid syntax");
 	else if (err.type == ERR_POSIX_BUILTIN_SPECIAL)
 		return ("special builtin error");
-	else if (err.type == ERR_POSIX_UTILITY)
-		return ("utility error");
 	else if (err.type == ERR_REDIRECTION_SPECIAL)
 		return ("redirection error (special built-in)");
 	else if (err.type == ERR_REDIRECTION_OTHER)

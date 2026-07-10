@@ -54,7 +54,7 @@ void	redirect_close_backups(t_redirector *redirector);
  * @param redirector Redirector state used to track backups (borrowed).
  * @param redirections Redirection list to apply (borrowed).
  * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE,
- *         @c ERR_OPEN_INVALID_USAGE, @c ERR_INTERRUPTED,
+ *         @c ERR_INVALID_USAGE, @c ERR_INTERRUPTED,
  *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
  *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
  *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
@@ -71,7 +71,7 @@ t_error	redirect_commit(t_redirector *redirector, t_ast_redir_list *redirections
  * @param redirector Redirector state used to track backups (borrowed).
  * @param redirections Redirection list to apply (borrowed).
  * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE,
- *         @c ERR_OPEN_INVALID_USAGE, @c ERR_INTERRUPTED,
+ *         @c ERR_INVALID_USAGE, @c ERR_INTERRUPTED,
  *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
  *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
  *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
