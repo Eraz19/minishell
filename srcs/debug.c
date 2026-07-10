@@ -574,23 +574,23 @@ static void	ast_log_redir_list(
 static void	ast_log_token_vector(
 	const char *name,
 	const char *item_name,
-	t_vector *vector,
+	t_token_pool *vector,
 	size_t depth,
 	bool *lasts,
 	bool is_last)
 {
 	size_t	i;
-	t_token	**token;
+	t_token	*token;
 
 	ast_log_head(lasts, depth, is_last, CYAN, name);
 	fprintf(stderr, " count=%zu\n", vector->len);
 	i = 0;
 	while (i < vector->len)
 	{
-		token = AST_AT(t_token *, vector, i);
+		token = AST_AT(t_token, vector, i);
 		ast_log_head(lasts, depth + 1, i + 1 == vector->len,
 			CYAN, item_name);
-		ast_log_token_value(*token);
+		ast_log_token_value(token);
 		fprintf(stderr, "\n");
 		i++;
 	}
@@ -604,14 +604,14 @@ static void	ast_log_token_vector_list(
 	bool is_last)
 {
 	size_t	i;
-	t_vector	*pattern;
+	t_token_pool	*pattern;
 
 	ast_log_head(lasts, depth, is_last, CYAN, name);
 	fprintf(stderr, " count=%zu\n", vector->len);
 	i = 0;
 	while (i < vector->len)
 	{
-		pattern = AST_AT(t_vector, vector, i);
+		pattern = AST_AT(t_token_pool, vector, i);
 		ast_log_head(lasts, depth + 1, i + 1 == vector->len, CYAN, "PATTERN");
 		fprintf(stderr, " count=%zu\n", pattern->len);
 		ast_log_token_vector("TOKENS", "TOKEN", pattern,
