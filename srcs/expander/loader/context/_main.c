@@ -23,8 +23,6 @@ t_error	loader_push_context(t_loader *loader)
 {
 	t_context_stack_item	*item;
 
-	if (loader->stack.len == 0)
-		return (loader->err);
 	loader->err = context_stack_fpop(&loader->stack, &item);
 	if (loader->err.type)
 		return (loader->err);

@@ -59,8 +59,12 @@ t_error	fields_fpop(t_word *out, t_fields *fields);
  *        copied by value).
  *
  * @warning Ownership is conditional: on success @p fields owns the
- *          word's storage and the caller must not free its copy; on
- *          failure the caller keeps ownership.
+ *          word's storage and the caller must not free its copy (double
+ *          free); on failure the caller keeps ownership and must release
+ *          it with @c word_free (leak otherwise). Callers pushing a word
+ *          that a persistent field still aliases (e.g.
+ *          @c expander->word_exp) must re-initialize that field after a
+ *          SUCCESSFUL push instead of freeing.
  * @param fields Already initialized container (borrowed).
  * @param item Word to append (ownership of its storage taken by
  *             @p fields on success only).

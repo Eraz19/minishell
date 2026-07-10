@@ -2,7 +2,7 @@
 #include "loader_.h"
 #include "loader_context_.h"
 
-t_error	loader_char(t_loader *state)
+static t_error	loader_char(t_loader *state)
 {
 	if (is_char_escaped(state))
 	{
@@ -14,7 +14,7 @@ t_error	loader_char(t_loader *state)
 		return (loader_consume(state, false));
 }
 
-t_error	loader_substitution(t_loader *state)
+static t_error	loader_substitution(t_loader *state)
 {
 	t_context	outer_local;
 

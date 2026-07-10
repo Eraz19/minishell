@@ -18,7 +18,6 @@ t_error	append_param_as_field(t_expander *expander, t_word word_exp, size_t i)
 t_error	join_param(t_string *out, const t_positionals *params, t_string *sep)
 {
 	size_t		i;
-	t_error		err;
 	t_string	param;
 
 	i = 0;
@@ -26,10 +25,10 @@ t_error	join_param(t_string *out, const t_positionals *params, t_string *sep)
 	{
 		param = ((t_string *)params->data)[i++];
 		if (!string_append(out, &param))
-			return (err = error_sys());
+			return (error_sys());
 		if (i < params->len && sep->len > 0)
 			if (!string_append(out, sep))
-				return (err = error_sys());
+				return (error_sys());
 	}
 	return (error(ERR_NO));
 }

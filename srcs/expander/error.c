@@ -3,7 +3,6 @@
 static bool	is_expansion_user_error(t_error_type type)
 {
 	return (type == ERR_PARAM_BAD_SUBSTITUTION
-		|| type == ERR_BAD_SUBSTITUTION
 		|| type == ERR_PARAM_NULL_OR_UNSET
 		|| type == ERR_VAR_INVALID_NAME
 		|| type == ERR_UNEXPECTED_EOI

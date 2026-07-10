@@ -45,7 +45,6 @@ typedef enum e_error_type
 	ERR_QUOTED_TILDE,						// [EXPANDER]	Internal control flow, never escapes: a quoted tilde stays literal
 	ERR_PARAM_NULL_OR_UNSET,				// [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed at production with the parameter name)
 	ERR_PARAM_BAD_SUBSTITUTION,				// [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed)
-	ERR_BAD_SUBSTITUTION,					// [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed); currently produced nowhere
 	ERR_ALIAS_NOT_FOUND,					// [BUILTINS]	alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
 	// FT_GETOPT
 	ERR_OPT_INVALID,						// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)

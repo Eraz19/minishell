@@ -72,7 +72,9 @@ t_error	history_list_get(t_history_list *list, const t_string **item, size_t i);
  *          text and the caller must relinquish its copy of the struct
  *          (re-initialize or zero it, as @c history_save_entry and
  *          @c history_file_load do) to avoid a double free; on failure
- *          the caller keeps ownership.
+ *          the caller keeps ownership and must release the entry with
+ *          @c string_free, or keep it reachable for a later free (leak
+ *          otherwise).
  * @param list Already initialized list (borrowed).
  * @param item Entry to append (ownership of its text taken by @p list on
  *             success only).

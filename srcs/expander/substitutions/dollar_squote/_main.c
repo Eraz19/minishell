@@ -18,14 +18,15 @@ static t_error	dollar_squote_strip_opening(t_expander *expander)
 		return (expander->err);
 	if (item.c == '$' && !item.opt.escaped)
 	{
-		if (word_remove(&expander->word, 0, 1).type)
+		expander->err = word_remove(&expander->word, 0, 1);
+		if (expander->err.type)
 			return (expander->err);
 		expander->err = word_get(&item, &expander->word, 0);
 		if (expander->err.type)
 			return (expander->err);
 	}
 	if (item.c == '\'' && !item.opt.escaped)
-		return (word_remove(&expander->word, 0, 1));
+		return (expander->err = word_remove(&expander->word, 0, 1));
 	return (expander->err);
 }
 
@@ -43,7 +44,7 @@ static t_error	dollar_squote_next(
 		return (dollar_squote_escape(expander, opt, escapes));
 	if (dollar_squote_emit(expander, item.c, opt).type)
 		return (expander->err);
-	return (word_remove(&expander->word, 0, 1));
+	return (expander->err = word_remove(&expander->word, 0, 1));
 }
 
 static t_error	dollar_squote_body(
@@ -61,7 +62,7 @@ static t_error	dollar_squote_body(
 		if (item.opt.quoted != CONTEXT_DOLLAR_SQUOTE)
 			break ;
 		if (item.c == '\'' && !item.opt.escaped)
-			return (word_remove(&expander->word, 0, 1));
+			return (expander->err = word_remove(&expander->word, 0, 1));
 		if (dollar_squote_next(expander, opt, escapes).type)
 			return (expander->err);
 	}

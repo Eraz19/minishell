@@ -27,7 +27,8 @@ t_error	dollar_squote_numeric_escape(t_expander *expander, t_word_item_opt opt)
 		return (expander->err);
 	if (item.c >= '0' && item.c <= '7')
 		return (octal_convert(expander, opt));
-	if (word_remove(&expander->word, 0, 1).type)
+	expander->err = word_remove(&expander->word, 0, 1);
+	if (expander->err.type)
 		return (expander->err);
 	return (hex_convert(expander, opt));
 }
@@ -37,7 +38,8 @@ t_error	dollar_squote_control_escape(t_expander *expander, t_word_item_opt opt)
 	t_word_item	item;
 	char		c;
 
-	if (word_remove(&expander->word, 0, 1).type)
+	expander->err = word_remove(&expander->word, 0, 1);
+	if (expander->err.type)
 		return (expander->err);
 	if (expander->word.len == 0)
 		return (dollar_squote_emit(expander, '\\', opt));
@@ -47,7 +49,8 @@ t_error	dollar_squote_control_escape(t_expander *expander, t_word_item_opt opt)
 	c = item.c;
 	if (c >= 'a' && c <= 'z')
 		c = (char)(c - 32);
-	if (word_remove(&expander->word, 0, 1).type)
+	expander->err = word_remove(&expander->word, 0, 1);
+	if (expander->err.type)
 		return (expander->err);
 	return (dollar_squote_emit(expander, (char)(c ^ 0x40), opt));
 }

@@ -19,8 +19,8 @@ t_error	extract_arith_word(t_expander *expander, t_word *word)
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type)
 		return (expander->err);
-	len = item.opt.context_len;
 	i = 0;
+	len = item.opt.context_len;
 	word_init(word);
 	while (i < len)
 	{
@@ -36,6 +36,27 @@ t_error	extract_arith_word(t_expander *expander, t_word *word)
 		}
 		++i;
 	}
+	return (expander->err);
+}
+
+t_error	build_arith_expander(
+			t_expander *arith_expander,
+			t_expander *expander,
+			t_word *arith_word)
+{
+	expander_init(arith_expander);
+	expander->err = fields_push(&arith_expander->fields, *arith_word);
+	if (expander->err.type)
+	{
+		word_free(arith_word);
+		return (expander_free(arith_expander), expander->err);
+	}
+	if (!string_init(&arith_expander->ifs, 0, expander->ifs.data, -1))
+	{
+		expander->err = error_sys();
+		return (expander_free(arith_expander), expander->err);
+	}
+	arith_expander->flags = EXP_PARAM | EXP_CMD_SUB | EXP_QUOTE_REMOVAL;
 	return (expander->err);
 }
 
@@ -55,16 +76,8 @@ t_error	arith_substitution(t_expander *expander)
 
 	if (extract_arith_word(expander, &arith_word).type)
 		return (expander->err);
-	expander_init(&arith_expander);
-	expander->err = fields_push(&arith_expander.fields, arith_word);
-	if (expander->err.type)
-	{
-		word_free(&arith_word);
-		return (expander_free(&arith_expander), expander->err);
-	}
-	if (!string_init(&arith_expander.ifs, 0, expander->ifs.data, -1))
-		return (expander_free(&arith_expander), expander->err);
-	arith_expander.flags = EXP_PARAM | EXP_CMD_SUB | EXP_QUOTE_REMOVAL;
+	if (build_arith_expander(&arith_expander, expander, &arith_word).type)
+		return (expander->err);
 	expander->err = expand_word(&arith_expander);
 	if (expander->err.type)
 		return (expander_free(&arith_expander), expander->err);

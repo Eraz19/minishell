@@ -98,8 +98,6 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_PARAM_NULL_OR_UNSET)
 		return ("parameter null or not set");
 	else if (err.type == ERR_PARAM_BAD_SUBSTITUTION)
-		return ("param bad substitution");
-	else if (err.type == ERR_BAD_SUBSTITUTION)
 		return ("bad substitution");
 	else if (err.type == ERR_ALIAS_NOT_FOUND)
 		return ("not found");

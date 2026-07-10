@@ -38,9 +38,13 @@ typedef t_vector	t_word;
  *                               @c CONTEXT_NONE for plain text.
  * @var s_word_item_opt::escaped Whether the character was escaped by a
  *                               backslash.
- * @var s_word_item_opt::context_len Length in items of the construct
- *                                   starting at this character
- *                                   (delimiters included).
+ * @var s_word_item_opt::context_len Span in items of the innermost
+ *                                   substitution construct containing
+ *                                   this character (delimiters
+ *                                   included), stamped on every item of
+ *                                   the span; consumers read the value
+ *                                   carried by the construct's opening
+ *                                   character.
  * @var s_word_item_opt::local_quoted Innermost quoting at the character
  *                                    (inside nested constructs), used by
  *                                    the pattern-based operators.

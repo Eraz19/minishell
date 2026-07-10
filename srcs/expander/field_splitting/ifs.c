@@ -5,7 +5,7 @@ bool	is_it_white_space_ifs(char c)
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-t_error	exhaust_ifs_white_space(t_expander *expander)
+static t_error	exhaust_ifs_white_space(t_expander *expander)
 {
 	t_word_item	item;
 
