@@ -42,20 +42,18 @@ t_error	hook_3(
 	if (len != 2)
 		return (error_print(error(ERR_HOOK_INVALID_RHS_LEN), __func__, NULL,
 			"expected 2 received %i", (int)len));
-	err = parser_get_token(__func__, parser, rhs->tokens_start_id + 1, &delim);
-	if (err.type)
-		return (err);
+	delim = parser_get_token(parser, rhs->tokens_start_id + 1);
 	if (rhs[0].symbol == SYM_DLESSDASH)
 		mode = HEREDOC_MODE_TAB_STRIP;
 	else
 		mode = HEREDOC_MODE_NORMAL;
-	path = malloc(sizeof(t_buff));
+	path = malloc(sizeof(*path));
 	if (!path)
 		return (error_print(error_sys(), __func__,
-			"unable to malloc heredoc path buff", NULL, NULL));
+			"unable to malloc heredoc path", NULL, NULL));
 	err = scanner_report_io_here(path, delim, mode);
 	if (err.type)
-		return (err);
+		return (free(path), err);
 #ifdef DEBUG_PARSING
 	fprintf(stderr, "[PARSER] %sscanner_report_io_here(%p, %s%s%s, %i) => '%s%s%s'%s\n",
 		YELLOW, &path, BLUE, delim->value.data, YELLOW, (int)mode, BLUE, path->data, YELLOW, NC);

@@ -2,7 +2,7 @@
 # define REDIRECTOR_PRIV_H
 
 # include "error.h"
-# include "ast_type.h"
+# include "ast.h"
 # include "redirector_type.h"
 
 # define REDIRECTOR_MODULE_NAME	"runner: redirector"

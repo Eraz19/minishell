@@ -1,5 +1,9 @@
 #include "parser_type.h"
 #include <stdlib.h>
+#ifdef DEBUG_PARSING
+# include <stdio.h>	// DEBUG
+# include "logs.h"	// DEBUG
+#endif
 
 static inline void	update_parser_bools(t_parser *parser)
 {
@@ -7,8 +11,6 @@ static inline void	update_parser_bools(t_parser *parser)
 	parser->expansion_disabled = parser->function_body_depth > 0;
 }
 
-# include <stdio.h>	// DEBUG
-# include "logs.h"	// DEBUG
 t_error	hook_9_increment(
 	t_parser *parser,
 	t_parser_stack_item *rhs,

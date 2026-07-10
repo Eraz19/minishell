@@ -1,11 +1,11 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
 
 static inline t_error	add_pipeline(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_and_or *out)
 {
@@ -28,7 +28,7 @@ static inline t_error	add_operator(bool operator, t_ast_and_or *out)
 }
 
 static inline t_error	parse_rec(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *and_or,
 							t_ast_and_or *out)
 {
@@ -61,7 +61,7 @@ and_or           :                         pipeline
                  ;
 */
 t_error	convert_and_or(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *and_or,
 			t_ast_and_or *out)
 {

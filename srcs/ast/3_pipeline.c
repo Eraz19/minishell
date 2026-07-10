@@ -1,5 +1,4 @@
-#include "converter_priv.h"
-#include <stdlib.h>
+#include "ast.h"
 # include <assert.h>	// DEBUG
 
 void	ast_pipeline_init(t_ast_pipeline *pipeline)

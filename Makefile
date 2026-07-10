@@ -33,6 +33,7 @@ SRCS			:= \
 	$(wildcard srcs/0_posix_helpers/*.c) \
 	$(wildcard srcs/0_posix_helpers/*/*.c) \
 	$(wildcard srcs/0_token/*.c) \
+	$(wildcard srcs/0_token/*/*.c) \
 	$(wildcard srcs/0_utils/*.c) \
 	$(wildcard srcs/0_utils/*/*.c) \
 	$(wildcard srcs/1_shell/*.c) \

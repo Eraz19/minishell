@@ -3,7 +3,7 @@
 
 # include "error.h"
 # include "cst_type.h"
-# include "ast_type.h"
+# include "ast.h"
 
 t_error	convert_cst_to_ast(
 	t_parser *parser,

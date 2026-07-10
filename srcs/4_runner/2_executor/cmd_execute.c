@@ -126,7 +126,7 @@ TODO: fix `exec` builtin handling
 static inline t_error	cmd_redirect_start(
 							const t_cmd *cmd,
 							t_redirector *redirector,
-							t_ast_simple_command *simple_command)
+							t_ast_scmd *simple_command)
 {
 	// TODO: cf big TODO at the top of the file
 	if (cmd->builtin == builtin_exec)
@@ -177,7 +177,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 	return (err);
 }
 
-t_error cmd_execute(t_runner *runner, t_ast_simple_command *simple_command)
+t_error cmd_execute(t_runner *runner, t_ast_scmd *simple_command)
 {
 	t_cmd	cmd;
 	t_error	err;

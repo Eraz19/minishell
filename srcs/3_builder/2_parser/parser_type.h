@@ -1,17 +1,14 @@
 #ifndef PARSER_TYPE_H
 # define PARSER_TYPE_H
 
-# include "libft.h"
 # include "qualifiers_type.h"
 # include "parser_stack_type.h"
-
-// vector of t_token
-typedef t_vector	t_token_list;
+# include "token.h"
 
 typedef struct s_parser
 {
 	t_parser_stack	stack;
-	t_token_list	tokens;
+	t_token_pool	token_pool;
 	size_t			lookahead_id;
 	t_symbol		lookahead_raw_symbol;
 	t_symbol		lookahead_symbol;

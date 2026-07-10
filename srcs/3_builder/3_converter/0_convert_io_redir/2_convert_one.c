@@ -5,38 +5,32 @@
 # include <assert.h>	// DEBUG
 
 static inline t_error	convert_io_number(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *io_number_node,
 							t_ast_redirection *out)
 {
 	t_error	err;
 	t_token	*token;
 
-	err = converter_get_token(parser, io_number_node, 0, &token);
-	if (err.type)
-		return (err);
+	token = converter_get_token(parser, io_number_node, 0);
 	if (!parse_int(token->value.data, &out->fd))
 	{
 		err = error(ERR_FD_INVALID);
-		err = error_print(err, "converter", NULL, "%s", token->value.data);
+		err = error_print(err, "builder", "converter", NULL,
+			"%s", token->value.data);
+		// TODO: requalify as ERR_REDIRECTION ?
 		return (err);
 	}
-	// TODO: Disallow range of fd used for backuped fds
-	return (err);
+	return (error(ERR_NO));
 }
 
-static inline t_error	convert_io_location(
-							const t_parser *parser,
+static inline void	convert_io_location(
+							t_parser *parser,
 							const t_cst_node *io_location_node,
 							t_ast_redirection *out)
 {
-	t_error	err;
-
-	err = converter_get_token(parser, io_location_node, 0, &out->location);
-	if (err.type)
-		return (err);
+	converter_take_token(parser, io_location_node, 0, &out->location);
 	out->is_location = true;
-	return (err);
 }
 
 /*
@@ -64,7 +58,7 @@ here_end         : WORD
                  ;
 */
 t_error	convert_redirection(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *io_redirect,
 			t_ast_redirection *out)
 {
@@ -80,16 +74,18 @@ t_error	convert_redirection(
 		return (convert_io_file_or_here(parser, io_redirect->children[0], out));
 	}
 	else if (io_redirect->children[0]->symbol == SYM_IO_NUMBER)
+	{
 		err = convert_io_number(parser, io_redirect->children[0], out);
+		if (err.type)
+			return (ast_redirection_free(out), err);
+	}
 	else
-		err = convert_io_location(parser, io_redirect->children[0], out);
-	if (err.type)
-		return (ast_redirection_free(out), err);
+		convert_io_location(parser, io_redirect->children[0], out);
 	return (convert_io_file_or_here(parser, io_redirect->children[1], out));
 }
 
 t_error	convert_redirection_add(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *io_redirect,
 			t_ast_redir_list *out)
 {

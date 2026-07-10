@@ -78,9 +78,9 @@ typedef enum e_symbol
 	SYM_term,				// [t_ast_list]				content
 	SYM_subshell,			// [t_ast_list]				subshell = true
 	SYM_brace_group,		// [t_ast_list]				subshell = false
-	SYM_cmd_prefix,			// [t_ast_simple_command]	assignments/redirs
-	SYM_cmd_suffix,			// [t_ast_simple_command]	words/redirs
-	SYM_simple_command,		// [t_ast_simple_command]	content + redirs
+	SYM_cmd_prefix,			// [t_ast_scmd]	assignments/redirs
+	SYM_cmd_suffix,			// [t_ast_scmd]	words/redirs
+	SYM_simple_command,		// [t_ast_scmd]	content + redirs
 	SYM_command,			// [t_ast_command]			dispatcher
 	SYM_pipeline,			// [t_ast_pipeline]			negated
 	SYM_pipe_sequence,		// [t_ast_pipeline]			commands

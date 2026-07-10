@@ -1,19 +1,8 @@
-#include "parser.h"
+#include "parser_type.h"
 # include <assert.h>	// DEBUG
 
-t_error	parser_get_token(
-			const char *caller,
-			const t_parser *parser,
-			size_t index,
-			t_token **out)
+t_token	*parser_get_token(const t_parser *parser, size_t index)
 {
-	assert(caller != NULL);
 	assert(parser != NULL);
-	assert(index < parser->tokens.len);
-	assert(out != NULL);
-	if (index >= parser->tokens.len)
-		return (error_print(error(ERR_INDEX_OUT_OF_BOUND), "parser", caller,
-			"Unable to get heredoc delimiter token", NULL, NULL));
-	*out = &((t_token *)parser->tokens.data)[index];
-	return (error(ERR_NO));
+	return (token_pool_get(&parser->token_pool, index));
 }

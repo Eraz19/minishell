@@ -2,6 +2,7 @@
 #include "convert_io_priv.h"
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
+#include "debug.h"
 
 static inline t_error	convert_io_operator(
 							t_symbol symbol,
@@ -24,7 +25,9 @@ static inline t_error	convert_io_operator(
 	else if (symbol == SYM_LESSGREAT)
 		*out_op = AST_REDIR_READ_WRITE;
 	else
-		return (error(ERR_INCOHERENT_STATE));
+		return (error_print(error(ERR_INTERNAL), "builder", "converter",
+					"unknown io operator", NULL, "%i (%s)",
+					(int)symbol, symbol_to_string(symbol)));
 	return (error(ERR_NO));
 }
 
@@ -44,31 +47,21 @@ static inline bool	heredoc_should_expand(const t_token *delim_token)
 	return (true);
 }
 
-static inline t_error	convert_here_end(
-							const t_parser *parser,
-							const t_cst_node *here_end,
-							t_ast_redirection *out)
+static inline void	convert_io_here(
+						const t_parser *parser,
+						const t_cst_node *io_here,
+						t_ast_redirection *out)
 {
-	t_token	*delim;
-	t_error	err;
+	t_string			*heredoc_path;
+	t_token				*delim;
+	const t_cst_node	*here_end;
 
-	err = converter_get_token(parser, here_end, 0, &delim);
-	if (err.type)
-		return (ast_redirection_free(out), err);
+	heredoc_path = (t_string *)io_here->data;
+	token_init(&out->word);
+	string_take_string(&out->word.value, heredoc_path);
+	here_end = io_here->children[1];
+	delim = converter_get_token(parser, here_end, 0);
 	out->expand_heredoc_body = heredoc_should_expand(delim);
-	return (err);
-}
-
-static inline t_error	convert_io_here(
-							const t_cst_node *io_here,
-							t_ast_redirection *out)
-{
-	out->word = malloc(sizeof(*out->word));
-	if (!out->word)
-		return (error_sys());
-	token_init(out->word);
-	out->word->value = *((t_string *)io_here->data);
-	return (error(ERR_NO));
 }
 
 /*
@@ -88,7 +81,7 @@ io_here          : DLESS     here_end
 here_end         : WORD
 */
 t_error	convert_io_file_or_here(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *io_file_node,
 			t_ast_redirection *out)
 {
@@ -104,15 +97,8 @@ t_error	convert_io_file_or_here(
 	if (err.type)
 		return (ast_redirection_free(out), err);
 	if (out->operation == AST_REDIR_HEREDOC)
-	{
-		err = convert_io_here(io_file_node, out);
-		if (err.type)
-			return (err);
-		return (convert_here_end(parser, io_file_node->children[1], out));
-	}
+		return (convert_io_here(parser, io_file_node, out), err);
 	filename_node = io_file_node->children[1];
-	err = converter_get_token(parser, filename_node, 0, &out->word);
-	if (err.type)
-		ast_redirection_free(out);
+	converter_take_token(parser, filename_node, 0, &out->word);
 	return (err);
 }

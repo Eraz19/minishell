@@ -6,7 +6,7 @@
 #include "lr_state_type.h"
 #include "rule_state_type.h"
 #include "cst_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "heredoc.h"
 
 #include <stdio.h>
@@ -633,7 +633,7 @@ static void	ast_log_command(
 	bool is_last);
 
 static void	ast_log_simple_command(
-	t_ast_simple_command *cmd,
+	t_ast_scmd *cmd,
 	size_t depth,
 	bool *lasts,
 	bool is_last)

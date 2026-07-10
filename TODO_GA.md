@@ -1,34 +1,21 @@
-# ALEXANDER
-
-- 
-
-# BUGS
-
-```bash
-foo()
-{
-cat << EOF
-bonjour
-EOF
-}
-# Le contenu du heredoc est reçu en tokens
-```
-
-- `runner`:
-	- prints `error` even if success ?!
-- `heredoc`:
-	- is not unlinked if syntax error
-	- should not be unlinked if in a function (actually it is unlinked when cst_node is freed):
-		- tranfer from `cst` to `ast`
-		- unlink in `ast_redir_free()`
-		- transfer from `ast` to `function`
-		- unlink in `function_free()`
-
 # WIP
+
+- `token`:
+	- should store a ptr / index to `history` to never invalidate `t_token_index`
+	- => `function` simplified
+	- => detailed `errors` always available
 
 - `functions`:
 	- ⚠️ `function_set()` + `function_unset()`
 	- `unset` : trigger `function_unset()`
+- `heredoc`:
+	- ⚠️ should not be unlinked if in a function (actually it is unlinked when cst_node is freed):
+		- ✅ store it in `cst_node.data`
+		- ✅ `heredoc_unlink()` in `free_heredoc_cst_data()`
+		- 🚧 when `ast` is built => tranfer from `cst` to `ast` (set `cst_node.data = NULL`)
+		- 🚧 `heredoc_unlink()` in `ast_redir_free()`
+		- 🚧 when `function` is saved => transfer from `ast` to `function` (set `ast.??? = NULL`)
+		- 🚧 `heredoc_unlink()` in `function_free()`
 - `walker`:
 	- implement all
 	- handle errors (cf `error.h`)

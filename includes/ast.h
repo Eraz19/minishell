@@ -27,25 +27,26 @@ typedef struct s_ast_redirection
 	t_ast_redir_op	operation;
 	bool			expand_heredoc_body;
 	int				fd;					// -1 if [n] not specified in input
-	t_token			*word;				// word (borrowed, ⚠️ owned if heredoc)
-	t_string		expanded_word;		// (⚠️ owned)
+	t_token			word;				// word (or heredoc path)
+	t_string		expanded_word;
 	bool			is_location;
-	t_token			*location;			// only if is_location = true (borrowed)
-	t_string		expanded_location;	// only if is_location = true (⚠️ owned)
+	t_token			location;
+	t_string		expanded_location;
 }	t_ast_redirection;
 
-typedef t_vector	t_ast_redir_list;	// vector of t_ast_redirection
+// vector of t_ast_redirection
+typedef t_vector	t_ast_redir_list;
 
 /* ************************************************************************* */
 /*                               SIMPLE COMMANDS                             */
 /* ************************************************************************* */
 
-typedef struct s_ast_simple_command
+typedef struct s_ast_scmd
 {
-	t_vector			assignments;	// vector of t_token * (borrowed)
-	t_vector			words;			// vector of t_token * (borrowed)
-	t_ast_redir_list	redirs;			// vector of t_ast_redirection
-}	t_ast_simple_command;
+	t_token_pool		assignments;
+	t_token_pool		words;
+	t_ast_redir_list	redirs;
+}	t_ast_scmd;
 
 /* ************************************************************************* */
 /*                                    LISTS                                  */
@@ -84,10 +85,9 @@ typedef struct s_ast_if
 
 typedef struct s_ast_for
 {
-	t_token		*var_name;			// borrowed
-	t_vector	words;				// vector of t_token * (borrowed ⚠️ except if word_token_is_owned = true) (set to ["@"] if input doesn't contain any word)
-	t_ast_list	body;
-	bool		word_token_is_owned;
+	t_token			var_name;
+	t_token_pool	words;			// (set to ["@"] if input doesn't contain any word)
+	t_ast_list		body;
 }	t_ast_for;
 
 typedef struct s_ast_loop
@@ -99,8 +99,8 @@ typedef struct s_ast_loop
 
 typedef struct s_ast_case
 {
-	t_token		*word;				// raw tested word (borrowed)
-	t_vector	patterns;			// vector of t_vector(t_token *) (borrowed)
+	t_token		word;				// raw tested word
+	t_vector	patterns;			// vector of t_token_pool
 	t_vector	bodies;				// vector of t_ast_list
 	t_vector	fallthrough;		// vector of bool
 }	t_ast_case;
@@ -109,8 +109,8 @@ typedef struct s_ast_command	t_ast_command;
 
 typedef struct s_ast_function_def
 {
-	t_token				*name;		// borrowed
-	t_ast_command		*body;		// owned (shallow copy)
+	t_token				name;
+	t_ast_command		*body;		// owned
 	t_ast_redir_list	redirs;		// vector of t_ast_redirection
 }	t_ast_function_def;
 
@@ -132,13 +132,13 @@ typedef enum e_ast_command_type
 
 typedef union u_ast_command_data
 {
-	t_ast_simple_command	simple;
-	t_ast_list				list;
-	t_ast_if				if_clause;
-	t_ast_for				for_clause;
-	t_ast_loop				loop;
-	t_ast_case				case_clause;
-	t_ast_function_def		function_def;
+	t_ast_scmd			simple;
+	t_ast_list			list;
+	t_ast_if			if_clause;
+	t_ast_for			for_clause;
+	t_ast_loop			loop;
+	t_ast_case			case_clause;
+	t_ast_function_def	function_def;
 }	t_ast_command_data;
 
 typedef struct s_ast_command
@@ -149,5 +149,46 @@ typedef struct s_ast_command
 }	t_ast_command;
 
 typedef t_ast_list	t_ast_root;
+
+// Life cycle
+
+void	ast_redirection_init(t_ast_redirection *redirection);
+void	ast_redirection_free(void *redirection);
+
+void	ast_redir_list_init(t_ast_redir_list *redir_list);
+void	ast_redir_list_free(t_ast_redir_list *redir_list);
+
+void	ast_simple_command_init(t_ast_scmd *simple_command);
+void	ast_simple_command_free(void *simple_command);
+
+void	ast_pipeline_init(t_ast_pipeline *pipeline);
+void	ast_pipeline_free(void *pipeline);
+
+void	ast_and_or_init(t_ast_and_or *and_or);
+void	ast_and_or_free(void *and_or);
+
+void	ast_list_init(t_ast_list *list);
+void	ast_list_free(void *list);
+
+void	ast_if_init(t_ast_if *if_node);
+void	ast_if_free(t_ast_if *if_node);
+
+void	ast_for_init(t_ast_for *for_node);
+void	ast_for_free(t_ast_for *for_node);
+
+void	ast_loop_init(t_ast_loop *loop);
+void	ast_loop_free(t_ast_loop *loop);
+
+void	ast_case_init(t_ast_case *case_node);
+void	ast_case_free(t_ast_case *case_node);
+
+void	ast_function_def_init(t_ast_function_def *function_def);
+void	ast_function_def_free(t_ast_function_def *function_def);
+
+void	ast_command_init(t_ast_command *command);
+void	ast_command_free(void *command);
+
+void	ast_root_init(t_ast_root *root);
+void	ast_root_free(t_ast_root *root);
 
 #endif

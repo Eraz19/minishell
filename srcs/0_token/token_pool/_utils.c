@@ -9,16 +9,30 @@ t_error	token_pool_push(t_token_pool *pool, t_token *token)
 	return (error(ERR_NO));
 }
 
-t_token	*token_pool_get(t_token_pool *pool, size_t i)
+t_token	*token_pool_get(const t_token_pool *pool, size_t index)
 {
-	assert(i < pool->len);
-	return (&((t_token *)pool->data)[i]);
+	assert(index < pool->len);
+	return (&((t_token *)pool->data)[index]);
 }
 
-void	token_pool_take(t_token_pool *pool, size_t i, t_token *dst)
+void	token_pool_take(t_token_pool *pool, size_t index, t_token *dst)
 {
 	t_token	*src_token;
 
-	src_token = token_pool_get(pool, i);
+	src_token = token_pool_get(pool, index);
 	token_transfer(dst, src_token);
+}
+
+t_error	token_pool_transfer(t_token_pool *dst, t_token_pool *src, size_t index)
+{
+	t_token	*src_token;
+	t_token	dst_token;
+	t_error	err;
+
+	src_token = token_pool_get(src, index);
+	token_transfer(&dst_token, src_token);
+	err = token_pool_push(dst, &dst_token);
+	if (err.type)
+		token_transfer(src_token, &dst_token);
+	return (err);
 }

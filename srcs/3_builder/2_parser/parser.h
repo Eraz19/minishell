@@ -19,12 +19,10 @@ t_error	parser_build_qualifiers_table(
 t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine);
 t_error	parser_store_cst(t_parser *parser, t_parser_stack_item *main_item);
 
-// @warning : pointer may be invalidate when new token are stored
-t_error	parser_get_token(
-			const char *caller,
-			const t_parser *parser,
-			size_t index,
-			t_token **out);
+t_token	*parser_get_token(const t_parser *parser, size_t index);
+
+// TODO: old name = parser_get_token()
+void	parser_take_token(t_parser *parser, size_t index, t_token *dst);
 
 // @ret ERR_PARSER_INVALID_STATE / ERR_PARSER_EMPTY_GOTO / ERR_LIBC
 t_error	parser_can_next_token_be_a_cmd_name_or_word(

@@ -3,7 +3,7 @@
 
 # include "error.h"
 # include "runner.h"
-# include "ast_type.h"
+# include "ast.h"
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -27,6 +27,6 @@
  *         @c ERR_NOT_IMPLEMENTED, @c ERR_INCOHERENT_STATE,
  *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
  */
-t_error	cmd_execute(t_runner *runner, t_ast_simple_command *simple_command);
+t_error	cmd_execute(t_runner *runner, t_ast_scmd *simple_command);
 
 #endif

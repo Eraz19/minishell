@@ -1,5 +1,5 @@
 #include "redirector_priv.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "options.h"
 #include "posix_helpers.h"
 #include <unistd.h>

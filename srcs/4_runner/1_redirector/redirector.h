@@ -2,7 +2,7 @@
 # define REDIRECTOR_H
 
 # include "error.h"
-# include "ast_type.h"
+# include "ast.h"
 # include "redirector_type.h"
 
 /* ************************************************************************* */

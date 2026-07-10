@@ -2,7 +2,7 @@
 # define WALKER_H
 
 # include "error.h"
-# include "ast_type.h"
+# include "ast.h"
 # include "runner.h"
 
 /* --- PUBLIC --- */

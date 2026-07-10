@@ -1,6 +1,4 @@
-#include "ast_type.h"
-#include "converter_priv.h"
-#include <stdlib.h>
+#include "ast.h"
 # include <assert.h>	// DEBUG
 
 void	ast_redirection_init(t_ast_redirection *redirection)
@@ -9,10 +7,10 @@ void	ast_redirection_init(t_ast_redirection *redirection)
 	redirection->operation = AST_REDIR_COUNT;
 	redirection->expand_heredoc_body = false;
 	redirection->fd = -1;
-	redirection->word = NULL;
+	token_init(&redirection->word);
 	(void)string_init(&redirection->expanded_word, 0, NULL, 0);
 	redirection->is_location = false;
-	redirection->location = NULL;
+	token_init(&redirection->location);
 	(void)string_init(&redirection->expanded_location, 0, NULL, 0);
 }
 
@@ -22,16 +20,11 @@ void	ast_redirection_free(void *redirection)
 
 	assert(redirection != NULL);
 	redir = (t_ast_redirection *)redirection;
-	if (redir->operation == AST_REDIR_HEREDOC)
-		free(redir->word);
-	redir->operation = AST_REDIR_COUNT;
-	redir->expand_heredoc_body = false;
-	redir->fd = -1;
-	redir->word = NULL;
+	token_free(&redir->word);
 	string_free(&redir->expanded_word);
-	redir->is_location = false;
-	redir->location = NULL;
+	token_free(&redir->location);
 	string_free(&redir->expanded_location);
+	ast_redirection_init(redir);
 }
 
 void	ast_redir_list_init(t_ast_redir_list *redir_list)

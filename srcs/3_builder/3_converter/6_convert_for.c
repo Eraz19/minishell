@@ -1,24 +1,20 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
-static inline t_error	convert_for_add_word(
-							const t_parser *parser,
-							const t_cst_node *word,
+static inline t_error	convert_for_transfer(
+							t_parser *parser,
+							const t_cst_node *wordlist,
+							size_t child_id,
 							t_ast_for *out)
 {
-	t_token	*token;
-	t_error	err;
+	const t_cst_node	*child;
 
-	err = converter_get_token(parser, word, 0, &token);
-	if (err.type)
-		return (err);
-	if (!vector_push(&out->words, &token))
-		return (error_sys());
-	return (err);
+	child = wordlist->children[child_id];
+	return (converter_transfer_token(parser, child, 0, &out->words));
 }
 
 /*
@@ -27,44 +23,33 @@ wordlist         : wordlist WORD
                  ;
 */
 static inline t_error	convert_for_wordlist(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *wordlist,
 							t_ast_for *out)
 {
 	t_error	err;
 
 	if (wordlist->child_count == 1)
-		return (convert_for_add_word(parser, wordlist->children[0], out));
+		return (convert_for_transfer(parser, wordlist, 0, out));
 	err = convert_for_wordlist(parser, wordlist->children[0], out);
 	if (err.type)
 		return (err);
-	return (convert_for_add_word(parser, wordlist->children[1], out));
+	return (convert_for_transfer(parser, wordlist, 1, out));
 }
 
 
 static inline t_error	convert_for_build_default_word(t_ast_for *out)
 {
-	t_token	*default_word;
+	t_token	default_word;
 	t_error	err;
 
-	default_word = malloc(sizeof(*default_word));
-	if (default_word)
+	token_init(&default_word);
+	if (!string_append_n(&default_word.value, "\"$@\"", -1))
 		return (error_sys());
-	token_init(default_word);
-	if (!string_append_n(&default_word->value, "\"$@\"", -1))
-	{
-		err = error_sys();
-		free(default_word);
-		return (err);
-	}
-	if (!vector_push(&out->words, &default_word))
-	{
-		err = error_sys();
-		token_free(default_word);
-		free(default_word);
-		return (err);
-	}
-	return (error(ERR_NO));
+	err = token_pool_push(&out->words, &default_word);
+	if (err.type)
+		token_free(&default_word);
+	return (err);
 }
 
 /*
@@ -72,17 +57,14 @@ do_group         : Do compound_list Done
                  ;
 */
 static inline t_error	convert_for_clause(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *for_clause,
 							t_ast_for *out)
 {
 	const t_cst_node	*do_group;
 	t_error				err;
 
-	err = converter_get_token(
-		parser, for_clause->children[1], 0, &out->var_name);
-	if (err.type)
-		return (err);
+	converter_take_token(parser, for_clause->children[1], 0, &out->var_name);
 	if (for_clause->child_count <= 4)
 		err = convert_for_build_default_word(out);
 	else if (for_clause->child_count == 7)
@@ -105,7 +87,7 @@ in               : In
                  ;
 */
 t_error	convert_for(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *for_clause,
 			t_ast_for *out)
 {
