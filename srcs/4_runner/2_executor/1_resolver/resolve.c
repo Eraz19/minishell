@@ -1,6 +1,6 @@
 #include "cmd_resolver.h"
 #include "cmd_resolver_priv.h"
-#include "tokens.h"
+#include "token.h"
 #include "expander.h"
 #include "cmd_expansion.h"
 

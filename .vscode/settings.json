@@ -44,7 +44,6 @@
 		"-I${workspaceFolder}/srcs/3_builder/2_parser/3_cst",
 		"-I${workspaceFolder}/srcs/3_builder/3_converter",
 		"-I${workspaceFolder}/srcs/4_runner/0_cmd_expansion",
-		"-I${workspaceFolder}/srcs/4_runner/0_functions",
 		"-I${workspaceFolder}/srcs/4_runner/0_tokens",
 		"-I${workspaceFolder}/srcs/4_runner/1_redirector",
 		"-I${workspaceFolder}/srcs/4_runner/1_redirector/1_stack_and_frame",
@@ -100,6 +99,7 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/1_envp",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory",
 		"-I${workspaceFolder}/srcs/params/4_variables/load/2_mandatory/ft_getppid",
-		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up"
+		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up",
+		"-I${workspaceFolder}/srcs/params/5_functions"
 	]
 }

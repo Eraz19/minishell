@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-static inline void	cmd_exec_in_shell(t_cmd *cmd)
+static inline int	cmd_exec_in_shell(t_cmd *cmd)
 {
 	const char	*shell_name;
 	char		**cmd_name;
@@ -19,7 +19,7 @@ static inline void	cmd_exec_in_shell(t_cmd *cmd)
 	{
 		err = error_print(error_sys(), "runner", "executor",
 				"unable to edit argv in execve fallback", NULL, NULL);
-		exit((int)err.type);	
+		return ((int)err.type);	
 	}
 	cmd_name = &((char **)cmd->argv.data)[1];
 	free(*cmd_name);
@@ -27,7 +27,7 @@ static inline void	cmd_exec_in_shell(t_cmd *cmd)
 	cmd->path.cap = 0;
 	argc = (int)cmd->argv.len - 1;
 	shell_free_void();
-	exit(shell_run(argc, cmd->argv.data, cmd->envp.data));
+	return (shell_run(argc, cmd->argv.data, cmd->envp.data));
 }
 
 static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
@@ -40,18 +40,20 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 			(char *const *)cmd->argv.data,
 			(char *const *)cmd->envp.data);
 	if (errno == ENOEXEC)
-		cmd_exec_in_shell(cmd);
+		exit_status = cmd_exec_in_shell(cmd);
 	else if (errno == ENOENT || errno == ENOTDIR)
 		exit_status = (int)ERR_POSIX_CMD_NOT_FOUND;
 	else
 		exit_status = (int)ERR_POSIX_CMD_NOT_EXECUTABLE;
-	(void)error_print(
-		error((t_error_type)exit_status),
-		"runner",
-		"executor",
-		cmd->name.data,
-		NULL,
-		NULL);
+	if (exit_status == (int)ERR_POSIX_CMD_NOT_FOUND
+		|| exit_status == (int)ERR_POSIX_CMD_NOT_EXECUTABLE)
+		(void)error_print(
+			error((t_error_type)exit_status),
+			"runner",
+			"executor",
+			cmd->name.data,
+			NULL,
+			NULL);
 	exit(exit_status);
 }
 

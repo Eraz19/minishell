@@ -1,34 +1,19 @@
-# WIP EXECUTOR
-
-- `searcher`:
-	- Associer les **regular** builtins à un `bin/` (ex: `echo` match sur `bin/echo`)
-	- update `is_regular_builtin(path)` => si oui requalifier en `CMD_BUILTIN` et set `cmd.builtin`
-	- call `is_regular_builtin()` durant `path search` au lieu de `resolve`
-	- ne pas trigger `cmd_cache_set()` si regular builtin matched
-- `builtins`:
-	- update signature to `t_error <builtin>(t_vector *argv, t_vector *envp, int *exit_status)`
-	- `errors`:
-		- `ERR_NO` => pas d'erreur (quel que soit l'exit status)
-		- `ERR_SYS` => erreur libc / system => critique => always exit
-		- `ERR_BUILTIN_INTERNAL` => erreur interne du builtin => bug => à décider exit ou non
-		- `ERR_BUILTIN` => erreur POSIX => ignorée par `executor` si intrinsic builtin / remontée au runner si special builtin => runner décide exit ou non selon POSIX consequences of errors
-
-# TODO
+# WIP
 
 - `functions`:
 	- ⚠️ `function_set()` + `function_unset()`
-- `executor`:
-	- `dispatcher`:
-		- handle functions
-		- handle errors:
-			- Return correct `exit status` (see [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) `EXIT STATUS` section).
-			- Shall use [exit](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#exit) builtin to exit itself ??
-			- Implement correct [2.8.1 Consequences of Shell Errors](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_08_01).
-	- ⚠️ `exec` specific flow
-	- ⚠️ `command` specific flow
+	- `unset` : trigger `function_unset()`
 - `walker`:
 	- implement all
 	- handle errors (cf `error.h`)
+- `runner-executor`:
+	- `dispatcher`:
+		- `cmd_exec_function()`
+	- ⚠️ `exec` specific flow
+	- ⚠️ `command` specific flow
+
+# TODO
+
 - `shell`:
 	- `subshell`:
 		- subshell
@@ -62,6 +47,8 @@
 - `params`:
 	- `variables`:
 		- Switch `t_vector`s to `t_hashmap` ?
+- `all`:
+	- `clear()` API instead of `free()` for shell reset, subshell, etc (avoid rebuilding lr tables)
 - **ALL REPO**:
 	- use `print_unspecified_behaviour()`
 	- Move `t_tokens` from `runner` to `token` module ?
