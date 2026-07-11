@@ -75,7 +75,7 @@ t_error	alias_expand_token(t_string *expansion, const t_string *token_value)
 		alias->err = alias_stack_push(&alias->stack, token_value->data);
 		if (alias->err.type)
 			return (alias->err);
-		raw = hashmap_get(&alias->map, token_value->data);
+		raw = hashmap_get_const(&alias->map, token_value->data);
 		if (raw == NULL)
 			return (alias->err = error(ERR_INCOHERENT_STATE));
 		if (!string_init(expansion, 0, raw, -1))

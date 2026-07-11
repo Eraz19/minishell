@@ -21,7 +21,7 @@
 bool	cmd_name_is_function(
 			const t_functions *functions,
 			const char *name,
-			const t_function **out_function);
+			t_function **out_function);
 
 /**
  * @brief Test whether a command name is an intrinsic builtin.

@@ -32,7 +32,7 @@ t_error	alias_print_one(t_alias *alias, const char *name)
 		const char *str;
 	}	discalifier;
 
-	value = hashmap_get(&alias->map, name);
+	value = hashmap_get_const(&alias->map, name);
 	if (value == NULL)
 		return (alias->err = error(ERR_ALIAS_NOT_FOUND));
 	pairs = malloc(sizeof(t_key_value *) * 2);

@@ -5,6 +5,7 @@
 # include "options.h"
 # include "specials.h"
 # include "positionals.h"
+# include "functions.h"
 
 /**
  * @struct s_params
@@ -30,6 +31,8 @@ typedef struct s_params
 	t_specials			specials;
 	/** @brief Positional state managed by the positionals submodule. */
 	t_positionals_stack	positionals_stack;
+	// TODO: doc
+	t_functions			functions;
 }	t_params;
 
 /**
@@ -73,6 +76,12 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
+
+// TODO: doc
+t_error	params_set_function(t_ast_function_def *function_def);
+t_error	params_get_function(const char *name, t_function **out);
+t_error	params_unset_function(const char *name);
+void	params_stop_function(t_function **function);
 
 /**
  * @brief Build the exported environment as a @ref t_vector of C-strings.

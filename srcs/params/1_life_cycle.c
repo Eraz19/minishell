@@ -10,6 +10,7 @@ void	params_init(t_params *params)
 	options_init(&params->options);
 	specials_init(&params->specials);
 	positionals_init_stack(&params->positionals_stack);
+	functions_init(&params->functions);
 }
 
 void	params_free(t_params *params)
@@ -20,4 +21,5 @@ void	params_free(t_params *params)
 	options_free(&params->options);
 	specials_free(&params->specials);
 	positionals_free_stack(&params->positionals_stack);
+	functions_free(&params->functions);
 }
