@@ -22,9 +22,8 @@ t_error	walk_command(t_runner *runner, t_ast_command *command)
 		return (cmd_execute(runner, &command->data.simple));
 	else if (command->type == AST_CMD_FUNCTION_DEF)
 		return (params_set_function(&command->data.function_def));
-	(void)error_print(error(ERR_NOT_IMPLEMENTED), "walker", NULL,
-		"command type %s", ast_command_type_to_string(command->type));
-	return (error(ERR_NO));
+	return (error_print(error(ERR_NOT_IMPLEMENTED), "walker", NULL,
+		"command type %s", ast_command_type_to_string(command->type)));
 }
 
 t_error	walk_pipeline(t_runner *runner, t_ast_pipeline *pipeline)

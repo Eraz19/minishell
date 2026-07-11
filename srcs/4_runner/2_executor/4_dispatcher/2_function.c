@@ -49,6 +49,12 @@ static inline t_error	cmd_process_body(t_cmd *cmd, t_runner *runner)
 	t_error	err;
 
 	err = walk_command(runner, &cmd->function->body);
+	if (err.type == ERR_NOT_IMPLEMENTED)
+	{
+		cmd->exit_status = (int)err.type;
+		err.type = ERR_NO;
+		return (err);
+	}
 	// TODO: handle controls (e.g. ERR_RETURN)
 	if (err.type == ERR_NO)
 		err = params_get_last_status(&cmd->exit_status);

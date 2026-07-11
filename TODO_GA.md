@@ -4,6 +4,8 @@
 	- should store a ptr / index to `history` to never invalidate `t_token_index`
 	- => `function` simplified (évite de parcourir tout l'AST pour update les `token`)
 	- => detailed `errors` always available
+- ⚠️ `history`:
+	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
 - ✅ `hashmap`:
 	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
 	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
