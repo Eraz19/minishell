@@ -412,6 +412,25 @@ void	debug_dump_cst(t_cst_node *node)
 /*                                    AST                                    */
 /* ************************************************************************* */
 
+const char	*ast_command_type_to_string(t_ast_command_type type)
+{
+	if (type == AST_CMD_SIMPLE)
+		return ("SIMPLE");
+	if (type == AST_CMD_LIST)
+		return ("LIST");
+	if (type == AST_CMD_IF)
+		return ("IF");
+	if (type == AST_CMD_FOR)
+		return ("FOR");
+	if (type == AST_CMD_LOOP)
+		return ("LOOP");
+	if (type == AST_CMD_CASE)
+		return ("CASE");
+	if (type == AST_CMD_FUNCTION_DEF)
+		return ("FUNCTION_DEF");
+	return ("INVALID");
+}
+
 #ifdef DEBUG_AST
 #define AST_AT(type, vec, i) (&((type *)(vec)->data)[i])
 
@@ -509,25 +528,6 @@ static const char	*ast_redir_op_to_string(t_ast_redir_op op)
 		return ("CLOBBER");
 	if (op == AST_REDIR_READ_WRITE)
 		return ("READ_WRITE");
-	return ("INVALID");
-}
-
-static const char	*ast_command_type_to_string(t_ast_command_type type)
-{
-	if (type == AST_CMD_SIMPLE)
-		return ("SIMPLE");
-	if (type == AST_CMD_LIST)
-		return ("LIST");
-	if (type == AST_CMD_IF)
-		return ("IF");
-	if (type == AST_CMD_FOR)
-		return ("FOR");
-	if (type == AST_CMD_LOOP)
-		return ("LOOP");
-	if (type == AST_CMD_CASE)
-		return ("CASE");
-	if (type == AST_CMD_FUNCTION_DEF)
-		return ("FUNCTION_DEF");
 	return ("INVALID");
 }
 

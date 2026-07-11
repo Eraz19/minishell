@@ -49,6 +49,6 @@ t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner);
  * @param cmd Function command descriptor (borrowed).
  * @return @c ERR_NOT_IMPLEMENTED.
  */
-t_error	cmd_exec_function(t_cmd *cmd);
+t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner);
 
 #endif

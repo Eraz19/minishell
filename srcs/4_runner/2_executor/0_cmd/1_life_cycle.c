@@ -1,5 +1,6 @@
 #include "cmd.h"
 #include "utils.h"
+#include "params.h"
 
 void	cmd_init(t_cmd *cmd)
 {
@@ -17,6 +18,8 @@ void	cmd_init(t_cmd *cmd)
 
 void	cmd_free(t_cmd *cmd)
 {
+	if (cmd->type == CMD_FUNCTION)
+		params_stop_function(&cmd->function);
 	string_free(&cmd->name);
 	cmd->type = CMD_NONE;
 	cmd->is_declaration_utility = false;
@@ -24,7 +27,6 @@ void	cmd_free(t_cmd *cmd)
 	vector_free(&cmd->envp, free_char_ptr_void);
 	string_free(&cmd->path);
 	cmd->builtin = NULL;
-	cmd->function = NULL;
 	cmd->path_is_temporary = false;
 	cmd->exit_status = (int)ERR_NO;
 }

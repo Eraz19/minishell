@@ -1,28 +1,24 @@
 # ALEXANDER
 
-- `token`:
+- ⚠️ `token`:
 	- should store a ptr / index to `history` to never invalidate `t_token_index`
 	- => `function` simplified (évite de parcourir tout l'AST pour update les `token`)
 	- => detailed `errors` always available
-- `hashmap`:
+- ✅ `hashmap`:
 	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
 	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
 
 # WIP
 
-- `functions`:
-	- ⚠️ `function_set()` + `function_unset()`
-	- `unset` : trigger `function_unset()`
-- `walker`:
-	- implement all
-	- handle errors (cf `error.h`)
 - `runner-executor`:
 	- `dispatcher`:
 		- `cmd_exec_function()`
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
-- `posix_read_all()`
-
+	- ⚠️ set `params.specials.last_status`
+- `walker`:
+	- implement all
+	- handle errors (cf `error.h`)
 - `runner`:
 	- `error` handling (exit status, exit or not...)
 - ⚠️ `heredoc`:
@@ -36,6 +32,7 @@
 		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
 		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
 		- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
+- `posix_read_all()`
 
 # TODO
 

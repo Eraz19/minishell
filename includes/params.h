@@ -82,6 +82,7 @@ t_error	params_set_function(t_ast_function_def *function_def);
 t_error	params_get_function(const char *name, t_function **out);
 t_error	params_unset_function(const char *name);
 void	params_stop_function(t_function **function);
+t_error	params_get_last_status(int *out);
 
 /**
  * @brief Build the exported environment as a @ref t_vector of C-strings.

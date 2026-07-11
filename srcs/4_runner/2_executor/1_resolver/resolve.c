@@ -4,7 +4,7 @@
 #include "expander.h"
 #include "cmd_expansion.h"
 
-static inline void	cmd_compute_name(t_cmd *cmd, const t_functions *functions)
+static inline void	cmd_compute_name(t_cmd *cmd)
 {
 	cmd->is_declaration_utility = 
 		str_cmp(cmd->name.data, "export") == 0
@@ -20,7 +20,7 @@ static inline void	cmd_compute_name(t_cmd *cmd, const t_functions *functions)
 		return ;
 	}
 	cmd_warn_if_unspecified(cmd->name.data);
-	if (cmd_name_is_function(functions, cmd->name.data, &cmd->function))
+	if (cmd_name_is_function(cmd->name.data, &cmd->function))
 		cmd->type = CMD_FUNCTION;
 	else if (cmd_name_is_intrinsic_builtin(cmd->name.data, &cmd->builtin))
 		cmd->type = CMD_BUILTIN;
@@ -29,10 +29,7 @@ static inline void	cmd_compute_name(t_cmd *cmd, const t_functions *functions)
 }
 
 // @ret ERR_LIBC
-static inline t_error	cmd_add_to_argv(
-							t_cmd *cmd,
-							const t_functions *functions,
-							const t_expansion *expansion)
+static inline t_error	cmd_add_to_argv(t_cmd *cmd, const t_expansion *expansion)
 {
 	t_string	*expanded_word;
 	size_t		i;
@@ -51,16 +48,13 @@ static inline t_error	cmd_add_to_argv(
 		expanded_word = &((t_string *)expansion->data)[0];
 		cmd->name.data = expanded_word->data;
 		cmd->name.len = expanded_word->len;
-		cmd_compute_name(cmd, functions);
+		cmd_compute_name(cmd);
 	}
 	return (error(ERR_NO));
 }
 
 // @ret TODO
-static inline t_error	cmd_expand_word(
-							t_cmd *cmd,
-							const t_functions *functions,
-							const t_token *word)
+static inline t_error	cmd_expand_word(t_cmd *cmd, const t_token *word)
 {
 	t_exp_flag		flags;
 	t_expansion		expansion;
@@ -74,15 +68,12 @@ static inline t_error	cmd_expand_word(
 	err = expand_token(&expansion, word, flags);
 	if (err.type)
 		return (err);
-	err = cmd_add_to_argv(cmd, functions, &expansion);
+	err = cmd_add_to_argv(cmd, &expansion);
 	expansion_free(&expansion);
 	return (err);
 }
 
-t_error	cmd_resolve(
-			t_cmd *cmd,
-			const t_functions *functions,
-			const t_token_pool *words)
+t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words)
 {
 	size_t			index;
 	char			*null;
@@ -94,7 +85,7 @@ t_error	cmd_resolve(
 	while (index < words->len && err.type == ERR_NO)
 	{
 		word = token_pool_get(words, index);
-		err = cmd_expand_word(cmd, functions, word);
+		err = cmd_expand_word(cmd, word);
 		index++;
 	}
 	if (err.type == ERR_NO)

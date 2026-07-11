@@ -1,6 +1,8 @@
 #include "error.h"
 #include "walker.h"
 #include "executor.h"
+#include "params.h"
+# include "debug.h"
 
 t_error	walk_command(t_runner *runner, t_ast_command *command)
 {
@@ -18,7 +20,11 @@ t_error	walk_command(t_runner *runner, t_ast_command *command)
 	*/
 	if (command->type == AST_CMD_SIMPLE)
 		return (cmd_execute(runner, &command->data.simple));
-	return (error_print(error(ERR_NOT_IMPLEMENTED), "walker", NULL, "command type %i", command->type));
+	else if (command->type == AST_CMD_FUNCTION_DEF)
+		return (params_set_function(&command->data.function_def));
+	(void)error_print(error(ERR_NOT_IMPLEMENTED), "walker", NULL,
+		"command type %s", ast_command_type_to_string(command->type));
+	return (error(ERR_NO));
 }
 
 t_error	walk_pipeline(t_runner *runner, t_ast_pipeline *pipeline)

@@ -183,7 +183,7 @@ t_error cmd_execute(t_runner *runner, t_ast_scmd *simple_command)
 	t_error	err;
 
 	cmd_init(&cmd);
-	err = cmd_resolve(&cmd, &runner->functions, &simple_command->words);
+	err = cmd_resolve(&cmd, &simple_command->words);
 	if (err.type)
 		return (cmd_finalize(&cmd, runner, err, false));
 	err = cmd_redirect_start(&cmd, &runner->redirector, simple_command);
