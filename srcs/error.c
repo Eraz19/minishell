@@ -232,3 +232,28 @@ t_error	error_print(t_error err, ...)
 	(void)posix_write(STDERR_FILENO, "\n", 1);
 	return (err.printed = true, err);
 }
+
+static inline int	error_priority(t_error err)
+{
+	if (err.type == ERR_LIBC)
+		return (10);
+	else if (err.type == ERR_INTERNAL)
+		return (9);
+	else if (err.type == ERR_UB)
+		return (8);
+	else if (err.type == ERR_INTERRUPTED)
+		return (7);
+	else if (err.type >= ERR_POSIX_SYNTAX)
+		return (6);
+	else if (err.type >= ERR_POSIX_WRITE)
+		return (5);
+	else
+		return (0);
+}
+
+t_error	error_priorize(t_error a, t_error b)
+{
+	if (error_priority(a) >= error_priority(b))
+		return (a);
+	return (b);
+}

@@ -48,45 +48,46 @@ typedef enum e_error_type
 	ERR_BAD_SUBSTITUTION,
 	ERR_ALIAS_NOT_FOUND,
 	// FT_GETOPT
-	ERR_OPT_INVALID,						// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_INVALID_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_MISSING_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID,						// [0] [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID_ARG,					// [0] [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_MISSING_ARG,					// [0] [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
 	// posix_write()
-	ERR_POSIX_WRITE,						// [CALLER]		write error (special POSIX treatment required)
+	ERR_POSIX_WRITE,						// [ 5] [CALLER]	write error (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
-	ERR_INVALID_USAGE,						// [CALLER]		Options and / or arguments are invalid
+	ERR_INVALID_USAGE,						// [ 5] [CALLER]	Options and / or arguments are invalid
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION,						// [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
+	ERR_REDIRECTION,						// [ 5] [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
-	ERR_BUILTIN,							// [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
+	ERR_BUILTIN,							// [ 5] [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// GENERIC ERRORS (can be returned by any module or builtin)
-	ERR_INTERRUPTED = 116,					// [-]			[Y-Y-?] Shell interrupted by signal
-	ERR_UB = 117,							// [-]			[?-?-Y]	Undefined behaviour
-	ERR_INTERNAL = 118,						// [-]			[Y-Y-Y]	Shell internal error
-	ERR_LIBC = 119,							// [-]			[Y-Y-Y]	System or libc error
+	ERR_INTERRUPTED = 116,					// [ 7] [-]			[Y-Y-?] Shell interrupted by signal
+	ERR_UB = 117,							// [ 8] [-]			[?-?-Y]	Undefined behaviour
+	ERR_INTERNAL = 118,						// [ 9] [-]			[Y-Y-Y]	Shell internal error
+	ERR_LIBC = 119,							// [10] [-]			[Y-Y-Y]	System or libc error
 	// POSIX EXIT CODES
-	ERR_POSIX_SYNTAX = 120,					// [-]			[Y-N-Y] Shell language syntax error
-	ERR_POSIX_BUILTIN_SPECIAL = 121,		// [-]			[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
-	ERR_REDIRECTION_SPECIAL = 122,			// [-]			[Y-N-Y] Redirection error with special built-in utilities
-	ERR_REDIRECTION_OTHER = 123,			// [-]			[N-N-Y] Redirection error with non-special built-in utilities
-	ERR_POSIX_ASSIGNMENT = 124,				// [-]			[Y-N-Y] Variable assignment error
-	ERR_POSIX_EXPANSION = 125,				// [-]			[Y-N-Y] Expansion error
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [-]			???
-	ERR_POSIX_CMD_NOT_FOUND = 127,			// [-]			[?-N-Y] Command not found
-	ERR_POSIX_READ = 128,					// [-]			[Y-Y-Y] Unrecoverable read error when reading commands
+	ERR_POSIX_SYNTAX = 120,					// [ 6] [-]			[Y-N-Y] Shell language syntax error
+	ERR_POSIX_BUILTIN_SPECIAL = 121,		// [ 6] [-]			[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
+	ERR_REDIRECTION_SPECIAL = 122,			// [ 6] [-]			[Y-N-Y] Redirection error with special built-in utilities
+	ERR_REDIRECTION_OTHER = 123,			// [ 6] [-]			[N-N-Y] Redirection error with non-special built-in utilities
+	ERR_POSIX_ASSIGNMENT = 124,				// [ 6] [-]			[Y-N-Y] Variable assignment error
+	ERR_POSIX_EXPANSION = 125,				// [ 6] [-]			[Y-N-Y] Expansion error
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [-]			???
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [-]			[?-N-Y] Command not found
+	ERR_POSIX_READ = 128,					// [ 6] [-]			[Y-Y-Y] Unrecoverable read error when reading commands
 	// POSIX SIGNAL CODES (128 + signal code)
 }	t_error_type;
 /*
 Legend:
+	[n]			=> error priority => the error with the highest priority shall win
 	[<module>]	=> module in charge of error requalification ("-" means fully qualified)
 	[A-B-C]		=> A = shall exit (non-interactive) | B = shall exit (interactive) | C = shall print diagnostic
 	Errors should be printed as they are requalified to avoid losing diagnostic precision
 	Only final error codes are set to specific values => they are the exit status of the shell itself
 */
 
-// ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
+// TODO: ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
 
 #define error(type) error_priv(type, __FILE__, __LINE__, __func__)	//DEBUG
 #define error_sys() error_sys_priv(__FILE__, __LINE__, __func__)	//DEBUG
@@ -146,6 +147,8 @@ t_error	error_sys_priv(const char *file, int line, const char *caller);	// DEBUG
  * @return The error descriptor received as argument.
  */
 t_error	error_print(t_error err, ...);
+
+t_error	error_priorize(t_error a, t_error b);
 
 const char	*error_to_string(t_error err);
 
