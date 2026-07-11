@@ -34,6 +34,13 @@ typedef struct s_shell
 	t_scanner	scanner;
 }	t_shell;
 
+typedef enum e_subshell_mode
+{
+	SUBSHELL_NORMAL,
+	SUBSHELL_CMD_SUB_TRAP_ONLY,	// command substitution containing only a trap command
+	SUBSHELL_ASYNC_AND_OR		// async AND-OR list
+}	t_subshell_mode;
+
 /* ************************************************************************* */
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
@@ -48,6 +55,15 @@ void	shell_free_void(void);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
+
+/**
+ * @brief Reconfigures the current shell state for subshell execution.
+ *
+ * @param mode Subshell initialization mode.
+ * @return @c ERR_NO on success, @c ERR_INTERNAL , @c ERR_INTERRUPTED
+ *			or @c ERR_LIBC on failure.
+ */
+t_error	shell_init_subshell(t_subshell_mode mode);
 
 /**
  * @brief Returns the current global shell instance.
