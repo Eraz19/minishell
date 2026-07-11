@@ -7,7 +7,6 @@
 
 /* -------------------- helpers -------------------- */
 
-t_error	walk_wait(pid_t pid, int *exit_status);
 t_error	walk_normalize_output(t_error err, t_error *opt_err, int *exit_status);
 
 /* -------------------- walkers -------------------- */

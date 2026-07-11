@@ -6,6 +6,7 @@ t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner, int *exit_status)
 	if (cmd->type == CMD_NONE)
 	{
 		cmd->exit_status = 0;
+		*exit_status = 0;
 		return (error(ERR_NO));
 	}
 	else if (cmd->type == CMD_SPECIAL_BUILTIN || cmd->type == CMD_BUILTIN)

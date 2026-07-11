@@ -47,36 +47,38 @@ typedef enum e_error_type
 	ERR_BAD_SUBSTITUTION,					// [1]
 	ERR_ALIAS_NOT_FOUND,					// [1]
 	// FT_GETOPT
-	ERR_OPT_INVALID,						// [1] [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_INVALID_ARG,					// [1] [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_MISSING_ARG,					// [1] [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID,						// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID_ARG,					// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_MISSING_ARG,					// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
 	ERR_VEOF,								// [2]
 	// posix_write()
-	ERR_POSIX_WRITE,						// [ 5] [CALLER]	write error (special POSIX treatment required)
+	ERR_POSIX_WRITE,						// [ 4] [CALLER]		write error (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
-	ERR_INVALID_USAGE,						// [ 5] [CALLER]	Options and / or arguments are invalid
+	ERR_INVALID_USAGE,						// [ 4] [CALLER]		Options and / or arguments are invalid
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION,						// [ 5] [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
+	ERR_REDIRECTION,						// [ 4] [EXECUTOR]		Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
-	ERR_BUILTIN,							// [ 5] [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
+	ERR_BUILTIN,							// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
+	/* -------------------- FLOW CONTROL ERRORS -------------------- */
+	ERR_RETURN,								// [ 5] [FUNC WALKER]	Requalified as ERR_NO (exit status is produced by the builtin)
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// GENERIC ERRORS (can be returned by any module or builtin)
-	ERR_INTERRUPTED = 116,					// [ 7] [-]			[Y-Y-?] Shell interrupted by signal
-	ERR_UB = 117,							// [ 8] [-]			[?-?-Y]	Undefined behaviour
-	ERR_INTERNAL = 118,						// [ 9] [-]			[Y-Y-Y]	Shell internal error
-	ERR_LIBC = 119,							// [10] [-]			[Y-Y-Y]	System or libc error
+	ERR_INTERRUPTED = 116,					// [ 7] [-]				[Y-Y-?] Shell interrupted by signal
+	ERR_UB = 117,							// [ 8] [-]				[?-?-Y]	Undefined behaviour
+	ERR_INTERNAL = 118,						// [ 9] [-]				[Y-Y-Y]	Shell internal error
+	ERR_LIBC = 119,							// [10] [-]				[Y-Y-Y]	System or libc error
 	// POSIX EXIT CODES
-	ERR_POSIX_SYNTAX = 120,					// [ 6] [-]			[Y-N-Y] Shell language syntax error
-	ERR_POSIX_BUILTIN_SPECIAL = 121,		// [ 6] [-]			[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
-	ERR_REDIRECTION_SPECIAL = 122,			// [ 6] [-]			[Y-N-Y] Redirection error with special built-in utilities
-	ERR_REDIRECTION_OTHER = 123,			// [ 6] [-]			[N-N-Y] Redirection error with non-special built-in utilities
-	ERR_POSIX_ASSIGNMENT = 124,				// [ 6] [-]			[Y-N-Y] Variable assignment error
-	ERR_POSIX_EXPANSION = 125,				// [ 6] [-]			[Y-N-Y] Expansion error
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [-]			???
-	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [-]			[?-N-Y] Command not found
-	ERR_POSIX_READ = 128,					// [ 6] [-]			[Y-Y-Y] Unrecoverable read error when reading commands
-	// POSIX SIGNAL CODES (128 + signal code)
+	ERR_POSIX_SYNTAX = 120,					// [ 6] [-]				[Y-N-Y] Shell language syntax error
+	ERR_POSIX_BUILTIN_SPECIAL = 121,		// [ 6] [-]				[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
+	ERR_REDIRECTION_SPECIAL = 122,			// [ 6] [-]				[Y-N-Y] Redirection error with special built-in utilities
+	ERR_REDIRECTION_OTHER = 123,			// [ 6] [-]				[N-N-Y] Redirection error with non-special built-in utilities
+	ERR_POSIX_ASSIGNMENT = 124,				// [ 6] [-]				[Y-N-Y] Variable assignment error
+	ERR_POSIX_EXPANSION = 125,				// [ 6] [-]				[Y-N-Y] Expansion error
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [-]				???
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [-]				[?-N-Y] Command not found
+	ERR_POSIX_READ = 128,					// [ 6] [-]				[Y-Y-Y] Unrecoverable read error when reading commands
+	// POSIX SIGNAL CODES (128 + signal)	// [ 6] [-]
 }	t_error_type;
 /*
 Legend:

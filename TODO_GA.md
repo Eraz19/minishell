@@ -8,14 +8,34 @@
 	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
 - ⚠️ `heredoc`:
 	- use `$TMPDIR`
+- ⚠️ `expander`:
+	- doit retourner le statut de la dernière `command substitution`:
+```bash
+VAR=value          => status 0
+VAR=$(true)        => status 0
+VAR=$(false)       => status 1
+VAR=${bad syntax}  => ERR_POSIX_EXPANSION
+```
+- 🚧 `shell`:
+	- `shell_init_subshell()`: (only missing traps / signal handling)
 - ✅ `hashmap`:
 	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
 	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
+- ✅ `ast`:
+	- now fully owned (massive refactor)
+- ✅ `redirector`:
+	- refactored for `ast` updates
+- ✅ `executor`:
+	- refactored for `ast` updates
 - ✅ `functions`:
-	- `ast` fully owned
 	- `set()` / `unset()` / `get()` / `stop()`
 - ✅ `heredoc`:
 	- correctly `unlink()` (best effort)
+- ✅ `error`:
+	- priorization helpers
+- ✅ `walker`:
+	- `functions` fully implemented
+	- `pipeline` fully implemented
 
 # WIP
 

@@ -43,4 +43,8 @@ t_error	posix_dup(int fd, int *out);
 // @ret ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_dup2(int fd_from, int fd_to);
 
+// @note waits for target pid before returning on ERR_INTERRUPTED
+// @ret ERR_LIBC / ERR_INTERRUPTED
+t_error	posix_wait(pid_t pid, int *exit_status);
+
 #endif

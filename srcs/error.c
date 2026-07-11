@@ -245,8 +245,10 @@ static inline int	error_priority(t_error err)
 		return (7);
 	else if (err.type >= ERR_POSIX_SYNTAX)
 		return (6);
-	else if (err.type >= ERR_POSIX_WRITE)
+	else if (err.type >= ERR_RETURN)
 		return (5);
+	else if (err.type >= ERR_POSIX_WRITE)
+		return (4);
 	else if (err.type == ERR_VEOF)
 		return (2);
 	else if (err.type == ERR_NO)

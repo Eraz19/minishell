@@ -127,10 +127,21 @@ static inline t_error	cmd_redirect_start(
 							t_redirector *redirector,
 							const t_ast_scmd *simple_command)
 {
+	t_error	err;
+
 	// TODO: cf big TODO at the top of the file
 	if (cmd->builtin == builtin_exec)
-		return (redirect_commit(redirector, &simple_command->redirs));
-	return (redirect_start(redirector, &simple_command->redirs));
+		err = redirect_commit(redirector, &simple_command->redirs);
+	else
+		err = redirect_start(redirector, &simple_command->redirs);
+	if (err.type == ERR_REDIRECTION)
+	{
+		if (cmd->type == CMD_SPECIAL_BUILTIN)
+			err.type = ERR_REDIRECTION_SPECIAL;
+		else
+			err.type = ERR_REDIRECTION_OTHER;
+	}
+	return (err);
 }
 
 static inline t_error	cmd_redirect_stop(t_cmd *cmd, t_redirector *redirector)
@@ -151,16 +162,16 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 # include <stdio.h>
 t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied, int *exit_status)
 {
-	if (err.type && cmd->exit_status == 0)
-		cmd->exit_status = (int)err.type;
-	*exit_status = cmd->exit_status;
 	if (err.type == ERR_REDIRECTION_OTHER)
 	{
 		(void)error_print(err, "runner", "executor", NULL, NULL);
+		if (cmd->exit_status < 0)
+			cmd->exit_status = (int)ERR_REDIRECTION_OTHER;
 		err = error(ERR_NO);
 	}
 	if (redir_applied == true)
-		(void)cmd_redirect_stop(cmd, &runner->redirector);
+		err = error_priorize(err, cmd_redirect_stop(cmd, &runner->redirector));
+	*exit_status = cmd->exit_status;
 	/* ---------- DEBUG (START) ---------- */
 	fprintf(stderr, "--------------------------------------------------\n");
 	fprintf(stderr, "[EXECUTOR] [%s()] exit_status = %i\n", __func__, *exit_status);

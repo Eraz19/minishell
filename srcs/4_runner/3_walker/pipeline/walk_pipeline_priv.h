@@ -38,7 +38,14 @@ t_error	walk_pipe_single_command(
 			t_ast_pipeline *pipeline,
 			int *exit_status);
 
-/* -------------------- wait.c -------------------- */
+/* -------------------- multiple_commands.c -------------------- */
+
+t_error	walk_pipe_multiple_commands(
+							t_runner *runner,
+							t_ast_pipeline *pipeline,
+							int *exit_status);
+
+/* -------------------- finalize.c -------------------- */
 
 t_error	walk_pipe_finalize(t_pipe_run *run);
 
