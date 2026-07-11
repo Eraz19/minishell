@@ -19,6 +19,8 @@
 
 # WIP
 
+- refactor `fds` in `pipe_run` to avoid double_close
+
 - `walker`:
 	- implement all
 	- handle errors (cf `error.h`)
@@ -47,6 +49,7 @@
 	- process `ENV`:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
+	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
 - `runner`:
 	- set `stdin` to blocking mode (main loop ?)
 	- unlink heredoc path after use

@@ -57,7 +57,7 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 	exit(exit_status);
 }
 
-static inline t_error	cmd_exec_parent(t_cmd *cmd, pid_t child_pid)
+static inline t_error	cmd_exec_parent(pid_t child_pid, int *exit_status)
 {
 	int		status;
 	t_error	err;
@@ -66,11 +66,10 @@ static inline t_error	cmd_exec_parent(t_cmd *cmd, pid_t child_pid)
 	{
 		if (errno == EINTR)
 		{
-			(void)err;
 			err = shell_should_interrupt();
 			if (err.type)
 			{
-				cmd->exit_status = (int)ERR_POSIX_CMD_NOT_EXECUTABLE;
+				*exit_status = (int)ERR_POSIX_CMD_NOT_EXECUTABLE;
 				return (err);
 			}
 			continue ;
@@ -78,20 +77,28 @@ static inline t_error	cmd_exec_parent(t_cmd *cmd, pid_t child_pid)
 		return (error_sys());
 	}
 	if (WIFEXITED(status))
-		cmd->exit_status = WEXITSTATUS(status);
+		*exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		cmd->exit_status = ERR_POSIX_SIGNAL_BASE_CODE + WTERMSIG(status);
+		*exit_status = ERR_POSIX_SIGNAL_BASE_CODE + WTERMSIG(status);
 	return (error(ERR_NO));
 }
 
-t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner)
+t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner, int *exit_status)
 {
 	pid_t	pid;
+	t_error	err;
 
 	pid = fork();
 	if (pid < 0)
-		return (error_sys());
+	{
+		err = error_sys();
+		cmd->exit_status = (int)err.type;
+		*exit_status = cmd->exit_status;
+		return (err);
+	}
 	else if (pid == 0)
 		cmd_exec_child(cmd, runner);
-	return (cmd_exec_parent(cmd, pid));
+	err = cmd_exec_parent(pid, exit_status);
+	cmd->exit_status = *exit_status;
+	return (err);
 }

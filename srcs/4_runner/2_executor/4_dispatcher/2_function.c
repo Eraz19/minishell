@@ -48,7 +48,7 @@ static inline t_error	cmd_process_body(t_cmd *cmd, t_runner *runner)
 {
 	t_error	err;
 
-	err = walk_command(runner, &cmd->function->body);
+	err = walk_command(runner, &cmd->function->body, &cmd->exit_status);
 	if (err.type == ERR_NOT_IMPLEMENTED)
 	{
 		cmd->exit_status = (int)err.type;
@@ -73,24 +73,33 @@ static inline t_error	cmd_cleanup(t_cmd *cmd, t_runner *runner, t_error err)
 	else
 		cleanup_err = params_pop_positionals();
 	if (cleanup_err.type && cmd->exit_status == (int)ERR_NO)
-		return (cmd->exit_status = (int)cleanup_err.type, cleanup_err);
+		cmd->exit_status = (int)cleanup_err.type;
+	if (cleanup_err.type)
+		return (cleanup_err);
 	return (err);
 }
 
-t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner)
+t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner, int *exit_status)
 {
 	t_error	err;
 
 	err = cmd_update_positionals(cmd);
 	if (err.type)
-		return (cmd->exit_status = (int)err.type, err);
+	{
+		cmd->exit_status = (int)err.type;
+		*exit_status = cmd->exit_status;
+		return (err);
+	}
 	err = redirect_start(&runner->redirector, &cmd->function->redirs);
 	if (err.type)
 	{
 		cmd->exit_status = (int)ERR_REDIRECTION_OTHER;
+		*exit_status = cmd->exit_status;
 		(void)params_pop_positionals();
 		return (err);
 	}
 	err = cmd_process_body(cmd, runner);
-	return (cmd_cleanup(cmd, runner, err));
+	err = cmd_cleanup(cmd, runner, err);
+	*exit_status = cmd->exit_status;
+	return (err);
 }

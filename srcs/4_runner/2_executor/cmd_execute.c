@@ -6,7 +6,6 @@
 #include "cmd_assignator.h"
 #include "cmd_searcher.h"
 #include "cmd_dispatcher.h"
-#include "params.h"
 
 /*
 TODO: fix `exec` builtin handling
@@ -126,7 +125,7 @@ TODO: fix `exec` builtin handling
 static inline t_error	cmd_redirect_start(
 							const t_cmd *cmd,
 							t_redirector *redirector,
-							t_ast_scmd *simple_command)
+							const t_ast_scmd *simple_command)
 {
 	// TODO: cf big TODO at the top of the file
 	if (cmd->builtin == builtin_exec)
@@ -150,34 +149,29 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 }
 
 # include <stdio.h>
-// TODO: implement
-// TODO: requalify error but let runner loop decide if shell must exit or not ?
-t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied)
+t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied, int *exit_status)
 {
 	if (err.type && cmd->exit_status == 0)
 		cmd->exit_status = (int)err.type;
+	*exit_status = cmd->exit_status;
 	if (err.type == ERR_REDIRECTION_OTHER)
 	{
 		(void)error_print(err, "runner", "executor", NULL, NULL);
 		err = error(ERR_NO);
 	}
-	(void)params_set_last_status(cmd->exit_status);
 	if (redir_applied == true)
 		(void)cmd_redirect_stop(cmd, &runner->redirector);
 	/* ---------- DEBUG (START) ---------- */
 	fprintf(stderr, "--------------------------------------------------\n");
-	fprintf(stderr, "[EXECUTOR] [%s()] cmd.exit_status = %i\n", __func__, cmd->exit_status);
-	t_string saved_status;
-	(void)params_get_from_const("?", &saved_status);
-	fprintf(stderr, "[EXECUTOR] [%s()] $?              = %s\n", __func__, saved_status.data);
-	fprintf(stderr, "[EXECUTOR] [%s()] error           = %s\n", __func__, error_to_string(err));
+	fprintf(stderr, "[EXECUTOR] [%s()] exit_status = %i\n", __func__, *exit_status);
+	fprintf(stderr, "[EXECUTOR] [%s()] error       = %s\n", __func__, error_to_string(err));
 	fprintf(stderr, "--------------------------------------------------\n");
 	/* ---------- DEBUG (END) ---------- */
 	cmd_free(cmd);
 	return (err);
 }
 
-t_error cmd_execute(t_runner *runner, t_ast_scmd *simple_command)
+t_error cmd_execute(t_runner *runner, const t_ast_scmd *simple_command, int *exit_status)
 {
 	t_cmd	cmd;
 	t_error	err;
@@ -185,19 +179,19 @@ t_error cmd_execute(t_runner *runner, t_ast_scmd *simple_command)
 	cmd_init(&cmd);
 	err = cmd_resolve(&cmd, &simple_command->words);
 	if (err.type)
-		return (cmd_finalize(&cmd, runner, err, false));
+		return (cmd_finalize(&cmd, runner, err, false, exit_status));
 	err = cmd_redirect_start(&cmd, &runner->redirector, simple_command);
 	if (err.type)
-		return (cmd_finalize(&cmd, runner, err, false));
+		return (cmd_finalize(&cmd, runner, err, false, exit_status));
 	err = cmd_assign(&cmd, &simple_command->assignments);
 	if (err.type)
-		return (cmd_finalize(&cmd, runner, err, true));
+		return (cmd_finalize(&cmd, runner, err, true, exit_status));
 	if (cmd.type == CMD_EXTERNAL)
 	{
 		err = cmd_search_(&cmd, &runner->cmd_cache);
 		if (err.type)
-			return (cmd_finalize(&cmd, runner, err, true));
+			return (cmd_finalize(&cmd, runner, err, true, exit_status));
 	}
-	err = cmd_dispatch(&cmd, runner);
-	return (cmd_finalize(&cmd, runner, err, true));
+	err = cmd_dispatch(&cmd, runner, exit_status);
+	return (cmd_finalize(&cmd, runner, err, true, exit_status));
 }

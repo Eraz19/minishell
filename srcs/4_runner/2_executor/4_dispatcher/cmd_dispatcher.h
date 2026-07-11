@@ -20,6 +20,6 @@
  * @param runner Runner state used for external commands (borrowed).
  * @return @c ERR_NO, @c ERR_NOT_IMPLEMENTED or @c ERR_LIBC.
  */
-t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner);
+t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner, int *exit_status);
 
 #endif

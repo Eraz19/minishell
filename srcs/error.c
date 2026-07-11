@@ -247,8 +247,12 @@ static inline int	error_priority(t_error err)
 		return (6);
 	else if (err.type >= ERR_POSIX_WRITE)
 		return (5);
-	else
+	else if (err.type == ERR_VEOF)
+		return (2);
+	else if (err.type == ERR_NO)
 		return (0);
+	else
+		return (1);
 }
 
 t_error	error_priorize(t_error a, t_error b)

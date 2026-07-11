@@ -25,12 +25,14 @@ static inline t_error	reset_scanner_and_builder(void)
 static inline t_error	runner_loop_cycle(t_runner *runner)
 {
 	t_ast_root	ast_root;
+	int			exit_status;
 	t_error		err;
 
 	ast_root_init(&ast_root);
 	err = builder_get_ast(&ast_root);
 	if (err.type == ERR_NO)
-		err = walk(runner, &ast_root);
+		err = walk(runner, &ast_root, &exit_status);
+	// TODO: handle exit status
 	// TODO: handle errors directly in walker / executor
 	if (err.type == ERR_POSIX_CMD_NOT_EXECUTABLE || err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
 		err = error(ERR_NO);

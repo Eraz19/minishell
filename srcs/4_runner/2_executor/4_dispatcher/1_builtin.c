@@ -1,6 +1,6 @@
 #include "cmd_dispatcher_priv.h"
 
-t_error	cmd_exec_builtin(t_cmd *cmd)
+t_error	cmd_exec_builtin(t_cmd *cmd, int *exit_status)
 {
 	int		argc;
 	t_error	err;
@@ -14,5 +14,6 @@ t_error	cmd_exec_builtin(t_cmd *cmd)
 		else
 			err.type = ERR_NO;
 	}
+	*exit_status = cmd->exit_status;
 	return (err);
 }

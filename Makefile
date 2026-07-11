@@ -53,6 +53,7 @@ SRCS			:= \
 	$(wildcard srcs/4_runner/2_executor/*.c) \
 	$(wildcard srcs/4_runner/2_executor/*/*.c) \
 	$(wildcard srcs/4_runner/3_walker/*.c) \
+	$(wildcard srcs/4_runner/3_walker/*/*.c) \
 	$(wildcard srcs/ast/*.c) \
 	$(wildcard srcs/ast/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
@@ -129,6 +130,7 @@ INCLUDES		:= \
 	-Isrcs/4_runner/2_executor/3_searcher \
 	-Isrcs/4_runner/2_executor/4_dispatcher \
 	-Isrcs/4_runner/3_walker \
+	-Isrcs/4_runner/3_walker/pipeline \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \
 	-Isrcs/ast \
