@@ -63,6 +63,19 @@ static inline t_error	cmd_process_body(t_cmd *cmd, t_runner *runner)
 	cmd->exit_status = (int)err.type;
 	return (err);
 }
+static inline t_error	cmd_cleanup(t_cmd *cmd, t_runner *runner, t_error err)
+{
+	t_error	cleanup_err;
+
+	cleanup_err = redirect_stop(&runner->redirector);
+	if (cleanup_err.type)
+		(void)params_pop_positionals();
+	else
+		cleanup_err = params_pop_positionals();
+	if (cleanup_err.type && cmd->exit_status == (int)ERR_NO)
+		return (cmd->exit_status = (int)cleanup_err.type, cleanup_err);
+	return (err);
+}
 
 t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner)
 {
@@ -79,11 +92,5 @@ t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner)
 		return (err);
 	}
 	err = cmd_process_body(cmd, runner);
-	if (err.type)
-		(void)redirect_stop(&runner->redirector);
-	else
-		err = redirect_stop(&runner->redirector);
-	if (err.type)
-		return ((void)params_pop_positionals(), err);
-	return (params_pop_positionals());
+	return (cmd_cleanup(cmd, runner, err));
 }

@@ -6,30 +6,29 @@
 	- => detailed `errors` always available
 - ⚠️ `history`:
 	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
+- ⚠️ `heredoc`:
+	- use `$TMPDIR`
 - ✅ `hashmap`:
 	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
 	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
+- ✅ `functions`:
+	- `ast` fully owned
+	- `set()` / `unset()` / `get()` / `stop()`
+- ✅ `heredoc`:
+	- correctly `unlink()` (best effort)
 
 # WIP
 
-- `runner-executor`:
-	- `dispatcher`:
-		- `cmd_exec_function()`
-	- ⚠️ `exec` specific flow
-	- ⚠️ `command` specific flow
-	- ⚠️ set `params.specials.last_status`
 - `walker`:
 	- implement all
 	- handle errors (cf `error.h`)
 - `runner`:
 	- `error` handling (exit status, exit or not...)
+- `runner-executor`:
+	- ⚠️ `exec` specific flow
+	- ⚠️ `command` specific flow
 - ⚠️ `heredoc`:
 	- use `$TMPDIR` if exists (`params_get_variable()` + `expand_token()`)
-	- ⚠️ conflits avec les `user fd` ?!
-	- `unlink()`:
-		- best effort (no fail)
-		- immediatly after openning it
-		- all error paths
 	- `errors`:
 		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
 		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
