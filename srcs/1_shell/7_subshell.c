@@ -74,9 +74,10 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 
 	shell = shell_get();
 	if (shell == NULL)
-		err = error(ERR_SHELL_NOT_FOUND);
-	if (err.type == ERR_NO)
-		err = shell_reset_unignored_traps(shell, mode);
+		return (error_print(error(ERR_INTERNAL),
+					__func__, "shell not found", NULL, NULL));
+	process_clear(&shell->params.processes);
+	err = shell_reset_unignored_traps(shell, mode);
 	if (err.type == ERR_NO)
 	{
 		option_set(&shell->params.options, OPT_INTERACTIVE, false);

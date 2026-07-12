@@ -49,6 +49,6 @@ t_error	posix_wait(pid_t pid, int *exit_status);
 
 // @note always retry before returning ERR_INTERRUPTED
 // @ret ERR_LIBC / ERR_INTERRUPTED
-t_error	posix_wait_with_options(pid_t pid, int options, int *exit_status);
+t_error	posix_wait_with_opt(pid_t pid, int options, int *exit_status);
 
 #endif

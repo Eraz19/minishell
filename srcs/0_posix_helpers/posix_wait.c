@@ -43,7 +43,7 @@ t_error	posix_wait(pid_t pid, int *exit_status)
 	return (posix_wait_(pid, 0, exit_status));
 }
 
-t_error	posix_wait_with_options(pid_t pid, int options, int *exit_status)
+t_error	posix_wait_with_opt(pid_t pid, int options, int *exit_status)
 {
 	return (posix_wait_(pid, options, exit_status));
 }

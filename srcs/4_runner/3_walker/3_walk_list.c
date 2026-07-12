@@ -25,7 +25,7 @@ static inline t_error	walk_and_or_async(
 		(void)walk_normalize_output(err, NULL, exit_status);
 		exit(*exit_status);
 	}
-	err = params_mark_async_started(pid);
+	err = params_register_process(pid);
 	*exit_status = 0;
 	return (err);
 }

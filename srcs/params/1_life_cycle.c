@@ -11,6 +11,7 @@ void	params_init(t_params *params)
 	specials_init(&params->specials);
 	positionals_init_stack(&params->positionals_stack);
 	functions_init(&params->functions);
+	process_init(&params->processes);
 }
 
 void	params_free(t_params *params)
@@ -22,4 +23,5 @@ void	params_free(t_params *params)
 	specials_free(&params->specials);
 	positionals_free_stack(&params->positionals_stack);
 	functions_free(&params->functions);
+	process_free(&params->processes);
 }

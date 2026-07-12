@@ -6,7 +6,7 @@
 # include "specials.h"
 # include "positionals.h"
 # include "functions.h"
-# include "async.h"
+# include "process.h"
 
 /**
  * @struct s_params
@@ -176,6 +176,13 @@ t_error	params_push_positionals(t_positionals *src);
  */
 t_error	params_pop_positionals(void);
 
+// TODO: doc
+t_error	params_reap(void);
+
+// TODO: doc
+// @ret ERR_INTERNAL
+t_error	params_register_process(pid_t pid);
+
 /**
  * @brief Replace the current positional frame with a new one.
  *
@@ -195,14 +202,6 @@ t_error	params_replace_positionals(t_positionals *src);
  * @return @c ERR_SHELL_NOT_FOUND on failure.
  */
 t_error	params_set_option(t_option option, bool on);
-
-/**
- * @brief Update the last background process identifier.
- *
- * @param value New PID value.
- * @return @c ERR_SHELL_NOT_FOUND on failure.
- */
-t_error	params_mark_async_started(pid_t value);
 
 /**
  * @brief Update the last command exit status.
@@ -250,6 +249,12 @@ t_error	params_shift_positionals(size_t n);
  *         or @c ERR_INDEX_OUT_OF_BOUND on failure.
  */
 t_error	params_unset_variable(const t_string *name);
+
+// TODO: doc
+t_error	params_wait(pid_t pid, int *status);
+
+// TODO: doc
+t_error	params_wait_all(int *status);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */
