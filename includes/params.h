@@ -6,6 +6,7 @@
 # include "specials.h"
 # include "positionals.h"
 # include "functions.h"
+# include "async.h"
 
 /**
  * @struct s_params
@@ -33,6 +34,8 @@ typedef struct s_params
 	t_positionals_stack	positionals_stack;
 	// TODO: doc
 	t_functions			functions;
+	// TODO: doc
+	t_process_table		processes;
 }	t_params;
 
 /**

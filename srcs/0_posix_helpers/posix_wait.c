@@ -3,25 +3,47 @@
 #include <errno.h>
 #include <sys/wait.h>
 
-t_error	posix_wait(pid_t pid, int *exit_status)
+static inline void	parse_status(pid_t ret, int *status)
 {
-	int		status;
+	if (ret <= 0)
+		return ;
+	else if (WIFEXITED(*status))
+		*status = WEXITSTATUS(*status);
+	else if (WIFSIGNALED(*status))
+		*status = ERR_POSIX_SIGNAL_BASE_CODE + WTERMSIG(*status);
+}
+
+static inline t_error	posix_wait_(pid_t pid, int options, int *status)
+{
+	pid_t	ret;
 	t_error	err;
 
-	*exit_status = -1;
+	*status = -1;
 	err = error(ERR_NO);
-	while (waitpid(pid, &status, 0) == -1)
+	while (true)
 	{
-		if (errno == EINTR)
+		ret = waitpid(pid, status, options);
+		if (ret < 0)
 		{
-			err = error_priorize(err, shell_should_interrupt());
-			continue ;
+			if (errno == EINTR)
+			{
+				err = error_priorize(err, shell_should_interrupt());
+				continue ;
+			}
+			return (error_sys());
 		}
-		return (error_sys());
+		break ;
 	}
-	if (WIFEXITED(status))
-		*exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		*exit_status = ERR_POSIX_SIGNAL_BASE_CODE + WTERMSIG(status);
+	parse_status(ret, status);
 	return (err);
+}
+
+t_error	posix_wait(pid_t pid, int *exit_status)
+{
+	return (posix_wait_(pid, 0, exit_status));
+}
+
+t_error	posix_wait_with_options(pid_t pid, int options, int *exit_status)
+{
+	return (posix_wait_(pid, options, exit_status));
 }

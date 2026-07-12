@@ -173,7 +173,9 @@ INCLUDES		:= \
 	-Isrcs/params/4_variables/load/2_mandatory \
 	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
 	-Isrcs/params/4_variables/load/3_up \
-	-Isrcs/params/5_functions
+	-Isrcs/params/5_functions \
+	-Isrcs/params/6_async \
+	-Isrcs/params/6_async/process
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

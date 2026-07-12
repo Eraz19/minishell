@@ -44,16 +44,7 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - `ast`:
 	- ⚠️ open + unlink + store `fd` instead of `path` inside `ast` (avoid file `unlinking` before `async and_or` execution)
 - `async manager`:
-```bash
-async_init()
-async_register(pid)			# `params_mark_async_started()` + store pid
-async_wait(pid)				# `waitpid(pid, &status, 0)`
-async_reap_nonblocking()	# `waitpid(pid, &status, WNOHANG)` + update status
-async_wait_all()			# `async_reap_nonblocking()` on all table + update status
-async_shutdown()			# TODO job-control / SIGHUP / cleanup policy
-async_clear()				# used in subshell initialization to forget parent children
-async_free()
-```
+	- wip
 - **all children**:
 	- `shell_free()` avant d'exit
 - `shell`:
@@ -213,11 +204,14 @@ async_free()
 	- as `sysconf()` / `getrlimit()` are forbidden, we cannot query the actual file descriptor limit of the host process. POSIX only requires shell redirections to support user file descriptors 0 through 9. By default, `minishell` uses 0..128 as its user fd range and reserves 129..256 for internal redirection backups. If the backup range is exhausted or unsupported by the host system, the redirection fails with a redirection error. A MAX_COMPAT build option can restrict the layout to 0..9 for user fds and 10..19 for backup fds, which is a more conservative POSIX-minimum layout but still does not guarantee that backup fds are available.
 - `expander`:
 	- as `fn_match()` is forbidden, regex matching is not implemented.
-- `runner:`
+- `runner`:
 	- `redirector-tracker`:
 		- as `fcntl()` is forbidden, backup fds cannot be marked as `FD_CLOEXEC`; therefore, whenever a child is forked to execute a command, the shell explicitly closes each tracked backup fd before calling `execve()` (best effort).
 	- `executor`:
 		- as `_exit()` is forbidden, shell child processes use `exit()`, which may flush inherited standard I/O buffers and run inherited exit handlers.
+- `async`:
+	- `jobs`:
+		- as `setpgid()` / `tcsetpgrp()` / `getpgrp()` / `setsid()` are forbidden, job-control background jobs and non-job-control background jobs are not implemented.
 
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 
