@@ -8,6 +8,8 @@
 /* -------------------- helpers -------------------- */
 
 t_error	walk_normalize_output(t_error err, t_error *opt_err, int *exit_status);
+bool	walk_loop_must_continue(t_runner *runner, t_error *err);
+bool	walk_loop_must_break(t_runner *runner, t_error *err);
 
 /* -------------------- walkers -------------------- */
 

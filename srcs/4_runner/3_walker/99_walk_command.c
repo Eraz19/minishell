@@ -9,7 +9,6 @@ t_error	walk_command(t_runner *runner, t_ast_command *command, int *exit_status)
 {
 	t_error	err;
 
-	// TODO: AST_CMD_FOR
 	// TODO: AST_CMD_CASE
 	// TODO: handle redirs
 	*exit_status = -1;
@@ -19,6 +18,8 @@ t_error	walk_command(t_runner *runner, t_ast_command *command, int *exit_status)
 		err = walk_list(runner, &command->data.list, exit_status);
 	else if (command->type == AST_CMD_IF)
 		err = walk_if(runner, &command->data.if_clause, exit_status);
+	else if (command->type == AST_CMD_FOR)
+		err = walk_for(runner, &command->data.for_clause, exit_status);
 	else if (command->type == AST_CMD_LOOP)
 		err = walk_loop(runner, &command->data.loop, exit_status);
 	else if (command->type == AST_CMD_FUNCTION_DEF)

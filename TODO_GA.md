@@ -18,6 +18,29 @@ fi
 echo "after => $?"
 ```
 
+```bash
+i=old
+for i in a b c; do
+    :
+done
+echo "$i"
+```
+
+```bash
+a=one
+for x in $a $a; do
+    a=two
+    echo "$x"
+done
+```
+
+```bash
+readonly i
+for i in a b c; do
+    echo "$i"
+done
+```
+
 # ALEXANDER
 
 - ⚠️ `token`:
