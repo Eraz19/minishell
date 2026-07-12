@@ -55,6 +55,7 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 			cmd->name.data,
 			NULL,
 			NULL);
+	shell_free_void();
 	exit(exit_status);
 }
 

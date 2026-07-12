@@ -33,20 +33,18 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- correctly `unlink()` (best effort)
 - ✅ `error`:
 	- priorization helpers
+- ✅ ``params`:
+	- `process` module
 - ✅ `walker`:
 	- `functions` fully implemented
 	- `pipeline` fully implemented
 	- `and_or` fully implemented
-	- `list` partially implemented (missing `heredoc` limetime fix + `async manager`)
+	- `list` partially implemented (missing `heredoc` limetime fix)
 
 # WIP
 
 - `ast`:
 	- ⚠️ open + unlink + store `fd` instead of `path` inside `ast` (avoid file `unlinking` before `async and_or` execution)
-- `async manager`:
-	- wip
-- **all children**:
-	- `shell_free()` avant d'exit
 - `shell`:
 	- `shell_init_subshell()`: trigger `async_clear()`
 	- `tcsetattr()` avant d'exit (restaure le terminal)
@@ -67,6 +65,7 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - `runner-executor`:
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
+	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
 - ⚠️ `heredoc`:
 	- `errors`:
 		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"

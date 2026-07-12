@@ -26,6 +26,7 @@ static inline void	walk_pipe_child(t_pipe_run *run)
 	if (err.type == ERR_NO)
 		err = walk_command(runner, command, &exit_status);
 	(void)walk_normalize_output(err, NULL, &exit_status);
+	shell_free_void();
 	exit(exit_status);
 }
 

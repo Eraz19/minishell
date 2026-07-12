@@ -12,6 +12,7 @@ static inline t_error	walk_and_or_async(
 							int *exit_status)
 {
 	pid_t	pid;
+	int		status;
 	t_error	err;
 
 	pid = fork();
@@ -23,7 +24,9 @@ static inline t_error	walk_and_or_async(
 		if (err.type == ERR_NO)
 			err = walk_and_or(runner, and_or, exit_status);
 		(void)walk_normalize_output(err, NULL, exit_status);
-		exit(*exit_status);
+		status = *exit_status;
+		shell_free_void();
+		exit(status);
 	}
 	err = params_register_process(pid);
 	*exit_status = 0;
@@ -65,6 +68,7 @@ static inline t_error	walk_list_in_subshell(
 							int *exit_status)
 {
 	pid_t	pid;
+	int		status;
 	t_error	err;
 
 	pid = fork();
@@ -76,7 +80,9 @@ static inline t_error	walk_list_in_subshell(
 		if (err.type == ERR_NO)
 			err = walk_list_priv(runner, list, exit_status);
 		(void)walk_normalize_output(err, NULL, exit_status);
-		exit(*exit_status);
+		status = *exit_status;
+		shell_free_void();
+		exit(status);
 	}
 	return (posix_wait(pid, exit_status));
 }
