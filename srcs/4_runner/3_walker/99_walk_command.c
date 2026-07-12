@@ -9,18 +9,18 @@ t_error	walk_command(t_runner *runner, t_ast_command *command, int *exit_status)
 {
 	t_error	err;
 
-	/*
-	TODO: handle types:,
-		AST_CMD_LIST,
-		AST_CMD_IF,
-		AST_CMD_FOR,
-		AST_CMD_LOOP,
-		AST_CMD_CASE,
-	*/
+	// TODO: AST_CMD_FOR
+	// TODO: AST_CMD_CASE
 	// TODO: handle redirs
 	*exit_status = -1;
 	if (command->type == AST_CMD_SIMPLE)
 		err = cmd_execute(runner, &command->data.simple, exit_status);
+	else if (command->type == AST_CMD_LIST)
+		err = walk_list(runner, &command->data.list, exit_status);
+	else if (command->type == AST_CMD_IF)
+		err = walk_if(runner, &command->data.if_clause, exit_status);
+	else if (command->type == AST_CMD_LOOP)
+		err = walk_loop(runner, &command->data.loop, exit_status);
 	else if (command->type == AST_CMD_FUNCTION_DEF)
 	{
 		err = params_set_function(&command->data.function_def);

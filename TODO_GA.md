@@ -1,3 +1,23 @@
+# TO TEST
+
+```bash
+false
+echo "before => $?"
+if false || echo "in condition => $?"; then
+	echo "inside => $?"
+fi
+echo "after => $?"
+```
+
+```bash
+false
+echo "before => $?"
+if false; then
+	echo NOP
+fi
+echo "after => $?"
+```
+
 # ALEXANDER
 
 - ⚠️ `token`:
@@ -8,6 +28,7 @@
 	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
 - ⚠️ `heredoc`:
 	- use `$TMPDIR` if exists (`params_get_variable()` + `expand_token()`)
+	- use `t_string` instead of file
 - ⚠️ `expander`:
 	- doit retourner le statut de la dernière `command substitution`:
 ```bash
@@ -36,20 +57,13 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - ✅ ``params`:
 	- `process` module
 - ✅ `walker`:
-	- `functions` fully implemented
-	- `pipeline` fully implemented
-	- `and_or` fully implemented
-	- `list` partially implemented (missing `heredoc` limetime fix)
+	- `functions`
+	- `pipeline`
+	- `and_or`
+	- `list`
 
 # WIP
 
-- `ast`:
-	- ⚠️ open + unlink + store `fd` instead of `path` inside `ast` (avoid file `unlinking` before `async and_or` execution)
-- `shell`:
-	- `shell_init_subshell()`: trigger `async_clear()`
-	- `tcsetattr()` avant d'exit (restaure le terminal)
-- `walker`:
-	- `walk_and_or_async()`: update to use `async_register()`
 - `runner`:
 	- after each `AST` execution:
 		- try to `reap` all async children with `async_reap_nonblocking()`
@@ -62,6 +76,24 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- handle errors (cf `error.h`)
 - `runner`:
 	- `error` handling (exit status, exit or not...)
+- `heredoc`:
+	- **all**:
+		- remove all `unlink` usage
+	- `t_string` instead of file
+	- `cst node`:
+		- must be able to store heredoc body
+	- `builder`:
+		- keep heredoc delim stack
+		- on newline => parse heredoc bodies and store them in corresponding cst nodes
+	- `converter`:
+		- transfer heredoc body ownership to `ast_redir` (in word)
+	- `redirector`:
+		- expand heredoc body
+		- create + open tmp file in `$TMPDIR` (fallback `/tmp`)
+		- write heredoc body in tmp file
+		- close + open tmp file (rewind)
+		- process redirection
+		- unlink tmp file
 - `runner-executor`:
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
@@ -78,6 +110,7 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - `error`:
 	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
 - `shell`:
+	- exit avec `$?` comme status
 	- process `ENV`:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)

@@ -61,6 +61,8 @@ typedef enum e_error_type
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
 	ERR_BUILTIN,							// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
 	/* -------------------- FLOW CONTROL ERRORS -------------------- */
+	ERR_CONTINUE,							// [ 5] [LOOP WALKER]	Requalified as ERR_NO by targeted loop (or external one)
+	ERR_BREAK,								// [ 5] [LOOP WALKER]	Requalified as ERR_NO by targeted loop (or external one)
 	ERR_RETURN,								// [ 5] [FUNC WALKER]	Requalified as ERR_NO (exit status is produced by the builtin)
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// GENERIC ERRORS (can be returned by any module or builtin)
