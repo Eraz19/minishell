@@ -7,7 +7,7 @@
 - ⚠️ `history`:
 	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
 - ⚠️ `heredoc`:
-	- use `$TMPDIR`
+	- use `$TMPDIR` if exists (`params_get_variable()` + `expand_token()`)
 - ⚠️ `expander`:
 	- doit retourner le statut de la dernière `command substitution`:
 ```bash
@@ -36,13 +36,40 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - ✅ `walker`:
 	- `functions` fully implemented
 	- `pipeline` fully implemented
+	- `and_or` fully implemented
+	- `list` partially implemented (missing `heredoc` limetime fix + `async manager`)
 
 # WIP
 
-- refactor `fds` in `pipe_run` to avoid double_close
-
+- `ast`:
+	- ⚠️ open + unlink + store `fd` instead of `path` inside `ast` (avoid file `unlinking` before `async and_or` execution)
+- `async manager`:
+```bash
+async_init()
+async_register(pid)			# `params_mark_async_started()` + store pid
+async_wait(pid)				# `waitpid(pid, &status, 0)`
+async_reap_nonblocking()	# `waitpid(pid, &status, WNOHANG)` + update status
+async_wait_all()			# `async_reap_nonblocking()` on all table + update status
+async_shutdown()			# TODO job-control / SIGHUP / cleanup policy
+async_clear()				# used in subshell initialization to forget parent children
+async_free()
+```
+- **all children**:
+	- `shell_free()` avant d'exit
+- `shell`:
+	- `shell_init_subshell()`: trigger `async_clear()`
+	- `tcsetattr()` avant d'exit (restaure le terminal)
 - `walker`:
-	- implement all
+	- `walk_and_or_async()`: update to use `async_register()`
+- `runner`:
+	- after each `AST` execution:
+		- try to `reap` all async children with `async_reap_nonblocking()`
+		- `ft_stdin_set_blocking()`
+- `walker`:
+	- implement `if`
+	- implement `for`
+	- implement `loop`
+	- implement `case`
 	- handle errors (cf `error.h`)
 - `runner`:
 	- `error` handling (exit status, exit or not...)
@@ -50,7 +77,6 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
 - ⚠️ `heredoc`:
-	- use `$TMPDIR` if exists (`params_get_variable()` + `expand_token()`)
 	- `errors`:
 		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
 		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
@@ -62,22 +88,14 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - `error`:
 	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
 - `shell`:
-	- `subshell`:
-		- subshell
-		- command substituion lookup (input contains `(`)
-		- execve fallback
 	- process `ENV`:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
 	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
 - `runner`:
 	- set `stdin` to blocking mode (main loop ?)
-	- unlink heredoc path after use
-	- handle errors
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files
-- `posix_read()`:
-	- implement it using `string_read_*()` API ? (⚠️ remove auto retry on EINTR in libft !)
 - `libft`:
 	- update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
 	- update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers

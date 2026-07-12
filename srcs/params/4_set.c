@@ -18,7 +18,7 @@ t_error	params_unset_variable(const t_string *name)
 	return (var_unset(name));
 }
 
-t_error	params_set_last_bg_pid(pid_t value)
+t_error	params_mark_async_started(pid_t value)
 {
 	t_params	*params;
 
@@ -26,6 +26,7 @@ t_error	params_set_last_bg_pid(pid_t value)
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
 	specials_set_last_bg_pid(&params->specials, value);
+	specials_set_last_status(&params->specials, 0);
 	return (error(ERR_NO));
 }
 

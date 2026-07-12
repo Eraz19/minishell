@@ -199,7 +199,7 @@ t_error	params_set_option(t_option option, bool on);
  * @param value New PID value.
  * @return @c ERR_SHELL_NOT_FOUND on failure.
  */
-t_error	params_set_last_bg_pid(pid_t value);
+t_error	params_mark_async_started(pid_t value);
 
 /**
  * @brief Update the last command exit status.

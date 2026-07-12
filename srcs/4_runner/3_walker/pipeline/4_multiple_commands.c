@@ -1,4 +1,5 @@
 #include "walker.h"
+#include "walker_priv.h"
 #include "posix_helpers.h"
 #include "walk_pipeline_priv.h"
 #include "shell.h"
@@ -13,6 +14,7 @@ static inline void	walk_pipe_child(t_pipe_run *run)
 	t_error			err;
 
 	err = error(ERR_NO);
+	exit_status = -1;
 	err = shell_init_subshell(SUBSHELL_NORMAL);
 	if (err.type == ERR_NO && run->cmd_fds[READ_ID] >= 0)
 		err = posix_dup2(run->cmd_fds[READ_ID], STDIN_FILENO);
@@ -23,8 +25,7 @@ static inline void	walk_pipe_child(t_pipe_run *run)
 	walk_pipe_free(run);
 	if (err.type == ERR_NO)
 		err = walk_command(runner, command, &exit_status);
-	if (err.type)
-		exit((int)err.type);
+	(void)walk_normalize_output(err, NULL, &exit_status);
 	exit(exit_status);
 }
 

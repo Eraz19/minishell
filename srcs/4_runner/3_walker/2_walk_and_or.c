@@ -1,5 +1,6 @@
 #include "error.h"
 #include "walker_priv.h"
+# include <assert.h>
 
 t_error	walk_and_or(t_runner *runner, t_ast_and_or *and_or, int *exit_status)
 {
@@ -8,8 +9,9 @@ t_error	walk_and_or(t_runner *runner, t_ast_and_or *and_or, int *exit_status)
 	bool			next_on_success;
 	t_error			err;
 
+	assert(and_or->pipelines.len > 0);
+	assert(and_or->next_on_success.len == and_or->pipelines.len - 1);
 	i = 0;
-	*exit_status = 0;
 	err = error(ERR_NO);
 	while (i < and_or->pipelines.len)
 	{

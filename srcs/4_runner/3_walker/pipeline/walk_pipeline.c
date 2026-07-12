@@ -1,6 +1,7 @@
 #include "walker_priv.h"
 #include "walk_pipeline_priv.h"
 #include "params.h"
+# include <assert.h>
 
 t_error	walk_pipeline(
 			t_runner *runner,
@@ -9,6 +10,7 @@ t_error	walk_pipeline(
 {
 	t_error	err;
 
+	assert(pipeline->commands.len > 0);
 	*exit_status = -1;
 	if (pipeline->commands.len == 1)
 		err = walk_pipe_single_command(runner, pipeline, exit_status);
