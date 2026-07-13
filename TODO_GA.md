@@ -1,10 +1,20 @@
 # TESTS
 
-⚠️ remove `echo` from known builtin list to test
+⚠️ `echo` is removed from known builtin list to test
+
+## ERRORS
+
+```bash
+# ===> [ERROR] srcs/expander/word/_main.c:13 [word_fpop()] => empty stack
+unset pattern VAR
+VAR=${pattern} sh -c 'printf "child: VAR=<%s> pattern=<%s>\n" "${VAR-unset}" "${pattern-unset}"'
+printf 'parent: VAR=<%s> pattern=<%s>\n' "${VAR-unset}" "${pattern-unset}"
+```
 
 ## TESTS (IF)
 
 ```bash
+# OK
 echo "--------------------"
 false
 echo "before => $?"
@@ -16,6 +26,7 @@ echo "--------------------"
 ```
 
 ```bash
+# OK
 echo "--------------------"
 false
 echo "before => $?"
@@ -29,6 +40,7 @@ echo "--------------------"
 ## TESTS (FOR)
 
 ```bash
+# OK
 echo "--------------------"
 i=old
 for i in a b c; do
@@ -39,6 +51,7 @@ echo "--------------------"
 ```
 
 ```bash
+# OK
 echo "--------------------"
 a=one
 for x in $a $a; do
@@ -49,6 +62,7 @@ echo "--------------------"
 ```
 
 ```bash
+# [RUNNER] error should have been requalified : 124 (variable assignment error)
 echo "--------------------"
 echo "should throw assignment error"
 readonly i
@@ -61,6 +75,7 @@ echo "--------------------"
 ## TESTS (SUBSHELL)
 
 ```bash
+# ./minishell: builtin_break: not implemented
 echo "--------------------"
 while true; do
 	(
@@ -77,6 +92,7 @@ echo "--------------------"
 ## TESTS (CASE)
 
 ```bash
+# segfault
 echo "--------------------"
 case x in
   x) ;;
@@ -120,8 +136,23 @@ esac
 echo "--------------------"
 ```
 
+## TESTS EXPANSIONS
+
+```bash
+# should assign ONLY if pattern is unset or NULL:
+VAR=${pattern:=foo}
+# Should NEVER assign during expansion:
+VAR=${pattern}
+VAR=${pattern:-foo}
+VAR=${pattern+foo}
+VAR=${pattern#foo}
+VAR=${pattern%foo}
+```
+
 # ALEXANDER
 
+- ⚠️ `braced_assign()`:
+	- Assigne lui-même des variables pendant l'expansion ? (cf `TESTS EXPANSIONS`)
 - ⚠️ `errors`:
 	- `lexer_reset()` and `lexer_get_next_token()` were ignoring `lexer_input_EOF()` returned error... anyway I made it void with assert
 - ⚠️ `pattern matching`:

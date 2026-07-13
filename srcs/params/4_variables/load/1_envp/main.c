@@ -4,7 +4,7 @@
 # include "logs.h"		// DEBUG
 # include <assert.h>	// DEBUG
 
-// @ret ERR_SHELL_NOT_FOUND / ERR_VAR_READ_ONLY / ERR_LIBC.
+// @ret ERR_LIBC.
 static inline t_error	process_entry(t_string *name, t_string *value)
 {
 	t_error	err;
@@ -12,7 +12,7 @@ static inline t_error	process_entry(t_string *name, t_string *value)
 	if (value->data == NULL)
 		return (error(ERR_NO));
 	err = var_set(name, value, true, false);
-	if (err.type == ERR_VAR_INVALID_NAME)
+	if (err.type == ERR_VAR_INVALID_NAME || err.type == ERR_VAR_READ_ONLY)
 		return (error(ERR_NO));
 	return (err);
 }

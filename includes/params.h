@@ -231,8 +231,7 @@ void	params_set_last_status_in(t_params *params, int value);
  * @param value Variable value (borrowed, read-only).
  * @param export Export flag to apply.
  * @param readonly Read-only flag to apply.
- * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY
- *         or @c ERR_LIBC on failure.
+ * @return @c ERR_POSIX_ASSIGNMENT or @c ERR_LIBC (both are already printed).
  */
 t_error	params_set_variable(
 	const t_string *name,

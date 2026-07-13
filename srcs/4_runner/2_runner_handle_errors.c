@@ -61,5 +61,7 @@ void	runner_handle_errors(t_shell *shell, t_error *err)
 			err->type = ERR_NO;
 	}
 	runner_handle_bad_errors(err, interactive);
+	if (err->type)
+		*err = error_print(*err, NULL, NULL);
 	fprintf(stderr, "[RUNNER] => final error is %i (%s)\n", (int)err->type, error_to_string(*err));
 }

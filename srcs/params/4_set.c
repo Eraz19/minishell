@@ -24,9 +24,18 @@ t_error	params_set_variable(
 	bool export,
 	bool readonly)
 {
+	t_error	err;
+
 	assert(name != NULL);
 	assert(value != NULL);
-	return (var_set(name, value, export, readonly));
+	err = var_set(name, value, export, readonly);
+	if (err.type)
+	{
+		err = error_print(err, NULL, "%s", name->data, NULL);
+		if (err.type != ERR_LIBC)
+			err.type = ERR_POSIX_ASSIGNMENT;
+	}
+	return (err);
 }
 
 t_error	params_unset_variable(const t_string *name)
