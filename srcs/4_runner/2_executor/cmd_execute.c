@@ -1,5 +1,4 @@
 #include "executor.h"
-#include "runner.h"
 #include "cmd.h"
 #include "cmd_resolver.h"
 #include "redirector.h"
@@ -174,8 +173,8 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 	*exit_status = cmd->exit_status;
 	/* ---------- DEBUG (START) ---------- */
 	fprintf(stderr, "--------------------------------------------------\n");
-	fprintf(stderr, "[EXECUTOR] [%s()] exit_status = %i\n", __func__, *exit_status);
-	fprintf(stderr, "[EXECUTOR] [%s()] error       = %s\n", __func__, error_to_string(err));
+	fprintf(stderr, "[EXECTR] [%s()] exit_status = %i\n", __func__, *exit_status);
+	fprintf(stderr, "[EXECTR] [%s()] error       = %s\n", __func__, error_to_string(err));
 	fprintf(stderr, "--------------------------------------------------\n");
 	/* ---------- DEBUG (END) ---------- */
 	cmd_free(cmd);

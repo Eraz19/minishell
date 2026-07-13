@@ -5,52 +5,63 @@
 ## TESTS (IF)
 
 ```bash
+echo "--------------------"
 false
 echo "before => $?"
 if false || echo "in condition => $?"; then
 	echo "inside => $?"
 fi
 echo "after => $?"
+echo "--------------------"
 ```
 
 ```bash
+echo "--------------------"
 false
 echo "before => $?"
 if false; then
 	echo NOP
 fi
 echo "after => $?"
+echo "--------------------"
 ```
 
 ## TESTS (FOR)
 
 ```bash
+echo "--------------------"
 i=old
 for i in a b c; do
     :
 done
 echo "should be 'c' => '$i'"
+echo "--------------------"
 ```
 
 ```bash
+echo "--------------------"
 a=one
 for x in $a $a; do
     a=two
     echo "shoud be 'one' => '$x'"
 done
+echo "--------------------"
 ```
 
 ```bash
+echo "--------------------"
 echo "should throw assignment error"
 readonly i
 for i in a b c; do
     echo "$i"
 done
+echo "--------------------"
 ```
 
 ## TESTS (SUBSHELL)
 
 ```bash
+echo "--------------------"
 while true; do
 	(
 		while true; do
@@ -60,20 +71,24 @@ while true; do
 	)
 	echo parent
 done
+echo "--------------------"
 ```
 
 ## TESTS (CASE)
 
 ```bash
+echo "--------------------"
 case x in
   x) ;;
 esac
 echo "\$? should be '0' => '$?'"
+echo "--------------------"
 ```
 
 # TEST (CASE : AFTER PATTERN MATCHING UPDATE)
 
 ```bash
+echo "--------------------"
 v='abc*def'
 echo "${v#'*'}"
 
@@ -102,6 +117,7 @@ esac
 case "" in
     "") echo "valid 6" ;;
 esac
+echo "--------------------"
 ```
 
 # ALEXANDER
@@ -134,6 +150,8 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- use `t_string` instead of file
 - ⚠️ `history`:
 	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
+- 🤔 `runner_set_stdin_to_blocking()`:
+	- should be before each call to readline instead of each runner loop cycle ? (because runner loop cycles don't need stdin each time)
 - 🚧 `shell`:
 	- `shell_init_subshell()`: (only missing traps / signal handling)
 - ✅ `hashmap`:
