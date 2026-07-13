@@ -13,7 +13,7 @@ t_error	dollar_squote_emit(t_expander *expander, char c, t_word_item_opt opt)
 	t_word_item	item;
 
 	if (c == '\0')
-		return (expander->err);
+		return (error(ERR_NO));
 	item = word_item_init(c, opt);
 	return (expander->err = word_push(&expander->word_exp, item));
 }
@@ -56,9 +56,10 @@ t_error	dollar_squote_read_number(
 		if (digit < 0)
 			break ;
 		*value = *value * (unsigned int)base + (unsigned int)digit;
-		if (word_remove(&expander->word, 0, 1).type)
+		expander->err = word_remove(&expander->word, 0, 1);
+		if (expander->err.type)
 			return (expander->err);
 		n++;
 	}
-	return (expander->err);
+	return (error(ERR_NO));
 }

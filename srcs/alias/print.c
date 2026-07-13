@@ -1,51 +1,60 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include "libft.h"
 #include "error.h"
 #include "alias.h"
+#include "alias_.h"
+#include "utils.h"
+#include "posix_helpers.h"
 
-void	alias_print_all(const t_key_value **pairs)
+static t_error	alias_print_pair(const char *name, const char *value)
 {
+	t_error		err;
+	t_string	line;
+	t_string	escaped_value;
+
+	if (value == NULL)
+		value = "";
+	if (!string_init(&line, 0, name, -1))
+		return (error_sys());
+	if (!string_append_n(&line, "=", 1))
+		return (err = error_sys(), string_free(&line), err);
+	err = serialize(value, &escaped_value);
+	if (err.type)
+		return (string_free(&line), err);
+	if (!string_append(&line, &escaped_value))
+		return (err = error_sys(), string_free(&escaped_value),
+			string_free(&line), err);
+	string_free(&escaped_value);
+	if (!string_append_n(&line, "\n", 1))
+		return (err = error_sys(), string_free(&line), err);
+	err = posix_write(STDOUT_FILENO, line.data, line.len);
+	return (string_free(&line), err);
+}
+
+t_error	alias_print_all(const t_key_value **pairs)
+{
+	t_error	err;
 	size_t	i;
 
+	err = error(ERR_NO);
 	if (pairs == NULL)
-		return ;
+		return (err);
 	i = 0;
-	while (pairs[i] != NULL)
+	while (pairs[i] != NULL && err.type == ERR_NO)
 	{
-		if (pairs[i]->value == NULL)
-			ft_printf("%s=''\n", pairs[i]->key);
-		else
-			ft_printf("%s='%s'\n", pairs[i]->key, (char *)pairs[i]->value);
-		i++;	
+		err = alias_print_pair(pairs[i]->key, (const char *)pairs[i]->value);
+		i++;
 	}
-	free(pairs);
+	return (free(pairs), err);
 }
 
 t_error	alias_print_one(t_alias *alias, const char *name)
 {
-	const char			*value;
-	const t_key_value	**pairs;
-	t_key_value			*new_key_value;
-	union ptr_discalifier
-	{
-		void *ptr;
-		const char *str;
-	}	discalifier;
+	const char	*value;
 
 	value = hashmap_get_const(&alias->map, name);
 	if (value == NULL)
-		return (alias->err = error(ERR_ALIAS_NOT_FOUND));
-	pairs = malloc(sizeof(t_key_value *) * 2);
-	if (pairs == NULL)
-		return (alias->err = error_sys());
-	discalifier.str = value;
-	new_key_value = key_value_new(name, discalifier.ptr);
-	if (new_key_value == NULL)
-	{
-		alias->err = error_sys();
-		return (key_value_free(&new_key_value, NULL), free(pairs), alias->err);
-	}
-	pairs[0] = new_key_value;
-	pairs[1] = NULL;
-	return (alias_print_all(pairs), alias->err);
+		return (error(ERR_ALIAS_NOT_FOUND));
+	return (alias_print_pair(name, value));
 }

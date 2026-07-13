@@ -1,6 +1,6 @@
 #include "field_splitting_.h"
 
-t_error	field_splitting_char(t_expander *expander, bool *last_delim_white_space)
+static t_error	field_splitting_char(t_expander *expander)
 {
 	t_word_item	item;
 
@@ -9,30 +9,20 @@ t_error	field_splitting_char(t_expander *expander, bool *last_delim_white_space)
 		return (expander->err);
 	if (!is_delim(item, &expander->ifs))
 		return (consume_word_item(expander, item));
-	else if (is_it_white_space_ifs(item.c))
-	{
-		*last_delim_white_space = true;
+	if (is_it_white_space_ifs(item.c))
 		return (fields_splitting_on_ifs_white_space(expander));
-	}
-	else
-	{
-		*last_delim_white_space = false;
-		return (fields_splitting_on_ifs_non_white_space(expander));
-	}
+	return (fields_splitting_on_ifs_non_white_space(expander));
 }
 
-t_error	field_splitting_word(t_expander *expander)
+static t_error	field_splitting_word(t_expander *expander)
 {
-	bool	last_delim_white_space;
-
-	last_delim_white_space = true;
 	expander->err = fields_fpop(&expander->word, &expander->fields);
 	if (expander->err.type)
 		return (expander->err);
 	word_init(&expander->word_exp);
 	while (expander->word.len > 0)
 	{
-		if (field_splitting_char(expander, &last_delim_white_space).type)
+		if (field_splitting_char(expander).type)
 			return (expander->err);
 	}
 	word_free(&expander->word);

@@ -30,7 +30,7 @@ t_error	update_context_cmd_sub(
 	return (lexer->err);
 }
 
-t_error	context_cmd_sub(t_lexer *lexer)
+t_error	lexer_context_cmd_sub(t_lexer *lexer)
 {
 	t_context_stack_item	*item;
 	t_token					cmd_sub_token;

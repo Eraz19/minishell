@@ -24,22 +24,28 @@ bool	is_line_delimiter(t_body *body)
 	return (string_cmp(&body->line, &body->item->delim));
 }
 
+static t_error	body_missing_delimiter(t_body *body)
+{
+	body->item->delim.data[body->item->delim.len - 1] = '\0';
+	body->err = error_print(error(ERR_REDIRECTION), "heredoc",
+		"missing delimiter", NULL, "'%s'", body->item->delim.data);
+	return (body->err);
+}
+
 t_error	body_continuation(t_body *body, bool *continuation)
 {
 	if (body->item->is_tty)
 	{
 		if (*continuation == false)
-			*body->item->i = body->i;
+			body->item->i = body->i;
 		*continuation = true;
-		return (scanner_read_continuation(&body->item->input), body->err);
-	}
-	else
-	{
-		body->item->delim.data[body->item->delim.len - 1] = '\0';
-		body->err = error_print(error(ERR_REDIRECTION), "heredoc",
-			"missing delimiter", NULL, "'%s'", body->item->delim.data);
+		body->err = scanner_read_continuation(&body->item->input);
+		if (body->err.type == ERR_VEOF)
+			return (body_missing_delimiter(body));
 		return (body->err);
 	}
+	else
+		return (body_missing_delimiter(body));
 }
 
 t_error	get_body_content(t_body *body)
@@ -61,7 +67,7 @@ t_error	get_body_content(t_body *body)
 		if (is_line_delimiter(body))
 		{
 			if (!continuation)
-				*body->item->i = body->i;
+				body->item->i = body->i;
 			return (body->err);
 		}
 		if (!string_append(&body->content, &body->line))

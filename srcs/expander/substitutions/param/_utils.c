@@ -36,46 +36,36 @@ t_error	get_param_name(t_expander *expander, t_string *param_name, bool braced)
 	return (expander->err = word_remove(&expander->word, 0, i));
 }
 
-bool	is_valid_param(t_word_item *item)
+t_error	drop_quoted_null_at(t_expander *expander)
 {
-	if (item->c == '?'
-		|| item->c == '#'
-		|| item->c == '-'
-		|| item->c == '*'
-		|| item->c == '$'
-		|| item->c == '!'
-		|| item->c == '@'
-		|| item->c == '_'
-		|| ft_isalnum(item->c))
-		return (true);
-	return (false);
+	t_word_item	open;
+	t_word_item	close;
+
+	if (expander->word_exp.len == 0 || expander->word.len < 2)
+		return (expander->err);
+	expander->err = word_get(&open, &expander->word_exp,
+			expander->word_exp.len - 1);
+	if (expander->err.type)
+		return (expander->err);
+	expander->err = word_get(&close, &expander->word, 1);
+	if (expander->err.type)
+		return (expander->err);
+	if (open.c != '"' || open.opt.is_expand_res || open.opt.escaped
+		|| close.c != '"' || close.opt.is_expand_res || close.opt.escaped)
+		return (expander->err);
+	expander->err = word_remove(&expander->word_exp,
+			expander->word_exp.len - 1, 1);
+	if (expander->err.type)
+		return (expander->err);
+	return (expander->err = word_remove(&expander->word, 1, 1));
 }
 
-bool	context_prevent_param_expansion(t_word_item *item)
+t_word_item	simple_dquote_item(t_word_item_opt opt)
 {
-	t_context	context;
-	bool		is_valid_quoting;
-	bool		is_valid_context;
-
-	context = item->opt.context;
-	is_valid_context = context == CONTEXT_NONE || context == CONTEXT_PARAM;
-	is_valid_quoting = item->opt.quoted != CONTEXT_SQUOTE && !item->opt.escaped;
-	return (!is_valid_context || !is_valid_quoting);
-}
-
-bool	is_param_expansion(t_expander *expander, t_word_item *current_item)
-{
-	t_error		err;
 	t_word_item	item;
 
-	if (!flag_is_active((uint)expander->flags, EXP_PARAM))
-		return (false);
-	if (current_item->c != '$' || context_prevent_param_expansion(current_item))
-		return (false);
-	err = word_get(&item, &expander->word, 1);
-	if (err.type)
-		return (false);
-	if (item.c == '{')
-		return (true);
-	return (is_valid_param(&item));
+	item.c = '"';
+	item.opt = opt;
+	item.opt.is_expand_res = false;
+	return (item);
 }

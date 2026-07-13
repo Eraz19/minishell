@@ -21,7 +21,7 @@ void	heredoc_item_free(void *item)
 	*item_ = (t_heredoc_item){0};
 }
 
-t_error	heredoc_item_load(t_heredoc_item *item, const t_string *src, size_t *i)
+t_error	heredoc_item_load(t_heredoc_item *item, const t_string *src, size_t i)
 {
 	if (src == NULL)
 	{

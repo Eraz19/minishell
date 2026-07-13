@@ -52,6 +52,11 @@ t_error	run_expansion(t_expansion *expansion, t_expander_args *args)
 	return (expander_free(&expander), expander.err);
 }
 
+t_error expand_str(t_expansion *out, const t_string *src, t_exp_flag flags)
+{
+	return (expand_heredoc(out, src, flags));
+}
+
 t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
 {
 	t_expander_args	args;
@@ -60,7 +65,7 @@ t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
 	args.value = src->value;
 	args.contexts = &src->contexts;
 	args.assignment_offset = src->assignment_offset;
-	return (run_expansion(out, &args));
+	return (expander_error_qualify(run_expansion(out, &args)));
 }
 
 t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
@@ -70,16 +75,21 @@ t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
 	t_expander_args	args;
 	t_context_stack	contexts;
 
+	if (src->data == NULL || src->len == 0)
+		return (expander_error_qualify(expansion_load_empty(out)));
 	context_stack_init(&contexts);
 	if (!string_dup(&body, src))
-		return (context_stack_free(&contexts), error_sys());
+		return (context_stack_free(&contexts),
+			expander_error_qualify(error_sys()));
 	err = heredoc_prepare_for_expansion(&contexts, &body);
 	if (err.type)
-		return (context_stack_free(&contexts), string_free(&body), err);
+		return (context_stack_free(&contexts), string_free(&body),
+			expander_error_qualify(err));
 	args.value = body;
 	args.flags = flags;
 	args.contexts = &contexts;
 	args.assignment_offset = -1;
 	err = run_expansion(out, &args);
-	return (context_stack_free(&contexts), string_free(&body), err);
+	return (context_stack_free(&contexts), string_free(&body),
+		expander_error_qualify(err));
 }

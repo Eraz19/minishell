@@ -1,4 +1,5 @@
 #include "heredoc.h"
+#include "heredoc_.h"
 #include "input_mode.h"
 #include "heredoc_queue_.h"
 #include <unistd.h>
@@ -23,7 +24,7 @@ t_error	heredoc_load(t_heredoc *state)
 
 	state->err = input_mode_set(&mode);
 	if (state->err.type != ERR_NO)
-		return (state->err);
+		return (state->err = heredoc_error_qualify(state->err));
 	return (state->is_tty = mode == INPUT_MODE_STDIN_TTY, state->err);
 }
 

@@ -45,7 +45,8 @@ typedef struct s_params
 typedef enum e_params_print_mode
 {
 	PARAMS_PRINT_EXPORT,
-	PARAMS_PRINT_READONLY
+	PARAMS_PRINT_READONLY,
+	PARAMS_PRINT_SET
 }	t_params_print_mode;
 
 /* ************************************************************************* */

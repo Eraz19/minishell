@@ -76,10 +76,7 @@ void	debug_dump_heredoc_queue_item(t_heredoc_item *item)
 	if (item == NULL)
 		return ((void)fprintf(stderr, "[HEREDOC_QUEUE_ITEM] (null)\n"));
 	fprintf(stderr, "[HEREDOC_QUEUE_ITEM] %p\n", (void *)item);
-	fprintf(stderr, "  i=%p", (void *)item->i);
-	if (item->i != NULL)
-		fprintf(stderr, " (*i=%zu)", *item->i);
-	fprintf(stderr, "\n");
+	fprintf(stderr, "  i=%zu\n", item->i);
 	fprintf(stderr, "  mode=%s\n", heredoc_mode_to_string(item->mode));
 	fprintf(stderr, "  is_tty=%s\n", bool_to_string(item->is_tty));
 	fprintf(stderr, "  path={len=%zu cap=%zu data=",

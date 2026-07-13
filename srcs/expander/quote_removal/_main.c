@@ -1,8 +1,25 @@
 #include "quote_removal_.h"
 #include "quote_removal_context_.h"
 
-t_error	quote_removal_quoted(t_expander *expander, t_word_item item)
+static bool	is_opening_mark(t_word_item item)
 {
+	if (item.opt.escaped)
+		return (false);
+	if (item.opt.quoted == CONTEXT_SQUOTE)
+		return (item.c == '\'');
+	if (item.opt.quoted == CONTEXT_DQUOTE)
+		return (item.c == '"');
+	if (item.opt.quoted == CONTEXT_DOLLAR_SQUOTE)
+		return (item.c == '$');
+	return (true);
+}
+
+static t_error	quote_removal_quoted(t_expander *expander, t_word_item item)
+{
+	t_word_item	next;
+
+	if (!is_opening_mark(item))
+		return (expander->err = word_push(&expander->word_exp, item));
 	if (item.opt.quoted == CONTEXT_SQUOTE)
 		context_squote(expander);
 	else if (item.opt.quoted == CONTEXT_DQUOTE)
@@ -11,7 +28,12 @@ t_error	quote_removal_quoted(t_expander *expander, t_word_item item)
 		context_heredoc(expander, item);
 	else if (item.opt.quoted == CONTEXT_DOLLAR_SQUOTE)
 	{
-		expander->err = word_fpop(&item, &expander->word);
+		expander->err = word_get(&next, &expander->word, 0);
+		if (expander->err.type)
+			return (expander->err);
+		if (next.c != '\'')
+			return (expander->err = word_push(&expander->word_exp, item));
+		expander->err = word_remove(&expander->word, 0, 1);
 		if (expander->err.type)
 			return (expander->err);
 		context_dollar_squote(expander);
@@ -47,7 +69,7 @@ t_error	quote_remove_char(t_expander *expander)
 	return (expander->err);
 }
 
-t_error	quote_removal_word(t_expander *expander)
+static t_error	quote_removal_word(t_expander *expander)
 {
 	expander->err = fields_fpop(&expander->word, &expander->fields);
 	if (expander->err.type)

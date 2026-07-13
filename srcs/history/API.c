@@ -11,14 +11,14 @@ t_error	history_save_entry(void)
 	if (state == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (state->current_input.len == 0)
-		return (state->err);
+		return (error(ERR_NO));
 	if (state->current_input.data[state->current_input.len - 1] == '\n')
 	{
 		state->current_input.data[state->current_input.len - 1] = '\0';
 		state->current_input.len--;
 	}
 	if (state->current_input.len == 0)
-		return (state->err);
+		return (error(ERR_NO));
 	state->err = history_list_push(&state->list, &state->current_input);
 	if (state->err.type)
 		return (state->err);
@@ -46,8 +46,9 @@ t_error	history_save(void)
 
 	state = shell_get_history();
 	if (state == NULL)
-		return (error(ERR_SHELL_NOT_FOUND));
+		return (history_error_qualify(error(ERR_SHELL_NOT_FOUND)));
 	if (history_build_file_content(state, state->file.loaded_count).type)
-		return (state->err);
-	return (state->err = history_file_write(&state->file));
+		return (state->err = history_error_qualify(state->err));
+	state->err = history_error_qualify(history_file_write(&state->file));
+	return (state->err);
 }

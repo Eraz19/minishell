@@ -20,12 +20,15 @@ static t_error	prepare_path_name_word(t_expander *expander, t_word *original)
 	return (word_free(&expander->word), expander->err);
 }
 
-static t_error	on_failure(t_error err, t_path_comps *comps, t_word *original)
+static t_error	release_path_word(
+					t_error err,
+					t_path_comps *comps,
+					t_word *original)
 {
 	return (path_comps_free(comps), word_free(original), err);
 }
 
-t_error	path_name_expansion_word(t_expander *expander)
+static t_error	path_name_expansion_word(t_expander *expander)
 {
 	bool			globbed;
 	t_word			original;
@@ -44,10 +47,10 @@ t_error	path_name_expansion_word(t_expander *expander)
 		return (word_free(&original), expander->err);
 	expander->err = path_globbing(expander, &path_comps, &globbed);
 	if (expander->err.type || globbed)
-		return (on_failure(expander->err, &path_comps, &original));
+		return (release_path_word(expander->err, &path_comps, &original));
 	expander->err = fields_push(&expander->fields_exp, original);
 	if (expander->err.type)
-		return (on_failure(expander->err, &path_comps, &original));
+		return (release_path_word(expander->err, &path_comps, &original));
 	return (expander->err);
 }
 

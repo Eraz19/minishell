@@ -1,14 +1,33 @@
 #include "params.h"
 #include "param_expansion_.h"
 
-t_error	append_param_as_field(t_expander *expander, t_word word_exp, size_t i)
+t_error	append_param_as_field(
+			t_expander *expander,
+			t_word word_exp,
+			t_word_item_opt opt,
+			size_t i)
 {
+	t_word_item	dquote_item;
+
+	dquote_item = simple_dquote_item(opt);
 	if (i != 0)
 	{
+		if (opt.quoted == CONTEXT_DQUOTE)
+		{
+			expander->err = word_push(&expander->word_exp, dquote_item);
+			if (expander->err.type)
+				return (expander->err);
+		}
 		expander->err = fields_push(&expander->fields_exp, expander->word_exp);
 		if (expander->err.type)
 			return (expander->err);
 		word_init(&expander->word_exp);
+		if (opt.quoted == CONTEXT_DQUOTE)
+		{
+			expander->err = word_push(&expander->word_exp, dquote_item);
+			if (expander->err.type)
+				return (expander->err);
+		}
 	}
 	if (!vector_merge(&expander->word_exp, &word_exp, expander->word_exp.len))
 		return (expander->err = error_sys());
@@ -18,7 +37,6 @@ t_error	append_param_as_field(t_expander *expander, t_word word_exp, size_t i)
 t_error	join_param(t_string *out, const t_positionals *params, t_string *sep)
 {
 	size_t		i;
-	t_error		err;
 	t_string	param;
 
 	i = 0;
@@ -26,10 +44,10 @@ t_error	join_param(t_string *out, const t_positionals *params, t_string *sep)
 	{
 		param = ((t_string *)params->data)[i++];
 		if (!string_append(out, &param))
-			return (err = error_sys());
+			return (error_sys());
 		if (i < params->len && sep->len > 0)
 			if (!string_append(out, sep))
-				return (err = error_sys());
+				return (error_sys());
 	}
 	return (error(ERR_NO));
 }
@@ -52,6 +70,7 @@ t_error	expand_positional_star(t_expander *expander, t_word_item_opt opt)
 	expander->err = join_param(&param_exp, params, &sep);
 	if (expander->err.type)
 		return (string_free(&sep), string_free(&param_exp), expander->err);
+	opt.is_expand_res = true;
 	expander->err = from_str(&word_exp, &param_exp, opt);
 	if (expander->err.type)
 		return (string_free(&sep), string_free(&param_exp), expander->err);
@@ -71,16 +90,20 @@ t_error	expand_positional_at(t_expander *expander, t_word_item_opt opt)
 	expander->err = params_get_positionals(&params);
 	if (expander->err.type)
 		return (expander->err);
+	if (params->len == 0 && opt.quoted == CONTEXT_DQUOTE)
+		return (drop_quoted_null_at(expander));
 	i = 0;
 	while (i < params->len)
 	{
 		param = ((t_string *)params->data)[i];
+		opt.is_expand_res = true;
 		expander->err = from_str(&word_exp, &param, opt);
 		if (expander->err.type)
 			return (expander->err);
-		expander->err = append_param_as_field(expander, word_exp, i);
+		expander->err = append_param_as_field(expander, word_exp, opt, i);
+		word_free(&word_exp);
 		if (expander->err.type)
-			return (word_free(&word_exp), expander->err);
+			return (expander->err);
 		i++;
 	}
 	return (expander->err);

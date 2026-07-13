@@ -55,6 +55,8 @@ static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
 		return (*dst_symbol = SYM_DLESSDASH, error(ERR_NO));
 	else if (token_type == TOKEN_IO_NUMBER)
 		return (*dst_symbol = SYM_IO_NUMBER, error(ERR_NO));
+	else if (token_type == TOKEN_IO_LOCATION)
+		return (*dst_symbol = SYM_IO_LOCATION, error(ERR_NO));
 	else if (token_type == TOKEN_EOF)
 		return (*dst_symbol = SYM_EOF, error(ERR_NO));
 	return (sym_conv2(token_type, dst_symbol));

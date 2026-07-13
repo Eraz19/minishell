@@ -33,7 +33,7 @@ t_error	path_comps_load(t_path_comps *comps, const t_word *src)
 			return (path_comp_free(&glob_comp), path_comps_free(comps), err);
 		i++;
 	}
-	err = path_comps_push(comps, glob_comp);
+	err = path_comp_emit(comps, &glob_comp);
 	if (err.type)
 		return (path_comp_free(&glob_comp), path_comps_free(comps), err);
 	return (error(ERR_NO));

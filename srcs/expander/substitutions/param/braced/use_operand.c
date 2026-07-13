@@ -42,12 +42,31 @@ static t_error	operand_to_fields(
 	return (expander->err);
 }
 
-static t_error	emit_field_break(t_expander *expander)
+static t_error	emit_operand_items(
+					t_expander *expander,
+					const t_word *field,
+					t_word_item_opt opt)
 {
-	expander->err = fields_push(&expander->fields_exp, expander->word_exp);
-	if (expander->err.type)
-		return (expander->err);
-	return (word_init(&expander->word_exp), expander->err);
+	size_t		i;
+	t_word_item	item;
+
+	i = 0;
+	while (i < field->len)
+	{
+		expander->err = word_get(&item, field, i);
+		if (expander->err.type)
+			return (expander->err);
+		if (opt.quoted != CONTEXT_NONE)
+			item.opt.quoted = opt.quoted;
+		item.opt.context = CONTEXT_NONE;
+		item.opt.context_len = 0;
+		item.opt.is_expand_res = true;
+		expander->err = word_push(&expander->word_exp, item);
+		if (expander->err.type)
+			return (expander->err);
+		i++;
+	}
+	return (expander->err);
 }
 
 static t_error	emit_operand_fields(
@@ -55,21 +74,23 @@ static t_error	emit_operand_fields(
 					t_fields *fields,
 					t_word_item_opt opt)
 {
-	size_t		i;
-	t_word		field;
-	t_string	str;
+	size_t	i;
+	t_word	field;
 
 	i = 0;
 	while (i < fields->len)
 	{
 		field = ((t_word *)fields->data)[i];
-		expander->err = to_str(&str, &field, 0, field.len);
-		if (expander->err.type)
-			return (expander->err);
-		if (i != 0 && emit_field_break(expander).type)
-			return (string_free(&str), expander->err);
-		expander->err = braced_push_value(expander, &str, opt);
-		string_free(&str);
+		if (i != 0)
+		{
+			expander->err = fields_push(
+								&expander->fields_exp,
+								expander->word_exp);
+			if (expander->err.type)
+				return (expander->err);
+			word_init(&expander->word_exp);
+		}
+		expander->err = emit_operand_items(expander, &field, opt);
 		if (expander->err.type)
 			return (expander->err);
 		i++;

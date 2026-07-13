@@ -8,60 +8,59 @@
 typedef enum e_error_type
 {
 	// Success
-	ERR_NO,									// [0]
+	ERR_NO,									// [ 0]
 	/* -------------------- UNQUALIFIED ERRORS -------------------- */
 	// Failures
-	ERR_ASSIGNMENT_MISSING_NAME,			// [1]
-	ERR_FD_INVALID,							// [1]
-	ERR_FORMAT_INVALID,						// [1]
-	ERR_HOOK_INVALID_RHS_LEN,				// [1]
-	ERR_INDEX_OUT_OF_BOUND,					// [1]
-	ERR_LR_CONFLICT,						// [1]
-	ERR_LR_STATE_NOT_FOUND,					// [1]
-	ERR_PARSER_EMPTY_GOTO,					// [1]
-	ERR_PARSER_INVALID_FUNCTION_NAME,		// [1]
-	ERR_PARSER_INVALID_STATE,				// [1]
-	ERR_SHELL_NOT_FOUND,					// [1]
-	ERR_SHIFT_INVALID_VALUE,				// [1]
-	ERR_SIZE_MAX_REACHED,					// [1]
-	ERR_VAR_INVALID_NAME,					// [1]
-	ERR_VAR_MISSING_EQUAL,					// [1]
-	ERR_VAR_NOT_FOUND,						// [1]
-	ERR_VAR_READ_ONLY,						// [1]
+	ERR_ASSIGNMENT_MISSING_NAME,			// [ 1]
+	ERR_FD_INVALID,							// [ 1]
+	ERR_FORMAT_INVALID,						// [ 1]
+	ERR_HOOK_INVALID_RHS_LEN,				// [ 1]
+	ERR_INDEX_OUT_OF_BOUND,					// [ 1]
+	ERR_LR_CONFLICT,						// [ 1]
+	ERR_LR_STATE_NOT_FOUND,					// [ 1]
+	ERR_PARSER_EMPTY_GOTO,					// [ 1]
+	ERR_PARSER_INVALID_FUNCTION_NAME,		// [ 1]
+	ERR_PARSER_INVALID_STATE,				// [ 1]
+	ERR_SHELL_NOT_FOUND,					// [ 1]
+	ERR_SHIFT_INVALID_VALUE,				// [ 1]
+	ERR_SIZE_MAX_REACHED,					// [ 1]
+	ERR_VAR_INVALID_NAME,					// [ 1]
+	ERR_VAR_MISSING_EQUAL,					// [ 1]
+	ERR_VAR_NOT_FOUND,						// [ 1]
+	ERR_VAR_READ_ONLY,						// [ 1]
 	// Lexer failures
-	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [1]
-	ERR_CTX_END_NOT_FOUND,					// [1]
-	ERR_EMPTY_STACK,						// [1]
-	ERR_HEREDOC_MAX_ID_REACHED,				// [1]
-	ERR_HISTORY_DISABLED,					// [1]
-	ERR_INCOHERENT_STATE,					// [1]
-	ERR_NO_DELIM,							// [1]
-	ERR_NOT_IMPLEMENTED,					// [1]
-	ERR_UNEXPECTED_EOI,						// [1]
-	ERR_NO_INPUT_TO_LEX,					// [1]
-	ERR_EXP_RESULT_INCOHERENT,				// [1]
-	ERR_QUOTED_TILDE,						// [1]
-	ERR_PARAM_NULL_OR_UNSET,				// [1]
-	ERR_PARAM_BAD_SUBSTITUTION,				// [1]
-	ERR_BAD_SUBSTITUTION,					// [1]
-	ERR_ALIAS_NOT_FOUND,					// [1]
+	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_EMPTY_STACK,						// [ 1] 
+	ERR_HEREDOC_MAX_ID_REACHED,				// [ 1] 
+	ERR_HISTORY_DISABLED,					// [ 1] 
+	ERR_INCOHERENT_STATE,					// [ 1] 
+	ERR_NO_DELIM,							// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_NOT_IMPLEMENTED,					// [ 1] 
+	ERR_UNEXPECTED_EOI,						// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_NO_INPUT_TO_LEX,					// [ 1] 
+	ERR_EXP_RESULT_INCOHERENT,				// [ 1] 
+	ERR_QUOTED_TILDE,						// [ 1] [EXPANDER]	Internal control flow, never escapes: a quoted tilde stays literal
+	ERR_PARAM_NULL_OR_UNSET,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed at production with the parameter name)
+	ERR_PARAM_BAD_SUBSTITUTION,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed)
+	ERR_ALIAS_NOT_FOUND,					// [ 1] [BUILTINS]	alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
 	// FT_GETOPT
-	ERR_OPT_INVALID,						// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_INVALID_ARG,					// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_MISSING_ARG,					// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID,						// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_MISSING_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
 	// posix_write()
 	ERR_POSIX_WRITE,						// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
 	ERR_INVALID_USAGE,						// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL / ERR_REDIRECTION_OTHER
+	ERR_REDIRECTION,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL / ERR_REDIRECTION_OTHER. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
 	ERR_BUILTIN,							// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
 	ERR_REDIRECTION_OTHER = 116,			// [ 6] [WALKERS]		[N-N-Y] Absorbed (walk_scmd / walk_command / walk_function)
 	/* -------------------- FLOW CONTROL ERRORS -------------------- */
-	ERR_VEOF,								// [2]	[???]			TODO: difference ?
-	ERR_EOF,								// [2]	[RUNNER]		TODO: difference ?
+	ERR_VEOF,								// [ 2]	[RUNNER]		"CTRL+D" received: Absorbed (may exit with $? status)
+	ERR_EOF,								// [ 2]	[RUNNER]		End of input reached: Absorbed (may exit with $? status)
 	ERR_CONTINUE,							// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
 	ERR_BREAK,								// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
 	ERR_RETURN,								// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)

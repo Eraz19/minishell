@@ -7,6 +7,8 @@ t_error	path_match_append(t_string *cand, const char *pattern)
 {
 	size_t	i;
 
+	if (pattern == NULL)
+		return (error(ERR_NO));
 	i = 0;
 	while (pattern[i] != '\0')
 	{
@@ -19,7 +21,7 @@ t_error	path_match_append(t_string *cand, const char *pattern)
 	return (error(ERR_NO));
 }
 
-bool	skip_lookup_dir_entry(const char *name, const t_path_comp *comp)
+static bool	skip_lookup_dir_entry(const char *name, const t_path_comp *comp)
 {
 	const char	*pattern;
 
@@ -35,14 +37,14 @@ bool	skip_lookup_dir_entry(const char *name, const t_path_comp *comp)
 	return (true);
 }
 
-bool	is_dir_matches(const char *name, const t_path_comp *comp)
+static bool	is_dir_matches(const char *name, const t_path_comp *comp)
 {
 	if (skip_lookup_dir_entry(name, comp))
 		return (false);
 	return (match_pattern(comp->pattern.data, name, str_len(name)));
 }
 
-t_error	add_match(
+static t_error	add_match(
 			t_path_matches *out,
 			const t_string *match,
 			const char *dir_name,

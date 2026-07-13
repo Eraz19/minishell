@@ -54,9 +54,10 @@ bool	is_token_alias_expandable(t_alias *alias, char *word)
 		return (false);
 	else if (!alias->disable_position)
 	{
-		// TODO: handle error
-		(void)builder_can_next_word_be_a_cmd_name(&can_next_token_be_a_cmd_name);
-		if (!can_next_token_be_a_cmd_name)
+		can_next_token_be_a_cmd_name = false;
+		alias->err = builder_can_next_word_be_a_cmd_name(
+				&can_next_token_be_a_cmd_name);
+		if (alias->err.type || !can_next_token_be_a_cmd_name)
 			return (false);
 	}
 	return (true);

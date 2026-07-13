@@ -110,6 +110,7 @@ t_error	expand_braced_positional(t_expander *expander, size_t body_len)
 		return (expander->err);
 	positional_exp.symbol = item.c;
 	positional_exp.result_opt = item.opt;
+	positional_exp.result_opt.is_expand_res = true;
 	expander->err = word_remove(&expander->word, 0, 1);
 	if (expander->err.type)
 		return (expander->err);
@@ -117,13 +118,3 @@ t_error	expand_braced_positional(t_expander *expander, size_t body_len)
 		return (braced_positional_bare(expander, &positional_exp));
 	return (braced_positional_op(expander, &positional_exp, body_len));
 }
-
-/*
-In the arith_substitution function you can see the beginning of my implementation
-  for the arith expansion and what will be the plan to implement the rest. There
-  is only one question that I ask myself. The function compute_arith_expression
-  takes a t_expansion which is the plain result of the expansion. In some cases
-  that could be composed of multiple fields but in this case it should be only one.
-  But, because the param expansion is being applied and that, in the case where
-  there is a param expansion like $
-*/

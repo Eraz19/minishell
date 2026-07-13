@@ -15,8 +15,6 @@ void	loader_free(t_loader *loader)
 	context_stack_free(&loader->stack);
 	word_free(&loader->loaded_word);
 	context_stack_free(&loader->loading_stack);
-	if (loader->context_item)
-		loader->context_item = NULL;
 	*loader = (t_loader){0};
 }
 

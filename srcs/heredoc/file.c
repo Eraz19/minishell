@@ -25,7 +25,9 @@ t_error	try_create_heredoc_file(t_heredoc *heredoc,t_string *path, int *fd)
 	if (!string_append_format(path, "%i", (int)heredoc->file_id))
 		return (heredoc->err = error_sys(), string_free(path), heredoc->err);
 	heredoc->err = posix_open_with_mode(path->data, o_flag, 0600, fd);
-	return (close(*fd), heredoc->err);
+	if (heredoc->err.type == ERR_NO)
+		heredoc->err = posix_close(*fd);
+	return (heredoc->err);
 }
 
 t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path)

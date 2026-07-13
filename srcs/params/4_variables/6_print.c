@@ -9,9 +9,9 @@
 // @ret ERR_INTERRUPTED / ERR_LIBC
 static inline t_error	var_print_one(const char *prefix, const t_var *var)
 {
+	t_error		err;
 	t_string	string;
 	t_string	escaped_value;
-	t_error		err;
 
 	assert(prefix != NULL);
 	assert(var != NULL);
@@ -37,6 +37,24 @@ static inline t_error	var_print_one(const char *prefix, const t_var *var)
 	return (string_free(&string), err);
 }
 
+static inline bool	var_print_selects(t_var_print_mode mode, const t_var *var)
+{
+	if (mode == VAR_PRINT_EXPORT)
+		return (var->export);
+	if (mode == VAR_PRINT_READONLY)
+		return (var->readonly);
+	return (true);
+}
+
+static inline const char	*var_print_prefix(t_var_print_mode mode)
+{
+	if (mode == VAR_PRINT_EXPORT)
+		return ("export ");
+	if (mode == VAR_PRINT_READONLY)
+		return ("readonly ");
+	return ("");
+}
+
 t_error	var_print(t_var_print_mode mode)
 {
 	t_params	*params;
@@ -45,7 +63,8 @@ t_error	var_print(t_var_print_mode mode)
 	size_t		i;
 	t_error		err;
 
-	assert(mode == VAR_PRINT_EXPORT || mode == VAR_PRINT_READONLY);
+	assert(mode == VAR_PRINT_EXPORT || mode == VAR_PRINT_READONLY
+		|| mode == VAR_PRINT_SET);
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
@@ -55,10 +74,8 @@ t_error	var_print(t_var_print_mode mode)
 	while (i < list->len)
 	{
 		var = &((t_var *)list->data)[i];
-		if (mode == VAR_PRINT_EXPORT && var->export)
-			err = var_print_one("export ", var);
-		else if (mode == VAR_PRINT_READONLY && var->readonly)
-			err = var_print_one("readonly ", var);
+		if (var_print_selects(mode, var))
+			err = var_print_one(var_print_prefix(mode), var);
 		if (err.type != ERR_NO)
 			break ;
 		i++;

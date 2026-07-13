@@ -15,6 +15,7 @@ t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode)
 	heredoc = shell_get_heredoc();
 	if (heredoc == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
+	item = (t_heredoc_item){0};
 	if (create_heredoc_file(heredoc, out).type)
 		return (heredoc->err);
 	item.is_tty = heredoc->is_tty;
@@ -39,13 +40,12 @@ t_error	heredoc_read_body(
 	t_body			body;
 
 	i = 0;
+	if (start != NULL && src != NULL && *start <= src->len)
+		i = *start;
 	heredoc->err = heredoc_queue_pop(&heredoc->queue, &item);
 	if (heredoc->err.type)
 		return (heredoc->err);
-	if (start == NULL || *start > item.input.len)
-		heredoc->err = heredoc_item_load(&item, src, &i);
-	else 
-		heredoc->err = heredoc_item_load(&item, src, start);
+	heredoc->err = heredoc_item_load(&item, src, i);
 	if (heredoc->err.type)
 		return (heredoc_item_free(&item), heredoc->err);
 	body_init(&body);
@@ -57,6 +57,8 @@ t_error	heredoc_read_body(
 		return (body_free(&body), heredoc->err);
 	}
 	heredoc->err = save_body_in_file(&body.item->path, &body.content);
+	if (!heredoc->err.type && start != NULL)
+		*start = item.i;
 	return (heredoc_item_free(&item), body_free(&body), heredoc->err);
 }
 
@@ -85,22 +87,22 @@ t_error	heredoc_expand_body(const t_string *path)
 	flags = generate_heredoc_body_expand_flags();
 	err = read_body_file(&body, path);
 	if (err.type)
-		return (err);
+		return (heredoc_error_qualify(err));
 	err = expand_heredoc(&expansion, &body, flags);
 	if (err.type)
-		return (string_free(&body), err);
+		return (string_free(&body), heredoc_error_qualify(err));
 	string_free(&body);
 	string_init(&body, 0, NULL, 0);
 	if (expansion.len != 1)
 		return (expansion_free(&expansion), string_free(&body),
-			error(ERR_EXP_RESULT_INCOHERENT));
+			heredoc_error_qualify(error(ERR_EXP_RESULT_INCOHERENT)));
 	err = expansion_fpop(&body, &expansion);
 	if (err.type)
-		return (expansion_free(&expansion), string_free(&body), err);
+		return (expansion_free(&expansion), string_free(&body),
+			heredoc_error_qualify(err));
 	err = save_body_in_file(path, &body);
-	if (err.type)
-		return (expansion_free(&expansion), string_free(&body), err);
-	return (expansion_free(&expansion), string_free(&body), err);
+	return (expansion_free(&expansion), string_free(&body),
+		heredoc_error_qualify(err));
 }
 
 t_error	heredoc_prepare_for_expansion(

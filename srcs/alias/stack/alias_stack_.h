@@ -4,56 +4,73 @@
 # include "error.h"
 # include "alias.h"
 
-/*
- * The t_alias_stack type (a vector of owned alias-name strings) is declared
- * in alias.h; this header documents the operations on it. The stack records
- * the aliases currently being expanded to break expansion recursion.
+/** @defgroup alias_stack Alias recursion-guard stack
+ *  @brief Records the aliases currently being expanded to break expansion
+ *         recursion (POSIX 2.3.1).
+ *
+ *  The @ref t_alias_stack type (a @ref t_vector of owned alias-name
+ *  C-strings) is declared in alias.h; this header documents the
+ *  operations on it.
  */
 
+/* ************************************************************************* */
+/*                                LIFE_CYCLE                                 */
+/* ************************************************************************* */
+
 /**
- * @ingroup alias
- * @brief Initialises an empty expansion stack.
+ * @ingroup alias_stack
+ * @brief Initializes @p stack as an empty expansion stack.
  *
- * @param stack Pointer to the stack to initialise (borrowed).
+ * @param stack Stack initialized by the function (borrowed).
  */
 void	alias_stack_init(t_alias_stack *stack);
 
 /**
- * @ingroup alias
- * @brief Frees the stack and every name it owns.
+ * @ingroup alias_stack
+ * @brief Frees @p stack and every name it owns.
  *
- * @param stack Pointer to the stack to free (borrowed).
+ * @param stack Already initialized stack (borrowed).
  */
 void	alias_stack_free(t_alias_stack *stack);
 
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
+
 /**
- * @ingroup alias
+ * @ingroup alias_stack
+ * @brief Tests whether an alias name is currently being expanded.
+ *
+ * @param stack Already initialized stack (borrowed, read-only).
+ * @param word Alias name to look for, NUL-terminated C-string
+ *             (borrowed, read-only).
+ * @return True if @p word is on the stack, false otherwise.
+ */
+bool	alias_stack_contains(t_alias_stack *stack, char *word);
+
+/**
+ * @ingroup alias_stack
  * @brief Pops and frees the top alias name.
  *
  * Does nothing when the stack is empty.
  *
- * @param stack Pointer to the stack (borrowed).
+ * @param stack Already initialized stack (borrowed).
  */
 void	alias_stack_pop(t_alias_stack *stack);
 
 /**
- * @ingroup alias
- * @brief Pushes an alias name, taking ownership of @p item.
+ * @ingroup alias_stack
+ * @brief Pushes an alias name on the stack.
  *
- * @param stack Pointer to the stack (borrowed).
- * @param item Alias name whose ownership is transferred to the stack.
- * @return ERR_NO on success, ERR_LIBC on allocation failure.
+ * @warning Ownership is conditional: @p item is owned by the stack on
+ *          success, but stays owned by the caller on failure (the caller
+ *          must free it, as @c alias_expand_token does).
+ * @param stack Already initialized stack (borrowed).
+ * @param item Heap-allocated alias name (ownership taken by @p stack on
+ *             success only).
+ * @return @c ERR_LIBC if the push fails, @c ERR_NO on success.
  */
+// TODO: fix ownership
 t_error	alias_stack_push(t_alias_stack *stack, char *item);
-
-/**
- * @ingroup alias
- * @brief Tests whether an alias name is currently being expanded.
- *
- * @param stack Pointer to the stack (borrowed).
- * @param word Alias name to look for (borrowed).
- * @return true if @p word is on the stack, false otherwise.
- */
-bool	alias_stack_contains(t_alias_stack *stack, char *word);
 
 #endif

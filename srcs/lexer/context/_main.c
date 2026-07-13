@@ -15,7 +15,7 @@ t_error	lexer_context(t_lexer *lexer, t_context context)
 	if (context == CONTEXT_PARAM)
 		return (lexer_context_param(lexer));
 	if (context == CONTEXT_CMD_SUB)
-		return (lexer->err = error(ERR_NOT_IMPLEMENTED));
+		return (lexer_context_cmd_sub(lexer));
 	if (context == CONTEXT_NONE)
 		return (lexer->err = error(ERR_INCOHERENT_STATE));
 	return (lexer->err = error(ERR_INCOHERENT_STATE));

@@ -9,7 +9,8 @@ void	cmd_try_regular_builtin(t_cmd *cmd)
 	// 	cmd->builtin = builtin_echo;
 	if (str_cmp(cmd->path.data, "/usr/bin/env") == 0)
 		cmd->builtin = builtin_env;
-	else if (str_cmp(cmd->path.data, "/bin/pwd") == 0)
+	else if (str_cmp(cmd->path.data, "/bin/pwd") == 0
+		|| str_cmp(cmd->path.data, "/usr/bin/pwd") == 0)
 		cmd->builtin = builtin_pwd;
 	else
 		return ;

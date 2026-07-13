@@ -34,9 +34,9 @@ t_error	history_load_path_env(t_history *state)
 
 t_error	history_load_size_env(t_history *state)
 {
-	ssize_t		max;
+	long		max;
 	t_string	max_str;
-	
+
 	state->err = params_get_from_const("HISTSIZE", &max_str);
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
@@ -45,18 +45,23 @@ t_error	history_load_size_env(t_history *state)
 		state->rl_history.max = -1;
 		print_pass("history max size                       default (INFINITE)\n");
 	}
+	else if (!parse_long(max_str.data, &max))
+	{
+		string_free(&max_str);
+		state->rl_history.max = -1;
+		print_pass("history max size                       $HISTSIZE invalid, default (INFINITE)\n");
+	}
 	else
 	{
-		max = (ssize_t)ft_atol(max_str.data);
 		string_free(&max_str);
-		state->rl_history.max = max;
+		state->rl_history.max = (ssize_t)max;
 		if (max >= 0 && max < 128)
 		{
-			print_pass("history max size set from $HISTSIZE    %i\n", (int)state->rl_history.max);
+			print_pass("history max size set from $HISTSIZE    %li\n", max);
 			state->rl_history.max = 128;
 		}
 		else
-			print_pass("history max size from $HISTSIZE        default (%i)\n", (int)state->rl_history.max);
+			print_pass("history max size from $HISTSIZE        default (%li)\n", max);
 	}
 	return (state->err = error(ERR_NO));
 }

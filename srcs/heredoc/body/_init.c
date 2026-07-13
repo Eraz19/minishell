@@ -17,6 +17,6 @@ void	body_free(t_body *body)
 
 void	body_load(t_body *body, t_heredoc_item *item)
 {
-	body->i = *item->i;
+	body->i = item->i;
 	body->item = item;
 }

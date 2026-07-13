@@ -49,7 +49,8 @@ static t_error	dollar_squote_simple_apply(
 
 	if (dollar_squote_simple_escape(c, &byte, escapes))
 	{
-		if (word_remove(&expander->word, 0, 1).type)
+		expander->err = word_remove(&expander->word, 0, 1);
+		if (expander->err.type)
 			return (expander->err);
 		return (dollar_squote_emit(expander, byte, opt));
 	}
@@ -57,7 +58,7 @@ static t_error	dollar_squote_simple_apply(
 		return (expander->err);
 	if (dollar_squote_emit(expander, c, opt).type)
 		return (expander->err);
-	return (word_remove(&expander->word, 0, 1));
+	return (expander->err = word_remove(&expander->word, 0, 1));
 }
 
 t_error	dollar_squote_escape(
@@ -67,7 +68,8 @@ t_error	dollar_squote_escape(
 {
 	t_word_item	item;
 
-	if (word_remove(&expander->word, 0, 1).type)
+	expander->err = word_remove(&expander->word, 0, 1);
+	if (expander->err.type)
 		return (expander->err);
 	if (expander->word.len == 0)
 		return (dollar_squote_emit(expander, '\\', opt));
