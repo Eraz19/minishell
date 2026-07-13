@@ -1,5 +1,7 @@
 # TO TEST
 
+⚠️ remove `echo` from known builtin list to test
+
 ```bash
 false
 echo "before => $?"
@@ -23,35 +25,81 @@ i=old
 for i in a b c; do
     :
 done
-echo "$i"
+echo "should be 'c' => '$i'"
 ```
 
 ```bash
 a=one
 for x in $a $a; do
     a=two
-    echo "$x"
+    echo "shoud be 'one' => '$x'"
 done
 ```
 
 ```bash
+echo "should throw assignment error"
 readonly i
 for i in a b c; do
     echo "$i"
 done
 ```
 
+```bash
+case x in
+  x) ;;
+esac
+echo "\$? should be '0' => '$?'"
+```
+
+# TEST (AFTER PATTERN MATCHING UPDATE)
+
+```bash
+v='abc*def'
+echo "${v#'*'}"
+
+p='*'
+case abc in
+    "$p") echo "ERROR: * should be litteral when p='*' and pattern is \"$p\"" ;;
+	$p) echo "valid 1";;
+esac
+
+case '*' in
+    \*) echo "valid 2" ;;
+esac
+
+case '?' in
+    \?) echo "valid 3" ;;
+esac
+
+case '[' in
+    \[) echo "valid 4" ;;
+esac
+
+case '[' in
+    [) echo "valid 5" ;;
+esac
+
+case "" in
+    "") echo "valid 6" ;;
+esac
+```
+
 # ALEXANDER
 
+- ⚠️ `pattern matching`:
+	- Sections POSIX : 2.6 + 2.6.2 + 2.9.4.3 + 2.13
+	- Le matching des case doit se "souvenir" des quoted caractères après expansion:
+		- ex : Le pattern `"*"` (≠ `wildcard`) doit matcher uniquement la string littérale `*`.
+	- Les caractères sépciaux issus d'une expansion quoted doivent rester littéraux:
+		- ex : si `p='*'` => `"$p"` doit matcher `*` alors que `$p` doit matcher `wildcard`
+	- SOLUTION => exposer une API `t_error expander_match(t_string *expanded_word, t_token *pattern, bool *out)` ?
+		- flags = EXP_TILDE_NORMAL | EXP_PARAM | EXP_DOLLAR_SQUOTE | EXP_CMD_SUB | EXP_ARITH | EXP_QUOTE_REMOVAL
+	- + besoin confirmation que l'expansion fait toujours au moins un field sinon `walk_case()` peut segfault
 - ⚠️ `token`:
-	- should store a ptr / index to `history` to never invalidate `t_token_index`
-	- => `function` simplified (évite de parcourir tout l'AST pour update les `token`)
+	- could store a ptr / index to `history` to never invalidate `t_token_index` ?
+	- => `function` simplified (évite de parcourir tout l'AST pour update les `t_token_index`)
 	- => detailed `errors` always available
-- ⚠️ `history`:
-	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
-- ⚠️ `heredoc`:
-	- use `$TMPDIR` if exists (`params_get_variable()` + `expand_token()`)
-	- use `t_string` instead of file
+	- Sinon => GA => implémenter token index = -1 à la création des fonctions ?
 - ⚠️ `expander`:
 	- doit retourner le statut de la dernière `command substitution`:
 ```bash
@@ -60,6 +108,10 @@ VAR=$(true)        => status 0
 VAR=$(false)       => status 1
 VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 ```
+- ⚠️ `heredoc`:
+	- use `t_string` instead of file
+- ⚠️ `history`:
+	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
 - 🚧 `shell`:
 	- `shell_init_subshell()`: (only missing traps / signal handling)
 - ✅ `hashmap`:
@@ -87,6 +139,8 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 
 # WIP
 
+- `walker`:
+	- children should close all backup fds as in external commands ?
 - `runner`:
 	- after each `AST` execution:
 		- try to `reap` all async children with `async_reap_nonblocking()`
@@ -267,6 +321,8 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - `async`:
 	- `jobs`:
 		- as `setpgid()` / `tcsetpgrp()` / `getpgrp()` / `setsid()` are forbidden, job-control background jobs and non-job-control background jobs are not implemented.
+- `pattern matching`:
+	- as locale-management functions are forbidden, pattern matching ignores locale-dependent collation and character classification; therefore, bracket ranges, equivalence classes, collating symbols, and character classes are only approximated with byte/ASCII-like semantics.
 
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 

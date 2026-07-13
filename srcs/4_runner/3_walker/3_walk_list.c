@@ -91,6 +91,11 @@ t_error	walk_list(t_runner *runner, t_ast_list *list, int *exit_status)
 {
 	t_error	err;
 
+	if (list->and_ors.len == 0)
+	{
+		*exit_status = 0;
+		return (walk_normalize_output(error(ERR_NO), NULL, exit_status));
+	}
 	*exit_status = -1;
 	if (list->subshell == false)
 		err = walk_list_priv(runner, list, exit_status);
