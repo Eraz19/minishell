@@ -4,11 +4,14 @@
 
 void	cmd_try_regular_builtin(t_cmd *cmd)
 {
-	if (str_cmp(cmd->path.data, "/bin/echo") == 0)
+	if (str_cmp(cmd->path.data, "/bin/echo") == 0
+		|| str_cmp(cmd->path.data, "/usr/bin/echo") == 0)
 		cmd->builtin = builtin_echo;
-	else if (str_cmp(cmd->path.data, "/usr/bin/env") == 0)
+	else if (str_cmp(cmd->path.data, "/bin/env") == 0
+		|| str_cmp(cmd->path.data, "/usr/bin/env") == 0)
 		cmd->builtin = builtin_env;
-	else if (str_cmp(cmd->path.data, "/bin/pwd") == 0)
+	else if (str_cmp(cmd->path.data, "/bin/pwd") == 0
+		|| str_cmp(cmd->path.data, "/usr/bin/pwd") == 0)
 		cmd->builtin = builtin_pwd;
 	else
 		return ;

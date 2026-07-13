@@ -1,14 +1,33 @@
 #include "params.h"
 #include "param_expansion_.h"
 
-t_error	append_param_as_field(t_expander *expander, t_word word_exp, size_t i)
+t_error	append_param_as_field(
+			t_expander *expander,
+			t_word word_exp,
+			t_word_item_opt opt,
+			size_t i)
 {
+	t_word_item	dquote_item;
+
+	dquote_item = simple_dquote_item(opt);
 	if (i != 0)
 	{
+		if (opt.quoted == CONTEXT_DQUOTE)
+		{
+			expander->err = word_push(&expander->word_exp, dquote_item);
+			if (expander->err.type)
+				return (expander->err);
+		}
 		expander->err = fields_push(&expander->fields_exp, expander->word_exp);
 		if (expander->err.type)
 			return (expander->err);
 		word_init(&expander->word_exp);
+		if (opt.quoted == CONTEXT_DQUOTE)
+		{
+			expander->err = word_push(&expander->word_exp, dquote_item);
+			if (expander->err.type)
+				return (expander->err);
+		}
 	}
 	if (!vector_merge(&expander->word_exp, &word_exp, expander->word_exp.len))
 		return (expander->err = error_sys());
@@ -81,9 +100,10 @@ t_error	expand_positional_at(t_expander *expander, t_word_item_opt opt)
 		expander->err = from_str(&word_exp, &param, opt);
 		if (expander->err.type)
 			return (expander->err);
-		expander->err = append_param_as_field(expander, word_exp, i);
+		expander->err = append_param_as_field(expander, word_exp, opt, i);
+		word_free(&word_exp);
 		if (expander->err.type)
-			return (word_free(&word_exp), expander->err);
+			return (expander->err);
 		i++;
 	}
 	return (expander->err);

@@ -47,6 +47,11 @@ t_error	builtin_unset(int argc, char **argv, char **envp, int *exit_status);
 
 t_error	builtin_alias(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_bg(int argc, char **argv, char **envp, int *exit_status);
+
+// @p exit_status ERR_INVALID_USAGE / ERR_VAR_NOT_FOUND / ERR_VAR_READ_ONLY
+// 					/ ERR_SHELL_NOT_FOUND / ERR_POSIX_WRITE
+// 					/ ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_NO / ERR_BUILTIN / ERR_INTERRUPTED / ERR_INTERNAL
 t_error	builtin_cd(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_command(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_fc(int argc, char **argv, char **envp, int *exit_status);
@@ -64,8 +69,18 @@ t_error	builtin_wait(int argc, char **argv, char **envp, int *exit_status);
 
 // Regular builtins (Shell shall not exit on error)
 
+// @p exit_status ERR_POSIX_WRITE / ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_NO / ERR_BUILTIN / ERR_INTERRUPTED / ERR_LIBC
 t_error	builtin_echo(int argc, char **argv, char **envp, int *exit_status);
+
+// @p exit_status ERR_INVALID_USAGE / ERR_NOT_IMPLEMENTED (utility operand)
+// 					/ ERR_POSIX_WRITE / ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_NO / ERR_BUILTIN / ERR_UB / ERR_INTERRUPTED / ERR_LIBC
 t_error	builtin_env(int argc, char **argv, char **envp, int *exit_status);
+
+// @p exit_status ERR_INVALID_USAGE / ERR_UB / ERR_SHELL_NOT_FOUND
+// 					/ ERR_POSIX_WRITE / ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_NO / ERR_BUILTIN / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
 t_error	builtin_pwd(int argc, char **argv, char **envp, int *exit_status);
 
 #endif
