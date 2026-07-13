@@ -1,3 +1,27 @@
+# TO FIX
+
+⚠️ All expansions can produce multiple fields (check all `cmd_*_expansion_flags()` callers)
+```bash
+# TEST 1
+set -- 'a' 'b' 'c'
+for subject in 'abc' 'a b c' 'a' 'b' 'c'
+do
+    case $subject in
+        $@) printf 'MATCH <%s>\n' "$subject" ;;
+        *)  printf 'NO    <%s>\n' "$subject" ;;
+    esac
+done
+# TEST 2
+set -- 'a' 'b' 'c'
+for subject in 'abc' 'a b c' 'a' 'b' 'c'
+do
+    case $subject in
+        "$@") printf 'MATCH <%s>\n' "$subject" ;;
+        *)  printf 'NO    <%s>\n' "$subject" ;;
+    esac
+done
+```
+
 # TESTS
 
 ⚠️ `echo` is removed from known builtin list to test
@@ -9,6 +33,13 @@
 unset pattern VAR
 VAR=${pattern} sh -c 'printf "child: VAR=<%s> pattern=<%s>\n" "${VAR-unset}" "${pattern-unset}"'
 printf 'parent: VAR=<%s> pattern=<%s>\n' "${VAR-unset}" "${pattern-unset}"
+```
+
+## TESTS (MATCH PATTERN)
+
+```bash
+cat *	# should match all files in current dir
+cat "*"	# should only match "*" file
 ```
 
 ## TESTS (IF)
@@ -92,7 +123,7 @@ echo "--------------------"
 ## TESTS (CASE)
 
 ```bash
-# segfault
+# OK
 echo "--------------------"
 case x in
   x) ;;
@@ -105,31 +136,38 @@ echo "--------------------"
 
 ```bash
 echo "--------------------"
+# OK (expected = abc*def)
 v='abc*def'
 echo "${v#'*'}"
 
+# ERROR
 p='*'
 case abc in
     "$p") echo "ERROR: * should be litteral when p='*' and pattern is \"$p\"" ;;
 	$p) echo "valid 1";;
 esac
 
+# OK
 case '*' in
     \*) echo "valid 2" ;;
 esac
 
+# OK
 case '?' in
     \?) echo "valid 3" ;;
 esac
 
+# OK
 case '[' in
     \[) echo "valid 4" ;;
 esac
 
+# OK
 case '[' in
     [) echo "valid 5" ;;
 esac
 
+# SEGFAULT
 case "" in
     "") echo "valid 6" ;;
 esac
@@ -151,10 +189,17 @@ VAR=${pattern%foo}
 
 # ALEXANDER
 
-- ⚠️ `braced_assign()`:
-	- Assigne lui-même des variables pendant l'expansion ? (cf `TESTS EXPANSIONS`)
-- ⚠️ `errors`:
-	- `lexer_reset()` and `lexer_get_next_token()` were ignoring `lexer_input_EOF()` returned error... anyway I made it void with assert
+```bash
+set -- 'a' 'b' 'c'
+case abc in
+    $@) echo "params are one field" ;;
+	a) echo "params are multiple fields";;
+esac
+```
+
+unset VAR
+VAR="$@" echo "--$VAR--"
+
 - ⚠️ `pattern matching`:
 	- Sections POSIX : 2.6 + 2.6.2 + 2.9.4.3 + 2.13
 	- Le matching des case doit se "souvenir" des quoted caractères après expansion:
