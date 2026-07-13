@@ -6,6 +6,8 @@
 # include "functions.h"
 # include "cmd_cache.h"
 
+// TODO: doc
+
 typedef struct s_runner
 {
 	t_redirector	redirector;
@@ -16,6 +18,7 @@ typedef struct s_runner
 }	t_runner;
 
 void	runner_init(t_runner *runner);
+void	runner_init_subshell(t_runner *runner);
 t_error	runner_run(t_runner *runner);
 void	runner_free(t_runner *runner);
 

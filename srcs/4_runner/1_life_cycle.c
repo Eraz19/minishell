@@ -10,6 +10,11 @@ void	runner_init(t_runner *runner)
 	runner->control_depth = 0;
 }
 
+void	runner_init_subshell(t_runner *runner)
+{
+	redirect_init_subshell(&runner->redirector);
+}
+
 void	runner_free(t_runner *runner)
 {
 	redirect_free(&runner->redirector);

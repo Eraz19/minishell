@@ -19,6 +19,9 @@
  */
 void	redirect_init(t_redirector *redirector);
 
+// TODO: doc
+void	redirect_init_subshell(t_redirector *redirector);
+
 /**
  * @brief Restore tracked file descriptors and free redirector resources.
  *

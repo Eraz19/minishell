@@ -6,9 +6,17 @@
 
 void	redirect_init(t_redirector *redirector)
 {
-	redirector->max_frame_count = 0;
 	redirect_stack_init(&redirector->stack);
 	fd_tracker_init(&redirector->tracker, &redirector->stack);
+	redirector->max_frame_count = 0;
+}
+
+void	redirect_init_subshell(t_redirector *redirector)
+{
+	redirect_close_backups(redirector);
+	redirect_stack_free(&redirector->stack, redirector->max_frame_count);
+	fd_tracker_free(&redirector->tracker);
+	redirector->max_frame_count = 0;
 }
 
 void	redirect_free(t_redirector *redirector)

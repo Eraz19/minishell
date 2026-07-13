@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <signal.h>
+#include "runner.h"
 # include "logs.h"
 
 // TODO
@@ -76,7 +77,8 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL),
 					__func__, "shell not found", NULL, NULL));
-	process_clear(&shell->params.processes);
+	runner_init_subshell(&shell->runner);
+	params_init_subshell(&shell->params);
 	err = shell_reset_unignored_traps(shell, mode);
 	if (err.type == ERR_NO)
 	{

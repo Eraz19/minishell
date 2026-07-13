@@ -66,6 +66,9 @@ void	params_free(t_params *params);
  */
 void	params_init(t_params *params);
 
+// TODO: doc
+void	params_init_subshell(t_params *params);
+
 /**
  * @brief Load all shell parameters from argc/argv/envp.
  *

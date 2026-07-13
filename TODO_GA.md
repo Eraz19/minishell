@@ -1,6 +1,8 @@
-# TO TEST
+# TESTS
 
 ⚠️ remove `echo` from known builtin list to test
+
+## TESTS (IF)
 
 ```bash
 false
@@ -19,6 +21,8 @@ if false; then
 fi
 echo "after => $?"
 ```
+
+## TESTS (FOR)
 
 ```bash
 i=old
@@ -44,6 +48,22 @@ for i in a b c; do
 done
 ```
 
+## TESTS (SUBSHELL)
+
+```bash
+while true; do
+	(
+		while true; do
+			break 2
+		done
+		echo after
+	)
+	echo parent
+done
+```
+
+## TESTS (CASE)
+
 ```bash
 case x in
   x) ;;
@@ -51,7 +71,7 @@ esac
 echo "\$? should be '0' => '$?'"
 ```
 
-# TEST (AFTER PATTERN MATCHING UPDATE)
+# TEST (CASE : AFTER PATTERN MATCHING UPDATE)
 
 ```bash
 v='abc*def'
@@ -142,7 +162,7 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- after each `AST` execution:
 		- try to `reap` all async children with `async_reap_nonblocking()`
 		- `ft_stdin_set_blocking()`
-	- `error` handling (exit status, exit or not...)
+	- `error` handling (exit status, exit or not...) => let POSIX errors bubble up to `shell` module ?
 - `heredoc`:
 	- **all**:
 		- remove all `unlink` usage
@@ -172,6 +192,8 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- ⚠️ `command` specific flow
 	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
 - `posix_read_all()`
+- `*_init_subshell()`:
+	- `clear()` instead of `free()`
 
 # TODO
 
