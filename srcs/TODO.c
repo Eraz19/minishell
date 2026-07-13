@@ -34,13 +34,7 @@ int	builtin_break(int argc, char **argv, char **envp)
 	(void)envp;
 	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
 }
-int	builtin_colon(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	return ((int)error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL).type);
-}
+
 int	builtin_continue(int argc, char **argv, char **envp)
 {
 	(void)argc;

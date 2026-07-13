@@ -12,7 +12,10 @@ typedef t_error (*t_builtin)(int argc, char **argv, char **envp, int *exit_statu
 // Special builtins (Shell shall exit on error if invoked directly && non-interactive)
 
 t_error	builtin_break(int argc, char **argv, char **envp, int *exit_status);
+
+// @ret ERR_NO
 t_error	builtin_colon(int argc, char **argv, char **envp, int *exit_status);
+
 t_error	builtin_continue(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_dot(int argc, char **argv, char **envp, int *exit_status);
 t_error	builtin_eval(int argc, char **argv, char **envp, int *exit_status);
