@@ -152,6 +152,8 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
 - 🤔 `runner_set_stdin_to_blocking()`:
 	- should be before each call to readline instead of each runner loop cycle ? (because runner loop cycles don't need stdin each time)
+- 💡 `params_get_last_status()`:
+	- permet d'obtenir `$?` directement en `int` (si t'en as besoin...)
 - 🚧 `shell`:
 	- `shell_init_subshell()`: (only missing traps / signal handling)
 - ✅ `hashmap`:

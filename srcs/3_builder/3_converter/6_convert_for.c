@@ -64,11 +64,12 @@ static inline t_error	convert_for_clause(
 	const t_cst_node	*do_group;
 	t_error				err;
 
+	err = error(ERR_NO);
 	converter_take_token(parser, for_clause->children[1], 0, &out->var_name);
 	if (for_clause->child_count <= 4)
 		err = convert_for_build_default_word(out);
 	else if (for_clause->child_count == 7)
-		err = convert_for_wordlist(parser, for_clause->children[5], out);
+		err = convert_for_wordlist(parser, for_clause->children[4], out);
 	if (err.type)
 		return (err);
 	do_group = for_clause->children[for_clause->child_count - 1];
