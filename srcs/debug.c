@@ -596,28 +596,16 @@ static void	ast_log_token_vector(
 	}
 }
 
-static void	ast_log_token_vector_list(
+static void	ast_log_token_pattern(
 	const char *name,
-	t_vector *vector,
+	t_token_pool *pattern,
 	size_t depth,
 	bool *lasts,
 	bool is_last)
 {
-	size_t	i;
-	t_token_pool	*pattern;
-
 	ast_log_head(lasts, depth, is_last, CYAN, name);
-	fprintf(stderr, " count=%zu\n", vector->len);
-	i = 0;
-	while (i < vector->len)
-	{
-		pattern = AST_AT(t_token_pool, vector, i);
-		ast_log_head(lasts, depth + 1, i + 1 == vector->len, CYAN, "PATTERN");
-		fprintf(stderr, " count=%zu\n", pattern->len);
-		ast_log_token_vector("TOKENS", "TOKEN", pattern,
-			depth + 2, lasts, true);
-		i++;
-	}
+	fprintf(stderr, " count=%zu\n", pattern->len);
+	ast_log_token_vector("TOKENS", "TOKEN", pattern, depth + 1, lasts, true);
 }
 
 static void	ast_log_list(
@@ -804,8 +792,8 @@ static void	ast_log_case_item(
 	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE_ITEM");
 	fprintf(stderr, " index=%zu fallthrough=%s\n",
 		index, ast_bool(fallthrough[index]));
-	ast_log_token_vector_list("PATTERNS",
-		AST_AT(t_vector, &case_node->patterns, index),
+	ast_log_token_pattern("PATTERN",
+		AST_AT(t_token_pool, &case_node->patterns, index),
 		depth + 1, lasts, false);
 	ast_log_list("BODY", AST_AT(t_ast_list, &case_node->bodies, index),
 		depth + 1, lasts, true);
