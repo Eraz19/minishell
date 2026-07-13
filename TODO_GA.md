@@ -132,10 +132,7 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - ✅ ``params`:
 	- `process` module
 - ✅ `walker`:
-	- `functions`
-	- `pipeline`
-	- `and_or`
-	- `list`
+	- fully implemented
 
 # WIP
 
@@ -145,13 +142,6 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- after each `AST` execution:
 		- try to `reap` all async children with `async_reap_nonblocking()`
 		- `ft_stdin_set_blocking()`
-- `walker`:
-	- implement `if`
-	- implement `for`
-	- implement `loop`
-	- implement `case`
-	- handle errors (cf `error.h`)
-- `runner`:
 	- `error` handling (exit status, exit or not...)
 - `heredoc`:
 	- **all**:
@@ -171,15 +161,16 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 		- close + open tmp file (rewind)
 		- process redirection
 		- unlink tmp file
-- `runner-executor`:
-	- ⚠️ `exec` specific flow
-	- ⚠️ `command` specific flow
-	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
-- ⚠️ `heredoc`:
 	- `errors`:
 		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
 		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
 		- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
+- `builder`:
+	- handle `command substitution search`
+- `runner-executor`:
+	- ⚠️ `exec` specific flow
+	- ⚠️ `command` specific flow
+	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
 - `posix_read_all()`
 
 # TODO
@@ -192,8 +183,6 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
 	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
-- `runner`:
-	- set `stdin` to blocking mode (main loop ?)
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files
 - `libft`:
