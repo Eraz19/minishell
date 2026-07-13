@@ -137,7 +137,7 @@ static inline t_error	cmd_redirect_start(
 	if (err.type == ERR_REDIRECTION)
 	{
 		if (cmd->type == CMD_SPECIAL_BUILTIN)
-			err.type = ERR_REDIRECTION_SPECIAL;
+			err.type = ERR_POSIX_REDIR_SPECIAL;
 		else
 			err.type = ERR_REDIRECTION_OTHER;
 	}

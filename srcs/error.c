@@ -111,12 +111,19 @@ const char	*error_to_string(t_error err)
 		return ("internal builtin error");
 	else if (err.type == ERR_BUILTIN)
 		return ("builtin error");
+	// Flow control errors
+	else if (err.type == ERR_CONTINUE)
+		return ("continue is only available in loops");
+	else if (err.type == ERR_BREAK)
+		return ("break is only available in loops");
+	else if (err.type == ERR_RETURN)
+		return ("return is only available in functions");
 	// POSIX errors
 	else if (err.type == ERR_POSIX_SYNTAX)
 		return ("invalid syntax");
 	else if (err.type == ERR_POSIX_BUILTIN_SPECIAL)
 		return ("special builtin error");
-	else if (err.type == ERR_REDIRECTION_SPECIAL)
+	else if (err.type == ERR_POSIX_REDIR_SPECIAL)
 		return ("redirection error (special built-in)");
 	else if (err.type == ERR_REDIRECTION_OTHER)
 		return ("redirection error (non-special built-in)");
@@ -245,11 +252,11 @@ static inline int	error_priority(t_error err)
 		return (7);
 	else if (err.type >= ERR_POSIX_SYNTAX)
 		return (6);
-	else if (err.type >= ERR_RETURN)
+	else if (err.type >= ERR_CONTINUE)
 		return (5);
 	else if (err.type >= ERR_POSIX_WRITE)
 		return (4);
-	else if (err.type == ERR_VEOF)
+	else if (err.type == ERR_VEOF || err.type == ERR_EOF)
 		return (2);
 	else if (err.type == ERR_NO)
 		return (0);
@@ -259,7 +266,22 @@ static inline int	error_priority(t_error err)
 
 t_error	error_priorize(t_error a, t_error b)
 {
+	t_error	winner;
+	t_error	loser;
+
 	if (error_priority(a) >= error_priority(b))
-		return (a);
-	return (b);
+	{
+		winner = a;
+		loser = b;
+	}
+	else
+	{
+		winner = b;
+		loser = a;
+
+	}
+	if (a.type != ERR_NO && b.type != ERR_NO)
+		fprintf(stderr, "%s[%s] priorized against [%s]%s\n", YELLOW,
+			error_to_string(winner), error_to_string(loser), NC);
+	return (winner);
 }

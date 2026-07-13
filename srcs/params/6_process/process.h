@@ -5,6 +5,8 @@
 # include "error.h"
 # include <sys/types.h>
 
+// TODO: doc
+
 typedef struct s_process
 {
 	pid_t	pid;
@@ -25,6 +27,8 @@ void	process_free(t_process_table *table);
 t_error	process_register(t_process_table *table, pid_t pid);
 t_error	process_wait(t_process_table *table, pid_t pid, int *status);
 t_error	process_wait_all(t_process_table *table, int *status);
+
+// @ret ERR_LIBC / ERR_INTERRUPTED
 t_error	process_reap(t_process_table *table);
 
 #endif

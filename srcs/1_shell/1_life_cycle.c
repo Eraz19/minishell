@@ -1,4 +1,5 @@
 #include "shell_priv.h"
+#include "runner.h"
 #include "options.h"
 #include <stdlib.h>
 

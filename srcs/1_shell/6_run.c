@@ -1,4 +1,5 @@
 #include "shell_priv.h"
+#include "runner.h"
 #include <stdlib.h>
 
 /* -------------------- DEBUG (START) -------------------- */
@@ -45,6 +46,7 @@ t_error	shell_prepare(int argc, char **argv, char **envp, t_shell **out_shell)
 int	shell_run(int argc, char **argv, char **envp)
 {
 	t_shell	*shell;
+	int		exit_status;
 	t_error	err;
 
 	shell_start_logs();
@@ -52,14 +54,15 @@ int	shell_run(int argc, char **argv, char **envp)
 	if (err.type == ERR_NO)
 		err = shell_exec_env();
 	if (err.type == ERR_NO)
-		err = runner_run(&shell->runner);
+		err = runner_run(shell);
 	if (err.type)
 		(void)history_save();
 	else
 		err = history_save();
 	if (err.type)
 		err = error_print(err, "history", NULL, NULL);
+	exit_status = params_get_last_status_from(&shell->params);
 	shell_free(shell);
 	shell_stop_logs();
-	return ((int)err.type);
+	return (exit_status);
 }

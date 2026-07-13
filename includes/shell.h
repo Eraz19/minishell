@@ -4,7 +4,7 @@
 # include <stdint.h>
 # include "alias.h"
 # include "params.h"
-# include "runner.h"
+# include "runner_type.h"
 # include "history.h"
 # include "scanner.h"
 # include "heredoc.h"

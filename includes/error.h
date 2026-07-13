@@ -12,7 +12,6 @@ typedef enum e_error_type
 	/* -------------------- UNQUALIFIED ERRORS -------------------- */
 	// Failures
 	ERR_ASSIGNMENT_MISSING_NAME,			// [1]
-	ERR_EOF,								// [1]
 	ERR_FD_INVALID,							// [1]
 	ERR_FORMAT_INVALID,						// [1]
 	ERR_HOOK_INVALID_RHS_LEN,				// [1]
@@ -51,41 +50,42 @@ typedef enum e_error_type
 	ERR_OPT_INVALID_ARG,					// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	ERR_OPT_MISSING_ARG,					// [1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
-	ERR_VEOF,								// [2]
 	// posix_write()
-	ERR_POSIX_WRITE,						// [ 4] [CALLER]		write error (special POSIX treatment required)
+	ERR_POSIX_WRITE,						// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
-	ERR_INVALID_USAGE,						// [ 4] [CALLER]		Options and / or arguments are invalid
+	ERR_INVALID_USAGE,						// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION,						// [ 4] [EXECUTOR]		Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER
+	ERR_REDIRECTION,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL / ERR_REDIRECTION_OTHER
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
-	ERR_BUILTIN,							// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
+	ERR_BUILTIN,							// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
+	ERR_REDIRECTION_OTHER = 116,			// [ 6] [WALKERS]		[N-N-Y] Absorbed (walk_scmd / walk_command / walk_function)
 	/* -------------------- FLOW CONTROL ERRORS -------------------- */
-	ERR_CONTINUE,							// [ 5] [LOOP WALKER]	Requalified as ERR_NO by targeted loop (or external one)
-	ERR_BREAK,								// [ 5] [LOOP WALKER]	Requalified as ERR_NO by targeted loop (or external one)
-	ERR_RETURN,								// [ 5] [FUNC WALKER]	Requalified as ERR_NO (exit status is produced by the builtin)
+	ERR_VEOF,								// [2]	[???]			TODO: difference ?
+	ERR_EOF,								// [2]	[RUNNER]		TODO: difference ?
+	ERR_CONTINUE,							// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_BREAK,								// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_RETURN,								// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// GENERIC ERRORS (can be returned by any module or builtin)
-	ERR_INTERRUPTED = 116,					// [ 7] [-]				[Y-Y-?] Shell interrupted by signal
-	ERR_UB = 117,							// [ 8] [-]				[?-?-Y]	Undefined behaviour
-	ERR_INTERNAL = 118,						// [ 9] [-]				[Y-Y-Y]	Shell internal error
-	ERR_LIBC = 119,							// [10] [-]				[Y-Y-Y]	System or libc error
+	ERR_INTERRUPTED = 117,					// [ 7] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
+	ERR_UB = 118,							// [ 8] [-]				[?-?-Y]	Always fatal
+	ERR_INTERNAL = 119,						// [ 9] [-]				[Y-Y-Y]	Always fatal
+	ERR_LIBC = 120,							// [10] [-]				[Y-Y-Y]	Always fatal
 	// POSIX EXIT CODES
-	ERR_POSIX_SYNTAX = 120,					// [ 6] [-]				[Y-N-Y] Shell language syntax error
-	ERR_POSIX_BUILTIN_SPECIAL = 121,		// [ 6] [-]				[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
-	ERR_REDIRECTION_SPECIAL = 122,			// [ 6] [-]				[Y-N-Y] Redirection error with special built-in utilities
-	ERR_REDIRECTION_OTHER = 123,			// [ 6] [-]				[N-N-Y] Redirection error with non-special built-in utilities
-	ERR_POSIX_ASSIGNMENT = 124,				// [ 6] [-]				[Y-N-Y] Variable assignment error
-	ERR_POSIX_EXPANSION = 125,				// [ 6] [-]				[Y-N-Y] Expansion error
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [-]				???
-	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [-]				[?-N-Y] Command not found
-	ERR_POSIX_READ = 128,					// [ 6] [-]				[Y-Y-Y] Unrecoverable read error when reading commands
-	// POSIX SIGNAL CODES (128 + signal)	// [ 6] [-]
+	ERR_POSIX_SYNTAX = 121,					// [ 6] [RUNNER]		[Y-N-Y] Absorbed / bubbled up
+	ERR_POSIX_BUILTIN_SPECIAL = 122,		// [ 6] [SCMD WALKER]	[Y-N-N] Absorbed / bubbled up
+	ERR_POSIX_REDIR_SPECIAL = 123,			// [ 6] [SCMD WALKER]	[Y-N-Y] Absorbed / bubbled up (walk_scmd / walk_command / walk_function)
+	ERR_POSIX_ASSIGNMENT = 124,				// [ 6] [SCMD WALKER]	[Y-N-Y] Absorbed / bubbled up
+	ERR_POSIX_EXPANSION = 125,				// [ 6] [WALKERS]		[Y-N-Y] Absorbed / bubbled up (TODO: which walkers)
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [SCMD WALKER]	[?-?-?] Absorbed / bubbled up
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [SCMD WALKER]	[?-N-Y] Absorbed / bubbled up
+	ERR_POSIX_READ = 128,					// [ 6] [-]				[Y-Y-Y] Always fatal
+	// POSIX SIGNAL CODES (128 + signal)	// [ 6] [-]						TODO: signal management
 }	t_error_type;
 /*
 Legend:
-	[n]			=> error priority => the error with the highest priority shall win
-	[<module>]	=> module in charge of error requalification ("-" means fully qualified)
+	[n]			=> error priority => the error with the highest priority wins in error_priorize()
+	[<module>]	=> module in charge of error frontier
 	[A-B-C]		=> A = shall exit (non-interactive) | B = shall exit (interactive) | C = shall print diagnostic
 	Errors should be printed as they are requalified to avoid losing diagnostic precision
 	Only final error codes are set to specific values => they are the exit status of the shell itself

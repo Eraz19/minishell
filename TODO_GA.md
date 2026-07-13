@@ -106,6 +106,8 @@ esac
 
 # ALEXANDER
 
+- ⚠️ `errors`:
+	- `lexer_reset()` and `lexer_get_next_token()` were ignoring `lexer_input_EOF()` returned error... anyway I made it void with assert
 - ⚠️ `pattern matching`:
 	- Sections POSIX : 2.6 + 2.6.2 + 2.9.4.3 + 2.13
 	- Le matching des case doit se "souvenir" des quoted caractères après expansion:
@@ -153,16 +155,13 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 	- `process` module
 - ✅ `walker`:
 	- fully implemented
+- ✅ `runner`:
+	- fully implemented (error handling should be correct now)
 
 # WIP
 
-- `walker`:
-	- children should close all backup fds as in external commands ?
-- `runner`:
-	- after each `AST` execution:
-		- try to `reap` all async children with `async_reap_nonblocking()`
-		- `ft_stdin_set_blocking()`
-	- `error` handling (exit status, exit or not...) => let POSIX errors bubble up to `shell` module ?
+- `shell`:
+	- execute `$ENV` file
 - `heredoc`:
 	- **all**:
 		- remove all `unlink` usage

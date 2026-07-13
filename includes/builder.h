@@ -13,10 +13,10 @@ typedef struct s_builder
 }	t_builder;
 
 void	builder_init(t_builder *builder);
-t_error	builder_load(t_builder *builder);
-t_error	builder_reset(void);
+void	builder_clear(t_builder *builder);
 void	builder_free(t_builder *builder);
 
+t_error	builder_load(t_builder *builder);
 t_error	builder_get_ast(t_ast_root *dst_ast);
 
 // @ret ERR_SHELL_NOT_FOUND

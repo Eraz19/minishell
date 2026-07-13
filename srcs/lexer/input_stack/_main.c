@@ -1,12 +1,13 @@
 #include "lexer.h"
+# include <assert.h>
 
-t_error	lexer_input_stack_pop(t_lexer_input_stack *stack)
+void	lexer_input_stack_pop(t_lexer_input_stack *stack)
 {
 	t_lexer_input_stack_item	*last_item;
 
-	if (!vector_remove(stack, stack->len - 1, (void **)&last_item))
-		return (error_sys());
-	return (lexer_input_stack_item_free(&last_item), error(ERR_NO));
+	assert(stack->len > 0);
+	(void)vector_pop(stack, (void **)&last_item);
+	lexer_input_stack_item_free(&last_item);
 }
 
 t_error	lexer_input_stack_push(

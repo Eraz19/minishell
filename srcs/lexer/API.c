@@ -1,15 +1,12 @@
 #include <stdlib.h>
 #include "lexer.h"
 
-static t_error	lexer_input_EOF(t_lexer *lexer)
+static void	lexer_input_EOF(t_lexer *lexer)
 {
 	lexer->input = NULL;
-	lexer->err = lexer_input_stack_pop(&lexer->input_stack);
-	if (lexer->err.type)
-		return (lexer->err);
+	lexer_input_stack_pop(&lexer->input_stack);
 	if (lexer->rules.on_input_end != NULL)
-		return (lexer->rules.on_input_end(lexer));
-	return (lexer->err);
+		lexer->rules.on_input_end(lexer);
 }
 
 t_error	lexer_get_next_token(

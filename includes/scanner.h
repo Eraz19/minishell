@@ -7,6 +7,8 @@
 # include "heredoc.h"
 # include "input_mode.h"
 
+// TODO: doc
+
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
  *
@@ -49,7 +51,7 @@ void	scanner_free(t_scanner *scanner);
 
 t_error	scanner_load(t_scanner *scanner, const char *source);
 
-t_error	scanner_reset(void);
+void	scanner_reset(t_scanner *scanner);
 
 t_error	scanner_get_next_token(t_token *token);
 

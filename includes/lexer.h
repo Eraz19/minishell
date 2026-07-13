@@ -59,7 +59,7 @@ void			lexer_input_stack_init(t_lexer_input_stack *stack);
 void			lexer_input_stack_free(t_lexer_input_stack *stack);
 t_error			lexer_input_stack_item_init(t_lexer_input_stack_item **item);
 
-t_error			lexer_input_stack_pop(t_lexer_input_stack *stack);
+void			lexer_input_stack_pop(t_lexer_input_stack *stack);
 t_error			lexer_input_stack_push(
 					t_lexer_input_stack *stack,
 					t_lexer_input_stack_item *item);

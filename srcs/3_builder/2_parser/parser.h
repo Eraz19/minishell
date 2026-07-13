@@ -8,7 +8,7 @@
 // Life cycle
 
 void	parser_init(t_parser *parser);
-t_error	parser_reset(t_parser *parser);
+void	parser_clear(t_parser *parser);
 void	parser_free(t_parser *parser);
 
 // Ops

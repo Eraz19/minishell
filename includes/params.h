@@ -89,6 +89,7 @@ t_error	params_get_function(const char *name, t_function **out);
 t_error	params_unset_function(const char *name);
 void	params_stop_function(t_function **function);
 t_error	params_get_last_status(int *out);
+int		params_get_last_status_from(t_params *params);
 
 /**
  * @brief Build the exported environment as a @ref t_vector of C-strings.
@@ -180,7 +181,8 @@ t_error	params_push_positionals(t_positionals *src);
 t_error	params_pop_positionals(void);
 
 // TODO: doc
-t_error	params_reap(void);
+// @ret ERR_LIBC / ERR_INTERRUPTED
+t_error	params_reap(t_params *params);
 
 // TODO: doc
 // @ret ERR_INTERNAL
@@ -202,7 +204,7 @@ t_error	params_replace_positionals(t_positionals *src);
  *
  * @param option Option bit to modify.
  * @param on True to enable the option, false to clear it.
- * @return @c ERR_SHELL_NOT_FOUND on failure.
+ * @return @c ERR_INTERNAL on failure.
  */
 t_error	params_set_option(t_option option, bool on);
 
@@ -210,9 +212,12 @@ t_error	params_set_option(t_option option, bool on);
  * @brief Update the last command exit status.
  *
  * @param value New status value.
- * @return @c ERR_SHELL_NOT_FOUND on failure.
+ * @return @c ERR_INTERNAL on failure.
  */
 t_error	params_set_last_status(int value);
+
+// TODO: doc
+void	params_set_last_status_in(t_params *params, int value);
 
 /**
  * @brief Create or update a shell variable.

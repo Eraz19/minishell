@@ -48,13 +48,7 @@ t_error	params_wait_all(int *status)
 	return (process_wait_all(&params->processes, status));
 }
 
-t_error	params_reap(void)
+t_error	params_reap(t_params *params)
 {
-	t_params	*params;
-	t_error		err;
-
-	err = params_get_state(&params);
-	if (err.type)
-		return (err);
 	return (process_reap(&params->processes));
 }

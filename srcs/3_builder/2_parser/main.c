@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "parser_priv.h"
+#include "parser_stack.h"
 #include "qualifiers.h"
 #include "cst.h"
 # include "debug.h"		// DEBUG
@@ -23,13 +24,8 @@ static inline t_error	parser_push_initial_state(t_parser *parser)
 static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 {
 	t_error	err;
-	size_t	i;
 
-	i = 0;
-	while (i < parser->stack.len)
-		parser_free_stack_item(
-			&((t_parser_stack_item *)parser->stack.data)[i++]);
-	parser->stack.len = 0;
+	parser_stack_clear(&parser->stack);
 	err = parser_push_initial_state(parser);
 	if (err.type == ERR_NO && parser->lookahead_raw_symbol == SYM_NONE)
 		err = parser_read_next_symbol(parser);

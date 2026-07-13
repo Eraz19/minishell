@@ -83,7 +83,7 @@ void		option_set(t_option *options, t_option option, bool on);
  *
  * @param option Option bit to query.
  * @param out Receives the active state (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND on failure.
+ * @return @c ERR_INTERNAL on failure.
  */
 t_error		option_is_active(t_option option, bool *out);
 
