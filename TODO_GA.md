@@ -1,6 +1,8 @@
+⚠️ `echo` is removed from known builtin list to test
+
 # TO FIX
 
-⚠️ All expansions can produce multiple fields (check all `cmd_*_expansion_flags()` callers)
+⚠️ All expansions can produce zero/one/multiple fields (check all `cmd_*_expansion_flags()` callers)
 ```bash
 # TEST 1
 set -- 'a' 'b' 'c'
@@ -22,18 +24,10 @@ do
 done
 ```
 
+---
+
 # TESTS
 
-⚠️ `echo` is removed from known builtin list to test
-
-## ERRORS
-
-```bash
-# ===> [ERROR] srcs/expander/word/_main.c:13 [word_fpop()] => empty stack
-unset pattern VAR
-VAR=${pattern} sh -c 'printf "child: VAR=<%s> pattern=<%s>\n" "${VAR-unset}" "${pattern-unset}"'
-printf 'parent: VAR=<%s> pattern=<%s>\n' "${VAR-unset}" "${pattern-unset}"
-```
 
 ## TESTS (MATCH PATTERN)
 
@@ -167,7 +161,7 @@ case '[' in
     [) echo "valid 5" ;;
 esac
 
-# SEGFAULT
+# OK
 case "" in
     "") echo "valid 6" ;;
 esac
@@ -189,49 +183,31 @@ VAR=${pattern%foo}
 
 # ALEXANDER
 
-```bash
-set -- 'a' 'b' 'c'
-case abc in
-    $@) echo "params are one field" ;;
-	a) echo "params are multiple fields";;
-esac
-```
-
-unset VAR
-VAR="$@" echo "--$VAR--"
-
-- ⚠️ `pattern matching`:
-	- Sections POSIX : 2.6 + 2.6.2 + 2.9.4.3 + 2.13
-	- Le matching des case doit se "souvenir" des quoted caractères après expansion:
-		- ex : Le pattern `"*"` (≠ `wildcard`) doit matcher uniquement la string littérale `*`.
-	- Les caractères sépciaux issus d'une expansion quoted doivent rester littéraux:
-		- ex : si `p='*'` => `"$p"` doit matcher `*` alors que `$p` doit matcher `wildcard`
-	- SOLUTION => exposer une API `t_error expander_match(t_string *expanded_word, t_token *pattern, bool *out)` ?
-		- flags = EXP_TILDE_NORMAL | EXP_PARAM | EXP_DOLLAR_SQUOTE | EXP_CMD_SUB | EXP_ARITH | EXP_QUOTE_REMOVAL
-	- + besoin confirmation que l'expansion fait toujours au moins un field sinon `walk_case()` peut segfault
-- ⚠️ `token`:
-	- could store a ptr / index to `history` to never invalidate `t_token_index` ?
-	- => `function` simplified (évite de parcourir tout l'AST pour update les `t_token_index`)
-	- => detailed `errors` always available
-	- Sinon => GA => implémenter token index = -1 à la création des fonctions ?
+- ⚠️ `pattern matching`: wip
 - ⚠️ `expander`:
-	- doit retourner le statut de la dernière `command substitution`:
+	- expand combos:
+		- `str` -> `str`
+		- `token` -> `str`
+		- `token` -> `expansion`
+	- return last `command substitution` status
+- ⚠️ `heredoc`:
+	- use `t_string` instead of file
+	- stack delim inside `parser`
+- ⚠️ `token`: keep `history_list_index` in `t_token_index` ?
 ```bash
 VAR=value          => status 0
 VAR=$(true)        => status 0
 VAR=$(false)       => status 1
 VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 ```
-- ⚠️ `heredoc`:
-	- use `t_string` instead of file
-- ⚠️ `history`:
+- 🤔 `history`:
 	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
-- 🤔 `runner_set_stdin_to_blocking()`:
-	- should be before each call to readline instead of each runner loop cycle ? (because runner loop cycles don't need stdin each time)
 - 💡 `params_get_last_status()`:
 	- permet d'obtenir `$?` directement en `int` (si t'en as besoin...)
 - 🚧 `shell`:
 	- `shell_init_subshell()`: (only missing traps / signal handling)
+- ✅ `runner_set_stdin_to_blocking()`:
+	- now called in `readline_()`
 - ✅ `hashmap`:
 	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
 	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
@@ -256,8 +232,6 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 
 # WIP
 
-- `shell`:
-	- execute `$ENV` file
 - `heredoc`:
 	- **all**:
 		- remove all `unlink` usage
@@ -295,7 +269,6 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - `error`:
 	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
 - `shell`:
-	- exit avec `$?` comme status
 	- process `ENV`:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)

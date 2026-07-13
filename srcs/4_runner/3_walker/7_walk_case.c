@@ -34,7 +34,6 @@ static inline t_error	walk_case_token_matchs_word(
 	err = walk_case_expand(token, &expanded_token);
 	if (err.type)
 		return (err);
-	// TODO: handle quotes + '!' instead of '^' + ... (cf TODO.md)
 	*out = match_pattern(
 			expanded_token.data,
 			expanded_word->data,
