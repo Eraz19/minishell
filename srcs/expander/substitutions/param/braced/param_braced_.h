@@ -82,30 +82,47 @@ t_error	expand_braced(t_expander *expander);
  *
  * @param expander Expander state positioned on the parameter name.
  * @param body_len Number of items between the braces.
+ * @param origin Metadata of the construct's opening '$': its local
+ *               quoting is the quoting enclosing the construct, stamped
+ *               onto the produced items so pattern matching can tell a
+ *               quoted expansion result from an unquoted one.
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
  *         success.
  */
-t_error	expand_braced_param(t_expander *expander, size_t body_len);
+t_error	expand_braced_param(
+			t_expander *expander,
+			size_t body_len,
+			t_word_item_opt origin);
 
 /**
  * @brief Handles the length forms ${#name}, ${#} and ${#@} / ${#*}.
  *
  * @param expander Expander state positioned on the '#' item.
  * @param body_len Number of items between the braces.
+ * @param opt Metadata of the construct's opening '$', stamped onto the
+ *            produced items (see @ref expand_braced_param).
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
  *         success.
  */
-t_error	expand_braced_length(t_expander *expander, size_t body_len);
+t_error	expand_braced_length(
+			t_expander *expander,
+			size_t body_len,
+			t_word_item_opt opt);
 
 /**
  * @brief Handles the positional forms ${@ ...} and ${* ...}.
  *
  * @param expander Expander state positioned on the '@' or '*' item.
  * @param body_len Number of items between the braces.
+ * @param origin Metadata of the construct's opening '$', stamped onto
+ *               the produced items (see @ref expand_braced_param).
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
  *         success.
  */
-t_error	expand_braced_positional(t_expander *expander, size_t body_len);
+t_error	expand_braced_positional(
+			t_expander *expander,
+			size_t body_len,
+			t_word_item_opt origin);
 
 /**
  * @brief Applies the operator of a ${name op word} expansion, selecting the

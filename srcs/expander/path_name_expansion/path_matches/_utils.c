@@ -1,5 +1,5 @@
 #include <dirent.h>
-#include "utils.h"
+#include "expander_.h"
 #include "path_comps_.h"
 #include "path_matches_.h"
 

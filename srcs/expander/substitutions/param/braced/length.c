@@ -59,15 +59,13 @@ static t_error	braced_length_named(
 	return (braced_length_finish(expander, &value, opt));
 }
 
-t_error	expand_braced_length(t_expander *expander, size_t body_len)
+t_error	expand_braced_length(
+			t_expander *expander,
+			size_t body_len,
+			t_word_item_opt opt)
 {
-	t_word_item		item;
-	t_word_item_opt	opt;
+	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
-	opt = item.opt;
 	expander->err = word_remove(&expander->word, 0, 1);
 	if (expander->err.type)
 		return (expander->err);

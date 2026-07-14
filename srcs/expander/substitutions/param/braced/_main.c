@@ -1,6 +1,9 @@
 #include "param_braced_.h"
 
-static t_error	braced_body_len(t_expander *expander, size_t *body_len)
+static t_error	braced_origin(
+					t_expander *expander,
+					size_t *body_len,
+					t_word_item_opt *origin)
 {
 	t_word_item	item;
 
@@ -10,10 +13,14 @@ static t_error	braced_body_len(t_expander *expander, size_t *body_len)
 	if (item.opt.context_len < 3)
 		return (expander->err = error(ERR_INCOHERENT_STATE));
 	*body_len = item.opt.context_len - 3;
+	*origin = item.opt;
 	return (expander->err);
 }
 
-t_error	expand_braced_dispatch(t_expander *expander, size_t body_len)
+t_error	expand_braced_dispatch(
+			t_expander *expander,
+			size_t body_len,
+			t_word_item_opt origin)
 {
 	t_word_item	item;
 
@@ -21,18 +28,19 @@ t_error	expand_braced_dispatch(t_expander *expander, size_t body_len)
 	if (expander->err.type)
 		return (expander->err);
 	if (item.c == '#')
-		return (expand_braced_length(expander, body_len));
+		return (expand_braced_length(expander, body_len, origin));
 	if (item.c == '@' || item.c == '*')
-		return (expand_braced_positional(expander, body_len));
-	return (expand_braced_param(expander, body_len));
+		return (expand_braced_positional(expander, body_len, origin));
+	return (expand_braced_param(expander, body_len, origin));
 }
 
 t_error	expand_braced(t_expander *expander)
 {
-	t_string	body;
-	size_t		body_len;
+	t_string		body;
+	size_t			body_len;
+	t_word_item_opt	origin;
 
-	expander->err = braced_body_len(expander, &body_len);
+	expander->err = braced_origin(expander, &body_len, &origin);
 	if (expander->err.type)
 		return (expander->err);
 	expander->err = to_str(&body, &expander->word, 0, body_len + 3);
@@ -47,7 +55,7 @@ t_error	expand_braced(t_expander *expander)
 				"expander", body.data, NULL, NULL);
 		return (string_free(&body), expander->err);
 	}
-	expander->err = expand_braced_dispatch(expander, body_len);
+	expander->err = expand_braced_dispatch(expander, body_len, origin);
 	if (expander->err.type == ERR_PARAM_BAD_SUBSTITUTION
 		|| expander->err.type == ERR_VAR_INVALID_NAME)
 		expander->err = error_print(expander->err,

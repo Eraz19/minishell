@@ -114,6 +114,41 @@ t_error	expand_word(t_expander *expander);
 
 /**
  * @ingroup expander_priv
+ * @brief Matches the first @p len characters of @p str against the whole
+ *        POSIX shell pattern @p pattern (POSIX 2.13.1): @c * and @c ?
+ *        wildcards, @c \ escapes, bracket expressions (@c ! or @c ^
+ *        negation, ranges, character classes, collating symbols and
+ *        equivalence classes).
+ *
+ * @note Only the first @p len characters of @p str are read, so @p str
+ *       need not be NUL-terminated; the whole slice must match the whole
+ *       @p pattern. Quoting is expressed with @c \ escapes: render an
+ *       annotated word with @ref pattern_from_word first.
+ * @param pattern NUL-terminated pattern C-string (borrowed, read-only).
+ * @param str Characters to match, at least @p len long (borrowed,
+ *            read-only).
+ * @param len Number of characters of @p str to match.
+ */
+bool	match_pattern(const char *pattern, const char *str, size_t len);
+
+/**
+ * @ingroup expander_priv
+ * @brief Renders the annotated word @p pattern into the
+ *        @ref match_pattern dialect: a metacharacter that is quoted or
+ *        escaped (POSIX 2.13.1) is backslash-escaped so it matches
+ *        literally, an unquoted one stays active — including in
+ *        unquoted expansion results.
+ *
+ * @param out String receiving the rendered pattern, initialized by the
+ *            function and freed on failure (borrowed).
+ * @param pattern Annotated pattern word (borrowed, read-only).
+ * @return @c ERR_LIBC on allocation failure; @c ERR_INDEX_OUT_OF_BOUND
+ *         on an internal inconsistency; @c ERR_NO on success.
+ */
+t_error	pattern_from_word(t_string *out, const t_word *pattern);
+
+/**
+ * @ingroup expander_priv
  * @brief Runs one full expansion: loads the annotated word from @p args,
  *        applies the substitutions and the flagged stages, and stores
  *        the resulting fields in @p expansion.
@@ -137,6 +172,25 @@ t_error	expand_word(t_expander *expander);
  *         success.
  */
 t_error	run_expansion(t_expansion *expansion, t_expander_args *args);
+
+/**
+ * @ingroup expander_priv
+ * @brief Runs one full expansion like @ref run_expansion, but returns
+ *        the single resulting field as an annotated word instead of
+ *        degrading it to a string: the quoting metadata survives for
+ *        pattern matching.
+ *
+ * @warning Meant for flag sets without @c EXP_FIELD_SPLIT: only the
+ *          first resulting field is returned.
+ * @param word Word receiving the field; initialized by the function, the
+ *             caller owns it and must release it with @c word_free
+ *             (borrowed).
+ * @param args Input of the run; its IFS stays owned by the caller
+ *             (borrowed).
+ * @return Same contract as @ref run_expansion, plus @c ERR_EMPTY_STACK
+ *         if the run produces no field.
+ */
+t_error	run_expansion_word(t_word *word, t_expander_args *args);
 
 /**
  * @ingroup expander_priv

@@ -71,17 +71,16 @@ static t_error	braced_operator(
 		string_free(&param_exp->param_value), expander->err);
 }
 
-t_error	expand_braced_param(t_expander *expander, size_t body_len)
+t_error	expand_braced_param(
+			t_expander *expander,
+			size_t body_len,
+			t_word_item_opt origin)
 {
-	t_word_item	item;
 	t_param_exp	param_exp;
 	size_t		len_before;
 	size_t		operator_len;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
-	param_exp.result_opt = item.opt;
+	param_exp.result_opt = origin;
 	len_before = expander->word.len;
 	expander->err = get_param_name(expander, &param_exp.param_name, true);
 	if (expander->err.type)

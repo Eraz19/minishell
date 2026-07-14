@@ -2,7 +2,6 @@
 #include "walker_priv.h"
 #include "expander.h"
 #include "cmd_expansion.h"
-#include "utils.h"
 #include <assert.h>
 
 static inline t_error	walk_case_expand(t_token *token, t_string *dst)
@@ -10,10 +9,11 @@ static inline t_error	walk_case_expand(t_token *token, t_string *dst)
 	t_exp_flag	flags;
 	t_string	*expanded;
 	t_expansion	expansion;
+	int			exit_status;
 	t_error		err;
 
 	flags = cmd_case_expansion_flags();
-	err = expand_token(&expansion, token, flags);
+	err = expand_token(&expansion, token, &exit_status, flags);
 	if (err.type)
 		return (err);
 	assert(expansion.len == 1);
@@ -28,17 +28,23 @@ static inline t_error	walk_case_token_matchs_word(
 							t_token *token,
 							bool *out)
 {
-	t_string	expanded_token;
-	t_error		err;
+	t_word	pattern;
+	int		exit_status;
+	t_error	err;
 
-	err = walk_case_expand(token, &expanded_token);
+	err = expand_token_word(
+			&pattern,
+			token,
+			&exit_status,
+			cmd_case_expansion_flags());
 	if (err.type)
 		return (err);
-	*out = match_pattern(
-			expanded_token.data,
+	err = word_match_pattern(
+			out,
+			&pattern,
 			expanded_word->data,
 			expanded_word->len);
-	string_free(&expanded_token);
+	word_free(&pattern);
 	return (err);
 }
 

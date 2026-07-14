@@ -91,25 +91,6 @@ t_error	ft_getpwnam(const char *name, struct passwd **out_pw);
 time_t	get_now_unix_seconds(void);
 
 /**
- * @brief Match the first @p len characters of @p str against the whole POSIX
- *        shell pattern @p pattern.
- *
- * Supports @c * and @c ? wildcards, @c \ escapes, and bracket expressions
- * (@c ! or @c ^ negation, ranges, character classes @c [:alpha:], collating
- * symbols @c [.x.] and equivalence classes @c [=x=]).
- *
- * @note Only the first @p len characters of @p str are read, so @p str need
- *       not be NUL-terminated; the whole slice must match the whole
- *       @p pattern.
- * @param pattern NUL-terminated pattern C-string (borrowed, read-only).
- * @param str Characters to match, at least @p len long (borrowed, read-only).
- * @param len Number of characters of @p str to match.
- * @return True when the @p len first characters of @p str match @p pattern
- *         entirely.
- */
-bool	match_pattern(const char *pattern, const char *str, size_t len);
-
-/**
  * @brief Check whether @p name is a valid shell variable name.
  *
  * @param name Name to validate (borrowed, read-only).

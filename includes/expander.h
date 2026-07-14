@@ -4,6 +4,7 @@
 # include "error.h"
 # include "libft.h"
 # include "token.h"
+# include "word_.h"
 
 /** @defgroup expander Expander API
  *  @brief POSIX word expansions (XCU 2.6): tilde, parameter, command and
@@ -153,6 +154,58 @@ t_error	expand_token_merged(
 			const t_token *src,
 			int *exit_status,
 			t_exp_flag flags);
+
+/**
+ * @ingroup expander
+ * @brief Expands a word token like @ref expand_token, but returns the
+ *        single resulting field as an annotated word: the quoting
+ *        metadata survives, so a quoted metacharacter can still be told
+ *        from an unquoted one (see @ref word_match_pattern).
+ *
+ * @warning Meant for flag sets without @c EXP_FIELD_SPLIT (a @c case
+ *          pattern, POSIX 2.9.4.4): only the first resulting field is
+ *          returned.
+ * @param out Word receiving the field; initialized by the function, the
+ *            caller owns it and must release it with @c word_free
+ *            (borrowed).
+ * @param src Token to expand (borrowed, read-only).
+ * @param exit_status Destination for the exit status of the last command
+ *                    substitution; unused until command substitution is
+ *                    implemented (borrowed).
+ * @param flags Expansions to apply.
+ * @return Same contract as @ref expand_str.
+ */
+t_error	expand_token_word(
+			t_word *out,
+			const t_token *src,
+			int *exit_status,
+			t_exp_flag flags);
+
+/**
+ * @ingroup expander
+ * @brief Matches the first @p len characters of @p str against the
+ *        annotated pattern word @p pattern (POSIX 2.13.1): a
+ *        metacharacter that is quoted or escaped matches literally, an
+ *        unquoted one — including in unquoted expansion results — is
+ *        active.
+ *
+ * @note Only the first @p len characters of @p str are read, so @p str
+ *       need not be NUL-terminated; the whole slice must match the whole
+ *       @p pattern.
+ * @param match Set to the match outcome; @c false on error (borrowed).
+ * @param pattern Annotated pattern word, typically from
+ *                @ref expand_token_word (borrowed, read-only).
+ * @param str Characters to match, at least @p len long (borrowed,
+ *            read-only).
+ * @param len Number of characters of @p str to match.
+ * @return @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
+ *         (printed) on internal inconsistency; @c ERR_NO on success.
+ */
+t_error	word_match_pattern(
+			bool *match,
+			const t_word *pattern,
+			const char *str,
+			size_t len);
 
 /* ************************************************************************* */
 /*                              EXPANSION OPS                                */

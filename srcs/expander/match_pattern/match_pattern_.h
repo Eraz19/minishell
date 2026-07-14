@@ -4,6 +4,20 @@
 # include <stddef.h>
 # include <stdbool.h>
 
+/** @defgroup expander_match Pattern matching
+ *  @brief POSIX 2.13 pattern matching engine and its quoting-aware
+ *         front ends.
+ *
+ *  The char engine (@c match_pattern) works on a rendered dialect where
+ *  a backslash makes the next character literal; quoting decisions are
+ *  taken upstream by @c pattern_from_word, which renders an annotated
+ *  word so that quoted or escaped metacharacters (POSIX 2.13.1) are
+ *  backslash-escaped and unquoted ones stay active. @c word_match_pattern
+ *  combines both for single-shot matches (a @c case pattern); loop
+ *  matchers (@c ${var#pat}, pathname expansion) render once and drive
+ *  the engine directly.
+ */
+
 bool	ft_isxdigit(char c);
 bool	match_char(char c1, char c2, size_t *len);
 bool	set_negation(const char *pattern, size_t *i);

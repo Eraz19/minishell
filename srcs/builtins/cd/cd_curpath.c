@@ -78,8 +78,8 @@ static t_error	cd_search_cdpath(t_cd_args *args, const t_string *dir,
 
 t_error	cd_build_curpath(t_cd_args *args, const t_string *dir)
 {
-	bool	found;
 	t_error	err;
+	bool	found;
 
 	if (dir->len > 0 && dir->data[0] != '/'
 		&& !cd_starts_with_dot(dir->data))

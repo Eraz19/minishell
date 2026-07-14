@@ -100,7 +100,10 @@ static t_error	braced_positional_op(
 	return (braced_positional_apply(expander, positional_exp));
 }
 
-t_error	expand_braced_positional(t_expander *expander, size_t body_len)
+t_error	expand_braced_positional(
+			t_expander *expander,
+			size_t body_len,
+			t_word_item_opt origin)
 {
 	t_positional_exp	positional_exp;
 	t_word_item			item;
@@ -109,7 +112,7 @@ t_error	expand_braced_positional(t_expander *expander, size_t body_len)
 	if (expander->err.type)
 		return (expander->err);
 	positional_exp.symbol = item.c;
-	positional_exp.result_opt = item.opt;
+	positional_exp.result_opt = origin;
 	positional_exp.result_opt.is_expand_res = true;
 	expander->err = word_remove(&expander->word, 0, 1);
 	if (expander->err.type)

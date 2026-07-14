@@ -3,13 +3,6 @@
 #include "ft_getopt.h"
 #include "posix_helpers.h"
 
-// POSIX.1-2024 env. Without a utility operand the resulting
-// environment is written to standard output, one name=value pair per
-// line. -i ignores the inherited environment completely. name=value
-// operands modify the result. Utility invocation (first operand
-// without '=') is not implemented yet: diagnosed and reported as
-// ERR_UB, the project's stub convention.
-
 t_error	env_print_entry(const char *entry)
 {
 	t_error	err;

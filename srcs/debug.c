@@ -31,6 +31,7 @@ const char	*bool_to_string(bool value)
 	return ("false");
 }
 
+/*
 static const char	*heredoc_mode_to_string(t_here_mode mode)
 {
 	if (mode == HEREDOC_MODE_NORMAL)
@@ -39,7 +40,7 @@ static const char	*heredoc_mode_to_string(t_here_mode mode)
 		return ("HEREDOC_MODE_TAB_STRIP");
 	return ("unknown");
 }
-
+*/
 static void	debug_dump_string_value(const t_string *value)
 {
 	size_t	i;
@@ -71,6 +72,7 @@ static void	debug_dump_string_value(const t_string *value)
 	fprintf(stderr, "\"");
 }
 
+/*
 void	debug_dump_heredoc_queue_item(t_heredoc_item *item)
 {
 	if (item == NULL)
@@ -92,6 +94,7 @@ void	debug_dump_heredoc_queue_item(t_heredoc_item *item)
 	debug_dump_string_value(&item->input);
 	fprintf(stderr, "}\n");
 }
+*/
 
 /* ************************************************************************* */
 /*                                   TOKEN                                   */

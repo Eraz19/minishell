@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <stdarg.h>
 # include <debug.h>	// DEBUG
+#include <stdio.h>	// DEBUG
+#include "logs.h"
 
 #define SEPARATOR			": "
 #define WRITE_ERROR_PREFIX	"write error" SEPARATOR

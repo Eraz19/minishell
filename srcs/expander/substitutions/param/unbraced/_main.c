@@ -30,14 +30,14 @@ t_error	expand_positional_single(t_expander *expander, t_word_item_opt opt)
 	return (word_free(&word_exp), string_free(&param_exp), expander->err);
 }
 
-t_error	expand_positional_all(t_expander *expander)
+t_error	expand_positional_all(t_expander *expander, t_word_item_opt opt)
 {
 	t_word_item	item;
 
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type != ERR_NO)
 		return (expander->err);
-	expander->err = emit_positionals(expander, item.c, item.opt);
+	expander->err = emit_positionals(expander, item.c, opt);
 	if (expander->err.type)
 		return (expander->err);
 	return (expander->err = word_remove(&expander->word, 0, 1));
@@ -45,8 +45,12 @@ t_error	expand_positional_all(t_expander *expander)
 
 t_error	expand_unbraced(t_expander *expander)
 {
+	t_word_item	origin;
 	t_word_item	item;
 
+	expander->err = word_get(&origin, &expander->word, 0);
+	if (expander->err.type)
+		return (expander->err);
 	expander->err = word_remove(&expander->word, 0, 1);
 	if (expander->err.type)
 		return (expander->err);
@@ -54,7 +58,7 @@ t_error	expand_unbraced(t_expander *expander)
 	if (expander->err.type)
 		return (expander->err);
 	if (item.c == '@' || item.c == '*')
-		return (expand_positional_all(expander));
+		return (expand_positional_all(expander, origin.opt));
 	else
-		return (expand_positional_single(expander, item.opt));
+		return (expand_positional_single(expander, origin.opt));
 }

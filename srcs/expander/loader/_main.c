@@ -21,9 +21,9 @@ static t_error	loader_substitution(t_loader *state)
 	if (loader_push_context(state).type)
 		return (state->err);
 	outer_local = state->local_quoting;
-	state->local_quoting = CONTEXT_NONE;
 	if (loader_char(state).type)
 		return (state->err);
+	state->local_quoting = CONTEXT_NONE;
 	while (state->i < state->context_item->end)
 	{
 		if (is_substitution_start(state))
