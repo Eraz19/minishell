@@ -18,7 +18,8 @@
  *  ERROR CONTRACT
  *
  *  No caller needs the specific expansion error types, so every endpoint
- *  (@ref expand_token, @ref expand_str, @ref expand_heredoc) requalifies
+ *  (@ref expand_token, @ref expand_token_merged, @ref expand_str)
+ *  requalifies
  *  through @c expander_error_qualify (see expander_.h) before returning:
  *
  *  - user-facing expansion failures (bad substitution, @c ${var?} on an
@@ -63,7 +64,11 @@ typedef enum e_exp_flags
 	EXP_FIELD_SPLIT			= (1u << 6),	/**< IFS field splitting. */
 	EXP_PATH_NAME			= (1u << 7),	/**< Pathname expansion. */
 	EXP_QUOTE_REMOVAL		= (1u << 8),	/**< Quote removal. */
-	EXP_HEREDOC				= (1u << 9)
+
+	EXP_HEREDOC				= (1u << 9),	/**< Re-lex the raw string of
+												 @ref expand_str with the
+												 here-document rules
+												 (POSIX 2.7.4). */
 }	t_exp_flag;
 
 /**
@@ -78,22 +83,36 @@ typedef t_vector	t_expansion;
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-// WIP
-t_error expand_str_unique(t_string *out, const t_string *src, t_exp_flag flags);
-t_error expand_tok_unique(t_string *out, const t_token *src, t_exp_flag flags);
-
 /**
  * @ingroup expander
- * @brief Expands a raw C-string value (prompts, any text that is not a
- *        token); alias of @ref expand_heredoc.
+ * @brief Expands a raw text that never went through tokenization (a
+ *        prompt, a here-document body): the string is re-lexed to
+ *        recover its constructs — with the here-document rules
+ *        (POSIX 2.7.4: quotes literal) when @c EXP_HEREDOC is set, as an
+ *        unquoted word (POSIX 2.2: quotes open quoting contexts,
+ *        backslash escapes any character) otherwise — then expanded with
+ *        @p flags and joined with the first IFS character.
  *
- * @param out Expansion initialized by the function; the caller owns it
- *            and must release it with @ref expansion_free (borrowed).
+ * @note An empty (or NULL-buffered) @p src expands to an empty @p out.
+ * @param out String receiving the joined expansion, initialized by the
+ *            function (borrowed).
  * @param src Text to expand (borrowed, read-only).
+ * @param exit_status Destination for the exit status of the last command
+ *                    substitution; unused until command substitution is
+ *                    implemented (borrowed).
  * @param flags Expansions to apply.
- * @return Same contract as @ref expand_heredoc.
+ * @return @c ERR_POSIX_EXPANSION (printed) on a user-facing expansion
+ *         failure; @c ERR_POSIX_ASSIGNMENT (printed) on a readonly
+ *         assignment; @c ERR_INTERRUPTED when a signal interrupts the
+ *         work; @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
+ *         (printed) on internal inconsistency or unimplemented
+ *         substitution; @c ERR_NO on success.
  */
-t_error expand_str(t_expansion *out, const t_string *src, t_exp_flag flags);
+t_error expand_str(
+			t_string *out,
+			const t_string *src,
+			int *exit_status,
+			t_exp_flag flags);
 
 /**
  * @ingroup expander
@@ -103,10 +122,37 @@ t_error expand_str(t_expansion *out, const t_string *src, t_exp_flag flags);
  * @param out Expansion initialized by the function; the caller owns it
  *            and must release it with @ref expansion_free (borrowed).
  * @param src Token to expand (borrowed, read-only).
+ * @param exit_status Destination for the exit status of the last command
+ *                    substitution; unused until command substitution is
+ *                    implemented (borrowed).
  * @param flags Expansions to apply.
- * @return Same contract as @ref expand_heredoc.
+ * @return Same contract as @ref expand_str.
  */
-t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags);
+t_error	expand_token(
+			t_expansion *out,
+			const t_token *src,
+			int *exit_status,
+			t_exp_flag flags);
+
+/**
+ * @ingroup expander
+ * @brief Expands a word token like @ref expand_token, then joins the
+ *        resulting fields with the first IFS character.
+ *
+ * @param out String receiving the joined expansion, initialized by the
+ *            function (borrowed).
+ * @param src Token to expand (borrowed, read-only).
+ * @param exit_status Destination for the exit status of the last command
+ *                    substitution; unused until command substitution is
+ *                    implemented (borrowed).
+ * @param flags Expansions to apply.
+ * @return Same contract as @ref expand_str.
+ */
+t_error	expand_token_merged(
+			t_string *out,
+			const t_token *src,
+			int *exit_status,
+			t_exp_flag flags);
 
 /* ************************************************************************* */
 /*                              EXPANSION OPS                                */

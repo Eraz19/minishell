@@ -48,7 +48,8 @@ t_error	expand_braced(t_expander *expander)
 		return (string_free(&body), expander->err);
 	}
 	expander->err = expand_braced_dispatch(expander, body_len);
-	if (expander->err.type == ERR_PARAM_BAD_SUBSTITUTION)
+	if (expander->err.type == ERR_PARAM_BAD_SUBSTITUTION
+		|| expander->err.type == ERR_VAR_INVALID_NAME)
 		expander->err = error_print(expander->err,
 				"expander", body.data, NULL, NULL);
 	return (string_free(&body), expander->err);

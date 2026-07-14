@@ -65,6 +65,8 @@ t_error	braced_assign(
 	if (expander->err.type)
 		return (expander->err);
 	expander->err = params_set_variable(name, &operand_str, false, false);
+	if (expander->err.type == ERR_VAR_READ_ONLY)
+		expander->err = error_print(expander->err, name->data, NULL, NULL);
 	if (expander->err.type)
 		return (string_free(&operand_str), expander->err);
 	expander->err = braced_push_value(expander, &operand_str, opt);

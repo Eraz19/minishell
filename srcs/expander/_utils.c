@@ -1,5 +1,7 @@
+#include "lexer.h"
 #include "params.h"
 #include "expander_.h"
+#include "expansion_.h"
 
 bool    flag_is_active(uint bitset, uint flag)
 {
@@ -20,28 +22,74 @@ t_error	forward_word_item(t_word *word_exp, t_word *word)
 	return (error(ERR_NO));
 }
 
-t_error	get_ifs(t_expander *expander, t_string	*ifs)
+t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs)
 {
-	string_init(ifs, 0, NULL, 0);
-	expander->err = params_get_from_const("IFS", ifs);
-	if (expander->err.type != ERR_NO && expander->err.type != ERR_VAR_NOT_FOUND)
-		return (string_free(ifs), expander->err);
-	if (expander->err.type == ERR_VAR_NOT_FOUND)
+	size_t		i;
+	t_error		err;
+	t_string	str;
+
+	string_init(out, 0, NULL, 0);
+	if (in->len == 0)
+		return (error(ERR_NO));
+	i = 0;
+	while (in->len > 0)
 	{
-		expander->err = error(ERR_NO);
+		err = expansion_fpop(&str, in);
+		if (err.type)
+			return (string_free(out), err);
+		if (i != 0 && !string_append_n(out, ifs->data, 1))
+			err = error_sys();
+		if (!err.type && !string_append(out, &str))
+			err = error_sys();
+		if (err.type)
+			return (string_free(&str), string_free(out), err);
+		++i;
+	}
+	return (string_free(&str), err);
+}
+
+t_error	prepare_str_for_expansion(t_context_stack *out, t_string *src)
+{
+	t_error		err;
+	t_lexer		lexer;
+	t_string	lexer_src;
+
+	err = lexer_remove_escaped_newlines(src, str_context_rules());
+	if (err.type)
+		return (err);
+	if (!string_dup(&lexer_src, src))
+		return (error_sys());
+	lexer_init(&lexer);
+	err = lexer_push_input(&lexer, &lexer_src);
+	if (!err.type)
+		err = lexer_track_context(&lexer, out, str_context_rules());
+	return (lexer_free(&lexer), err);
+}
+
+t_error	get_ifs(t_string *ifs)
+{
+	t_error	err;
+
+	string_init(ifs, 0, NULL, 0);
+	err = params_get_from_const("IFS", ifs);
+	if (err.type != ERR_NO && err.type != ERR_VAR_NOT_FOUND)
+		return (string_free(ifs), err);
+	if (err.type == ERR_VAR_NOT_FOUND)
+	{
+		err = error(ERR_NO);
 		if (!string_append_n(ifs, " \t\n", 3))
 		{
-			expander->err = error_sys();
-			return (string_free(ifs), expander->err);
+			err = error_sys();
+			return (string_free(ifs), err);
 		}
 	}
 	else if (ifs->data == NULL)
 	{
 		if (!string_append_n(ifs, "", -1))
 		{
-			expander->err = error_sys();
-			return (string_free(ifs), expander->err);
+			err = error_sys();
+			return (string_free(ifs), err);
 		}
 	}
-	return (expander->err);
+	return (err);
 }

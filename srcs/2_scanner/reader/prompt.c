@@ -29,8 +29,8 @@ static t_error	prompt_expand_exclamation(t_string *value)
 	t_string	res;
 	size_t		i;
 
-	(void)string_init(&res, 0, NULL, 0);
 	i = 0;
+	string_init(&res, 0, NULL, 0);
 	while (i < value->len)
 	{
 		if (!prompt_excl_append(&res, value, &i))
@@ -41,43 +41,37 @@ static t_error	prompt_expand_exclamation(t_string *value)
 	return (error(ERR_NO));
 }
 
-static t_error	prompt_expand_params(t_string *value)
+static t_error	prompt_use_unexpanded(
+					const char *name,
+					t_string *dst,
+					t_string *value,
+					t_error err)
 {
-	t_error		err;
-	t_string	expanded;
-	t_expansion	exp;
-
-	err = expand_str(&exp, value, EXP_PARAM);
-	if (err.type)
-		return (err);
-	if (exp.len != 1)
-		return (expansion_free(&exp), error(ERR_EXP_RESULT_INCOHERENT));
-	err = expansion_take(&exp, 0, &expanded);
-	expansion_free(&exp);
-	if (err.type)
-		return (err);
-	string_free(value);
-	*value = expanded;
+	(void)error_print(err, "scanner", name, NULL, NULL);
+	string_free(dst);
+	*dst = *value;
 	return (error(ERR_NO));
 }
 
 t_error	reader_prompt(const char *name, t_string *dst)
 {
-	t_error	err;
+	t_error		err;
+	t_string	value;
+	int			exit_status;
 
-	err = params_get_from_const(name, dst);
+	string_init(dst, 0, NULL, 0);
+	err = params_get_from_const(name, &value);
 	if (err.type == ERR_VAR_NOT_FOUND)
 		return (error(ERR_NO));
 	if (err.type)
 		return (err);
-	if (dst->len == 0)
-		return (error(ERR_NO));
+	if (value.len == 0)
+		return (string_free(&value), error(ERR_NO));
 	if (str_cmp(name, "PS1") == 0)
-		err = prompt_expand_exclamation(dst);
+		err = prompt_expand_exclamation(&value);
 	if (err.type == ERR_NO)
-		err = prompt_expand_params(dst);
+		err = expand_str(dst, &value, &exit_status, EXP_PARAM);
 	if (err.type)
-		return (error_print(err, "scanner", name, NULL, NULL),
-			error(ERR_NO));
-	return (error(ERR_NO));
+		return (prompt_use_unexpanded(name, dst, &value, err));
+	return (string_free(&value), error(ERR_NO));
 }

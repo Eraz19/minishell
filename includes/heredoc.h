@@ -162,40 +162,27 @@ void	heredoc_free(t_heredoc *heredoc);
 
 /**
  * @ingroup heredoc
- * @brief Reads one here-document body from the current scanner input,
- *        prompting for continuation lines when needed, and stores the raw
- *        body in @p out_body.
+ * @brief Expands a here-document body: applies the POSIX 2.7.4 set
+ *        (parameter, command and arithmetic expansion, quote removal,
+ *        here-document lexing rules) to @p in through @c expand_str
+ *        (execution side, qualified).
  *
- * The delimiter is quote-removed before the comparison. The body itself is
- * not expanded here.
- *
- * @param out_body String receiving the body, initialized by the caller
- *                 (borrowed).
- * @param delim Raw delimiter token (borrowed, read-only).
- * @return @c ERR_REDIRECTION (printed with the delimiter) when the input
- *         ends before a delimiter line, including interactive EOF at the
- *         continuation prompt; @c ERR_LIBC on allocation failure;
- *         @c ERR_INTERNAL on internal inconsistency;
- *         @c ERR_SHELL_NOT_FOUND if the shell data is unavailable;
- *         @c ERR_NO on success.
- */
-t_error	heredoc_read(t_string *out_body, const t_token *delim);
-
-/**
- * @ingroup heredoc
- * @brief Expands a saved here-document body in place: reads the backing
- *        file, expands it (parameter, command, arithmetic, quote removal)
- *        and writes the result back (execution side, qualified).
- *
- * @param path Backing file path (borrowed, read-only).
+ * @param out String receiving the expanded body, initialized by the
+ *            function (borrowed).
+ * @param in Body text to expand (borrowed, read-only).
+ * @param exit_status Destination for the exit status of the last command
+ *                    substitution; unused until command substitution is
+ *                    implemented (borrowed).
  * @return @c ERR_POSIX_EXPANSION (printed) on a user-facing expansion
- *         failure; @c ERR_REDIRECTION (printed with the path) on a
- *         temp-file write failure, further requalified by the executor;
- *         @c ERR_INTERRUPTED when a signal interrupts a file operation;
- *         @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
+ *         failure; @c ERR_POSIX_ASSIGNMENT (printed) on a readonly
+ *         assignment; @c ERR_INTERRUPTED when a signal interrupts the
+ *         work; @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
  *         (printed) on internal inconsistency; @c ERR_NO on success.
  */
-t_error	heredoc_expand_body(const t_string *path);
+t_error	heredoc_expand_body(
+			t_string *out,
+			const t_string *in,
+			int *exit_status);
 
 /**
  * @ingroup heredoc

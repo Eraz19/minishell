@@ -10,7 +10,6 @@ void	expander_init(t_expander *expander)
 
 void	expander_free(t_expander *expander)
 {
-	string_free(&expander->ifs);
 	fields_free(&expander->fields);
 	fields_free(&expander->fields_exp);
 	word_free(&expander->word);
@@ -23,11 +22,10 @@ t_error	expander_load(t_expander *expander, t_expander_args *args)
 	t_loader	loader;
 	t_word		word_copy;
 
+	expander->ifs = args->ifs;
 	expander->flags = args->flags;
+	expander->exit_status = args->exit_status;
 	expander->assignment_offset = args->assignment_offset;
-	expander->err = get_ifs(expander, &expander->ifs);
-	if (expander->err.type)
-		return (expander->err);
 	loader_init(&loader);
 	expander->err = loader_load(&loader, args);
 	if (expander->err.type)
