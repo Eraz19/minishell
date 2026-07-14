@@ -24,5 +24,5 @@ t_cst_node	*parser_here_stack_get(const t_parser_here_stack *stack, size_t i)
 	assert(stack->len > 0);
 	if (stack->len == 0)
 		return (NULL);
-	return (&((t_cst_node *)stack->data)[i]);
+	return (((t_cst_node **)stack->data)[i]);
 }

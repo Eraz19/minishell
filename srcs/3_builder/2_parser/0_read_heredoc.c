@@ -3,10 +3,10 @@
 #include "parser_type.h"
 #include "parser_priv.h"
 #include "parser_here_stack.h"
-# include <stdio.h>		// DEBUG
 #ifdef DEBUG_PARSING
-# include "logs.h"		// DEBUG
-# include "debug.h"
+# include <stdio.h>	// DEBUG
+# include "logs.h"	// DEBUG
+# include "debug.h"	// DEBUG
 #endif
 # include <assert.h>	// DEBUG
 
@@ -28,14 +28,14 @@ t_error	parser_read_heredoc(t_parser *parser)
 		assert(io_here->child_count == 2);
 		delim = parser_get_token(parser, io_here->children[1]->tokens_start_id);
 		strip = io_here->children[0]->symbol == SYM_DLESSDASH;
+#ifdef DEBUG_PARSING
+		fprintf(stderr, "%s[PARSER] scanner_read_heredoc(%p, %s%s%s, %s)%s\n",
+			YELLOW, &io_here->heredoc_body, BLUE, delim->value.data, YELLOW, bool_to_string(strip), NC);
+#endif
 		err = scanner_read_heredoc(&io_here->heredoc_body, delim, strip);
 		if (err.type)
 			return (err);
 		i++;
 	}
-#ifdef DEBUG_PARSING
-	fprintf(stderr, "[PARSER] %scanner_read_heredoc(%p, %s%s%s, %s)%s\n",
-		YELLOW, &io_here->heredoc_body, BLUE, delim->value.data, YELLOW, bool_to_string(strip), NC);
-#endif
 	return (err);
 }

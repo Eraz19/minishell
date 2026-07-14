@@ -48,8 +48,8 @@ static inline size_t	parser_tokens_count_sum(
 }
 
 static inline t_error	parser_replace_items(
-							t_parser					*parser,
-							size_t 						count,
+							t_parser *parser,
+							size_t count,
 							const t_parser_item	*item)
 {
 	size_t	i;
@@ -71,11 +71,11 @@ t_error	parser_reduce(
 			const t_lr_machine *machine,
 			size_t rule_id)
 {
-	const t_rule		*rule;
-	size_t				rhs_start;
+	const t_rule	*rule;
+	size_t			rhs_start;
 	t_parser_item	*rhs;
 	t_parser_item	item;
-	t_error				err;
+	t_error			err;
 
 	assert(parser != NULL);
 	assert(machine != NULL);
@@ -84,7 +84,7 @@ t_error	parser_reduce(
 	rhs = &((t_parser_item *)parser->item_stack.data)[rhs_start];
 	item.symbol = rule->lhs;
 	err = parser_new_lr_state(parser, machine, rule, &item.lr_state_id);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
 	item.tokens_start_id = parser->lookahead_id;
 	if (rule->rhs_len > 0)
