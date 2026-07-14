@@ -4,7 +4,6 @@
 #include "heredoc.h"
 #include "heredoc_.h"
 #include "expander.h"
-#include "expansion_.h"
 #include "heredoc_queue_.h"
 
 t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode)
@@ -77,32 +76,16 @@ t_error	heredoc_read_body_from_input(const t_string *input, size_t *start)
 	return (heredoc->err);
 }
 
-t_error	heredoc_expand_body(const t_string *path)
+t_error	heredoc_expand_body(t_string *out, const t_string *in, int *exit_status)
 {
 	t_error		err;
-	t_string	body;
 	t_exp_flag	flags;
-	t_expansion	expansion;
 
 	flags = generate_heredoc_body_expand_flags();
-	err = read_body_file(&body, path);
+	err = expand_str(out, in, exit_status, flags);
 	if (err.type)
 		return (heredoc_error_qualify(err));
-	err = expand_heredoc(&expansion, &body, flags);
-	if (err.type)
-		return (string_free(&body), heredoc_error_qualify(err));
-	string_free(&body);
-	string_init(&body, 0, NULL, 0);
-	if (expansion.len != 1)
-		return (expansion_free(&expansion), string_free(&body),
-			heredoc_error_qualify(error(ERR_EXP_RESULT_INCOHERENT)));
-	err = expansion_fpop(&body, &expansion);
-	if (err.type)
-		return (expansion_free(&expansion), string_free(&body),
-			heredoc_error_qualify(err));
-	err = save_body_in_file(path, &body);
-	return (expansion_free(&expansion), string_free(&body),
-		heredoc_error_qualify(err));
+	return (err);
 }
 
 t_error	heredoc_prepare_for_expansion(

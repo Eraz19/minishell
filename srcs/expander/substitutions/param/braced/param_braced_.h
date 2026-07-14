@@ -66,6 +66,10 @@ typedef struct s_positional_exp
  *        the brace body and routes to the length, positional or parameter
  *        handler.
  *
+ * @note Diagnostic funnel of the braced forms: an
+ *       @c ERR_PARAM_BAD_SUBSTITUTION or @c ERR_VAR_INVALID_NAME escaping
+ *       a handler is printed here with the whole construct text, the
+ *       most specific context available.
  * @param expander Expander state holding the input word at the ${ token.
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
  *         success.
@@ -254,7 +258,10 @@ t_error	braced_use_value(t_expander *expander,
  * @param opt Quoting/context to stamp onto the produced items.
  * @param operand Operand word to expand and assign (freed by this call).
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
- *         success, ERR_VAR_INVALID_NAME for a non-assignable name.
+ *         success, ERR_VAR_INVALID_NAME for a non-assignable name (printed
+ *         by @ref expand_braced with the construct text), ERR_VAR_READ_ONLY
+ *         (printed with the variable name) for a readonly variable,
+ *         ERR_SHELL_NOT_FOUND or ERR_LIBC from the assignment.
  */
 t_error	braced_assign(t_expander *expander,
 			const t_string *name,

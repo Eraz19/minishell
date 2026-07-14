@@ -160,19 +160,27 @@ void	heredoc_free(t_heredoc *heredoc);
 
 /**
  * @ingroup heredoc
- * @brief Expands a saved here-document body in place: reads the backing
- *        file, expands it (parameter, command, arithmetic, quote removal)
- *        and writes the result back (execution side, qualified).
+ * @brief Expands a here-document body: applies the POSIX 2.7.4 set
+ *        (parameter, command and arithmetic expansion, quote removal,
+ *        here-document lexing rules) to @p in through @c expand_str
+ *        (execution side, qualified).
  *
- * @param path Backing file path (borrowed, read-only).
+ * @param out String receiving the expanded body, initialized by the
+ *            function (borrowed).
+ * @param in Body text to expand (borrowed, read-only).
+ * @param exit_status Destination for the exit status of the last command
+ *                    substitution; unused until command substitution is
+ *                    implemented (borrowed).
  * @return @c ERR_POSIX_EXPANSION (printed) on a user-facing expansion
- *         failure; @c ERR_REDIRECTION (printed with the path) on a
- *         temp-file write failure, further requalified by the executor;
- *         @c ERR_INTERRUPTED when a signal interrupts a file operation;
- *         @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
+ *         failure; @c ERR_POSIX_ASSIGNMENT (printed) on a readonly
+ *         assignment; @c ERR_INTERRUPTED when a signal interrupts the
+ *         work; @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
  *         (printed) on internal inconsistency; @c ERR_NO on success.
  */
-t_error	heredoc_expand_body(const t_string *path);
+t_error	heredoc_expand_body(
+			t_string *out,
+			const t_string *in,
+			int *exit_status);
 
 /**
  * @ingroup heredoc

@@ -51,11 +51,7 @@ t_error	build_arith_expander(
 		word_free(arith_word);
 		return (expander_free(arith_expander), expander->err);
 	}
-	if (!string_init(&arith_expander->ifs, 0, expander->ifs.data, -1))
-	{
-		expander->err = error_sys();
-		return (expander_free(arith_expander), expander->err);
-	}
+	arith_expander->ifs = expander->ifs;
 	arith_expander->flags = EXP_PARAM | EXP_CMD_SUB | EXP_QUOTE_REMOVAL;
 	return (expander->err);
 }

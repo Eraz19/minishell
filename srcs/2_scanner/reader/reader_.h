@@ -72,14 +72,18 @@ t_error	reader_new_input(t_string *res);
  *
  * @note Command substitution and arithmetic expansion are unspecified by
  *       POSIX and not applied.
- * @note A failed expansion is printed and the unexpanded value is used, so
- *       a broken prompt variable cannot abort input reading; an unset
- *       variable yields an empty prompt.
+ * @note An unset or empty variable yields an empty prompt (@c ERR_NO with
+ *       an empty @p dst).
+ * @note A failed expansion is printed and the unexpanded value is used as
+ *       the prompt: POSIX 2.8.1 requires an interactive shell to report
+ *       an expansion error without exiting, and leaves the resulting
+ *       prompt value unspecified — kept readable as the raw value.
  * @param name Variable name, @c "PS1" or @c "PS2" (borrowed, read-only).
  * @param dst String receiving the expanded prompt, initialized by the
- *            function; the caller owns it (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND if the shell data is unavailable,
- *         @c ERR_NO otherwise.
+ *            function on every path; the caller owns it (borrowed).
+ * @return @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC, raw, if the fetch
+ *         fails; @c ERR_NO otherwise (expansion failures are absorbed,
+ *         printed here when not already printed by the expander).
  */
 t_error	reader_prompt(const char *name, t_string *dst);
 

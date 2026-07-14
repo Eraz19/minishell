@@ -17,20 +17,6 @@ void	expansion_free_void(void *expansion)
 	expansion_free(expansion);
 }
 
-t_error	expansion_load_empty(t_expansion *out)
-{
-	t_error		err;
-	t_string	field;
-
-	expansion_init(out);
-	if (!string_init(&field, 1, NULL, 0))
-		return (error_sys());
-	err = expansion_push(out, &field);
-	if (err.type)
-		return (string_free(&field), err);
-	return (error(ERR_NO));
-}
-
 t_error	expansion_load(t_expansion *out, t_fields *src)
 {
 	t_error		err;

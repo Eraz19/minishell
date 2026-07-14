@@ -44,11 +44,10 @@ t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path);
  * @param out String receiving the expanded delimiter, initialized by the
  *            function on success (borrowed).
  * @param delim Raw delimiter token (borrowed, read-only).
- * @return @c ERR_EXP_RESULT_INCOHERENT if the delimiter does not
- *         quote-remove to exactly one field; @c ERR_LIBC on allocation
- *         failure; @c ERR_POSIX_EXPANSION or @c ERR_INTERNAL (printed,
- *         qualified by the expander) if the quote removal fails;
- *         @c ERR_NO on success.
+ * @return From the quote removal, qualified by the expander:
+ *         @c ERR_POSIX_EXPANSION (printed), @c ERR_INTERNAL (printed),
+ *         @c ERR_LIBC (printed) or @c ERR_INTERRUPTED; @c ERR_LIBC (raw)
+ *         if the newline append fails; @c ERR_NO on success.
  */
 t_error	expand_delim(t_heredoc *heredoc, t_string *out, const t_token *delim);
 
@@ -56,7 +55,9 @@ t_error	expand_delim(t_heredoc *heredoc, t_string *out, const t_token *delim);
  * @ingroup heredoc_priv
  * @brief Builds the expansion flag set of a here-document body
  *        (POSIX 2.7.4): parameter, command and arithmetic expansion plus
- *        quote removal; no field splitting, no pathname expansion.
+ *        quote removal, and @c EXP_HEREDOC so the body is re-lexed with
+ *        the here-document rules; no field splitting, no pathname
+ *        expansion.
  *
  * @return The flag set.
  */
