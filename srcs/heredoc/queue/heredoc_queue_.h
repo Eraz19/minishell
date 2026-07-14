@@ -20,6 +20,9 @@
  */
 void	heredoc_queue_init(t_heredoc_queue *queue);
 
+// TODO: doc
+void	heredoc_queue_clear(t_heredoc_queue *queue);
+
 /**
  * @ingroup heredoc_queue
  * @brief Frees @p queue and the strings of every item it owns.

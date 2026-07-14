@@ -9,6 +9,14 @@ void	alias_init(t_alias *alias)
 	hashmap_init(&alias->map, 0, free_char_ptr_void);
 }
 
+void	alias_clear(t_alias *alias)
+{
+	alias_stack_clear(&alias->stack);
+	hashmap_clear(&alias->map);
+	alias->err = (t_error){0};
+	alias->disable_position = false;
+}
+
 void	alias_free(t_alias *alias)
 {
 	alias_stack_free(&alias->stack);

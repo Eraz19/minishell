@@ -14,7 +14,7 @@ void	shell_init(t_shell *shell)
 	runner_init(&shell->runner);
 }
 
-void	shell_clear(t_shell *shell)
+t_error	shell_clear(t_shell *shell)
 {
 	params_clear(&shell->params);
 	scanner_clear(&shell->scanner);
@@ -22,7 +22,7 @@ void	shell_clear(t_shell *shell)
 	heredoc_clear(&shell->heredoc);
 	history_clear(&shell->history);
 	builder_clear(&shell->builder);
-	runner_clear(&shell->runner);
+	return (runner_clear(&shell->runner));
 }
 
 void	shell_free(t_shell *shell)

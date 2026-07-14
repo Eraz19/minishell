@@ -5,6 +5,11 @@ void	heredoc_queue_init(t_heredoc_queue *queue)
 	vector_init(queue, sizeof(t_heredoc_item), 0);
 }
 
+void	heredoc_queue_clear(t_heredoc_queue *queue)
+{
+	vector_clear(queue, heredoc_item_free);
+}
+
 void	heredoc_queue_free(t_heredoc_queue *queue)
 {
 	vector_free(queue, heredoc_item_free);

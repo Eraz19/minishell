@@ -145,7 +145,8 @@ void	heredoc_init(t_heredoc *heredoc);
  *         unavailable, @c ERR_NO on success.
  */
 t_error	heredoc_load(t_heredoc *heredoc);
-void	heredoc_unlink(const char *heredoc_path);
+
+void	heredoc_clear(t_heredoc *state);
 
 /**
  * @ingroup heredoc

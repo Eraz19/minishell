@@ -20,7 +20,7 @@ static inline void	runner_handle_syntax_errors(
 	params_set_last_status_in(&shell->params, (int)err->type);
 	if (interactive == true)
 	{
-		scanner_reset(&shell->scanner);
+		scanner_clear(&shell->scanner);
 		builder_clear(&shell->builder);
 		err->type = ERR_NO;
 	}

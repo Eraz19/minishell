@@ -28,14 +28,14 @@ static inline int	cmd_exec_in_shell(t_cmd *cmd)
 	cmd->path.cap = 0;
 	argc = (int)cmd->argv.len - 1;
 	shell_free_void();
-	return (shell_run(argc, cmd->argv.data, cmd->envp.data));
+	return (shell_run(argc, cmd->argv.data, cmd->envp.data, false));
 }
 
 static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 {
 	int	exit_status;
 
-	redirect_clear(&runner->redirector);
+	(void)redirect_clear(&runner->redirector, false);
 	(void)execve(
 			cmd->path.data,
 			(char *const *)cmd->argv.data,

@@ -46,6 +46,9 @@ void	var_init(t_var_list *variables);
  */
 t_error	var_load(t_var_list *variables, char **envp);
 
+// TODO: doc
+void	var_clear(t_var_list *variables);
+
 /**
  * @brief Release every variable owned by the list.
  *

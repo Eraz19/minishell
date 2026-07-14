@@ -109,7 +109,7 @@ t_error	scanner_init(t_scanner *scanner);
 t_error	scanner_load(t_scanner *scanner, const char *source);
 
 // TODO: doc
-void	scanner_reset(t_scanner *scanner);
+void	scanner_clear(t_scanner *scanner);
 
 /**
  * @ingroup scanner

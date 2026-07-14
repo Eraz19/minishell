@@ -27,7 +27,7 @@ t_error	scanner_load(t_scanner *scanner, const char *source)
 	return (scanner->err);
 }
 
-void	scanner_reset(t_scanner *scanner)
+void	scanner_clear(t_scanner *scanner)
 {
-	lexer_reset(&scanner->lexer);
+	lexer_clear(&scanner->lexer);
 }

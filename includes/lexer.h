@@ -262,7 +262,7 @@ void			lexer_init(t_lexer *lexer);
  *
  * @param lexer Already initialized lexer (borrowed).
  */
-void			lexer_reset(t_lexer *lexer);
+void			lexer_clear(t_lexer *lexer);
 
 /**
  * @ingroup lexer

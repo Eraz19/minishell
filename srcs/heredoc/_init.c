@@ -12,6 +12,14 @@ void	heredoc_init(t_heredoc *state)
 	state->file_id = -1;
 }
 
+void	heredoc_clear(t_heredoc *state)
+{
+	heredoc_queue_clear(&state->queue);
+	state->err = (t_error){0};
+	state->is_tty = false;
+	state->file_id = -1;
+}
+
 void	heredoc_free(t_heredoc *state)
 {
 	heredoc_queue_free(&state->queue);
@@ -26,24 +34,4 @@ t_error	heredoc_load(t_heredoc *state)
 	if (state->err.type != ERR_NO)
 		return (state->err = heredoc_error_qualify(state->err));
 	return (state->is_tty = mode == INPUT_MODE_STDIN_TTY, state->err);
-}
-
-# include <stdio.h>
-# include "logs.h"
-# include <string.h>
-void	heredoc_unlink(const char *heredoc_path)
-{
-	bool	succeed;
-	int		saved_errno;
-
-	succeed = unlink(heredoc_path) == 0;
-	if (succeed == true)
-		fprintf(stderr, "%s[%s()] heredoc unlinked: '%s%s%s'%s\n",
-			YELLOW, __func__, BLUE, heredoc_path, YELLOW, NC);
-	else
-	{
-		saved_errno = errno;
-		fprintf(stderr, "%s[%s()] heredoc unlink FAILED: '%s%s%s'%s (%s)\n",
-			RED, __func__, BLUE, heredoc_path, RED, strerror(saved_errno), NC);
-	}
 }

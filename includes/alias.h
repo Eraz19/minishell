@@ -84,6 +84,9 @@ typedef struct s_alias
  */
 void	alias_init(t_alias *alias);
 
+// TODO: doc
+void	alias_clear(t_alias *alias);
+
 /**
  * @ingroup alias
  * @brief Frees the expansion stack and the map (keys and values) of

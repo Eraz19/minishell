@@ -25,44 +25,47 @@ static inline void	shell_stop_logs(void)
 
 /* -------------------- DEBUG (STOP) -------------------- */
 
-t_error	shell_prepare(int argc, char **argv, char **envp, t_shell **out_shell)
+static inline t_error	shell_prepare(t_shell_loading_options *options)
 {
 	t_shell	*shell;
 
-	assert(argc > 0);
-	assert(argv != NULL);
-	assert(envp != NULL);
-	shell = malloc(sizeof(*shell));
-	if (!shell)
+	assert(options->argc > 0);
+	assert(options->argv != NULL);
+	assert(options->envp != NULL);
+	options->shell = malloc(sizeof(*shell));
+	if (!options->shell)
 		return (error_print(error_sys(),
 					"unable to malloc shell data struct", NULL, NULL));
-	shell_init(shell);
-	shell_set(shell);
-	*out_shell = shell;
+	shell_init(options->shell);
+	shell_set(options->shell);
 	print_pass("shell initialized\n");
-	return (shell_load(shell, argc, argv, envp));
+	return (shell_load(options));
 }
 
-int	shell_run(int argc, char **argv, char **envp)
+int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
 {
-	t_shell	*shell;
-	int		exit_status;
-	t_error	err;
+	t_shell_loading_options	options;
+	int						exit_status;
+	t_error					err;
 
 	shell_start_logs();
-	err = shell_prepare(argc, argv, envp, &shell);
+	options.argc = argc;
+	options.argv = argv;
+	options.envp = envp;
+	options.build_parser_tables = build_parser_tables;
+	err = shell_prepare(&options);
 	if (err.type == ERR_NO)
 		err = shell_exec_env();
 	if (err.type == ERR_NO)
-		err = runner_run(shell);
+		err = runner_run(options.shell);
 	if (err.type)
 		(void)history_save();
 	else
 		err = history_save();
 	if (err.type)
 		err = error_print(err, "history", NULL, NULL);
-	exit_status = params_get_last_status_from(&shell->params);
-	shell_free(shell);
+	exit_status = params_get_last_status_from(&options.shell->params);
+	shell_free(options.shell);
 	shell_stop_logs();
 	return (exit_status);
 }

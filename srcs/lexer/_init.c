@@ -27,7 +27,7 @@ t_error	lexer_push_input(t_lexer *state, t_string *str)
 	return (state->err);
 }
 
-void	lexer_reset(t_lexer *state)
+void	lexer_clear(t_lexer *state)
 {
 	state->input = NULL;
 	state->token = NULL;

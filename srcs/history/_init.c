@@ -12,6 +12,17 @@ void	history_init(t_history *state)
 	string_init(&state->current_input, 0, NULL, 0);
 }
 
+void	history_clear(t_history *state)
+{
+	state->err = (t_error){0};
+	history_list_clear(&state->list);
+	history_file_clear(&state->file);
+	if (state->current_input.data != NULL)
+		state->current_input.data[0] = '\0';
+	state->current_input.len = 0;
+	history_rl_free(&state->rl_history);
+}
+
 void	history_free(t_history *state)
 {
 	history_list_free(&state->list);

@@ -45,6 +45,9 @@ typedef enum e_subshell_mode
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
+// TODO: doc
+t_error	shell_clear(t_shell *shell);
+
 /**
  * @brief Frees the current global shell instance when one is registered.
  *
@@ -147,9 +150,10 @@ t_scanner	*shell_get_scanner(void);
  * @param argc Argument count.
  * @param argv Argument array (borrowed, read-only).
  * @param envp Environment array (borrowed, read-only).
+ * @param build_lr_tables Specifies if parser tables need to be built.
  * @return Integer form of the final error type, or @c ERR_NO on success.
  */
-int		shell_run(int argc, char **argv, char **envp);
+int		shell_run(int argc, char **argv, char **envp, bool build_parser_tables);
 
 /**
  * @brief Reports whether interactive EOF should terminate the shell.

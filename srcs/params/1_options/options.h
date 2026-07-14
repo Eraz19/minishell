@@ -42,6 +42,9 @@ typedef uint32_t	t_option;
  */
 void		options_free(t_option *options);
 
+// TODO: doc
+void	options_clear(t_option *options);
+
 /**
  * @brief Reset an option bitset to its empty state.
  *

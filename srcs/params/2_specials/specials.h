@@ -43,6 +43,9 @@ typedef struct s_specials
  */
 void	specials_init(t_specials *specials);
 
+// TODO: doc
+void	specials_clear(t_specials *specials);
+
 /**
  * @brief Load special parameters from argv and current shell options.
  *

@@ -45,6 +45,12 @@ t_error	var_load(t_var_list *variables, char **envp)
 	return (error(ERR_NO));
 }
 
+void	var_clear(t_var_list *variables)
+{
+	assert(variables != NULL);
+	vector_clear(variables, var_free_one);
+}
+
 void	var_free(t_var_list *variables)
 {
 	assert(variables != NULL);

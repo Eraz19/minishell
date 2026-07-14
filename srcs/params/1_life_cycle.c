@@ -19,6 +19,16 @@ void	params_init_subshell(t_params *params)
 	process_clear(&params->processes);
 }
 
+void	params_clear(t_params *params)
+{
+	var_clear(&params->variables);
+	options_clear(&params->options);
+	specials_clear(&params->specials);
+	positionals_clear_stack(&params->positionals_stack);
+	functions_clear(&params->functions);
+	process_clear(&params->processes);
+}
+
 void	params_free(t_params *params)
 {
 	assert(params != NULL);

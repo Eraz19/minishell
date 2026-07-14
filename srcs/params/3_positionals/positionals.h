@@ -42,6 +42,9 @@ t_error	positionals_load_stack(
 			char **argv,
 			size_t start_index);
 
+// TODO: doc
+void	positionals_clear_stack(t_positionals_stack *stack);
+
 /**
  * @brief Release every positional frame owned by the stack.
  *

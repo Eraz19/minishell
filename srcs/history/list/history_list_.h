@@ -20,6 +20,9 @@ typedef t_vector	t_history_list;
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
+// TODO: doc
+void	history_list_clear(t_history_list *list);
+
 /**
  * @ingroup history_list
  * @brief Initializes @p list as an empty entry list.

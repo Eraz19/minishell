@@ -34,6 +34,11 @@ void	functions_init(t_functions *functions)
 	hashmap_init(functions, 0, NULL);
 }
 
+void	functions_clear(t_functions *functions)
+{
+	hashmap_clear(functions);
+}
+
 void	functions_free(t_functions *functions)
 {
 	functions->del_value = function_free_void;

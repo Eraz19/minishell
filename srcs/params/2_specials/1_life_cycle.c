@@ -10,6 +10,11 @@ void	specials_init(t_specials *specials)
 	specials->last_status = 0;
 }
 
+void	specials_clear(t_specials *specials)
+{
+	specials_init(specials);
+}
+
 void	specials_free(t_specials *specials)
 {
 	specials_init(specials);

@@ -10,6 +10,18 @@ void	history_file_init(t_history_file *state)
 	(void)string_init(&state->content, 0, NULL, 0);
 }
 
+void	history_file_clear(t_history_file *state)
+{
+	if (state->path.data)
+		state->path.data[0] = '\0';
+	state->path.len = 0;
+	if (state->content.data)
+		state->content.data[0] = '\0';
+	state->content.len = 0;
+	state->err = (t_error){0};
+	state->loaded_count = 0;
+}
+
 void	history_file_free(t_history_file *state)
 {
 	string_free(&state->path);

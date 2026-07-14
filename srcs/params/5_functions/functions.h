@@ -20,6 +20,7 @@ typedef t_hashmap	t_functions;
 // Life cycle
 
 void	functions_init(t_functions *functions);
+void	functions_clear(t_functions *functions);
 void	functions_free(t_functions *functions);
 
 // ops

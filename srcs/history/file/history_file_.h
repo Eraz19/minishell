@@ -42,6 +42,9 @@ typedef struct s_history_file
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
+// TODO: doc
+void	history_file_clear(t_history_file *state);
+
 /**
  * @ingroup history_file
  * @brief Zeroes @p state and initializes its path and content strings.
