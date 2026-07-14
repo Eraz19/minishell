@@ -9,7 +9,8 @@
 typedef struct s_parser
 {
 	t_parser_item_stack	item_stack;
-	t_parser_here_stack	here_stack;
+	t_parser_here_stack	here_stack;		// pending io_here nodes (borrowed),
+										// bodies read at the line's newline
 	t_token_pool		token_pool;
 	size_t				lookahead_id;
 	t_symbol			lookahead_raw_symbol;

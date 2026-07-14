@@ -33,7 +33,7 @@ t_error	scanner_get_next_token(t_token *token)
 	return (scanner->err);
 }
 
-t_error	scanner_heredoc_read(t_string *out, const t_token *delim, bool strip)
+t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip)
 {
 	t_heredoc_read_args	args;
 	t_scanner			*scanner;
@@ -44,7 +44,7 @@ t_error	scanner_heredoc_read(t_string *out, const t_token *delim, bool strip)
 		return (scanner_error_qualify(error(ERR_SHELL_NOT_FOUND), false));
 	scanner->err = heredoc_expand_delim(&delim_exp, delim);
 	if (scanner->err.type)
-		return (scanner->err);
+		return (scanner->err = scanner_error_qualify(scanner->err, false));
 	prepare_heredoc_read_args(scanner, &args, strip, &delim_exp);
 	scanner->err = heredoc_read_body_from_input(out, &args);
 	scanner->err = scanner_error_qualify(scanner->err, false);

@@ -96,6 +96,19 @@ t_lexer_rules	scanner_lexer_rules(t_scanner *scanner);
  */
 t_error		scanner_read_input(t_scanner *scanner);
 
+/**
+ * @ingroup scanner_priv
+ * @brief Builds the body-read arguments from the scanner state: the top
+ *        lexer input and its cursor (@c NULL when no input is loaded),
+ *        the mode from @p strip and the terminal flag from the input
+ *        mode.
+ *
+ * @param scanner Already initialized scanner state (borrowed).
+ * @param out Arguments filled by the function (borrowed).
+ * @param strip Tab-stripping mode of the @c <<- operator.
+ * @param delim Quote-removed delimiter with its trailing newline
+ *              (borrowed, read-only).
+ */
 void		prepare_heredoc_read_args(
 				t_scanner *scanner,
 				t_heredoc_read_args *out,

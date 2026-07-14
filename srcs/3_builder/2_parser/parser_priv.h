@@ -25,6 +25,21 @@ void	parser_free(t_parser *parser);
 /* ************************************************************************* */
 
 t_error	parser_read_next_symbol(t_parser *parser);
+
+/**
+ * @brief Reads the pending here-document bodies when the lookahead is
+ *        the line's newline (POSIX 2.7.4): one body per recorded
+ *        @c io_here node, in reduction order, each stored on its node's
+ *        @c heredoc_body; a no-op on any other lookahead.
+ *
+ * @param parser Already initialized parser state (borrowed).
+ * @return From the scanner, fully qualified: @c ERR_POSIX_SYNTAX
+ *         (printed with the delimiter) when the input ends before a
+ *         delimiter line; @c ERR_POSIX_EXPANSION (printed) from a
+ *         delimiter's quote removal; @c ERR_INTERRUPTED; @c ERR_LIBC
+ *         (printed); @c ERR_INTERNAL (printed); @c ERR_NO on success or
+ *         when nothing is pending.
+ */
 t_error	parser_read_heredoc(t_parser *parser);
 
 /* ************************************************************************* */

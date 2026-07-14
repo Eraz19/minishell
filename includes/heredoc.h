@@ -7,16 +7,19 @@
 # include "context.h"
 
 /** @defgroup heredoc Heredoc API
- *  @brief Collects, reads and expands here-documents (POSIX 2.7.4).
+ *  @brief Reads and prepares here-documents for the scanner (POSIX 2.7.4).
  *
- *  The parser reports each here-document operator through the scanner
- *  (@ref heredoc_register): the delimiter is quote-removed and a backing
- *  temporary file is created. Once a complete command line is parsed, the
- *  scanner drains the queue (@ref heredoc_read_body_from_input): each body
- *  is read from the current input (prompting for continuation lines on a
- *  terminal) up to its delimiter line, tab-stripped for @c <<-, and saved
- *  in its backing file. At execution time the redirector expands the body
- *  in place (@ref heredoc_expand_body) unless the delimiter was quoted.
+ *  When the newline ending a command line is reached, the parser asks
+ *  the scanner for each pending here-document body in order
+ *  (POSIX 2.7.4): the delimiter is quote-removed
+ *  (@ref heredoc_expand_delim), the body is read from the current input
+ *  up to the delimiter line (@ref heredoc_read_body_from_input,
+ *  prompting for continuation lines on a terminal, tab-stripping for
+ *  @c <<-) and returned as a string that the parser stores in the syntax
+ *  tree. At execution time the redirector expands the stored body
+ *  through the expander unless the delimiter was quoted;
+ *  @ref heredoc_prepare_for_expansion re-lexes it with the body rules
+ *  for that run.
  *
  *  Body semantics follow POSIX 2.7.4: parameter, command and arithmetic
  *  expansion; a backslash escapes only @c $, @c ` and @c \ (a double
@@ -24,33 +27,15 @@
  *
  *  ERROR CONTRACT
  *
- *  The module has two API surfaces with different qualification rules:
- *
- *  - Tokenization side (@ref heredoc_register,
- *    @ref heredoc_read_body_from_input, @ref heredoc_prepare_for_expansion):
- *    errors stay SPECIFIC, the callers (scanner endpoints, expander) are
- *    the requalifiers. A missing delimiter (end of input before the
- *    delimiter line, including an interactive end-of-file at the
- *    continuation prompt) is printed here with the delimiter name and
- *    reported as @c ERR_REDIRECTION, which the scanner requalifies as
- *    @c ERR_POSIX_SYNTAX.
- *  - Execution side (@ref heredoc_expand_body, @ref heredoc_load): the
- *    callers no longer need specifics, so these endpoints requalify
- *    through @c heredoc_error_qualify (see heredoc_.h): expansion
- *    failures become @c ERR_POSIX_EXPANSION, temp-file write failures
- *    @c ERR_REDIRECTION (further requalified by the executor),
- *    inconsistencies @c ERR_INTERNAL, all printed at requalification.
- *
- *  File diagnostics are printed at the most specific point, with the
- *  backing file path.
- *
- *  @warning The backing files (@c /tmp/minishell_heredoc_N) are never
- *           unlinked: neither after execution nor on a registration that
- *           fails after creating the file. A cleanup design is pending.
- *
- *  Expansion errors arrive already qualified and printed by the expander
- *  (@c ERR_POSIX_EXPANSION, @c ERR_POSIX_ASSIGNMENT, @c ERR_INTERNAL,
- *  @c ERR_LIBC): the scanner lets them through untouched.
+ *  The module is tokenization-side only: errors stay SPECIFIC, the
+ *  callers (scanner endpoint, expander) are the requalifiers. A missing
+ *  delimiter (end of input before the delimiter line, including an
+ *  interactive end-of-file at the continuation prompt) is printed here
+ *  with the delimiter name and reported as @c ERR_REDIRECTION, which the
+ *  scanner requalifies as @c ERR_POSIX_SYNTAX (documented choice: POSIX
+ *  2.7.4 requires the delimiter line, so an input ending without it is
+ *  read as a syntax error). Delimiter-expansion errors arrive already
+ *  qualified and printed by the expander and pass through untouched.
  */
 
 /**
@@ -65,6 +50,28 @@ typedef enum e_here_mode
 								 and delimiter lines. */
 }	t_here_mode;
 
+/**
+ * @ingroup heredoc
+ * @struct s_heredoc_read_args
+ * @brief Input of one body read.
+ *
+ * @var s_heredoc_read_args::mode Body reading mode (plain or
+ *                                tab-stripping).
+ * @var s_heredoc_read_args::input Text the body is read from, @c NULL
+ *                                 for an empty input (borrowed,
+ *                                 read-only).
+ * @var s_heredoc_read_args::start Read cursor into @c input, advanced
+ *                                 past the consumed body; @c NULL when
+ *                                 no cursor is tracked (borrowed).
+ * @var s_heredoc_read_args::delim Quote-removed delimiter with its
+ *                                 trailing newline (see
+ *                                 @ref heredoc_expand_delim); on the
+ *                                 missing-delimiter path its last
+ *                                 character is overwritten for the
+ *                                 diagnostic (borrowed).
+ * @var s_heredoc_read_args::is_tty Tells whether continuation lines can
+ *                                  be prompted for.
+ */
 typedef struct s_heredoc_read_args
 {
 	t_here_mode 	mode;
@@ -78,6 +85,20 @@ typedef struct s_heredoc_read_args
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
+/**
+ * @ingroup heredoc
+ * @brief Quote-removes the here-document delimiter (POSIX 2.7.4) and
+ *        appends the trailing newline used by the delimiter line
+ *        comparison.
+ *
+ * @param out String receiving the expanded delimiter, initialized by the
+ *            function on success (borrowed).
+ * @param delim Raw delimiter token (borrowed, read-only).
+ * @return From the quote removal, qualified by the expander:
+ *         @c ERR_POSIX_EXPANSION (printed), @c ERR_INTERNAL (printed),
+ *         @c ERR_LIBC (printed) or @c ERR_INTERRUPTED; @c ERR_LIBC (raw)
+ *         if the newline append fails; @c ERR_NO on success.
+ */
 t_error	heredoc_expand_delim(t_string *out, const t_token *delim);
 
 /**
@@ -98,6 +119,23 @@ t_error	heredoc_expand_delim(t_string *out, const t_token *delim);
  */
 t_error	heredoc_prepare_for_expansion(t_context_stack *out, t_string *body);
 
+/**
+ * @ingroup heredoc
+ * @brief Reads one here-document body from the input of @p args up to
+ *        the delimiter line and returns it; the caller's cursor is
+ *        advanced past the consumed body, clamped to the input it
+ *        indexes when continuation lines were read.
+ *
+ * @param out String receiving the body, initialized by the function on
+ *            success (borrowed).
+ * @param args Input of the read (borrowed).
+ * @return Raw errors, requalified by the scanner endpoint:
+ *         @c ERR_REDIRECTION (printed with the delimiter) when the input
+ *         ends before the delimiter line; @c ERR_LIBC on allocation
+ *         failure, or (printed) from the continuation reader;
+ *         @c ERR_INTERRUPTED and @c ERR_INTERNAL (printed) from the
+ *         continuation reader; @c ERR_NO on success.
+ */
 t_error	heredoc_read_body_from_input(t_string *out, t_heredoc_read_args *args);
 
 #endif

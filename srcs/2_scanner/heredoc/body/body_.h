@@ -3,13 +3,31 @@
 
 # include "lexer.h"
 # include "heredoc.h"
-# include "context.h"
 
 /** @defgroup heredoc_body Heredoc body
  *  @brief Reads one here-document body from its input up to the delimiter
- *         line and saves it in its backing file (POSIX 2.7.4).
+ *         line and accumulates it as the body content (POSIX 2.7.4).
  */
 
+/**
+ * @ingroup heredoc_body
+ * @struct s_body
+ * @brief State of one body read.
+ *
+ * @var s_body::i Read cursor into @c input.
+ * @var s_body::err Last error recorded by the module.
+ * @var s_body::mode Body reading mode (plain or tab-stripping).
+ * @var s_body::input Private copy of the caller's input, extended with
+ *                    the continuation lines read on a terminal (owned).
+ * @var s_body::delim Quote-removed delimiter with its trailing newline,
+ *                    shallow copy of the read args' delimiter: its
+ *                    buffer is not released by @ref body_free
+ *                    (borrowed).
+ * @var s_body::line Line currently compared to the delimiter (owned).
+ * @var s_body::is_tty Tells whether continuation lines can be prompted
+ *                     for.
+ * @var s_body::content Accumulated body text (owned).
+ */
 typedef struct s_body
 {
 	size_t			i;
@@ -20,7 +38,6 @@ typedef struct s_body
 	t_string		line;
 	bool			is_tty;
 	t_string		content;
-	t_context_stack	contexts;
 }	t_body;
 
 /* ************************************************************************* */
@@ -29,8 +46,7 @@ typedef struct s_body
 
 /**
  * @ingroup heredoc_body
- * @brief Zeroes @p body and initializes its content string and context
- *        stack.
+ * @brief Zeroes @p body and initializes its content string.
  *
  * @param body Body state initialized by the function (borrowed).
  */
@@ -38,14 +54,29 @@ void					body_init(t_body *body);
 
 /**
  * @ingroup heredoc_body
- * @brief Frees the line, content and context stack of @p body, then
- *        zeroes it.
+ * @brief Loads the read arguments into @p body: duplicates the input
+ *        text (empty when @c NULL), copies the cursor, mode and terminal
+ *        flag, and borrows the delimiter.
  *
+ * @warning The args' cursor is dereferenced unconditionally: the caller
+ *          rebinds it to a valid location before loading (see
+ *          @ref heredoc_read_body_from_input).
+ * @param body Already initialized body state (borrowed).
+ * @param args Input of the read (borrowed, read-only).
+ * @return @c ERR_LIBC on allocation failure, @c ERR_NO on success.
+ */
+t_error					body_load(t_body *body, t_heredoc_read_args *args);
+
+/**
+ * @ingroup heredoc_body
+ * @brief Frees the line, input copy and content of @p body, then zeroes
+ *        it.
+ *
+ * @warning Zeroes the whole state: owner-only, last touch (the cursor
+ *          must be read before freeing).
  * @param body Already initialized body state (borrowed).
  */
 void					body_free(t_body *body);
-
-t_error					body_load(t_body *body, t_heredoc_read_args *args);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

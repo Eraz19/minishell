@@ -3,29 +3,44 @@
 #include "heredoc.h"
 #include "expander.h"
 
+static t_error	heredoc_read_body(
+					t_string *out,
+					t_body *body,
+					t_heredoc_read_args *args)
+{
+	t_error	err;
+
+	err = body_load(body, args);
+	if (err.type)
+		return (err);
+	err = get_body_content(body);
+	if (err.type)
+		return (err);
+	if (!string_init(out, 0, body->content.data, (long)body->content.len))
+		err = error_sys();
+	return (err);
+}
+
 t_error	heredoc_read_body_from_input(t_string *out, t_heredoc_read_args *args)
 {
 	size_t	i;
 	t_error	err;
 	t_body	body;
+	size_t	*start;
 
 	i = 0;
-	if (args->start != NULL
-		&& args->input != NULL
-		&& *args->start <= args->input->len)
-		i = *args->start;
+	start = args->start;
+	if (start != NULL && args->input != NULL && *start <= args->input->len)
+		i = *start;
 	args->start = &i;
 	body_init(&body);
-	err = body_load(&body, args);
-	if (err.type)
-		return (body_free(&body), err);
-	err = get_body_content(&body);
-	if (err.type)
-		return (body_free(&body), err);
-	if (!string_init(out, 0, body.content.data, (long)body.content.len))
-		err = error_sys();
-	if (!err.type && args->start != NULL)
-		*args->start = body.i;
+	err = heredoc_read_body(out, &body, args);
+	if (!err.type && start != NULL && args->input != NULL)
+	{
+		*start = body.i;
+		if (body.i > args->input->len)
+			*start = args->input->len;
+	}
 	return (body_free(&body), err);
 }
 

@@ -4,19 +4,12 @@
 #include "ft_getopt.h"
 #include "posix_helpers.h"
 
-// POSIX.1-2024 cd. Options -L (logical, default), -P (physical, PWD
-// from getcwd), -e (with -P, undeterminable PWD is an error); the last
-// -L/-P wins. Operand: a directory, '-' (equivalent to
-// cd "$OLDPWD" && pwd), or none (HOME; unset or empty HOME is a
-// diagnosed error, an implementation-defined choice — see cd_.h). The
-// new PWD is printed when a non-empty CDPATH entry or '-' was used.
-
 static t_error	cd_process_options(int argc, char **argv, t_cd_args *args)
 {
+	size_t			i;
 	t_getopt_in		in;
 	t_getopt_out	out;
 	t_error			err;
-	size_t			i;
 
 	in.builtin_name = argv[0];
 	in.single_delimiter = false;
@@ -92,9 +85,9 @@ static t_error	cd_print_new(void)
 
 t_error	builtin_cd(int argc, char **argv, char **envp, int *exit_status)
 {
-	t_cd_args	args;
-	t_string	dir;
 	t_error		err;
+	t_string	dir;
+	t_cd_args	args;
 
 	(void)envp;
 	string_init(&args.curpath, 0, NULL, 0);

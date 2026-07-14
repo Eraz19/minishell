@@ -6,11 +6,6 @@
 # include "lexer.h"
 # include "input_mode.h"
 
-// WIP
-t_error	scanner_read_heredoc(t_string *body, const t_token *delim, bool strip);
-
-// TODO: doc
-
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
  *
@@ -47,10 +42,6 @@ t_error	scanner_read_heredoc(t_string *body, const t_token *delim, bool strip);
  *           escapes @c runner_run as a fatal error and becomes a garbage
  *           exit status. The shell loop must catch it and exit cleanly
  *           with the exit status of the last command executed.
- *  @warning @c heredoc @c body_continuation currently discards the error
- *           returned by @ref scanner_read_continuation, so an @c ERR_VEOF
- *           during an interactive here-document loops forever instead of
- *           ending the body. It must be handled by the heredoc module.
  *
  *  End of input at the very start of the token stream is not an error:
  *  an empty source (empty script, @c -c with an empty string, empty
@@ -145,7 +136,27 @@ void	scanner_free(t_scanner *scanner);
  */
 t_error	scanner_get_next_token(t_token *token);
 
-t_error	scanner_heredoc_read(t_string *out, const t_token *delim, bool strip);
+/**
+ * @ingroup scanner
+ * @brief Reads one pending here-document body from the current lexer
+ *        input (prompting for continuation lines on a terminal) and
+ *        returns it: the delimiter is quote-removed, the body runs up to
+ *        the delimiter line (tab-stripped for @c <<- when @p strip is
+ *        set) and the input cursor is advanced past it.
+ *
+ * @param out String receiving the body, initialized by the function on
+ *            success (borrowed).
+ * @param delim Raw delimiter token (borrowed, read-only).
+ * @param strip Tab-stripping mode of the @c <<- operator.
+ * @return @c ERR_POSIX_SYNTAX (printed with the delimiter) when the
+ *         input ends before the delimiter line, including an interactive
+ *         end-of-file at the continuation prompt; from the delimiter's
+ *         quote removal: @c ERR_POSIX_EXPANSION (printed) or
+ *         @c ERR_INTERRUPTED; @c ERR_LIBC (printed) on system failure;
+ *         @c ERR_INTERNAL (printed) on internal inconsistency; @c ERR_NO
+ *         on success.
+ */
+t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip);
 
 /**
  * @ingroup scanner
@@ -155,8 +166,8 @@ t_error	scanner_heredoc_read(t_string *out, const t_token *delim, bool strip);
  * @param res Already initialized string the line is appended to
  *            (borrowed).
  * @return @c ERR_VEOF (raw, unprinted) when the input ends at the
- *         continuation prompt: the decision belongs to the caller (see the
- *         module warning about the heredoc module); @c ERR_LIBC (printed)
+ *         continuation prompt: the decision belongs to the caller (the
+ *         heredoc body reports it as a missing delimiter); @c ERR_LIBC (printed)
  *         on system failure; @c ERR_INTERNAL (printed) on internal
  *         inconsistency; @c ERR_NO on success.
  */
