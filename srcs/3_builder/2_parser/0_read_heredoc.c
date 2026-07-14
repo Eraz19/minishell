@@ -20,6 +20,8 @@ t_error	parser_read_heredoc(t_parser *parser)
 
 	assert(parser != NULL);
 	err = error(ERR_NO);
+	if (parser->lookahead_raw_symbol != SYM_NEWLINE)
+		return (error(ERR_NO));
 	i = 0;
 	while (i < parser->here_stack.len)
 	{

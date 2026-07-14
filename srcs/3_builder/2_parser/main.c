@@ -53,6 +53,8 @@ t_error	parser_store_cst(t_parser *parser, t_parser_item *main_item)
 #endif
 	parser->cst = main_item->cst_node;
 	main_item->cst_node = NULL;
+	if (parser->lookahead_raw_symbol == SYM_NEWLINE)
+		return (parser_read_heredoc(parser));
 	return (error(ERR_NO));
 }
 

@@ -20,7 +20,7 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_INVALID_USAGE)
 		return ("usage");
 	else if (err.type == ERR_EOF)
-		return ("unexpected end of file");
+		return ("end of file");
 	else if (err.type == ERR_FD_INVALID)
 		return ("invalid file descriptor");
 	else if (err.type == ERR_HOOK_INVALID_RHS_LEN)
@@ -78,7 +78,7 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_HISTORY_DISABLED)
 		return ("persistent history disabled");
 	else if (err.type == ERR_VEOF)
-		return ("unexpected end of input");
+		return ("end of input");
 	else if (err.type == ERR_INCOHERENT_STATE)
 		return ("incoherent state");
 	else if (err.type == ERR_NOT_IMPLEMENTED)

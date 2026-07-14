@@ -8,6 +8,9 @@ t_error	parser_shift(t_parser *parser, size_t lr_state_id)
 	t_error			err;
 
 	assert(parser != NULL);
+	err = parser_read_heredoc(parser);
+	if (err.type)
+		return (err);
 	item.symbol = parser->lookahead_symbol;
 	item.lr_state_id = lr_state_id;
 	item.tokens_start_id = parser->lookahead_id;
