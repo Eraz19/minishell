@@ -151,7 +151,7 @@ t_error	error_sys_priv(const char *file, int line, const char *caller);	// DEBUG
  */
 t_error	error_print(t_error err, ...);
 
-t_error	error_priorize(t_error a, t_error b);
+t_error	error_priorize(t_error previous, t_error new);
 
 const char	*error_to_string(t_error err);
 

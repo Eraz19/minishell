@@ -4,31 +4,8 @@
 
 ⚠️ `echo` is removed from known builtin list to test
 
-- `heredoc`:
-	- `t_string` instead of file
-	- `cst node`:
-		- must be able to store heredoc delim / body:
-			- store `delim` until read
-			- register node to `parser->heredoc_stack`
-			- fre `delim` + store `body` instead
-	- `builder`:
-		- keep heredoc delim stack
-		- on newline => parse heredoc bodies and store them in corresponding cst nodes
-	- `converter`:
-		- transfer heredoc body ownership to `ast_redir` (in word)
-	- `redirector`:
-		- expand heredoc body
-		- create + open tmp file in `$TMPDIR` (fallback `/tmp`)
-		- write heredoc body in tmp file
-		- close + open tmp file (rewind)
-		- process redirection
-		- unlink tmp file
-	- **all**:
-		- remove all `unlink` usage
-	- `errors`:
-		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
-		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
-		- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
+- `redirector`:
+	- si error lors d'une expansion de la redirection : `ERR_EXPANSION` ou `ERR_REDIRECTION` ?
 - `builder`:
 	- handle `command substitution search`
 - `runner-executor`:

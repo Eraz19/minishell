@@ -18,11 +18,11 @@ void	parser_here_stack_free(t_parser_here_stack *stack)
 	vector_free(stack, NULL);
 }
 
-t_cst_node	*parser_here_stack_first(const t_parser_here_stack *stack)
+t_cst_node	*parser_here_stack_get(const t_parser_here_stack *stack, size_t i)
 {
 	assert(stack != NULL);
 	assert(stack->len > 0);
 	if (stack->len == 0)
 		return (NULL);
-	return (&((t_cst_node *)stack->data)[0]);
+	return (&((t_cst_node *)stack->data)[i]);
 }

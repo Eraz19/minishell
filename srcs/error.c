@@ -262,23 +262,23 @@ static inline int	error_priority(t_error err)
 		return (1);
 }
 
-t_error	error_priorize(t_error a, t_error b)
+t_error	error_priorize(t_error previous, t_error new)
 {
 	t_error	winner;
 	t_error	loser;
 
-	if (error_priority(a) >= error_priority(b))
+	if (error_priority(previous) >= error_priority(new))
 	{
-		winner = a;
-		loser = b;
+		winner = previous;
+		loser = new;
 	}
 	else
 	{
-		winner = b;
-		loser = a;
+		winner = new;
+		loser = previous;
 
 	}
-	if (a.type != ERR_NO && b.type != ERR_NO)
+	if (previous.type != ERR_NO && new.type != ERR_NO)
 		fprintf(stderr, "%s[%s] priorized against [%s]%s\n", YELLOW,
 			error_to_string(winner), error_to_string(loser), NC);
 	return (winner);

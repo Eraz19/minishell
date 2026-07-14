@@ -13,7 +13,7 @@ t_error	hook_3(
 	assert(lhs != NULL);
 	assert(rhs != NULL);
 	assert(len == 2);
-	if (!vector_push(&parser->here_stack, &rhs->cst_node))
+	if (!vector_push(&parser->here_stack, &lhs->cst_node))
 		return (error_sys());
 	return (error(ERR_NO));
 }

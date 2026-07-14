@@ -14,8 +14,9 @@ typedef struct s_redir
 	t_ast_redir_op	operation;
 	bool			expand_heredoc_body;
 	int				fd;
-	const t_token	*word;				// word (or heredoc path) (borrowed)
-	t_string		expanded_word;
+	const t_token	*word;				// borrowed
+	const t_string	*heredoc_body;		// borrowed
+	t_string		expanded_word;		// or expanded heredoc_body
 	bool			is_location;
 	const t_token	*location;			// borrowed
 	t_string		expanded_location;
@@ -68,17 +69,10 @@ t_error	redirect_apply(
 bool	redirect_parse_fd(const char *s, int *out_fd);
 
 /**
- * @brief Expand the word and optional io_location of one redirection.
- *
- * @note On success, expanded strings are stored directly inside
- *       @p redirection.
+ * @brief Expand the word/heredoc body and optional io_location of redirection.
  *
  * @param redirection Redirection to expand (borrowed).
- * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_SHELL_NOT_FOUND,
- *         @c ERR_VAR_INVALID_NAME, @c ERR_VAR_NOT_FOUND,
- *         @c ERR_PARAM_BAD_SUBSTITUTION, @c ERR_PARAM_NULL_OR_UNSET,
- *         @c ERR_NOT_IMPLEMENTED, @c ERR_INCOHERENT_STATE,
- *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
+ * @return @c ERR_POSIX_EXPANSION, @c ERR_REDIRECTION, @c ERR_INTERNAL or @c ERR_LIBC.
  */
 t_error	redirect_expand(t_redir *redirection);
 
@@ -99,15 +93,16 @@ t_error	redirect_prepare(
 			t_redirector *redirector,
 			bool permanent);
 
-/**
- * @brief Open the file targeted by a non-duplication redirection.
- *
- * @param redirection Redirection describing the path and mode (borrowed).
- * @param out_fd Destination receiving the opened file descriptor (borrowed).
- * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INVALID_USAGE,
- *         @c ERR_INTERRUPTED, @c ERR_SHELL_NOT_FOUND or @c ERR_LIBC.
- */
-t_error	redirect_open(t_redir *redirection, int *out_fd);
+// TODO: doc
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
+t_error	redirect_open(t_redirector *redirector, t_redir *redir, int *out_fd);
+
+// TODO: doc
+// @ret ERR_INVALID_USAGE / ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
+t_error	redirect_get_heredoc_path(
+			t_redirector *redirector,
+			const t_string *body,
+			char **out_path);
 
 /* ************************************************************************* */
 /*                                   ERRORS                                  */

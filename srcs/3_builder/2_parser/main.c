@@ -4,7 +4,9 @@
 #include "parser_here_stack.h"
 #include "qualifiers.h"
 #include "cst.h"
+#ifdef DEBUG_PARSING
 # include "debug.h"		// DEBUG
+#endif
 # include <assert.h>	// DEBUG
 # include <stdio.h>
 

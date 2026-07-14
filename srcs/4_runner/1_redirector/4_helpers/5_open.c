@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 
 static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
@@ -27,7 +28,7 @@ static inline int	redirect_get_oflag(t_ast_redir_op op, bool no_clobber)
 	return (oflag);
 }
 
-// @ret ERR_REDIRECTION / ERR_INVALID_USAGE / ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_INVALID_USAGE / ERR_REDIRECTION / ERR_INTERRUPTED / ERR_LIBC
 static inline t_error	redirect_handle_noclobber_eexist(
 							t_redir *redir,
 							const char *path,
@@ -58,7 +59,15 @@ static inline t_error	redirect_handle_noclobber_eexist(
 	return (posix_open_with_mode(path, oflag, mode, out_fd));
 }
 
-// @ret ERR_REDIRECTION
+static inline void	redirect_unlink_heredoc(char *path)
+{
+	if (unlink(path) != 0)
+		(void)error_print(error_sys(), REDIRECTOR_MODULE_NAME,
+			"unable to unlink heredoc file", NULL, "'%s'", path);
+	free(path);
+}
+
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
 static inline t_error	redirect_handle_open_error(
 							t_redir *redir,
 							bool no_clobber,
@@ -67,15 +76,7 @@ static inline t_error	redirect_handle_open_error(
 {
 	const char	*path;
 
-	if (err.type == ERR_NO)
-		return (err);
-	else if (redir->operation == AST_REDIR_HEREDOC)
-	{
-		(void)error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
-			"unable to open heredoc file", NULL, NULL);
-		return (err = error(ERR_REDIRECTION), err.printed = true, err);
-	}
-	else if (err.type == ERR_LIBC && err.saved_errno == EEXIST
+	if (err.type == ERR_LIBC && err.saved_errno == EEXIST
 		&& redir->operation == AST_REDIR_WRITE && no_clobber)
 	{
 		path = redir->expanded_word.data;
@@ -83,38 +84,46 @@ static inline t_error	redirect_handle_open_error(
 		if (err.type == ERR_NO)
 			return (err);
 	}
-	if (err.type && err.printed == false)
-		(void)error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
+	if (err.type && redir->operation == AST_REDIR_HEREDOC)
+	{
+		err = error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
+			"unable to open heredoc file", NULL, NULL);
+	}
+	else if (err.type)
+	{
+		err = error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
 			"unable to open file", NULL, "'%s' expanded from '%s'",
 			redir->expanded_word.data, redir->word->value.data);
-	return (err = error(ERR_REDIRECTION), err.printed = true, err);
+	}
+	if (err.type == ERR_INVALID_USAGE)
+		err.type = ERR_REDIRECTION;
+	return (err);
 }
 
-t_error	redirect_open(t_redir *redirection, int *out_fd)
+t_error	redirect_open(t_redirector *redirector, t_redir *redir, int *out_fd)
 {
-	bool		no_clobber;
-	const char	*path;
-	int			oflag;
-	mode_t		mode;
-	t_error		err;
+	bool	no_clobber;
+	char	*path;
+	int		oflag;
+	t_error	err;
 
 	err = option_is_active(OPT_NOCLOBBER, &no_clobber);
+	if (err.type == ERR_NO && redir->operation == AST_REDIR_HEREDOC)
+		err = redirect_get_heredoc_path(redirector, &redir->expanded_word, &path);
+	else
+		path = redir->expanded_word.data;
 	if (err.type)
 		return (err);
-	if (redirection->operation == AST_REDIR_HEREDOC)
-		path = redirection->word->value.data;
-	else
-		path = redirection->expanded_word.data;
-	oflag = redirect_get_oflag(redirection->operation, no_clobber);
-	if (redirection->operation == AST_REDIR_WRITE
-		|| redirection->operation == AST_REDIR_CLOBBER
-		|| redirection->operation == AST_REDIR_APPEND
-		|| redirection->operation == AST_REDIR_READ_WRITE)
-	{
-		mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-		err = posix_open_with_mode(path, oflag, mode, out_fd);
-	}
+	oflag = redirect_get_oflag(redir->operation, no_clobber);
+	if (redir->operation == AST_REDIR_WRITE
+		|| redir->operation == AST_REDIR_CLOBBER
+		|| redir->operation == AST_REDIR_APPEND
+		|| redir->operation == AST_REDIR_READ_WRITE)
+		err = posix_open_with_mode(path, oflag, S_IRUSR | S_IWUSR | S_IRGRP
+				| S_IWGRP | S_IROTH | S_IWOTH, out_fd);
 	else
 		err = posix_open(path, oflag, out_fd);
-	return (redirect_handle_open_error(redirection, no_clobber, out_fd, err));
+	if (redir->operation == AST_REDIR_HEREDOC)
+		redirect_unlink_heredoc(path);
+	return (redirect_handle_open_error(redir, no_clobber, out_fd, err));
 }

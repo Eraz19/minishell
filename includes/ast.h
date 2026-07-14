@@ -25,9 +25,10 @@ typedef enum e_ast_redir_op
 typedef struct s_ast_redirection
 {
 	t_ast_redir_op	operation;
+	int				fd;
+	t_token			word;
+	t_string		heredoc_body;
 	bool			expand_heredoc_body;
-	int				fd;					// -1 if [n] not specified in input
-	t_token			word;				// word (or heredoc path)
 	bool			is_location;
 	t_token			location;
 }	t_ast_redirection;

@@ -63,6 +63,7 @@ typedef enum e_exp_flags
 	EXP_FIELD_SPLIT			= (1u << 6),	/**< IFS field splitting. */
 	EXP_PATH_NAME			= (1u << 7),	/**< Pathname expansion. */
 	EXP_QUOTE_REMOVAL		= (1u << 8),	/**< Quote removal. */
+	EXP_HEREDOC				= (1u << 9)
 }	t_exp_flag;
 
 /**
@@ -77,26 +78,9 @@ typedef t_vector	t_expansion;
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-/**
- * @ingroup expander
- * @brief Expands a here-document body or any raw text: the string is
- *        re-lexed with here-document semantics to find its constructs,
- *        then expanded with @p flags.
- *
- * @note An empty (or NULL-buffered) @p src expands to a single empty
- *       field, per POSIX.
- * @param out Expansion initialized by the function; the caller owns it
- *            and must release it with @ref expansion_free (borrowed).
- * @param src Text to expand (borrowed, read-only).
- * @param flags Expansions to apply.
- * @return @c ERR_POSIX_EXPANSION (printed) on a user-facing expansion
- *         failure; @c ERR_POSIX_ASSIGNMENT (printed) on a readonly
- *         assignment; @c ERR_INTERRUPTED when a signal interrupts the
- *         work; @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
- *         (printed) on internal inconsistency or unimplemented
- *         substitution; @c ERR_NO on success.
- */
-t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags);
+// WIP
+t_error expand_str_unique(t_string *out, const t_string *src, t_exp_flag flags);
+t_error expand_tok_unique(t_string *out, const t_token *src, t_exp_flag flags);
 
 /**
  * @ingroup expander

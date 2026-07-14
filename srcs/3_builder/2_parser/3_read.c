@@ -1,7 +1,9 @@
 #include "parser_priv.h"
 #include "scanner.h"
+#ifdef DEBUG_PARSING
 # include <stdio.h>		// DEBUG
 # include "logs.h"		// DEBUG
+#endif
 # include <assert.h>	// DEBUG
 
 static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)

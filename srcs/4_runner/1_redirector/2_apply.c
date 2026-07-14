@@ -4,12 +4,12 @@
 #include <unistd.h>
 #include <errno.h>
 
-static inline t_error	redirect_redirect(t_redir *redirection)
+static inline t_error	redirect_redirect(t_redirector *redirector, t_redir *redirection)
 {
 	int		opened_fd;
 	t_error	err;
 
-	err = redirect_open(redirection, &opened_fd);
+	err = redirect_open(redirector, redirection, &opened_fd);
 	if (err.type)
 		return (err);
 	else if (opened_fd == redirection->fd)
@@ -74,7 +74,7 @@ t_error	redirect_apply(
 	if (operation == AST_REDIR_DUP_READ || operation == AST_REDIR_DUP_WRITE)
 		err = redirect_dup(&redir);
 	else
-		err = redirect_redirect(&redir);
+		err = redirect_redirect(redirector, &redir);
 	if (err.type && permanent == false)
 		return (redirect_handle_failure(&redir, redirector, err));
 	else if (err.type == ERR_NO && permanent == true)

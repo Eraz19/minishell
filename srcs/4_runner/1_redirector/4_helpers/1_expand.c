@@ -1,16 +1,29 @@
 #include "redirector_priv.h"
 #include "expander.h"
-#include "heredoc.h"
 
-// @ret TODO (heredoc_expand() has no doc yet)
+// @ret ERR_POSIX_EXPANSION / ERR_LIBC
 static inline t_error	redirect_expand_heredoc_body(t_redir *redir)
 {
+	t_exp_flag	flags;
+
 	if (redir->expand_heredoc_body)
-		return (heredoc_expand_body(&redir->word->value));
+	{
+		flags = EXP_HEREDOC
+			| EXP_PARAM
+			| EXP_CMD_SUB
+			| EXP_ARITH
+			| EXP_QUOTE_REMOVAL;
+		return (expand_str_unique(
+					&redir->expanded_word,
+					redir->heredoc_body,
+					flags));
+	}
+	else if (!string_dup(&redir->expanded_word, redir->heredoc_body))
+		return (error_sys());
 	return (error(ERR_NO));
 }
 
-// @ret TODO (expander has no doc yet)
+// @ret ERR_POSIX_EXPANSION / ERR_REDIRECTION / ERR_INTERNAL / ERR_LIBC
 static inline t_error	redirect_expand_word(
 							const char *param_name,
 							const t_token *token,

@@ -7,6 +7,9 @@
 # include "heredoc.h"
 # include "input_mode.h"
 
+// WIP
+t_error	scanner_read_heredoc(t_string *body, const t_token *delim, bool strip);
+
 // TODO: doc
 
 /** @defgroup scanner Scanner API
@@ -142,20 +145,6 @@ void	scanner_free(t_scanner *scanner);
  *         (printed) on internal inconsistency; @c ERR_NO on success.
  */
 t_error	scanner_get_next_token(t_token *token);
-
-/**
- * @ingroup scanner
- * @brief Reads every pending here-document body from the current lexer
- *        input (prompting for continuation lines on a terminal) and saves
- *        each body in its backing file.
- *
- * @return @c ERR_POSIX_SYNTAX (printed) when the input ends before a
- *         delimiter line; @c ERR_INTERRUPTED when a signal interrupts a
- *         file operation; @c ERR_LIBC (printed) on system failure;
- *         @c ERR_INTERNAL (printed) on internal inconsistency; @c ERR_NO
- *         on success.
- */
-t_error	scanner_heredoc_read(void);	// TODO: remove
 
 /**
  * @ingroup scanner

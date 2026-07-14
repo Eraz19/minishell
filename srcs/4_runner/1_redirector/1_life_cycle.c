@@ -9,14 +9,23 @@ void	redirect_init(t_redirector *redirector)
 	redirect_stack_init(&redirector->stack);
 	fd_tracker_init(&redirector->tracker, &redirector->stack);
 	redirector->max_frame_count = 0;
+	redirector->heredoc_id = 0;
 }
 
 void	redirect_init_subshell(t_redirector *redirector)
 {
 	redirect_close_backups(redirector);
+	redirect_clear(redirector);
+	redirector->heredoc_id = 0;
+}
+
+void	redirect_clear(t_redirector *redirector)
+{
+	// TODO
 	redirect_stack_free(&redirector->stack, redirector->max_frame_count);
 	fd_tracker_free(&redirector->tracker);
 	redirector->max_frame_count = 0;
+	redirector->heredoc_id = 0;
 }
 
 void	redirect_free(t_redirector *redirector)
@@ -25,6 +34,7 @@ void	redirect_free(t_redirector *redirector)
 	redirect_stack_free(&redirector->stack, redirector->max_frame_count);
 	fd_tracker_free(&redirector->tracker);
 	redirector->max_frame_count = 0;
+	redirector->heredoc_id = 0;
 }
 
 void	redir_init(t_redir *redir, const t_ast_redirection *src)
@@ -33,6 +43,7 @@ void	redir_init(t_redir *redir, const t_ast_redirection *src)
 	redir->expand_heredoc_body = src->expand_heredoc_body;
 	redir->fd = src->fd;
 	redir->word = &src->word;
+	redir->heredoc_body = &src->heredoc_body;
 	(void)string_init(&redir->expanded_word, 0, NULL, 0);
 	redir->is_location = src->is_location;
 	redir->location = &src->location;
