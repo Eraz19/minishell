@@ -2,33 +2,11 @@
 # define HEREDOC__H
 
 # include "error.h"
-# include "token.h"
-# include "heredoc.h"
 
 /** @defgroup heredoc_priv Heredoc internals
  *  @brief Backing file creation, delimiter expansion and error
  *         requalification behind the heredoc API.
  */
-
-/* ************************************************************************* */
-/*                                 EXPANSION                                 */
-/* ************************************************************************* */
-
-/**
- * @ingroup heredoc_priv
- * @brief Quote-removes the here-document delimiter and appends the
- *        trailing newline used by the delimiter line comparison.
- *
- * @param heredoc Heredoc state (borrowed).
- * @param out String receiving the expanded delimiter, initialized by the
- *            function on success (borrowed).
- * @param delim Raw delimiter token (borrowed, read-only).
- * @return From the quote removal, qualified by the expander:
- *         @c ERR_POSIX_EXPANSION (printed), @c ERR_INTERNAL (printed),
- *         @c ERR_LIBC (printed) or @c ERR_INTERRUPTED; @c ERR_LIBC (raw)
- *         if the newline append fails; @c ERR_NO on success.
- */
-t_error	expand_delim(t_heredoc *heredoc, t_string *out, const t_token *delim);
 
 /* ************************************************************************* */
 /*                                   ERROR                                   */

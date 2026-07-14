@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include "alias.h"
+#include "heredoc.h"
 #include "reader_.h"
 #include "scanner_.h"
 
@@ -70,4 +71,28 @@ t_error	scanner_alias_expand(t_scanner *scanner, t_token *token)
 			scanner_lexer_rules(scanner)).type)
 		return (scanner->err = scanner->lexer.err);
 	return (scanner->err);
+}
+
+void	prepare_heredoc_read_args(
+			t_scanner *scanner,
+			t_heredoc_read_args *out,
+			bool strip,
+			const t_string *delim)
+{
+	if (scanner->lexer.input == NULL)
+	{
+		out->input = NULL;
+		out->start = NULL;
+	}
+	else
+	{
+		out->input = &scanner->lexer.input->str;
+		out->start = &scanner->lexer.input->i;
+	}
+	if (strip)
+		out->mode = HEREDOC_MODE_TAB_STRIP;
+	else
+		out->mode = HEREDOC_MODE_NORMAL;
+	out->is_tty = scanner->mode == INPUT_MODE_STDIN_TTY;
+	out->delim = delim;
 }

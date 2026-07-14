@@ -4,7 +4,6 @@
 # include "error.h"
 # include "token.h"
 # include "lexer.h"
-# include "heredoc.h"
 # include "input_mode.h"
 
 /** @defgroup scanner Scanner API
@@ -148,19 +147,7 @@ void	scanner_free(t_scanner *scanner);
  */
 t_error	scanner_get_next_token(t_token *token);
 
-/**
- * @ingroup scanner
- * @brief Reads every pending here-document body from the current lexer
- *        input (prompting for continuation lines on a terminal) and saves
- *        each body in its backing file.
- *
- * @return @c ERR_POSIX_SYNTAX (printed) when the input ends before a
- *         delimiter line; @c ERR_INTERRUPTED when a signal interrupts a
- *         file operation; @c ERR_LIBC (printed) on system failure;
- *         @c ERR_INTERNAL (printed) on internal inconsistency; @c ERR_NO
- *         on success.
- */
-t_error	scanner_heredoc_read(void);
+t_error	scanner_heredoc_read(t_string *out, const t_token *delim, bool strip);
 
 /**
  * @ingroup scanner
@@ -176,21 +163,5 @@ t_error	scanner_heredoc_read(void);
  *         inconsistency; @c ERR_NO on success.
  */
 t_error	scanner_read_continuation(t_string *res);
-
-/**
- * @ingroup scanner
- * @brief Registers a here-document reported by the parser: creates its
- *        backing file, quote-removes its delimiter and queues it for
- *        @ref scanner_heredoc_read.
- *
- * @param out String receiving the backing file path, initialized by the
- *            function; the caller owns it (borrowed).
- * @param delim Raw delimiter token (borrowed, read-only).
- * @param mode Here-document mode (plain or tab-stripping).
- * @return @c ERR_INTERRUPTED when a signal interrupts the file creation;
- *         @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
- *         (printed) on internal inconsistency; @c ERR_NO on success.
- */
-t_error	scanner_report_io_here(t_string *out, t_token *delim, t_here_mode mode);
 
 #endif

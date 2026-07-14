@@ -10,7 +10,6 @@
  *         line and saves it in its backing file (POSIX 2.7.4).
  */
 
-
 typedef struct s_body
 {
 	size_t			i;
@@ -46,6 +45,8 @@ void					body_init(t_body *body);
  */
 void					body_free(t_body *body);
 
+t_error					body_load(t_body *body, t_heredoc_read_args *args);
+
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
@@ -59,36 +60,6 @@ void					body_free(t_body *body);
  *         stack item are left for the lexer entry point to fill in.
  */
 t_lexer_context_args	body_context_rules(void);
-
-/**
- * @ingroup heredoc_body
- * @brief Reads the whole backing file @p path.
- *
- * @param out String receiving the file content, initialized by the
- *            function and freed on failure (borrowed).
- * @param path Backing file path (borrowed, read-only).
- * @return @c ERR_LIBC (printed with the path for open and read failures,
- *         raw on allocation failure); @c ERR_INTERRUPTED when a signal
- *         interrupts a file operation; @c ERR_NO on success.
- */
-t_error					read_body_file(t_string *out, const t_string *path);
-
-/**
- * @ingroup heredoc_body
- * @brief Writes @p body to the backing file @p path (created or
- *        truncated, mode 0600).
- *
- * @param path Backing file path (borrowed, read-only).
- * @param body Body text to write (borrowed).
- * @return @c ERR_POSIX_WRITE (printed with the path) on a write failure,
- *         requalified by the caller per error.h; @c ERR_LIBC (printed
- *         with the path) on an open failure, raw on a close failure;
- *         @c ERR_INTERRUPTED when a signal interrupts a file operation;
- *         @c ERR_NO on success.
- */
-t_error					save_body_in_file(
-							const t_string *path,
-							t_string *body);
 
 /* ************************************************************************* */
 /*                                INPUT SCAN                                 */
