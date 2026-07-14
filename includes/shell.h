@@ -7,7 +7,6 @@
 # include "runner.h"
 # include "history.h"
 # include "scanner.h"
-# include "heredoc.h"
 # include "builder.h"
 
 /**
@@ -27,7 +26,6 @@ typedef struct s_shell
 {
 	t_alias		alias;
 	t_builder	builder;
-	t_heredoc	heredoc;
 	t_history	history;
 	t_params	params;
 	t_runner	runner;
@@ -71,14 +69,6 @@ t_alias		*shell_get_alias(void);
  *         when the shell is unavailable. (borrowed)
  */
 t_builder	*shell_get_builder(void);
-
-/**
- * @brief Returns the here-document state stored in the global shell.
- *
- * @return Heredoc state managed by the heredoc submodule, or NULL
- *         when the shell is unavailable. (borrowed)
- */
-t_heredoc	*shell_get_heredoc(void);
 
 /**
  * @brief Returns the history state stored in the global shell.

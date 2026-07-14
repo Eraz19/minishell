@@ -2,95 +2,93 @@
 #include "shell.h"
 #include "body_.h"
 #include "heredoc.h"
-#include "heredoc_.h"
 #include "expander.h"
-#include "heredoc_queue_.h"
 
-t_error	heredoc_register(t_string *out, const t_token *delim, t_here_mode mode)
+static t_error	heredoc_read_body_from_input(t_string *out, t_body *body)
 {
-	t_heredoc_item	item;
-	t_heredoc		*heredoc;
-
-	heredoc = shell_get_heredoc();
-	if (heredoc == NULL)
-		return (error(ERR_SHELL_NOT_FOUND));
-	item = (t_heredoc_item){0};
-	if (create_heredoc_file(heredoc, out).type)
-		return (heredoc->err);
-	item.is_tty = heredoc->is_tty;
-	if (!string_init(&item.path, 0, out->data, (long)out->len))
-		return (heredoc->err = error_sys(), string_free(out), heredoc->err);
-	if (expand_delim(heredoc, &item.delim, delim).type)
-		return (string_free(out), heredoc_item_free(&item), heredoc->err);
-	item.mode = mode;
-	heredoc->err = heredoc_queue_push(&heredoc->queue, item);
-	if (heredoc->err.type)
-		return (string_free(out), heredoc_item_free(&item), heredoc->err);
-	return (heredoc->err);
-}
-
-t_error	heredoc_read_body(
-			t_heredoc *heredoc,
-			const t_string *src,
-			unsigned long *start)
-{
-	size_t			i;
-	t_heredoc_item	item;
-	t_body			body;
-
-	i = 0;
-	if (start != NULL && src != NULL && *start <= src->len)
-		i = *start;
-	heredoc->err = heredoc_queue_pop(&heredoc->queue, &item);
-	if (heredoc->err.type)
-		return (heredoc->err);
-	heredoc->err = heredoc_item_load(&item, src, i);
-	if (heredoc->err.type)
-		return (heredoc_item_free(&item), heredoc->err);
-	body_init(&body);
-	body_load(&body, &item);
-	heredoc->err = get_body_content(&body);
-	if (heredoc->err.type)
-	{
-		heredoc_item_free(&item);
-		return (body_free(&body), heredoc->err);
-	}
-	heredoc->err = save_body_in_file(&body.item->path, &body.content);
-	if (!heredoc->err.type && start != NULL)
-		*start = item.i;
-	return (heredoc_item_free(&item), body_free(&body), heredoc->err);
-}
-
-t_error	heredoc_read_body_from_input(const t_string *input, size_t *start)
-{
+	size_t		i;
 	t_heredoc	*heredoc;
 
 	heredoc = shell_get_heredoc();
 	if (heredoc == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	while (heredoc->queue.len != 0)
-	{
-		if (heredoc_read_body(heredoc, input, start).type)
-			return (heredoc->err);
-	}
+	i = 0;
+	heredoc->err = get_body_content(body);
+	if (heredoc->err.type)
+		return (heredoc->err);
+	if (!string_init(out, 0, body->content.data, (long)body->content.len))
+		heredoc->err = error_sys();
 	return (heredoc->err);
 }
 
-t_error	heredoc_expand_body(t_string *out, const t_string *in, int *exit_status)
+t_error	heredoc_read_body_from_input_stripped(
+			t_string *out,
+			const t_string *input,
+			size_t *start,
+			const t_string *delim)
 {
+	size_t		i;
 	t_error		err;
-	t_exp_flag	flags;
+	t_body		body;
+	t_heredoc	*heredoc;
 
-	flags = generate_heredoc_body_expand_flags();
-	err = expand_str(out, in, exit_status, flags);
-	if (err.type)
-		return (heredoc_error_qualify(err));
-	return (err);
+	heredoc = shell_get_heredoc();
+	if (heredoc == NULL)
+		return (error(ERR_SHELL_NOT_FOUND));
+	i = 0;
+	if (start != NULL && input != NULL && *start <= input->len)
+		i = *start;
+	body_init(&body);
+	body.i = i;
+	body.delim = *delim;
+	body.input = *input;
+	body.is_tty = heredoc->is_tty;
+	body.mode = HEREDOC_MODE_TAB_STRIP;
+	err = heredoc_read_body_from_input(out, &body);
+	if (!err.type && start != NULL)
+		*start = body.i;
+	return (body_free(&body), heredoc->err);
 }
 
-t_error	heredoc_prepare_for_expansion(
-			t_context_stack *out,
-			t_string *body)
+/*
+
+*/
+
+t_error	heredoc_read_body_from_input(t_string *out, t_heredoc_read_args *args)
+{
+	size_t		i;
+	t_error		err;
+	t_body		body;
+
+	i = 0;
+	if (start != NULL && input != NULL && *start <= input->len)
+		i = *start;
+	body_init(&body);
+	body.i = i;
+	body.delim = *delim;
+	body.input = *input;
+	body.is_tty = heredoc->is_tty;
+	body.mode = HEREDOC_MODE_NORMAL;
+	err = heredoc_read_body_from_input(out, &body);
+	if (!err.type && start != NULL)
+		*start = body.i;
+	return (body_free(&body), heredoc->err);
+}
+
+t_error	heredoc_expand_delim(t_string *out, const t_token *delim)
+{
+	t_error	err;
+	int		exit_status;
+
+	err = expand_token_merged(out, delim, &exit_status, EXP_QUOTE_REMOVAL);
+	if (err.type)
+		return (err);
+	if (!string_append_n(out, "\n", 1))
+		return (err = error_sys(), string_free(out), err);
+	return (error(ERR_NO));
+}
+
+t_error	heredoc_prepare_for_expansion(t_context_stack *out, t_string *body)
 {
 	t_error					err;
 	t_lexer					lexer;

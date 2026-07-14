@@ -2,34 +2,13 @@
 # define HEREDOC__H
 
 # include "error.h"
+# include "token.h"
 # include "heredoc.h"
-
-# define HEREDOC_TMP_PATH "/tmp/minishell_heredoc_"
 
 /** @defgroup heredoc_priv Heredoc internals
  *  @brief Backing file creation, delimiter expansion and error
  *         requalification behind the heredoc API.
  */
-
-/* ************************************************************************* */
-/*                                   FILE                                    */
-/* ************************************************************************* */
-
-/**
- * @ingroup heredoc_priv
- * @brief Creates the next free backing file
- *        (@c HEREDOC_TMP_PATH + increasing identifier, mode 0600) and
- *        returns its path.
- *
- * @param heredoc Heredoc state (borrowed).
- * @param path String receiving the file path, initialized by the function
- *             and freed on failure (borrowed).
- * @return @c ERR_HEREDOC_MAX_ID_REACHED (printed) when every identifier
- *         up to @c INT_MAX is taken; @c ERR_LIBC (printed) on a creation
- *         failure; @c ERR_INTERRUPTED when a signal interrupts the
- *         creation; @c ERR_NO on success.
- */
-t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path);
 
 /* ************************************************************************* */
 /*                                 EXPANSION                                 */
@@ -50,18 +29,6 @@ t_error	create_heredoc_file(t_heredoc *heredoc, t_string *path);
  *         if the newline append fails; @c ERR_NO on success.
  */
 t_error	expand_delim(t_heredoc *heredoc, t_string *out, const t_token *delim);
-
-/**
- * @ingroup heredoc_priv
- * @brief Builds the expansion flag set of a here-document body
- *        (POSIX 2.7.4): parameter, command and arithmetic expansion plus
- *        quote removal, and @c EXP_HEREDOC so the body is re-lexed with
- *        the here-document rules; no field splitting, no pathname
- *        expansion.
- *
- * @return The flag set.
- */
-uint	generate_heredoc_body_expand_flags(void);
 
 /* ************************************************************************* */
 /*                                   ERROR                                   */

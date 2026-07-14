@@ -31,19 +31,7 @@ t_error	scanner_get_next_token(t_token *token)
 	return (scanner->err);
 }
 
-t_error	scanner_report_io_here(t_string *out, t_token *delim, t_here_mode mode)
-{
-	t_scanner	*scanner;
-
-	scanner = shell_get_scanner();
-	if (scanner == NULL)
-		return (scanner_error_qualify(error(ERR_SHELL_NOT_FOUND), false));
-	scanner->err = scanner_error_qualify(
-			heredoc_register(out, delim, mode), false);
-	return (scanner->err);
-}
-
-t_error	scanner_heredoc_read(void)
+t_error	scanner_heredoc_read(t_string *body, const t_token *delim, bool strip)
 {
 	t_lexer_input_stack_item	*item;
 	t_scanner					*scanner;

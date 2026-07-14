@@ -15,8 +15,13 @@ void	body_free(t_body *body)
 	*(body) = (t_body){0};
 }
 
-void	body_load(t_body *body, t_heredoc_item *item)
+t_error	body_load(t_body *body, t_heredoc_read_args *args)
 {
-	body->i = item->i;
-	body->item = item;
+
+	string_init(&body->input, 0, args->input->data, (long)args->input->len);
+	body->input = args->input;
+	body->i = *(args->start);
+	body->delim = *(args->delim);
+	body->is_tty = args->is_tty;
+	body->mode = args->mode;
 }

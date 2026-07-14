@@ -10,27 +10,16 @@
  *         line and saves it in its backing file (POSIX 2.7.4).
  */
 
-/**
- * @ingroup heredoc_body
- * @struct s_body
- * @brief State of one body read.
- *
- * @var s_body::i Read cursor into the item's input.
- * @var s_body::err Last error recorded by the read.
- * @var s_body::item Here-document being read (borrowed).
- * @var s_body::line Current input line, a @ref t_string owned by the
- *                   body (re-created for every line).
- * @var s_body::content Accumulated body text, a @ref t_string owned by
- *                      the body.
- * @var s_body::contexts Contexts recorded in the body, managed by the
- *                       context submodule.
- */
+
 typedef struct s_body
 {
 	size_t			i;
 	t_error			err;
-	t_heredoc_item	*item;
+	t_here_mode		mode;
+	t_string		input;
+	t_string		delim;
 	t_string		line;
+	bool			is_tty;
 	t_string		content;
 	t_context_stack	contexts;
 }	t_body;
@@ -47,16 +36,6 @@ typedef struct s_body
  * @param body Body state initialized by the function (borrowed).
  */
 void					body_init(t_body *body);
-
-/**
- * @ingroup heredoc_body
- * @brief Attaches @p item to @p body and positions the read cursor on the
- *        item's saved cursor.
- *
- * @param body Already initialized body state (borrowed).
- * @param item Here-document to read (borrowed).
- */
-void					body_load(t_body *body, t_heredoc_item *item);
 
 /**
  * @ingroup heredoc_body
