@@ -15,7 +15,7 @@ static inline t_error	parser_new_lr_state(
 	size_t					lr_state_from;
 	size_t					lr_state_to;
 
-	stack = &parser->stack;
+	stack = &parser->item_stack;
 	previous_item_id = stack->len - rule->rhs_len - 1;
 	previous_item = &((t_parser_item *)stack->data)[previous_item_id];
 	lr_state_from = previous_item->lr_state_id;
@@ -57,11 +57,11 @@ static inline t_error	parser_replace_items(
 	i = 0;
 	while (i < count)
 	{
-		if (!vector_pop(&parser->stack, NULL))
+		if (!vector_pop(&parser->item_stack, NULL))
 			return (parser_internal_error(error_sys()));
 		i++;
 	}
-	if (!vector_push(&parser->stack, item))
+	if (!vector_push(&parser->item_stack, item))
 		return (parser_internal_error(error_sys()));
 	return (error(ERR_NO));
 }
@@ -80,8 +80,8 @@ t_error	parser_reduce(
 	assert(parser != NULL);
 	assert(machine != NULL);
 	rule = &machine->rules[rule_id];
-	rhs_start = parser->stack.len - rule->rhs_len;
-	rhs = &((t_parser_item *)parser->stack.data)[rhs_start];
+	rhs_start = parser->item_stack.len - rule->rhs_len;
+	rhs = &((t_parser_item *)parser->item_stack.data)[rhs_start];
 	item.symbol = rule->lhs;
 	err = parser_new_lr_state(parser, machine, rule, &item.lr_state_id);
 	if (err.type != ERR_NO)

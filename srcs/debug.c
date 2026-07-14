@@ -356,6 +356,16 @@ static inline void	cst_log_span(t_cst_node *node)
 		node->tokens_start_id, token_end_id, node->tokens_count);
 }
 
+static inline void	cst_log_heredoc_body(t_cst_node *node)
+{
+	if (node->heredoc_body.data == NULL && node->heredoc_body.len == 0)
+		return ;
+	fprintf(stderr, " heredoc_body={len=%zu cap=%zu data=",
+		node->heredoc_body.len, node->heredoc_body.cap);
+	debug_dump_string_value(&node->heredoc_body);
+	fprintf(stderr, "}");
+}
+
 static void	cst_log_node(t_cst_node *node, size_t depth, bool *lasts, bool is_last)
 {
 	size_t		i;
@@ -375,8 +385,7 @@ static void	cst_log_node(t_cst_node *node, size_t depth, bool *lasts, bool is_la
 	if (node->rule_id != RULE_NONE)
 		fprintf(stderr, " rule=%i", (int)node->rule_id);
 	cst_log_span(node);
-	if (node->data)
-		fprintf(stderr, " data=%p", node->data);
+	cst_log_heredoc_body(node);
 	fprintf(stderr, "\n");
 	lasts[depth] = is_last;
 	i = 0;
@@ -507,6 +516,14 @@ static void	ast_log_token(const char *name, t_token *token)
 	ast_log_token_value(token);
 }
 
+static void	ast_log_string(const char *name, t_string *value)
+{
+	fprintf(stderr, " %s={len=%zu cap=%zu data=",
+		name, value->len, value->cap);
+	debug_dump_string_value(value);
+	fprintf(stderr, "}");
+}
+
 static const char	*ast_redir_op_to_string(t_ast_redir_op op)
 {
 	if (op == AST_REDIR_READ)
@@ -539,9 +556,10 @@ static void	ast_log_redirection(
 	fprintf(stderr, " fd=%d", redir->fd);
 	fprintf(stderr, " is_location=%s", ast_bool(redir->is_location));
 	if (redir->is_location)
-	{
 		ast_log_token("location", &redir->location);
-	}
+	if (redir->operation == AST_REDIR_HEREDOC)
+		ast_log_string("heredoc_body", &redir->heredoc_body);
+	else
 		ast_log_token("word", &redir->word);
 	fprintf(stderr, " expand_heredoc_body=%s",
 		ast_bool(redir->expand_heredoc_body));

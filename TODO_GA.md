@@ -6,6 +6,9 @@
 💡 Les erreurs dépendent de l'opération qui a échouée:
 ===> donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
 
+- ⚠️ **ALL**:
+	- check all `expand_token()` and `expand_str()` calls:
+		- call `*_unique()` instead if exactly one field is needed
 - `builder`:
 	- handle `command substitution search`
 - `runner-executor`:
@@ -13,8 +16,6 @@
 	- ⚠️ `command` specific flow
 	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
 - `posix_read_all()`
-- `*_init_subshell()`:
-	- `clear()` instead of `free()`
 
 # ALEXANDER
 

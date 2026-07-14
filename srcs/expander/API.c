@@ -52,11 +52,6 @@ t_error	run_expansion(t_expansion *expansion, t_expander_args *args)
 	return (expander_free(&expander), expander.err);
 }
 
-t_error expand_str(t_expansion *out, const t_string *src, t_exp_flag flags)
-{
-	return (expand_heredoc(out, src, flags));
-}
-
 t_error	expand_token(t_expansion *out, const t_token *src, t_exp_flag flags)
 {
 	t_expander_args	args;
@@ -92,4 +87,73 @@ t_error	expand_heredoc(t_expansion *out, const t_string *src, t_exp_flag flags)
 	err = run_expansion(out, &args);
 	return (context_stack_free(&contexts), string_free(&body),
 		expander_error_qualify(err));
+}
+
+/* -------------------- WIP -------------------- */
+
+t_error expand_str(t_expansion *out, const t_string *src, t_exp_flag flags)
+{
+	return (expand_heredoc(out, src, flags));
+}
+
+t_error expand_str_unique(t_string *out, const t_string *src, t_exp_flag flags)
+{
+	t_expansion	expansion;
+	t_string	*tmp;
+	size_t		i;
+	t_error		err;
+
+	err = expand_str(&expansion, src, flags);
+	if (err.type)
+		return (err);
+	if (expansion.len == 0)
+	{
+		tmp = &((t_string *)expansion.data)[0];
+		if (!string_init(out, 0, tmp->data, -1))
+			err = error_sys();
+		return (expansion_free(&expansion), err);
+	}
+	(void)string_init(out, 0, NULL, 0);
+	i = 0;
+	while (i < expansion.len)
+	{
+		tmp = &((t_string *)expansion.data)[i];
+		if (!string_append(out, tmp))
+			return (err = error_sys(), expansion_free(&expansion), string_free(out), err);
+		if (i < expansion.len - 1)
+			string_append_n(out, " ", 1);
+		i++;
+	}
+	return (expansion_free(&expansion), err);
+}
+
+t_error expand_tok_unique(t_string *out, const t_token *src, t_exp_flag flags)
+{
+	t_expansion	expansion;
+	t_string	*tmp;
+	size_t		i;
+	t_error		err;
+
+	err = expand_token(&expansion, src, flags);
+	if (err.type)
+		return (err);
+	if (expansion.len == 0)
+	{
+		tmp = &((t_string *)expansion.data)[0];
+		if (!string_init(out, 0, tmp->data, -1))
+			err = error_sys();
+		return (expansion_free(&expansion), err);
+	}
+	(void)string_init(out, 0, NULL, 0);
+	i = 0;
+	while (i < expansion.len)
+	{
+		tmp = &((t_string *)expansion.data)[i];
+		if (!string_append(out, tmp))
+			return (err = error_sys(), expansion_free(&expansion), string_free(out), err);
+		if (i < expansion.len - 1)
+			string_append_n(out, " ", 1);
+		i++;
+	}
+	return (expansion_free(&expansion), err);
 }

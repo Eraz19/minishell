@@ -88,7 +88,7 @@ t_error	heredoc_expand_body(const t_string *path)
 	err = read_body_file(&body, path);
 	if (err.type)
 		return (heredoc_error_qualify(err));
-	err = expand_heredoc(&expansion, &body, flags);
+	err = expand_str(&expansion, &body, flags);
 	if (err.type)
 		return (string_free(&body), heredoc_error_qualify(err));
 	string_free(&body);
