@@ -53,7 +53,7 @@ t_error	alias_print_one(t_alias *alias, const char *name)
 {
 	const char	*value;
 
-	value = hashmap_get(&alias->map, name);
+	value = hashmap_get_const(&alias->map, name);
 	if (value == NULL)
 		return (error(ERR_ALIAS_NOT_FOUND));
 	return (alias_print_pair(name, value));

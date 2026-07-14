@@ -46,6 +46,9 @@ void	var_init(t_var_list *variables);
  */
 t_error	var_load(t_var_list *variables, char **envp);
 
+// TODO: doc
+void	var_clear(t_var_list *variables);
+
 /**
  * @brief Release every variable owned by the list.
  *
@@ -137,8 +140,7 @@ t_error	var_print(t_var_print_mode mode);
  * @param value Variable value (borrowed, read-only).
  * @param export Export flag to apply.
  * @param rdonly Read-only flag to apply.
- * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY
- *         or @c ERR_LIBC.
+ * @return @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY or @c ERR_LIBC.
  */
 t_error	var_set(
 			const t_string *name,

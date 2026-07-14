@@ -9,15 +9,15 @@ static inline t_error	parser_new_lr_state(
 							const t_rule *rule,
 							size_t *dst)
 {
-	const t_parser_stack	*stack;
+	const t_parser_item_stack	*stack;
 	size_t					previous_item_id;
-	t_parser_stack_item		*previous_item;
+	t_parser_item		*previous_item;
 	size_t					lr_state_from;
 	size_t					lr_state_to;
 
-	stack = &parser->stack;
+	stack = &parser->item_stack;
 	previous_item_id = stack->len - rule->rhs_len - 1;
-	previous_item = &((t_parser_stack_item *)stack->data)[previous_item_id];
+	previous_item = &((t_parser_item *)stack->data)[previous_item_id];
 	lr_state_from = previous_item->lr_state_id;
 	lr_state_to = 
 		machine->gotos[lr_state_from][rule->lhs - SYM_NON_TERMINAL_MIN];
@@ -29,11 +29,11 @@ static inline t_error	parser_new_lr_state(
 }
 
 static inline size_t	parser_tokens_count_sum(
-							const t_parser_stack_item *rhs_items,
+							const t_parser_item *rhs_items,
 							size_t count)
 {
 	size_t						i;
-	const t_parser_stack_item	*item;
+	const t_parser_item	*item;
 	size_t						token_count;
 
 	token_count = 0;
@@ -48,20 +48,20 @@ static inline size_t	parser_tokens_count_sum(
 }
 
 static inline t_error	parser_replace_items(
-							t_parser					*parser,
-							size_t 						count,
-							const t_parser_stack_item	*item)
+							t_parser *parser,
+							size_t count,
+							const t_parser_item	*item)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < count)
 	{
-		if (!vector_pop(&parser->stack, NULL))
+		if (!vector_pop(&parser->item_stack, NULL))
 			return (parser_internal_error(error_sys()));
 		i++;
 	}
-	if (!vector_push(&parser->stack, item))
+	if (!vector_push(&parser->item_stack, item))
 		return (parser_internal_error(error_sys()));
 	return (error(ERR_NO));
 }
@@ -71,20 +71,20 @@ t_error	parser_reduce(
 			const t_lr_machine *machine,
 			size_t rule_id)
 {
-	const t_rule		*rule;
-	size_t				rhs_start;
-	t_parser_stack_item	*rhs;
-	t_parser_stack_item	item;
-	t_error				err;
+	const t_rule	*rule;
+	size_t			rhs_start;
+	t_parser_item	*rhs;
+	t_parser_item	item;
+	t_error			err;
 
 	assert(parser != NULL);
 	assert(machine != NULL);
 	rule = &machine->rules[rule_id];
-	rhs_start = parser->stack.len - rule->rhs_len;
-	rhs = &((t_parser_stack_item *)parser->stack.data)[rhs_start];
+	rhs_start = parser->item_stack.len - rule->rhs_len;
+	rhs = &((t_parser_item *)parser->item_stack.data)[rhs_start];
 	item.symbol = rule->lhs;
 	err = parser_new_lr_state(parser, machine, rule, &item.lr_state_id);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
 	item.tokens_start_id = parser->lookahead_id;
 	if (rule->rhs_len > 0)

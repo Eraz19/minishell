@@ -1,11 +1,11 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
 
 static inline t_error	add_command(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_pipeline *out)
 {
@@ -21,7 +21,7 @@ static inline t_error	add_command(
 }
 
 static inline t_error	parse_rec(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_pipeline *out)
 {
@@ -54,7 +54,7 @@ pipe_sequence    :                             command
                  ;
 */
 t_error	convert_pipeline(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *pipeline,
 			t_ast_pipeline *out)
 {

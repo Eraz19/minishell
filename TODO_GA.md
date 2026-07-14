@@ -1,35 +1,87 @@
 # WIP
 
-- `functions`:
-	- ⚠️ `function_set()` + `function_unset()`
-	- `unset` : trigger `function_unset()`
-- `walker`:
-	- implement all
-	- handle errors (cf `error.h`)
+🚨 **ACTUALISATION FT**
+
+⚠️ `echo` is removed from known builtin list to test
+💡 Les erreurs dépendent de l'opération qui a échouée:
+===> donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
+
+- ⚠️ **ALL**:
+	- check all `expand_token()` and `expand_str()` calls:
+		- call `*_unique()` instead if exactly one field is needed
+- `builder`:
+	- handle `command substitution search`
 - `runner-executor`:
-	- `dispatcher`:
-		- `cmd_exec_function()`
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
+	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
+- `posix_read_all()`
+
+# ALEXANDER
+
+- ⚠️ `pattern matching`: wip
+- ⚠️ `expander`:
+	- expand combos:
+		- `str` -> `str`
+		- `token` -> `str`
+		- `token` -> `expansion`
+	- return last `command substitution` status
+- ⚠️ `heredoc`:
+	- use `t_string` instead of file
+	- stack delim inside `parser`
+- `token`: keep `history_list_index` in `t_token_index` ?
+```bash
+VAR=value          => status 0
+VAR=$(true)        => status 0
+VAR=$(false)       => status 1
+VAR=${bad syntax}  => ERR_POSIX_EXPANSION
+```
+- 🚧 `shell`:
+	- `shell_init_subshell()`: (only missing traps / signal handling)
+- ✅ `runner_set_stdin_to_blocking()`:
+	- now called in `readline_()`
+- ✅ `hashmap`:
+	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
+	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
+- ✅ `ast`:
+	- now fully owned (massive refactor)
+- ✅ `redirector`:
+	- refactored for `ast` updates
+- ✅ `executor`:
+	- refactored for `ast` updates
+- ✅ `functions`:
+	- `set()` / `unset()` / `get()` / `stop()`
+- ✅ `heredoc`:
+	- correctly `unlink()` (best effort)
+- ✅ `error`:
+	- priorization helpers
+- ✅ ``params`:
+	- `process` module
+- ✅ `walker`:
+	- fully implemented
+- ✅ `runner`:
+	- fully implemented (error handling should be correct now)
+- 🤔 **OLD**:
+	- `void	print_unspecified_behaviour(const char *condition, const char *implementation)`
+	- `EXP_DSQUOTE`:
+		- process first, then apply all other expansions from the beginning of `word`
+	- `utils`:
+		- `scan_set_mode()` à déplacer dans un module `input_mode`
+		- Utiliser `free_char_ptr_void()` au lieu de `free` comme callback pour les `vector_fre()` contenant des `char *`
+	- replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
+	- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
 
 # TODO
 
+- `error`:
+	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
 - `shell`:
-	- `subshell`:
-		- subshell
-		- command substituion lookup (input contains `(`)
-		- execve fallback
 	- process `ENV`:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
-- `runner`:
-	- set `stdin` to blocking mode (main loop ?)
-	- unlink heredoc path after use
-	- handle errors
+	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files
-- `posix_read()`:
-	- implement it using `string_read_*()` API ? (⚠️ remove auto retry on EINTR in libft !)
 - `libft`:
 	- update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
 	- update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
@@ -74,16 +126,186 @@
 
 ---
 
-# ALEXANDER
+# TO FIX
 
-- `void	print_unspecified_behaviour(const char *condition, const char *implementation)`
-- `EXP_DSQUOTE`:
-	- process first, then apply all other expansions from the beginning of `word`
-- `utils`:
-	- `scan_set_mode()` à déplacer dans un module `input_mode`
-	- Utiliser `free_char_ptr_void()` au lieu de `free` comme callback pour les `vector_fre()` contenant des `char *`
-- replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
-- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
+⚠️ All expansions can produce zero/one/multiple fields (check all `cmd_*_expansion_flags()` callers)
+```bash
+# TEST 1
+set -- 'a' 'b' 'c'
+for subject in 'abc' 'a b c' 'a' 'b' 'c'
+do
+    case $subject in
+        $@) printf 'MATCH <%s>\n' "$subject" ;;
+        *)  printf 'NO    <%s>\n' "$subject" ;;
+    esac
+done
+# TEST 2
+set -- 'a' 'b' 'c'
+for subject in 'abc' 'a b c' 'a' 'b' 'c'
+do
+    case $subject in
+        "$@") printf 'MATCH <%s>\n' "$subject" ;;
+        *)  printf 'NO    <%s>\n' "$subject" ;;
+    esac
+done
+```
+
+---
+
+# TESTS
+
+
+## TESTS (MATCH PATTERN)
+
+```bash
+cat *	# should match all files in current dir
+cat "*"	# should only match "*" file
+```
+
+## TESTS (IF)
+
+```bash
+# OK
+echo "--------------------"
+false
+echo "before => $?"
+if false || echo "in condition => $?"; then
+	echo "inside => $?"
+fi
+echo "after => $?"
+echo "--------------------"
+```
+
+```bash
+# OK
+echo "--------------------"
+false
+echo "before => $?"
+if false; then
+	echo NOP
+fi
+echo "after => $?"
+echo "--------------------"
+```
+
+## TESTS (FOR)
+
+```bash
+# OK
+echo "--------------------"
+i=old
+for i in a b c; do
+    :
+done
+echo "should be 'c' => '$i'"
+echo "--------------------"
+```
+
+```bash
+# OK
+echo "--------------------"
+a=one
+for x in $a $a; do
+    a=two
+    echo "shoud be 'one' => '$x'"
+done
+echo "--------------------"
+```
+
+```bash
+# [RUNNER] error should have been requalified : 124 (variable assignment error)
+echo "--------------------"
+echo "should throw assignment error"
+readonly i
+for i in a b c; do
+    echo "$i"
+done
+echo "--------------------"
+```
+
+## TESTS (SUBSHELL)
+
+```bash
+# ./minishell: builtin_break: not implemented
+echo "--------------------"
+while true; do
+	(
+		while true; do
+			break 2
+		done
+		echo after
+	)
+	echo parent
+done
+echo "--------------------"
+```
+
+## TESTS (CASE)
+
+```bash
+# OK
+echo "--------------------"
+case x in
+  x) ;;
+esac
+echo "\$? should be '0' => '$?'"
+echo "--------------------"
+```
+
+# TEST (CASE : AFTER PATTERN MATCHING UPDATE)
+
+```bash
+echo "--------------------"
+# OK (expected = abc*def)
+v='abc*def'
+echo "${v#'*'}"
+
+# ERROR
+p='*'
+case abc in
+    "$p") echo "ERROR: * should be litteral when p='*' and pattern is \"$p\"" ;;
+	$p) echo "valid 1";;
+esac
+
+# OK
+case '*' in
+    \*) echo "valid 2" ;;
+esac
+
+# OK
+case '?' in
+    \?) echo "valid 3" ;;
+esac
+
+# OK
+case '[' in
+    \[) echo "valid 4" ;;
+esac
+
+# OK
+case '[' in
+    [) echo "valid 5" ;;
+esac
+
+# OK
+case "" in
+    "") echo "valid 6" ;;
+esac
+echo "--------------------"
+```
+
+## TESTS EXPANSIONS
+
+```bash
+# should assign ONLY if pattern is unset or NULL:
+VAR=${pattern:=foo}
+# Should NEVER assign during expansion:
+VAR=${pattern}
+VAR=${pattern:-foo}
+VAR=${pattern+foo}
+VAR=${pattern#foo}
+VAR=${pattern%foo}
+```
 
 ---
 
@@ -147,11 +369,16 @@
 	- as `sysconf()` / `getrlimit()` are forbidden, we cannot query the actual file descriptor limit of the host process. POSIX only requires shell redirections to support user file descriptors 0 through 9. By default, `minishell` uses 0..128 as its user fd range and reserves 129..256 for internal redirection backups. If the backup range is exhausted or unsupported by the host system, the redirection fails with a redirection error. A MAX_COMPAT build option can restrict the layout to 0..9 for user fds and 10..19 for backup fds, which is a more conservative POSIX-minimum layout but still does not guarantee that backup fds are available.
 - `expander`:
 	- as `fn_match()` is forbidden, regex matching is not implemented.
-- `runner:`
+- `runner`:
 	- `redirector-tracker`:
 		- as `fcntl()` is forbidden, backup fds cannot be marked as `FD_CLOEXEC`; therefore, whenever a child is forked to execute a command, the shell explicitly closes each tracked backup fd before calling `execve()` (best effort).
 	- `executor`:
 		- as `_exit()` is forbidden, shell child processes use `exit()`, which may flush inherited standard I/O buffers and run inherited exit handlers.
+- `async`:
+	- `jobs`:
+		- as `setpgid()` / `tcsetpgrp()` / `getpgrp()` / `setsid()` are forbidden, job-control background jobs and non-job-control background jobs are not implemented.
+- `pattern matching`:
+	- as locale-management functions are forbidden, pattern matching ignores locale-dependent collation and character classification; therefore, bracket ranges, equivalence classes, collating symbols, and character classes are only approximated with byte/ASCII-like semantics.
 
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 

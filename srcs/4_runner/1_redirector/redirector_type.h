@@ -23,6 +23,7 @@ typedef struct s_redirector
 	t_redir_stack	stack;
 	/** @brief File-descriptor tracker managed by the fd_tracker submodule. */
 	t_fd_tracker	tracker;
+	size_t			heredoc_id;
 }	t_redirector;
 
 #endif

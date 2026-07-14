@@ -3,9 +3,9 @@
 
 t_error	hook_store_cst(
 	t_parser *parser,
-	t_parser_stack_item *rhs,
+	t_parser_item *rhs,
 	size_t len,
-	t_parser_stack_item *lhs)
+	t_parser_item *lhs)
 {
 	(void)rhs;
 	(void)len;

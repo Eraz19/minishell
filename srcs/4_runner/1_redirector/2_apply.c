@@ -4,23 +4,34 @@
 #include <unistd.h>
 #include <errno.h>
 
-static inline t_error	redirect_redirect(t_ast_redirection *redirection)
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
+static inline t_error	redirect_redirect(
+							t_redirector *redirector,
+							t_redir *redirection,
+							bool *applied)
 {
 	int		opened_fd;
 	t_error	err;
 
-	err = redirect_open(redirection, &opened_fd);
+	err = redirect_open(redirector, redirection, &opened_fd);
 	if (err.type)
 		return (err);
 	else if (opened_fd == redirection->fd)
-		return (err);
+		return (*applied = true, err);
 	err = posix_dup2(opened_fd, redirection->fd);
 	if (err.type)
-		return ((void)posix_close_if_open(opened_fd), err);
+	{
+		(void)posix_close_if_open(opened_fd);
+		if (err.type == ERR_LIBC)
+			err.type = ERR_REDIRECTION;
+		return (err);
+	}
+	*applied = true;
 	return (posix_close_if_open(opened_fd));
 }
 
-static inline t_error	redirect_dup(t_ast_redirection *redir)
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED
+static inline t_error	redirect_dup(t_redir *redir, bool *applied)
 {
 	int		rhs_fd;
 	t_error	err;
@@ -36,15 +47,21 @@ static inline t_error	redirect_dup(t_ast_redirection *redir)
 				REDIRECTOR_MODULE_NAME, "file descriptor is not valid", NULL,
 				"%i expanded from '%s'", rhs_fd, redir->word->value.data);
 	}
+	if (err.type == ERR_LIBC)
+		err.type = ERR_REDIRECTION;
+	if (err.type == ERR_NO)
+		*applied = true;
 	return (err);
 }
 
 static inline t_error	redirect_handle_failure(
+							t_redir *redir,
 							t_redirector *redirector,
 							t_error err)
 {
 	t_error	restore_err;
 
+	redir_free(redir);
 	restore_err = fd_restore_last_backup(redirector);
 	if (restore_err.type)
 		return (restore_err);
@@ -52,28 +69,32 @@ static inline t_error	redirect_handle_failure(
 }
 
 t_error	redirect_apply(
-			t_ast_redirection *redirection,
+			const t_ast_redirection *redirection,
 			t_redirector *redirector,
 			bool permanent)
 {
+	t_redir			redir;
 	t_ast_redir_op	operation;
+	bool			applied;
 	t_error			err;
 
-	err = redirect_expand(redirection);
+	applied = false;
+	redir_init(&redir, redirection);
+	err = redirect_expand(&redir);
+	if (err.type == ERR_NO && redir.is_location == true)
+		err = redirect_resolve_location(&redir);
 	if (err.type == ERR_NO)
-		err = redirect_normalize_fd(redirection);
-	if (err.type == ERR_NO)
-		err = redirect_prepare(redirection, redirector, permanent);
+		err = redirect_prepare(&redir, redirector, permanent);
 	if (err.type)
-		return (err);
-	operation = redirection->operation;
+		return (redir_free(&redir), err);
+	operation = redir.operation;
 	if (operation == AST_REDIR_DUP_READ || operation == AST_REDIR_DUP_WRITE)
-		err = redirect_dup(redirection);
+		err = redirect_dup(&redir, &applied);
 	else
-		err = redirect_redirect(redirection);
+		err = redirect_redirect(redirector, &redir, &applied);
 	if (err.type && permanent == false)
-		return (redirect_handle_failure(redirector, err));
-	else if (err.type == ERR_NO && permanent == true)
-		fd_save_perm(redirector, redirection->fd);
-	return (err);
+		return (redirect_handle_failure(&redir, redirector, err));
+	else if (permanent == true && applied == true)
+		fd_save_perm(redirector, redir.fd);
+	return (redir_free(&redir), err);
 }

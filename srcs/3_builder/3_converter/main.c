@@ -1,8 +1,7 @@
 #include "error.h"
 #include "cst_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
-#include "builder.h"
 # include <assert.h>	// DEBUG
 
 static inline t_error	convert_complete_commands(

@@ -1,11 +1,11 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
 
 static inline t_error	add_to_list(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *compound_list,
 							t_vector *out)
 {
@@ -21,7 +21,7 @@ static inline t_error	add_to_list(
 }
 
 static inline t_error	parse_rec(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_if *out)
 {
@@ -52,7 +52,7 @@ else_part        : Elif compound_list Then compound_list
                  ;
 */
 t_error	convert_if(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *if_clause,
 			t_ast_if *out)
 {

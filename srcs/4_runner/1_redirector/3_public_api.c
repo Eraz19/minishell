@@ -3,6 +3,7 @@
 #include "redirect_stack.h"
 #include "fd_manager.h"
 #include <errno.h>
+#include <unistd.h>
 
 // @ret ERR_LIBC
 static inline t_error	redirect_use_new_frame(t_redirector *redirector)
@@ -26,11 +27,11 @@ static inline t_error	redirect_use_new_frame(t_redirector *redirector)
 	return (err);
 }
 
-t_error	redirect_commit(t_redirector *redirector, t_ast_redir_list *redirections)
+t_error	redirect_commit(t_redirector *redirector, const t_ast_redir_list *redirections)
 {
-	size_t				i;
-	t_ast_redirection	*redirection;
-	t_error				err;
+	size_t					i;
+	const t_ast_redirection	*redirection;
+	t_error					err;
 
 	err = error(ERR_NO);
 	i = 0;
@@ -39,18 +40,18 @@ t_error	redirect_commit(t_redirector *redirector, t_ast_redir_list *redirections
 		redirection = &((t_ast_redirection *)redirections->data)[i];
 		err = redirect_apply(redirection, redirector, true);
 		if (err.type)
-			return (err);
+			break ;
 		i++;
 	}
 	return (err);
 }
 
-t_error	redirect_start(t_redirector *redirector, t_ast_redir_list *redirections)
+t_error	redirect_start(t_redirector *redirector, const t_ast_redir_list *redirections)
 {
-	size_t				i;
-	t_ast_redirection	*redirection;
-	t_error				err;
-	t_error				restore_err;
+	size_t					i;
+	const t_ast_redirection	*redirection;
+	t_error					err;
+	t_error					restore_err;
 
 	err = redirect_use_new_frame(redirector);
 	if (err.type)
@@ -64,17 +65,12 @@ t_error	redirect_start(t_redirector *redirector, t_ast_redir_list *redirections)
 		{
 			restore_err = fd_restore_last_frame(redirector);
 			if (restore_err.type)
-				return (restore_err);
-			return (err);
+				err = restore_err;
+			break ;
 		}
 		i++;
 	}
 	return (err);
-}
-
-void	redirect_close_backups(t_redirector *redirector)
-{
-	redirect_stack_close_backups(&redirector->stack);
 }
 
 t_error	redirect_stop(t_redirector *redirector)

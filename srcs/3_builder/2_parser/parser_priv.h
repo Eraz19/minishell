@@ -17,8 +17,7 @@ t_error	parser_invalid_syntax(void);
 /* ************************************************************************* */
 
 void	parser_init(t_parser *parser);
-void	parser_free_token(void *token);
-void	parser_free_stack_item(void *raw_item);
+void	parser_stack_item_free(void *raw_item);
 void	parser_free(t_parser *parser);
 
 /* ************************************************************************* */
@@ -27,12 +26,6 @@ void	parser_free(t_parser *parser);
 
 t_error	parser_read_next_symbol(t_parser *parser);
 t_error	parser_read_heredoc(t_parser *parser);
-
-/* ************************************************************************* */
-/*                                   STACK                                   */
-/* ************************************************************************* */
-
-t_parser_stack_item	*parser_stack_top(const t_parser_stack *stack);
 
 /* ************************************************************************* */
 /*                                  ACTIONS                                  */

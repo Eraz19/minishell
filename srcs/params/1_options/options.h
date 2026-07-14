@@ -42,6 +42,9 @@ typedef uint32_t	t_option;
  */
 void		options_free(t_option *options);
 
+// TODO: doc
+void	options_clear(t_option *options);
+
 /**
  * @brief Reset an option bitset to its empty state.
  *
@@ -83,7 +86,7 @@ void		option_set(t_option *options, t_option option, bool on);
  *
  * @param option Option bit to query.
  * @param out Receives the active state (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND on failure.
+ * @return @c ERR_INTERNAL on failure.
  */
 t_error		option_is_active(t_option option, bool *out);
 

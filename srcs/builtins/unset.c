@@ -76,14 +76,25 @@ static t_error	unset_var(size_t first_operand_index, int argc, char **argv)
 	return (exit_status);
 }
 
-// TODO
 static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 {
-	// TODO
-	(void)first_operand_index;
-	(void)argc;
-	(void)argv;
-	return (error(ERR_NO));
+	int			i;
+	t_error		last_exit_status;
+	t_error		exit_status;
+
+	exit_status = error(ERR_NO);
+	i = (int)first_operand_index;
+	while (i < argc)
+	{
+		last_exit_status = params_unset_function(argv[i]);
+		if (last_exit_status.type != ERR_NO)
+		{
+			exit_status = error_print(
+				last_exit_status, argv[0], argv[i], NULL, NULL);
+		}
+		i++;
+	}
+	return (exit_status);
 }
 
 t_error	builtin_unset(int argc, char **argv, char **envp, int *exit_status)

@@ -262,7 +262,7 @@ void			lexer_init(t_lexer *lexer);
  *
  * @param lexer Already initialized lexer (borrowed).
  */
-void			lexer_reset(t_lexer *lexer);
+void			lexer_clear(t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -333,11 +333,8 @@ t_error			lexer_input_stack_item_init(t_lexer_input_stack_item **item);
  * @brief Pops and frees the top input item of @p stack.
  *
  * @param stack Already initialized stack (borrowed).
- * @return @c ERR_EMPTY_STACK if @p stack is empty,
- *         @c ERR_INDEX_OUT_OF_BOUND if the removal fails, @c ERR_NO on
- *         success.
  */
-t_error			lexer_input_stack_pop(t_lexer_input_stack *stack);
+void	lexer_input_stack_pop(t_lexer_input_stack *stack);
 
 /**
  * @ingroup lexer

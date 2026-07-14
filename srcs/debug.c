@@ -6,8 +6,9 @@
 #include "lr_state_type.h"
 #include "rule_state_type.h"
 #include "cst_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "heredoc.h"
+#include "logs.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -355,6 +356,16 @@ static inline void	cst_log_span(t_cst_node *node)
 		node->tokens_start_id, token_end_id, node->tokens_count);
 }
 
+static inline void	cst_log_heredoc_body(t_cst_node *node)
+{
+	if (node->heredoc_body.data == NULL && node->heredoc_body.len == 0)
+		return ;
+	fprintf(stderr, " heredoc_body={len=%zu cap=%zu data=",
+		node->heredoc_body.len, node->heredoc_body.cap);
+	debug_dump_string_value(&node->heredoc_body);
+	fprintf(stderr, "}");
+}
+
 static void	cst_log_node(t_cst_node *node, size_t depth, bool *lasts, bool is_last)
 {
 	size_t		i;
@@ -374,8 +385,7 @@ static void	cst_log_node(t_cst_node *node, size_t depth, bool *lasts, bool is_la
 	if (node->rule_id != RULE_NONE)
 		fprintf(stderr, " rule=%i", (int)node->rule_id);
 	cst_log_span(node);
-	if (node->data)
-		fprintf(stderr, " data=%p", node->data);
+	cst_log_heredoc_body(node);
 	fprintf(stderr, "\n");
 	lasts[depth] = is_last;
 	i = 0;
@@ -407,6 +417,25 @@ void	debug_dump_cst(t_cst_node *node)
 /* ************************************************************************* */
 /*                                    AST                                    */
 /* ************************************************************************* */
+
+const char	*ast_command_type_to_string(t_ast_command_type type)
+{
+	if (type == AST_CMD_SIMPLE)
+		return ("SIMPLE");
+	if (type == AST_CMD_LIST)
+		return ("LIST");
+	if (type == AST_CMD_IF)
+		return ("IF");
+	if (type == AST_CMD_FOR)
+		return ("FOR");
+	if (type == AST_CMD_LOOP)
+		return ("LOOP");
+	if (type == AST_CMD_CASE)
+		return ("CASE");
+	if (type == AST_CMD_FUNCTION_DEF)
+		return ("FUNCTION_DEF");
+	return ("INVALID");
+}
 
 #ifdef DEBUG_AST
 #define AST_AT(type, vec, i) (&((type *)(vec)->data)[i])
@@ -487,6 +516,14 @@ static void	ast_log_token(const char *name, t_token *token)
 	ast_log_token_value(token);
 }
 
+static void	ast_log_string(const char *name, t_string *value)
+{
+	fprintf(stderr, " %s={len=%zu cap=%zu data=",
+		name, value->len, value->cap);
+	debug_dump_string_value(value);
+	fprintf(stderr, "}");
+}
+
 static const char	*ast_redir_op_to_string(t_ast_redir_op op)
 {
 	if (op == AST_REDIR_READ)
@@ -508,25 +545,6 @@ static const char	*ast_redir_op_to_string(t_ast_redir_op op)
 	return ("INVALID");
 }
 
-static const char	*ast_command_type_to_string(t_ast_command_type type)
-{
-	if (type == AST_CMD_SIMPLE)
-		return ("SIMPLE");
-	if (type == AST_CMD_LIST)
-		return ("LIST");
-	if (type == AST_CMD_IF)
-		return ("IF");
-	if (type == AST_CMD_FOR)
-		return ("FOR");
-	if (type == AST_CMD_LOOP)
-		return ("LOOP");
-	if (type == AST_CMD_CASE)
-		return ("CASE");
-	if (type == AST_CMD_FUNCTION_DEF)
-		return ("FUNCTION_DEF");
-	return ("INVALID");
-}
-
 static void	ast_log_redirection(
 	t_ast_redirection *redir,
 	size_t depth,
@@ -538,10 +556,11 @@ static void	ast_log_redirection(
 	fprintf(stderr, " fd=%d", redir->fd);
 	fprintf(stderr, " is_location=%s", ast_bool(redir->is_location));
 	if (redir->is_location)
-	{
-		ast_log_token("location", redir->location);
-	}
-		ast_log_token("word", redir->word);
+		ast_log_token("location", &redir->location);
+	if (redir->operation == AST_REDIR_HEREDOC)
+		ast_log_string("heredoc_body", &redir->heredoc_body);
+	else
+		ast_log_token("word", &redir->word);
 	fprintf(stderr, " expand_heredoc_body=%s",
 		ast_bool(redir->expand_heredoc_body));
 	fprintf(stderr, "\n");
@@ -570,50 +589,38 @@ static void	ast_log_redir_list(
 static void	ast_log_token_vector(
 	const char *name,
 	const char *item_name,
-	t_vector *vector,
+	t_token_pool *vector,
 	size_t depth,
 	bool *lasts,
 	bool is_last)
 {
 	size_t	i;
-	t_token	**token;
+	t_token	*token;
 
 	ast_log_head(lasts, depth, is_last, CYAN, name);
 	fprintf(stderr, " count=%zu\n", vector->len);
 	i = 0;
 	while (i < vector->len)
 	{
-		token = AST_AT(t_token *, vector, i);
+		token = AST_AT(t_token, vector, i);
 		ast_log_head(lasts, depth + 1, i + 1 == vector->len,
 			CYAN, item_name);
-		ast_log_token_value(*token);
+		ast_log_token_value(token);
 		fprintf(stderr, "\n");
 		i++;
 	}
 }
 
-static void	ast_log_token_vector_list(
+static void	ast_log_token_pattern(
 	const char *name,
-	t_vector *vector,
+	t_token_pool *pattern,
 	size_t depth,
 	bool *lasts,
 	bool is_last)
 {
-	size_t	i;
-	t_vector	*pattern;
-
 	ast_log_head(lasts, depth, is_last, CYAN, name);
-	fprintf(stderr, " count=%zu\n", vector->len);
-	i = 0;
-	while (i < vector->len)
-	{
-		pattern = AST_AT(t_vector, vector, i);
-		ast_log_head(lasts, depth + 1, i + 1 == vector->len, CYAN, "PATTERN");
-		fprintf(stderr, " count=%zu\n", pattern->len);
-		ast_log_token_vector("TOKENS", "TOKEN", pattern,
-			depth + 2, lasts, true);
-		i++;
-	}
+	fprintf(stderr, " count=%zu\n", pattern->len);
+	ast_log_token_vector("TOKENS", "TOKEN", pattern, depth + 1, lasts, true);
 }
 
 static void	ast_log_list(
@@ -630,7 +637,7 @@ static void	ast_log_command(
 	bool is_last);
 
 static void	ast_log_simple_command(
-	t_ast_simple_command *cmd,
+	t_ast_scmd *cmd,
 	size_t depth,
 	bool *lasts,
 	bool is_last)
@@ -767,7 +774,7 @@ static void	ast_log_for(
 	bool is_last)
 {
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FOR");
-	ast_log_token("var", for_node->var_name);
+	ast_log_token("var", &for_node->var_name);
 	fprintf(stderr, " words=%zu\n", for_node->words.len);
 	ast_log_token_vector("WORDS", "WORD", &for_node->words,
 		depth + 1, lasts, false);
@@ -800,8 +807,8 @@ static void	ast_log_case_item(
 	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE_ITEM");
 	fprintf(stderr, " index=%zu fallthrough=%s\n",
 		index, ast_bool(fallthrough[index]));
-	ast_log_token_vector_list("PATTERNS",
-		AST_AT(t_vector, &case_node->patterns, index),
+	ast_log_token_pattern("PATTERN",
+		AST_AT(t_token_pool, &case_node->patterns, index),
 		depth + 1, lasts, false);
 	ast_log_list("BODY", AST_AT(t_ast_list, &case_node->bodies, index),
 		depth + 1, lasts, true);
@@ -816,7 +823,7 @@ static void	ast_log_case(
 	size_t	i;
 
 	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE");
-	ast_log_token("word", case_node->word);
+	ast_log_token("word", &case_node->word);
 	fprintf(stderr, " items=%zu\n", case_node->patterns.len);
 	i = 0;
 	while (i < case_node->patterns.len)
@@ -841,7 +848,7 @@ static void	ast_log_function(
 		child_count++;
 	id = 0;
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FUNCTION_DEF");
-	ast_log_token("name", function->name);
+	ast_log_token("name", &function->name);
 	fprintf(stderr, " redirs=%zu\n", function->redirs.len);
 	if (function->body)
 		ast_log_command(function->body, depth + 1, lasts,

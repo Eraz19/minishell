@@ -8,84 +8,89 @@
 typedef enum e_error_type
 {
 	// Success
-	ERR_NO,
+	ERR_NO,									// [ 0]
 	/* -------------------- UNQUALIFIED ERRORS -------------------- */
 	// Failures
-	ERR_ASSIGNMENT_MISSING_NAME,
-	ERR_EOF,
-	ERR_FD_INVALID,
-	ERR_FORMAT_INVALID,
-	ERR_HOOK_INVALID_RHS_LEN,
-	ERR_INDEX_OUT_OF_BOUND,
-	ERR_LR_CONFLICT,
-	ERR_LR_STATE_NOT_FOUND,
-	ERR_PARSER_EMPTY_GOTO,
-	ERR_PARSER_INVALID_FUNCTION_NAME,
-	ERR_PARSER_INVALID_STATE,
-	ERR_SHELL_NOT_FOUND,
-	ERR_SHIFT_INVALID_VALUE,
-	ERR_SIZE_MAX_REACHED,
-	ERR_VAR_INVALID_NAME,
-	ERR_VAR_MISSING_EQUAL,
-	ERR_VAR_NOT_FOUND,
-	ERR_VAR_READ_ONLY,
+	ERR_ASSIGNMENT_MISSING_NAME,			// [ 1]
+	ERR_FD_INVALID,							// [ 1]
+	ERR_FORMAT_INVALID,						// [ 1]
+	ERR_HOOK_INVALID_RHS_LEN,				// [ 1]
+	ERR_INDEX_OUT_OF_BOUND,					// [ 1]
+	ERR_LR_CONFLICT,						// [ 1]
+	ERR_LR_STATE_NOT_FOUND,					// [ 1]
+	ERR_PARSER_EMPTY_GOTO,					// [ 1]
+	ERR_PARSER_INVALID_FUNCTION_NAME,		// [ 1]
+	ERR_PARSER_INVALID_STATE,				// [ 1]
+	ERR_SHELL_NOT_FOUND,					// [ 1]
+	ERR_SHIFT_INVALID_VALUE,				// [ 1]
+	ERR_SIZE_MAX_REACHED,					// [ 1]
+	ERR_VAR_INVALID_NAME,					// [ 1]
+	ERR_VAR_MISSING_EQUAL,					// [ 1]
+	ERR_VAR_NOT_FOUND,						// [ 1]
+	ERR_VAR_READ_ONLY,						// [ 1]
 	// Lexer failures
-	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
-	ERR_CTX_END_NOT_FOUND,					// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
-	ERR_EMPTY_STACK,
-	ERR_HEREDOC_MAX_ID_REACHED,
-	ERR_HISTORY_DISABLED,
-	ERR_INCOHERENT_STATE,
-	ERR_NO_DELIM,							// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
-	ERR_NOT_IMPLEMENTED,
-	ERR_UNEXPECTED_EOI,						// [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
-	ERR_VEOF,								// [RUNNER]		Top-level end of input: exit decision belongs to the shell loop (never printed). Mid-construct: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed)
-	ERR_NO_INPUT_TO_LEX,
-	ERR_EXP_RESULT_INCOHERENT,
-	ERR_QUOTED_TILDE,						// [EXPANDER]	Internal control flow, never escapes: a quoted tilde stays literal
-	ERR_PARAM_NULL_OR_UNSET,				// [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed at production with the parameter name)
-	ERR_PARAM_BAD_SUBSTITUTION,				// [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed)
-	ERR_ALIAS_NOT_FOUND,					// [BUILTINS]	alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
+	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_EMPTY_STACK,						// [ 1] 
+	ERR_HEREDOC_MAX_ID_REACHED,				// [ 1] 
+	ERR_HISTORY_DISABLED,					// [ 1] 
+	ERR_INCOHERENT_STATE,					// [ 1] 
+	ERR_NO_DELIM,							// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_NOT_IMPLEMENTED,					// [ 1] 
+	ERR_UNEXPECTED_EOI,						// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_NO_INPUT_TO_LEX,					// [ 1] 
+	ERR_EXP_RESULT_INCOHERENT,				// [ 1] 
+	ERR_QUOTED_TILDE,						// [ 1] [EXPANDER]	Internal control flow, never escapes: a quoted tilde stays literal
+	ERR_PARAM_NULL_OR_UNSET,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed at production with the parameter name)
+	ERR_PARAM_BAD_SUBSTITUTION,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed)
+	ERR_ALIAS_NOT_FOUND,					// [ 1] [BUILTINS]	alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
 	// FT_GETOPT
-	ERR_OPT_INVALID,						// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_INVALID_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
-	ERR_OPT_MISSING_ARG,					// [FT_GETOPT]	Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID,						// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_INVALID_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
+	ERR_OPT_MISSING_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
 	// posix_write()
-	ERR_POSIX_WRITE,						// [CALLER]		write error (special POSIX treatment required)
+	ERR_POSIX_WRITE,						// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
-	ERR_INVALID_USAGE,						// [CALLER]		Options and / or arguments are invalid
+	ERR_INVALID_USAGE,						// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION,						// [EXECUTOR]	Requalified as ERR_REDIRECTION_SPECIAL / ERR_REDIRECTION_OTHER. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
+	ERR_REDIRECTION,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL / ERR_REDIRECTION_OTHER. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
-	ERR_BUILTIN,							// [EXECUTOR]	Requalified as ERR_POSIX_BUILTIN_SPECIAL or dropped
+	ERR_BUILTIN,							// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
+	ERR_REDIRECTION_OTHER = 116,			// [ 6] [WALKERS]		[N-N-Y] Absorbed (walk_scmd / walk_command / walk_function)
+	/* -------------------- FLOW CONTROL ERRORS -------------------- */
+	ERR_VEOF,								// [ 2]	[RUNNER]		"CTRL+D" received: Absorbed (may exit with $? status)
+	ERR_EOF,								// [ 2]	[RUNNER]		End of input reached: Absorbed (may exit with $? status)
+	ERR_CONTINUE,							// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_BREAK,								// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_RETURN,								// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// GENERIC ERRORS (can be returned by any module or builtin)
-	ERR_INTERRUPTED = 116,					// [-]			[Y-Y-?] Shell interrupted by signal
-	ERR_UB = 117,							// [-]			[?-?-Y]	Undefined behaviour
-	ERR_INTERNAL = 118,						// [-]			[Y-Y-Y]	Shell internal error
-	ERR_LIBC = 119,							// [-]			[Y-Y-Y]	System or libc error
+	ERR_INTERRUPTED = 117,					// [ 7] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
+	ERR_UB = 118,							// [ 8] [-]				[?-?-Y]	Always fatal
+	ERR_INTERNAL = 119,						// [ 9] [-]				[Y-Y-Y]	Always fatal
+	ERR_LIBC = 120,							// [10] [-]				[Y-Y-Y]	Always fatal
 	// POSIX EXIT CODES
-	ERR_POSIX_SYNTAX = 120,					// [-]			[Y-N-Y] Shell language syntax error
-	ERR_POSIX_BUILTIN_SPECIAL = 121,		// [-]			[Y-N-N] Special built-in utility error (⚠️ do NOT exit if executed via `command`)
-	ERR_REDIRECTION_SPECIAL = 122,			// [-]			[Y-N-Y] Redirection error with special built-in utilities
-	ERR_REDIRECTION_OTHER = 123,			// [-]			[N-N-Y] Redirection error with non-special built-in utilities
-	ERR_POSIX_ASSIGNMENT = 124,				// [-]			[Y-N-Y] Variable assignment error
-	ERR_POSIX_EXPANSION = 125,				// [-]			[Y-N-Y] Expansion error
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [-]			???
-	ERR_POSIX_CMD_NOT_FOUND = 127,			// [-]			[?-N-Y] Command not found
-	ERR_POSIX_READ = 128,					// [-]			[Y-Y-Y] Unrecoverable read error when reading commands
-	// POSIX SIGNAL CODES (128 + signal code)
+	ERR_POSIX_SYNTAX = 121,					// [ 6] [RUNNER]		[Y-N-Y] Absorbed / bubbled up
+	ERR_POSIX_BUILTIN_SPECIAL = 122,		// [ 6] [SCMD WALKER]	[Y-N-N] Absorbed / bubbled up
+	ERR_POSIX_REDIR_SPECIAL = 123,			// [ 6] [SCMD WALKER]	[Y-N-Y] Absorbed / bubbled up (walk_scmd / walk_command / walk_function)
+	ERR_POSIX_ASSIGNMENT = 124,				// [ 6] [SCMD WALKER]	[Y-N-Y] Absorbed / bubbled up
+	ERR_POSIX_EXPANSION = 125,				// [ 6] [WALKERS]		[Y-N-Y] Absorbed / bubbled up (TODO: which walkers)
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [SCMD WALKER]	[?-?-?] Absorbed / bubbled up
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [SCMD WALKER]	[?-N-Y] Absorbed / bubbled up
+	ERR_POSIX_READ = 128,					// [ 6] [-]				[Y-Y-Y] Always fatal
+	// POSIX SIGNAL CODES (128 + signal)	// [ 6] [-]						TODO: signal management
 }	t_error_type;
 /*
 Legend:
-	[<module>]	=> module in charge of error requalification ("-" means fully qualified)
+	[n]			=> error priority => the error with the highest priority wins in error_priorize()
+	[<module>]	=> module in charge of error frontier
 	[A-B-C]		=> A = shall exit (non-interactive) | B = shall exit (interactive) | C = shall print diagnostic
 	Errors should be printed as they are requalified to avoid losing diagnostic precision
 	Only final error codes are set to specific values => they are the exit status of the shell itself
 */
 
-// ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
+// TODO: ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
 
 #define error(type) error_priv(type, __FILE__, __LINE__, __func__)	//DEBUG
 #define error_sys() error_sys_priv(__FILE__, __LINE__, __func__)	//DEBUG
@@ -145,6 +150,8 @@ t_error	error_sys_priv(const char *file, int line, const char *caller);	// DEBUG
  * @return The error descriptor received as argument.
  */
 t_error	error_print(t_error err, ...);
+
+t_error	error_priorize(t_error previous, t_error new);
 
 const char	*error_to_string(t_error err);
 

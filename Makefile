@@ -1,16 +1,15 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2 -DDEBUG_LOGS -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
+CFLAGS			:= -Wall -Wextra -Werror -O2 -DDEBUG_LOGS -DDEBUG_PARSING -DDEBUG_CST -DDEBUG_AST	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
 	-DDEBUG_ERROR_TRACE \
 	-DDEBUG_LOGS \
 	-DDEBUG_PARAMS \
-	-DDEBUG_HISTORY \
 	-DDEBUG_PARSING \
 	-DDEBUG_CST \
-	-DDEBUG_AST
+	-DDEBUG_AST # -DDEBUG_HISTORY
 
 LIBFT_DIR		:= libft
 LIBFT			:= $(LIBFT_DIR)/libft.a
@@ -33,6 +32,7 @@ SRCS			:= \
 	$(wildcard srcs/0_posix_helpers/*.c) \
 	$(wildcard srcs/0_posix_helpers/*/*.c) \
 	$(wildcard srcs/0_token/*.c) \
+	$(wildcard srcs/0_token/*/*.c) \
 	$(wildcard srcs/0_utils/*.c) \
 	$(wildcard srcs/0_utils/*/*.c) \
 	$(wildcard srcs/1_shell/*.c) \
@@ -53,6 +53,7 @@ SRCS			:= \
 	$(wildcard srcs/4_runner/2_executor/*.c) \
 	$(wildcard srcs/4_runner/2_executor/*/*.c) \
 	$(wildcard srcs/4_runner/3_walker/*.c) \
+	$(wildcard srcs/4_runner/3_walker/*/*.c) \
 	$(wildcard srcs/ast/*.c) \
 	$(wildcard srcs/ast/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
@@ -113,9 +114,10 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/9_action \
 	-Isrcs/3_builder/2_parser \
 	-Isrcs/builtins/set \
+	-Isrcs/3_builder/0_cst \
 	-Isrcs/3_builder/2_parser/1_qualifiers \
-	-Isrcs/3_builder/2_parser/2_stack \
-	-Isrcs/3_builder/2_parser/3_cst \
+	-Isrcs/3_builder/2_parser/2_item_stack \
+	-Isrcs/3_builder/2_parser/3_here_stack \
 	-Isrcs/3_builder/3_converter \
 	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \
@@ -133,6 +135,7 @@ INCLUDES		:= \
 	-Isrcs/4_runner/2_executor/3_searcher \
 	-Isrcs/4_runner/2_executor/4_dispatcher \
 	-Isrcs/4_runner/3_walker \
+	-Isrcs/4_runner/3_walker/pipeline \
 	-Isrcs/alias \
 	-Isrcs/alias/stack \
 	-Isrcs/ast \
@@ -172,7 +175,9 @@ INCLUDES		:= \
 	-Isrcs/params/4_variables/load/2_mandatory \
 	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
 	-Isrcs/params/4_variables/load/3_up \
-	-Isrcs/params/5_functions
+	-Isrcs/params/5_functions \
+	-Isrcs/params/6_process \
+	-Isrcs/params/6_process/process
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

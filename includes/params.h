@@ -5,6 +5,8 @@
 # include "options.h"
 # include "specials.h"
 # include "positionals.h"
+# include "functions.h"
+# include "process.h"
 
 /**
  * @struct s_params
@@ -30,6 +32,10 @@ typedef struct s_params
 	t_specials			specials;
 	/** @brief Positional state managed by the positionals submodule. */
 	t_positionals_stack	positionals_stack;
+	// TODO: doc
+	t_functions			functions;
+	// TODO: doc
+	t_process_table		processes;
 }	t_params;
 
 /**
@@ -61,6 +67,12 @@ void	params_free(t_params *params);
  */
 void	params_init(t_params *params);
 
+// TODO: doc
+void	params_init_subshell(t_params *params);
+
+// TODO: doc
+void	params_clear(t_params *params);
+
 /**
  * @brief Load all shell parameters from argc/argv/envp.
  *
@@ -74,6 +86,14 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
+
+// TODO: doc
+t_error	params_set_function(t_ast_function_def *function_def);
+t_error	params_get_function(const char *name, t_function **out);
+t_error	params_unset_function(const char *name);
+void	params_stop_function(t_function **function);
+t_error	params_get_last_status(int *out);
+int		params_get_last_status_from(t_params *params);
 
 /**
  * @brief Build the exported environment as a @ref t_vector of C-strings.
@@ -164,6 +184,14 @@ t_error	params_push_positionals(t_positionals *src);
  */
 t_error	params_pop_positionals(void);
 
+// TODO: doc
+// @ret ERR_LIBC / ERR_INTERRUPTED
+t_error	params_reap(t_params *params);
+
+// TODO: doc
+// @ret ERR_INTERNAL
+t_error	params_register_process(pid_t pid);
+
 /**
  * @brief Replace the current positional frame with a new one.
  *
@@ -180,25 +208,20 @@ t_error	params_replace_positionals(t_positionals *src);
  *
  * @param option Option bit to modify.
  * @param on True to enable the option, false to clear it.
- * @return @c ERR_SHELL_NOT_FOUND on failure.
+ * @return @c ERR_INTERNAL on failure.
  */
 t_error	params_set_option(t_option option, bool on);
-
-/**
- * @brief Update the last background process identifier.
- *
- * @param value New PID value.
- * @return @c ERR_SHELL_NOT_FOUND on failure.
- */
-t_error	params_set_last_bg_pid(pid_t value);
 
 /**
  * @brief Update the last command exit status.
  *
  * @param value New status value.
- * @return @c ERR_SHELL_NOT_FOUND on failure.
+ * @return @c ERR_INTERNAL on failure.
  */
 t_error	params_set_last_status(int value);
+
+// TODO: doc
+void	params_set_last_status_in(t_params *params, int value);
 
 /**
  * @brief Create or update a shell variable.
@@ -212,8 +235,7 @@ t_error	params_set_last_status(int value);
  * @param value Variable value (borrowed, read-only).
  * @param export Export flag to apply.
  * @param readonly Read-only flag to apply.
- * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY
- *         or @c ERR_LIBC on failure.
+ * @return @c ERR_POSIX_ASSIGNMENT or @c ERR_LIBC (both are already printed).
  */
 t_error	params_set_variable(
 	const t_string *name,
@@ -238,6 +260,12 @@ t_error	params_shift_positionals(size_t n);
  *         or @c ERR_INDEX_OUT_OF_BOUND on failure.
  */
 t_error	params_unset_variable(const t_string *name);
+
+// TODO: doc
+t_error	params_wait(pid_t pid, int *status);
+
+// TODO: doc
+t_error	params_wait_all(int *status);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */

@@ -27,7 +27,7 @@ static bool	dollar_squote_simple_escape(char c, char *out, t_hashmap *escapes)
 
 	key[0] = c;
 	key[1] = '\0';
-	value = hashmap_get(escapes, key);
+	value = hashmap_get_const(escapes, key);
 	if (value == NULL)
 		return (false);
 	*out = (char)(intptr_t)value;

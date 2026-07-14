@@ -10,6 +10,23 @@ void	params_init(t_params *params)
 	options_init(&params->options);
 	specials_init(&params->specials);
 	positionals_init_stack(&params->positionals_stack);
+	functions_init(&params->functions);
+	process_init(&params->processes);
+}
+
+void	params_init_subshell(t_params *params)
+{
+	process_clear(&params->processes);
+}
+
+void	params_clear(t_params *params)
+{
+	var_clear(&params->variables);
+	options_clear(&params->options);
+	specials_clear(&params->specials);
+	positionals_clear_stack(&params->positionals_stack);
+	functions_clear(&params->functions);
+	process_clear(&params->processes);
 }
 
 void	params_free(t_params *params)
@@ -20,4 +37,6 @@ void	params_free(t_params *params)
 	options_free(&params->options);
 	specials_free(&params->specials);
 	positionals_free_stack(&params->positionals_stack);
+	functions_free(&params->functions);
+	process_free(&params->processes);
 }

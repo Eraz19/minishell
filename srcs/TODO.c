@@ -3,6 +3,17 @@
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
 
+/* ---------- WIP: scanner + heredoc ---------- */
+
+t_error	scanner_read_heredoc(t_string *body, const t_token *delim, bool strip)
+{
+	(void)strip;
+	(void)delim;
+	if (!string_init(body, 0, "[WIP] I should be the heredoc body [WIP]", -1))
+		return (error_sys());
+	return (error(ERR_NO));
+}
+
 /* ---------- TODO: shell ---------- */
 
 t_error		shell_should_interrupt(void)
@@ -35,14 +46,7 @@ t_error	builtin_break(int argc, char **argv, char **envp, int *exit_status)
 	(void)exit_status;
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-t_error	builtin_colon(int argc, char **argv, char **envp, int *exit_status)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
+
 t_error	builtin_continue(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;

@@ -1,29 +1,46 @@
 #include "functions.h"
-#include "converter_priv.h"
+#include <stdlib.h>
 
 void	function_init(t_function *function)
 {
 	ast_command_init(&function->body);
 	ast_redir_list_init(&function->redirs);
+	function->active_count = 0;
+	function->pending_free = false;
 }
 
-void	function_free(t_function *function)
+void	function_free(t_function **function)
 {
-	ast_command_free(&function->body);
-	ast_redir_list_free(&function->redirs);
+	if (function == NULL || *function == NULL)
+		return ;
+	ast_command_free(&(*function)->body);
+	ast_redir_list_free(&(*function)->redirs);
+	(*function)->active_count = 0;
+	(*function)->pending_free = false;
+	free(*function);
+	*function = NULL;
 }
 
-void	function_free_void(void *function)
+static void	function_free_void(void *function)
 {
-	function_free(function);
+	t_function	*func;
+
+	func = (t_function *)function;
+	function_free(&func);
 }
 
 void	functions_init(t_functions *functions)
 {
-	hashmap_init(functions, 0, function_free_void);
+	hashmap_init(functions, 0, NULL);
+}
+
+void	functions_clear(t_functions *functions)
+{
+	hashmap_clear(functions);
 }
 
 void	functions_free(t_functions *functions)
 {
+	functions->del_value = function_free_void;
 	hashmap_free(functions);
 }

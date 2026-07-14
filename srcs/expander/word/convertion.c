@@ -10,7 +10,7 @@ t_error	to_str(t_string *out, const t_word *src, size_t start, size_t len)
 	i = 0;
 	string_init(out, 0, NULL, 0);
 	if (len == 0)
-		if (!string_append_n(out, "", 1))
+		if (!string_append_n(out, "", 0))
 			return (err = error_sys(), string_free(out), err);
 	while (i < len)
 	{

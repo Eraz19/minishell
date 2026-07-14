@@ -1,11 +1,11 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
 
 static inline t_error	add_and_or(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_list *out)
 {
@@ -36,7 +36,7 @@ static inline void	set_last_async(bool async, const t_ast_list *out)
 
 // input = compound_list / complete_command / list
 static inline t_error	parse_rec(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_list *out)
 {
@@ -63,7 +63,7 @@ static inline t_error	parse_rec(
 }
 
 t_error	convert_list_add(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *node,
 			t_ast_list *out)
 {
@@ -108,7 +108,7 @@ separator_op     : '&'
 */
 // input = subshell / compound_list / complete_command
 t_error	convert_list(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *node,
 			t_ast_list *out)
 {

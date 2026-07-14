@@ -6,10 +6,15 @@
 t_error	option_is_active(t_option option, bool *out)
 {
 	t_params	*params;
+	t_error		err;
 
 	params = shell_get_params();
 	if (!params)
-		return (error(ERR_SHELL_NOT_FOUND));
+	{
+		err = error_print(error(ERR_SHELL_NOT_FOUND), __func__, NULL, NULL);
+		err.type = ERR_INTERNAL;
+		return (err);
+	}
 	*out = (params->options & option) != 0;
 	return (error(ERR_NO));
 }

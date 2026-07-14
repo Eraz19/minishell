@@ -20,7 +20,7 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_INVALID_USAGE)
 		return ("usage");
 	else if (err.type == ERR_EOF)
-		return ("unexpected end of file");
+		return ("end of file");
 	else if (err.type == ERR_FD_INVALID)
 		return ("invalid file descriptor");
 	else if (err.type == ERR_HOOK_INVALID_RHS_LEN)
@@ -78,7 +78,7 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_HISTORY_DISABLED)
 		return ("persistent history disabled");
 	else if (err.type == ERR_VEOF)
-		return ("unexpected end of input");
+		return ("end of input");
 	else if (err.type == ERR_INCOHERENT_STATE)
 		return ("incoherent state");
 	else if (err.type == ERR_NOT_IMPLEMENTED)
@@ -109,12 +109,19 @@ const char	*error_to_string(t_error err)
 		return ("internal builtin error");
 	else if (err.type == ERR_BUILTIN)
 		return ("builtin error");
+	// Flow control errors
+	else if (err.type == ERR_CONTINUE)
+		return ("continue is only available in loops");
+	else if (err.type == ERR_BREAK)
+		return ("break is only available in loops");
+	else if (err.type == ERR_RETURN)
+		return ("return is only available in functions");
 	// POSIX errors
 	else if (err.type == ERR_POSIX_SYNTAX)
 		return ("invalid syntax");
 	else if (err.type == ERR_POSIX_BUILTIN_SPECIAL)
 		return ("special builtin error");
-	else if (err.type == ERR_REDIRECTION_SPECIAL)
+	else if (err.type == ERR_POSIX_REDIR_SPECIAL)
 		return ("redirection error (special built-in)");
 	else if (err.type == ERR_REDIRECTION_OTHER)
 		return ("redirection error (non-special built-in)");
@@ -229,4 +236,50 @@ t_error	error_print(t_error err, ...)
 	(void)posix_write(STDERR_FILENO, string, str_len(string));
 	(void)posix_write(STDERR_FILENO, "\n", 1);
 	return (err.printed = true, err);
+}
+
+static inline int	error_priority(t_error err)
+{
+	if (err.type == ERR_LIBC)
+		return (10);
+	else if (err.type == ERR_INTERNAL)
+		return (9);
+	else if (err.type == ERR_UB)
+		return (8);
+	else if (err.type == ERR_INTERRUPTED)
+		return (7);
+	else if (err.type >= ERR_POSIX_SYNTAX)
+		return (6);
+	else if (err.type >= ERR_CONTINUE)
+		return (5);
+	else if (err.type >= ERR_POSIX_WRITE)
+		return (4);
+	else if (err.type == ERR_VEOF || err.type == ERR_EOF)
+		return (2);
+	else if (err.type == ERR_NO)
+		return (0);
+	else
+		return (1);
+}
+
+t_error	error_priorize(t_error previous, t_error new)
+{
+	t_error	winner;
+	t_error	loser;
+
+	if (error_priority(previous) >= error_priority(new))
+	{
+		winner = previous;
+		loser = new;
+	}
+	else
+	{
+		winner = new;
+		loser = previous;
+
+	}
+	if (previous.type != ERR_NO && new.type != ERR_NO)
+		fprintf(stderr, "%s[%s] priorized against [%s]%s\n", YELLOW,
+			error_to_string(winner), error_to_string(loser), NC);
+	return (winner);
 }

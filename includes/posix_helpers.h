@@ -43,4 +43,12 @@ t_error	posix_dup(int fd, int *out);
 // @ret ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_dup2(int fd_from, int fd_to);
 
+// @note always retry before returning ERR_INTERRUPTED
+// @ret ERR_LIBC / ERR_INTERRUPTED
+t_error	posix_wait(pid_t pid, int *exit_status);
+
+// @note always retry before returning ERR_INTERRUPTED
+// @ret ERR_LIBC / ERR_INTERRUPTED
+t_error	posix_wait_with_opt(pid_t pid, int options, int *exit_status);
+
 #endif

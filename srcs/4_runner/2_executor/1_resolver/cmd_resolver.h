@@ -32,9 +32,6 @@
  *         @c ERR_NOT_IMPLEMENTED, @c ERR_INCOHERENT_STATE,
  *         @c ERR_QUOTED_TILDE, @c ERR_EMPTY_STACK or @c ERR_LIBC.
  */
-t_error	cmd_resolve(
-			t_cmd *cmd,
-			const t_functions *functions,
-			const t_tokens *words);
+t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words);
 
 #endif

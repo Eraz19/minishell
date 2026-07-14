@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 // @ret ERR_REDIRECTION
-static inline t_error	redirect_dup_invalid_word(t_ast_redirection *redir)
+static inline t_error	redirect_dup_invalid_word(t_redir *redir)
 {
 	const char	*value;
 
@@ -22,7 +22,7 @@ static inline t_error	redirect_dup_invalid_word(t_ast_redirection *redir)
 
 // @ret ERR_REDIRECTION / ERR_LIBC
 static inline t_error	redirect_validate_dup_rhs(
-							t_ast_redirection *redir,
+							t_redir *redir,
 							t_redirector *redirector)
 {
 	int		rhs_fd;
@@ -42,7 +42,7 @@ static inline t_error	redirect_validate_dup_rhs(
 }
 
 t_error	redirect_prepare(
-			t_ast_redirection *redirection,
+			t_redir *redirection,
 			t_redirector *redirector,
 			bool permanent)
 {

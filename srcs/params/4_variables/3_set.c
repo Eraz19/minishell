@@ -31,6 +31,7 @@ static inline t_error	var_update_value(
 	return (error(ERR_NO));
 }
 
+// @ret ERR_LIBC
 static inline t_error	var_create(
 							const t_string *name,
 							const t_string *value,
@@ -44,8 +45,7 @@ static inline t_error	var_create(
 
 	assert(name != NULL);
 	params = shell_get_params();
-	if (!params)
-		return (error(ERR_SHELL_NOT_FOUND));
+	assert(params != NULL);
 	list = &params->variables;
 	if (!string_init(&new_var.name, 0, name->data, (long)name->len))
 		return (error_sys());
@@ -76,8 +76,7 @@ t_error	var_set(
 	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	params = shell_get_params();
-	if (!params)
-		return (error(ERR_SHELL_NOT_FOUND));
+	assert(params != NULL);
 	list = &params->variables;
 	if (var_find(list, name, &var_index))
 	{

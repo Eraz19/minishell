@@ -25,6 +25,9 @@
  */
 void	alias_stack_init(t_alias_stack *stack);
 
+// TODO: doc
+void	alias_stack_clear(t_alias_stack *stack);
+
 /**
  * @ingroup alias_stack
  * @brief Frees @p stack and every name it owns.

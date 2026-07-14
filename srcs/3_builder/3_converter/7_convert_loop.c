@@ -1,6 +1,6 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
 
@@ -13,7 +13,7 @@ do_group         : Do compound_list Done
                  ;
 */
 t_error	convert_loop(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *loop,
 			t_ast_loop *out)
 {

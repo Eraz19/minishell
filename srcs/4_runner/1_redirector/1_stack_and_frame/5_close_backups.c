@@ -1,8 +1,11 @@
 #include "error.h"
 #include "redirect_stack.h"
 #include "posix_helpers.h"
+#include "fd_tracker.h"
 
-static inline void	redirect_stack_close_frame_backups(const t_redir_frame *frame)
+static inline void	redirect_stack_close_frame_backups(
+						const t_redir_frame *frame,
+						t_fd_tracker *tracker)
 {
 	t_redir_backup	*backup;
 	size_t			i;
@@ -15,12 +18,21 @@ static inline void	redirect_stack_close_frame_backups(const t_redir_frame *frame
 		if (err.type)
 			break ;
 		if (backup->backup_fd >= 0)
-			(void)posix_close_if_open(backup->backup_fd);
+		{
+			err = posix_close_if_open(backup->backup_fd);
+			if (err.type == ERR_NO)
+			{
+				fd_tracker_unlock(tracker, backup->backup_fd);
+				backup->backup_fd = -1;
+			}
+		}
 		i++;
 	}
 }
 
-void	redirect_stack_close_backups(const t_redir_stack *redir_stack)
+void	redirect_stack_close_backups(
+			const t_redir_stack *redir_stack,
+			t_fd_tracker *tracker)
 {
 	t_redir_frame	*frame;
 	size_t			i;
@@ -32,7 +44,8 @@ void	redirect_stack_close_backups(const t_redir_stack *redir_stack)
 		err = redirect_stack_get_frame(redir_stack, i, &frame);
 		if (err.type)
 			break ;
-		redirect_stack_close_frame_backups(frame);
+		redirect_stack_close_frame_backups(frame, tracker);
 		i++;
 	}
+	tracker->next_available = TRACKER_MIN_FD_SHELL;
 }

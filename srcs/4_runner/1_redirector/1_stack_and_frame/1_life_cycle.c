@@ -9,6 +9,11 @@ void	redirect_stack_init(t_redir_stack *stack)
 	(void)vector_init(stack, sizeof(t_redir_frame), 0);
 }
 
+void	redirect_stack_clear(t_redir_stack *stack)
+{
+	vector_clear(stack, NULL);
+}
+
 void	redirect_stack_free(t_redir_stack *stack, size_t item_count_to_free)
 {
 	size_t	i;

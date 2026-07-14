@@ -73,6 +73,9 @@ typedef struct s_history
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
+// TODO
+void	history_clear(t_history *state);
+
 /**
  * @ingroup history
  * @brief Zeroes @p state and initializes its list, file backing,

@@ -1,6 +1,6 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
 
@@ -9,7 +9,7 @@ brace_group      : Lbrace compound_list Rbrace
                  ;
 */
 static inline t_error	convert_to_list(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_command *out)
 {
@@ -32,7 +32,7 @@ compound_command : brace_group
                  ;
 */
 static inline t_error	convert_compound_command_priv(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *compound_command,
 							t_ast_command *out)
 {
@@ -64,7 +64,7 @@ static inline t_error	convert_compound_command_priv(
 }
 
 static inline t_error	convert_to_simple(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *simple,
 							t_ast_command *out)
 {
@@ -73,7 +73,7 @@ static inline t_error	convert_to_simple(
 }
 
 static inline t_error	convert_to_function(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *func,
 							t_ast_command *out)
 {
@@ -82,7 +82,7 @@ static inline t_error	convert_to_function(
 }
 
 t_error	convert_compound_command(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *compound_command,
 			t_ast_command *out)
 {
@@ -107,7 +107,7 @@ command          : simple_command
                  ;
 */
 t_error	convert_command(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *command,
 			t_ast_command *out)
 {

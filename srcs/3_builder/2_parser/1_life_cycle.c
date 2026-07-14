@@ -1,4 +1,6 @@
 #include "parser_priv.h"
+#include "parser_item_stack.h"
+#include "parser_here_stack.h"
 #include "parser.h"
 #include "token.h"
 #include "cst.h"
@@ -8,8 +10,9 @@
 void	parser_init(t_parser *parser)
 {
 	assert(parser != NULL);
-	(void)vector_init(&parser->stack, sizeof(t_parser_stack_item), 0);
-	(void)vector_init(&parser->tokens, sizeof(t_token), 0);
+	parser_item_stack_init(&parser->item_stack);
+	parser_here_stack_init(&parser->here_stack);
+	token_pool_init(&parser->token_pool);
 	parser->cst = NULL;
 	parser->qualifiers = NULL;
 	parser->lookahead_id = 0;
@@ -18,23 +21,13 @@ void	parser_init(t_parser *parser)
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
-	parser->must_read_heredoc = false;
 }
 
-t_error	parser_reset(t_parser *parser)
+void	parser_clear(t_parser *parser)
 {
-	size_t	i;
-
-	assert(parser != NULL);
-	i = 0;
-	while (i < parser->stack.len)
-		parser_free_stack_item(
-			&((t_parser_stack_item *)parser->stack.data)[i++]);
-	parser->stack.len = 0;
-	i = 0;
-	while (i < parser->tokens.len)
-		parser_free_token(&((t_token *)parser->tokens.data)[i++]);
-	parser->tokens.len = 0;
+	parser_item_stack_clear(&parser->item_stack);
+	parser_here_stack_clear(&parser->here_stack);
+	token_pool_clear(&parser->token_pool);
 	cst_node_free(&parser->cst);
 	parser->cst = NULL;
 	parser->lookahead_id = 0;
@@ -43,30 +36,14 @@ t_error	parser_reset(t_parser *parser)
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
-	parser->must_read_heredoc = false;
-	return (error(ERR_NO));
-}
-
-void	parser_free_token(void *token)
-{
-	assert(token != NULL);
-	token_free(token);
-}
-
-void	parser_free_stack_item(void *raw_item)
-{
-	t_parser_stack_item	*item;
-
-	assert(raw_item != NULL);
-	item = raw_item;
-	cst_node_free(&item->cst_node);
 }
 
 void	parser_free(t_parser *parser)
 {
 	assert(parser != NULL);
-	vector_free(&parser->stack, parser_free_stack_item);
-	vector_free(&parser->tokens, parser_free_token);
+	parser_item_stack_free(&parser->item_stack);
+	parser_here_stack_free(&parser->here_stack);
+	token_pool_free(&parser->token_pool);
 	cst_node_free(&parser->cst);
 	free(parser->qualifiers);
 	parser_init(parser);

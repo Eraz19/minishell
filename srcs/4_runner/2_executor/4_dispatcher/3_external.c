@@ -1,7 +1,8 @@
-#include "runner.h"
+#include "redirector.h"
 #include "shell.h"
 #include "cmd_dispatcher_priv.h"
 #include "redirector.h"
+#include "posix_helpers.h"
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
@@ -27,14 +28,14 @@ static inline int	cmd_exec_in_shell(t_cmd *cmd)
 	cmd->path.cap = 0;
 	argc = (int)cmd->argv.len - 1;
 	shell_free_void();
-	return (shell_run(argc, cmd->argv.data, cmd->envp.data));
+	return (shell_run(argc, cmd->argv.data, cmd->envp.data, false));
 }
 
 static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 {
 	int	exit_status;
 
-	redirect_close_backups(&runner->redirector);
+	(void)redirect_clear(&runner->redirector, false);
 	(void)execve(
 			cmd->path.data,
 			(char *const *)cmd->argv.data,
@@ -54,44 +55,21 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 			cmd->name.data,
 			NULL,
 			NULL);
+	shell_free_void();
 	exit(exit_status);
 }
 
-static inline t_error	cmd_exec_parent(t_cmd *cmd, pid_t child_pid)
-{
-	int		status;
-	t_error	err;
-
-	while (waitpid(child_pid, &status, 0) == -1)
-	{
-		if (errno == EINTR)
-		{
-			(void)err;
-			err = shell_should_interrupt();
-			if (err.type)
-			{
-				cmd->exit_status = (int)ERR_POSIX_CMD_NOT_EXECUTABLE;
-				return (err);
-			}
-			continue ;
-		}
-		return (error_sys());
-	}
-	if (WIFEXITED(status))
-		cmd->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		cmd->exit_status = ERR_POSIX_SIGNAL_BASE_CODE + WTERMSIG(status);
-	return (error(ERR_NO));
-}
-
-t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner)
+t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner, int *exit_status)
 {
 	pid_t	pid;
+	t_error	err;
 
 	pid = fork();
 	if (pid < 0)
 		return (error_sys());
 	else if (pid == 0)
 		cmd_exec_child(cmd, runner);
-	return (cmd_exec_parent(cmd, pid));
+	err = posix_wait(pid, exit_status);
+	cmd->exit_status = *exit_status;
+	return (err);
 }

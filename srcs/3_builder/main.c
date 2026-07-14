@@ -44,14 +44,9 @@ t_error	builder_get_ast(t_ast_root *dst_ast)
 	return (error(ERR_NO));
 }
 
-t_error	builder_reset(void)
+void	builder_clear(t_builder *builder)
 {
-	t_builder	*builder;
-
-	builder = shell_get_builder();
-	if (!builder)
-		return (error(ERR_SHELL_NOT_FOUND));
-	return (parser_reset(&builder->parser));
+	parser_clear(&builder->parser);
 }
 
 void	builder_free(t_builder *builder)

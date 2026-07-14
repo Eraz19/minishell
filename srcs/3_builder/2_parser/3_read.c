@@ -1,7 +1,9 @@
 #include "parser_priv.h"
 #include "scanner.h"
+#ifdef DEBUG_PARSING
 # include <stdio.h>		// DEBUG
 # include "logs.h"		// DEBUG
+#endif
 # include <assert.h>	// DEBUG
 
 static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
@@ -71,17 +73,10 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	err = scanner_get_next_token(&token);
 	if (err.type != ERR_NO)
 		return (err);
-	if (!vector_push(&parser->tokens, &token))
-	{
-		err = error_sys();
-		token_free(&token);
-		parser_internal_error(err);
-	}
 	err = sym_conv(token.type, &parser->lookahead_raw_symbol);
 	if (err.type != ERR_NO)
-		return (err);
+		return (token_free(&token), err);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
-	parser->lookahead_id = parser->tokens.len - 1;
 #ifdef DEBUG_PARSING
 	fprintf(stderr, "[PARSER] READ   => [%3zu] %s%s%s",
 		parser->lookahead_id, RED, token_type_to_string(token.type), NC);
@@ -91,5 +86,15 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		fprintf(stderr, " assignment_offset=%s%zu%s", YELLOW, token.assignment_offset, NC);
 	fprintf(stderr, "\n");
 #endif
+	if (token.type == TOKEN_NEWLINE)
+	{
+		err = parser_read_heredoc(parser);
+		if (err.type)
+			return (token_free(&token), parser_internal_error(err));
+	}
+	err = token_pool_push(&parser->token_pool, &token);
+	if (err.type)
+		return (token_free(&token), parser_internal_error(err));
+	parser->lookahead_id = parser->token_pool.len - 1;
 	return (err);
 }

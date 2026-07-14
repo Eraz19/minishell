@@ -11,5 +11,6 @@ void	cmd_expansions_free(t_cmd_expansions *expansions);
 
 t_exp_flag	cmd_regular_expansion_flags(void);
 t_exp_flag	cmd_assignment_expansion_flags(void);
+t_exp_flag	cmd_case_expansion_flags(void);
 
 #endif

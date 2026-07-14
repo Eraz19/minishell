@@ -1,6 +1,6 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
@@ -11,7 +11,7 @@ function_body    : compound_command
                  ;
 */
 static inline t_error	convert_function_body(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *body,
 							t_ast_function_def *out)
 {
@@ -37,7 +37,7 @@ fname            : NAME
                  ;
 */
 t_error	convert_function(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *function_definition,
 			t_ast_function_def *out)
 {
@@ -50,10 +50,9 @@ t_error	convert_function(
 	assert(out != NULL);
 	ast_function_def_init(out);
 	fname = function_definition->children[0];
-	err = converter_get_token(parser, fname, 0, &out->name);
+	converter_take_token(parser, fname, 0, &out->name);
 	body = function_definition->children[4];
-	if (err.type == ERR_NO)
-		err = convert_function_body(parser, body, out);
+	err = convert_function_body(parser, body, out);
 	if (err.type)
 		ast_function_def_free(out);
 	return (err);

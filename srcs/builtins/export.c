@@ -64,8 +64,6 @@ static t_error	export_add_one(const char *builtin_name, const char *string)
 	if (err.type)
 		return (err);
 	err = params_set_variable(&name, &value, true, false);
-	if (err.type == ERR_VAR_INVALID_NAME || err.type == ERR_VAR_READ_ONLY)
-		err = error_print(err, builtin_name, string, NULL, NULL);
 	string_free(&name);
 	string_free(&value);
 	return (err);

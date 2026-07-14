@@ -6,6 +6,11 @@
 # include "lexer.h"
 # include "input_mode.h"
 
+// WIP
+t_error	scanner_read_heredoc(t_string *body, const t_token *delim, bool strip);
+
+// TODO: doc
+
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
  *
@@ -102,15 +107,8 @@ t_error	scanner_init(t_scanner *scanner);
  */
 t_error	scanner_load(t_scanner *scanner, const char *source);
 
-/**
- * @ingroup scanner
- * @brief Resets the lexer state of the shell scanner so a fresh parse can
- *        start, typically after a syntax error.
- *
- * @return @c ERR_INTERNAL (printed) if the shell data is unavailable,
- *         @c ERR_NO on success.
- */
-t_error	scanner_reset(void);
+// TODO: doc
+void	scanner_clear(t_scanner *scanner);
 
 /**
  * @ingroup scanner

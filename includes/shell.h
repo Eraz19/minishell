@@ -4,7 +4,7 @@
 # include <stdint.h>
 # include "alias.h"
 # include "params.h"
-# include "runner.h"
+# include "runner_type.h"
 # include "history.h"
 # include "scanner.h"
 # include "builder.h"
@@ -32,9 +32,19 @@ typedef struct s_shell
 	t_scanner	scanner;
 }	t_shell;
 
+typedef enum e_subshell_mode
+{
+	SUBSHELL_NORMAL,
+	SUBSHELL_CMD_SUB_TRAP_ONLY,	// command substitution containing only a trap command
+	SUBSHELL_ASYNC_AND_OR		// async AND-OR list
+}	t_subshell_mode;
+
 /* ************************************************************************* */
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
+
+// TODO: doc
+t_error	shell_clear(t_shell *shell);
 
 /**
  * @brief Frees the current global shell instance when one is registered.
@@ -46,6 +56,15 @@ void	shell_free_void(void);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
+
+/**
+ * @brief Reconfigures the current shell state for subshell execution.
+ *
+ * @param mode Subshell initialization mode.
+ * @return @c ERR_NO on success, @c ERR_INTERNAL , @c ERR_INTERRUPTED
+ *			or @c ERR_LIBC on failure.
+ */
+t_error	shell_init_subshell(t_subshell_mode mode);
 
 /**
  * @brief Returns the current global shell instance.
@@ -121,9 +140,10 @@ t_scanner	*shell_get_scanner(void);
  * @param argc Argument count.
  * @param argv Argument array (borrowed, read-only).
  * @param envp Environment array (borrowed, read-only).
+ * @param build_lr_tables Specifies if parser tables need to be built.
  * @return Integer form of the final error type, or @c ERR_NO on success.
  */
-int		shell_run(int argc, char **argv, char **envp);
+int		shell_run(int argc, char **argv, char **envp, bool build_parser_tables);
 
 /**
  * @brief Reports whether interactive EOF should terminate the shell.

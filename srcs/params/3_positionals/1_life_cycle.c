@@ -18,3 +18,8 @@ void	positionals_free_stack(t_positionals_stack *stack)
 	assert(stack != NULL);
 	vector_free(stack, positionals_free_item);
 }
+
+void	positionals_clear_stack(t_positionals_stack *stack)
+{
+	vector_clear(stack, positionals_free_item);
+}

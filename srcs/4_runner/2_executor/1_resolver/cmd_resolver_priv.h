@@ -18,10 +18,7 @@
  *                     unchanged when not found (borrowed).
  * @return True when @p name resolves to a shell function, false otherwise.
  */
-bool	cmd_name_is_function(
-			const t_functions *functions,
-			const char *name,
-			const t_function **out_function);
+bool	cmd_name_is_function(const char *name, t_function **out_function);
 
 /**
  * @brief Test whether a command name is an intrinsic builtin.

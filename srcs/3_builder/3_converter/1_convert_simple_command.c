@@ -1,33 +1,17 @@
 #include "error.h"
 #include "parser_type.h"
-#include "ast_type.h"
+#include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
 
-static inline t_error	add_token_to(
-							const t_parser *parser,
-							const t_cst_node *node,
-							t_vector *out)
-{
-	t_token	*token;
-	t_error	err;
-
-	err = converter_get_token(parser, node, 0, &token);
-	if (err.type)
-		return (err);
-	if (!vector_push(out, &token))
-		return (error_sys());
-	return (err);
-}
-
 static inline t_error	parse_rec(
-							const t_parser *parser,
+							t_parser *parser,
 							const t_cst_node *node,
-							t_ast_simple_command *out)
+							t_ast_scmd *out)
 {
-	const t_cst_node	*child;
-	size_t				i;
-	t_error				err;
+	t_cst_node	*child;
+	size_t		i;
+	t_error		err;
 
 	err = error(ERR_NO);
 	i = 0;
@@ -39,9 +23,9 @@ static inline t_error	parse_rec(
 		else if (child->symbol == SYM_cmd_name
 			|| child->symbol == SYM_cmd_word
 			|| child->symbol == SYM_WORD)
-			err = add_token_to(parser, child, &out->words);
+			err = converter_transfer_token(parser, child, 0, &out->words);
 		else if (child->symbol == SYM_ASSIGNMENT_WORD)
-			err = add_token_to(parser, child, &out->assignments);
+			err = converter_transfer_token(parser, child, 0, &out->assignments);
 		else
 			err = parse_rec(parser, child, out);
 		i++;
@@ -72,9 +56,9 @@ cmd_suffix       :            io_redirect
                  ;
 */
 t_error	convert_simple_command(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *simple_command,
-			t_ast_simple_command *out)
+			t_ast_scmd *out)
 {
 	t_error		err;
 

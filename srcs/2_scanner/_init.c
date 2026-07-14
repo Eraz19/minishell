@@ -1,4 +1,3 @@
-#include "shell.h"
 #include "scanner.h"
 #include "scanner_.h"
 
@@ -28,13 +27,7 @@ t_error	scanner_load(t_scanner *scanner, const char *source)
 	return (scanner->err);
 }
 
-t_error	scanner_reset(void)
+void	scanner_clear(t_scanner *scanner)
 {
-	t_scanner	*scanner;
-
-	scanner = shell_get_scanner();
-	if (!scanner)
-		return (scanner_error_qualify(error(ERR_SHELL_NOT_FOUND), false));
-	lexer_reset(&scanner->lexer);
-	return (error(ERR_NO));
+	lexer_clear(&scanner->lexer);
 }

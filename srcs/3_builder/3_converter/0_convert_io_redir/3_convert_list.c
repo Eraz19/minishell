@@ -7,7 +7,7 @@ redirect_list    :               io_redirect
                  ;
 */
 t_error	convert_redirection_add_list(
-			const t_parser *parser,
+			t_parser *parser,
 			const t_cst_node *redirect_list,
 			t_ast_redir_list *out)
 {

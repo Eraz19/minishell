@@ -4,6 +4,39 @@
 #include "libft.h"
 #include "shell.h"
 #include "reader_.h"
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+# include "logs.h"	// DEBUG
+
+// ERR_NO / ERR_LIBC
+static inline t_error	reader_set_stdin_to_blocking(void)
+{
+	int			enabled;
+	struct stat	stat_buff;
+	bool		is_a_terminal;
+	bool		is_fifo;
+	
+	is_a_terminal = isatty(STDIN_FILENO);
+	if (!is_a_terminal)
+	{
+		if (fstat(STDIN_FILENO, &stat_buff) != 0)
+			return (error_print(error_sys(),
+					"unable to check if stdin is FIFO", NULL, NULL));
+		is_fifo = S_ISFIFO(stat_buff.st_mode);
+		if (!is_fifo)
+		{
+			print_pass("stdin is not a fifo: not set to blocking mode\n");
+			return (error(ERR_NO));
+		}
+	}
+	enabled = 0;
+	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
+		return (error_print(error_sys(),
+				"Unable to set stdin to blocking mode", NULL, NULL));
+	print_pass("stdin set to blocking mode\n");
+	return (error(ERR_NO));
+}
 
 t_error	readline_(t_string *res, const char *prompt)
 {
@@ -12,10 +45,16 @@ t_error	readline_(t_string *res, const char *prompt)
 
 	if (prompt == NULL)
 		prompt = "";
+	err = reader_set_stdin_to_blocking();
+	if (err.type)
+		return (err);
 	input = readline(prompt);
 	while (input == NULL)
 	{
 		err = shell_should_exit_on_veof();
+		if (err.type)
+			return (err);
+		err = reader_set_stdin_to_blocking();
 		if (err.type)
 			return (err);
 		input = readline(prompt);
