@@ -84,6 +84,12 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		fprintf(stderr, " assignment_offset=%s%zu%s", YELLOW, token.assignment_offset, NC);
 	fprintf(stderr, "\n");
 #endif
+	if (token.type == TOKEN_NEWLINE)
+	{
+		err = parser_read_heredoc(parser);
+		if (err.type)
+			return (token_free(&token), parser_internal_error(err));
+	}
 	err = token_pool_push(&parser->token_pool, &token);
 	if (err.type)
 		return (token_free(&token), parser_internal_error(err));

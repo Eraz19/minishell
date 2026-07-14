@@ -1,6 +1,6 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2 -DDEBUG_LOGS -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
+CFLAGS			:= -Wall -Wextra -Werror -O2 -DDEBUG_LOGS -DDEBUG_PARSING -DDEBUG_CST -DDEBUG_AST	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
@@ -112,9 +112,10 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/9_action \
 	-Isrcs/3_builder/2_parser \
 	-Isrcs/builtins/set \
+	-Isrcs/3_builder/0_cst \
 	-Isrcs/3_builder/2_parser/1_qualifiers \
-	-Isrcs/3_builder/2_parser/2_stack \
-	-Isrcs/3_builder/2_parser/3_cst \
+	-Isrcs/3_builder/2_parser/2_item_stack \
+	-Isrcs/3_builder/2_parser/2_here_stack \
 	-Isrcs/3_builder/3_converter \
 	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \

@@ -13,9 +13,9 @@ static inline void	update_parser_bools(t_parser *parser)
 
 t_error	hook_9_increment(
 	t_parser *parser,
-	t_parser_stack_item *rhs,
+	t_parser_item *rhs,
 	size_t len,
-	t_parser_stack_item *lhs)
+	t_parser_item *lhs)
 {
 	(void)rhs;
 	(void)len;
@@ -30,9 +30,9 @@ t_error	hook_9_increment(
 
 t_error	hook_9_decrement(
 	t_parser *parser,
-	t_parser_stack_item *rhs,
+	t_parser_item *rhs,
 	size_t len,
-	t_parser_stack_item *lhs)
+	t_parser_item *lhs)
 {
 	(void)rhs;
 	(void)len;

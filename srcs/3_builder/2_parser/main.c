@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "parser_priv.h"
-#include "parser_stack.h"
+#include "parser_item_stack.h"
+#include "parser_here_stack.h"
 #include "qualifiers.h"
 #include "cst.h"
 # include "debug.h"		// DEBUG
@@ -9,14 +10,14 @@
 
 static inline t_error	parser_push_initial_state(t_parser *parser)
 {
-	t_parser_stack_item	item;
+	t_parser_item	item;
 
 	item.symbol = SYM_error;
 	item.lr_state_id = 0;
 	item.tokens_start_id = 0;
 	item.tokens_count = 0;
 	item.cst_node = NULL;
-	if (!vector_push(&parser->stack, &item))
+	if (!vector_push(&parser->item_stack, &item))
 		return (parser_internal_error(error_sys()));
 	return (error(ERR_NO));
 }
@@ -25,7 +26,8 @@ static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 {
 	t_error	err;
 
-	parser_stack_clear(&parser->stack);
+	parser_item_stack_clear(&parser->item_stack);
+	parser_here_stack_clear(&parser->here_stack);
 	err = parser_push_initial_state(parser);
 	if (err.type == ERR_NO && parser->lookahead_raw_symbol == SYM_NONE)
 		err = parser_read_next_symbol(parser);
@@ -34,11 +36,10 @@ static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
-	parser->must_read_heredoc = false;
 	return (err);
 }
 
-t_error	parser_store_cst(t_parser *parser, t_parser_stack_item *main_item)
+t_error	parser_store_cst(t_parser *parser, t_parser_item *main_item)
 {
 	assert(parser != NULL);
 	assert(main_item != NULL);
@@ -50,21 +51,19 @@ t_error	parser_store_cst(t_parser *parser, t_parser_stack_item *main_item)
 #endif
 	parser->cst = main_item->cst_node;
 	main_item->cst_node = NULL;
-	if (parser->lookahead_raw_symbol == SYM_NEWLINE)
-		return (parser_read_heredoc(parser));
 	return (error(ERR_NO));
 }
 
 static inline t_error	parser_accept(t_parser *parser)
 {
-	t_parser_stack_item	*main_item;
+	t_parser_item	*main_item;
 	bool				is_EOF;
 	t_error				err;
 
 	is_EOF = parser->lookahead_raw_symbol = SYM_EOF;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
-	main_item = parser_stack_top(&parser->stack);
+	main_item = parser_item_stack_top(&parser->item_stack);
 	err = parser_store_cst(parser, main_item);
 	if (err.type)
 		return (err);
@@ -86,7 +85,7 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 	err = parser_prepare_to_build_cst(parser);
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{
-		lr_state_id = parser_stack_top(&parser->stack)->lr_state_id;
+		lr_state_id = parser_item_stack_top(&parser->item_stack)->lr_state_id;
 		token = parser_get_token(parser, parser->lookahead_id);
 		err = parser_qualify_symbol(parser, lr_state_id, token);
 		if (err.type != ERR_NO)

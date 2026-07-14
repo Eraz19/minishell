@@ -161,6 +161,27 @@ void	heredoc_free(t_heredoc *heredoc);
 
 /**
  * @ingroup heredoc
+ * @brief Reads one here-document body from the current scanner input,
+ *        prompting for continuation lines when needed, and stores the raw
+ *        body in @p out_body.
+ *
+ * The delimiter is quote-removed before the comparison. The body itself is
+ * not expanded here.
+ *
+ * @param out_body String receiving the body, initialized by the caller
+ *                 (borrowed).
+ * @param delim Raw delimiter token (borrowed, read-only).
+ * @return @c ERR_REDIRECTION (printed with the delimiter) when the input
+ *         ends before a delimiter line, including interactive EOF at the
+ *         continuation prompt; @c ERR_LIBC on allocation failure;
+ *         @c ERR_INTERNAL on internal inconsistency;
+ *         @c ERR_SHELL_NOT_FOUND if the shell data is unavailable;
+ *         @c ERR_NO on success.
+ */
+t_error	heredoc_read(t_string *out_body, const t_token *delim);
+
+/**
+ * @ingroup heredoc
  * @brief Expands a saved here-document body in place: reads the backing
  *        file, expands it (parameter, command, arithmetic, quote removal)
  *        and writes the result back (execution side, qualified).

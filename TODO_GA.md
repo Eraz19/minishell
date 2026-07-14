@@ -1,4 +1,152 @@
+# WIP
+
+🚨 **ACTUALISATION FT**
+
 ⚠️ `echo` is removed from known builtin list to test
+
+- `heredoc`:
+	- `t_string` instead of file
+	- `cst node`:
+		- must be able to store heredoc delim / body:
+			- store `delim` until read
+			- register node to `parser->heredoc_stack`
+			- fre `delim` + store `body` instead
+	- `builder`:
+		- keep heredoc delim stack
+		- on newline => parse heredoc bodies and store them in corresponding cst nodes
+	- `converter`:
+		- transfer heredoc body ownership to `ast_redir` (in word)
+	- `redirector`:
+		- expand heredoc body
+		- create + open tmp file in `$TMPDIR` (fallback `/tmp`)
+		- write heredoc body in tmp file
+		- close + open tmp file (rewind)
+		- process redirection
+		- unlink tmp file
+	- **all**:
+		- remove all `unlink` usage
+	- `errors`:
+		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
+		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
+		- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
+- `builder`:
+	- handle `command substitution search`
+- `runner-executor`:
+	- ⚠️ `exec` specific flow
+	- ⚠️ `command` specific flow
+	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
+- `posix_read_all()`
+- `*_init_subshell()`:
+	- `clear()` instead of `free()`
+
+# ALEXANDER
+
+- ⚠️ `pattern matching`: wip
+- ⚠️ `expander`:
+	- expand combos:
+		- `str` -> `str`
+		- `token` -> `str`
+		- `token` -> `expansion`
+	- return last `command substitution` status
+- ⚠️ `heredoc`:
+	- use `t_string` instead of file
+	- stack delim inside `parser`
+- `token`: keep `history_list_index` in `t_token_index` ?
+```bash
+VAR=value          => status 0
+VAR=$(true)        => status 0
+VAR=$(false)       => status 1
+VAR=${bad syntax}  => ERR_POSIX_EXPANSION
+```
+- 🚧 `shell`:
+	- `shell_init_subshell()`: (only missing traps / signal handling)
+- ✅ `runner_set_stdin_to_blocking()`:
+	- now called in `readline_()`
+- ✅ `hashmap`:
+	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
+	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
+- ✅ `ast`:
+	- now fully owned (massive refactor)
+- ✅ `redirector`:
+	- refactored for `ast` updates
+- ✅ `executor`:
+	- refactored for `ast` updates
+- ✅ `functions`:
+	- `set()` / `unset()` / `get()` / `stop()`
+- ✅ `heredoc`:
+	- correctly `unlink()` (best effort)
+- ✅ `error`:
+	- priorization helpers
+- ✅ ``params`:
+	- `process` module
+- ✅ `walker`:
+	- fully implemented
+- ✅ `runner`:
+	- fully implemented (error handling should be correct now)
+- 🤔 **OLD**:
+	- `void	print_unspecified_behaviour(const char *condition, const char *implementation)`
+	- `EXP_DSQUOTE`:
+		- process first, then apply all other expansions from the beginning of `word`
+	- `utils`:
+		- `scan_set_mode()` à déplacer dans un module `input_mode`
+		- Utiliser `free_char_ptr_void()` au lieu de `free` comme callback pour les `vector_fre()` contenant des `char *`
+	- replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
+	- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
+
+# TODO
+
+- `error`:
+	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
+- `shell`:
+	- process `ENV`:
+		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
+		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
+	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
+- `builder`:
+	- Split `builder/parser/qualifiers/build_table.c` into multiple files
+- `libft`:
+	- update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
+	- update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
+	- ⚠️ Vérifier que les `buff_*()`, `vector_*()` etc de `libft` ne free pas en cas d'échec (sinon `errno` undefined):
+		- 🚨 `buff_dup_n()` le fait !!
+		- 🚨 `buff/format/append()` le fait !!
+		- 🚨 `vector_dup()` le fait !!
+		- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
+	- Remove **wildcards** from `libft`'s `Makefile`
+	- ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
+	- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
+- `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
+- `undefined_behaviour()`:
+	- print la tête à Xavier
+- `params`:
+	- `variables`:
+		- Switch `t_vector`s to `t_hashmap` ?
+- `all`:
+	- `clear()` API instead of `free()` for shell reset, subshell, etc (avoid rebuilding lr tables)
+- **ALL REPO**:
+	- use `print_unspecified_behaviour()`
+	- Move `t_tokens` from `runner` to `token` module ?
+	- Use `t_tokens` instead of `t_vector` of `t_token *` (`ast`...)
+	- handle `options` properly (`-n` flag, ...)
+	- `const` partout
+	- `inline` partout
+	- `assert` partout
+	- `out_` prefix de tous les args qui sont **générés** par une fonction (cf `C#` syntax)
+	- `ref_` prefix de tous les args qui sont **potentiellement modifiés** par une fonction (cf `C#` syntax)
+	- use `posix_write()` instead of `write()`
+	- use `posiw_open()` instead of `open()`
+	- `errors`:
+		- rename `ERR_LIBC` -> `ERR_SYS`
+		- Ensure no `free()` / `libc` is done before `error_sys()`
+		- Ensure all `error_print()` calls are **double** `NULL` terminated
+		- handler `erros` at module-gates to only return meaning-full errors to callers
+	- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
+	- `error_print()` return value must **NOT** be ignored (for `err.printed` update)
+	- add doc + `make doc` / `github action`
+	- **include** prototype header
+	- ⚠️ don't call `undefined_behaviour()` when it's `unspecified`
+
+---
 
 # TO FIX
 
@@ -180,155 +328,6 @@ VAR=${pattern+foo}
 VAR=${pattern#foo}
 VAR=${pattern%foo}
 ```
-
-# ALEXANDER
-
-- ⚠️ `pattern matching`: wip
-- ⚠️ `expander`:
-	- expand combos:
-		- `str` -> `str`
-		- `token` -> `str`
-		- `token` -> `expansion`
-	- return last `command substitution` status
-- ⚠️ `heredoc`:
-	- use `t_string` instead of file
-	- stack delim inside `parser`
-- ⚠️ `token`: keep `history_list_index` in `t_token_index` ?
-```bash
-VAR=value          => status 0
-VAR=$(true)        => status 0
-VAR=$(false)       => status 1
-VAR=${bad syntax}  => ERR_POSIX_EXPANSION
-```
-- 🤔 `history`:
-	- il manque certaines entrées (ex: `foo() { cat test.sh; }` puis `foo` => il manque `foo() { cat test.sh; }`)
-- 💡 `params_get_last_status()`:
-	- permet d'obtenir `$?` directement en `int` (si t'en as besoin...)
-- 🚧 `shell`:
-	- `shell_init_subshell()`: (only missing traps / signal handling)
-- ✅ `runner_set_stdin_to_blocking()`:
-	- now called in `readline_()`
-- ✅ `hashmap`:
-	- rename `hashmap_get()` as `hashmap_get_const()` and create `hashmap_get()`
-	- `functions` module need to modify values in place (avoid copying whole `ast` at each function execution)
-- ✅ `ast`:
-	- now fully owned (massive refactor)
-- ✅ `redirector`:
-	- refactored for `ast` updates
-- ✅ `executor`:
-	- refactored for `ast` updates
-- ✅ `functions`:
-	- `set()` / `unset()` / `get()` / `stop()`
-- ✅ `heredoc`:
-	- correctly `unlink()` (best effort)
-- ✅ `error`:
-	- priorization helpers
-- ✅ ``params`:
-	- `process` module
-- ✅ `walker`:
-	- fully implemented
-- ✅ `runner`:
-	- fully implemented (error handling should be correct now)
-
-# WIP
-
-- `heredoc`:
-	- **all**:
-		- remove all `unlink` usage
-	- `t_string` instead of file
-	- `cst node`:
-		- must be able to store heredoc body
-	- `builder`:
-		- keep heredoc delim stack
-		- on newline => parse heredoc bodies and store them in corresponding cst nodes
-	- `converter`:
-		- transfer heredoc body ownership to `ast_redir` (in word)
-	- `redirector`:
-		- expand heredoc body
-		- create + open tmp file in `$TMPDIR` (fallback `/tmp`)
-		- write heredoc body in tmp file
-		- close + open tmp file (rewind)
-		- process redirection
-		- unlink tmp file
-	- `errors`:
-		- "POSIX dit qu’un échec d’ouverture ou de création d’un fichier fait échouer la redirection"
-		- si error lors de le création /lecture du heredoc : `ERR_REIDRECTION` / `ERR_LIBC` / `ERR_INTERNAL` ?
-		- si error lors de l'expansion du heredoc : `ERR_SYNTAX` / `ERR_EXPANSION` / `ERR_LIBC` / `ERR_POSIX_WRITE` / `ERR_REDIRECTION` ?
-- `builder`:
-	- handle `command substitution search`
-- `runner-executor`:
-	- ⚠️ `exec` specific flow
-	- ⚠️ `command` specific flow
-	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
-- `posix_read_all()`
-- `*_init_subshell()`:
-	- `clear()` instead of `free()`
-
-# TODO
-
-- `error`:
-	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
-- `shell`:
-	- process `ENV`:
-		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
-		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
-	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
-- `builder`:
-	- Split `builder/parser/qualifiers/build_table.c` into multiple files
-- `libft`:
-	- update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
-	- update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers
-	- ⚠️ Vérifier que les `buff_*()`, `vector_*()` etc de `libft` ne free pas en cas d'échec (sinon `errno` undefined):
-		- 🚨 `buff_dup_n()` le fait !!
-		- 🚨 `buff/format/append()` le fait !!
-		- 🚨 `vector_dup()` le fait !!
-		- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
-	- Remove **wildcards** from `libft`'s `Makefile`
-	- ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
-	- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
-- `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
-- `undefined_behaviour()`:
-	- print la tête à Xavier
-- `params`:
-	- `variables`:
-		- Switch `t_vector`s to `t_hashmap` ?
-- `all`:
-	- `clear()` API instead of `free()` for shell reset, subshell, etc (avoid rebuilding lr tables)
-- **ALL REPO**:
-	- use `print_unspecified_behaviour()`
-	- Move `t_tokens` from `runner` to `token` module ?
-	- Use `t_tokens` instead of `t_vector` of `t_token *` (`ast`...)
-	- handle `options` properly (`-n` flag, ...)
-	- `const` partout
-	- `inline` partout
-	- `assert` partout
-	- `out_` prefix de tous les args qui sont **générés** par une fonction (cf `C#` syntax)
-	- `ref_` prefix de tous les args qui sont **potentiellement modifiés** par une fonction (cf `C#` syntax)
-	- use `posix_write()` instead of `write()`
-	- use `posiw_open()` instead of `open()`
-	- `errors`:
-		- rename `ERR_LIBC` -> `ERR_SYS`
-		- Ensure no `free()` / `libc` is done before `error_sys()`
-		- Ensure all `error_print()` calls are **double** `NULL` terminated
-		- handler `erros` at module-gates to only return meaning-full errors to callers
-	- ⚠️ search for `open()` / `read()` / `write()` / ... remaining usages
-	- `error_print()` return value must **NOT** be ignored (for `err.printed` update)
-	- add doc + `make doc` / `github action`
-	- **include** prototype header
-	- ⚠️ don't call `undefined_behaviour()` when it's `unspecified`
-
----
-
-# ALEXANDER
-
-- `void	print_unspecified_behaviour(const char *condition, const char *implementation)`
-- `EXP_DSQUOTE`:
-	- process first, then apply all other expansions from the beginning of `word`
-- `utils`:
-	- `scan_set_mode()` à déplacer dans un module `input_mode`
-	- Utiliser `free_char_ptr_void()` au lieu de `free` comme callback pour les `vector_fre()` contenant des `char *`
-- replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
-- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
 
 ---
 

@@ -13,14 +13,14 @@ static inline t_error	get_lr_state_ids_from_stack(
 							t_vector *dst)
 {
 	size_t						i;
-	const t_parser_stack_item	*item;
+	const t_parser_item	*item;
 
 	if (!vector_init(dst, sizeof(size_t), parser->stack.len))
 		return (error_sys());
 	i = 0;
 	while (i < parser->stack.len)
 	{
-		item = &((t_parser_stack_item *)parser->stack.data)[i];
+		item = &((t_parser_item *)parser->stack.data)[i];
 		if (!vector_push(dst, &item->lr_state_id))
 			return (vector_free(dst, NULL), error_sys());
 		i++;

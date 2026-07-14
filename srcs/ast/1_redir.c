@@ -19,8 +19,6 @@ void	ast_redirection_free(void *redirection)
 
 	assert(redirection != NULL);
 	redir = (t_ast_redirection *)redirection;
-	if (redir->operation == AST_REDIR_HEREDOC && redir->word.value.data != NULL)
-		heredoc_unlink(redir->word.value.data);
 	token_free(&redir->word);
 	token_free(&redir->location);
 	ast_redirection_init(redir);

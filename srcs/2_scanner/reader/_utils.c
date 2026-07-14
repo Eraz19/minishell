@@ -34,7 +34,7 @@ static inline t_error	reader_set_stdin_to_blocking(void)
 	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
 		return (error_print(error_sys(),
 				"Unable to set stdin to blocking mode", NULL, NULL));
-	print_pass("stdin has been set to blocking mode\n");
+	print_pass("stdin set to blocking mode\n");
 	return (error(ERR_NO));
 }
 

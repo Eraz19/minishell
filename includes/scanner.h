@@ -155,7 +155,7 @@ t_error	scanner_get_next_token(t_token *token);
  *         @c ERR_INTERNAL (printed) on internal inconsistency; @c ERR_NO
  *         on success.
  */
-t_error	scanner_heredoc_read(void);
+t_error	scanner_heredoc_read(void);	// TODO: remove
 
 /**
  * @ingroup scanner

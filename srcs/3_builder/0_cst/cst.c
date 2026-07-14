@@ -1,12 +1,12 @@
 #include "error.h"
-#include "parser_stack_type.h"
+#include "parser_item_stack_type.h"
 #include "cst_type.h"
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
 static inline t_error	cst_node_set_children(
 							t_cst_node *node,
-							t_parser_stack_item *rhs,
+							t_parser_item *rhs,
 							size_t rhs_len)
 {
 	size_t	i;
@@ -31,8 +31,8 @@ static inline t_error	cst_node_set_children(
 }
 
 t_error	cst_node_new(
-			t_parser_stack_item *lhs,
-			t_parser_stack_item *rhs,
+			t_parser_item *lhs,
+			t_parser_item *rhs,
 			size_t rhs_len,
 			t_rule_id rule_id)
 {
@@ -50,26 +50,10 @@ t_error	cst_node_new(
 	node->rule_id = rule_id;
 	node->tokens_start_id = lhs->tokens_start_id;
 	node->tokens_count = lhs->tokens_count;
-	node->data = NULL;
-	node->free_func = NULL;
+	(void)string_init(&node->heredoc_body, 0, NULL, 0);
 	lhs->cst_node = node;
 	return (error(ERR_NO));
 }
-
-static inline void	cst_node_free_data(t_cst_node *node)
-{
-	if (node->data && node->free_func)
-		node->free_func(node->data);
-	node->data = NULL;
-}
-
-void	cst_node_set_data(t_cst_node *node, void *data, t_cst_free_data free_f)
-{
-	cst_node_free_data(node);
-	node->data = data;
-	node->free_func = free_f;
-}
-
 
 void	cst_node_free(t_cst_node **node)
 {
@@ -85,7 +69,6 @@ void	cst_node_free(t_cst_node **node)
 	while (i < tmp->child_count)
 		cst_node_free(&tmp->children[i++]);
 	free(tmp->children);
-	cst_node_free_data(tmp);
-	free(tmp);
+	string_free(&tmp->heredoc_body);
 	*node = NULL;
 }

@@ -4,14 +4,14 @@
 # include "error.h"
 # include <stddef.h>
 
-typedef struct s_parser_stack_item	t_parser_stack_item;
-typedef struct s_parser				t_parser;
-typedef struct s_cst_node			t_cst_node;
+typedef struct s_parser_item	t_parser_item;
+typedef struct s_parser			t_parser;
+typedef struct s_cst_node		t_cst_node;
 
 typedef t_error	(*t_reduce_hook)(
 	t_parser *parser,
-	t_parser_stack_item *rhs,
+	t_parser_item *rhs,
 	size_t len,
-	t_parser_stack_item *lhs);
+	t_parser_item *lhs);
 
 #endif
