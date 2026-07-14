@@ -73,11 +73,6 @@ t_error	redirect_start(t_redirector *redirector, const t_ast_redir_list *redirec
 	return (err);
 }
 
-void	redirect_close_backups(t_redirector *redirector)
-{
-	redirect_stack_close_backups(&redirector->stack);
-}
-
 t_error	redirect_stop(t_redirector *redirector)
 {
 	return (fd_restore_last_frame(redirector));

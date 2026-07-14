@@ -1,4 +1,4 @@
-#include "runner.h"
+#include "redirector.h"
 #include "shell.h"
 #include "cmd_dispatcher_priv.h"
 #include "redirector.h"
@@ -35,7 +35,7 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 {
 	int	exit_status;
 
-	redirect_close_backups(&runner->redirector);
+	redirect_clear(&runner->redirector);
 	(void)execve(
 			cmd->path.data,
 			(char *const *)cmd->argv.data,

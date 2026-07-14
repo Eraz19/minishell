@@ -4,7 +4,11 @@
 #include <unistd.h>
 #include <errno.h>
 
-static inline t_error	redirect_redirect(t_redirector *redirector, t_redir *redirection)
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
+static inline t_error	redirect_redirect(
+							t_redirector *redirector,
+							t_redir *redirection,
+							bool *applied)
 {
 	int		opened_fd;
 	t_error	err;
@@ -13,14 +17,21 @@ static inline t_error	redirect_redirect(t_redirector *redirector, t_redir *redir
 	if (err.type)
 		return (err);
 	else if (opened_fd == redirection->fd)
-		return (err);
+		return (*applied = true, err);
 	err = posix_dup2(opened_fd, redirection->fd);
 	if (err.type)
-		return ((void)posix_close_if_open(opened_fd), err);
+	{
+		(void)posix_close_if_open(opened_fd);
+		if (err.type == ERR_LIBC)
+			err.type = ERR_REDIRECTION;
+		return (err);
+	}
+	*applied = true;
 	return (posix_close_if_open(opened_fd));
 }
 
-static inline t_error	redirect_dup(t_redir *redir)
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED
+static inline t_error	redirect_dup(t_redir *redir, bool *applied)
 {
 	int		rhs_fd;
 	t_error	err;
@@ -36,6 +47,10 @@ static inline t_error	redirect_dup(t_redir *redir)
 				REDIRECTOR_MODULE_NAME, "file descriptor is not valid", NULL,
 				"%i expanded from '%s'", rhs_fd, redir->word->value.data);
 	}
+	if (err.type == ERR_LIBC)
+		err.type = ERR_REDIRECTION;
+	if (err.type == ERR_NO)
+		*applied = true;
 	return (err);
 }
 
@@ -60,8 +75,10 @@ t_error	redirect_apply(
 {
 	t_redir			redir;
 	t_ast_redir_op	operation;
+	bool			applied;
 	t_error			err;
 
+	applied = false;
 	redir_init(&redir, redirection);
 	err = redirect_expand(&redir);
 	if (err.type == ERR_NO && redir.is_location == true)
@@ -72,12 +89,12 @@ t_error	redirect_apply(
 		return (redir_free(&redir), err);
 	operation = redir.operation;
 	if (operation == AST_REDIR_DUP_READ || operation == AST_REDIR_DUP_WRITE)
-		err = redirect_dup(&redir);
+		err = redirect_dup(&redir, &applied);
 	else
-		err = redirect_redirect(redirector, &redir);
+		err = redirect_redirect(redirector, &redir, &applied);
 	if (err.type && permanent == false)
 		return (redirect_handle_failure(&redir, redirector, err));
-	else if (err.type == ERR_NO && permanent == true)
+	else if (permanent == true && applied == true)
 		fd_save_perm(redirector, redir.fd);
 	return (redir_free(&redir), err);
 }

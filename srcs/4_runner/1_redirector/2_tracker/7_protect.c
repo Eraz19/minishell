@@ -17,8 +17,9 @@ t_error	fd_tracker_protect(t_fd_tracker *tracker, int fd)
 	frame_i = tracker->data[fd].frame_index;
 	backup_i = tracker->data[fd].backup_index;
 	err = redirect_stack_get_backup(tracker->stack, frame_i, backup_i, &backup);
-	if (err.type == ERR_NO)
-		err = fd_tracker_backup_priv(tracker, fd, &new_backup_fd);
+	if (err.type)
+		return (err);
+	err = fd_tracker_backup_priv(tracker, fd, &new_backup_fd);
 	if (err.type == ERR_NO)
 		err = fd_tracker_grow(tracker, (size_t)new_backup_fd + 1);
 	if (err.type == ERR_NO)
@@ -29,6 +30,5 @@ t_error	fd_tracker_protect(t_fd_tracker *tracker, int fd)
 	tracker->data[new_backup_fd].is_used_by_shell = true;
 	tracker->data[new_backup_fd].frame_index = frame_i;
 	tracker->data[new_backup_fd].backup_index = backup_i;
-	fd_tracker_unlock(tracker, fd);
-	return (err);
+	return (fd_tracker_unlock(tracker, fd), err);
 }

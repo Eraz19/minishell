@@ -95,7 +95,8 @@ static inline t_error	redirect_handle_open_error(
 			"unable to open file", NULL, "'%s' expanded from '%s'",
 			redir->expanded_word.data, redir->word->value.data);
 	}
-	if (err.type == ERR_INVALID_USAGE)
+	if (err.type && err.type != ERR_INVALID_USAGE && err.type != ERR_INTERNAL
+		&& err.type != ERR_INTERRUPTED)
 		err.type = ERR_REDIRECTION;
 	return (err);
 }

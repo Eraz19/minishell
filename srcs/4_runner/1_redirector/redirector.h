@@ -23,7 +23,8 @@ void	redirect_init(t_redirector *redirector);
 void	redirect_init_subshell(t_redirector *redirector);
 
 // TODO: doc
-void	redirect_clear(t_redirector *redirector);
+// can't fail if restore_redirections = false
+t_error	redirect_clear(t_redirector *redirector, bool restore_redirections);
 
 /**
  * @brief Restore tracked file descriptors and free redirector resources.
@@ -35,21 +36,6 @@ void	redirect_free(t_redirector *redirector);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
-
-/**
- * @brief Close every backup file descriptor currently stored in the redirector.
- *
- * This is a best-effort cleanup helper intended for child processes before
- * @c execve(), since backup descriptors cannot currently be marked
- * @c FD_CLOEXEC.
- *
- * @note The logical redirection stack is left unchanged; only backup file
- *       descriptors are closed.
- *
- * @param redirector Redirector state whose backup file descriptors must be
- *                   closed (borrowed).
- */
-void	redirect_close_backups(t_redirector *redirector);
 
 /**
  * @brief Apply redirections permanently to the current process.

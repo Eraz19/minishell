@@ -98,7 +98,7 @@ t_error	redirect_prepare(
 t_error	redirect_open(t_redirector *redirector, t_redir *redir, int *out_fd);
 
 // TODO: doc
-// @ret ERR_INVALID_USAGE / ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
 t_error	redirect_get_heredoc_path(
 			t_redirector *redirector,
 			const t_string *body,

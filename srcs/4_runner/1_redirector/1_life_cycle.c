@@ -14,18 +14,16 @@ void	redirect_init(t_redirector *redirector)
 
 void	redirect_init_subshell(t_redirector *redirector)
 {
-	redirect_close_backups(redirector);
-	redirect_clear(redirector);
-	redirector->heredoc_id = 0;
+	(void)redirect_clear(redirector, false);
 }
 
-void	redirect_clear(t_redirector *redirector)
+t_error	redirect_clear(t_redirector *redirector, bool restore_redirections)
 {
-	// TODO
-	redirect_stack_free(&redirector->stack, redirector->max_frame_count);
-	fd_tracker_free(&redirector->tracker);
-	redirector->max_frame_count = 0;
-	redirector->heredoc_id = 0;
+	if (restore_redirections == true)
+		return (fd_restore_stack(redirector));
+	redirect_stack_close_backups(&redirector->stack, &redirector->tracker);
+	redirect_stack_clear(&redirector->stack);
+	return (error(ERR_NO));
 }
 
 void	redirect_free(t_redirector *redirector)

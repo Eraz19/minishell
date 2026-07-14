@@ -3,9 +3,9 @@
 🚨 **ACTUALISATION FT**
 
 ⚠️ `echo` is removed from known builtin list to test
+💡 Les erreurs dépendent de l'opération qui a échouée:
+===> donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
 
-- `redirector`:
-	- si error lors d'une expansion de la redirection : `ERR_EXPANSION` ou `ERR_REDIRECTION` ?
 - `builder`:
 	- handle `command substitution search`
 - `runner-executor`:

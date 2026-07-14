@@ -7,6 +7,22 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+static inline t_error	redirect_print_and_qualify(
+							t_error err,
+							bool requalify_libc_errors,
+							const char *message)
+{
+	if (err.type == ERR_NO || err.type == ERR_INTERRUPTED)
+		return (err);
+	err = error_print(err, REDIRECTOR_MODULE_NAME,
+			message, NULL, NULL);
+	if (err.type == ERR_INTERNAL || err.type == ERR_INVALID_USAGE)
+		return (err);
+	if (requalify_libc_errors == true && err.type == ERR_LIBC)
+		err.type = ERR_REDIRECTION;
+	return (err);
+}
+
 // @ret ERR_LIBC
 static inline t_error	redirect_dir_is_writable(const t_string *dir, bool *out)
 {
@@ -75,7 +91,7 @@ static inline t_error	redirect_build_heredoc_base_path(t_string *out)
 	return (err);
 }
 
-// @ret ERR_INVALID_USAGE / ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
+// @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
 t_error	redirect_open_heredoc(t_redirector *redirector, t_string *path, int *fd)
 {
 	size_t	initial_len;
@@ -102,7 +118,7 @@ t_error	redirect_open_heredoc(t_redirector *redirector, t_string *path, int *fd)
 	string_free(path);
 	if (redirector->heredoc_id > INT_MAX)
 		return (error(ERR_REDIRECTION));
-	return (err);
+	return (redirect_print_and_qualify(err, true, "heredoc creation failed"));
 }
 
 t_error	redirect_get_heredoc_path(
@@ -117,22 +133,21 @@ t_error	redirect_get_heredoc_path(
 
 	err = redirect_open_heredoc(redirector, &path, &fd);
 	if (err.type)
-		return (error_print(err, REDIRECTOR_MODULE_NAME,
-			"unable to create heredoc file", NULL, NULL));
+		return (redirect_print_and_qualify(err, false,
+					"unable to create heredoc file"));
 	err = posix_write(fd, body->data, body->len);
 	if (err.type)
-		err = error_print(err, REDIRECTOR_MODULE_NAME, "unable to "
-			"write to heredoc file", NULL, "'%s'", path.data);
+		err = redirect_print_and_qualify(err, true,
+					"unable to write to heredoc file");
 	close_err = posix_close_if_open(fd);
 	if (close_err.type)
-		err = error_priorize(err, error_print(close_err, REDIRECTOR_MODULE_NAME,
-				"unable to close heredoc file", NULL, "'%s'", path.data));
+		err = error_priorize(err, redirect_print_and_qualify(close_err, false,
+					"unable to close heredoc file"));
 	if (err.type && unlink(path.data) != 0)
 		(void)error_print(error_sys(), REDIRECTOR_MODULE_NAME, "unable to "
 			"unlink heredoc file", NULL, "'%s'", path.data);
 	if (err.type)
-		string_free(&path);
-	else
-		*out_path = path.data;
+		return (string_free(&path), err);
+	*out_path = path.data;
 	return (err);
 }
