@@ -22,7 +22,7 @@ static t_error	pwd_process_options(int argc, char **argv, char *mode)
 	in.options_with_arg_count = 0;
 	err = ft_getopt(argc, argv, &in, &out);
 	if (err.type == ERR_NO && out.first_operand_index < (size_t)argc)
-		print_unspecified_behaviour("POSIX: pwd: OPERANDS: None",
+		print_unspecified_behaviour(NULL, "POSIX: pwd: OPERANDS: None",
 			"operands ignored");
 	*mode = 'L';
 	i = 0;

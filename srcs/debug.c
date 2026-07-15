@@ -31,15 +31,7 @@ const char	*bool_to_string(bool value)
 	return ("false");
 }
 
-static const char	*heredoc_mode_to_string(t_here_mode mode)
-{
-	if (mode == HEREDOC_MODE_NORMAL)
-		return ("HEREDOC_MODE_NORMAL");
-	if (mode == HEREDOC_MODE_TAB_STRIP)
-		return ("HEREDOC_MODE_TAB_STRIP");
-	return ("unknown");
-}
-
+#if defined DEBUG_CST || defined DEBUG_AST
 static void	debug_dump_string_value(const t_string *value)
 {
 	size_t	i;
@@ -70,28 +62,7 @@ static void	debug_dump_string_value(const t_string *value)
 	}
 	fprintf(stderr, "\"");
 }
-
-void	debug_dump_heredoc_queue_item(t_heredoc_item *item)
-{
-	if (item == NULL)
-		return ((void)fprintf(stderr, "[HEREDOC_QUEUE_ITEM] (null)\n"));
-	fprintf(stderr, "[HEREDOC_QUEUE_ITEM] %p\n", (void *)item);
-	fprintf(stderr, "  i=%zu\n", item->i);
-	fprintf(stderr, "  mode=%s\n", heredoc_mode_to_string(item->mode));
-	fprintf(stderr, "  is_tty=%s\n", bool_to_string(item->is_tty));
-	fprintf(stderr, "  path={len=%zu cap=%zu data=",
-		item->path.len, item->path.cap);
-	debug_dump_string_value(&item->path);
-	fprintf(stderr, "}\n");
-	fprintf(stderr, "  delim={len=%zu cap=%zu data=",
-		item->delim.len, item->delim.cap);
-	debug_dump_string_value(&item->delim);
-	fprintf(stderr, "}\n");
-	fprintf(stderr, "  input={len=%zu cap=%zu data=",
-		item->input.len, item->input.cap);
-	debug_dump_string_value(&item->input);
-	fprintf(stderr, "}\n");
-}
+#endif
 
 /* ************************************************************************* */
 /*                                   TOKEN                                   */

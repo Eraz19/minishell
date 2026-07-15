@@ -2,7 +2,12 @@
 #include "cmd_resolver_priv.h"
 #include "error.h"
 
-static inline bool	cmd_name_is_unspecified2(const char *cmd_name)
+#define CITATION_1		"POSIX 2.9.1.4: If the command name matches the name of"
+#define CITATION_2		" a utility listed in [...] the results are unspecified"
+#define CITATION		CITATION_1 CITATION_2
+#define IMPLEMENTATION	"continue regular command resolution"
+
+static inline bool	cmd_name_is_unspecified_3(const char *cmd_name)
 {
 	return (str_cmp(cmd_name, "enum") == 0
 		|| str_cmp(cmd_name, "float") == 0
@@ -31,7 +36,7 @@ static inline bool	cmd_name_is_unspecified2(const char *cmd_name)
 		|| str_cmp(cmd_name, "whence") == 0);
 }
 
-static inline bool	cmd_name_is_unspecified(const char *cmd_name)
+static inline bool	cmd_name_is_unspecified_2(const char *cmd_name)
 {
 	return (str_cmp(cmd_name, "caller") == 0
 		|| str_cmp(cmd_name, "cap") == 0
@@ -57,31 +62,22 @@ static inline bool	cmd_name_is_unspecified(const char *cmd_name)
 		|| str_cmp(cmd_name, "dosh") == 0
 		|| str_cmp(cmd_name, "echotc") == 0
 		|| str_cmp(cmd_name, "echoti") == 0
-		|| cmd_name_is_unspecified2(cmd_name));
+		|| cmd_name_is_unspecified_3(cmd_name));
 }
 
-void	cmd_warn_if_unspecified(const char *cmd_name)
+static inline bool	cmd_name_is_unspecified(const char *cmd_name)
 {
-	t_string	message;
-
-	if (str_cmp(cmd_name, "alloc") == 0
+	return (str_cmp(cmd_name, "alloc") == 0
 		|| str_cmp(cmd_name, "autoload") == 0
 		|| str_cmp(cmd_name, "bind") == 0
 		|| str_cmp(cmd_name, "bindkey") == 0
 		|| str_cmp(cmd_name, "builtin") == 0
 		|| str_cmp(cmd_name, "bye") == 0
-		|| cmd_name_is_unspecified(cmd_name))
-	{
-		(void)string_init(&message, 0, NULL, 0);
-		if (string_append_format(&message,
-				"POSIX 2.9.1.4: If the command name matches the name of a "
-				"utility listed in [..., %s, ...], the results are unspecified",
-				cmd_name))
-		{
-			print_unspecified_behaviour(
-				message.data,
-				"continue regular command resolution");
-			string_free(&message);
-		}
-	}
+		|| cmd_name_is_unspecified_2(cmd_name));
+}
+
+void	cmd_warn_if_unspecified(const char *cmd_name)
+{
+	if (cmd_name_is_unspecified(cmd_name))
+		print_unspecified_behaviour(cmd_name, CITATION, IMPLEMENTATION);
 }

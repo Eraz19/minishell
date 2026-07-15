@@ -54,10 +54,7 @@ static inline t_error	cmd_add_to_argv(t_cmd *cmd, const t_expansion *expansion)
 }
 
 // @ret TODO
-static inline t_error	cmd_expand_word(
-							t_cmd *cmd,
-							const t_token *word,
-							int *exit_status)
+static inline t_error	cmd_expand_word(t_cmd *cmd, const t_token *word)
 {
 	t_exp_flag		flags;
 	t_expansion		expansion;
@@ -68,7 +65,7 @@ static inline t_error	cmd_expand_word(
 		flags = cmd_assignment_expansion_flags();
 	else
 		flags = cmd_regular_expansion_flags();
-	err = expand_token(&expansion, word, exit_status, flags);
+	err = expand_token(&expansion, word, &cmd->exit_status, flags);
 	if (err.type)
 		return (err);
 	err = cmd_add_to_argv(cmd, &expansion);
@@ -76,7 +73,7 @@ static inline t_error	cmd_expand_word(
 	return (err);
 }
 
-t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words, int *exit_status)
+t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words)
 {
 	size_t			index;
 	char			*null;
@@ -88,7 +85,7 @@ t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words, int *exit_status)
 	while (index < words->len && err.type == ERR_NO)
 	{
 		word = token_pool_get(words, index);
-		err = cmd_expand_word(cmd, word, exit_status);
+		err = cmd_expand_word(cmd, word);
 		index++;
 	}
 	if (err.type == ERR_NO)

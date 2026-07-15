@@ -19,6 +19,14 @@ move `heredoc.h` into `scanner`
 - `assignments`
 - `command name`
 
+🧪 Tester les exit status des command substitutions dans:
+- `assignments`
+- `redirections`
+- `words`
+- `case` / `for` / `loop` components...
+- `functions`
+- ...
+
 ## LAST EXPANDED COMMAND SUBSTITUTION STATUS
 
 ```bash
