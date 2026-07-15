@@ -3,7 +3,7 @@
 
 # include "error.h"
 # include "cmd_type.h"
-# include "runner.h"
+# include "runner_type.h"
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
