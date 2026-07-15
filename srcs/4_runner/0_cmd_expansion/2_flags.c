@@ -17,3 +17,15 @@ t_exp_flag	cmd_case_expansion_flags(void)
 	return (EXP_TILDE_NORMAL | EXP_PARAM | EXP_DOLLAR_SQUOTE | EXP_CMD_SUB
 		| EXP_ARITH | EXP_QUOTE_REMOVAL);
 }
+
+t_exp_flag	cmd_redirection_expansion_flags(void)
+{
+	return (EXP_TILDE_NORMAL | EXP_PARAM | EXP_DOLLAR_SQUOTE | EXP_CMD_SUB
+		| EXP_ARITH | EXP_QUOTE_REMOVAL);
+}
+
+t_exp_flag	cmd_heredoc_body_expansion_flags(void)
+{
+	return (EXP_HEREDOC | EXP_PARAM | EXP_CMD_SUB | EXP_ARITH
+		| EXP_QUOTE_REMOVAL);
+}
