@@ -29,14 +29,6 @@ typedef t_vector	t_fields;
  */
 void	fields_init(t_fields *fields);
 
-/**
- * @ingroup expander_field
- * @brief Frees @p fields and every word it owns.
- *
- * @param fields Already initialized container (borrowed).
- */
-void	fields_free(t_fields *fields);
-
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */

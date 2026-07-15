@@ -99,6 +99,5 @@
 		"-I${workspaceFolder}/srcs/params/5_functions",
 		"-I${workspaceFolder}/srcs/params/6_process",
 		"-I${workspaceFolder}/srcs/params/6_process/process"
-	],
-	"explorer.sortOrder": "modified"
+	]
 }

@@ -18,7 +18,7 @@ static inline t_error	walk_case_expand(
 	err = expand_token(&expansion, token, exit_status, flags);
 	if (err.type)
 		return (err);
-	assert(expansion.len == 1);
+	assert(expansion.len == 1);	// TODO: expander_merge()
 	expanded = &((t_string *)expansion.data)[0];
 	string_take_string(dst, expanded);
 	expansion_free(&expansion);
@@ -31,23 +31,32 @@ static inline t_error	walk_case_token_matchs_word(
 							bool *out,
 							int *exit_status)
 {
-	t_word	pattern;
-	int		exit_status;
-	t_error	err;
+	t_fields	pattern_list;
+	size_t		i;
+	t_word		*pattern;
+	t_error		err;
 
 	err = expand_token_word(
-			&pattern,
+			&pattern_list,
 			token,
-			&exit_status,
+			exit_status,
 			cmd_case_expansion_flags());
 	if (err.type)
 		return (err);
-	err = word_match_pattern(
+	i = 0;
+	while (i < pattern_list.len)
+	{
+		pattern = &((t_word *)pattern_list.data)[i];
+		err = word_match_pattern(
 			out,
-			&pattern,
+			pattern,
 			expanded_word->data,
 			expanded_word->len);
-	word_free(&pattern);
+		if (err.type)
+			break ;
+		i++;
+	}
+	fields_free(&pattern_list);
 	return (err);
 }
 

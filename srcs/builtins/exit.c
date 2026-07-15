@@ -9,7 +9,7 @@ static bool	exit_parse_status(char *arg, int *status)
 	if (*status > 255)
 	{
 		print_unspecified_behaviour(
-			"POSIX: exit: EXIT STATUS: undefined when n is not between"
+			arg, "POSIX: exit: EXIT STATUS: undefined when n is not between"
 			" 0 and 255 inclusively", "value taken modulo 256");
 		*status %= 256;
 	}

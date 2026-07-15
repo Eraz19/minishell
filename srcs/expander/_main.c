@@ -54,20 +54,25 @@ t_error	run_expansion(t_expansion *expansion, t_expander_args *args)
 	return (expander_free(&expander), expander.err);
 }
 
-t_error	run_expansion_word(t_word *word, t_expander_args *args)
+t_error	run_expansion_word(t_fields *out, t_expander_args *args)
 {
 	t_error		err;
 	t_expander	expander;
 
-	word_init(word);
 	if (run_pipeline(&expander, args).type)
 		return (err = expander.err, expander_free(&expander), err);
-	expander.err = fields_fpop(word, &expander.fields);
+	out->item_size = expander.fields.item_size;
+	out->data = expander.fields.data;
+	out->cap = expander.fields.cap;
+	out->len = expander.fields.len;
+	expander.fields.cap = 0;
+	expander.fields.data = NULL;
+	expander.fields.len = 0;
 	return (expander_free(&expander), expander.err);
 }
 
 t_error	expand_token_word(
-			t_word *out,
+			t_fields *out,
 			const t_token *src,
 			int *exit_status,
 			t_exp_flag flags)

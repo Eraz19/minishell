@@ -134,6 +134,8 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 
 # TODO
 
+- `walker`:
+	- `walk_case_expand()` : implement expansion incorrect len handling
 - `error`:
 	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
 - `shell`:
