@@ -5,6 +5,11 @@
 # include <assert.h>	// DEBUG
 # include <stdio.h>		// DEBUG
 
+#define CITATION_1	"The conditional construct case shall execute the "
+#define CITATION_2	"compound-list corresponding to the first pattern [...] "
+#define CITATION_3	"that is matched by the string resulting from [expansions]"
+#define CITATION	CITATION_1 CITATION_2 CITATION_3
+
 static inline t_error	walk_case_expand(
 							t_token *token,
 							t_string *dst,
@@ -19,7 +24,8 @@ static inline t_error	walk_case_expand(
 	err = expand_token(&expansion, token, exit_status, flags);
 	if (err.type)
 		return (err);
-	assert(expansion.len == 1);	// TODO: expander_merge()
+	if (expansion.len != 1)
+		return (expansion_merge(token->value.data, CITATION, &expansion, dst));
 	expanded = &((t_string *)expansion.data)[0];
 	string_take_string(dst, expanded);
 	expansion_free(&expansion);
@@ -27,33 +33,27 @@ static inline t_error	walk_case_expand(
 }
 
 static inline t_error	walk_case_token_matchs_word(
-							t_string *expanded_word,
+							t_string *word,
 							t_token *token,
 							bool *out,
 							int *exit_status)
 {
+	t_exp_flag	flags;
 	t_fields	pattern_list;
 	size_t		i;
 	t_word		*pattern;
 	t_error		err;
 
-	err = expand_token_word(
-			&pattern_list,
-			token,
-			exit_status,
-			cmd_case_expansion_flags());
+	flags = cmd_case_expansion_flags();
+	err = expand_token_word(&pattern_list, token, exit_status, flags);
 	if (err.type)
 		return (err);
 	i = 0;
 	while (i < pattern_list.len)
 	{
 		pattern = &((t_word *)pattern_list.data)[i];
-		err = word_match_pattern(
-			out,
-			pattern,
-			expanded_word->data,
-			expanded_word->len);
-		if (err.type)
+		err = word_match_pattern(out, pattern, word->data, word->len);
+		if (err.type || *out == true)
 			break ;
 		i++;
 	}
@@ -62,7 +62,7 @@ static inline t_error	walk_case_token_matchs_word(
 }
 
 static inline t_error	walk_case_match_pool(
-							t_string *expanded_word,
+							t_string *word,
 							t_token_pool *pool,
 							bool *out,
 							int *exit_status)
@@ -77,11 +77,7 @@ static inline t_error	walk_case_match_pool(
 	while (i < pool->len)
 	{
 		token = token_pool_get(pool, i);
-		err = walk_case_token_matchs_word(
-				expanded_word,
-				token,
-				out,
-				exit_status);
+		err = walk_case_token_matchs_word(word, token, out, exit_status);
 		if (err.type || *out == true)
 			return (err);
 		i++;
