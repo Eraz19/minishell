@@ -71,9 +71,7 @@ SRCS			:= \
 	$(wildcard srcs/params/*/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*/*.c) \
 	$(wildcard srcs/alias/*.c) \
-	$(wildcard srcs/alias/*/*.c) \
-	$(wildcard srcs/heredoc/*.c) \
-	$(wildcard srcs/heredoc/*/*.c) \
+	$(wildcard srcs/alias/*/*.c)
 
 INCLUDES		:= \
 	-I$(READLINE_DIR)/include \
@@ -100,6 +98,8 @@ INCLUDES		:= \
 	-Isrcs/2_scanner/recognition \
 	-Isrcs/2_scanner/recognition/operator \
 	-Isrcs/2_scanner/reader \
+	-Isrcs/2_scanner/heredoc \
+	-Isrcs/2_scanner/heredoc/body \
 	-Isrcs/3_builder/1_lr_machine \
 	-Isrcs/3_builder/1_lr_machine/1_hooks \
 	-Isrcs/3_builder/1_lr_machine/2_symbols \
@@ -160,9 +160,6 @@ INCLUDES		:= \
 	-Isrcs/expander/substitutions/arith \
 	-Isrcs/expander/substitutions/backtick \
 	-Isrcs/expander/word \
-	-Isrcs/heredoc \
-	-Isrcs/heredoc/body \
-	-Isrcs/heredoc/queue \
 	-Isrcs/history \
 	-Isrcs/history/file \
 	-Isrcs/history/list \

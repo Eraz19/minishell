@@ -8,7 +8,6 @@ void	shell_init(t_shell *shell)
 	params_init(&shell->params);
 	scanner_init(&shell->scanner);
 	alias_init(&shell->alias);
-	heredoc_init(&shell->heredoc);
 	history_init(&shell->history);
 	builder_init(&shell->builder);
 	runner_init(&shell->runner);
@@ -19,7 +18,6 @@ t_error	shell_clear(t_shell *shell)
 	params_clear(&shell->params);
 	scanner_clear(&shell->scanner);
 	alias_clear(&shell->alias);
-	heredoc_clear(&shell->heredoc);
 	history_clear(&shell->history);
 	builder_clear(&shell->builder);
 	return (runner_clear(&shell->runner));
@@ -30,7 +28,6 @@ void	shell_free(t_shell *shell)
 	params_free(&shell->params);
 	scanner_free(&shell->scanner);
 	alias_free(&shell->alias);
-	heredoc_free(&shell->heredoc);
 	history_free(&shell->history);
 	builder_free(&shell->builder);
 	runner_free(&shell->runner);

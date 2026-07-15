@@ -13,8 +13,6 @@ t_error	shell_load(t_shell_loading_options *options)
 	if (err.type == ERR_NO)
 		err = scanner_load(&options->shell->scanner,
 				options->shell->params.specials.source.data);
-	if (err.type == ERR_NO)
-		err = heredoc_load(&options->shell->heredoc);
 	if (err.type == ERR_NO && options->build_parser_tables)
 		err = builder_load(&options->shell->builder);
 	if (err.type == ERR_NO)

@@ -6,7 +6,7 @@ t_error	get_body_line(t_body *body, char *EOL, size_t *i)
 	char	*start;
 	size_t	line_len;
 
-	start = body->item->input.data + *i;
+	start = body->input.data + *i;
 	if (EOL == NULL)
 		line_len = str_len(start);
 	else
@@ -19,27 +19,27 @@ t_error	get_body_line(t_body *body, char *EOL, size_t *i)
 
 bool	is_line_delimiter(t_body *body)
 {
-	if (body->item->mode == HEREDOC_MODE_TAB_STRIP)
+	if (body->mode == HEREDOC_MODE_TAB_STRIP)
 		string_trim_leading(&body->line, '\t');
-	return (string_cmp(&body->line, &body->item->delim));
+	return (string_cmp(&body->line, &body->delim));
 }
 
 static t_error	body_missing_delimiter(t_body *body)
 {
-	body->item->delim.data[body->item->delim.len - 1] = '\0';
+	body->delim.data[body->delim.len - 1] = '\0';
 	body->err = error_print(error(ERR_REDIRECTION), "heredoc",
-		"missing delimiter", NULL, "'%s'", body->item->delim.data);
+		"missing delimiter", NULL, "'%s'", body->delim.data);
 	return (body->err);
 }
 
 t_error	body_continuation(t_body *body, bool *continuation)
 {
-	if (body->item->is_tty)
+	if (body->is_tty)
 	{
 		if (*continuation == false)
-			body->item->i = body->i;
+			body->i = body->i;
 		*continuation = true;
-		body->err = scanner_read_continuation(&body->item->input);
+		body->err = scanner_read_continuation(&body->input);
 		if (body->err.type == ERR_VEOF)
 			return (body_missing_delimiter(body));
 		return (body->err);
@@ -56,18 +56,18 @@ t_error	get_body_content(t_body *body)
 	continuation = false;
 	while (true)
 	{
-		if (body->item->input.data[body->i] == '\0')
+		if (body->input.data[body->i] == '\0')
 		{
 			if (body_continuation(body, &continuation).type)
 				return (body->err);
 		}
-		match_EOL = str_chr(body->item->input.data + body->i, '\n');
+		match_EOL = str_chr(body->input.data + body->i, '\n');
 		if (get_body_line(body, match_EOL, &body->i).type)
 			return (body->err);
 		if (is_line_delimiter(body))
 		{
 			if (!continuation)
-				body->item->i = body->i;
+				body->i = body->i;
 			return (body->err);
 		}
 		if (!string_append(&body->content, &body->line))

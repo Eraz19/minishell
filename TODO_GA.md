@@ -1,3 +1,5 @@
+move `heredoc.h` into `scanner`
+
 # WIP
 
 ⚠️ Tous les calls à l'`expander`:

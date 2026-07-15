@@ -10,27 +10,15 @@
  *         line and saves it in its backing file (POSIX 2.7.4).
  */
 
-/**
- * @ingroup heredoc_body
- * @struct s_body
- * @brief State of one body read.
- *
- * @var s_body::i Read cursor into the item's input.
- * @var s_body::err Last error recorded by the read.
- * @var s_body::item Here-document being read (borrowed).
- * @var s_body::line Current input line, a @ref t_string owned by the
- *                   body (re-created for every line).
- * @var s_body::content Accumulated body text, a @ref t_string owned by
- *                      the body.
- * @var s_body::contexts Contexts recorded in the body, managed by the
- *                       context submodule.
- */
 typedef struct s_body
 {
 	size_t			i;
 	t_error			err;
-	t_heredoc_item	*item;
+	t_here_mode		mode;
+	t_string		input;
+	t_string		delim;
 	t_string		line;
+	bool			is_tty;
 	t_string		content;
 	t_context_stack	contexts;
 }	t_body;
@@ -50,22 +38,14 @@ void					body_init(t_body *body);
 
 /**
  * @ingroup heredoc_body
- * @brief Attaches @p item to @p body and positions the read cursor on the
- *        item's saved cursor.
- *
- * @param body Already initialized body state (borrowed).
- * @param item Here-document to read (borrowed).
- */
-void					body_load(t_body *body, t_heredoc_item *item);
-
-/**
- * @ingroup heredoc_body
  * @brief Frees the line, content and context stack of @p body, then
  *        zeroes it.
  *
  * @param body Already initialized body state (borrowed).
  */
 void					body_free(t_body *body);
+
+t_error					body_load(t_body *body, t_heredoc_read_args *args);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -80,36 +60,6 @@ void					body_free(t_body *body);
  *         stack item are left for the lexer entry point to fill in.
  */
 t_lexer_context_args	body_context_rules(void);
-
-/**
- * @ingroup heredoc_body
- * @brief Reads the whole backing file @p path.
- *
- * @param out String receiving the file content, initialized by the
- *            function and freed on failure (borrowed).
- * @param path Backing file path (borrowed, read-only).
- * @return @c ERR_LIBC (printed with the path for open and read failures,
- *         raw on allocation failure); @c ERR_INTERRUPTED when a signal
- *         interrupts a file operation; @c ERR_NO on success.
- */
-t_error					read_body_file(t_string *out, const t_string *path);
-
-/**
- * @ingroup heredoc_body
- * @brief Writes @p body to the backing file @p path (created or
- *        truncated, mode 0600).
- *
- * @param path Backing file path (borrowed, read-only).
- * @param body Body text to write (borrowed).
- * @return @c ERR_POSIX_WRITE (printed with the path) on a write failure,
- *         requalified by the caller per error.h; @c ERR_LIBC (printed
- *         with the path) on an open failure, raw on a close failure;
- *         @c ERR_INTERRUPTED when a signal interrupts a file operation;
- *         @c ERR_NO on success.
- */
-t_error					save_body_in_file(
-							const t_string *path,
-							t_string *body);
 
 /* ************************************************************************* */
 /*                                INPUT SCAN                                 */

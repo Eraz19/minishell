@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "heredoc_.h"
 
 static bool	is_expansion_user_error(t_error_type type)

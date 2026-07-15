@@ -2,6 +2,7 @@
 # define SCANNER__H
 
 # include "scanner.h"
+# include "heredoc.h"
 
 /** @defgroup scanner_priv Scanner internals
  *  @brief Helpers behind the scanner API.
@@ -94,5 +95,11 @@ t_lexer_rules	scanner_lexer_rules(t_scanner *scanner);
  *         data is unavailable; @c ERR_NO on success.
  */
 t_error		scanner_read_input(t_scanner *scanner);
+
+void		prepare_heredoc_read_args(
+				t_scanner *scanner,
+				t_heredoc_read_args *out,
+				bool strip,
+				const t_string *delim);
 
 #endif
