@@ -1,14 +1,56 @@
 # WIP
 
-🚨 **ACTUALISATION FT**
+⚠️ Tous les calls à l'`expander`:
+- ne pas update `exit_status` s'il vaut `-1` !
+- Ça écraserait le status de la dernière commande substitution !
+- ===> Chaque expansion:
+	- set `tmp_exit_status = -1`
+	- récupérer le `tmp_exit_status` de l'expander
+	- update le vrai `exit_status` uniquement si `tmp_exit_status >= 0`
+
+- ⚠️ `exit_status`:
+	- remove some `exit_status = -1` to avoid losing expansion / redirection status ?
+
+🧪 Tester expansions qui produisent 0 / 1 / plusieurs fields:
+- `redirections`
+- `heredoc body`
+- `assignments`
+- `command name`
+
+## LAST EXPANDED COMMAND SUBSTITUTION STATUS
+
+```bash
+A=$(true)
+echo "should be 0 => $?"
+#
+A=$(false)
+echo "should be 1 => $?"
+#
+cat << EOF
+$(true)
+EOF
+echo "should be 0 => $?"
+#
+cat << EOF
+$(false)
+EOF
+echo "should be 0 => $?"
+#
+<< EOF
+$(true)
+EOF
+echo "should be 0 => $?"
+#
+<< EOF
+$(false)
+EOF
+echo "should be 1 => $?"
+```
 
 ⚠️ `echo` is removed from known builtin list to test
 💡 Les erreurs dépendent de l'opération qui a échouée:
 ===> donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
 
-- ⚠️ **ALL**:
-	- check all `expand_token()` and `expand_str()` calls:
-		- call `*_unique()` instead if exactly one field is needed
 - `builder`:
 	- handle `command substitution search`
 - `runner-executor`:
@@ -19,6 +61,12 @@
 
 # ALEXANDER
 
+- ⚠️ docs:
+	- Replace `Same contract as @ref ...` par les erreurs retournées (insup à utiliser)
+- 🚧 `expander`:
+	- ✅ `expansion_merge()` implemented by GA
+	- ⚠️ use `int exit_status_priorize(int prev, int new)` (`utils.h`):
+		- `new` doit être set à `-1`
 - ⚠️ `pattern matching`: wip
 - ⚠️ `expander`:
 	- expand combos:
@@ -36,6 +84,8 @@ VAR=$(true)        => status 0
 VAR=$(false)       => status 1
 VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 ```
+- ⚠️ **all**:
+	- replace all `ERR_INDEX_OUT_OF_BOND`, etc by `error_print()` + `ERR_INTERNAL`
 - 🚧 `shell`:
 	- `shell_init_subshell()`: (only missing traps / signal handling)
 - ✅ `runner_set_stdin_to_blocking()`:

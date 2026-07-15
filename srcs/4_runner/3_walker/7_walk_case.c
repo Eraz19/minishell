@@ -5,7 +5,10 @@
 #include "utils.h"
 #include <assert.h>
 
-static inline t_error	walk_case_expand(t_token *token, t_string *dst)
+static inline t_error	walk_case_expand(
+							t_token *token,
+							t_string *dst,
+							int *exit_status)
 {
 	t_exp_flag	flags;
 	t_string	*expanded;
@@ -13,7 +16,7 @@ static inline t_error	walk_case_expand(t_token *token, t_string *dst)
 	t_error		err;
 
 	flags = cmd_case_expansion_flags();
-	err = expand_token(&expansion, token, flags);
+	err = expand_token(&expansion, token, exit_status, flags);
 	if (err.type)
 		return (err);
 	assert(expansion.len == 1);
@@ -26,12 +29,13 @@ static inline t_error	walk_case_expand(t_token *token, t_string *dst)
 static inline t_error	walk_case_token_matchs_word(
 							t_string *expanded_word,
 							t_token *token,
-							bool *out)
+							bool *out,
+							int *exit_status)
 {
 	t_string	expanded_token;
 	t_error		err;
 
-	err = walk_case_expand(token, &expanded_token);
+	err = walk_case_expand(token, &expanded_token, exit_status);
 	if (err.type)
 		return (err);
 	*out = match_pattern(
@@ -45,7 +49,8 @@ static inline t_error	walk_case_token_matchs_word(
 static inline t_error	walk_case_match_pool(
 							t_string *expanded_word,
 							t_token_pool *pool,
-							bool *out)
+							bool *out,
+							int *exit_status)
 {
 	size_t	i;
 	t_token *token;
@@ -57,7 +62,11 @@ static inline t_error	walk_case_match_pool(
 	while (i < pool->len)
 	{
 		token = token_pool_get(pool, i);
-		err = walk_case_token_matchs_word(expanded_word, token, out);
+		err = walk_case_token_matchs_word(
+				expanded_word,
+				token,
+				out,
+				exit_status);
 		if (err.type || *out == true)
 			return (err);
 		i++;
@@ -100,14 +109,14 @@ t_error	walk_case(t_runner *runner, t_ast_case *case_clause, int *exit_status)
 	assert(case_clause->patterns.len == case_clause->bodies.len);
 	assert(case_clause->bodies.len == case_clause->fallthrough.len);
 	*exit_status = -1;
-	err = walk_case_expand(&case_clause->word, &word);
+	err = walk_case_expand(&case_clause->word, &word, exit_status);
 	if (err.type)
 		return (walk_normalize_output(err, NULL, exit_status));
 	i = 0;
 	while (err.type == ERR_NO && i < case_clause->patterns.len)
 	{
 		pool = &((t_token_pool *)case_clause->patterns.data)[i];
-		err = walk_case_match_pool(&word, pool, &match);
+		err = walk_case_match_pool(&word, pool, &match, exit_status);
 		if (err.type == ERR_NO && match == true)
 		{
 			err = walk_case_exec(runner, case_clause, i, exit_status);

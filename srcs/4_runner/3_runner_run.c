@@ -18,9 +18,9 @@ t_error	runner_run(t_shell *shell)
 	t_error		err;
 
 	err = error(ERR_NO);
+	ast_root_init(&ast_root);
 	while (err.type == ERR_NO)
 	{
-		ast_root_init(&ast_root);
 		err = builder_get_ast(&ast_root);
 		if (err.type == ERR_NO)
 			err = walk(&shell->runner, &ast_root, &exit_status);

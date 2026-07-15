@@ -21,7 +21,7 @@ static inline t_error	redirect_expand_word(
 	err = expand_token(&expansion, token, exit_status, flags);
 	if (err.type)
 		return (err);
-	else if (expansion.len == 0 || expansion.len > 1)
+	else if (expansion.len != 1)
 		return (expansion_merge(token->value.data, CITATION, &expansion, out));
 	err = expansion_take(&expansion, 0, out);
 	expansion_free(&expansion);
