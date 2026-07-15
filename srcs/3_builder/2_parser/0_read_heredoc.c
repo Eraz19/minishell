@@ -39,5 +39,6 @@ t_error	parser_read_heredoc(t_parser *parser)
 			return (err);
 		i++;
 	}
+	vector_clear(&parser->here_stack, NULL);
 	return (err);
 }

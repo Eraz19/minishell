@@ -21,20 +21,14 @@ const char	*error_to_string(t_error err)
 		return ("missing assignment name");
 	else if (err.type == ERR_INVALID_USAGE)
 		return ("usage");
-	else if (err.type == ERR_EOF)
-		return ("end of file");
 	else if (err.type == ERR_FD_INVALID)
 		return ("invalid file descriptor");
 	else if (err.type == ERR_HOOK_INVALID_RHS_LEN)
 		return ("invalid rhs len");
 	else if (err.type == ERR_INDEX_OUT_OF_BOUND)
 		return ("index out of bound");
-	else if (err.type == ERR_INTERRUPTED)
-		return ("interupted by signal");
 	else if (err.type == ERR_FORMAT_INVALID)
 		return ("invalid format");
-	else if (err.type == ERR_LIBC)
-		return (strerror(err.saved_errno));
 	else if (err.type == ERR_LR_CONFLICT)
 		return ("LR conflict");
 	else if (err.type == ERR_LR_STATE_NOT_FOUND)
@@ -61,8 +55,6 @@ const char	*error_to_string(t_error err)
 		return ("shift value is out of range");
 	else if (err.type == ERR_SIZE_MAX_REACHED)
 		return ("SIZE_MAX has been reached");
-	else if (err.type == ERR_UB)
-		return ("undefined behaviour 🤪");
 	else if (err.type == ERR_VAR_INVALID_NAME)
 		return ("invalid variable name");
 	else if (err.type == ERR_VAR_MISSING_EQUAL)
@@ -79,8 +71,6 @@ const char	*error_to_string(t_error err)
 		return ("no available file name");
 	else if (err.type == ERR_HISTORY_DISABLED)
 		return ("persistent history disabled");
-	else if (err.type == ERR_VEOF)
-		return ("end of input");
 	else if (err.type == ERR_INCOHERENT_STATE)
 		return ("incoherent state");
 	else if (err.type == ERR_NOT_IMPLEMENTED)
@@ -109,17 +99,32 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_POSIX_WRITE)
 		return ("write error");
 	// builtin errors
-	else if (err.type == ERR_INTERNAL)
-		return ("internal builtin error");
 	else if (err.type == ERR_BUILTIN)
 		return ("builtin error");
+	else if (err.type == ERR_REDIRECTION_OTHER)
+		return ("redirection error (non-special built-in)");
 	// Flow control errors
+	else if (err.type == ERR_VEOF)
+		return ("end of input");
+	else if (err.type == ERR_EOF)
+		return ("end of file");
 	else if (err.type == ERR_CONTINUE)
 		return ("continue is only available in loops");
 	else if (err.type == ERR_BREAK)
 		return ("break is only available in loops");
 	else if (err.type == ERR_RETURN)
 		return ("return is only available in functions");
+	else if (err.type == ERR_EXIT)
+		return ("exit");
+	else if (err.type == ERR_INTERRUPTED)
+		return ("interupted by signal");
+	else if (err.type == ERR_UB)
+		return ("undefined behaviour 🤪");
+	// Internal errors
+	else if (err.type == ERR_INTERNAL)
+		return ("internal builtin error");
+	else if (err.type == ERR_LIBC)
+		return (strerror(err.saved_errno));
 	// POSIX errors
 	else if (err.type == ERR_POSIX_SYNTAX)
 		return ("invalid syntax");
@@ -127,8 +132,6 @@ const char	*error_to_string(t_error err)
 		return ("special builtin error");
 	else if (err.type == ERR_POSIX_REDIR_SPECIAL)
 		return ("redirection error (special built-in)");
-	else if (err.type == ERR_REDIRECTION_OTHER)
-		return ("redirection error (non-special built-in)");
 	else if (err.type == ERR_POSIX_ASSIGNMENT)
 		return ("variable assignment error");
 	else if (err.type == ERR_POSIX_EXPANSION)

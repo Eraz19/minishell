@@ -1,13 +1,10 @@
 # WIP
 
-⚠️ Tous les calls à l'`expander`:
-- ne pas update `exit_status` s'il vaut `-1` !
-- Ça écraserait le status de la dernière commande substitution !
-- ===> Chaque expansion:
-	- set `tmp_exit_status = -1`
-	- récupérer le `tmp_exit_status` de l'expander
-	- update le vrai `exit_status` uniquement si `tmp_exit_status >= 0`
-
+- ⚠️ `expansion_merge()`: correctly handle `IFS` set but null case
+- handle `n` fields expansions :
+	- `redirection`: always redirect to one file per field
+	- `case`: 0 field => skip (match = false)
+	- `case`: n fields => match sur chaque field
 - ⚠️ `exit_status`:
 	- remove some `exit_status = -1` to avoid losing expansion / redirection status ?
 
@@ -55,7 +52,6 @@ EOF
 echo "should be 1 => $?"
 ```
 
-⚠️ `echo` is removed from known builtin list to test
 💡 Les erreurs dépendent de l'opération qui a échouée:
 ===> donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
 
@@ -71,20 +67,6 @@ echo "should be 1 => $?"
 
 - ⚠️ docs:
 	- Replace `Same contract as @ref ...` par les erreurs retournées (insup à utiliser)
-- 🚧 `expander`:
-	- ✅ `expansion_merge()` implemented by GA
-	- ⚠️ use `int exit_status_priorize(int prev, int new)` (`utils.h`):
-		- `new` doit être set à `-1`
-- ⚠️ `pattern matching`: wip
-- ⚠️ `expander`:
-	- expand combos:
-		- `str` -> `str`
-		- `token` -> `str`
-		- `token` -> `expansion`
-	- return last `command substitution` status
-- ⚠️ `heredoc`:
-	- use `t_string` instead of file
-	- stack delim inside `parser`
 - `token`: keep `history_list_index` in `t_token_index` ?
 ```bash
 VAR=value          => status 0
@@ -123,11 +105,7 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 - ✅ `runner`:
 	- fully implemented (error handling should be correct now)
 - 🤔 **OLD**:
-	- `void	print_unspecified_behaviour(const char *condition, const char *implementation)`
-	- `EXP_DSQUOTE`:
-		- process first, then apply all other expansions from the beginning of `word`
 	- `utils`:
-		- `scan_set_mode()` à déplacer dans un module `input_mode`
 		- Utiliser `free_char_ptr_void()` au lieu de `free` comme callback pour les `vector_fre()` contenant des `char *`
 	- replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 	- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
@@ -191,9 +169,76 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 
 # TO FIX
 
-⚠️ All expansions can produce zero/one/multiple fields (check all `cmd_*_expansion_flags()` callers)
+# `$@` / `$*` UNSPECIFIED CASES IMPLEMENTATIONS
+
+**POSIX 2.5.2 Special Parameters**:
+- `$@`					=> 1 field **per parameter**, join [first with before] + join [last with after]
+- `$*` + unquoted		=> 1 field **per parameter**, join [first with before] + join [last with after]
+- `$*` + quoted			=> **only** 1 field, joined with:
+	- if `IFS` len > 0				=> `IFS[0]`
+	- if `IFS` is *unset*			=> ` `
+	- if `IFS` is *set but null*	=> *nothing*
+- if no *field spillting*	=> UNSPECIFIED => **MINISHELL** => same behaviour as if field splitting was active
+
+**MINISHELL**:
+- `$@`:
+	- `redirection`: always redirect to one file per field
+	- `case`: 0 field => skip (match = false)
+	- `case`: n fields => match sur chaque field
+
+**YASH (normal / -o posixlycorrect)**
+- `$@`:
+	- `redirection`: always merge fields in `filename`
+	- `case`: always merge patterns
+
+**BASH --posix**:
+- `$@`:
+	- `redirection`: always merge fields in `filename`
+	- `case`: unquoted => merge fields
+	- `case`: quoted => only keep first field
+
+**BASH**:
+- `$@`:
+	- `redirection`: error "redirection ambigue"
+	- `case`: unquoted => merge fields
+	- `case`: quoted => only keep first field
+
+**ZSH**:
+- `$@`:
+	- `redirection`: always redirect to one file per field
+	- `case`: always merge patterns
+
+# REDIRECTION UNSPECIFIED TESTS
+
 ```bash
-# TEST 1
+# prints to "a" + "b" + "c"
+set -- 'a' 'b' 'c'
+echo hello > $@
+# prints to "a" + "b" + "c"
+set -- 'a' 'b' 'c'
+echo hello > "$@"
+# prints to "a" + "b" + "c"
+set -- 'a' 'b' 'c'
+echo hello > $*
+# prints to "azbzc"
+IFS="zab"
+set -- 'a' 'b' 'c'
+echo hello > "$*"
+# prints to "a b c"
+unset IFS
+set -- 'a' 'b' 'c'
+echo hello > "$*"
+# prints to "abc"
+IFS=
+set -- 'a' 'b' 'c'
+echo hello > "$*"
+```
+
+# CASE UNSPECIFIED TESTS
+
+```bash
+# TEST 1 => bash merges all fields
+clear
 set -- 'a' 'b' 'c'
 for subject in 'abc' 'a b c' 'a' 'b' 'c'
 do
@@ -202,9 +247,20 @@ do
         *)  printf 'NO    <%s>\n' "$subject" ;;
     esac
 done
-# TEST 2
+# TEST 2 => bash keeps only first field
+clear
 set -- 'a' 'b' 'c'
-for subject in 'abc' 'a b c' 'a' 'b' 'c'
+for subject in 'abc' 'a b c' 'b' 'a' 'c'
+do
+    case $subject in
+        "$@") printf 'MATCH <%s>\n' "$subject" ;;
+        *)  printf 'NO    <%s>\n' "$subject" ;;
+    esac
+done
+# TEST 2 => no match
+clear
+set --
+for subject in 'abc' 'a b c' 'b' 'a' 'c'
 do
     case $subject in
         "$@") printf 'MATCH <%s>\n' "$subject" ;;
@@ -323,7 +379,7 @@ echo "--------------------"
 v='abc*def'
 echo "${v#'*'}"
 
-# ERROR
+# OK
 p='*'
 case abc in
     "$p") echo "ERROR: * should be litteral when p='*' and pattern is \"$p\"" ;;

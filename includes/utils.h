@@ -53,8 +53,6 @@ t_error	deserialize(const char *src, t_string *dst);
  */
 t_error	deserialize_all(const char *src, t_vector *dst);
 
-// TODO: doc
-int		exit_status_priorize(int prev, int new);
 
 /**
  * @brief Free a @c char* item through a generic @c void* callback signature.

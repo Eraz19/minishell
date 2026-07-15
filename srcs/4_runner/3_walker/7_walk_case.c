@@ -2,7 +2,8 @@
 #include "walker_priv.h"
 #include "expander.h"
 #include "cmd_expansion.h"
-#include <assert.h>
+# include <assert.h>	// DEBUG
+# include <stdio.h>		// DEBUG
 
 static inline t_error	walk_case_expand(
 							t_token *token,
