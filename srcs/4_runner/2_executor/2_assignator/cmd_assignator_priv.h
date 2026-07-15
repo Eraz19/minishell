@@ -18,24 +18,12 @@
  */
 t_error	cmd_assignment_check(const t_token *token);
 
-/**
- * @brief Expand one assignment token into a single owned string.
- *
- * @note @p out_expanded is initialized by the function on success.
- *
- * @param token Assignment token to expand (borrowed, read-only).
- * @param flags Expansion flags to apply.
- * @param out_expanded Destination string initialized by the function
- *                     (borrowed).
- * @return @c ERR_NO, @c ERR_INDEX_OUT_OF_BOUND, @c ERR_VAR_INVALID_NAME,
- *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
- *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
- *         @c ERR_INCOHERENT_STATE, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
- */
+// TODO: doc
 t_error	cmd_assignment_expand(
 			const t_token *token,
 			t_exp_flag flags,
-			t_string *out_expanded);
+			t_string *out_expanded,
+			int *exit_status);
 
 /**
  * @brief Apply one expanded assignment according to the command kind.
