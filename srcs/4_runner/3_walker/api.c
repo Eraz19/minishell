@@ -2,8 +2,10 @@
 #include "walker.h"
 #include "walker_priv.h"
 
-t_error	walk(t_runner *runner, t_ast_root *ast_root, int *exit_status)
+t_error	walk(t_runner *runner, t_ast_root *ast_root)
 {
-	*exit_status = -1;
-	return (walk_list(runner, ast_root, exit_status));
+	int	exit_status;
+
+	exit_status = -1;
+	return (walk_list(runner, ast_root, &exit_status));
 }

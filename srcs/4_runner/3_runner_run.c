@@ -14,7 +14,6 @@ Therefore, only fatal errors should bubble up to the main loop.
 t_error	runner_run(t_shell *shell)
 {
 	t_ast_root	ast_root;
-	int			exit_status;
 	t_error		err;
 
 	err = error(ERR_NO);
@@ -23,7 +22,7 @@ t_error	runner_run(t_shell *shell)
 	{
 		err = builder_get_ast(&ast_root);
 		if (err.type == ERR_NO)
-			err = walk(&shell->runner, &ast_root, &exit_status);
+			err = walk(&shell->runner, &ast_root);
 		err = error_priorize(err, params_reap(&shell->params));
 		runner_handle_errors(shell, &err);
 		ast_root_free(&ast_root);

@@ -1,5 +1,3 @@
-move `heredoc.h` into `scanner`
-
 # WIP
 
 ⚠️ Tous les calls à l'`expander`:
@@ -96,6 +94,9 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 ```
 - ⚠️ **all**:
 	- replace all `ERR_INDEX_OUT_OF_BOND`, etc by `error_print()` + `ERR_INTERNAL`
+- 🤔 move `heredoc.h` into `srcs/scanner/` ?
+- `echo` (and other builtins):
+	- Minimal 42 implementation or POSIX implementation ?
 - 🚧 `shell`:
 	- `shell_init_subshell()`: (only missing traps / signal handling)
 - ✅ `runner_set_stdin_to_blocking()`:
