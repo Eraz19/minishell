@@ -159,6 +159,7 @@ const char	*error_to_string(t_error err);
 t_error	undefined_behaviour(const char *message);
 
 void	print_unspecified_behaviour(
+			const char *optional_prefix,
 			const char *posix_citation,
 			const char *implemented_as);
 
