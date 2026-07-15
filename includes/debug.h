@@ -6,6 +6,10 @@
 # include "symbols_type.h"
 # include "lr_machine_type.h"
 # include "ast.h"
+<<<<<<< HEAD
+=======
+# include "logs.h"
+>>>>>>> 1c3691d88a12c17403fe5089b8972b342f2b3f3d
 
 const char	*bool_to_string(bool value);
 const char	*action_type_to_string(t_action_type type);

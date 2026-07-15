@@ -3,7 +3,7 @@
 
 # include "error.h"
 # include "cmd_type.h"
-# include "runner.h"
+# include "runner_type.h"
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -20,6 +20,6 @@
  * @param runner Runner state used for external commands (borrowed).
  * @return @c ERR_NO, @c ERR_NOT_IMPLEMENTED or @c ERR_LIBC.
  */
-t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner, int *exit_status);
+t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner);
 
 #endif

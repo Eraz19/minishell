@@ -71,7 +71,8 @@ static inline t_error	redirect_handle_failure(
 t_error	redirect_apply(
 			const t_ast_redirection *redirection,
 			t_redirector *redirector,
-			bool permanent)
+			bool permanent,
+			int *exit_status)
 {
 	t_redir			redir;
 	t_ast_redir_op	operation;
@@ -80,7 +81,7 @@ t_error	redirect_apply(
 
 	applied = false;
 	redir_init(&redir, redirection);
-	err = redirect_expand(&redir);
+	err = redirect_expand(&redir, exit_status);
 	if (err.type == ERR_NO && redir.is_location == true)
 		err = redirect_resolve_location(&redir);
 	if (err.type == ERR_NO)

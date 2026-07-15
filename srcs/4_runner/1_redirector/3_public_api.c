@@ -27,7 +27,10 @@ static inline t_error	redirect_use_new_frame(t_redirector *redirector)
 	return (err);
 }
 
-t_error	redirect_commit(t_redirector *redirector, const t_ast_redir_list *redirections)
+t_error	redirect_commit(
+			t_redirector *redirector,
+			const t_ast_redir_list *redirections,
+			int *exit_status)
 {
 	size_t					i;
 	const t_ast_redirection	*redirection;
@@ -38,7 +41,7 @@ t_error	redirect_commit(t_redirector *redirector, const t_ast_redir_list *redire
 	while (i < redirections->len)
 	{
 		redirection = &((t_ast_redirection *)redirections->data)[i];
-		err = redirect_apply(redirection, redirector, true);
+		err = redirect_apply(redirection, redirector, true, exit_status);
 		if (err.type)
 			break ;
 		i++;
@@ -46,7 +49,10 @@ t_error	redirect_commit(t_redirector *redirector, const t_ast_redir_list *redire
 	return (err);
 }
 
-t_error	redirect_start(t_redirector *redirector, const t_ast_redir_list *redirections)
+t_error	redirect_start(
+			t_redirector *redirector,
+			const t_ast_redir_list *redirections,
+			int *exit_status)
 {
 	size_t					i;
 	const t_ast_redirection	*redirection;
@@ -60,7 +66,7 @@ t_error	redirect_start(t_redirector *redirector, const t_ast_redir_list *redirec
 	while (i < redirections->len)
 	{
 		redirection = &((t_ast_redirection *)redirections->data)[i];
-		err = redirect_apply(redirection, redirector, false);
+		err = redirect_apply(redirection, redirector, false, exit_status);
 		if (err.type)
 		{
 			restore_err = fd_restore_last_frame(redirector);

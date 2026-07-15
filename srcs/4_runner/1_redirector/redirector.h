@@ -37,39 +37,17 @@ void	redirect_free(t_redirector *redirector);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-/**
- * @brief Apply redirections permanently to the current process.
- *
- * Successful permanent redirections are recorded inside @p redirector so they
- * can later be restored by @ref redirect_free().
- *
- * @param redirector Redirector state used to track backups (borrowed).
- * @param redirections Redirection list to apply (borrowed).
- * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE,
- *         @c ERR_INVALID_USAGE, @c ERR_INTERRUPTED,
- *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
- *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
- *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
- *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
- */
-t_error	redirect_commit(t_redirector *redirector, const t_ast_redir_list *redirections);
+// TODO: doc
+t_error	redirect_commit(
+			t_redirector *redirector,
+			const t_ast_redir_list *redirections,
+			int *exit_status);
 
-/**
- * @brief Apply redirections temporarily within a new restorable frame.
- *
- * When one redirection fails, every redirection already applied in the current
- * frame is rolled back before the function returns.
- *
- * @param redirector Redirector state used to track backups (borrowed).
- * @param redirections Redirection list to apply (borrowed).
- * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE,
- *         @c ERR_INVALID_USAGE, @c ERR_INTERRUPTED,
- *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
- *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
- *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
- *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
- */
-t_error	redirect_start(t_redirector *redirector, const t_ast_redir_list *redirections);
+// TODO: doc
+t_error	redirect_start(
+			t_redirector *redirector,
+			const t_ast_redir_list *redirections,
+			int *exit_status);
 
 /**
  * @brief Restore and discard the most recent temporary redirection frame.

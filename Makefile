@@ -71,9 +71,7 @@ SRCS			:= \
 	$(wildcard srcs/params/*/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*/*.c) \
 	$(wildcard srcs/alias/*.c) \
-	$(wildcard srcs/alias/*/*.c) \
-	$(wildcard srcs/heredoc/*.c) \
-	$(wildcard srcs/heredoc/*/*.c) \
+	$(wildcard srcs/alias/*/*.c)
 
 INCLUDES		:= \
 	-I$(READLINE_DIR)/include \

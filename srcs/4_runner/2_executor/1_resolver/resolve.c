@@ -65,7 +65,7 @@ static inline t_error	cmd_expand_word(t_cmd *cmd, const t_token *word)
 		flags = cmd_assignment_expansion_flags();
 	else
 		flags = cmd_regular_expansion_flags();
-	err = expand_token(&expansion, word, flags);
+	err = expand_token(&expansion, word, &cmd->exit_status, flags);
 	if (err.type)
 		return (err);
 	err = cmd_add_to_argv(cmd, &expansion);

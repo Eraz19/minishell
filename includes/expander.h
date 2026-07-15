@@ -242,6 +242,14 @@ void	expansion_free_void(void *expansion);
  */
 t_error	expansion_get(t_string *out, const t_expansion *expansion, size_t i);
 
+// TODO: doc (frees src anyway)
+// @ret ERR_INTERNAL / ERR_LIBC
+t_error	expansion_merge(
+			const char *raw_value,
+			const char *posix_citation,
+			t_expansion *src,
+			t_string *out);
+
 /**
  * @ingroup expander
  * @brief Removes the field at index @p i and hands it to the caller.

@@ -8,6 +8,7 @@
 #define UB_SUFFIX	"\" 🤪\n ╰──▶ Byyye! 👋\n"
 
 void	print_unspecified_behaviour(
+			const char *optional_prefix,
 			const char *posix_citation,
 			const char *implemented_as)
 {
@@ -16,6 +17,11 @@ void	print_unspecified_behaviour(
 	shell_name = shell_get_name();
 	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));
 	(void)posix_write(STDERR_FILENO, COND_PREFIX, str_len(COND_PREFIX));
+	if (optional_prefix != NULL)
+	{
+		(void)posix_write(STDERR_FILENO, optional_prefix, str_len(optional_prefix));
+		(void)posix_write(STDERR_FILENO, ": ", 2);
+	}
 	(void)posix_write(STDERR_FILENO, posix_citation, str_len(posix_citation));
 	(void)posix_write(STDERR_FILENO, IMPL_PREFIX, str_len(IMPL_PREFIX));
 	(void)posix_write(STDERR_FILENO, implemented_as, str_len(implemented_as));

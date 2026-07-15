@@ -59,7 +59,7 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 	exit(exit_status);
 }
 
-t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner, int *exit_status)
+t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner)
 {
 	pid_t	pid;
 	t_error	err;
@@ -69,7 +69,6 @@ t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner, int *exit_status)
 		return (error_sys());
 	else if (pid == 0)
 		cmd_exec_child(cmd, runner);
-	err = posix_wait(pid, exit_status);
-	cmd->exit_status = *exit_status;
+	err = posix_wait(pid, &cmd->exit_status);
 	return (err);
 }

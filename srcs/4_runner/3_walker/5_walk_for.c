@@ -6,7 +6,8 @@
 
 static inline t_error	walk_for_expand_words(
 							t_token_pool *pool,
-							t_cmd_expansions *expansions)
+							t_cmd_expansions *expansions,
+							int *exit_status)
 {
 	size_t		i;
 	t_token		*token;
@@ -20,7 +21,7 @@ static inline t_error	walk_for_expand_words(
 	while (i < pool->len)
 	{
 		token = token_pool_get(pool, i++);
-		err = expand_token(&expansion, token, flags);
+		err = expand_token(&expansion, token, exit_status, flags);
 		if (err.type)
 			break ;
 		if (expansion.len == 0)
@@ -106,7 +107,7 @@ t_error	walk_for(t_runner *runner, t_ast_for *for_clause, int *exit_status)
 	runner->loop_depth++;
 	*exit_status = -1;
 	cmd_expansions_init(&expansions);
-	err = walk_for_expand_words(&for_clause->words, &expansions);
+	err = walk_for_expand_words(&for_clause->words, &expansions, exit_status);
 	if (err.type == ERR_NO)
 		err = walk_for_loop(runner, for_clause, &expansions, exit_status);
 	cmd_expansions_free(&expansions);

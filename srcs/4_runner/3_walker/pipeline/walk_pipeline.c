@@ -1,7 +1,9 @@
 #include "walker_priv.h"
 #include "walk_pipeline_priv.h"
 #include "params.h"
-# include <assert.h>
+# include <assert.h>	// DEBUG
+# include <stdio.h>		// DEBUG
+# include "logs.h"		// DEBUG
 
 t_error	walk_pipeline(
 			t_runner *runner,
@@ -17,6 +19,7 @@ t_error	walk_pipeline(
 	else
 		err = walk_pipe_multiple_commands(runner, pipeline, exit_status);
 	err = walk_normalize_output(err, NULL, exit_status);
+	fprintf(stderr, "%s[WALKER] $? = %i%s\n", YELLOW, *exit_status, NC);
 	params_set_last_status(*exit_status);
 	return (err);
 }

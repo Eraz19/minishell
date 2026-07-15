@@ -31,27 +31,12 @@ void	redir_free(t_redir *redir);
 /*                                ENTRY POINT                                */
 /* ************************************************************************* */
 
-/**
- * @brief Expand, normalize, prepare and apply one redirection.
- *
- * When @p permanent is @c false, backup state is rolled back on application
- * failure. When @p permanent is @c true, successful backups are kept inside
- * @p redirector.
- *
- * @param redirection Redirection to apply (borrowed).
- * @param redirector Redirector state used to track backups (borrowed).
- * @param permanent True for committed redirections, false for restorable ones.
- * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE,
- *         @c ERR_INVALID_USAGE, @c ERR_INTERRUPTED,
- *         @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME,
- *         @c ERR_VAR_NOT_FOUND, @c ERR_PARAM_BAD_SUBSTITUTION,
- *         @c ERR_PARAM_NULL_OR_UNSET, @c ERR_NOT_IMPLEMENTED,
- *         @c ERR_EXP_RESULT_INCOHERENT, @c ERR_QUOTED_TILDE or @c ERR_LIBC.
- */
+// TODO: doc
 t_error	redirect_apply(
 			const t_ast_redirection *redirection,
 			t_redirector *redirector,
-			bool permanent);
+			bool permanent,
+			int *exit_status);
 
 /* ************************************************************************* */
 /*                                  HELPERS                                  */
@@ -68,13 +53,9 @@ t_error	redirect_apply(
  */
 bool	redirect_parse_fd(const char *s, int *out_fd);
 
-/**
- * @brief Expand the word/heredoc body and optional io_location of redirection.
- *
- * @param redirection Redirection to expand (borrowed).
- * @return @c ERR_POSIX_EXPANSION, @c ERR_REDIRECTION, @c ERR_INTERNAL or @c ERR_LIBC.
- */
-t_error	redirect_expand(t_redir *redirection);
+// TODO: doc
+// @return @c ERR_POSIX_EXPANSION, @c ERR_REDIRECTION, @c ERR_INTERNAL or @c ERR_LIBC.
+t_error	redirect_expand(t_redir *redirection, int *exit_status);
 
 // @ret ERR_REDIRECTION
 t_error	redirect_resolve_location(t_redir *redir);

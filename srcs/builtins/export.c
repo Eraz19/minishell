@@ -16,7 +16,7 @@ static t_error export_catch_ub(int argc, char **argv, t_getopt_out *out)
 	options_count = out->options.len;
 	operand_count = (size_t)argc - out->first_operand_index;
 	if (options_count == 0 && operand_count == 0)
-		print_unspecified_behaviour("POSIX: export: DESCRIPTION: When no "
+		print_unspecified_behaviour(NULL, "POSIX: export: DESCRIPTION: When no "
 			"arguments are given, the results are unspecified", "no-op");
 	if (options_count > 0 && operand_count > 0)
 	{

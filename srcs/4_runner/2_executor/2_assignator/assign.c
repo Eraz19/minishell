@@ -47,7 +47,8 @@ t_error	cmd_assign(t_cmd *cmd, const t_token_pool *assignments)
 		token = token_pool_get(assignments, i++);
 		err = cmd_assignment_check(token);
 		if (err.type == ERR_NO)
-			err = cmd_assignment_expand(token, flags, &expanded);
+			err = cmd_assignment_expand(token, flags, &expanded,
+					&cmd->exit_status);
 		if (err.type == ERR_NO)
 			err = cmd_assignment_process(cmd, token, &expanded);
 	}

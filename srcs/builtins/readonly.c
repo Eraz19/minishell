@@ -16,8 +16,8 @@ static t_error readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
 	options_count = out->options.len;
 	operand_count = (size_t)argc - out->first_operand_index;
 	if (options_count == 0 && operand_count == 0)
-		print_unspecified_behaviour("POSIX: readonly: DESCRIPTION: When no "
-			"arguments are given, the results are unspecified", "no-op");
+		print_unspecified_behaviour(NULL, "POSIX: readonly: DESCRIPTION: When "
+			"no arguments are given, the results are unspecified", "no-op");
 	if (options_count > 0 && operand_count > 0)
 	{
 		(void)error_print(error(ERR_INVALID_USAGE), argv[0], READONLY_USAGE,
