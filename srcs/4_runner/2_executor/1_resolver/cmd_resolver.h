@@ -10,6 +10,6 @@
 /* ************************************************************************* */
 
 // TODO: doc
-t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words, int *exit_status);
+t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words);
 
 #endif

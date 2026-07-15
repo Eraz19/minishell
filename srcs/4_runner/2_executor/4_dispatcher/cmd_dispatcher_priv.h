@@ -21,7 +21,7 @@
  *			@c ERR_POSIX_BUILTIN_SPECIAL @c ERR_INTERRUPTED @c ERR_INTERNAL
  *			or @c ERR_LIBC ).
  */
-t_error	cmd_exec_builtin(t_cmd *cmd, int *exit_status);
+t_error	cmd_exec_builtin(t_cmd *cmd);
 
 /**
  * @brief Execute an external command in a child process.
@@ -38,7 +38,7 @@ t_error	cmd_exec_builtin(t_cmd *cmd, int *exit_status);
  *         parent wait loop is interrupted and must stop, or @c ERR_LIBC on
  *         @c fork() / @c waitpid() failure.
  */
-t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner, int *exit_status);
+t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner);
 
 /**
  * @brief Execute a shell function already selected in @p cmd.
@@ -49,6 +49,6 @@ t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner, int *exit_status);
  * @param cmd Function command descriptor (borrowed).
  * @return @c ERR_NOT_IMPLEMENTED.
  */
-t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner, int *exit_status);
+t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner);
 
 #endif

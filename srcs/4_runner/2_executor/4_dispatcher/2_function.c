@@ -42,7 +42,7 @@ static inline t_error	cmd_update_positionals(t_cmd *cmd)
 	return (err);
 }
 
-t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner, int *exit_status)
+t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner)
 {
 	t_error	err;
 
@@ -55,7 +55,6 @@ t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner, int *exit_status)
 	{
 		if (err.type == ERR_REDIRECTION)
 			err.type = ERR_REDIRECTION_OTHER;
-		*exit_status = cmd->exit_status;
 		err = error_priorize(err, params_pop_positionals());
 		return (err);
 	}
@@ -64,6 +63,5 @@ t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner, int *exit_status)
 		err.type = ERR_NO;
 	err = error_priorize(err, redirect_stop(&runner->redirector));
 	err = error_priorize(err, params_pop_positionals());
-	*exit_status = cmd->exit_status;
 	return (err);
 }
