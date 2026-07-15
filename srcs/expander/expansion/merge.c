@@ -5,24 +5,36 @@
 #define MULTIPLE_FIELDS	"merging fields with first character of IFS"
 
 /*
-le premier caractère de IFS, si IFS contient au moins un caractère ;
-un <space> si IFS est unset ;
-aucun caractère si IFS est set but null.
+- If IFS contains at least one character => use first character of IFS
+- If IFS is unset => use ' '
+- If IFS is set but null => don't use separator
 */
 
 // @ret ERR_INTERNAL / ERR_LIBC
-static inline t_error	expansion_get_ifs_first_char(char *out)
+static inline t_error	expansion_get_ifs_first_char(char *out, bool *sep)
 {
 	t_string	ifs;
 	t_error		err;
 
 	(void)string_init(&ifs, 0, NULL, 0);
 	err = params_get_from_const("IFS", &ifs);
-	if (err.type == ERR_VAR_NOT_FOUND || ifs.len == 0)
-		return (string_free(&ifs), *out = ' ', error(ERR_NO));
-	if (err.type)
+	if (err.type == ERR_VAR_NOT_FOUND)
+	{
+		*out = ' ';
+		*sep = true;
+		string_free(&ifs);
+		return (error(ERR_NO));
+	}
+	else if (err.type)
 		return (error_print(err, NULL, NULL));
+	else if (ifs.len == 0)
+	{
+		*sep = false;
+		string_free(&ifs);
+		return (error(ERR_NO));
+	}
 	*out = ifs.data[0];
+	*sep = true;
 	string_free(&ifs);
 	return (err);
 }
@@ -30,7 +42,8 @@ static inline t_error	expansion_get_ifs_first_char(char *out)
 // @ret ERR_LIBC
 static inline t_error	expansion_merge_fields(
 							t_expansion *src,
-							char sep,
+							char c,
+							bool sep,
 							t_string *out)
 {
 	size_t	i;
@@ -45,7 +58,7 @@ static inline t_error	expansion_merge_fields(
 			err = error_print(error_sys(), NULL, NULL);
 			return (string_free(out), err);
 		}
-		if (i < src->len - 1 && !string_append_n(out, &sep, 1))
+		if (sep == true && i < src->len - 1 && !string_append_n(out, &c, 1))
 		{
 			err = error_print(error_sys(), NULL, NULL);
 			return (string_free(out), err);
@@ -55,7 +68,6 @@ static inline t_error	expansion_merge_fields(
 	return (error(ERR_NO));
 }
 
-# include <stdio.h>
 t_error	expansion_merge(
 			const char *raw_value,
 			const char *posix_citation,
@@ -63,18 +75,14 @@ t_error	expansion_merge(
 			t_string *out)
 {
 	char	c;
+	bool	sep;
 	t_error	err;
 
-	for (size_t i = 0; i < src->len; i++)
-	{
-		t_string *str = &((t_string *)src->data)[i];
-		fprintf(stderr, "expansion[%zu] = '%s'\n", i, str->data);
-	}
 	if (src->len == 0)
 		print_unspecified_behaviour(raw_value, posix_citation, NO_FIELD);
 	else if (src->len > 1)
 		print_unspecified_behaviour(raw_value, posix_citation, MULTIPLE_FIELDS);
-	err = expansion_get_ifs_first_char(&c);
+	err = expansion_get_ifs_first_char(&c, &sep);
 	if (err.type)
 		return (expansion_free(src), err);
 	if (src->len == 0)
@@ -88,7 +96,7 @@ t_error	expansion_merge(
 		expansion_free(src);
 		return (err);
 	}
-	err = expansion_merge_fields(src, c, out);
+	err = expansion_merge_fields(src, c, sep, out);
 	expansion_free(src);
 	return (err);
 }
