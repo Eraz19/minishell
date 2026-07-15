@@ -41,7 +41,7 @@ static inline t_error	redirect_handle_noclobber_eexist(
 
 	if (stat(path, &st) == -1)
 	{
-		(void)error_print(error_sys(), REDIRECTOR_MODULE_NAME,
+		(void)error_print(error_sys(),
 			"redirection failed", "no clobber is active and file exists",
 			"unable to stat file", NULL,
 			"'%s' expanded from '%s'", path, redir->word->value.data);
@@ -51,7 +51,6 @@ static inline t_error	redirect_handle_noclobber_eexist(
 	}
 	else if (S_ISREG(st.st_mode))
 		return (error_print(error(ERR_REDIRECTION),
-			REDIRECTOR_MODULE_NAME,
 			"no clobber is active and file is regular", NULL,
 			"'%s' expanded from '%s'", path, redir->word->value.data));
 	oflag = O_WRONLY | O_CREAT | O_TRUNC;
@@ -62,7 +61,7 @@ static inline t_error	redirect_handle_noclobber_eexist(
 static inline void	redirect_unlink_heredoc(char *path)
 {
 	if (unlink(path) != 0)
-		(void)error_print(error_sys(), REDIRECTOR_MODULE_NAME,
+		(void)error_print(error_sys(),
 			"unable to unlink heredoc file", NULL, "'%s'", path);
 	free(path);
 }
@@ -86,12 +85,12 @@ static inline t_error	redirect_handle_open_error(
 	}
 	if (err.type && redir->operation == AST_REDIR_HEREDOC)
 	{
-		err = error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
+		err = error_print(err, "redirection failed",
 			"unable to open heredoc file", NULL, NULL);
 	}
 	else if (err.type)
 	{
-		err = error_print(err, REDIRECTOR_MODULE_NAME, "redirection failed",
+		err = error_print(err, "redirection failed",
 			"unable to open file", NULL, "'%s' expanded from '%s'",
 			redir->expanded_word.data, redir->word->value.data);
 	}

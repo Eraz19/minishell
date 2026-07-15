@@ -20,7 +20,7 @@ t_error	redirect_resolve_location(t_redir *redir)
 	if (redirect_parse_fd(content_start, &redir->fd))
 		err = error(ERR_NO);
 	else
-		err = error_print(error(ERR_REDIRECTION), REDIRECTOR_MODULE_NAME,
+		err = error_print(error(ERR_REDIRECTION),
 			"io_location is not a valid file descriptor", NULL,
 			"'%s' expanded from '%s'",
 			content_start, redir->location->value.data);

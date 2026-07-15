@@ -14,7 +14,7 @@ static inline t_error	redirect_print_and_qualify(
 {
 	if (err.type == ERR_NO || err.type == ERR_INTERRUPTED)
 		return (err);
-	err = error_print(err, REDIRECTOR_MODULE_NAME,
+	err = error_print(err,
 			message, NULL, NULL);
 	if (err.type == ERR_INTERNAL || err.type == ERR_INVALID_USAGE)
 		return (err);
@@ -144,7 +144,7 @@ t_error	redirect_get_heredoc_path(
 		err = error_priorize(err, redirect_print_and_qualify(close_err, false,
 					"unable to close heredoc file"));
 	if (err.type && unlink(path.data) != 0)
-		(void)error_print(error_sys(), REDIRECTOR_MODULE_NAME, "unable to "
+		(void)error_print(error_sys(), "unable to "
 			"unlink heredoc file", NULL, "'%s'", path.data);
 	if (err.type)
 		return (string_free(&path), err);

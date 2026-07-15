@@ -5,9 +5,9 @@
 # include <assert.h>	// DEBUG
 # include <stdio.h>		// DEBUG
 
-#define CITATION_1	"The conditional construct case shall execute the "
-#define CITATION_2	"compound-list corresponding to the first pattern [...] "
-#define CITATION_3	"that is matched by the string resulting from [expansions]"
+#define CITATION_1	"POSIX 2.9.4.3: case shall execute "
+#define CITATION_2	"the compound-list corresponding to the first pattern [...]"
+#define CITATION_3	" that is matched by the string resulting from [expansions]"
 #define CITATION	CITATION_1 CITATION_2 CITATION_3
 
 static inline t_error	walk_case_expand(

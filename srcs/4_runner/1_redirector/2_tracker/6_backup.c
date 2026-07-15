@@ -89,7 +89,7 @@ t_error	fd_tracker_backup(t_fd_tracker *tracker, int fd, int *out_backup_fd)
 	if (err.type)
 	{
 		(void)posix_close_if_open(backup_fd);
-		return (error_print(err, REDIRECTOR_MODULE_NAME,
+		return (error_print(err,
 			"unable to lock shell fd", NULL, NULL));
 	}
 	err = fd_tracker_grow(tracker, (size_t)backup_fd + 1);

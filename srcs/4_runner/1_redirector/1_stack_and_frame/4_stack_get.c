@@ -1,5 +1,4 @@
 #include "redirect_stack.h"
-#include "redirector_priv.h"
 
 t_error	redirect_stack_get_frame(
 			const t_redir_stack *stack,
@@ -7,7 +6,8 @@ t_error	redirect_stack_get_frame(
 			t_redir_frame **out_frame)
 {
 	if (index >= stack->len)
-		return (error(ERR_INDEX_OUT_OF_BOUND));
+		return (error_print(error(ERR_INTERNAL),
+			"redirect stack doesn't contain the required index", NULL, NULL));
 	*out_frame = &((t_redir_frame *)stack->data)[index];
 	return (error(ERR_NO));
 }
@@ -17,8 +17,8 @@ t_error	redirect_stack_get_current_frame(
 			t_redir_frame **out_current_frame)
 {
 	if (stack->len == 0)
-		return (error_print(error(ERR_INDEX_OUT_OF_BOUND),
-			REDIRECTOR_MODULE_NAME, "stack is empty", NULL, NULL));
+		return (error_print(error(ERR_INTERNAL),
+			"redirect stack is empty", NULL, NULL));
 	return (redirect_stack_get_frame(stack, stack->len - 1, out_current_frame));
 }
 

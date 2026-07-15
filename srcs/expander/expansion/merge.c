@@ -2,10 +2,10 @@
 #include "params.h"
 
 #define NO_FIELD		"converts 0 field into empty field"
-#define MULTIPLE_FIELDS	"merging fields with first character of IFS"
+#define MULTIPLE_FIELDS	"merging fields with first IFS character"
 
 /*
-- If IFS contains at least one character => use first character of IFS
+- If IFS contains at least one character => use first IFS character
 - If IFS is unset => use ' '
 - If IFS is set but null => don't use separator
 */

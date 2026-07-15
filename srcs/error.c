@@ -122,7 +122,7 @@ const char	*error_to_string(t_error err)
 		return ("undefined behaviour 🤪");
 	// Internal errors
 	else if (err.type == ERR_INTERNAL)
-		return ("internal builtin error");
+		return ("internal error");
 	else if (err.type == ERR_LIBC)
 		return (strerror(err.saved_errno));
 	// POSIX errors
@@ -177,7 +177,10 @@ t_error	error_sys_priv(const char *file, int line, const char *caller)
 	t_error	err;
 
 	err.type = ERR_LIBC;
-	err.saved_errno = errno;
+	if (errno != 0)
+		err.saved_errno = errno;
+	else
+		err.type = ERR_INTERNAL;
 	err.printed = false;
 #ifdef DEBUG_ERROR_TRACE
 	fprintf(stderr, RED "===> [ERROR] %s:%i [%s()] => ERR_LIBC (%s)\n" NC, 

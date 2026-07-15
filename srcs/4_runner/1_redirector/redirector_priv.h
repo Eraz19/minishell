@@ -5,8 +5,6 @@
 # include "ast.h"
 # include "redirector_type.h"
 
-# define REDIRECTOR_MODULE_NAME	"runner: redirector"
-
 // Type
 
 typedef struct s_redir

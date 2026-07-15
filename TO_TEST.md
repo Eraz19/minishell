@@ -1,3 +1,41 @@
+# WIP
+
+```bash
+set -- a b c
+case b in
+	$@) echo VALID_1 ;;
+	*)  echo ERROR_1 ;;
+esac
+case b in
+	"$@") echo VALID_2 ;;
+	*)  echo ERROR_2 ;;
+esac
+case b in
+	$*) echo ERROR_3 ;;
+	*)  echo VALID_3 ;;
+esac
+case "a b c" in
+	$*) echo VALID_4 ;;
+	*)  echo ERROR_4 ;;
+esac
+case b in
+	"$*") echo ERROR_5 ;;
+	*)  echo VALID_5 ;;
+esac
+case $@ in
+	a) echo ERROR a ;;
+	b) echo ERROR b ;;
+	c) echo ERROR c ;;
+	abc) echo ERROR abc ;;
+	"a b c") echo VALID_6 ;;
+	*)  echo ERROR no ;;
+esac
+case b in
+	a|b|c) echo VALID_7 ;;
+	*)  echo ERROR_7 ;;
+esac
+```
+
 # TESTS TODO
 
 🧪 Tester expansions qui produisent 0 / 1 / plusieurs fields:

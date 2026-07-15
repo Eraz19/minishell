@@ -49,6 +49,8 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 	if (err.type == ERR_REDIRECTION_OTHER)
 	{
 		(void)error_print(err, "runner", "executor", NULL, NULL);
+		if (cmd->exit_status < 0)
+			cmd->exit_status = (int)err.type;
 		err = error(ERR_NO);
 	}
 	if (redir_applied == true)

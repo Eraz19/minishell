@@ -1,34 +1,36 @@
 # WIP
 
-- handle `n` fields expansions :
-	- `redirection`: always redirect to one file per field
-	- `case`: 0 field => skip (match = false)
-	- `case`: n fields => match sur chaque field
+- `builder`:
+	- handle `command substitution search`
+- `runner`:
+	- handle `command substitution execution`
+- **all**:
+	- handle all `options` properly
+- `runner-executor`:
+	- ⚠️ `exec` specific flow
+	- ⚠️ `command` specific flow
+- `posix_read_all()`
+
+---
+
+# KEEP IN MIND
+
 - ⚠️ `exit_status`:
 	- remove some `exit_status = -1` to avoid losing expansion / redirection status ?
 - 💡 Les erreurs dépendent de l'opération qui a échouée:
 	- Donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
-- `builder`:
-	- handle `command substitution search`
-- `runner-executor`:
-	- ⚠️ `exec` specific flow
-	- ⚠️ `command` specific flow
-	- `execve fallback`: don't free `lr_machine` to avoid recomputing tables
-- `posix_read_all()`
 
 ---
 
 # TODO
 
-- `walker`:
-	- `walk_case_expand()` : implement expansion incorrect len handling
-- `error`:
-	- `error_sys()`: requalify as `ERR_INTERNAL` if `errno == 0`
 - `shell`:
 	- process `ENV`:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
 	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
+- `undefined_behaviour()`:
+	- print la tête à Xavier
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files
 - `libft`:
@@ -40,21 +42,12 @@
 		- 🚨 `vector_dup()` le fait !!
 		- 🚨 `vector_init()`, `vector_grow()` et `vector_dup()`, `vector_pop()`, `vector_insert()`, `vector_remove()` et `vector_merge()` retournent false dans d'autres cas qu'une erreur système !
 	- Remove **wildcards** from `libft`'s `Makefile`
-	- ⚠️ `libft/vector` => Arithmétique sur `void *` n'est pas **standard C**, c'est une **extension GCC** => Ok norme et compilation 42 ?!
+	- ⚠️ `libft/vector` => remplacer arithmétique `void *` par `char *`
 	- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
 - `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
-- `undefined_behaviour()`:
-	- print la tête à Xavier
-- `params`:
-	- `variables`:
-		- Switch `t_vector`s to `t_hashmap` ?
-- `all`:
-	- `clear()` API instead of `free()` for shell reset, subshell, etc (avoid rebuilding lr tables)
 - **ALL REPO**:
 	- use `print_unspecified_behaviour()`
 	- Move `t_tokens` from `runner` to `token` module ?
-	- Use `t_tokens` instead of `t_vector` of `t_token *` (`ast`...)
-	- handle `options` properly (`-n` flag, ...)
 	- `const` partout
 	- `inline` partout
 	- `assert` partout
@@ -75,46 +68,13 @@
 
 ---
 
-# TO FIX
+# TODO IF ON A QUE ÇA A FOUTRE
 
-# `$@` / `$*` UNSPECIFIED CASES IMPLEMENTATIONS
-
-**POSIX 2.5.2 Special Parameters**:
-- `$@`					=> 1 field **per parameter**, join [first with before] + join [last with after]
-- `$*` + unquoted		=> 1 field **per parameter**, join [first with before] + join [last with after]
-- `$*` + quoted			=> **only** 1 field, joined with:
-	- if `IFS` len > 0				=> `IFS[0]`
-	- if `IFS` is *unset*			=> ` `
-	- if `IFS` is *set but null*	=> *nothing*
-- if no *field spillting*	=> UNSPECIFIED => **MINISHELL** => same behaviour as if field splitting was active
-
-**MINISHELL**:
-- `$@`:
-	- `redirection`: always redirect to one file per field
-	- `case`: 0 field => skip (match = false)
-	- `case`: n fields => match sur chaque field
-
-**YASH (normal / -o posixlycorrect)**
-- `$@`:
-	- `redirection`: always merge fields in `filename`
-	- `case`: always merge patterns
-
-**BASH --posix**:
-- `$@`:
-	- `redirection`: always merge fields in `filename`
-	- `case`: unquoted => merge fields
-	- `case`: quoted => only keep first field
-
-**BASH**:
-- `$@`:
-	- `redirection`: error "redirection ambigue"
-	- `case`: unquoted => merge fields
-	- `case`: quoted => only keep first field
-
-**ZSH**:
-- `$@`:
-	- `redirection`: always redirect to one file per field
-	- `case`: always merge patterns
+- `params`:
+	- `variables`:
+		- Switch `t_vector`s to `t_hashmap`
+- `redirection`:
+	- when `filename` expands to more than one field: redirect to one file per field
 
 ---
 

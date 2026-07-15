@@ -2,21 +2,23 @@
 #include "fd_manager.h"
 #include <unistd.h>
 
+#define CITATION_1	"POSIX 2.7.5 / 2.7.6: If word evaluates to something else "
+#define CITATION_2	"[than a file descriptor or '-'], the behavior is unspecified"
+#define CITATION	CITATION_1 CITATION_2
+#define IMPLEMENT	"redirection error"
+
 // @ret ERR_REDIRECTION
 static inline t_error	redirect_dup_invalid_word(t_redir *redir)
 {
 	const char	*value;
 
-	(void)undefined_behaviour("POSIX 2.7.5 / 2.7.6: "
-		"If word evaluates to something else "
-		"[than a file descriptor or '-'], "
-		"the behavior is unspecified");
+	print_unspecified_behaviour(redir->word->value.data, CITATION, IMPLEMENT);
 	if (redir->expanded_word.len == 0)
 		value = "";
 	else
 		value = redir->expanded_word.data;
-	return (error_print(error(ERR_REDIRECTION), REDIRECTOR_MODULE_NAME,
-		"invalid word value", NULL, "'%s' expanded from '%s'",
+	return (error_print(error(ERR_REDIRECTION),
+		"invalid file descriptor", NULL, "'%s' expanded from '%s'",
 		value, redir->word->value.data));
 }
 
@@ -36,7 +38,7 @@ static inline t_error	redirect_validate_dup_rhs(
 	err = fd_check_dup_rhs(redirector, rhs_fd);
 	if (err.type == ERR_REDIRECTION)
 		return (error_print(err,
-			REDIRECTOR_MODULE_NAME, "file descriptor is not open", NULL,
+			"file descriptor is not open", NULL,
 			"%i expanded from '%s'", rhs_fd, redir->word->value.data));
 	return (err);
 }

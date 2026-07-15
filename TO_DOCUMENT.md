@@ -39,15 +39,63 @@
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 
 ⚠️ Search for `print_unspecified_behaviour()` usage
-- `runner/executor/resolver`:
+- `utilities`:
 	- No special treatment is done for `unspecified command names` so it can resolve to a `function` or an `external command`
 - `functions`:
 	- `assignments` persist after execution
-- `utilities`:
-	- unspecified utilities are processed as external utilities
 - `errors`:
 	- shell exists on `command not found` error when shell is not interactive
+- `redirections`:
+	- `io location` are supported: must expand to a valid file descriptor
+	- `word` expansion producing more than one field : we merge it with first `IFS` character (` ` if *unset*, none if *set but null*)
+- `expansions`:
+	- `$@` / `$*`: always expand as in a *field splitting* context:
+		- `$@` / `$*` / `"$@"`: 1 field per parameter, first field joined with previous one and last field joined with next one
+		- `"$*"`: 1 field joined by first `IFS` character (` ` if *unset*, none if *set but null*)
 - ...
+
+### `$@` / `$*` UNSPECIFIED CASES IMPLEMENTATIONS
+
+**POSIX 2.5.2 Special Parameters**:
+- `$@`					=> 1 field **per parameter**, join [first with before] + join [last with after]
+- `$*` + unquoted		=> 1 field **per parameter**, join [first with before] + join [last with after]
+- `$*` + quoted			=> **only** 1 field, joined with:
+	- if `IFS` len > 0				=> `IFS[0]`
+	- if `IFS` is *unset*			=> ` `
+	- if `IFS` is *set but null*	=> *nothing*
+- if no *field spillting*	=> UNSPECIFIED => **MINISHELL** => same behaviour as if field splitting was active
+
+**MINISHELL**:
+- `$@`:
+	- `redirection filename`: merge fields with first `IFS` character
+	- `case word`: 0 field => `""`
+	- `case word`: n fields => merge fields with first `IFS` character
+	- `case pattern`: 0 field => skip (match = false)
+	- `case pattern`: n fields => match sur chaque field
+
+**YASH (normal / -o posixlycorrect)**
+- `$@`:
+	- `redirection`: always merge fields in `filename`
+	- `case`: always merge patterns
+
+**BASH --posix**:
+- `$@`:
+	- `redirection`: always merge fields in `filename`
+	- `case`: unquoted => merge fields
+	- `case`: quoted => only keep first field
+
+**BASH**:
+- `$@`:
+	- `redirection`: error "redirection ambigue"
+	- `case`: unquoted => merge fields
+	- `case`: quoted => only keep first field
+
+**ZSH**:
+- `$@`:
+	- `redirection`: always redirect to one file per field
+	- `case`: always merge patterns
+
+---
 
 ## lr_machine.md
 
@@ -63,6 +111,7 @@
 - Think, find and implement a suitable **architecture** for a large purpose program:
 	- **deep modules** strategy: `scanner` (aka `lexer`) + `builder` (aka `parser`) + `runner` (aka `executor`)
 	- **memory safety** flow: init, run, free
+	- **error management**: handle various error types, printing and absorbing strategies
 - Work as a **team** with `git` and `discord` (2 members):
 	- **git branches**
 	- **git issues**
