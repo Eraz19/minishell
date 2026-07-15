@@ -44,6 +44,7 @@ typedef enum e_error_type
 	ERR_PARAM_NULL_OR_UNSET,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed at production with the parameter name)
 	ERR_PARAM_BAD_SUBSTITUTION,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed)
 	ERR_ALIAS_NOT_FOUND,					// [ 1] [BUILTINS]	alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
+	ERR_ALIAS_INVALID_NAME,					// [ 1] [BUILTINS]
 	// FT_GETOPT
 	ERR_OPT_INVALID,						// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	ERR_OPT_INVALID_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)

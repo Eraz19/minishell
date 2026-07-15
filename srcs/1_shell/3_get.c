@@ -20,16 +20,6 @@ t_builder	*shell_get_builder(void)
 	return (&shell->builder);
 }
 
-t_heredoc	*shell_get_heredoc(void)
-{
-	t_shell *shell;
-
-	shell = shell_get();
-	if (!shell)
-		return (NULL);
-	return (&shell->heredoc);
-}
-
 t_history	*shell_get_history(void)
 {
 	t_shell *shell;

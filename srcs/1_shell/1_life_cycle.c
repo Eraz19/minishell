@@ -18,7 +18,6 @@ t_error	shell_clear(t_shell *shell)
 	params_clear(&shell->params);
 	scanner_clear(&shell->scanner);
 	alias_clear(&shell->alias);
-	heredoc_clear(&shell->heredoc);
 	history_clear(&shell->history);
 	builder_clear(&shell->builder);
 	return (runner_clear(&shell->runner));

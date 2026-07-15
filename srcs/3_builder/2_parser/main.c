@@ -9,6 +9,7 @@
 #endif
 # include <assert.h>	// DEBUG
 # include <stdio.h>
+#include "logs.h"
 
 static inline t_error	parser_push_initial_state(t_parser *parser)
 {

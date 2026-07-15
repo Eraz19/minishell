@@ -101,6 +101,8 @@ const char	*error_to_string(t_error err)
 		return ("parameter null or not set");
 	else if (err.type == ERR_PARAM_BAD_SUBSTITUTION)
 		return ("bad substitution");
+	else if (err.type == ERR_ALIAS_INVALID_NAME)
+		return ("invalid alias name");
 	else if (err.type == ERR_ALIAS_NOT_FOUND)
 		return ("not found");
 	// posix_write() error

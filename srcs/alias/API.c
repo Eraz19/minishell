@@ -50,6 +50,7 @@ t_error	alias_remove(const char *name)
 t_error	alias_add(const char *name, const char *value)
 {
 	t_alias	*alias;
+	char	*name_copy;
 	char	*value_copy;
 
 	alias = shell_get_alias();
@@ -57,14 +58,20 @@ t_error	alias_add(const char *name, const char *value)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (name == NULL)
 		return (alias->err);
+	name_copy = str_dup(name);
+	if (name_copy == NULL)
+		return (alias->err = error_sys());
 	if (value == NULL)
 		value_copy = str_dup("");
 	else
 		value_copy = str_dup(value);
 	if (value_copy == NULL)
-		return (alias->err = error_sys());
-	if (!hashmap_put(&alias->map, name, (void *)value_copy))
-		return (free(value_copy), alias->err = error_sys());
+		return (alias->err = error_sys(), free(name_copy), alias->err);
+	if (!hashmap_put(&alias->map, name_copy, (void *)value_copy))
+	{
+		alias->err = error_sys();
+		return (free(name_copy), free(value_copy), alias->err);
+	}
 	return (alias->err);
 }
 
