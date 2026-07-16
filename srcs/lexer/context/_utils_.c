@@ -31,7 +31,19 @@ t_error	context_EOI(t_lexer *lexer)
 	const char	*construct;
 
 	if (lexer->rules.on_eoi != NULL)
-		return (lexer->rules.on_eoi(lexer));
+	{
+		if (lexer->input_stack.len == 1)
+			return (lexer->rules.on_eoi(lexer));
+		else
+		{
+			lexer_input_stack_pop(&lexer->input_stack);
+			lexer->err = lexer_input_stack_get_last(
+							&lexer->input_stack,
+							&lexer->input);
+			if (lexer->err.type)
+				return (lexer->err);
+		}
+	}
 	construct = unterminated_construct(lexer);
 	if (construct != NULL)
 		return (lexer->err = error_print(error(ERR_UNEXPECTED_EOI),
