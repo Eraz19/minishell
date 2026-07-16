@@ -2,9 +2,7 @@
 
 bool	is_context_param_start(char *str)
 {
-	if (str[1] != '\0')
-		return (str[0] == '$' && str[1] == '{');
-	return (false);
+	return (str[0] == '$' && str[1] == '{');
 }
 
 bool	is_in_context_param_whitelist(char c)

@@ -17,7 +17,6 @@ t_error	lexer_input_stack_item_init(t_lexer_input_stack_item **item)
 	if (*item == NULL)
 		return (error_sys());
 	**item = (t_lexer_input_stack_item){0};
-	context_stack_init(&(*item)->context);
 	return (error(ERR_NO));
 }
 
@@ -27,8 +26,6 @@ void	lexer_input_stack_item_free(void *item)
 
 	item_ = (t_lexer_input_stack_item **)item;
 	string_free(&(*item_)->str);
-	ft_bzero((*item_)->context.data, (*item_)->context.cap);
-	vector_free(&(*item_)->context, NULL);
 	**item_ = (t_lexer_input_stack_item){0};
 	free(*item_);
 	*item_ = NULL;

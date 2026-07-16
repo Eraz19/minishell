@@ -2,9 +2,7 @@
 
 bool	is_context_arith_start(char *str)
 {
-	if (str[1] != '\0' && str[2] != '\0')
-		return (str[0] == '$' && str[1] == '(' && str[2] == '(');
-	return (false);
+	return (str[0] == '$' && str[1] == '(' && str[2] == '(');
 }
 
 bool	is_context_arith_ending(char c, void *nesting_depth)
