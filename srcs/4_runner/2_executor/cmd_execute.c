@@ -5,6 +5,7 @@
 #include "cmd_assignator.h"
 #include "cmd_searcher.h"
 #include "cmd_dispatcher.h"
+#include "xtrace.h"
 # include <stdio.h>	// DEBUG
 # include "logs.h"	// DEBUG
 # include "debug.h"	// DEBUG
@@ -97,6 +98,9 @@ t_error cmd_execute(t_runner *runner, const t_ast_scmd *simple_command, int *exi
 	if (err.type)
 		return (cmd_finalize(&cmd, runner, err, false, exit_status));
 	err = cmd_assign(&cmd, &simple_command->assignments);
+	if (err.type)
+		return (cmd_finalize(&cmd, runner, err, true, exit_status));
+	err = xtrace_print_argv(&cmd.argv);
 	if (err.type)
 		return (cmd_finalize(&cmd, runner, err, true, exit_status));
 	if (cmd.type == CMD_EXTERNAL)
