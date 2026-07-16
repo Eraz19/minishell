@@ -2,9 +2,7 @@
 
 t_error	redirect_print_error(const char *message)
 {
-	return (error_print(error(ERR_REDIRECTION),
-		REDIRECTOR_MODULE_NAME,
-		message, NULL, NULL));
+	return (error_print(error(ERR_REDIRECTION), message, NULL, NULL));
 }
 
 t_error	redirect_print_error_all_fd_used(void)

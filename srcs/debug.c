@@ -6,19 +6,13 @@
 #include "lr_state_type.h"
 #include "rule_state_type.h"
 #include "cst_type.h"
+#include "cmd_type.h"
 #include "ast.h"
 #include "heredoc.h"
 #include "logs.h"
 
 #include <stdio.h>
 #include <stdbool.h>
-
-#ifndef MAGENTA
-# define MAGENTA "\033[35m"
-#endif
-#ifndef CYAN
-# define CYAN "\033[36m"
-#endif
 
 /* ************************************************************************* */
 /*                                   BOOL                                    */
@@ -29,6 +23,19 @@ const char	*bool_to_string(bool value)
 	if (value)
 		return ("true");
 	return ("false");
+}
+
+const char	*cmd_type_to_string(t_cmd_type type)
+{
+	switch (type)
+	{
+		case CMD_NONE: return ("CMD_NONE");
+		case CMD_SPECIAL_BUILTIN: return ("CMD_SPECIAL_BUILTIN");
+		case CMD_FUNCTION: return ("CMD_FUNCTION");
+		case CMD_BUILTIN: return ("CMD_BUILTIN");
+		case CMD_EXTERNAL: return ("CMD_EXTERNAL");
+		default: return ("unknown");
+	}
 }
 
 #if defined DEBUG_CST || defined DEBUG_AST
@@ -376,10 +383,8 @@ void	debug_dump_cst(t_cst_node *node)
 
 	if (!node)
 		return ;
-	fprintf(stderr, "--------------------------------------------------\n");
-	fprintf(stderr, "[BUILDER] CST built:\n");
+	fprintf(stderr, "[BUILDR] CST built:\n");
 	cst_log_node(node, 0, lasts, true);
-	fprintf(stderr, "--------------------------------------------------\n");
 #else
 	(void)node;
 #endif
@@ -875,10 +880,8 @@ void	debug_dump_ast(t_ast_root *root)
 
 	if (!root)
 		return ;
-	fprintf(stderr, "--------------------------------------------------\n");
-	fprintf(stderr, "[BUILDER] AST built:\n");
+	fprintf(stderr, "[BUILDR] AST built:\n");
 	ast_log_list("AST_ROOT", root, 0, lasts, true);
-	fprintf(stderr, "--------------------------------------------------\n");
 #else
 	(void)root;
 #endif

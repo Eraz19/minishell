@@ -29,21 +29,21 @@ typedef enum e_error_type
 	ERR_VAR_NOT_FOUND,						// [ 1]
 	ERR_VAR_READ_ONLY,						// [ 1]
 	// Lexer failures
-	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
-	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_EMPTY_STACK,						// [ 1] 
 	ERR_HEREDOC_MAX_ID_REACHED,				// [ 1] 
 	ERR_HISTORY_DISABLED,					// [ 1] 
 	ERR_INCOHERENT_STATE,					// [ 1] 
-	ERR_NO_DELIM,							// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_NO_DELIM,							// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_NOT_IMPLEMENTED,					// [ 1] 
-	ERR_UNEXPECTED_EOI,						// [ 1] [SCANNER]	Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_UNEXPECTED_EOI,						// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_NO_INPUT_TO_LEX,					// [ 1] 
 	ERR_EXP_RESULT_INCOHERENT,				// [ 1] 
-	ERR_QUOTED_TILDE,						// [ 1] [EXPANDER]	Internal control flow, never escapes: a quoted tilde stays literal
-	ERR_PARAM_NULL_OR_UNSET,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed at production with the parameter name)
-	ERR_PARAM_BAD_SUBSTITUTION,				// [ 1] [EXPANDER]	Requalified as ERR_POSIX_EXPANSION (printed)
-	ERR_ALIAS_NOT_FOUND,					// [ 1] [BUILTINS]	alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
+	ERR_QUOTED_TILDE,						// [ 1] [EXPANDER]		Internal control flow, never escapes: a quoted tilde stays literal
+	ERR_PARAM_NULL_OR_UNSET,				// [ 1] [EXPANDER]		Requalified as ERR_POSIX_EXPANSION (printed at production with the parameter name)
+	ERR_PARAM_BAD_SUBSTITUTION,				// [ 1] [EXPANDER]		Requalified as ERR_POSIX_EXPANSION (printed)
+	ERR_ALIAS_NOT_FOUND,					// [ 1] [BUILTINS]		alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
 	ERR_ALIAS_INVALID_NAME,					// [ 1] [BUILTINS]
 	// FT_GETOPT
 	ERR_OPT_INVALID,						// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
@@ -51,24 +51,24 @@ typedef enum e_error_type
 	ERR_OPT_MISSING_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
 	// posix_write()
-	ERR_POSIX_WRITE,						// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
+	ERR_POSIX_WRITE = 105,					// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
-	ERR_INVALID_USAGE,						// [ 4] [CALLER]		Requalified as ???
+	ERR_INVALID_USAGE = 106,				// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL / ERR_REDIRECTION_OTHER. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
+	ERR_REDIRECTION = 107,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL or dropped. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
-	ERR_BUILTIN,							// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
-	ERR_REDIRECTION_OTHER = 116,			// [ 6] [WALKERS]		[N-N-Y] Absorbed (walk_scmd / walk_command / walk_function)
+	ERR_BUILTIN = 108,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
 	/* -------------------- FLOW CONTROL ERRORS -------------------- */
-	ERR_VEOF,								// [ 2]	[RUNNER]		"CTRL+D" received: Absorbed (may exit with $? status)
-	ERR_EOF,								// [ 2]	[RUNNER]		End of input reached: Absorbed (may exit with $? status)
-	ERR_CONTINUE,							// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
-	ERR_BREAK,								// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
-	ERR_RETURN,								// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
+	ERR_VEOF = 110,							// [ 2]	[RUNNER]		"CTRL+D" received: Absorbed (may exit with $? status)
+	ERR_EOF = 112,							// [ 2]	[RUNNER]		End of input reached: Absorbed (may exit with $? status)
+	ERR_CONTINUE = 113,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_BREAK = 114,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_RETURN = 115,						// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
+	ERR_EXIT = 116,							// [ 5] [-]				Exit builtin has been called
+	ERR_INTERRUPTED = 117,					// [ 5] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
+	ERR_UB = 118,							// [ 5] [-]				[?-?-Y]	Always fatal
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
-	// GENERIC ERRORS (can be returned by any module or builtin)
-	ERR_INTERRUPTED = 117,					// [ 7] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
-	ERR_UB = 118,							// [ 8] [-]				[?-?-Y]	Always fatal
+	// INTERNAL ERRORS (can be returned by any module or builtin)
 	ERR_INTERNAL = 119,						// [ 9] [-]				[Y-Y-Y]	Always fatal
 	ERR_LIBC = 120,							// [10] [-]				[Y-Y-Y]	Always fatal
 	// POSIX EXIT CODES
@@ -80,7 +80,7 @@ typedef enum e_error_type
 	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [SCMD WALKER]	[?-?-?] Absorbed / bubbled up
 	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [SCMD WALKER]	[?-N-Y] Absorbed / bubbled up
 	ERR_POSIX_READ = 128,					// [ 6] [-]				[Y-Y-Y] Always fatal
-	// POSIX SIGNAL CODES (128 + signal)	// [ 6] [-]						TODO: signal management
+	// POSIX SIGNAL CODES (128 + signal)	// [ 6] [-]				TODO: signal management
 }	t_error_type;
 /*
 Legend:

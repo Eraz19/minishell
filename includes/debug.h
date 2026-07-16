@@ -6,10 +6,12 @@
 # include "symbols_type.h"
 # include "lr_machine_type.h"
 # include "ast.h"
+# include "cmd_type.h"
 # include "logs.h"
 
 const char	*bool_to_string(bool value);
 const char	*action_type_to_string(t_action_type type);
+const char	*cmd_type_to_string(t_cmd_type type);
 const char	*symbol_to_string(t_symbol symbol);
 const char	*ast_command_type_to_string(t_ast_command_type type);
 void		debug_dump_rule(t_lr_machine *machine, size_t rule_id);

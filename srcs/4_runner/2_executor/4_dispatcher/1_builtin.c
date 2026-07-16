@@ -1,5 +1,6 @@
 #include "cmd_dispatcher_priv.h"
 
+# include <stdio.h>	// DEBUG
 t_error	cmd_exec_builtin(t_cmd *cmd)
 {
 	int		argc;

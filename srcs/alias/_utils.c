@@ -20,20 +20,22 @@ static bool	is_word_containing_quoting(char *word)
 	return (false);
 }
 
-static bool	is_valid_alias_name(char *word)
+bool	alias_is_valid_name(const char *name)
 {
 	size_t	i;
 
+	if (name == NULL || *name == '\0')
+		return (false);
 	i = 0;
-	while (word[i] != '\0')
+	while (name[i] != '\0')
 	{
-		if (!ft_isalnum(word[i]) &&
-			word[i] != '_' &&
-			word[i] != '!' &&
-			word[i] != '%' &&
-			word[i] != ',' &&
-			word[i] != '@' &&
-			word[i] != '.')
+		if (!ft_isalnum(name[i]) &&
+			name[i] != '_' &&
+			name[i] != '!' &&
+			name[i] != '%' &&
+			name[i] != ',' &&
+			name[i] != '-' &&
+			name[i] != '@')
 			return (false);
 		i++;
 	}
@@ -44,9 +46,10 @@ bool	is_token_alias_expandable(t_alias *alias, char *word)
 {
 	bool	can_next_token_be_a_cmd_name;
 
+	alias->err = error(ERR_NO);
 	if (is_word_containing_quoting(word))
 		return (false);
-	else if (!is_valid_alias_name(word))
+	else if (!alias_is_valid_name(word))
 		return (false);
 	else if (!hashmap_contains(&alias->map, word))
 		return (false);

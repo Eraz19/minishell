@@ -1,29 +1,7 @@
 #include "alias.h"
 #include <stdlib.h>
 
-bool	alias_is_valid_name(const char *name)
-{
-	size_t	i;
-
-	if (name == NULL || *name == '\0')
-		return (false);
-	i = 0;
-	while (name[i] != '\0')
-	{
-		if (!ft_isalnum(name[i])
-			&& name[i] != '_'
-			&& name[i] != '!'
-			&& name[i] != '%'
-			&& name[i] != ','
-			&& name[i] != '-'
-			&& name[i] != '@')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-t_error	alias_interpret_operand(const char *operand)
+static t_error	alias_interpret_operand(const char *operand)
 {
 	t_error	err;
 	char	*name;
@@ -52,31 +30,48 @@ t_error	alias_interpret_operand(const char *operand)
 	return (err);
 }
 
-t_error	alias_interpret_operands(int argc, char **argv)
+static t_error	alias_interpret_operands(int start, int argc, char **argv)
 {
 	int		i;
-	t_error	err;
+	t_error	last_exit_status;
+	t_error	exit_status;
 
-	i = 0;
+	exit_status = error(ERR_NO);
+	i = start;
 	while (i < argc)
 	{
-		err = alias_interpret_operand(argv[i]);
-		if (err.type)
-			return (err);
+		last_exit_status = alias_interpret_operand(argv[i]);
+		if (last_exit_status.type != ERR_NO)
+		{
+			exit_status = error_print(
+					last_exit_status, argv[0], argv[i], NULL, NULL);
+		}
 		i++;
 	}
-	return (error(ERR_NO));
+	return (exit_status);
 }
 
 t_error	builtin_alias(int argc, char **argv, char **envp, int *exit_status)
 {
 	t_error	err;
+	int		first_operand;
 
 	(void)envp;
-	if (argc == 1)
+	first_operand = 1;
+	if (argc > 1 && str_cmp(argv[1], "--") == 0)
+		first_operand = 2;
+	if (first_operand >= argc)
 		err = alias_print(NULL);
 	else
-		err = alias_interpret_operands(argc - 1, argv + 1);
+		err = alias_interpret_operands(first_operand, argc, argv);
 	*exit_status = (int)err.type;
+	if (err.type)
+		err = error_print(err, argv[0], NULL, NULL);
+	if (err.type == ERR_ALIAS_NOT_FOUND
+		|| err.type == ERR_ALIAS_INVALID_NAME
+		|| err.type == ERR_POSIX_WRITE)
+		err.type = ERR_BUILTIN;
+	else if (err.type == ERR_SHELL_NOT_FOUND)
+		err.type = ERR_INTERNAL;
 	return (err);
 }

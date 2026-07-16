@@ -130,12 +130,17 @@ t_error	alias_add(const char *name, const char *value);
  *
  * @note On failure after the eligibility check, the recursion-guard stack
  *       is rebalanced: no name stays blocked.
- * @warning @p expansion is written only when the token expands; test the
- *          resulting length (the scanner checks @c len) so the
- *          no-expansion case stays distinguishable.
+ * @note The recursion-guard entry pushed on a successful expansion is
+ *       popped by @ref alias_on_expansion_end when the caller's pushed
+ *       input ends: a true @p expanded REQUIRES the caller to feed
+ *       @p expansion back as a lexer input (empty expansions included —
+ *       POSIX: an empty alias value removes the word).
  * @param expansion String receiving the expansion, initialized by the
- *                  function on a successful expansion only; the caller
- *                  owns it (borrowed).
+ *                  function only when @p expanded is set to true; the
+ *                  caller owns it (borrowed).
+ * @param expanded Out: whether the token expanded — the ONLY signal to
+ *                 test; an empty @p expansion is a valid expansion
+ *                 (borrowed).
  * @param token_value Token text to test (borrowed, read-only).
  * @return @c ERR_SHELL_NOT_FOUND if the shell alias or builder state is
  *         unavailable; @c ERR_LIBC on allocation failure;
@@ -145,7 +150,23 @@ t_error	alias_add(const char *name, const char *value);
  *         @c ERR_PARSER_EMPTY_GOTO (printed); @c ERR_NO on success,
  *         whether or not the token expanded.
  */
-t_error	alias_expand_token(t_string *expansion, const t_string *token_value);
+t_error	alias_expand_token(
+			t_string *expansion, bool *expanded, const t_string *token_value);
+
+/**
+ * @ingroup alias
+ * @brief Tests whether @p name is a valid alias name (XBD 3.10).
+ *
+ * Accepts words made only of portable-character-set alphanumerics and
+ * '_', '!', '%', ',', '-', '@'. NULL and the empty string are invalid.
+ * Single source of truth for both sides of the module: the alias/unalias
+ * builtins (operand validation) and the expansion eligibility check use
+ * this predicate, so a definable name is always an expandable name.
+ *
+ * @param name Candidate name (borrowed, read-only), may be NULL.
+ * @return true when @p name is a valid alias name.
+ */
+bool	alias_is_valid_name(const char *name);
 
 /**
  * @ingroup alias
@@ -197,5 +218,22 @@ t_error	alias_print(const char *name);
  *         shell alias state is unavailable; @c ERR_NO on success.
  */
 t_error	alias_remove(const char *name);
+
+/**
+ * @ingroup alias
+ * @brief Removes every alias definition (POSIX @c unalias @c -a).
+ *
+ * Empties the definition map and frees the module's copies of all keys
+ * and values. Removing zero definitions is a success. Operates on the
+ * global shell alias state.
+ *
+ * @warning Clears the MAP ONLY — unlike @ref alias_clear, the
+ *          recursion-guard stack is left intact: an in-flight expansion
+ *          (e.g. @c alias @c ua='unalias @c -a'; @c ua) must keep its
+ *          guard entries until its own expansion end.
+ * @return @c ERR_SHELL_NOT_FOUND if the shell alias state is
+ *         unavailable, @c ERR_NO otherwise.
+ */
+t_error	alias_remove_all(void);
 
 #endif

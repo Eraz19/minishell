@@ -6,10 +6,10 @@
 #include "cst.h"
 #ifdef DEBUG_PARSING
 # include "debug.h"		// DEBUG
+# include "logs.h"		// DEBUG
+# include <stdio.h>		// DEBUG
 #endif
 # include <assert.h>	// DEBUG
-# include <stdio.h>
-#include "logs.h"
 
 static inline t_error	parser_push_initial_state(t_parser *parser)
 {
@@ -86,7 +86,6 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 
 	assert(parser != NULL);
 	assert(machine != NULL);
-	fprintf(stderr, "--------------------------------------------------\n");
 	err = parser_prepare_to_build_cst(parser);
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{
@@ -94,17 +93,16 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 		token = parser_get_token(parser, parser->lookahead_id);
 		err = parser_qualify_symbol(parser, lr_state_id, token);
 		if (err.type != ERR_NO)
-			return (fprintf(stderr, "--------------------------------------------------\n"), err);
+			return (err);
 		action = machine->actions[lr_state_id][parser->lookahead_symbol];
 		if (action.type == ACTION_ERROR)
-			return (fprintf(stderr, "--------------------------------------------------\n"), parser_invalid_syntax());
+			return (parser_invalid_syntax());
 		else if (action.type == ACTION_ACCEPT)
-			return (fprintf(stderr, "--------------------------------------------------\n"), parser_accept(parser));
+			return (parser_accept(parser));
 		else if (action.type == ACTION_SHIFT)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)
 			err = parser_reduce(parser, machine, action.payload);
 	}
-	fprintf(stderr, "--------------------------------------------------\n");
 	return (err);
 }

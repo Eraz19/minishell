@@ -32,20 +32,18 @@ static t_error	exit_resolve_status(int argc, char **argv, int *status)
 t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
 {
 	t_error	err;
-	int		status;
 
 	(void)envp;
-	err = exit_resolve_status(argc, argv, &status);
+	err = exit_resolve_status(argc, argv, exit_status);
 	if (err.type == ERR_INVALID_USAGE && argc > 2)
 		return (*exit_status = (int)err.type, err.type = ERR_BUILTIN, err);
 	if (err.type == ERR_INVALID_USAGE)
-		status = 2;
+		*exit_status = 2;
 	else if (err.type)
 	{
 		*exit_status = (int)err.type;
 		err = error_print(err, argv[0], NULL, NULL);
 		return (err.type = ERR_INTERNAL, err);
 	}
-	*exit_status = status;
-	return (error(ERR_VEOF));
+	return (error(ERR_EXIT));
 }

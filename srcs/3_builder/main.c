@@ -26,7 +26,7 @@ t_error	builder_load(t_builder *builder)
 		&builder->lr_machine));
 }
 
-t_error	builder_get_ast(t_ast_root *dst_ast)
+t_error	build_ast(t_ast_root *dst_ast)
 {
 	t_builder	*builder;
 	t_error		err;

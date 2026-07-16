@@ -48,6 +48,7 @@ t_error	readline_(t_string *res, const char *prompt)
 	err = reader_set_stdin_to_blocking();
 	if (err.type)
 		return (err);
+	fprintf(stderr, CYAN "####################### IN #######################\n" NC);
 	input = readline(prompt);
 	while (input == NULL)
 	{
@@ -59,6 +60,7 @@ t_error	readline_(t_string *res, const char *prompt)
 			return (err);
 		input = readline(prompt);
 	}
+	fprintf(stderr, CYAN "##################################################\n" NC);
 	if (!string_init(res, 0, input, -1))
 		return (free(input), error_sys());
 	free(input);

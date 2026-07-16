@@ -42,7 +42,7 @@ t_error	walk_command(t_runner *runner, t_ast_command *command, int *exit_status)
 {
 	t_error	err;
 
-	*exit_status = -1;
+	// *exit_status = -1;
 	err = redirect_start(&runner->redirector, &command->redirs, exit_status);
 	if (err.type == ERR_NO)
 	{

@@ -17,7 +17,7 @@ void	builder_clear(t_builder *builder);
 void	builder_free(t_builder *builder);
 
 t_error	builder_load(t_builder *builder);
-t_error	builder_get_ast(t_ast_root *dst_ast);
+t_error	build_ast(t_ast_root *dst_ast);
 
 // @ret ERR_SHELL_NOT_FOUND
 t_error	builder_can_next_word_be_a_cmd_name(bool *dst);
