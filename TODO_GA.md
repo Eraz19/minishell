@@ -1,7 +1,32 @@
-# WIP
+# WIP (COMMAND SUBSTITUTION PARSING)
 
-- `builder`:
-	- handle `command substitution search`
+1. Initialiser un nouveau scanner + parser avec les mêmes options que les "main" scanner et parser
+2. Set l'input dans le nouveau scanner à la string qu'on cherche à parser (donc la vraie input + offset qui permet de commencer sur `(` de `$(`)
+3. Lexer / parser l'input "normalement" jusqu'à ce que le parser reduce un `subshell` (car ça signifie qu'on a obtenu une forme valide de commande `( command )` donc que la substitution `$( command )` est valide)
+4. Retourner l'index de la `)` fermant la cmd sub dans l'input au scanner qui a initialement call la fonction qui parse les cmd sub (+ free le scanner et le parser qui avaient été créés en étape 1)
+
+- ⚠️ handle uniquement `$(...)` form because `backquote` form only needs to find next `backquote`
+- ⚠️ `scanner` doit repérer lui-même les `$()` vides
+- ⚠️ Ajouter les continuations au main scanner (sinon l'historique et l'index du `)` seront incohérents):
+	- `t_error scanner_init_cmd_sub_parsing(const t_scanner *main_scanner, t_scanner *cmd_sub_scanner)`:
+		- initialise le scanner de la cmd_sub à partir du main scanner
+	- `t_error	builder_init_cmd_sub_parsing(const t_builder *main_builder, t_builder *cmd_sub_builder)`
+		- initialise le parser de la cmd_sub à partir du main parser:
+			- `cst_clear()`
+			- `find_cmd_sub = true`
+```bash
+bash-5.2$ echo $(echo "hello
+> boy"
+> )
+hello boy
+# historique bash --posix:
+echo $(echo "hello
+boy"
+)
+```
+
+# WIP (OTHER)
+
 - `runner`:
 	- handle `command substitution execution`
 - **all**:
