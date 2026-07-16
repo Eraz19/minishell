@@ -81,7 +81,7 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	fprintf(stderr, "[PARSER] READ   => [%3zu] %s%s%s",
 		parser->lookahead_id, RED, token_type_to_string(token.type), NC);
 	if (token.type == TOKEN_TOKEN)
-		fprintf(stderr, " (%s%s%s)", BLUE, token.value.data, NC);
+		fprintf(stderr, " (%s%s%s) [%zu - %zu]", BLUE, token.value.data, NC, token.index.start, token.index.end);
 	if (token.assignment_offset >= 0)
 		fprintf(stderr, " assignment_offset=%s%zu%s", YELLOW, token.assignment_offset, NC);
 	fprintf(stderr, "\n");

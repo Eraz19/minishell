@@ -1,6 +1,21 @@
 #include "error.h"
+#include "scanner.h"
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
+
+t_error	scanner_cmd_sub_init(const t_scanner *main_scanner, t_scanner *cmd_sub_scanner)
+{
+	(void)main_scanner;
+	(void)cmd_sub_scanner;
+	return (error(ERR_NO));
+}
+
+void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner)
+{
+	(void)cmd_sub_scanner;
+}
+
+
 /* ---------- TODO: shell ---------- */
 
 t_error		shell_should_interrupt(void)
