@@ -52,6 +52,8 @@
 	- `$@` / `$*`: always expand as in a *field splitting* context:
 		- `$@` / `$*` / `"$@"`: 1 field per parameter, first field joined with previous one and last field joined with next one
 		- `"$*"`: 1 field joined by first `IFS` character (` ` if *unset*, none if *set but null*)
+- `command substitutions`
+	- `alias`: 
 - ...
 
 ### `$@` / `$*` UNSPECIFIED CASES IMPLEMENTATIONS

@@ -40,8 +40,6 @@ boy"
 
 # KEEP IN MIND
 
-- ⚠️ `exit_status`:
-	- remove some `exit_status = -1` to avoid losing expansion / redirection status ?
 - 💡 Les erreurs dépendent de l'opération qui a échouée:
 	- Donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
 
