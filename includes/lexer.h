@@ -84,26 +84,9 @@ typedef struct s_lexer_input_stack_item
 
 typedef struct s_lexer	t_lexer;
 
-/**
- * @ingroup lexer
- * @struct s_lexer_rules
- * @brief Behaviour injected by whoever drives the lexer.
- *
- * @var s_lexer_rules::recognize Applies one token-recognition rule to the
- *                               current character (used by
- *                               @ref lexer_get_next_token; @c NULL for
- *                               context-only scans).
- * @var s_lexer_rules::on_eoi Handles end of input reached while still
- *                            inside a context: read a continuation line
- *                            and resume, or report the error. When
- *                            @c NULL, @ref context_EOI reports
- *                            @c ERR_UNEXPECTED_EOI (printed).
- * @var s_lexer_rules::on_input_end Hook fired when the top input is
- *                                  exhausted and popped (e.g. end of an
- *                                  alias expansion); may be @c NULL.
- */
 typedef struct s_lexer_rules
 {
+	t_lexer *calling_lexer;
 	t_error	(*on_eoi)(t_lexer *);
 	t_error	(*on_input_end)(t_lexer *);
 	t_error	(*recognize)(t_lexer *, t_context *);
@@ -358,6 +341,10 @@ void	lexer_input_stack_pop(t_lexer_input_stack *stack);
 t_error			lexer_input_stack_push(
 					t_lexer_input_stack *stack,
 					t_lexer_input_stack_item *item);
+
+t_error			lexer_input_stack_dup(
+					t_lexer_input_stack *out,
+					const t_lexer_input_stack *in);
 
 /* ************************************************************************* */
 /*                               ENTRY POINTS                                */

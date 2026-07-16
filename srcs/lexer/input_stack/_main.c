@@ -28,3 +28,33 @@ t_error	lexer_input_stack_get_last(
 	*item = ((t_lexer_input_stack_item **)stack->data)[stack->len - 1];
 	return (error(ERR_NO));
 }
+
+t_error	lexer_input_stack_dup(
+			t_lexer_input_stack *out,
+			const t_lexer_input_stack *in)
+{
+	size_t						i;
+	t_error						err;
+	t_string					str;
+	t_lexer_input_stack_item	*item;
+	t_lexer_input_stack_item	*item_dup;	
+
+	i = 0;
+	lexer_input_stack_init(out);
+	while (i < in->len)
+	{
+		lexer_input_stack_item_init(&item_dup);
+		item = ((t_lexer_input_stack_item **)in->data)[i];
+		str = item->str;
+		item_dup->i = item->i;
+		if (!string_init(&item_dup->str, 0, str.data, (long)str.len))
+		{
+			err = error_sys();
+			lexer_input_stack_item_free(&item_dup);
+			return (lexer_input_stack_free(out), err);
+		}
+		lexer_input_stack_push(out, item_dup);
+		++i;
+	}
+	return (error(ERR_NO));
+}

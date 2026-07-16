@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "reader_.h"
 #include "heredoc.h"
 #include "scanner.h"
 #include "scanner_.h"
@@ -49,14 +48,4 @@ t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip)
 	scanner->err = heredoc_read_body_from_input(out, &args);
 	scanner->err = scanner_error_qualify(scanner->err, false);
 	return (string_free(&delim_exp), scanner->err);
-}
-
-t_error	scanner_read_continuation(t_string *res)
-{
-	return (scanner_error_qualify(reader_continuation(res), true));
-}
-
-void	scanner_init_subshell(t_scanner *scanner)
-{
-	scanner->mode = INPUT_MODE_STDIN_PIPE;
 }

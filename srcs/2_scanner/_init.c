@@ -31,3 +31,8 @@ void	scanner_clear(t_scanner *scanner)
 {
 	lexer_clear(&scanner->lexer);
 }
+
+void	scanner_init_subshell(t_scanner *scanner)
+{
+	scanner->mode = INPUT_MODE_STDIN_PIPE;
+}
