@@ -59,6 +59,7 @@ bool	is_token_alias_expandable(t_alias *alias, char *word)
 	{
 		can_next_token_be_a_cmd_name = false;
 		alias->err = builder_can_next_word_be_a_cmd_name(
+				alias->parser,
 				&can_next_token_be_a_cmd_name);
 		if (alias->err.type || !can_next_token_be_a_cmd_name)
 			return (false);

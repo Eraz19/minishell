@@ -3,6 +3,7 @@
 
 # include "error.h"
 # include "libft.h"
+# include "parser_type.h"
 
 /** @defgroup alias Alias API
  *  @brief Shell command aliases with recursion-guarded expansion
@@ -68,6 +69,7 @@ typedef struct s_alias
 	t_error			err;
 	t_hashmap		map;
 	t_alias_stack	stack;
+	t_parser		*parser;
 	bool			disable_position;
 }	t_alias;
 
@@ -75,14 +77,7 @@ typedef struct s_alias
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
-/**
- * @ingroup alias
- * @brief Zeroes @p alias then initializes its expansion stack and its
- *        name-to-value map (values released with @c free on removal).
- *
- * @param alias Alias state initialized by the function (borrowed).
- */
-void	alias_init(t_alias *alias);
+void	alias_init(t_alias *alias, t_parser *parser);
 
 // TODO: doc
 void	alias_clear(t_alias *alias);
