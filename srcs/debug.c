@@ -880,7 +880,6 @@ void	debug_dump_ast(t_ast_root *root)
 
 	if (!root)
 		return ;
-	fprintf(stderr, "[BUILDR] AST built:\n");
 	ast_log_list("AST_ROOT", root, 0, lasts, true);
 #else
 	(void)root;

@@ -3,18 +3,11 @@
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
 
-t_error	scanner_cmd_sub_init(const t_scanner *main_scanner, t_scanner *cmd_sub_scanner)
+t_error	scanner_set_cmd_sub_input(const t_string *cmd_string)
 {
-	(void)main_scanner;
-	(void)cmd_sub_scanner;
+	(void)cmd_string;
 	return (error(ERR_NO));
 }
-
-void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner)
-{
-	(void)cmd_sub_scanner;
-}
-
 
 /* ---------- TODO: shell ---------- */
 
