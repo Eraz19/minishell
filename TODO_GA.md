@@ -1,22 +1,44 @@
-# WIP
+# WIP (COMMAND SUBSTITUTION PARSING)
 
-- `builder`:
-	- handle `command substitution search`
-- `runner`:
-	- handle `command substitution execution`
+⚠️ `t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);`
+
+// TODO: keep cmd sub generated `AST`
+```bash
+echo before; echo $( cat << EOF ); echo after
+# write it manually:
+inside
+EOF
+```
+
+- ⚠️ handle uniquement `$(...)` form because `backquote` form only needs to find next `backquote`
+- ⚠️ `scanner` doit repérer lui-même les `$()` vides
+- ⚠️ Ajouter les continuations au main scanner (sinon l'historique et l'index du `)` seront incohérents):
+
+```bash
+bash-5.2$ echo $(echo "hello
+> boy"
+> )
+hello boy
+# historique bash --posix:
+echo $(echo "hello
+boy"
+)
+```
+
+# WIP (OTHER)
+
 - **all**:
+	- ⚠️ retry on `EINTR` => shell only compute signals in *safe points*
 	- handle all `options` properly
 - `runner-executor`:
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
-- `posix_read_all()`
+- `posix_read_all()` and replace all `string_read*()` calls
 
 ---
 
 # KEEP IN MIND
 
-- ⚠️ `exit_status`:
-	- remove some `exit_status = -1` to avoid losing expansion / redirection status ?
 - 💡 Les erreurs dépendent de l'opération qui a échouée:
 	- Donc une `ERR_EXPANSION` ne peut jamais être requalifiée en `ERR_REDIRECTION`, `ERR_ASSIGNMENT`, etc.
 

@@ -59,6 +59,7 @@ SRCS			:= \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/builtins/*/*.c) \
 	$(wildcard srcs/cmd_cache/*.c) \
+	$(wildcard srcs/cmd_sub/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
 	$(wildcard srcs/expander/*/*/*.c) \
@@ -138,6 +139,7 @@ INCLUDES		:= \
 	-Isrcs/alias/stack \
 	-Isrcs/ast \
 	-Isrcs/builtins \
+	-Isrcs/cmd_sub \
 	-Isrcs/expander \
 	-Isrcs/expander/expansion \
 	-Isrcs/expander/field \

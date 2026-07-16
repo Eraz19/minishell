@@ -30,12 +30,13 @@ typedef struct s_shell
 	t_params	params;
 	t_runner	runner;
 	t_scanner	scanner;
+	bool		is_subshell;
 }	t_shell;
 
 typedef enum e_subshell_mode
 {
 	SUBSHELL_NORMAL,
-	SUBSHELL_CMD_SUB_TRAP_ONLY,	// command substitution containing only a trap command
+	SUBSHELL_CMD_SUB_TRAP_ONLY,	// Not used (not mandatory)
 	SUBSHELL_ASYNC_AND_OR		// async AND-OR list
 }	t_subshell_mode;
 
@@ -65,6 +66,9 @@ void	shell_free_void(void);
  *			or @c ERR_LIBC on failure.
  */
 t_error	shell_init_subshell(t_subshell_mode mode);
+
+// TODO: doc
+t_error	shell_is_subshell(bool *out);
 
 /**
  * @brief Returns the current global shell instance.

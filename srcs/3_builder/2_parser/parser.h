@@ -11,6 +11,9 @@ void	parser_init(t_parser *parser);
 void	parser_clear(t_parser *parser);
 void	parser_free(t_parser *parser);
 
+void	parser_cmd_sub_init(const t_parser *main_parser, t_parser *cmd_sub_parser);
+void	parser_cmd_sub_free(t_parser *cmd_sub_parser);
+
 // Ops
 
 t_error	parser_build_qualifiers_table(

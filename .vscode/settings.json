@@ -60,6 +60,7 @@
 		"-I${workspaceFolder}/srcs/alias/stack",
 		"-I${workspaceFolder}/srcs/builtins",
 		"-I${workspaceFolder}/srcs/cmd_cache",
+		"-I${workspaceFolder}/srcs/cmd_sub",
 		"-I${workspaceFolder}/srcs/expander",
 		"-I${workspaceFolder}/srcs/expander/field",
 		"-I${workspaceFolder}/srcs/expander/field_splitting",
@@ -99,6 +100,5 @@
 		"-I${workspaceFolder}/srcs/params/5_functions",
 		"-I${workspaceFolder}/srcs/params/6_process",
 		"-I${workspaceFolder}/srcs/params/6_process/process"
-	],
-	"explorer.sortOrder": "modified"
+	]
 }

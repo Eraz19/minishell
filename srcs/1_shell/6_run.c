@@ -46,6 +46,7 @@ int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
 {
 	t_shell_loading_options	options;
 	int						exit_status;
+	t_error					history_err;
 	t_error					err;
 
 	shell_start_logs();
@@ -57,13 +58,12 @@ int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
 	if (err.type == ERR_NO)
 		err = shell_exec_env();
 	if (err.type == ERR_NO)
-		err = runner_run(options.shell);
-	if (err.type)
-		(void)history_save();
-	else
-		err = history_save();
-	if (err.type)
-		err = error_print(err, "history", NULL, NULL);
+	{
+		runner_run(options.shell);
+		history_err = history_save();
+		if (history_err.type)
+			(void)error_print(history_err, "history", NULL, NULL);
+	}
 	exit_status = params_get_last_status_from(&options.shell->params);
 	shell_free(options.shell);
 	shell_stop_logs();

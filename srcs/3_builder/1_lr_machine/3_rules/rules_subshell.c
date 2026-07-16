@@ -1,4 +1,5 @@
 #include "rules__type.h"
+#include "hooks.h"
 
 /*
 subshell         : '(' compound_list ')'
@@ -11,4 +12,5 @@ void	rules_build_subshell(t_rule *rules)
 	rules[RULE_SUBSHELL_1].rhs[1] = SYM_compound_list;
 	rules[RULE_SUBSHELL_1].rhs[2] = SYM_RPARENTHESIS;
 	rules[RULE_SUBSHELL_1].rhs_len = 3;
+	rules[RULE_SUBSHELL_1].hook = hook_cmd_sub;
 }

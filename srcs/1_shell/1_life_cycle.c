@@ -11,6 +11,7 @@ void	shell_init(t_shell *shell)
 	history_init(&shell->history);
 	builder_init(&shell->builder);
 	runner_init(&shell->runner);
+	shell->is_subshell = false;
 }
 
 t_error	shell_clear(t_shell *shell)
@@ -20,6 +21,7 @@ t_error	shell_clear(t_shell *shell)
 	alias_clear(&shell->alias);
 	history_clear(&shell->history);
 	builder_clear(&shell->builder);
+	shell->is_subshell = false;
 	return (runner_clear(&shell->runner));
 }
 
@@ -31,6 +33,7 @@ void	shell_free(t_shell *shell)
 	history_free(&shell->history);
 	builder_free(&shell->builder);
 	runner_free(&shell->runner);
+	shell->is_subshell = false;
 	free(shell);
 	shell_set(NULL);
 }

@@ -51,26 +51,27 @@ typedef enum e_error_type
 	ERR_OPT_MISSING_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	/* -------------------- PARTIALLY QUALIFIED ERRORS -------------------- */
 	// posix_write()
-	ERR_POSIX_WRITE = 105,					// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
+	ERR_POSIX_WRITE = 90,					// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
-	ERR_INVALID_USAGE = 106,				// [ 4] [CALLER]		Requalified as ???
+	ERR_INVALID_USAGE = 91,				// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION = 107,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL or dropped. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
+	ERR_REDIRECTION = 92,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL or dropped. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
-	ERR_BUILTIN = 108,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
+	ERR_BUILTIN = 93,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
 	/* -------------------- FLOW CONTROL ERRORS -------------------- */
-	ERR_VEOF = 110,							// [ 2]	[RUNNER]		"CTRL+D" received: Absorbed (may exit with $? status)
-	ERR_EOF = 112,							// [ 2]	[RUNNER]		End of input reached: Absorbed (may exit with $? status)
-	ERR_CONTINUE = 113,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
-	ERR_BREAK = 114,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
-	ERR_RETURN = 115,						// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
-	ERR_EXIT = 116,							// [ 5] [-]				Exit builtin has been called
-	ERR_INTERRUPTED = 117,					// [ 5] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
-	ERR_UB = 118,							// [ 5] [-]				[?-?-Y]	Always fatal
+	ERR_VEOF = 100,							// [ 2]	[RUNNER]		"CTRL+D" received: Absorbed (may exit with $? status)
+	ERR_EOF = 101,							// [ 2]	[RUNNER]		End of input reached: Absorbed (may exit with $? status)
+	ERR_CONTINUE = 102,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_BREAK = 103,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
+	ERR_RETURN = 104,						// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
+	ERR_CMD_SUB_CLOSING_FOUND = 105,		// [ 5] [BUILDER]		Absorbed by builder_find_cmd_sub_end()
+	ERR_EXIT = 106,							// [ 5] [-]				Exit builtin has been called
+	ERR_INTERRUPTED = 107,					// [ 5] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
+	ERR_UB = 108,							// [ 5] [-]				[?-?-Y]	Always fatal
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// INTERNAL ERRORS (can be returned by any module or builtin)
-	ERR_INTERNAL = 119,						// [ 9] [-]				[Y-Y-Y]	Always fatal
-	ERR_LIBC = 120,							// [10] [-]				[Y-Y-Y]	Always fatal
+	ERR_INTERNAL = 110,						// [ 9] [-]				[Y-Y-Y]	Always fatal
+	ERR_LIBC = 111,							// [10] [-]				[Y-Y-Y]	Always fatal
 	// POSIX EXIT CODES
 	ERR_POSIX_SYNTAX = 121,					// [ 6] [RUNNER]		[Y-N-Y] Absorbed / bubbled up
 	ERR_POSIX_BUILTIN_SPECIAL = 122,		// [ 6] [SCMD WALKER]	[Y-N-N] Absorbed / bubbled up

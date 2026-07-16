@@ -11,7 +11,7 @@
 Non-fatal errors should be handled in walkers.
 Therefore, only fatal errors should bubble up to the main loop.
 */
-t_error	runner_run(t_shell *shell)
+void	runner_run(t_shell *shell)
 {
 	t_ast_root	ast_root;
 	t_error		err;
@@ -28,5 +28,4 @@ t_error	runner_run(t_shell *shell)
 		runner_handle_errors(shell, &err);
 		ast_root_free(&ast_root);
 	}
-	return (err);
 }

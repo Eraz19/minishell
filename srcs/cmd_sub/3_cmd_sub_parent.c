@@ -1,0 +1,42 @@
+#include "cmd_sub_priv.h"
+#include "posix_helpers.h"
+
+static inline t_error	cmd_sub_parent_read_and_close(
+							int pipe_fds[2],
+							t_string *out_string)
+{
+	t_error	err;
+
+	err = posix_close_if_open(pipe_fds[1]);
+	if (err.type)
+		return (error_priorize(err, posix_close_if_open(pipe_fds[0])));
+	if (!string_read_all(out_string, pipe_fds[0]))	// TODO: use posix_read_all()
+	{
+		err = error_sys();
+		return (error_priorize(err, posix_close_if_open(pipe_fds[0])));
+	}
+	return (posix_close_if_open(pipe_fds[0]));
+}
+
+static inline void	cmd_sub_parent_trim(t_string *string)
+{
+	while (string->len > 0 && string->data[string->len - 1] == '\n')
+		string->len--;
+	string->data[string->len] = '\0';
+}
+
+t_error	cmd_sub_parent(
+			int pipe_fds[2],
+			pid_t child_pid,
+			t_string *out_string,
+			int *out_exit_status)
+{
+	t_error	err;
+
+	err = cmd_sub_parent_read_and_close(pipe_fds, out_string);
+	err = error_priorize(err, posix_wait(child_pid, out_exit_status));
+	if (err.type)
+		return (err);
+	cmd_sub_parent_trim(out_string);
+	return (err);
+}

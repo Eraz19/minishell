@@ -6,6 +6,18 @@
 #include "runner.h"
 # include "logs.h"
 
+t_error	shell_is_subshell(bool *out)
+{
+	t_shell	*shell;
+
+	shell = shell_get();
+	if (shell == NULL)
+		return (error_print(error(ERR_INTERNAL),
+					"shell not found", NULL, NULL));
+	*out = shell->is_subshell;
+	return (error(ERR_NO));
+}
+
 // TODO
 static inline t_error	shell_reset_unignored_traps(t_shell *shell, t_subshell_mode mode)
 {
@@ -77,8 +89,10 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL),
 					__func__, "shell not found", NULL, NULL));
-	runner_init_subshell(&shell->runner);
+	shell->is_subshell = true;
 	params_init_subshell(&shell->params);
+	scanner_init_subshell(&shell->scanner);
+	runner_init_subshell(&shell->runner);
 	err = shell_reset_unignored_traps(shell, mode);
 	if (err.type == ERR_NO)
 	{

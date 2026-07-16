@@ -1,26 +1,27 @@
 #include "error.h"
-#include "token.h"
+#include "scanner.h"
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
+
+t_error	scanner_cmd_sub_init(const t_scanner *main_scanner, t_scanner *cmd_sub_scanner)
+{
+	(void)main_scanner;
+	(void)cmd_sub_scanner;
+	return (error(ERR_NO));
+}
+
+void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner)
+{
+	(void)cmd_sub_scanner;
+}
+
+
 /* ---------- TODO: shell ---------- */
 
 t_error		shell_should_interrupt(void)
 {
 	// TODO
 	return (error(ERR_INTERRUPTED));
-}
-
-/* ---------- TODO: runner/subshell ---------- */
-
-// Voici les cas possibles
-//	- EOI avant cmd_sub closing token.end == -1
-//	- cmd_sub closing detected token.end == lexer_i du lexer interne
-t_error	runner_find_cmd_sub_closing(t_token *out, t_string *input)
-{
-	// TODO
-	(void)out;
-	(void)input;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
 /* ---------- TODO: builtins ---------- */
@@ -94,6 +95,13 @@ t_error	builtin_times(int argc, char **argv, char **envp, int *exit_status)
 }
 t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status)
 {
+	/*
+	(use shell_is_subshell())
+	if trap sans opérande && in_subshell && !trap_table_modified_since_subshell_entry:
+		print saved_traps_on_subshell_entry
+	else:
+		print current_traps
+	*/
 	(void)argc;
 	(void)argv;
 	(void)envp;
