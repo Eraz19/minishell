@@ -16,6 +16,6 @@ void	runner_free(t_runner *runner);
 
 // Ops
 
-t_error	runner_run(t_shell *shell);
+void	runner_run(t_shell *shell);
 
 #endif

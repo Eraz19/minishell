@@ -1,6 +1,5 @@
 #include "cmd_sub.h"
 #include "shell.h"
-# include <assert.h>
 
 t_error	cmd_sub_find_end(size_t *out_token_id, bool *found)
 {

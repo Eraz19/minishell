@@ -54,6 +54,7 @@
 		- `"$*"`: 1 field joined by first `IFS` character (` ` if *unset*, none if *set but null*)
 - `command substitutions`
 	- closing `)` must not be inside an `alias`
+	- unignored `traps` are reset to default even if the `command substitution` only contains a `trap` command
 - ...
 
 ### `$@` / `$*` UNSPECIFIED CASES IMPLEMENTATIONS

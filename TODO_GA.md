@@ -1,5 +1,7 @@
 # WIP (COMMAND SUBSTITUTION PARSING)
 
+⚠️ `t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);`
+
 // TODO: keep cmd sub generated `AST`
 ```bash
 echo before; echo $( cat << EOF ); echo after
@@ -25,14 +27,13 @@ boy"
 
 # WIP (OTHER)
 
-- `runner`:
-	- handle `command substitution execution`
 - **all**:
+	- ⚠️ retry on `EINTR` => shell only compute signals in *safe points*
 	- handle all `options` properly
 - `runner-executor`:
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
-- `posix_read_all()`
+- `posix_read_all()` and replace all `string_read*()` calls
 
 ---
 

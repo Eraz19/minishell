@@ -95,6 +95,13 @@ t_error	builtin_times(int argc, char **argv, char **envp, int *exit_status)
 }
 t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status)
 {
+	/*
+	(use shell_is_subshell())
+	if trap sans opérande && in_subshell && !trap_table_modified_since_subshell_entry:
+		print saved_traps_on_subshell_entry
+	else:
+		print current_traps
+	*/
 	(void)argc;
 	(void)argv;
 	(void)envp;

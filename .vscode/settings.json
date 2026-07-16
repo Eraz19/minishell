@@ -60,6 +60,7 @@
 		"-I${workspaceFolder}/srcs/alias/stack",
 		"-I${workspaceFolder}/srcs/builtins",
 		"-I${workspaceFolder}/srcs/cmd_cache",
+		"-I${workspaceFolder}/srcs/cmd_sub",
 		"-I${workspaceFolder}/srcs/expander",
 		"-I${workspaceFolder}/srcs/expander/field",
 		"-I${workspaceFolder}/srcs/expander/field_splitting",

@@ -62,13 +62,11 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner)
 {
 	pid_t	pid;
-	t_error	err;
 
 	pid = fork();
 	if (pid < 0)
 		return (error_sys());
 	else if (pid == 0)
 		cmd_exec_child(cmd, runner);
-	err = posix_wait(pid, &cmd->exit_status);
-	return (err);
+	return (posix_wait(pid, &cmd->exit_status));
 }
