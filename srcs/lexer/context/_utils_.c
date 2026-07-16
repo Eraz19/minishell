@@ -4,10 +4,10 @@ static const char	*unterminated_construct(t_lexer *lexer)
 {
 	t_context_stack_item	*item;
 
-	if (lexer->input == NULL || lexer->input->context.len == 0)
+	if (lexer->context.len == 0)
 		return (NULL);
-	if (context_stack_get(&lexer->input->context, &item,
-			lexer->input->context.len - 1).type)
+	if (context_stack_get(&lexer->context, &item,
+			lexer->context.len - 1).type)
 		return (NULL);
 	if (item->context == CONTEXT_SQUOTE)
 		return ("unterminated single quotes");
@@ -30,20 +30,20 @@ t_error	context_EOI(t_lexer *lexer)
 {
 	const char	*construct;
 
-	if (lexer->rules.on_eoi != NULL)
+	if (lexer->input_stack.len > 1)
 	{
-		if (lexer->input_stack.len == 1)
-			return (lexer->rules.on_eoi(lexer));
-		else
-		{
-			lexer_input_stack_pop(&lexer->input_stack);
-			lexer->err = lexer_input_stack_get_last(
-							&lexer->input_stack,
-							&lexer->input);
-			if (lexer->err.type)
-				return (lexer->err);
-		}
+		lexer->input = NULL;
+		lexer_input_stack_pop(&lexer->input_stack);
+		if (lexer->rules.on_input_end != NULL
+			&& lexer->rules.on_input_end(lexer).type)
+			return (lexer->err);
+		lexer->err = lexer_input_stack_get_last(
+						&lexer->input_stack,
+						&lexer->input);
+		return (lexer->err);
 	}
+	if (lexer->rules.on_eoi != NULL)
+		return (lexer->rules.on_eoi(lexer));
 	construct = unterminated_construct(lexer);
 	if (construct != NULL)
 		return (lexer->err = error_print(error(ERR_UNEXPECTED_EOI),

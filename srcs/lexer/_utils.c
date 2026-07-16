@@ -30,7 +30,7 @@ t_lexer_backup	lexer_backup(t_lexer *lexer)
 
     res.i = lexer->input->i;
     res.token_type = lexer->token->type;
-    res.context_len = lexer->input->context.len;
+    res.context_len = lexer->context.len;
     res.token_value_len = lexer->token->value.len;
     res.token_contexts_len = lexer->token->contexts.len;
 	return (res);
@@ -40,9 +40,9 @@ t_error	lexer_restore(t_lexer *lexer, t_lexer_backup backup)
 {
 	t_context_stack_item	*item;
 
-	while (lexer->input->context.len > backup.context_len)
+	while (lexer->context.len > backup.context_len)
 	{
-		lexer->err = context_stack_bpop(&lexer->input->context, NULL);
+		lexer->err = context_stack_bpop(&lexer->context, NULL);
 		if (lexer->err.type)
 			return (lexer->err);
 	}
@@ -62,5 +62,11 @@ t_error	lexer_restore(t_lexer *lexer, t_lexer_backup backup)
 void	lexer_delimit_token(t_lexer *lexer)
 {
 	lexer->emited_token = true;
-	lexer->token->index.end = (ssize_t)lexer->input->i;
+	if (lexer->input_stack.len == 1)
+	{
+		lexer->token->index.end = (ssize_t)lexer->input->i;
+		lexer->last_index.end = (ssize_t)lexer->input->i;
+	}
+	else
+		lexer->token->index.end = lexer->last_index.end;
 }

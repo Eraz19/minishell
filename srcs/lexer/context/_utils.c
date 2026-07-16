@@ -5,7 +5,7 @@ static t_error	context_start(t_lexer *lexer, t_lexer_context_args args)
 	lexer->token->type = TOKEN_TOKEN;
 	if (args.stack_item != NULL)
 		args.stack_item->start = lexer->token->value.len;
-	lexer->err = context_stack_push(&lexer->input->context, args.stack_item);
+	lexer->err = context_stack_push(&lexer->context, args.stack_item);
 	if (lexer->err.type)
 		return (lexer->err);
 	return (lexer_consume(lexer, lexer->token->type, args.opening_len));
@@ -17,7 +17,7 @@ static t_error	context_end(t_lexer *lexer, t_lexer_context_args args)
 
 	if (lexer_consume(lexer, lexer->token->type, args.closing_len).type)
 		return (lexer->err);
-	lexer->err = context_stack_bpop(&lexer->input->context, &item);
+	lexer->err = context_stack_bpop(&lexer->context, &item);
 	if (lexer->err.type)
 		return (lexer->err);
 	return (item->end = lexer->token->value.len, lexer->err);

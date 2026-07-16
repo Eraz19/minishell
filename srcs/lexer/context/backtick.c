@@ -5,12 +5,12 @@ static bool	is_backtick_squote_surrounded(t_lexer *lexer)
 	t_error					err;
 	t_context_stack_item	*item;
 	
-	if (lexer->input->context.len < 2)
+	if (lexer->context.len < 2)
 		return (false);
 	err = context_stack_get(
-		&lexer->input->context,
+		&lexer->context,
 		&item,
-		lexer->input->context.len - 2);
+		lexer->context.len - 2);
     if (err.type)
         return (false);
     return (item->context == CONTEXT_DQUOTE || item->context == CONTEXT_ARITH);

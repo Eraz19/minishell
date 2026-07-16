@@ -66,22 +66,20 @@ typedef t_vector	t_lexer_input_stack;
 /**
  * @ingroup lexer
  * @struct s_lexer_input_stack_item
- * @brief One input source: its text, a read cursor and its own context
- *        stack.
+ * @brief One input source: its text and a read cursor.
+ *
+ * Open quoting/expansion contexts are NOT tracked here: they live on the
+ * lexer itself (@ref s_lexer::context) so a construct opened in one input
+ * (e.g. inside an alias expansion) can close in an outer one.
  *
  * @var s_lexer_input_stack_item::i Read cursor (index into @c str).
  * @var s_lexer_input_stack_item::str Input text, NUL-terminated, a
  *                                    @ref t_string owned by the item.
- * @var s_lexer_input_stack_item::context Stack of currently open quoting/
- *                                        expansion contexts; its items are
- *                                        borrowed from the token's context
- *                                        stack, which owns them (borrowed).
  */
 typedef struct s_lexer_input_stack_item
 {
 	size_t			i;
 	t_string		str;
-	t_context_stack	context;
 }	t_lexer_input_stack_item;
 
 typedef struct s_lexer	t_lexer;
@@ -118,7 +116,7 @@ typedef struct s_lexer_rules
  *
  * @var s_lexer_backup::i Saved read cursor.
  * @var s_lexer_backup::token_type Saved type of the token in progress.
- * @var s_lexer_backup::context_len Saved depth of the input context stack.
+ * @var s_lexer_backup::context_len Saved depth of the lexer context stack.
  * @var s_lexer_backup::token_value_len Saved length of the token value.
  * @var s_lexer_backup::token_contexts_len Saved depth of the token context
  *                                         stack.
@@ -144,6 +142,19 @@ typedef struct s_lexer_backup
  * @var s_lexer::input_stack Stack of inputs owned by the lexer; alias
  *                           expansions and line continuations are pushed
  *                           on top of the base input.
+ * @var s_lexer::context Stack of currently open quoting/expansion
+ *                       contexts, shared across the WHOLE input stack so
+ *                       a construct opened in a nested input (alias
+ *                       expansion) survives that input's pop and can
+ *                       close in an outer one; its items are borrowed
+ *                       from the token's context stack, which owns them
+ *                       (borrowed).
+ * @var s_lexer::last_index Span of the last token boundaries recorded on
+ *                          the BASE input; a token produced from a nested
+ *                          input (alias expansion) inherits these values,
+ *                          so its reported position points at the
+ *                          originating word in the raw input (error
+ *                          positions stay meaningful in the logs).
  * @var s_lexer::emited_token Set when a complete token has been delimited.
  */
 struct s_lexer
@@ -153,6 +164,8 @@ struct s_lexer
 	t_lexer_input_stack_item	*input;
 	t_token						*token;
 	t_lexer_input_stack			input_stack;
+	t_context_stack				context;
+	t_token_index				last_index;
 	bool						emited_token;
 };
 
@@ -306,11 +319,9 @@ void			lexer_input_stack_init(t_lexer_input_stack *stack);
 
 /**
  * @ingroup lexer
- * @brief Frees one input item: its text, its context stack and the item
- *        itself, then sets the caller's pointer to @c NULL.
+ * @brief Frees one input item: its text and the item itself, then sets
+ *        the caller's pointer to @c NULL.
  *
- * @note The context stack entries are borrowed from the token's context
- *       stack, so only the backing storage is released, not the entries.
  * @note Signature matches the @c vector_free element destructor callback.
  * @param item Pointer to the item pointer to free, as an untyped pointer
  *             (borrowed).
@@ -319,7 +330,7 @@ void			lexer_input_stack_item_free(void *item);
 
 /**
  * @ingroup lexer
- * @brief Allocates a zeroed input item with an empty context stack.
+ * @brief Allocates a zeroed input item.
  *
  * @param item Set to the newly allocated item; the caller becomes its
  *             owner until it is pushed with @ref lexer_input_stack_push
@@ -497,13 +508,19 @@ t_error			lexer_restore(t_lexer *lexer, t_lexer_backup backup);
  * @ingroup lexer
  * @brief Handles reaching end of input while still inside a context.
  *
- * Delegates to the injected @c rules.on_eoi (continuation) when present.
- * Otherwise reports @c ERR_UNEXPECTED_EOI, printed here with the name of
- * the unterminated construct (top of the input's context stack): this is
- * the most specific diagnostic point, requalifiers must not reprint it.
+ * A nested input (alias expansion) that ends mid-context is popped —
+ * firing @c rules.on_input_end, exactly like the between-tokens pop —
+ * and scanning RESUMES inside the still-open context on the outer input
+ * (the context stack lives on the lexer, so it survives the pop). Only
+ * when the BASE input ends does the function delegate to the injected
+ * @c rules.on_eoi (continuation) when present, or report
+ * @c ERR_UNEXPECTED_EOI, printed here with the name of the unterminated
+ * construct (top of the lexer's context stack): this is the most
+ * specific diagnostic point, requalifiers must not reprint it.
  *
  * @param lexer Already initialized lexer (borrowed).
- * @return The @c on_eoi handler's error, verbatim; or
+ * @return @c ERR_EMPTY_STACK on an input stack inconsistency; the
+ *         @c on_input_end or @c on_eoi handler's error, verbatim; or
  *         @c ERR_UNEXPECTED_EOI (printed).
  */
 t_error			context_EOI(t_lexer *lexer);
