@@ -16,10 +16,7 @@ static t_error	lexer_scan_token(t_lexer *lexer, t_token *token)
 	token_init(token);
 	lexer->token = token;
 	if (lexer->input_stack.len == 1)
-	{
 		lexer->token->index.start = (ssize_t)lexer->input->i;
-		lexer->last_index.start = (ssize_t)lexer->input->i;
-	}
 	else
 		lexer->token->index.start = lexer->last_index.start;
 	while (!lexer->emited_token)

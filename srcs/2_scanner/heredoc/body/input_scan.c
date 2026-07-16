@@ -1,5 +1,5 @@
 #include "body_.h"
-#include "scanner.h"
+#include "reader_.h"
 
 t_error	get_body_line(t_body *body, char *EOL, size_t *i)
 {
@@ -37,7 +37,7 @@ t_error	body_continuation(t_body *body, bool *continuation)
 	if (body->is_tty)
 	{
 		*continuation = true;
-		body->err = scanner_read_continuation(&body->input);
+		body->err = reader_continuation(&body->input);
 		if (body->err.type == ERR_VEOF)
 			return (body_missing_delimiter(body));
 		return (body->err);

@@ -14,6 +14,15 @@ t_error	lexer_consume(t_lexer *lexer, t_token_type type, size_t iter)
 	i = 0;
 	while (i < iter)
 	{
+		if (lexer->input_stack.len == 1)
+		{
+			if (lexer->token->value.len == 0)
+				lexer->token->index.start = (ssize_t)lexer->input->i;
+			lexer->token->index.end = (ssize_t)lexer->input->i;
+			lexer->last_index = lexer->token->index;
+		}
+		else
+			lexer->token->index = lexer->last_index;
 		current_char = lexer->input->str.data[lexer->input->i];
 		if (!string_append_n(&lexer->token->value, &current_char, 1))
 			return (lexer->err = error_sys());
@@ -62,11 +71,6 @@ t_error	lexer_restore(t_lexer *lexer, t_lexer_backup backup)
 void	lexer_delimit_token(t_lexer *lexer)
 {
 	lexer->emited_token = true;
-	if (lexer->input_stack.len == 1)
-	{
-		lexer->token->index.end = (ssize_t)lexer->input->i;
-		lexer->last_index.end = (ssize_t)lexer->input->i;
-	}
-	else
-		lexer->token->index.end = lexer->last_index.end;
+	if (lexer->token->value.len == 0)
+		lexer->token->index.end = lexer->token->index.start;
 }

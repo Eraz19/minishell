@@ -115,6 +115,15 @@ void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
 t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);
 
 /* ************************************************************************* */
+/*                                 CMD_SUB                                   */
+/* ************************************************************************* */
+
+void	    scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
+t_error    scanner_cmd_sub_init(
+				const t_scanner *main_scanner,
+				t_scanner *cmd_sub_scanner);
+
+/* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
@@ -177,7 +186,5 @@ t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip);
  *         inconsistency; @c ERR_NO on success.
  */
 t_error	scanner_read_continuation(t_string *res);
-
-void	scanner_init_subshell(t_scanner *scanner);
 
 #endif

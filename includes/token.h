@@ -55,14 +55,17 @@ typedef enum e_token_type
 /**
  * @ingroup token
  * @struct s_token_index
- * @brief Byte span of a token inside the raw lexer input.
+ * @brief Byte span of a token inside the raw BASE input, both bounds
+ *        INCLUSIVE.
  *
- * Every field is @c -1 until the lexer sets it; @c end staying @c -1 marks
- * a token whose ending was never reached (e.g. an unterminated command
- * substitution).
+ * Every field is @c -1 until the lexer sets it. Tokens produced from a
+ * nested input (alias expansion) inherit the span of the originating
+ * word in the base input, so reported positions stay meaningful.
  *
- * @var s_token_index::end Offset one past the last character of the token
- *                         in the raw input, @c -1 when unset.
+ * @var s_token_index::end Offset of the LAST character of the token in
+ *                         the raw input (inclusive; equals @c start for
+ *                         a token with no consumed character), @c -1
+ *                         when unset.
  * @var s_token_index::start Offset of the first character of the token in
  *                           the raw input, @c -1 when unset.
  * @var s_token_index::error Offset of the character associated with a
