@@ -26,24 +26,31 @@ static const char	*unterminated_construct(t_lexer *lexer)
 	return (NULL);
 }
 
+#include <stdio.h>
 t_error	context_EOI(t_lexer *lexer)
 {
 	const char	*construct;
 
+	printf("IN CONTEXT_EOI\n");
 	if (lexer->rules.on_eoi != NULL)
 	{
+		printf("ON_EOI NOT NULL\n");
 		if (lexer->input_stack.len == 1)
+		{
+			printf("calling continuation because of EOI\n");
 			return (lexer->rules.on_eoi(lexer));
+		}
 		else
 		{
+			printf("popping input stack because of EOI and stack input is not last\n");
 			lexer_input_stack_pop(&lexer->input_stack);
 			lexer->err = lexer_input_stack_get_last(
 							&lexer->input_stack,
 							&lexer->input);
-			if (lexer->err.type)
-				return (lexer->err);
+			return (lexer->err);
 		}
 	}
+	printf("FUCKING CONTEXT_EOI\n");
 	construct = unterminated_construct(lexer);
 	if (construct != NULL)
 		return (lexer->err = error_print(error(ERR_UNEXPECTED_EOI),

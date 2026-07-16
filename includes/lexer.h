@@ -81,7 +81,7 @@ typedef struct s_lexer_input_stack_item
 {
 	size_t			i;
 	t_string		str;
-	t_context_stack	context;
+	t_context_stack	context; // TODO Need to move this in lexer to have context continuation between stack input elems
 }	t_lexer_input_stack_item;
 
 typedef struct s_lexer	t_lexer;
