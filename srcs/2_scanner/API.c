@@ -55,3 +55,8 @@ t_error	scanner_read_continuation(t_string *res)
 {
 	return (scanner_error_qualify(reader_continuation(res), true));
 }
+
+void	scanner_init_subshell(t_scanner *scanner)
+{
+	scanner->mode = INPUT_MODE_STDIN_PIPE;
+}
