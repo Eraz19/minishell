@@ -18,7 +18,9 @@ t_error	walk_pipeline(
 		err = walk_pipe_single_command(runner, pipeline, exit_status);
 	else
 		err = walk_pipe_multiple_commands(runner, pipeline, exit_status);
-	err = walk_normalize_output(err, NULL, exit_status);
+	if (*exit_status < 0)
+		*exit_status = (int)err.type;
+	// err = walk_normalize_output(err, NULL, exit_status);
 	fprintf(stderr, "%s[WALKER] $? = %i%s\n", YELLOW, *exit_status, NC);
 	params_set_last_status(*exit_status);
 	return (err);

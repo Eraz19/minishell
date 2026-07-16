@@ -44,17 +44,33 @@ t_error	params_unset_variable(const t_string *name)
 	return (var_unset(name));
 }
 
-void	params_set_last_status_in(t_params *params, int value)
+void	params_set_last_status_in_priv(const char *caller, t_params *params, int value)
 {
+	if (str_cmp(caller, "runner_handle_syntax_errors") != 0
+		&& str_cmp(caller, "runner_handle_read_errors") != 0
+		&& str_cmp(caller, "params_set_last_status_priv") != 0)
+	{
+		fprintf(stderr, RED);
+		(void)error_print(error(ERR_INTERNAL), __func__, "caller is not allowed", caller, NULL, NULL);
+		fprintf(stderr, NC);
+		assert(true == false);
+	}
 	specials_set_last_status(&params->specials, value);
 	fprintf(stderr, "%s[PARAMS] $? = %i%s\n", YELLOW, value, NC);
 }
 
-t_error	params_set_last_status(int value)
+t_error	params_set_last_status_priv(const char *caller, int value)
 {
 	t_params	*params;
 	t_error		err;
 
+	if (str_cmp(caller, "walk_pipeline") != 0)
+	{
+		fprintf(stderr, RED);
+		err = error_print(error(ERR_INTERNAL), __func__, "caller is not allowed", caller, NULL, NULL);
+		fprintf(stderr, NC);
+		return (err);
+	}
 	err = params_get_struct(&params);
 	if (err.type)
 		return (err);

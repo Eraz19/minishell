@@ -55,10 +55,9 @@ typedef enum e_error_type
 	// OPTIONS (produced by ft_getopt() + posix_open*())
 	ERR_INVALID_USAGE = 106,				// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION = 107,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL / ERR_REDIRECTION_OTHER. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
+	ERR_REDIRECTION = 107,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL or dropped. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
 	ERR_BUILTIN = 108,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
-	ERR_REDIRECTION_OTHER = 109,			// [ 6] [WALKERS]		[N-N-Y] Absorbed (walk_scmd / walk_command / walk_function)
 	/* -------------------- FLOW CONTROL ERRORS -------------------- */
 	ERR_VEOF = 110,							// [ 2]	[RUNNER]		"CTRL+D" received: Absorbed (may exit with $? status)
 	ERR_EOF = 112,							// [ 2]	[RUNNER]		End of input reached: Absorbed (may exit with $? status)

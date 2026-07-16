@@ -1,5 +1,7 @@
 # ALEXANDER
 
+- ⚠️ wrong error message:
+	- `wrong "error` puis `CTRL+D` should print `syntax error` / `unexpected end of input` ?
 - ⚠️ docs:
 	- Replace `Same contract as @ref ...` par les erreurs retournées (insup à utiliser)
 - `token`: keep `history_list_index` in `t_token_index` ?

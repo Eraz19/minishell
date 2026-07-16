@@ -20,7 +20,7 @@ t_error	runner_run(t_shell *shell)
 	ast_root_init(&ast_root);
 	while (err.type == ERR_NO)
 	{
-		err = builder_get_ast(&ast_root);
+		err = build_ast(&ast_root);
 		if (err.type == ERR_NO
 			&& option_is_active_in(shell->params.options, OPT_NOEXEC) == false)
 				err = walk(&shell->runner, &ast_root);

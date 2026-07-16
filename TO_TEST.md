@@ -4,23 +4,23 @@
 set -- a b c
 case b in
 	$@) echo VALID_1 ;;
-	*)  echo ERROR_1 ;;
+	*) echo ERROR_1 ;;
 esac
 case b in
 	"$@") echo VALID_2 ;;
-	*)  echo ERROR_2 ;;
+	*) echo ERROR_2 ;;
 esac
 case b in
 	$*) echo ERROR_3 ;;
-	*)  echo VALID_3 ;;
+	*) echo VALID_3 ;;
 esac
 case "a b c" in
 	$*) echo VALID_4 ;;
-	*)  echo ERROR_4 ;;
+	*) echo ERROR_4 ;;
 esac
 case b in
 	"$*") echo ERROR_5 ;;
-	*)  echo VALID_5 ;;
+	*) echo VALID_5 ;;
 esac
 case $@ in
 	a) echo ERROR a ;;
@@ -28,13 +28,18 @@ case $@ in
 	c) echo ERROR c ;;
 	abc) echo ERROR abc ;;
 	"a b c") echo VALID_6 ;;
-	*)  echo ERROR no ;;
+	*) echo ERROR no ;;
 esac
 case b in
 	a|b|c) echo VALID_7 ;;
-	*)  echo ERROR_7 ;;
+	*) echo ERROR_7 ;;
 esac
 ```
+
+case b in
+	a) echo NOP ;;
+	c) echo NOP ;;
+esac
 
 # TESTS TODO
 
@@ -159,30 +164,30 @@ clear
 set -- 'a' 'b' 'c'
 for subject in 'abc' 'a b c' 'a' 'b' 'c'
 do
-    case $subject in
-        $@) printf 'MATCH <%s>\n' "$subject" ;;
-        *)  printf 'NO    <%s>\n' "$subject" ;;
-    esac
+  case $subject in
+    $@) printf 'MATCH <%s>\n' "$subject" ;;
+    *) printf 'NO  <%s>\n' "$subject" ;;
+  esac
 done
 # TEST 2 => bash keeps only first field
 clear
 set -- 'a' 'b' 'c'
 for subject in 'abc' 'a b c' 'b' 'a' 'c'
 do
-    case $subject in
-        "$@") printf 'MATCH <%s>\n' "$subject" ;;
-        *)  printf 'NO    <%s>\n' "$subject" ;;
-    esac
+  case $subject in
+    "$@") printf 'MATCH <%s>\n' "$subject" ;;
+    *) printf 'NO  <%s>\n' "$subject" ;;
+  esac
 done
 # TEST 2 => no match
 clear
 set --
 for subject in 'abc' 'a b c' 'b' 'a' 'c'
 do
-    case $subject in
-        "$@") printf 'MATCH <%s>\n' "$subject" ;;
-        *)  printf 'NO    <%s>\n' "$subject" ;;
-    esac
+  case $subject in
+    "$@") printf 'MATCH <%s>\n' "$subject" ;;
+    *) printf 'NO  <%s>\n' "$subject" ;;
+  esac
 done
 ```
 
@@ -228,7 +233,7 @@ echo "--------------------"
 echo "--------------------"
 i=old
 for i in a b c; do
-    :
+  :
 done
 echo "should be 'c' => '$i'"
 echo "--------------------"
@@ -239,8 +244,8 @@ echo "--------------------"
 echo "--------------------"
 a=one
 for x in $a $a; do
-    a=two
-    echo "shoud be 'one' => '$x'"
+  a=two
+  echo "shoud be 'one' => '$x'"
 done
 echo "--------------------"
 ```
@@ -251,7 +256,7 @@ echo "--------------------"
 echo "should throw assignment error"
 readonly i
 for i in a b c; do
-    echo "$i"
+  echo "$i"
 done
 echo "--------------------"
 ```
@@ -283,7 +288,7 @@ echo "--------------------"
 # OK
 echo "--------------------"
 case x in
-  x) ;;
+ x) ;;
 esac
 echo "\$? should be '0' => '$?'"
 echo "--------------------"
@@ -300,33 +305,33 @@ echo "${v#'*'}"
 # OK
 p='*'
 case abc in
-    "$p") echo "ERROR: * should be litteral when p='*' and pattern is \"$p\"" ;;
+  "$p") echo "ERROR: * should be litteral when p='*' and pattern is \"$p\"" ;;
 	$p) echo "valid 1";;
 esac
 
 # OK
 case '*' in
-    \*) echo "valid 2" ;;
+  \*) echo "valid 2" ;;
 esac
 
 # OK
 case '?' in
-    \?) echo "valid 3" ;;
+  \?) echo "valid 3" ;;
 esac
 
 # OK
 case '[' in
-    \[) echo "valid 4" ;;
+  \[) echo "valid 4" ;;
 esac
 
 # OK
 case '[' in
-    [) echo "valid 5" ;;
+  [) echo "valid 5" ;;
 esac
 
 # OK
 case "" in
-    "") echo "valid 6" ;;
+  "") echo "valid 6" ;;
 esac
 echo "--------------------"
 ```

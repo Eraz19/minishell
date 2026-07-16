@@ -44,6 +44,10 @@ extern t_depth	g_depth;
 # define BOLD_RED "\033[1;31m"
 # define YELLOW "\033[0;33m"
 # define BOLD_YELLOW "\033[1;33m"
+# define MAGENTA "\033[0;35m"
+# define BOLD_MAGENTA "\033[1;35m"
+# define CYAN "\033[0;36m"
+# define BOLD_CYAN "\033[1;36m"
 # define NC "\033[0m"
 
 /* ---------- SETTINGS ---------- */

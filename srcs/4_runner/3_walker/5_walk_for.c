@@ -105,7 +105,7 @@ t_error	walk_for(t_runner *runner, t_ast_for *for_clause, int *exit_status)
 	t_error				err;
 
 	runner->loop_depth++;
-	*exit_status = -1;
+	// *exit_status = -1;
 	cmd_expansions_init(&expansions);
 	err = walk_for_expand_words(&for_clause->words, &expansions, exit_status);
 	if (err.type == ERR_NO)

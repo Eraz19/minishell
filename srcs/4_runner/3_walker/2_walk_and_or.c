@@ -15,7 +15,7 @@ t_error	walk_and_or(t_runner *runner, t_ast_and_or *and_or, int *exit_status)
 	err = error(ERR_NO);
 	while (i < and_or->pipelines.len)
 	{
-		*exit_status = -1;
+		// *exit_status = -1;
 		pipeline = &((t_ast_pipeline *)and_or->pipelines.data)[i];
 		err = walk_pipeline(runner, pipeline, exit_status);
 		if (err.type || i == and_or->pipelines.len - 1)

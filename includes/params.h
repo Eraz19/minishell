@@ -212,16 +212,18 @@ t_error	params_replace_positionals(t_positionals *src);
  */
 t_error	params_set_option(t_option option, bool on);
 
+#define params_set_last_status(value) params_set_last_status_priv(__func__, value)
 /**
  * @brief Update the last command exit status.
  *
  * @param value New status value.
  * @return @c ERR_INTERNAL on failure.
  */
-t_error	params_set_last_status(int value);
+t_error	params_set_last_status_priv(const char *caller, int value);
 
 // TODO: doc
-void	params_set_last_status_in(t_params *params, int value);
+#define params_set_last_status_in(params, value) params_set_last_status_in_priv(__func__, params, value)
+void	params_set_last_status_in_priv(const char *caller, t_params *params, int value);
 
 /**
  * @brief Create or update a shell variable.

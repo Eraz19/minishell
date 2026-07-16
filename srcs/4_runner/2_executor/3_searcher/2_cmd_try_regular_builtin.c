@@ -1,7 +1,6 @@
 #include "cmd_searcher_priv.h"
 #include "builtins.h"
 #include "cmd_type.h"
-# include "logs.h"	// DEBUG
 
 void	cmd_try_regular_builtin(t_cmd *cmd)
 {
@@ -14,8 +13,6 @@ void	cmd_try_regular_builtin(t_cmd *cmd)
 		cmd->builtin = builtin_pwd;
 	else
 		return ;
-	fprintf(stderr, "%s[RESOLVER] regular builtin matched: '%s%s%s'%s\n",
-		YELLOW, BLUE, cmd->path.data, YELLOW, NC);
 	cmd->type = CMD_BUILTIN;
 	string_free(&cmd->path);
 }

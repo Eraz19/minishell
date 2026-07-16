@@ -5,6 +5,9 @@
 #include "cmd_assignator.h"
 #include "cmd_searcher.h"
 #include "cmd_dispatcher.h"
+# include <stdio.h>	// DEBUG
+# include "logs.h"	// DEBUG
+# include "debug.h"	// DEBUG
 
 static inline t_error	cmd_redirect_start(
 							t_cmd *cmd,
@@ -13,24 +16,15 @@ static inline t_error	cmd_redirect_start(
 {
 	t_error	err;
 
-	// TODO: cf big TODO at the top of the file
 	if (cmd->builtin == builtin_exec)
 		err = redirect_commit(redirector, &s_cmd->redirs, &cmd->exit_status);
 	else
 		err = redirect_start(redirector, &s_cmd->redirs, &cmd->exit_status);
-	if (err.type == ERR_REDIRECTION)
-	{
-		if (cmd->type == CMD_SPECIAL_BUILTIN)
-			err.type = ERR_POSIX_REDIR_SPECIAL;
-		else
-			err.type = ERR_REDIRECTION_OTHER;
-	}
 	return (err);
 }
 
 static inline t_error	cmd_redirect_stop(t_cmd *cmd, t_redirector *redirector)
 {
-	// TODO: cf big TODO at the top of the file
 	if (cmd->builtin != builtin_exec)
 		return (redirect_stop(redirector));
 	return (error(ERR_NO));
@@ -43,24 +37,48 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 	return (cmd_search(cmd, cache));
 }
 
-# include <stdio.h>
 t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied, int *exit_status)
 {
-	if (err.type == ERR_REDIRECTION_OTHER)
+	bool	interactive;
+	t_error	option_err;
+	int		initial_cmd_status;		// DEBUG
+	int		initial_exit_status;	// DEBUG
+	t_error	initial_error;			// DEBUG
+
+	initial_cmd_status = cmd->exit_status;
+	initial_exit_status = *exit_status;
+	initial_error = err;
+	if (cmd->exit_status < 0)
+		cmd->exit_status = (int)err.type;
+	if (err.type)
 	{
-		(void)error_print(err, "runner", "executor", NULL, NULL);
-		if (cmd->exit_status < 0)
-			cmd->exit_status = (int)err.type;
-		err = error(ERR_NO);
+		(void)error_print(err, NULL, NULL);
+		if (err.type == ERR_REDIRECTION)
+		{
+			if (cmd->type == CMD_SPECIAL_BUILTIN)
+				err.type = ERR_POSIX_BUILTIN_SPECIAL;
+			else
+				err.type = ERR_NO;
+		}
+		else if (err.type > ERR_POSIX_SYNTAX && err.type < ERR_POSIX_READ)
+		{
+			option_err = option_is_active(OPT_INTERACTIVE, &interactive);
+			if (option_err.type)
+				err = error_priorize(err, option_err);
+			else if (interactive == true)
+				err.type = ERR_NO;
+		}
 	}
 	if (redir_applied == true)
 		err = error_priorize(err, cmd_redirect_stop(cmd, &runner->redirector));
+	if (err.type && cmd->exit_status <= 0)
+		cmd->exit_status = (int)err.type;
 	*exit_status = cmd->exit_status;
+	fprintf(stderr, MAGENTA "##################################################\n" NC);
 	/* ---------- DEBUG (START) ---------- */
-	fprintf(stderr, "--------------------------------------------------\n");
-	fprintf(stderr, "[CMD   ] [%s()] exit_status = %i\n", __func__, *exit_status);
-	fprintf(stderr, "[CMD   ] [%s()] error       = %s\n", __func__, error_to_string(err));
-	fprintf(stderr, "--------------------------------------------------\n");
+	fprintf(stderr, "[CMD   ] type        => %s\n", cmd_type_to_string(cmd->type));
+	fprintf(stderr, "[CMD   ] exit_status => %i => %i => %i\n", initial_exit_status, initial_cmd_status, *exit_status);
+	fprintf(stderr, "[CMD   ] error       = %s => %s\n", error_to_string(initial_error), error_to_string(err));
 	/* ---------- DEBUG (END) ---------- */
 	cmd_free(cmd);
 	return (err);
@@ -71,6 +89,7 @@ t_error cmd_execute(t_runner *runner, const t_ast_scmd *simple_command, int *exi
 	t_cmd	cmd;
 	t_error	err;
 
+	fprintf(stderr, MAGENTA "###################### OUT #######################\n" NC);
 	cmd_init(&cmd);
 	err = cmd_resolve(&cmd, &simple_command->words);
 	if (err.type == ERR_NO)

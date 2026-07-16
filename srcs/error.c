@@ -101,8 +101,6 @@ const char	*error_to_string(t_error err)
 	// builtin errors
 	else if (err.type == ERR_BUILTIN)
 		return ("builtin error");
-	else if (err.type == ERR_REDIRECTION_OTHER)
-		return ("redirection error (non-special built-in)");
 	// Flow control errors
 	else if (err.type == ERR_VEOF)
 		return ("end of input");

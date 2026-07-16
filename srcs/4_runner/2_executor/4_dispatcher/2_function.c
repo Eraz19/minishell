@@ -52,16 +52,10 @@ t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner)
 	err = redirect_start(&runner->redirector, &cmd->function->redirs,
 			&cmd->exit_status);
 	if (err.type)
-	{
-		if (err.type == ERR_REDIRECTION)
-			err.type = ERR_REDIRECTION_OTHER;
-		err = error_priorize(err, params_pop_positionals());
-		return (err);
-	}
+		return (error_priorize(err, params_pop_positionals()));
 	err = walk_command(runner, &cmd->function->body, &cmd->exit_status);
 	if (err.type == ERR_RETURN)
 		err.type = ERR_NO;
 	err = error_priorize(err, redirect_stop(&runner->redirector));
-	err = error_priorize(err, params_pop_positionals());
-	return (err);
+	return (error_priorize(err, params_pop_positionals()));
 }

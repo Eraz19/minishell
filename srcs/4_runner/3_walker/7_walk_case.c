@@ -119,7 +119,7 @@ t_error	walk_case(t_runner *runner, t_ast_case *case_clause, int *exit_status)
 
 	assert(case_clause->patterns.len == case_clause->bodies.len);
 	assert(case_clause->bodies.len == case_clause->fallthrough.len);
-	*exit_status = -1;
+	// *exit_status = -1;
 	err = walk_case_expand(&case_clause->word, &word, exit_status);
 	if (err.type)
 		return (walk_normalize_output(err, NULL, exit_status));
