@@ -48,7 +48,6 @@ static inline t_error	walk_list_priv(
 	i = 0;
 	while (i < list->and_ors.len)
 	{
-		// *exit_status = -1;
 		and_or = &((t_ast_and_or *)list->and_ors.data)[i];
 		async = ((bool *)list->asyncs.data)[i];
 		if (async == true)
@@ -96,7 +95,6 @@ t_error	walk_list(t_runner *runner, t_ast_list *list, int *exit_status)
 		*exit_status = 0;
 		return (walk_normalize_output(error(ERR_NO), NULL, exit_status));
 	}
-	// *exit_status = -1;
 	if (list->subshell == false)
 		err = walk_list_priv(runner, list, exit_status);
 	else
