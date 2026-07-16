@@ -43,8 +43,10 @@ t_error	lexer_input_stack_dup(
 	lexer_input_stack_init(out);
 	while (i < in->len)
 	{
-		lexer_input_stack_item_init(&item_dup);
-		item = ((t_lexer_input_stack_item **)in->data)[i];
+		err = lexer_input_stack_item_init(&item_dup);
+		if (err.type)
+			return (lexer_input_stack_free(out), err);
+		item = ((t_lexer_input_stack_item **)in->data)[i++];
 		str = item->str;
 		item_dup->i = item->i;
 		if (!string_init(&item_dup->str, 0, str.data, (long)str.len))
@@ -54,7 +56,6 @@ t_error	lexer_input_stack_dup(
 			return (lexer_input_stack_free(out), err);
 		}
 		lexer_input_stack_push(out, item_dup);
-		++i;
 	}
 	return (error(ERR_NO));
 }

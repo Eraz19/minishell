@@ -1,16 +1,11 @@
-#include "shell.h"
 #include "heredoc.h"
 #include "scanner.h"
 #include "scanner_.h"
 
-t_error	scanner_get_next_token(t_token *token)
+t_error	scanner_get_next_token(t_scanner *scanner, t_token *token)
 {
-	t_scanner		*scanner;
 	t_lexer_rules	lexer_rules;
 
-	scanner = shell_get_scanner();
-	if (scanner == NULL)
-		return (scanner_error_qualify(error(ERR_SHELL_NOT_FOUND), false));
 	if (scanner->lexer.input_stack.len == 0)
 	{
 		if (scanner_read_input(scanner).type)
@@ -32,15 +27,15 @@ t_error	scanner_get_next_token(t_token *token)
 	return (scanner->err);
 }
 
-t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip)
+t_error	scanner_read_heredoc(
+			t_scanner *scanner,
+			t_string *out,
+			const t_token *delim,
+			bool strip)
 {
 	t_heredoc_read_args	args;
-	t_scanner			*scanner;
 	t_string			delim_exp;
 
-	scanner = shell_get_scanner();
-	if (scanner == NULL)
-		return (scanner_error_qualify(error(ERR_SHELL_NOT_FOUND), false));
 	scanner->err = heredoc_expand_delim(&delim_exp, delim);
 	if (scanner->err.type)
 		return (scanner->err = scanner_error_qualify(scanner->err, false));

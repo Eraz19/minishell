@@ -3,9 +3,10 @@
 #include "shell.h"
 #include "alias_stack_.h"
 
-void	alias_init(t_alias *alias)
+void	alias_init(t_alias *alias, t_parser *parser)
 {
 	*alias = (t_alias){0};
+	alias->parser = parser;
 	alias_stack_init(&alias->stack);
 	hashmap_init(&alias->map, 0, free);
 }

@@ -19,7 +19,8 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	if (lexer->input->str.data[lexer->input->i] == '('
 		&& lexer->input->str.data[lexer->input->i + 1] == ')')
 	{
-		lexer_consume(lexer, lexer->token->type, 1);
+		if (lexer_consume(lexer, lexer->token->type, 1).type)
+			return (lexer->err);
 		item->end = lexer->token->value.len;
 		return (lexer_consume(lexer, lexer->token->type, 1));
 	}

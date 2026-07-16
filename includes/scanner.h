@@ -109,82 +109,27 @@ void	scanner_clear(t_scanner *scanner);
  */
 void	scanner_free(t_scanner *scanner);
 
-// TODO
-t_error	scanner_cmd_sub_init(const t_scanner *main_scanner, t_scanner *cmd_sub_scanner);
-void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
-t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);
-
 /* ************************************************************************* */
 /*                                 CMD_SUB                                   */
 /* ************************************************************************* */
 
-void	    scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
-t_error    scanner_cmd_sub_init(
-				const t_scanner *main_scanner,
-				t_scanner *cmd_sub_scanner);
+t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);
+
+void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
+t_error	scanner_cmd_sub_init(
+			const t_scanner *main_scanner,
+			t_scanner *cmd_sub_scanner);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-/**
- * @ingroup scanner
- * @brief Produces the next POSIX token, reading a new chunk of input when
- *        the lexer has none left and re-lexing through alias expansions.
- *
- * @note An empty source yields a @c TOKEN_EOF token and @c ERR_NO (an
- *       empty input is zero commands, not an error).
- * @param token Token initialized by the function; on success the caller
- *              owns it and must release it with @ref token_free
- *              (borrowed).
- * @return @c ERR_VEOF (raw, unprinted) at the top-level end of input of an
- *         interactive shell: the exit decision belongs to the shell loop;
- *         @c ERR_POSIX_SYNTAX (printed) when the input ends inside a
- *         construct (unterminated quote, expansion or here-document);
- *         @c ERR_POSIX_CMD_NOT_FOUND / @c ERR_POSIX_CMD_NOT_EXECUTABLE
- *         (printed) when the script file cannot be opened;
- *         @c ERR_POSIX_READ (printed) on an unrecoverable read error;
- *         @c ERR_INTERRUPTED when a signal interrupts the read;
- *         @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
- *         (printed) on internal inconsistency; @c ERR_NO on success.
- */
-t_error	scanner_get_next_token(t_token *token);
+t_error	scanner_get_next_token(t_scanner *scanner, t_token *token);
 
-/**
- * @ingroup scanner
- * @brief Reads one pending here-document body from the current lexer
- *        input (prompting for continuation lines on a terminal) and
- *        returns it: the delimiter is quote-removed, the body runs up to
- *        the delimiter line (tab-stripped for @c <<- when @p strip is
- *        set) and the input cursor is advanced past it.
- *
- * @param out String receiving the body, initialized by the function on
- *            success (borrowed).
- * @param delim Raw delimiter token (borrowed, read-only).
- * @param strip Tab-stripping mode of the @c <<- operator.
- * @return @c ERR_POSIX_SYNTAX (printed with the delimiter) when the
- *         input ends before the delimiter line, including an interactive
- *         end-of-file at the continuation prompt; from the delimiter's
- *         quote removal: @c ERR_POSIX_EXPANSION (printed) or
- *         @c ERR_INTERRUPTED; @c ERR_LIBC (printed) on system failure;
- *         @c ERR_INTERNAL (printed) on internal inconsistency; @c ERR_NO
- *         on success.
- */
-t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip);
-
-/**
- * @ingroup scanner
- * @brief Reads one continuation line (PS2 prompt) and appends it to
- *        @p res, recording it in the history entry.
- *
- * @param res Already initialized string the line is appended to
- *            (borrowed).
- * @return @c ERR_VEOF (raw, unprinted) when the input ends at the
- *         continuation prompt: the decision belongs to the caller (the
- *         heredoc body reports it as a missing delimiter); @c ERR_LIBC (printed)
- *         on system failure; @c ERR_INTERNAL (printed) on internal
- *         inconsistency; @c ERR_NO on success.
- */
-t_error	scanner_read_continuation(t_string *res);
+t_error	scanner_read_heredoc(
+			t_scanner *scanner,
+			t_string *out,
+			const t_token *delim,
+			bool strip);
 
 #endif
