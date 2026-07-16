@@ -173,4 +173,6 @@ t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip);
  */
 t_error	scanner_read_continuation(t_string *res);
 
+void	scanner_init_subshell(t_scanner *scanner);
+
 #endif
