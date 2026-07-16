@@ -7,11 +7,14 @@
 
 // Life cycle
 
-void	parser_init(t_parser *parser);
+void	parser_init(t_parser *parser, t_scanner *scanner);
 void	parser_clear(t_parser *parser);
 void	parser_free(t_parser *parser);
 
-void	parser_cmd_sub_init(const t_parser *main_parser, t_parser *cmd_sub_parser);
+void	parser_cmd_sub_init(
+			const t_parser *main_parser,
+			t_parser *cmd_sub_parser,
+			t_scanner *cmd_sub_scanner);
 void	parser_cmd_sub_free(t_parser *cmd_sub_parser);
 
 // Ops

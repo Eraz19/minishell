@@ -8,6 +8,7 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	t_context_stack_item	*item;
 	size_t					closing_par_index;
 
+	lexer->token->type = TOKEN_TOKEN;
 	if (lexer_consume(lexer, lexer->token->type, 1).type)
 		return (lexer->err);
 	lexer->err = context_stack_item_init(&item, CONTEXT_CMD_SUB);
@@ -28,5 +29,6 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	if (lexer->err.type)
 		return (lexer->err);
 	item->end = closing_par_index;
+	printf("%s() end (%zu) - start (%zu) = %zu \n", __func__, item->end, item->start, item->end - item->start);
 	return (lexer_consume(lexer, lexer->token->type, item->end - item->start));
 }

@@ -3,7 +3,7 @@
 #include "parser.h"
 # include <assert.h>	// DEBUG
 
-t_error	builder_can_next_word_be_a_cmd_name(bool *dst)
+t_error	builder_can_next_word_be_a_cmd_name(t_parser *parser, bool *dst)
 {
 	t_builder	*builder;
 
@@ -12,7 +12,7 @@ t_error	builder_can_next_word_be_a_cmd_name(bool *dst)
 	if (!builder)
 		return (error(ERR_SHELL_NOT_FOUND));
 	return (parser_can_next_token_be_a_cmd_name_or_word(
-		&builder->parser,
+		parser,
 		&builder->lr_machine,
 		dst));
 }

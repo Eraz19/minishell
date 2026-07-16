@@ -37,7 +37,7 @@ t_error	build_ast(t_ast_root *dst_ast)
 	return (error(ERR_NO));
 }
 
-t_error	builder_find_cmd_sub_end(t_cmd_sub_builder *builder, size_t *end_index)
+t_error	builder_find_cmd_sub_end(t_cmd_sub_builder *builder, ssize_t *end_index)
 {
 	t_error	err;
 

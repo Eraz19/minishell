@@ -1,4 +1,3 @@
-#include "parser_priv.h"
 #include "parser_item_stack.h"
 #include "parser_here_stack.h"
 #include "parser.h"
@@ -7,9 +6,11 @@
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
-void	parser_init(t_parser *parser)
+void	parser_init(t_parser *parser, t_scanner *scanner)
 {
 	assert(parser != NULL);
+	if (scanner != NULL)
+		parser->scanner = scanner;
 	parser_item_stack_init(&parser->item_stack);
 	parser_here_stack_init(&parser->here_stack);
 	token_pool_init(&parser->token_pool);
@@ -23,6 +24,7 @@ void	parser_init(t_parser *parser)
 	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
+	parser->opening_par = 0;
 }
 
 void	parser_clear(t_parser *parser)
@@ -41,6 +43,7 @@ void	parser_clear(t_parser *parser)
 	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
+	parser->opening_par = 0;
 }
 
 void	parser_free(t_parser *parser)
@@ -51,5 +54,5 @@ void	parser_free(t_parser *parser)
 	token_pool_free(&parser->token_pool);
 	cst_node_free(&parser->cst);
 	free(parser->qualifiers);
-	parser_init(parser);
+	parser_init(parser, NULL);
 }

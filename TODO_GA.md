@@ -1,5 +1,12 @@
 # WIP (COMMAND SUBSTITUTION PARSING)
 
+```bash
+# segfault
+$(( echo hello ); foo() { echo hello; }; echo bye )
+# abort
+$( echo hello )
+```
+
 - ⚠️ store `ast` into `token`:
 	- 
 

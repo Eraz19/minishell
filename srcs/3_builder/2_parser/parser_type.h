@@ -5,9 +5,11 @@
 # include "parser_item_stack_type.h"
 # include "parser_here_stack_type.h"
 # include "token.h"
+# include "scanner.h"
 
 typedef struct s_parser
 {
+	t_scanner			*scanner;	// borrowed
 	t_parser_item_stack	item_stack;
 	t_parser_here_stack	here_stack;
 	t_token_pool		token_pool;
@@ -20,7 +22,8 @@ typedef struct s_parser
 	bool				assignment_disabled;
 	bool				expansion_disabled;
 	bool				search_cmd_sub_end;
-	size_t				cmd_sub_end_index;
+	ssize_t				cmd_sub_end_index;
+	size_t				opening_par;
 }	t_parser;
 
 #endif

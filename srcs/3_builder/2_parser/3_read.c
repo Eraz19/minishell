@@ -70,7 +70,7 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	t_error	err;
 
 	assert(parser != NULL);
-	err = scanner_get_next_token(&token);
+	err = scanner_get_next_token(parser->scanner, &token);
 	if (err.type != ERR_NO)
 		return (err);
 	err = sym_conv(token.type, &parser->lookahead_raw_symbol);
@@ -81,7 +81,8 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	fprintf(stderr, "[PARSER] READ   => [%3zu] %s%s%s",
 		parser->lookahead_id, RED, token_type_to_string(token.type), NC);
 	if (token.type == TOKEN_TOKEN)
-		fprintf(stderr, " (%s%s%s) [%zu - %zu]", BLUE, token.value.data, NC, token.index.start, token.index.end);
+		fprintf(stderr, " (%s%s%s)", BLUE, token.value.data, NC);
+	fprintf(stderr, " [%zu - %zu]", token.index.start, token.index.end);
 	if (token.assignment_offset >= 0)
 		fprintf(stderr, " assignment_offset=%s%zu%s", YELLOW, token.assignment_offset, NC);
 	fprintf(stderr, "\n");
@@ -92,6 +93,8 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		if (err.type)
 			return (token_free(&token), parser_internal_error(err));
 	}
+	else if (parser->search_cmd_sub_end && token.type == TOKEN_LPARENTHESIS)
+		parser->opening_par++;
 	err = token_pool_push(&parser->token_pool, &token);
 	if (err.type)
 		return (token_free(&token), parser_internal_error(err));

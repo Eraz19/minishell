@@ -13,7 +13,7 @@ t_error	lexer_rule_expansion(t_lexer *lexer, t_context context)
 	{
 		if (lexer_context(lexer, CONTEXT_ARITH).type == ERR_CTX_END_NOT_FOUND)
 		{
-			lexer->err = error(ERR_NO);
+			lexer->err.type = ERR_NO;
 			return (lexer_context(lexer, CONTEXT_CMD_SUB));
 		}
 		return (lexer->err);

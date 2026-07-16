@@ -6,8 +6,10 @@
 
 void	parser_cmd_sub_init(
 			const t_parser *main_parser,
-			t_parser *cmd_sub_parser)
+			t_parser *cmd_sub_parser,
+			t_scanner *cmd_sub_scanner)
 {
+	cmd_sub_parser->scanner = cmd_sub_scanner;
 	parser_item_stack_init(&cmd_sub_parser->item_stack);
 	parser_here_stack_init(&cmd_sub_parser->here_stack);
 	token_pool_init(&cmd_sub_parser->token_pool);
@@ -21,6 +23,7 @@ void	parser_cmd_sub_init(
 	cmd_sub_parser->expansion_disabled = false;
 	cmd_sub_parser->search_cmd_sub_end = true;
 	cmd_sub_parser->cmd_sub_end_index = 0;
+	cmd_sub_parser->opening_par = 0;
 }
 
 void	parser_cmd_sub_free(t_parser *cmd_sub_parser)
@@ -37,4 +40,5 @@ void	parser_cmd_sub_free(t_parser *cmd_sub_parser)
 	cmd_sub_parser->expansion_disabled = false;
 	cmd_sub_parser->search_cmd_sub_end = true;
 	cmd_sub_parser->cmd_sub_end_index = 0;
+	cmd_sub_parser->opening_par = 0;
 }

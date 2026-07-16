@@ -16,9 +16,7 @@ t_error	parser_invalid_syntax(void);
 /*                                LIFE CYCLE                                 */
 /* ************************************************************************* */
 
-void	parser_init(t_parser *parser);
 void	parser_stack_item_free(void *raw_item);
-void	parser_free(t_parser *parser);
 
 /* ************************************************************************* */
 /*                                    READ                                   */

@@ -49,4 +49,16 @@ t_error	hook_cmd_sub(
 		size_t len,
 		t_parser_item *lhs);
 
+t_error	hook_increment_lpar(
+			t_parser *parser,
+			t_parser_item *rhs,
+			size_t len,
+			t_parser_item *lhs);
+
+t_error	hook_decrement_lpar(
+			t_parser *parser,
+			t_parser_item *rhs,
+			size_t len,
+			t_parser_item *lhs);
+
 #endif

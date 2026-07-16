@@ -147,7 +147,7 @@ t_error	scanner_cmd_sub_init(
  *         @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
  *         (printed) on internal inconsistency; @c ERR_NO on success.
  */
-t_error	scanner_get_next_token(t_token *token);
+t_error	scanner_get_next_token(t_scanner *scanner, t_token *token);
 
 /**
  * @ingroup scanner
@@ -169,7 +169,11 @@ t_error	scanner_get_next_token(t_token *token);
  *         @c ERR_INTERNAL (printed) on internal inconsistency; @c ERR_NO
  *         on success.
  */
-t_error	scanner_read_heredoc(t_string *out, const t_token *delim, bool strip);
+t_error	scanner_read_heredoc(
+			t_scanner *scanner,
+			t_string *out,
+			const t_token *delim,
+			bool strip);
 
 /**
  * @ingroup scanner
