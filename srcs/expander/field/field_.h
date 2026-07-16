@@ -65,4 +65,6 @@ t_error	fields_fpop(t_word *out, t_fields *fields);
 // TODO: fix ownership
 t_error	fields_push(t_fields *fields, t_word item);
 
+t_error	fields_get(t_word *out, t_fields *fields, size_t index);
+
 #endif

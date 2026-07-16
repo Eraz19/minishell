@@ -47,12 +47,5 @@ t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
 		return (err.type = ERR_INTERNAL, err);
 	}
 	*exit_status = status;
-	err = params_set_last_status(status);
-	if (err.type)
-	{
-		*exit_status = (int)err.type;
-		err = error_print(err, argv[0], NULL, NULL);
-		return (err.type = ERR_INTERNAL, err);
-	}
 	return (error(ERR_VEOF));
 }
