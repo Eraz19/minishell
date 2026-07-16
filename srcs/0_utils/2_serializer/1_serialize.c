@@ -20,7 +20,7 @@ static inline void copy_and_add_escape(
 	{
 		if (src[i] == '\'')
 		{
-			str_lcpy(buff + j, ESCAPED_QUOTE, dst->cap - j);
+			str_lcpy(buff + j, ESCAPED_QUOTE, buff_cap - j);
 			j += ESCAPED_QUOTE_ADDITIONAL_LEN;
 		}
 		else
