@@ -77,8 +77,9 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL),
 					__func__, "shell not found", NULL, NULL));
-	runner_init_subshell(&shell->runner);
 	params_init_subshell(&shell->params);
+	scanner_init_subshell(&shell->scanner);
+	runner_init_subshell(&shell->runner);
 	err = shell_reset_unignored_traps(shell, mode);
 	if (err.type == ERR_NO)
 	{
