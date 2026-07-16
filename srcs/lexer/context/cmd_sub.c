@@ -8,8 +8,7 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	t_context_stack_item	*item;
 	size_t					closing_par_index;
 
-	printf("%s()\n", __func__);
-	if (lexer_consume(lexer, lexer->token->type, 2).type)
+	if (lexer_consume(lexer, lexer->token->type, 1).type)
 		return (lexer->err);
 	lexer->err = context_stack_item_init(&item, CONTEXT_CMD_SUB);
 	if (lexer->err.type)
@@ -18,8 +17,10 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	lexer->err = context_stack_push(&lexer->token->contexts, item);
 	if (lexer->err.type)
 		return (free(item), lexer->err);
-	if (lexer->input->str.data[lexer->input->i] == ')')
+	if (lexer->input->str.data[lexer->input->i] == '('
+		&& lexer->input->str.data[lexer->input->i + 1] == ')')
 	{
+		lexer_consume(lexer, lexer->token->type, 1);
 		item->end = lexer->token->value.len;
 		return (lexer_consume(lexer, lexer->token->type, 1));
 	}
