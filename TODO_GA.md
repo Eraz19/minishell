@@ -1,5 +1,48 @@
 # WIP
 
+```bash
+unset VAR
+FOO=bar
+echo $VAR $FOO
+```
+
+- ORDRE POSIX:
+1. Expand command name + arguments
+2. expand + process redirections
+3. expand + process variables assignments
+4. process command
+
+```bash
+# echo should receive empty argument
+unset VAR
+VAR=foo echo $VAR
+# redirection should receive empty argument
+unset VAR
+VAR=foo echo "false" > $VAR
+```
+
+```bash
+# test 1
+unset VAR
+VAR=foo printf 'arg=<%s>\n' "$VAR"
+printf 'after=<%s>\n' "$VAR"
+# test 2
+unset VAR
+VAR=foo sh -c 'printf "env=<%s>\n" "$VAR"'
+printf 'after=<%s>\n' "$VAR"
+# test 3 (expected: exists=no)
+rm -f posix_order_test
+unset VAR
+VAR=posix_order_test printf x > "$VAR"
+printf 'exists='
+test -e posix_order_test && echo yes || echo no
+# test 4 (expected: arg=<> && env=<foo> && after=<>)
+unset VAR
+VAR=foo printf 'arg=<%s>\n' "$VAR"
+VAR=foo sh -c 'printf "env=<%s>\n" "$VAR"'
+printf 'after=<%s>\n' "$VAR"
+```
+
 - `builder`:
 	- handle `command substitution search`
 - `runner`:

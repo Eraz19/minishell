@@ -43,7 +43,7 @@
 		"-I${workspaceFolder}/srcs/3_builder/3_converter",
 		"-I${workspaceFolder}/srcs/builtins/set",
 		"-I${workspaceFolder}/srcs/4_runner/0_cmd_expansion",
-		"-I${workspaceFolder}/srcs/4_runner/0_tokens",
+		"-I${workspaceFolder}/srcs/4_runner/0_xtrace",
 		"-I${workspaceFolder}/srcs/4_runner/1_redirector",
 		"-I${workspaceFolder}/srcs/4_runner/1_redirector/1_stack_and_frame",
 		"-I${workspaceFolder}/srcs/4_runner/1_redirector/2_tracker",

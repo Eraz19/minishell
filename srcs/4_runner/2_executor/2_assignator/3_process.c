@@ -1,6 +1,7 @@
 #include "cmd_assignator_priv.h"
 #include "params.h"
 #include "entry_is_target.h"
+#include "xtrace.h"
 #include <stdlib.h>
 
 #define PATH_TARGET		"PATH="
@@ -69,6 +70,9 @@ t_error	cmd_assignment_process(
 	t_string	value;
 	t_error		err;
 
+	err = xtrace_print_one(expanded);
+	if (err.type)
+		return (string_free(expanded), err);
 	if (cmd->type == CMD_NONE
 		|| cmd->type == CMD_SPECIAL_BUILTIN
 		|| cmd->type == CMD_FUNCTION)
