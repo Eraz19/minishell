@@ -8,9 +8,17 @@ static t_error	history_prepare_entry(
 					t_string *content,
 					const t_string *entry)
 {
-	state->err = serialize(entry->data, content);
+	t_string	serialized_entry;
+
+	state->err = serialize(entry->data, &serialized_entry);
 	if (state->err.type)
 		return (state->err);
+	if (!string_append(content, &serialized_entry))
+	{
+		state->err = error_sys();
+		return (string_free(&serialized_entry), state->err);
+	}
+	string_free(&serialized_entry);
 	if (!string_append_n(content, "\n", 1))
 		return (state->err = error_sys());
 	return (state->err);

@@ -41,46 +41,44 @@ t_error	alias_remove(const char *name)
 	if (alias == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (name == NULL)
-		return (alias->err);
+		return (error(ERR_NO));
 	if (!hashmap_remove(&alias->map, name))
 		return (error(ERR_ALIAS_NOT_FOUND));
-	return (alias->err);
+	return (error(ERR_NO));
 }
 
 t_error	alias_add(const char *name, const char *value)
 {
 	t_alias	*alias;
-	char	*name_copy;
 	char	*value_copy;
 
 	alias = shell_get_alias();
 	if (alias == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
 	if (name == NULL)
-		return (alias->err);
-	name_copy = str_dup(name);
-	if (name_copy == NULL)
-		return (alias->err = error_sys());
+		return (error(ERR_NO));
 	if (value == NULL)
 		value_copy = str_dup("");
 	else
 		value_copy = str_dup(value);
 	if (value_copy == NULL)
-		return (alias->err = error_sys(), free(name_copy), alias->err);
-	if (!hashmap_put(&alias->map, name_copy, (void *)value_copy))
+		return (alias->err = error_sys());
+	if (!hashmap_put(&alias->map, name, (void *)value_copy))
 	{
 		alias->err = error_sys();
-		return (free(name_copy), free(value_copy), alias->err);
+		return (free(value_copy), alias->err);
 	}
-	return (alias->err);
+	return (error(ERR_NO));
 }
 
-t_error	alias_expand_token(t_string *expansion, const t_string *token_value)
+t_error	alias_expand_token(
+			t_string *expansion, bool *expanded, const t_string *token_value)
 {
 	t_alias		*alias;
 	const char	*raw;
 	char		*name;
 
+	*expanded = false;
 	alias = shell_get_alias();
 	if (alias == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
@@ -98,5 +96,6 @@ t_error	alias_expand_token(t_string *expansion, const t_string *token_value)
 			alias->err = error(ERR_INCOHERENT_STATE));
 	if (!string_init(expansion, 0, raw, -1))
 		return (alias_stack_pop(&alias->stack), alias->err = error_sys());
-	return (set_position_for_next_word(alias, expansion), alias->err);
+	set_position_for_next_word(alias, expansion);
+	return (*expanded = true, error(ERR_NO));
 }

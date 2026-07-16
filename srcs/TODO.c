@@ -199,14 +199,6 @@ t_error	builtin_umask(int argc, char **argv, char **envp, int *exit_status)
 	(void)exit_status;
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-t_error	builtin_unalias(int argc, char **argv, char **envp, int *exit_status)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
 t_error	builtin_wait(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;

@@ -9,13 +9,27 @@ static void	lexer_input_EOF(t_lexer *lexer)
 		lexer->rules.on_input_end(lexer);
 }
 
+static t_error	lexer_scan_token(t_lexer *lexer, t_token *token)
+{
+	t_context	context;
+
+	token_init(token);
+	lexer->token = token;
+	if (lexer->input_stack.len == 1)
+		lexer->token->index.start = (ssize_t)lexer->input->i;
+	while (!lexer->emited_token)
+	{
+		if (lexer->rules.recognize(lexer, &context).type)
+			return (lexer->err);
+	}
+	return (lexer->err);
+}
+
 t_error	lexer_get_next_token(
 			t_lexer *lexer,
 			t_token *token,
 			t_lexer_rules rules)
 {
-	t_context	context;
-
 	lexer->rules = rules;
 	lexer->emited_token = false;
 	if (lexer->input == NULL)
@@ -26,17 +40,15 @@ t_error	lexer_get_next_token(
 		if (lexer->err.type)
 			return (lexer->err);
 	}
-	token_init(token);
-	lexer->token = token;
-	if (lexer->input_stack.len == 1)
-		lexer->token->index.start = (ssize_t)lexer->input->i;
-	while (!lexer->emited_token)
-	{
-		if (lexer->rules.recognize(lexer, &context).type)
-			return (lexer->err);
-	}
+	if (lexer_scan_token(lexer, token).type)
+		return (lexer->err);
 	if (token->type == TOKEN_EOF && lexer->input_stack.len > 0)
+	{
 		lexer_input_EOF(lexer);
+		if (lexer->err.type || lexer->input_stack.len == 0)
+			return (lexer->err);
+		return (token_free(token), lexer_get_next_token(lexer, token, rules));
+	}
 	return (lexer->err);
 }
 

@@ -56,20 +56,27 @@ t_error	scanner_read_input(t_scanner *scanner)
 t_error	scanner_alias_expand(t_scanner *scanner, t_token *token)
 {
 	t_lexer_input_stack_item	*item;
+	bool						expanded;
 
 	scanner->err = lexer_input_stack_item_init(&item);
 	if (scanner->err.type)
 		return (scanner->err);
-	scanner->err = alias_expand_token(&item->str, &token->value);
-	if (scanner->err.type || item->str.len < 2)
+	scanner->err = alias_expand_token(&item->str, &expanded, &token->value);
+	if (scanner->err.type || !expanded)
 		return (lexer_input_stack_item_free(&item), scanner->err);
 	scanner->err = lexer_input_stack_push(&scanner->lexer.input_stack, item);
 	if (scanner->err.type)
+	{
+		(void)alias_on_expansion_end();
 		return (lexer_input_stack_item_free(&item), scanner->err);
+	}
+	scanner->lexer.input = NULL;
 	token_free(token);
 	if (lexer_get_next_token(&scanner->lexer, token,
 			scanner_lexer_rules(scanner)).type)
 		return (scanner->err = scanner->lexer.err);
+	if (token->type == TOKEN_TOKEN)
+		return (scanner_alias_expand(scanner, token));
 	return (scanner->err);
 }
 
