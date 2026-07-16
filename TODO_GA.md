@@ -1,5 +1,8 @@
 # WIP (COMMAND SUBSTITUTION PARSING)
 
+- ⚠️ store `ast` into `token`:
+	- 
+
 ```bash
 alias test="echo before; echo $( echo inside ); echo after"
 ```

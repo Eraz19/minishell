@@ -2,11 +2,13 @@
 #include "lexer.h"
 #include "cmd_sub.h"
 
+# include <stdio.h>
 t_error	lexer_context_cmd_sub(t_lexer *lexer)
 {
 	t_context_stack_item	*item;
 	size_t					closing_par_index;
 
+	printf("%s()\n", __func__);
 	if (lexer_consume(lexer, lexer->token->type, 2).type)
 		return (lexer->err);
 	lexer->err = context_stack_item_init(&item, CONTEXT_CMD_SUB);
