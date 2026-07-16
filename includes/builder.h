@@ -35,10 +35,8 @@ void	builder_cmd_sub_free(t_cmd_sub_builder *cmd_sub_builder);
 
 t_error	builder_load(t_builder *builder);
 t_error	build_ast(t_ast_root *dst_ast);
-t_error	builder_find_cmd_sub_end(
-			t_cmd_sub_builder *builder,
-			size_t *end_index,
-			bool *found);
+t_error	builder_find_cmd_sub_end(t_cmd_sub_builder *builder, size_t *end_index);
+
 
 // @ret ERR_SHELL_NOT_FOUND
 t_error	builder_can_next_word_be_a_cmd_name(bool *dst);

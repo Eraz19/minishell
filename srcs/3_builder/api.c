@@ -37,17 +37,13 @@ t_error	build_ast(t_ast_root *dst_ast)
 	return (error(ERR_NO));
 }
 
-t_error	builder_find_cmd_sub_end(
-			t_cmd_sub_builder *builder,
-			size_t *end_index,
-			bool *found)
+t_error	builder_find_cmd_sub_end(t_cmd_sub_builder *builder, size_t *end_index)
 {
 	t_error	err;
 
 	err = parser_build_cst(&builder->parser, builder->lr_machine);
 	*end_index = builder->parser.cmd_sub_end_index;
-	*found = err.type == ERR_CMD_SUB_CLOSING_FOUND;
-	if (err.type == ERR_POSIX_SYNTAX || err.type == ERR_CMD_SUB_CLOSING_FOUND)
+	if (err.type == ERR_CMD_SUB_CLOSING_FOUND)
 		err.type = ERR_NO;
 	return (err);
 }

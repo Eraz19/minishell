@@ -39,10 +39,12 @@
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 
 ⚠️ Search for `print_unspecified_behaviour()` usage
+- `options`:
+	- `i` and `c` are printed in `$-` expansion
 - `executor`:
 	- `utilities`: No special treatment is done for `unspecified command names` so it can resolve to a `function` or an `external command`
 	- `functions`: `assignments` persist after execution
-	- order of processing: step 3 and 4 are always done in the same order
+	- step 3 (apply `redirections`) and step 4 (expand and apply `variable assignments`) are always done in the same order
 - `errors`:
 	- shell exists on `command not found` error when shell is not interactive
 - `redirections`:

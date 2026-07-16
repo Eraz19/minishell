@@ -1,5 +1,9 @@
 # WIP (COMMAND SUBSTITUTION PARSING)
 
+```bash
+alias test="echo before; echo $( echo inside ); echo after"
+```
+
 ⚠️ `t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);`
 
 // TODO: keep cmd sub generated `AST`
@@ -10,9 +14,9 @@ inside
 EOF
 ```
 
-- ⚠️ handle uniquement `$(...)` form because `backquote` form only needs to find next `backquote`
-- ⚠️ `scanner` doit repérer lui-même les `$()` vides
-- ⚠️ Ajouter les continuations au main scanner (sinon l'historique et l'index du `)` seront incohérents):
+- ⚠️ only handle `$(...)` form because `backquote` form only needs to find next `backquote`.
+- ⚠️ `scanner` must handle empty `$()` itself.
+- ⚠️ Continuations read inside the `cmd sub scanner` must also be added to the `main scanner`.
 
 ```bash
 bash-5.2$ echo $(echo "hello

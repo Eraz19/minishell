@@ -5,7 +5,7 @@
 # include "libft.h"
 # include <stddef.h>
 
-t_error	cmd_sub_find_end(size_t *out_token_id, bool *found);
+t_error	cmd_sub_find_end(size_t *out_token_id);
 t_error	cmd_sub_run(
 			const t_string *cmd_string,
 			t_string *out_string,

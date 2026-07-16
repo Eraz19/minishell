@@ -6,7 +6,6 @@ t_error	run_cmd_sub_detection(t_lexer *lexer, t_token *cmd_sub_token)
 {
 	t_string	input;
 	size_t		closing_par_index;
-	bool		closing_par_found;
 
 	token_init(cmd_sub_token);
 	if (lexer->input == NULL)
@@ -16,7 +15,7 @@ t_error	run_cmd_sub_detection(t_lexer *lexer, t_token *cmd_sub_token)
 		lexer->err = error_sys();
 		return (token_free(cmd_sub_token), lexer->err);
 	}
-	lexer->err = cmd_sub_find_end(&closing_par_index, &closing_par_found);
+	lexer->err = cmd_sub_find_end(&closing_par_index);
 	return (token_free(cmd_sub_token), string_free(&input), lexer->err);
 }
 

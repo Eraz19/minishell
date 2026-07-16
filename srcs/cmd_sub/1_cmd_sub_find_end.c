@@ -1,7 +1,7 @@
 #include "cmd_sub.h"
 #include "shell.h"
 
-t_error	cmd_sub_find_end(size_t *out_token_id, bool *found)
+t_error	cmd_sub_find_end(size_t *out_token_id)
 {
 	t_shell				*shell;
 	t_scanner			cmd_sub_scanner;
@@ -17,7 +17,7 @@ t_error	cmd_sub_find_end(size_t *out_token_id, bool *found)
 	if (err.type)
 		return (err);
 	builder_cmd_sub_init(&shell->builder, &cmd_sub_builder);
-	err = builder_find_cmd_sub_end(&cmd_sub_builder, out_token_id, found);
+	err = builder_find_cmd_sub_end(&cmd_sub_builder, out_token_id);
 	scanner_cmd_sub_free(&cmd_sub_scanner);
 	builder_cmd_sub_free(&cmd_sub_builder);
 	return (err);
