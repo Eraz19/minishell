@@ -109,6 +109,10 @@ void	scanner_clear(t_scanner *scanner);
  */
 void	scanner_free(t_scanner *scanner);
 
+// TODO
+t_error	scanner_cmd_sub_init(const t_scanner *main_scanner, t_scanner *cmd_sub_scanner);
+void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
+
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */

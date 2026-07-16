@@ -6,13 +6,6 @@
 # include "debug.h"		// DEBUG
 # include <assert.h>	// DEBUG
 
-void	builder_init(t_builder *builder)
-{
-	assert(builder != NULL);
-	lr_machine_init(&builder->lr_machine);
-	parser_init(&builder->parser);
-}
-
 t_error	builder_load(t_builder *builder)
 {
 	t_error	err;
@@ -44,14 +37,17 @@ t_error	build_ast(t_ast_root *dst_ast)
 	return (error(ERR_NO));
 }
 
-void	builder_clear(t_builder *builder)
+t_error	builder_find_cmd_sub_end(
+			t_cmd_sub_builder *builder,
+			size_t *end_index,
+			bool *found)
 {
-	parser_clear(&builder->parser);
-}
+	t_error	err;
 
-void	builder_free(t_builder *builder)
-{
-	assert(builder != NULL);
-	lr_machine_free(&builder->lr_machine);
-	parser_free(&builder->parser);
+	err = parser_build_cst(&builder->parser, builder->lr_machine);
+	*end_index = builder->parser.cmd_sub_end_index;
+	*found = err.type == ERR_CMD_SUB_CLOSING_FOUND;
+	if (err.type == ERR_POSIX_SYNTAX || err.type == ERR_CMD_SUB_CLOSING_FOUND)
+		err.type = ERR_NO;
+	return (err);
 }

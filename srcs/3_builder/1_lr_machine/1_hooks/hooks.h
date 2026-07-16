@@ -43,4 +43,10 @@ t_error	hook_store_cst(
 	size_t len,
 	t_parser_item *lhs);
 
+t_error	hook_cmd_sub(
+		t_parser *parser,
+		t_parser_item *rhs,
+		size_t len,
+		t_parser_item *lhs);
+
 #endif

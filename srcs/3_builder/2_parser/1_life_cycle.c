@@ -21,10 +21,13 @@ void	parser_init(t_parser *parser)
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
+	parser->search_cmd_sub_end = false;
+	parser->cmd_sub_end_index = 0;
 }
 
 void	parser_clear(t_parser *parser)
 {
+	assert(parser != NULL);
 	parser_item_stack_clear(&parser->item_stack);
 	parser_here_stack_clear(&parser->here_stack);
 	token_pool_clear(&parser->token_pool);
@@ -36,6 +39,8 @@ void	parser_clear(t_parser *parser)
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
+	parser->search_cmd_sub_end = false;
+	parser->cmd_sub_end_index = 0;
 }
 
 void	parser_free(t_parser *parser)

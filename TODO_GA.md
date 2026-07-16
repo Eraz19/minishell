@@ -1,5 +1,13 @@
 # WIP (COMMAND SUBSTITUTION PARSING)
 
+// TODO: keep cmd sub generated `AST`
+```bash
+echo before; echo $( cat << EOF ); echo after
+# write it manually:
+inside
+EOF
+```
+
 1. Initialiser un nouveau scanner + parser avec les mêmes options que les "main" scanner et parser
 2. Set l'input dans le nouveau scanner à la string qu'on cherche à parser (donc la vraie input + offset qui permet de commencer sur `(` de `$(`)
 3. Lexer / parser l'input "normalement" jusqu'à ce que le parser reduce un `subshell` (car ça signifie qu'on a obtenu une forme valide de commande `( command )` donc que la substitution `$( command )` est valide)
