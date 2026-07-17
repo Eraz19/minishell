@@ -10,7 +10,7 @@ bool	is_backtick_substitution(t_word_item *current_item, uint flags)
 	return (false);
 }
 
-t_error	merge_cmd_res_into_word_exp(
+static t_error	merge_cmd_res_into_word_exp(
 			t_expander *expander,
 			t_word_item_opt *item_opt,
 			t_string *cmd_res)
