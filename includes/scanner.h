@@ -124,6 +124,8 @@ t_error	scanner_cmd_sub_init(
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
+void	scanner_init_subshell(t_scanner *scanner);
+
 t_error	scanner_get_next_token(t_scanner *scanner, t_token *token);
 
 t_error	scanner_read_heredoc(

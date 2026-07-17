@@ -3,7 +3,7 @@
 #include "posix_helpers.h"
 #include <unistd.h>
 
-t_error	cmd_sub_run(
+t_error	cmd_sub_run_string(
 			const t_string *cmd_string,
 			t_string *out_string,
 			int *out_exit_status)

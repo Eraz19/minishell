@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include "lexer.h"
 #include "cmd_sub.h"
+# include <assert.h>
 
-# include <stdio.h>
 t_error	lexer_context_cmd_sub(t_lexer *lexer)
 {
 	t_context_stack_item	*item;
-	size_t					closing_par_index;
+	ssize_t					closing_par_index;
 
 	lexer->token->type = TOKEN_TOKEN;
 	if (lexer_consume(lexer, lexer->token->type, 1).type)
@@ -29,7 +29,7 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	lexer->err = cmd_sub_find_end(&closing_par_index);
 	if (lexer->err.type)
 		return (lexer->err);
-	item->end = closing_par_index;
-	printf("%s() end (%zu) - start (%zu) = %zu \n", __func__, item->end, item->start, item->end - item->start);
-	return (lexer_consume(lexer, lexer->token->type, item->end - item->start));
+	assert(closing_par_index >= 0);
+	item->end = (size_t)closing_par_index;
+	return (lexer_consume(lexer, lexer->token->type, item->end - item->start + 1));
 }

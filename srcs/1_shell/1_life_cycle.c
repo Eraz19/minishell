@@ -7,7 +7,7 @@ void	shell_init(t_shell *shell)
 {
 	params_init(&shell->params);
 	scanner_init(&shell->scanner);
-	alias_init(&shell->alias, &shell->parser);
+	alias_init(&shell->alias, &shell->builder.parser);
 	history_init(&shell->history);
 	builder_init(&shell->builder, &shell->scanner);
 	runner_init(&shell->runner);

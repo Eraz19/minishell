@@ -1,20 +1,18 @@
+- ⚠️ store `AST` in `token`:
+	- `cmd_sub_find_end()` => retourne `t_ast_root`
+	- `t_vector(t_ast_root)` => `init()`, `push()`, `get()`, `free()`
+	- `cmd_sub_run()` => 1 version qui prend un `t_string*` + 1 version qui prend un `t_ast_root*`
+
 # WIP (COMMAND SUBSTITUTION PARSING)
 
 ```bash
-# segfault
 $(( echo hello ); foo() { echo hello; }; echo bye )
-# abort
 $( echo hello )
 ```
-
-- ⚠️ store `ast` into `token`:
-	- 
 
 ```bash
 alias test="echo before; echo $( echo inside ); echo after"
 ```
-
-⚠️ `t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);`
 
 // TODO: keep cmd sub generated `AST`
 ```bash

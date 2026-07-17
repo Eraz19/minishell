@@ -64,6 +64,7 @@ static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
 	return (sym_conv2(token_type, dst_symbol));
 }
 
+# include "logs.h"
 t_error	parser_read_next_symbol(t_parser *parser)
 {
 	t_token	token;
@@ -94,7 +95,10 @@ t_error	parser_read_next_symbol(t_parser *parser)
 			return (token_free(&token), parser_internal_error(err));
 	}
 	else if (parser->search_cmd_sub_end && token.type == TOKEN_LPARENTHESIS)
+	{
 		parser->opening_par++;
+		// fprintf(stderr, YELLOW "opening_par incremented to %zu\n" NC, parser->opening_par);
+	}
 	err = token_pool_push(&parser->token_pool, &token);
 	if (err.type)
 		return (token_free(&token), parser_internal_error(err));
