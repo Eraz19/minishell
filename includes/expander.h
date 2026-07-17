@@ -143,7 +143,7 @@ t_error expand_str(
  */
 t_error	expand_token(
 			t_expansion *out,
-			const t_token *src,
+			t_token *src,
 			int *exit_status,
 			t_exp_flag flags);
 
@@ -163,14 +163,14 @@ t_error	expand_token(
  */
 t_error	expand_token_merged(
 			t_string *out,
-			const t_token *src,
+			t_token *src,
 			int *exit_status,
 			t_exp_flag flags);
 
 // TODO: doc
 t_error	expand_token_word(
 			t_fields *out,
-			const t_token *src,
+			t_token *src,
 			int *exit_status,
 			t_exp_flag flags);
 

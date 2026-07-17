@@ -122,7 +122,10 @@ t_error	heredoc_expand_delim(t_string *out, const t_token *delim);
  *         @c ERR_EMPTY_STACK, @c ERR_INDEX_OUT_OF_BOUND; @c ERR_NO on
  *         success.
  */
-t_error	heredoc_prepare_for_expansion(t_context_stack *out, t_string *body);
+t_error	heredoc_prepare_for_expansion(
+			t_context_stack *context_stack_out,
+			t_ast_vector *ast_vec_out,
+			t_string *body);
 
 /**
  * @ingroup heredoc

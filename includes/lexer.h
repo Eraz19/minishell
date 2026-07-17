@@ -462,6 +462,7 @@ t_error			lexer_remove_escaped_newlines(
  */
 t_error			lexer_track_context(
 					t_lexer *lexer,
+					t_ast_vector *ast_vec_out,
 					t_context_stack *out,
 					t_lexer_context_args args);
 

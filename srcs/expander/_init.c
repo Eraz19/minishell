@@ -1,5 +1,6 @@
-#include "expander_.h"
+#include "ast.h"
 #include "loader_.h"
+#include "expander_.h"
 
 void	expander_init(t_expander *expander)
 {
@@ -17,6 +18,15 @@ void	expander_free(t_expander *expander)
 	*expander = (t_expander){0};
 }
 
+void	expander_args_free(t_expander_args *args)
+{
+	string_free(&args->ifs);
+	string_free(&args->value);
+	ast_vector_free(args->ast_vec);
+	context_stack_free(args->contexts);
+	*args = (t_expander_args){0};
+}
+
 t_error	expander_load(t_expander *expander, t_expander_args *args)
 {
 	t_loader	loader;
@@ -24,6 +34,7 @@ t_error	expander_load(t_expander *expander, t_expander_args *args)
 
 	expander->ifs = args->ifs;
 	expander->flags = args->flags;
+	expander->ast_vec = args->ast_vec;
 	expander->exit_status = args->exit_status;
 	expander->assignment_offset = args->assignment_offset;
 	loader_init(&loader);

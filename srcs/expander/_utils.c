@@ -48,7 +48,10 @@ t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs)
 	return (string_free(&str), err);
 }
 
-t_error	prepare_str_for_expansion(t_context_stack *out, t_string *src)
+t_error	prepare_str_for_expansion(
+			t_context_stack *context_out,
+			t_ast_vector *ast_vec_out,
+			t_string *src)
 {
 	t_error		err;
 	t_lexer		lexer;
@@ -62,7 +65,11 @@ t_error	prepare_str_for_expansion(t_context_stack *out, t_string *src)
 	lexer_init(&lexer);
 	err = lexer_push_input(&lexer, &lexer_src);
 	if (!err.type)
-		err = lexer_track_context(&lexer, out, str_context_rules());
+		err = lexer_track_context(
+				&lexer,
+				context_out,
+				ast_vec_out,
+				str_context_rules());
 	return (lexer_free(&lexer), err);
 }
 
