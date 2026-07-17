@@ -1,6 +1,7 @@
 #include "cmd_sub_priv.h"
 #include "posix_helpers.h"
 #include "runner.h"
+#include "walker.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -19,7 +20,7 @@ static inline void	cmd_sub_child_dup_and_close(int pipe_fds[2])
 		exit((int)err.type);
 }
 
-static inline void	cmd_sub_child_init_subshell(
+static inline void	cmd_sub_child_init_subshell_string(
 						const t_string *cmd_string,
 						t_shell *shell)
 {
@@ -34,7 +35,7 @@ static inline void	cmd_sub_child_init_subshell(
 	builder_clear(&shell->builder);
 }
 
-void	cmd_sub_child(const t_string *cmd_string, int pipe_fds[2])
+void	cmd_sub_child_string(const t_string *cmd_string, int pipe_fds[2])
 {
 	t_shell	*shell;
 	t_error	err;
@@ -47,7 +48,27 @@ void	cmd_sub_child(const t_string *cmd_string, int pipe_fds[2])
 		(void)error_print(err, "cmd sub child", "shell not found", NULL, NULL);
 		exit((int)err.type);
 	}
-	cmd_sub_child_init_subshell(cmd_string, shell);
+	cmd_sub_child_init_subshell_string(cmd_string, shell);
 	runner_run(shell);
+	exit(params_get_last_status_from(&shell->params));
+}
+
+void	cmd_sub_child_ast(t_ast_root *ast_root, int pipe_fds[2])
+{
+	t_shell	*shell;
+	t_error	err;
+
+	cmd_sub_child_dup_and_close(pipe_fds);
+	shell = shell_get();
+	if (shell == NULL)
+	{
+		err = error(ERR_INTERNAL);
+		(void)error_print(err, "cmd sub child", "shell not found", NULL, NULL);
+		exit((int)err.type);
+	}
+	err = shell_init_subshell(SUBSHELL_NORMAL);
+	if (err.type)
+		exit((int)err.type);
+	walk(&shell->runner, ast_root);
 	exit(params_get_last_status_from(&shell->params));
 }
