@@ -73,7 +73,7 @@ t_error	run_expansion_word(t_fields *out, t_expander_args *args)
 
 t_error	expand_token_word(
 			t_fields *out,
-			const t_token *src,
+			t_token *src,
 			int *exit_status,
 			t_exp_flag flags)
 {
@@ -88,6 +88,7 @@ t_error	expand_token_word(
 	args.contexts = &src->contexts;
 	args.exit_status = exit_status;
 	args.assignment_offset = src->assignment_offset;
+	args.ast_vec = &src->ast_vector;
 	err = run_expansion_word(out, &args);
 	return (string_free(&args.ifs), expander_error_qualify(err));
 }

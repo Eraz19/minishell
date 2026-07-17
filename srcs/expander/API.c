@@ -4,22 +4,26 @@
 #include "expander_.h"
 
 t_error	prepare_src(
-			t_context_stack *contexts,
-			t_string *out,
-			const t_string *in,
+			t_expander_args	*args,
+			t_context_stack *context_out,
+			t_ast_vector *ast_vec,
 			t_exp_flag flags)
 {
 	t_error	err;
 
-	context_stack_init(contexts);
-	if (!string_dup(out, in))
-		return (context_stack_free(contexts), error_sys());
-	if (flag_is_active((uint)flags, EXP_HEREDOC))
-		err = heredoc_prepare_for_expansion(contexts, out);
-	else
-		err = prepare_str_for_expansion(contexts, out);
+	err = get_ifs(&args->ifs);
 	if (err.type)
-		return (context_stack_free(contexts), string_free(out), err);
+		return (err);
+	if (flag_is_active((uint)flags, EXP_HEREDOC))
+		err = heredoc_prepare_for_expansion(context_out, ast_vec, &args->value);
+	else
+		err = prepare_str_for_expansion(context_out, &args->value);
+	if (err.type)
+	{
+		context_stack_free(context_out);
+		return (string_free(&args->value), err);
+	}
+	args->flags = flags;
 	return (error(ERR_NO));
 }
 
@@ -44,33 +48,27 @@ t_error expand_str(
 
 	t_error			err;
 	t_expander_args	args;
-	t_string		src_dup;
+	t_ast_vector	ast_vec;
 	t_context_stack	contexts;
 
 	if (src->data == NULL || src->len == 0)
 		return (string_init(out, 0, NULL, 0), error(ERR_NO));
-	err = prepare_src(&contexts, &src_dup, src, flags);
+	if (!string_dup(&args.value, src))
+		return (error_sys());
+	err = prepare_src(&args, &contexts, &ast_vec, flags);
 	if (err.type)
-		return (context_stack_free(&contexts), expander_error_qualify(err));
-	err = get_ifs(&args.ifs);
-	if (err.type)
-	{
-		string_free(&src_dup);
-		return (context_stack_free(&contexts), expander_error_qualify(err));
-	}
-	args.flags = flags;
-	args.value = src_dup;
+		return (expander_args_free(&args), expander_error_qualify(err));
+	args.ast_vec = &ast_vec;
 	args.contexts = &contexts;
 	args.assignment_offset = -1;
 	args.exit_status = exit_status;
 	err = run_and_merge_expansion(out, &args);
-	return (string_free(&src_dup), string_free(&args.ifs),
-		context_stack_free(&contexts), expander_error_qualify(err));
+	return (expander_args_free(&args), expander_error_qualify(err));
 }
 
 t_error	expand_token(
 			t_expansion *out,
-			const t_token *src,
+			t_token *src,
 			int *exit_status,
 			t_exp_flag flags)
 {
@@ -91,7 +89,7 @@ t_error	expand_token(
 
 t_error	expand_token_merged(
 			t_string *out,
-			const t_token *src,
+			t_token *src,
 			int *exit_status,
 			t_exp_flag flags)
 {

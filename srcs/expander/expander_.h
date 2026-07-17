@@ -36,26 +36,29 @@
  */
 typedef	struct s_expander_args
 {
-	t_string				ifs;
-	t_string				value;
-	t_exp_flag				flags;
-	const t_context_stack	*contexts;
-	int						*exit_status;
-	ssize_t					assignment_offset;
+	t_string		ifs;
+	t_string		value;
+	t_exp_flag		flags;
+	t_ast_vector	*ast_vec;
+	t_context_stack	*contexts;
+	int				*exit_status;
+	ssize_t			assignment_offset;
 }	t_expander_args;
 
 typedef struct s_expander
 {
-	t_string	ifs;
-	t_error		err;
-	t_word		word;
-	t_exp_flag	flags;
-	t_fields	fields;
-	t_word		word_exp;
-	t_fields	fields_exp;
-	bool		in_operand;
-	int			*exit_status;
-	ssize_t		assignment_offset;
+	t_string		ifs;
+	t_error			err;
+	t_word			word;
+	t_exp_flag		flags;
+	size_t			ast_i;
+	t_fields		fields;
+	t_ast_vector	*ast_vec;
+	t_word			word_exp;
+	t_fields		fields_exp;
+	bool			in_operand;
+	int				*exit_status;
+	ssize_t			assignment_offset;
 }	t_expander;
 
 /* ************************************************************************* */
@@ -95,6 +98,8 @@ t_error	expander_load(t_expander *expander, t_expander_args *args);
  * @param expander Already initialized expander state (borrowed).
  */
 void	expander_free(t_expander *expander);
+
+void	expander_args_free(t_expander_args *args);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

@@ -56,7 +56,8 @@ t_error	lexer_get_next_token(
 
 t_error	lexer_track_context(
 	t_lexer *lexer,
-	t_context_stack *out,
+	t_context_stack *context_out,
+	t_ast_vector *ast_vec_out,
 	t_lexer_context_args args)
 {
 	t_token					token;
@@ -77,7 +78,9 @@ t_error	lexer_track_context(
 	args.stack_item = item;
 	if (lexer_context_scan(lexer, args).type)
 		return (free(item), token_free(&token), lexer->err);
-	lexer->err = context_stack_dup(out, &token.contexts);
+	vector_take(context_out, &token.contexts);
+	vector_take(ast_vec_out, &token.ast_vector);
+	//lexer->err = context_stack_dup(context_out, &token.contexts);
 	return (free(item), token_free(&token), lexer->err);
 }
 
