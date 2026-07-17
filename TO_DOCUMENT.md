@@ -17,8 +17,7 @@
 		- all OS and archs: via `ioctl()` (non-POSIX function) instead of `fcntl()`
 - ⚠️ as `OpenBSD` sends `SIGABRT` when `syscalls` are sent from unauthorized memory addresses, this `shell` is not fully POSIX compliant on this Operating System. A next version of this program may use all the real `libc` functions to enable full POSIX compliance.
 - `heredoc`:
-	- as `mkdir()` and `mktmp()` is forbidden, we can't properly create a tmp file, so we just iterate over an 0-INT_MAX file_name suffix to find an available filename to create directly in `tmp/`
-	- as `lseek()` is forbidden, we can't keep the `fd` open, so we `open()`/`close()` the tmp file several times to re-roll it
+	- stored as a `t_string` inside the `AST`
 - `redirections`:
 	- as `fcntl()` is forbidden, we check whether the rhs fd of `>&` / `<&` is open, but we do not check whether it is open respectively for writing or reading. This is still POSIX-compliant because POSIX says that a redirection error "may" result in that case.
 	- as `fcntl()` is forbidden, we cannot allocate redirection backup fds atomically with `F_DUPFD`. We use `fstat()` + `dup2()` instead. This is considered safe enough for `minishell` because it is single-threaded and its signal handlers do not open file descriptors.
