@@ -23,7 +23,7 @@ t_error	redirect_resolve_location(t_redir *redir)
 		err = error_print(error(ERR_REDIRECTION),
 			"io_location is not a valid file descriptor", NULL,
 			"'%s' expanded from '%s'",
-			content_start, redir->location->value.data);
+			content_start, redir->location.value.data);
 	redir->expanded_location.data[last_char_index] = last_char;
 	return (err);
 }

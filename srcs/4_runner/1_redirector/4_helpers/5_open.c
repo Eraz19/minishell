@@ -44,7 +44,7 @@ static inline t_error	redirect_handle_noclobber_eexist(
 		(void)error_print(error_sys(),
 			"redirection failed", "no clobber is active and file exists",
 			"unable to stat file", NULL,
-			"'%s' expanded from '%s'", path, redir->word->value.data);
+			"'%s' expanded from '%s'", path, redir->word.value.data);
 		err = error(ERR_REDIRECTION);
 		err.printed = true;
 		return (err);
@@ -52,7 +52,7 @@ static inline t_error	redirect_handle_noclobber_eexist(
 	else if (S_ISREG(st.st_mode))
 		return (error_print(error(ERR_REDIRECTION),
 			"no clobber is active and file is regular", NULL,
-			"'%s' expanded from '%s'", path, redir->word->value.data));
+			"'%s' expanded from '%s'", path, redir->word.value.data));
 	oflag = O_WRONLY | O_CREAT | O_TRUNC;
 	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 	return (posix_open_with_mode(path, oflag, mode, out_fd));
@@ -92,7 +92,7 @@ static inline t_error	redirect_handle_open_error(
 	{
 		err = error_print(err, "redirection failed",
 			"unable to open file", NULL, "'%s' expanded from '%s'",
-			redir->expanded_word.data, redir->word->value.data);
+			redir->expanded_word.data, redir->word.value.data);
 	}
 	if (err.type && err.type != ERR_INVALID_USAGE && err.type != ERR_INTERNAL
 		&& err.type != ERR_INTERRUPTED)

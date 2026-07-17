@@ -12,14 +12,14 @@ static inline t_error	redirect_dup_invalid_word(t_redir *redir)
 {
 	const char	*value;
 
-	print_unspecified_behaviour(redir->word->value.data, CITATION, IMPLEMENT);
+	print_unspecified_behaviour(redir->word.value.data, CITATION, IMPLEMENT);
 	if (redir->expanded_word.len == 0)
 		value = "";
 	else
 		value = redir->expanded_word.data;
 	return (error_print(error(ERR_REDIRECTION),
 		"invalid file descriptor", NULL, "'%s' expanded from '%s'",
-		value, redir->word->value.data));
+		value, redir->word.value.data));
 }
 
 // @ret ERR_REDIRECTION / ERR_LIBC
@@ -39,7 +39,7 @@ static inline t_error	redirect_validate_dup_rhs(
 	if (err.type == ERR_REDIRECTION)
 		return (error_print(err,
 			"file descriptor is not open", NULL,
-			"%i expanded from '%s'", rhs_fd, redir->word->value.data));
+			"%i expanded from '%s'", rhs_fd, redir->word.value.data));
 	return (err);
 }
 
