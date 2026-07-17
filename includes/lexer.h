@@ -84,6 +84,26 @@ typedef struct s_lexer_input_stack_item
 
 typedef struct s_lexer	t_lexer;
 
+/**
+ * @ingroup lexer
+ * @struct s_lexer_rules
+ * @brief Behaviour a caller injects into one lexer drive
+ *        (see @ref lexer_get_next_token).
+ *
+ * @var s_lexer_rules::calling_lexer Currently unused: no engine code
+ *                                   reads it (TODO: wire or remove).
+ * @var s_lexer_rules::on_eoi Fired by @ref context_EOI when the BASE
+ *                            input runs out mid-scan; typically reads a
+ *                            continuation line. @c NULL when no
+ *                            continuation source exists.
+ * @var s_lexer_rules::on_input_end Fired each time an exhausted input
+ *                                  is popped from the stack (e.g. the
+ *                                  alias recursion guard pop). May be
+ *                                  @c NULL.
+ * @var s_lexer_rules::recognize Applies one token-recognition rule to
+ *                               the current character; drives the
+ *                               whole scan.
+ */
 typedef struct s_lexer_rules
 {
 	t_lexer *calling_lexer;
@@ -342,6 +362,17 @@ t_error			lexer_input_stack_push(
 					t_lexer_input_stack *stack,
 					t_lexer_input_stack_item *item);
 
+/**
+ * @ingroup lexer
+ * @brief Deep-copies @p in into @p out, preserving the order, text and
+ *        read cursor of every input item (used to clone a scanner for
+ *        a command substitution parse).
+ *
+ * @param out Stack initialized by the function; released (with the
+ *            already copied items) on failure (borrowed).
+ * @param in Source stack (borrowed, read-only).
+ * @return @c ERR_LIBC if an allocation fails, @c ERR_NO on success.
+ */
 t_error			lexer_input_stack_dup(
 					t_lexer_input_stack *out,
 					const t_lexer_input_stack *in);
@@ -391,6 +422,10 @@ t_error			lexer_push_input(t_lexer *lexer, t_string *str);
  * @ingroup lexer
  * @brief Rewrites @p word without its escaped newlines, scanning it with
  *        @p args on a private lexer.
+ *
+ * @warning On failure @p word is left as a valid EMPTY string: its
+ *          buffer is consumed by the scan and the cleaned copy is only
+ *          written back on success.
  *
  * @param word Word to clean; replaced by the cleaned copy (borrowed).
  * @param args Detection configuration for the scan; the context tag,
@@ -505,10 +540,23 @@ t_error			lexer_restore(t_lexer *lexer, t_lexer_backup backup);
  * construct (top of the lexer's context stack): this is the most
  * specific diagnostic point, requalifiers must not reprint it.
  *
+ * End of input is an error ONLY while a construct is open. With no
+ * open construct (POSIX 2.2.1: a trailing line continuation is
+ * removed before tokenization, so the input simply ends), the
+ * function reports @c ERR_NO and the caller's scan loop reaches its
+ * normal end-of-input rule. When the @c on_eoi handler itself
+ * reports end of input (@c ERR_VEOF), the same split applies: an
+ * open construct means the input ended mid-construct for good —
+ * reported as @c ERR_UNEXPECTED_EOI, printed here with the construct
+ * name — while no construct means the continuation line was simply
+ * never provided: benign, @c ERR_NO.
+ *
  * @param lexer Already initialized lexer (borrowed).
  * @return @c ERR_EMPTY_STACK on an input stack inconsistency; the
- *         @c on_input_end or @c on_eoi handler's error, verbatim; or
- *         @c ERR_UNEXPECTED_EOI (printed).
+ *         @c on_input_end handler's error, verbatim; the @c on_eoi
+ *         handler's error, verbatim except @c ERR_VEOF;
+ *         @c ERR_UNEXPECTED_EOI (printed) mid-construct; @c ERR_NO
+ *         otherwise.
  */
 t_error			context_EOI(t_lexer *lexer);
 

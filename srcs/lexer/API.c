@@ -87,27 +87,26 @@ t_error	lexer_remove_escaped_newlines(
 {
 	t_token					token;
 	t_lexer					lexer;
+	t_error					err;
 	t_context_stack_item	*item;
 
 	lexer_init(&lexer);
-	lexer.err = lexer_push_input(&lexer, word);
-	if (lexer.err.type)
-		return (lexer_free(&lexer), lexer.err);
-	lexer.err = lexer_input_stack_get_last(&lexer.input_stack, &lexer.input);
-	if (lexer.err.type)
-		return (lexer_free(&lexer), lexer.err);
-	lexer.err = context_stack_item_init(&item, CONTEXT_NONE);
-	if (lexer.err.type)
-		return (lexer_free(&lexer), lexer.err);
+	err = lexer_push_input(&lexer, word);
+	if (!err.type)
+		err = lexer_input_stack_get_last(&lexer.input_stack, &lexer.input);
+	if (err.type)
+		return (lexer_free(&lexer), err);
+	err = context_stack_item_init(&item, CONTEXT_NONE);
+	if (err.type)
+		return (lexer_free(&lexer), err);
 	token_init(&token);
 	lexer.token = &token;
 	args.context = CONTEXT_NONE;
 	args.opening_len = 0;
 	args.closing_len = 0;
 	args.stack_item = item;
-	if (lexer_context_scan(&lexer, args).type)
-		return (free(item), token_free(&token), lexer_free(&lexer), lexer.err);
-	if (!string_dup(word, &token.value))
-		lexer.err = error_sys();
-	return (free(item), token_free(&token), lexer_free(&lexer), lexer.err);
+	err = lexer_context_scan(&lexer, args);
+	if (!err.type && !string_dup(word, &token.value))
+		err = error_sys();
+	return (free(item), token_free(&token), lexer_free(&lexer), err);
 }

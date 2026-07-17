@@ -21,7 +21,7 @@ t_error	scanner_load(t_scanner *scanner, const char *source)
 	scanner->mode = INPUT_MODE_NONE;
 	err = input_mode_set(&scanner->mode);
 	if (err.type != ERR_NO)
-		return (scanner_error_qualify(err, false));
+		return (scanner->err = scanner_error_qualify(err, false));
 	if (scanner->mode == INPUT_MODE_STRING || scanner->mode == INPUT_MODE_FILE)
 		scanner->source = source;
 	return (scanner->err);

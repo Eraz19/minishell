@@ -16,7 +16,7 @@ static t_error	scanner_lexer_continuation(t_lexer *lexer)
 		return (lexer->err);
 	scanner = shell_get_scanner();
 	if (scanner == NULL)
-		return (scanner_error_qualify(error(ERR_SHELL_NOT_FOUND), false));
+		return (lexer->err = error(ERR_SHELL_NOT_FOUND));
 	if (&(scanner->lexer) != lexer && scanner->lexer.input != NULL)
 	{
 		last_input = scanner->lexer.input->str;

@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include "lexer.h"
 #include "cmd_sub.h"
-# include <assert.h>
 
 t_error	lexer_context_cmd_sub(t_lexer *lexer)
 {
@@ -29,7 +28,8 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	lexer->err = cmd_sub_find_end(&closing_par_index, &lexer->token->ast_vector);
 	if (lexer->err.type)
 		return (lexer->err);
-	assert(closing_par_index >= 0);
+	if (closing_par_index < 0 || (size_t)closing_par_index < item->start)
+		return (lexer->err = error(ERR_INCOHERENT_STATE));
 	item->end = (size_t)closing_par_index;
 	return (lexer_consume(lexer, lexer->token->type, item->end - item->start + 1));
 }

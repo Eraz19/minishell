@@ -27,8 +27,8 @@ bool	is_line_delimiter(t_body *body)
 static t_error	body_missing_delimiter(t_body *body)
 {
 	body->delim.data[body->delim.len - 1] = '\0';
-	body->err = error_print(error(ERR_REDIRECTION), "heredoc",
-		"missing delimiter", NULL, "'%s'", body->delim.data);
+	body->err = error_print(error(ERR_NO_DELIM), "heredoc",
+		NULL, "'%s'", body->delim.data);
 	return (body->err);
 }
 

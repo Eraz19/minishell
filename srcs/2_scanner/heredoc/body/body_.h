@@ -107,7 +107,7 @@ t_lexer_context_args	body_context_rules(void);
  * @param continuation Set once a continuation line has been read, so the
  *                     item's saved cursor is rewound only once
  *                     (borrowed).
- * @return @c ERR_REDIRECTION (printed with the delimiter) when the input
+ * @return @c ERR_NO_DELIM (printed with the delimiter) when the input
  *         ends before the delimiter line: requalified as
  *         @c ERR_POSIX_SYNTAX by the scanner; @c ERR_LIBC (printed) or
  *         @c ERR_INTERNAL (printed) from the continuation reader;
@@ -121,7 +121,7 @@ t_error					body_continuation(t_body *body, bool *continuation);
  *        delimiter line, reading continuation lines as needed.
  *
  * @param body Body state (borrowed).
- * @return @c ERR_REDIRECTION (printed with the delimiter) when the input
+ * @return @c ERR_NO_DELIM (printed with the delimiter) when the input
  *         ends before the delimiter line; @c ERR_LIBC on allocation
  *         failure or (printed) from the continuation reader;
  *         @c ERR_INTERNAL (printed) from the continuation reader;

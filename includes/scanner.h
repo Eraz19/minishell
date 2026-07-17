@@ -98,9 +98,6 @@ t_error	scanner_init(t_scanner *scanner);
  */
 t_error	scanner_load(t_scanner *scanner, const char *source);
 
-// TODO: doc
-void	scanner_clear(t_scanner *scanner);
-
 /**
  * @ingroup scanner
  * @brief Releases the lexer state of @p scanner and zeroes it.
@@ -113,21 +110,121 @@ void	scanner_free(t_scanner *scanner);
 /*                                 CMD_SUB                                   */
 /* ************************************************************************* */
 
-t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);
-
+/**
+ * @ingroup scanner
+ * @brief Releases a scanner clone built by @ref scanner_cmd_sub_init.
+ *
+ * @param cmd_sub_scanner Already initialized clone (borrowed).
+ */
 void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
+
+/**
+ * @ingroup scanner
+ * @brief Builds an independent scanner clone for a command substitution
+ *        parse: copies the mode and source of @p main_scanner and
+ *        deep-copies its lexer input stack, cursors included, so the
+ *        recursive parse (POSIX 2.6.3) reads the same input without
+ *        consuming the main scanner's state.
+ *
+ * @note @p cmd_sub_scanner is initialized by the function on every
+ *       outcome: it is always safe to release it with
+ *       @ref scanner_cmd_sub_free.
+ * @param main_scanner Scanner whose input is cloned
+ *                     (borrowed, read-only).
+ * @param cmd_sub_scanner Clone initialized by the function (borrowed).
+ * @return @c ERR_LIBC (printed) if the input stack copy fails,
+ *         @c ERR_NO on success.
+ */
 t_error	scanner_cmd_sub_init(
 			const t_scanner *main_scanner,
 			t_scanner *cmd_sub_scanner);
+
+/**
+ * @ingroup scanner
+ * @brief Loads @p cmd_string as the input of the forked subshell's
+ *        scanner, replacing the input inherited from the parent.
+ *
+ * @warning STUB (TODO.c): currently ignores @p cmd_string and returns
+ *          @c ERR_NO; the subshell still scans the inherited input.
+ * @param cmd_string Command text of the substitution
+ *                   (borrowed, read-only).
+ * @return @c ERR_NO.
+ */
+t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-void	scanner_init_subshell(t_scanner *scanner);
+/**
+ * @ingroup scanner
+ * @brief Drops every pending input and the token in progress of the
+ *        scanner's lexer, ready for a fresh drive (typically after a
+ *        syntax error).
+ *
+ * @param scanner Already initialized scanner (borrowed).
+ */
+void	scanner_clear(t_scanner *scanner);
 
+/**
+ * @ingroup scanner
+ * @brief Produces the next POSIX token: reads input when the stack is
+ *        empty, drives the lexer with the recognition rules, and
+ *        applies alias substitution to word tokens (re-lexing from the
+ *        expansion).
+ *
+ * @note An exhausted source is not an error: @p token is set to
+ *       @c TOKEN_EOF and @c ERR_NO is returned.
+ * @param scanner Already initialized and loaded scanner (borrowed).
+ * @param token Token initialized by the function; the caller owns it
+ *              and must release it with @c token_free (borrowed).
+ * @return @c ERR_VEOF (raw, unprinted) at the top-level end of input of
+ *         an interactive shell (see the ERROR CONTRACT above);
+ *         @c ERR_POSIX_SYNTAX (printed) on an unexpected end of input
+ *         inside a construct; @c ERR_POSIX_CMD_NOT_FOUND /
+ *         @c ERR_POSIX_CMD_NOT_EXECUTABLE (printed) when the script
+ *         file cannot be opened; @c ERR_POSIX_READ (printed) on an
+ *         unrecoverable read error; @c ERR_INTERRUPTED when a signal
+ *         interrupts the read; @c ERR_LIBC (printed) on allocation
+ *         failure; @c ERR_INTERNAL (printed) on any scanner, lexer,
+ *         alias or history inconsistency; @c ERR_NO on success.
+ */
 t_error	scanner_get_next_token(t_scanner *scanner, t_token *token);
 
+/**
+ * @ingroup scanner
+ * @brief Switches @p scanner to the pipe input mode after a fork, so
+ *        the subshell reads its whole standard input regardless of the
+ *        parent's mode (see @c shell_init_subshell).
+ *
+ * @param scanner Already initialized scanner (borrowed).
+ */
+void	scanner_init_subshell(t_scanner *scanner);
+
+/**
+ * @ingroup scanner
+ * @brief Reads one here-document body from the current input up to the
+ *        delimiter line (POSIX 2.7.4): quote-removes @p delim, then
+ *        accumulates lines (prompting for continuation lines on a
+ *        terminal), tab-stripping them when @p strip is set.
+ *
+ * @note The delimiter line is matched on PHYSICAL lines; a trailing
+ *       line continuation in the body is removed at expansion time
+ *       (documented choice, see the heredoc module).
+ * @param scanner Already initialized scanner (borrowed).
+ * @param out String receiving the body, initialized by the function on
+ *            success only (borrowed).
+ * @param delim Raw delimiter token (borrowed, read-only).
+ * @param strip Tab-stripping mode of the @c <<- operator.
+ * @return @c ERR_POSIX_SYNTAX (printed with the delimiter by the
+ *         heredoc) when the input ends before the delimiter line
+ *         (documented choice, POSIX 2.7.4 "should, but need not,
+ *         treat this as a redirection error"); from the delimiter
+ *         quote removal, already qualified by the expander:
+ *         @c ERR_POSIX_EXPANSION (printed), @c ERR_INTERNAL (printed)
+ *         or @c ERR_INTERRUPTED; @c ERR_LIBC (printed) on allocation
+ *         failure; @c ERR_NO on success.
+ */
 t_error	scanner_read_heredoc(
 			t_scanner *scanner,
 			t_string *out,

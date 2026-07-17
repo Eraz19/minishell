@@ -67,8 +67,6 @@ const char	*error_to_string(t_error err)
 		return ("context end not found");
 	else if (err.type == ERR_EMPTY_STACK)
 		return ("empty stack");
-	else if (err.type == ERR_HEREDOC_MAX_ID_REACHED)
-		return ("no available file name");
 	else if (err.type == ERR_HISTORY_DISABLED)
 		return ("persistent history disabled");
 	else if (err.type == ERR_INCOHERENT_STATE)
@@ -286,8 +284,12 @@ t_error	error_priorize(t_error previous, t_error new)
 		loser = previous;
 
 	}
+#ifdef DEBUG_ERROR_TRACE
 	if (previous.type != ERR_NO && new.type != ERR_NO)
 		fprintf(stderr, "%s[%s] priorized against [%s]%s\n", YELLOW,
 			error_to_string(winner), error_to_string(loser), NC);
+# else
+	(void)loser;
+#endif
 	return (winner);
 }
