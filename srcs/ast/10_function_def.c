@@ -23,7 +23,7 @@ t_error	ast_function_def_dup(void *dst, const void *src)
 	if (err.type)
 		return (err);
 	dst_function_def->body = malloc(sizeof(*dst_function_def->body));
-	if (dst_function_def == NULL)
+	if (dst_function_def->body == NULL)
 		err = error_sys();
 	if (err.type == ERR_NO)
 		err = ast_command_dup(dst_function_def->body, src_function_def->body);

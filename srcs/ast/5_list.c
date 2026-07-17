@@ -57,7 +57,7 @@ void	ast_root_free_void(void *ast_root)
 	ast_list_free(ast_root);
 }
 
-t_error	ast_root_dup(t_ast_root *dst, const t_ast_root *src)
+t_error	ast_root_dup(void *dst, const void *src)
 {
 	return (ast_list_dup(dst, src));
 }

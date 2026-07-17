@@ -67,7 +67,7 @@ static inline void	ast_command_free_data(t_ast_command *command)
 	else if (command->type == AST_CMD_CASE)
 		ast_case_free(&command->data.case_clause);
 	else if (command->type == AST_CMD_FUNCTION_DEF)
-		ast_command_free(&command->data.function_def);
+		ast_function_def_free(&command->data.function_def);
 }
 
 void	ast_command_free(void *command)

@@ -201,7 +201,7 @@ t_error	ast_command_dup(void *dst, const void *src);
 void	ast_command_free(void *command);
 
 void	ast_root_init(t_ast_root *root);
-t_error	ast_root_dup(t_ast_root *dst, const t_ast_root *src);
+t_error	ast_root_dup(void *dst, const void *src);
 void	ast_root_free(t_ast_root *root);
 void	ast_root_free_void(void *ast_root);
 
