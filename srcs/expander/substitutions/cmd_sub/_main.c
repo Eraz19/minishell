@@ -1,4 +1,3 @@
-#include "ast.h"
 #include "cmd_sub.h"
 #include "cmd_substitution_.h"
 
@@ -35,20 +34,18 @@ t_error	cmd_substitution(t_expander *expander)
 {
 	t_word_item	item;
 	t_string	cmd_res;
-	t_ast_root	*ast_root;
 
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type)
 		return (expander->err);
-	ast_vector_get()
+	expander->err = cmd_sub_run_ast(
+						expander->ast_vec,
+						expander->ast_i,
+						&cmd_res,
+						expander->exit_status);
 	if (expander->err.type)
-		return (string_free(&cmd_str), expander->err);
-	string_free(&cmd_str);
+		return (expander->err);
+	++expander->ast_i;
 	merge_cmd_res_into_word_exp(expander, &item.opt, &cmd_res);
 	return (string_free(&cmd_res), expander->err);
-
-
-	expander->err = error_print(error(ERR_NOT_IMPLEMENTED),
-			__func__, NULL, NULL);
-	return (expander->err);
 }
