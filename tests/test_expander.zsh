@@ -1248,53 +1248,53 @@ run_cmd_sub_tests()
 	# Uncomment these tests (and the S8/SEC locals) once $(...) and `...`
 	# are wired. Expectations are POSIX-based, validated against dash+bash.
 
-	# local S8='unset IFS'
+	local S8='unset IFS'
 
-	# local SEC="8. \$() basic"
-	# tc 8.01 "$SEC" "$S8" './test_exec $(echo hi)'   ./test_exec hi
-	# tc 8.02 "$SEC" "$S8" './test_exec "$(echo hi)"' ./test_exec hi
-	# tc 8.03 "$SEC" "$S8" "./test_exec \$(echo 'a  b')"     ./test_exec a b
-	# tc 8.04 "$SEC" "$S8" "./test_exec \"\$(echo 'a  b')\"" ./test_exec 'a  b'
-	# tc 8.05 "$SEC" "$S8" './test_exec pre"$(echo mid)"post' \
-	# 	./test_exec premidpost
-	# tc 8.06 "$SEC" "$S8" './test_exec pre$(echo mid)post' \
-	# 	./test_exec premidpost
+	local SEC="8. \$() basic"
+	tc 8.01 "$SEC" "$S8" './test_exec $(echo hi)'   ./test_exec hi
+	tc 8.02 "$SEC" "$S8" './test_exec "$(echo hi)"' ./test_exec hi
+	tc 8.03 "$SEC" "$S8" "./test_exec \$(echo 'a  b')"     ./test_exec a b
+	tc 8.04 "$SEC" "$S8" "./test_exec \"\$(echo 'a  b')\"" ./test_exec 'a  b'
+	tc 8.05 "$SEC" "$S8" './test_exec pre"$(echo mid)"post' \
+		./test_exec premidpost
+	tc 8.06 "$SEC" "$S8" './test_exec pre$(echo mid)post' \
+		./test_exec premidpost
 
-	# SEC="8. trailing newline removal"
-	# tc 8.10 "$SEC" "$S8" "./test_exec \"\$(printf 'x\\n\\n\\n')\"" \
-	# 	./test_exec x
-	# tc 8.11 "$SEC" "$S8" "./test_exec \"\$(printf 'a\\nb\\n')\"" \
-	# 	./test_exec $'a\nb'
-	# tc 8.12 "$SEC" "$S8" "./test_exec \$(printf 'a\\nb\\n')" \
-	# 	./test_exec a b
+	SEC="8. trailing newline removal"
+	tc 8.10 "$SEC" "$S8" "./test_exec \"\$(printf 'x\\n\\n\\n')\"" \
+		./test_exec x
+	tc 8.11 "$SEC" "$S8" "./test_exec \"\$(printf 'a\\nb\\n')\"" \
+		./test_exec $'a\nb'
+	tc 8.12 "$SEC" "$S8" "./test_exec \$(printf 'a\\nb\\n')" \
+		./test_exec a b
 
-	# SEC="8. backquotes"
-	# tc 8.20 "$SEC" "$S8" './test_exec `echo hi`'   ./test_exec hi
-	# tc 8.21 "$SEC" "$S8" './test_exec "`echo hi`"' ./test_exec hi
+	SEC="8. backquotes"
+	tc 8.20 "$SEC" "$S8" './test_exec `echo hi`'   ./test_exec hi
+	tc 8.21 "$SEC" "$S8" './test_exec "`echo hi`"' ./test_exec hi
 
-	# SEC="8. nesting and inner quoting"
-	# tc 8.30 "$SEC" "$S8" './test_exec "$(echo $(echo inner))"' \
-	# 	./test_exec inner
-	# tc 8.31 "$SEC" "$S8" './test_exec "$(echo "a b")"' ./test_exec 'a b'
+	SEC="8. nesting and inner quoting"
+	tc 8.30 "$SEC" "$S8" './test_exec "$(echo $(echo inner))"' \
+		./test_exec inner
+	tc 8.31 "$SEC" "$S8" './test_exec "$(echo "a b")"' ./test_exec 'a b'
 
-	# SEC="8. empty output"
-	# tc 8.40 "$SEC" "$S8" './test_exec before "$(true)" after' \
-	# 	./test_exec before '' after
-	# tc 8.41 "$SEC" "$S8" './test_exec before $(true) after' \
-	# 	./test_exec before after
+	SEC="8. empty output"
+	tc 8.40 "$SEC" "$S8" './test_exec before "$(true)" after' \
+		./test_exec before '' after
+	tc 8.41 "$SEC" "$S8" './test_exec before $(true) after' \
+		./test_exec before after
 
-	# SEC="8. assignment context: no field splitting"
-	# tc 8.50 "$SEC" "$S8"$'\n'"V=\$(echo 'a  b')" './test_exec "$V"' \
-	# 	./test_exec 'a  b'
+	SEC="8. assignment context: no field splitting"
+	tc 8.50 "$SEC" "$S8"$'\n'"V=\$(echo 'a  b')" './test_exec "$V"' \
+		./test_exec 'a  b'
 
-	# SEC="8. with field splitting and pathname expansion"
-	# tc 8.60 "$SEC" "$S8" "./test_exec \$(echo 'g/base/*.c')" \
-	# 	./test_exec g/base/file.c g/base/main.c
-	# tc 8.61 "$SEC" "$S8" "./test_exec \"\$(echo 'g/base/*.c')\"" \
-	# 	./test_exec 'g/base/*.c'
+	SEC="8. with field splitting and pathname expansion"
+	tc 8.60 "$SEC" "$S8" "./test_exec \$(echo 'g/base/*.c')" \
+		./test_exec g/base/file.c g/base/main.c
+	tc 8.61 "$SEC" "$S8" "./test_exec \"\$(echo 'g/base/*.c')\"" \
+		./test_exec 'g/base/*.c'
 
-	# SEC="8. command-name position"
-	# tc 8.70 "$SEC" "$S8" '$(echo ./test_exec) ok' ./test_exec ok
+	SEC="8. command-name position"
+	tc 8.70 "$SEC" "$S8" '$(echo ./test_exec) ok' ./test_exec ok
 }
 
 ###############################################################################
@@ -1466,16 +1466,16 @@ main()
 		echo -e "${GREY}filter:   ids starting with '$FILTER'${NC}"
 	fi
 
-	# run_param_tests
-	# run_pathname_tests
-	# run_field_splitting_tests
-	# run_tilde_tests
-	# run_dollar_squote_tests
-	# run_length_removal_tests
+	run_param_tests
+	run_pathname_tests
+	run_field_splitting_tests
+	run_tilde_tests
+	run_dollar_squote_tests
+	run_length_removal_tests
 	run_special_param_tests
-	#run_cmd_sub_tests
+	run_cmd_sub_tests
 	#run_arith_tests
-	# run_quote_removal_tests
+	run_quote_removal_tests
 
 	summary
 }
