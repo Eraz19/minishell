@@ -83,6 +83,7 @@ t_error	expand_token(
 	args.contexts = &src->contexts;
 	args.exit_status = exit_status;
 	args.assignment_offset = src->assignment_offset;
+	args.ast_vec = &src->ast_vector;
 	err = run_expansion(out, &args);
 	return (string_free(&args.ifs), expander_error_qualify(err));
 }
@@ -104,6 +105,7 @@ t_error	expand_token_merged(
 	args.contexts = &src->contexts;
 	args.exit_status = exit_status;
 	args.assignment_offset = src->assignment_offset;
+	args.ast_vec = &src->ast_vector;
 	err = run_and_merge_expansion(out, &args);
 	return (string_free(&args.ifs), expander_error_qualify(err));
 }

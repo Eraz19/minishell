@@ -17,6 +17,7 @@ static t_error	merge_cmd_res_into_word_exp(
 {
 	t_word	word;
 
+	item_opt->is_expand_res = true;
 	expander->err = from_str(&word, cmd_res, *item_opt);
 	if (expander->err.type)
 		return (expander->err);
