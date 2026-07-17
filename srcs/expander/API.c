@@ -17,7 +17,7 @@ t_error	prepare_src(
 	if (flag_is_active((uint)flags, EXP_HEREDOC))
 		err = heredoc_prepare_for_expansion(context_out, ast_vec, &args->value);
 	else
-		err = prepare_str_for_expansion(context_out, &args->value);
+		err = prepare_str_for_expansion(context_out, ast_vec, &args->value);
 	if (err.type)
 	{
 		context_stack_free(context_out);

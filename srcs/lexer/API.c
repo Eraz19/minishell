@@ -80,7 +80,6 @@ t_error	lexer_track_context(
 		return (free(item), token_free(&token), lexer->err);
 	vector_take(context_out, &token.contexts);
 	vector_take(ast_vec_out, &token.ast_vector);
-	//lexer->err = context_stack_dup(context_out, &token.contexts);
 	return (free(item), token_free(&token), lexer->err);
 }
 

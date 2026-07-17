@@ -291,7 +291,10 @@ t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs);
  *         @c ERR_INDEX_OUT_OF_BOUND or @c ERR_INCOHERENT_STATE on an
  *         internal inconsistency; @c ERR_NO on success.
  */
-t_error	prepare_str_for_expansion(t_context_stack *out, t_string *src);
+t_error	prepare_str_for_expansion(
+			t_context_stack *out,
+			t_ast_vector *ats_vec_out,
+			t_string *src);
 
 /* ************************************************************************* */
 /*                                LEXER RULES                                */

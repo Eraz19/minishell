@@ -11,6 +11,8 @@ bool	is_cmd_substitution(t_word_item *current_item, uint flags)
 
 t_error	cmd_substitution(t_expander *expander)
 {
+	
+
 	expander->err = error_print(error(ERR_NOT_IMPLEMENTED),
 			__func__, NULL, NULL);
 	return (expander->err);
