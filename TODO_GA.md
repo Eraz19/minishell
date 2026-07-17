@@ -1,5 +1,5 @@
 - ⚠️ `scanner_set_cmd_sub_input()`
-- ⚠️ `cmd_sub_run()` => 1 version qui prend un `t_string*` + 1 version qui prend un `t_ast_root*`
+- replace all `string_read*()` calls
 
 # WIP (COMMAND SUBSTITUTION PARSING)
 
@@ -20,10 +20,6 @@ inside
 EOF
 ```
 
-- ⚠️ only handle `$(...)` form because `backquote` form only needs to find next `backquote`.
-- ⚠️ `scanner` must handle empty `$()` itself.
-- ⚠️ Continuations read inside the `cmd sub scanner` must also be added to the `main scanner`.
-
 ```bash
 bash-5.2$ echo $(echo "hello
 > boy"
@@ -43,7 +39,6 @@ boy"
 - `runner-executor`:
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
-- `posix_read_all()` and replace all `string_read*()` calls
 
 ---
 

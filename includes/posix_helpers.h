@@ -18,6 +18,9 @@ t_error	posix_write(int fd, const char *buff, size_t len);
 // @ret ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_read(int fd, void *buff, size_t len, size_t *bytes_read);
 
+// @ret ERR_INTERRUPTED / ERR_LIBC
+t_error	posix_read_all(int fd, t_string *out);
+
 // @ret ERR_INVALID_USAGE / ERR_INTERRUPTED / ERR_LIBC
 t_error	posix_open(const char *path, int oflag, int *out_fd);
 
