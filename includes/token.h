@@ -4,6 +4,7 @@
 # include "error.h"
 # include "libft.h"
 # include "context.h"
+# include "ast_vector_type.h"
 
 /** @defgroup token Token API
  *  @brief Lexical tokens produced by the scanner.
@@ -105,6 +106,7 @@ typedef struct s_token
 	t_token_index	index;
 	t_context_stack	contexts;
 	ssize_t			assignment_offset;
+	t_ast_vector	ast_vector;
 }	t_token;
 
 // vector of t_token

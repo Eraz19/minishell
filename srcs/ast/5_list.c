@@ -32,3 +32,7 @@ void	ast_root_free(t_ast_root *root)
 	ast_list_free(root);
 }
 
+void	ast_root_free_void(void *ast_root)
+{
+	ast_list_free(ast_root);
+}

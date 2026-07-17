@@ -45,7 +45,7 @@ t_error		scanner_alias_expand(t_scanner *scanner, t_token *token);
  * Prints the specific diagnostic at the moment precision is lost, then
  * requalifies: an unexpected end of input during tokenization
  * (@c ERR_VEOF, @c ERR_UNEXPECTED_EOI, @c ERR_CTX_END_NOT_FOUND,
- * @c ERR_CMD_SUB_CLOSING_NOT_FOUND, @c ERR_NO_DELIM)
+ * @c ERR_NO_DELIM, @c ERR_REDIRECTION)
  * becomes @c ERR_POSIX_SYNTAX, any other unqualified error becomes
  * @c ERR_INTERNAL. @c ERR_LIBC is printed with the scanner context and
  * kept, fully qualified errors (>= @c ERR_INTERRUPTED) pass through

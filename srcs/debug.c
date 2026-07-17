@@ -521,12 +521,36 @@ static const char	*ast_redir_op_to_string(t_ast_redir_op op)
 	return ("INVALID");
 }
 
+static void	ast_log_list(
+	const char *name,
+	t_ast_list *list,
+	size_t depth,
+	bool *lasts,
+	bool is_last);
+
+static void	ast_log_token_ast_vector(
+	const char *name,
+	t_token *token,
+	size_t depth,
+	bool *lasts,
+	bool is_last);
+
 static void	ast_log_redirection(
 	t_ast_redirection *redir,
 	size_t depth,
 	bool *lasts,
 	bool is_last)
 {
+	size_t	child_count;
+	size_t	child_id;
+
+	child_count = 0;
+	if (redir->is_location && redir->location.ast_vector.len > 0)
+		child_count++;
+	if (redir->operation != AST_REDIR_HEREDOC
+		&& redir->word.ast_vector.len > 0)
+		child_count++;
+	child_id = 0;
 	ast_log_head(lasts, depth, is_last, RED, "REDIRECTION");
 	fprintf(stderr, " op=%s", ast_redir_op_to_string(redir->operation));
 	fprintf(stderr, " fd=%d", redir->fd);
@@ -540,6 +564,13 @@ static void	ast_log_redirection(
 	fprintf(stderr, " expand_heredoc_body=%s",
 		ast_bool(redir->expand_heredoc_body));
 	fprintf(stderr, "\n");
+	if (redir->is_location && redir->location.ast_vector.len > 0)
+		ast_log_token_ast_vector("LOCATION_AST_VECTOR", &redir->location,
+			depth + 1, lasts, ++child_id == child_count);
+	if (redir->operation != AST_REDIR_HEREDOC
+		&& redir->word.ast_vector.len > 0)
+		ast_log_token_ast_vector("WORD_AST_VECTOR", &redir->word,
+			depth + 1, lasts, ++child_id == child_count);
 }
 
 static void	ast_log_redir_list(
@@ -558,6 +589,30 @@ static void	ast_log_redir_list(
 	{
 		ast_log_redirection(AST_AT(t_ast_redirection, redirs, i),
 			depth + 1, lasts, i + 1 == redirs->len);
+		i++;
+	}
+}
+
+static void	ast_log_token_ast_vector(
+	const char *name,
+	t_token *token,
+	size_t depth,
+	bool *lasts,
+	bool is_last)
+{
+	size_t		i;
+	t_ast_root	*root;
+
+	if (token->ast_vector.len == 0)
+		return ;
+	ast_log_head(lasts, depth, is_last, GREEN, name);
+	fprintf(stderr, " count=%zu\n", token->ast_vector.len);
+	i = 0;
+	while (i < token->ast_vector.len)
+	{
+		root = AST_AT(t_ast_root, &token->ast_vector, i);
+		ast_log_list("NESTED_AST", root, depth + 1, lasts,
+			i + 1 == token->ast_vector.len);
 		i++;
 	}
 }
@@ -582,7 +637,11 @@ static void	ast_log_token_vector(
 		ast_log_head(lasts, depth + 1, i + 1 == vector->len,
 			CYAN, item_name);
 		ast_log_token_value(token);
+		if (token->ast_vector.len > 0)
+			fprintf(stderr, " ast_vector=%zu", token->ast_vector.len);
 		fprintf(stderr, "\n");
+		ast_log_token_ast_vector("TOKEN_AST_VECTOR", token,
+			depth + 2, lasts, true);
 		i++;
 	}
 }
@@ -598,13 +657,6 @@ static void	ast_log_token_pattern(
 	fprintf(stderr, " count=%zu\n", pattern->len);
 	ast_log_token_vector("TOKENS", "TOKEN", pattern, depth + 1, lasts, true);
 }
-
-static void	ast_log_list(
-	const char *name,
-	t_ast_list *list,
-	size_t depth,
-	bool *lasts,
-	bool is_last);
 
 static void	ast_log_command(
 	t_ast_command *command,
@@ -749,12 +801,23 @@ static void	ast_log_for(
 	bool *lasts,
 	bool is_last)
 {
+	size_t	child_count;
+	size_t	child_id;
+
+	child_count = 2;
+	if (for_node->var_name.ast_vector.len > 0)
+		child_count++;
+	child_id = 0;
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FOR");
 	ast_log_token("var", &for_node->var_name);
 	fprintf(stderr, " words=%zu\n", for_node->words.len);
+	if (for_node->var_name.ast_vector.len > 0)
+		ast_log_token_ast_vector("VAR_AST_VECTOR", &for_node->var_name,
+			depth + 1, lasts, ++child_id == child_count);
 	ast_log_token_vector("WORDS", "WORD", &for_node->words,
-		depth + 1, lasts, false);
-	ast_log_list("BODY", &for_node->body, depth + 1, lasts, true);
+		depth + 1, lasts, ++child_id == child_count);
+	ast_log_list("BODY", &for_node->body, depth + 1, lasts,
+		++child_id == child_count);
 }
 
 static void	ast_log_loop(
@@ -797,15 +860,24 @@ static void	ast_log_case(
 	bool is_last)
 {
 	size_t	i;
+	size_t	child_count;
+	size_t	child_id;
 
+	child_count = case_node->patterns.len;
+	if (case_node->word.ast_vector.len > 0)
+		child_count++;
+	child_id = 0;
 	ast_log_head(lasts, depth, is_last, MAGENTA, "CASE");
 	ast_log_token("word", &case_node->word);
 	fprintf(stderr, " items=%zu\n", case_node->patterns.len);
+	if (case_node->word.ast_vector.len > 0)
+		ast_log_token_ast_vector("WORD_AST_VECTOR", &case_node->word,
+			depth + 1, lasts, ++child_id == child_count);
 	i = 0;
 	while (i < case_node->patterns.len)
 	{
 		ast_log_case_item(case_node, i, depth + 1, lasts,
-			i + 1 == case_node->patterns.len);
+			++child_id == child_count);
 		i++;
 	}
 }
@@ -819,13 +891,20 @@ static void	ast_log_function(
 	size_t	child_count;
 	size_t	id;
 
-	child_count = 1;
+	child_count = 0;
+	if (function->body)
+		child_count++;
 	if (function->redirs.len > 0)
+		child_count++;
+	if (function->name.ast_vector.len > 0)
 		child_count++;
 	id = 0;
 	ast_log_head(lasts, depth, is_last, MAGENTA, "FUNCTION_DEF");
 	ast_log_token("name", &function->name);
 	fprintf(stderr, " redirs=%zu\n", function->redirs.len);
+	if (function->name.ast_vector.len > 0)
+		ast_log_token_ast_vector("NAME_AST_VECTOR", &function->name,
+			depth + 1, lasts, ++id == child_count);
 	if (function->body)
 		ast_log_command(function->body, depth + 1, lasts,
 			++id == child_count);

@@ -29,7 +29,6 @@ typedef enum e_error_type
 	ERR_VAR_NOT_FOUND,						// [ 1]
 	ERR_VAR_READ_ONLY,						// [ 1]
 	// Lexer failures
-	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_EMPTY_STACK,						// [ 1]
 	ERR_HISTORY_DISABLED,					// [ 1]
@@ -63,7 +62,7 @@ typedef enum e_error_type
 	ERR_CONTINUE = 102,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
 	ERR_BREAK = 103,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
 	ERR_RETURN = 104,						// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
-	ERR_CMD_SUB_CLOSING_FOUND = 105,		// [ 5] [BUILDER]		Absorbed by builder_find_cmd_sub_end()
+	ERR_CMD_SUB_END_FOUND = 105,			// [ 5] [PARSER]		Absorbed by parser_build_cst()
 	ERR_EXIT = 106,							// [ 5] [-]				Exit builtin has been called
 	ERR_INTERRUPTED = 107,					// [ 5] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
 	ERR_UB = 108,							// [ 5] [-]				[?-?-Y]	Always fatal

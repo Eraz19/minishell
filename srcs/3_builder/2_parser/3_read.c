@@ -1,8 +1,12 @@
 #include "parser_priv.h"
 #include "scanner.h"
-#ifdef DEBUG_PARSING
+// #ifdef DEBUG_PARSING
+# include "ast.h"
 # include <stdio.h>		// DEBUG
-# include "logs.h"		// DEBUG
+# include "debug.h"		// DEBUG
+// #endif
+#ifdef DEBUG_CMD_SUB
+# include "logs.h"
 #endif
 # include <assert.h>	// DEBUG
 
@@ -64,7 +68,6 @@ static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
 	return (sym_conv2(token_type, dst_symbol));
 }
 
-# include "logs.h"
 t_error	parser_read_next_symbol(t_parser *parser)
 {
 	t_token	token;
@@ -84,8 +87,10 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	if (token.type == TOKEN_TOKEN)
 		fprintf(stderr, " (%s%s%s)", BLUE, token.value.data, NC);
 	fprintf(stderr, " [%zu - %zu]", token.index.start, token.index.end);
+	if (token.ast_vector.len > 0)
+		fprintf(stderr, " ast_vector.len=%zu", token.ast_vector.len);
 	if (token.assignment_offset >= 0)
-		fprintf(stderr, " assignment_offset=%s%zu%s", YELLOW, token.assignment_offset, NC);
+		fprintf(stderr, " assignment_offset=%zu", token.assignment_offset);
 	fprintf(stderr, "\n");
 #endif
 	if (token.type == TOKEN_NEWLINE)
@@ -97,7 +102,9 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	else if (parser->search_cmd_sub_end && token.type == TOKEN_LPARENTHESIS)
 	{
 		parser->opening_par++;
-		// fprintf(stderr, YELLOW "opening_par incremented to %zu\n" NC, parser->opening_par);
+#ifdef DEBUG_CMD_SUB
+		fprintf(stderr, YELLOW "opening_par incremented to %zu\n" NC, parser->opening_par);
+#endif
 	}
 	err = token_pool_push(&parser->token_pool, &token);
 	if (err.type)

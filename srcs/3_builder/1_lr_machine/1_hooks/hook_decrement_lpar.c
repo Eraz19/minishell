@@ -1,6 +1,8 @@
 #include "error.h"
 #include "parser_type.h"
+#ifdef DEBUG_CMD_SUB
 # include "logs.h"		// DEBUG
+#endif
 # include <assert.h>	// DEBUG
 
 t_error	hook_decrement_lpar(
@@ -17,7 +19,9 @@ t_error	hook_decrement_lpar(
 	if (parser->search_cmd_sub_end == false)
 		return (error(ERR_NO));
 	parser->opening_par--;
-	// fprintf(stderr, "%s[PARSER] %s() => opening_par decremented to %zu%s\n",
-	// 	YELLOW, __func__, parser->opening_par, NC);
+#ifdef DEBUG_CMD_SUB
+	fprintf(stderr, "%s[PARSER] %s() => opening_par decremented to %zu%s\n",
+		YELLOW, __func__, parser->opening_par, NC);
+#endif
 	return (error(ERR_NO));
 }
