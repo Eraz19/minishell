@@ -135,10 +135,11 @@ t_error	lexer_rule_in_middle_of_operator(t_lexer *lexer);
  *        handling top-level backslash escaping and recording the first
  *        unquoted @c '=' as the token's assignment offset.
  *
+ * @note A line continuation ending the input is benign (POSIX 2.2.1:
+ *       removed before tokenization): the scan resumes at rule 1.
+ *
  * @param lexer Lexer state (borrowed).
- * @return @c ERR_LIBC on allocation failure; @c ERR_UNEXPECTED_EOI or
- *         @c ERR_VEOF when the input ends on a line continuation;
- *         @c ERR_NO on success.
+ * @return @c ERR_LIBC on allocation failure; @c ERR_NO on success.
  */
 t_error	lexer_rule_in_middle_of_word(t_lexer *lexer);
 
@@ -163,10 +164,11 @@ t_error	lexer_rule_new_operator(t_lexer *lexer);
  * @brief Rule 10: starts a new word from the current character, handling
  *        top-level backslash escaping.
  *
+ * @note A line continuation ending the input is benign (POSIX 2.2.1:
+ *       removed before tokenization): the scan resumes at rule 1.
+ *
  * @param lexer Lexer state (borrowed).
- * @return @c ERR_LIBC on allocation failure; @c ERR_UNEXPECTED_EOI or
- *         @c ERR_VEOF when the input ends on a line continuation;
- *         @c ERR_NO on success.
+ * @return @c ERR_LIBC on allocation failure; @c ERR_NO on success.
  */
 t_error	lexer_rule_new_word(t_lexer *lexer);
 

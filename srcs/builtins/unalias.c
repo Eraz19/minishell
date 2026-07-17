@@ -78,7 +78,7 @@ t_error	builtin_unalias(int argc, char **argv, char **envp, int *exit_status)
 		err = alias_remove_all();
 	else if (err.type == ERR_NO)
 		err = unalias_remove_operands(out.first_operand_index, argc, argv);
-	*exit_status = (int)err.type;
+	*exit_status = (err.type != ERR_NO);
 	if (err.type)
 		err = error_print(err, argv[0], NULL, NULL);
 	if (err.type == ERR_ALIAS_NOT_FOUND

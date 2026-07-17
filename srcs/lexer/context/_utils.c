@@ -35,7 +35,6 @@ t_error	lexer_context_unescape(t_lexer *lexer, t_unescape_args args)
 
 t_error	lexer_context_escape(t_lexer *lexer, t_escape_args args)
 {
-	lexer->token->type = TOKEN_TOKEN;
 	if (args.enable_line_continuation &&
 		lexer->input->str.data[lexer->input->i + 1] == '\n')
 	{
@@ -47,8 +46,9 @@ t_error	lexer_context_escape(t_lexer *lexer, t_escape_args args)
 		return (context_EOI(lexer));
 	else
 	{
+		lexer->token->type = TOKEN_TOKEN;
 		if (lexer_consume(lexer, lexer->token->type, 1).type)
-			return (lexer->err);	
+			return (lexer->err);
 		if (context_escape_next_char(lexer, args).type)
 			return (lexer->err);
 	}

@@ -31,10 +31,15 @@
  *  callers (scanner endpoint, expander) are the requalifiers. A missing
  *  delimiter (end of input before the delimiter line, including an
  *  interactive end-of-file at the continuation prompt) is printed here
- *  with the delimiter name and reported as @c ERR_REDIRECTION, which the
- *  scanner requalifies as @c ERR_POSIX_SYNTAX (documented choice: POSIX
- *  2.7.4 requires the delimiter line, so an input ending without it is
- *  read as a syntax error). Delimiter-expansion errors arrive already
+ *  with the delimiter name and reported as @c ERR_NO_DELIM, which the
+ *  scanner requalifies as @c ERR_POSIX_SYNTAX. Documented choice: POSIX
+ *  2.7.4 says the shell "should, but need not, treat this as a
+ *  redirection error" — erroring is the sanctioned strict reading; the
+ *  error is detected during token recognition, before any command
+ *  exists to attach a redirection failure to, so it is classified as a
+ *  syntax error (2.8.1 consequences: diagnostic + non-interactive
+ *  exit) rather than as a redirection error.
+ *  Delimiter-expansion errors arrive already
  *  qualified and printed by the expander and pass through untouched.
  */
 
@@ -130,7 +135,7 @@ t_error	heredoc_prepare_for_expansion(t_context_stack *out, t_string *body);
  *            success (borrowed).
  * @param args Input of the read (borrowed).
  * @return Raw errors, requalified by the scanner endpoint:
- *         @c ERR_REDIRECTION (printed with the delimiter) when the input
+ *         @c ERR_NO_DELIM (printed with the delimiter) when the input
  *         ends before the delimiter line; @c ERR_LIBC on allocation
  *         failure, or (printed) from the continuation reader;
  *         @c ERR_INTERRUPTED and @c ERR_INTERNAL (printed) from the

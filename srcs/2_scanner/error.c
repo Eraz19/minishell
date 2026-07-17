@@ -6,8 +6,7 @@ static bool	is_unexpected_end_of_input(t_error_type type)
 		|| type == ERR_UNEXPECTED_EOI
 		|| type == ERR_CTX_END_NOT_FOUND
 		|| type == ERR_CMD_SUB_CLOSING_NOT_FOUND
-		|| type == ERR_NO_DELIM
-		|| type == ERR_REDIRECTION);
+		|| type == ERR_NO_DELIM);
 }
 
 t_error	scanner_error_qualify(t_error err, bool allow_veof)

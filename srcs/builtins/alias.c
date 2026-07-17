@@ -64,7 +64,7 @@ t_error	builtin_alias(int argc, char **argv, char **envp, int *exit_status)
 		err = alias_print(NULL);
 	else
 		err = alias_interpret_operands(first_operand, argc, argv);
-	*exit_status = (int)err.type;
+	*exit_status = (err.type != ERR_NO);
 	if (err.type)
 		err = error_print(err, argv[0], NULL, NULL);
 	if (err.type == ERR_ALIAS_NOT_FOUND

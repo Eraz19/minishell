@@ -31,11 +31,10 @@ typedef enum e_error_type
 	// Lexer failures
 	ERR_CMD_SUB_CLOSING_NOT_FOUND,			// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
-	ERR_EMPTY_STACK,						// [ 1] 
-	ERR_HEREDOC_MAX_ID_REACHED,				// [ 1] 
-	ERR_HISTORY_DISABLED,					// [ 1] 
-	ERR_INCOHERENT_STATE,					// [ 1] 
-	ERR_NO_DELIM,							// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_EMPTY_STACK,						// [ 1]
+	ERR_HISTORY_DISABLED,					// [ 1]
+	ERR_INCOHERENT_STATE,					// [ 1]
+	ERR_NO_DELIM,							// [ 1] [SCANNER]		Missing here-doc delimiter, printed at production by the heredoc; requalified as ERR_POSIX_SYNTAX (documented choice, POSIX 2.7.4 "should, but need not, treat this as a redirection error")
 	ERR_NOT_IMPLEMENTED,					// [ 1] 
 	ERR_UNEXPECTED_EOI,						// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_NO_INPUT_TO_LEX,					// [ 1] 
@@ -55,7 +54,7 @@ typedef enum e_error_type
 	// OPTIONS (produced by ft_getopt() + posix_open*())
 	ERR_INVALID_USAGE = 91,				// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
-	ERR_REDIRECTION = 92,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL or dropped. Unterminated here-document: requalified as ERR_POSIX_SYNTAX by [SCANNER] (printed by heredoc)
+	ERR_REDIRECTION = 92,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL or dropped
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)
 	ERR_BUILTIN = 93,						// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_BUILTIN_SPECIAL or absorbed
 	/* -------------------- FLOW CONTROL ERRORS -------------------- */

@@ -43,12 +43,16 @@ t_error	context_EOI(t_lexer *lexer)
 		return (lexer->err);
 	}
 	if (lexer->rules.on_eoi != NULL)
-		return (lexer->rules.on_eoi(lexer));
+	{
+		lexer->err = lexer->rules.on_eoi(lexer);
+		if (lexer->err.type != ERR_VEOF)
+			return (lexer->err);
+	}
 	construct = unterminated_construct(lexer);
 	if (construct != NULL)
 		return (lexer->err = error_print(error(ERR_UNEXPECTED_EOI),
 				"lexer", construct, NULL, NULL));
-	return (lexer->err = error(ERR_UNEXPECTED_EOI));
+	return (lexer->err = error(ERR_NO));
 }
 
 t_error	context_escape_next_char(t_lexer *lexer, t_escape_args args)
