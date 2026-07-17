@@ -33,11 +33,11 @@ static inline t_error	cmd_assignment_finalize_envp(t_vector *envp)
 
 t_error	cmd_assign(t_cmd *cmd, const t_token_pool *assignments)
 {
-	size_t			i;
-	t_exp_flag		flags;
-	const t_token	*token;
-	t_string		expanded;
-	t_error			err;
+	size_t		i;
+	t_exp_flag	flags;
+	t_token		*token;
+	t_string	expanded;
+	t_error		err;
 
 	flags = cmd_assignment_expansion_flags();
 	err = cmd_assignment_build_envp(cmd);

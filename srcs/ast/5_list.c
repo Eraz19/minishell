@@ -1,4 +1,5 @@
 #include "ast.h"
+#include "utils.h"
 # include <assert.h>	// DEBUG
 
 void	ast_list_init(t_ast_list *list)
@@ -20,6 +21,25 @@ void	ast_list_free(void *list)
 	list_node->subshell = false;
 }
 
+t_error	ast_list_dup(void *dst, const void *src)
+{
+	t_ast_list			*dst_list;
+	const t_ast_list	*src_list;
+	t_error				err;
+
+	dst_list = (t_ast_list *)dst;
+	src_list = (const t_ast_list *)src;
+	ast_list_init(dst_list);
+	err = vector_deep_dup(&dst_list->and_ors, &src_list->and_ors,
+			ast_and_or_dup, ast_and_or_free);
+	if (err.type == ERR_NO &&!vector_dup(&dst_list->asyncs, &src_list->asyncs))
+		err = error_sys();
+	if (err.type)
+		return (ast_list_free(dst_list), err);
+	dst_list->subshell = src_list->subshell;
+	return (error(ERR_NO));
+}
+
 void	ast_root_init(t_ast_root *root)
 {
 	assert(root != NULL);
@@ -35,4 +55,9 @@ void	ast_root_free(t_ast_root *root)
 void	ast_root_free_void(void *ast_root)
 {
 	ast_list_free(ast_root);
+}
+
+t_error	ast_root_dup(t_ast_root *dst, const t_ast_root *src)
+{
+	return (ast_list_dup(dst, src));
 }

@@ -12,17 +12,17 @@ typedef struct s_redir
 	t_ast_redir_op	operation;
 	bool			expand_heredoc_body;
 	int				fd;
-	const t_token	*word;				// borrowed
+	t_token			word;
 	const t_string	*heredoc_body;		// borrowed
 	t_string		expanded_word;		// or expanded heredoc_body
 	bool			is_location;
-	const t_token	*location;			// borrowed
+	t_token			location;
 	t_string		expanded_location;
 }	t_redir;
 
 // Life cycle
 
-void	redir_init(t_redir *redir, const t_ast_redirection *src);
+t_error	redir_init(t_redir *redir, const t_ast_redirection *src);
 void	redir_free(t_redir *redir);
 
 /* ************************************************************************* */

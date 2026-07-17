@@ -1,4 +1,5 @@
 #include "token.h"
+#include "utils.h"
 #include <assert.h>
 
 t_error	token_pool_push(t_token_pool *pool, t_token *token)
@@ -35,4 +36,9 @@ t_error	token_pool_transfer(t_token_pool *dst, t_token_pool *src, size_t index)
 	if (err.type)
 		token_transfer(src_token, &dst_token);
 	return (err);
+}
+
+t_error	token_pool_deep_dup(void *dst, const void *src)
+{
+	return (vector_deep_dup(dst, src, token_dup_void, token_free_void));
 }

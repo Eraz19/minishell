@@ -28,3 +28,28 @@ void	ast_vector_free(t_ast_vector *ast_vector)
 {
 	vector_free(ast_vector, ast_root_free_void);
 }
+
+t_error	ast_vector_dup(t_ast_vector *dst, const t_ast_vector *src)
+{
+	size_t		i;
+	t_ast_root	*root_src;
+	t_ast_root	*root_dst;
+	t_error		err;
+
+	if (!vector_dup(dst, src))
+		return (error_sys());
+	i = 0;
+	while (i < dst->len)
+	{
+		(void)ast_vector_get(dst, i, &root_dst);
+		(void)ast_vector_get(dst, i, &root_src);
+		err = ast_root_dup(root_dst, root_src);
+		if (err.type)
+		{
+			// TODO: free already dup items
+			vector_free(dst, NULL);
+		}
+		i++;
+	}
+	return (error(ERR_NO));
+}

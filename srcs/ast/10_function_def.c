@@ -10,6 +10,31 @@ void	ast_function_def_init(t_ast_function_def *function_def)
 	ast_redir_list_init(&function_def->redirs);
 }
 
+t_error	ast_function_def_dup(void *dst, const void *src)
+{
+	t_ast_function_def			*dst_function_def;
+	const t_ast_function_def	*src_function_def;
+	t_error						err;
+
+	dst_function_def = (t_ast_function_def *)dst;
+	src_function_def = (const t_ast_function_def *)src;
+	ast_function_def_init(dst_function_def);
+	err = token_dup(&dst_function_def->name, &src_function_def->name);
+	if (err.type)
+		return (err);
+	dst_function_def->body = malloc(sizeof(*dst_function_def->body));
+	if (dst_function_def == NULL)
+		err = error_sys();
+	if (err.type == ERR_NO)
+		err = ast_command_dup(dst_function_def->body, src_function_def->body);
+	if (err.type == ERR_NO)
+		err = ast_redir_list_dup(&dst_function_def->redirs,
+				&src_function_def->redirs);
+	if (err.type)
+		return (ast_function_def_free(dst_function_def), err);
+	return (error(ERR_NO));
+}
+
 void	ast_function_def_free(t_ast_function_def *function_def)
 {
 	assert(function_def != NULL);

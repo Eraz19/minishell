@@ -228,7 +228,7 @@ void	scanner_init_subshell(t_scanner *scanner);
 t_error	scanner_read_heredoc(
 			t_scanner *scanner,
 			t_string *out,
-			const t_token *delim,
+			t_token *delim,
 			bool strip);
 
 #endif

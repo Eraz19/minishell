@@ -54,7 +54,7 @@ static inline t_error	cmd_add_to_argv(t_cmd *cmd, const t_expansion *expansion)
 }
 
 // @ret TODO
-static inline t_error	cmd_expand_word(t_cmd *cmd, const t_token *word)
+static inline t_error	cmd_expand_word(t_cmd *cmd, t_token *word)
 {
 	t_exp_flag		flags;
 	t_expansion		expansion;
@@ -75,10 +75,10 @@ static inline t_error	cmd_expand_word(t_cmd *cmd, const t_token *word)
 
 t_error	cmd_resolve(t_cmd *cmd, const t_token_pool *words)
 {
-	size_t			index;
-	char			*null;
-	const t_token	*word;
-	t_error			err;
+	size_t	index;
+	char	*null;
+	t_token	*word;
+	t_error	err;
 
 	index = 0;
 	err = error(ERR_NO);

@@ -148,6 +148,7 @@ void	token_free_void(void *token);
 /* ************************************************************************* */
 
 void	token_pool_init(t_token_pool *pool);
+t_error	token_pool_deep_dup(void *dst, const void *src);
 void	token_pool_clear(t_token_pool *pool);
 void	token_pool_free(t_token_pool *pool);
 void	token_pool_free_void(void *pool);
@@ -170,6 +171,7 @@ void	token_pool_free_void(void *pool);
  *         a context item lookup fails, @c ERR_NO on success.
  */
 t_error	token_dup(t_token *dst, const t_token *src);
+t_error	token_dup_void(void *dst, const void *src);
 
 t_error	token_pool_push(t_token_pool *pool, t_token *token);
 

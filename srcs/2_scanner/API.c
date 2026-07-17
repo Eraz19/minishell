@@ -30,7 +30,7 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *token)
 t_error	scanner_read_heredoc(
 			t_scanner *scanner,
 			t_string *out,
-			const t_token *delim,
+			t_token *delim,
 			bool strip)
 {
 	t_heredoc_read_args	args;

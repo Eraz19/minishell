@@ -80,8 +80,9 @@ t_error	redirect_apply(
 	t_error			err;
 
 	applied = false;
-	redir_init(&redir, redirection);
-	err = redirect_expand(&redir, exit_status);
+	err = redir_init(&redir, redirection);
+	if (err.type == ERR_NO)
+		err = redirect_expand(&redir, exit_status);
 	if (err.type == ERR_NO && redir.is_location == true)
 		err = redirect_resolve_location(&redir);
 	if (err.type == ERR_NO)

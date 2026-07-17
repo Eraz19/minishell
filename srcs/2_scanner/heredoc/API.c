@@ -44,7 +44,7 @@ t_error	heredoc_read_body_from_input(t_string *out, t_heredoc_read_args *args)
 	return (body_free(&body), err);
 }
 
-t_error	heredoc_expand_delim(t_string *out, const t_token *delim)
+t_error	heredoc_expand_delim(t_string *out, t_token *delim)
 {
 	t_error	err;
 	int		exit_status;

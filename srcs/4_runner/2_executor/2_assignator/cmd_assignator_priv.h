@@ -20,7 +20,7 @@ t_error	cmd_assignment_check(const t_token *token);
 
 // TODO: doc
 t_error	cmd_assignment_expand(
-			const t_token *token,
+			t_token *token,
 			t_exp_flag flags,
 			t_string *out_expanded,
 			int *exit_status);
@@ -44,7 +44,7 @@ t_error	cmd_assignment_expand(
  */
 t_error	cmd_assignment_process(
 			t_cmd *cmd,
-			const t_token *token,
+			t_token *token,
 			t_string *expanded);
 
 #endif

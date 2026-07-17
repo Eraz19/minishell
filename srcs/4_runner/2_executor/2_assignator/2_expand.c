@@ -7,7 +7,7 @@
 #define CITATION	CITATION_1 CITATION_2 CITATION_3
 
 t_error	cmd_assignment_expand(
-			const t_token *token,
+			t_token *token,
 			t_exp_flag flags,
 			t_string *out,
 			int *exit_status)

@@ -153,46 +153,60 @@ typedef t_ast_list	t_ast_root;
 // Life cycle
 
 void	ast_redirection_init(t_ast_redirection *redirection);
+t_error	ast_redirection_dup(void *dst, const void *src);
 void	ast_redirection_free(void *redirection);
 
 void	ast_redir_list_init(t_ast_redir_list *redir_list);
+t_error	ast_redir_list_dup(void *dst, const void *src);
 void	ast_redir_list_free(t_ast_redir_list *redir_list);
 
 void	ast_simple_command_init(t_ast_scmd *simple_command);
+t_error	ast_simple_command_dup(void *dst, const void *src);
 void	ast_simple_command_free(void *simple_command);
 
 void	ast_pipeline_init(t_ast_pipeline *pipeline);
+t_error	ast_pipeline_dup(void *dst, const void *src);
 void	ast_pipeline_free(void *pipeline);
 
 void	ast_and_or_init(t_ast_and_or *and_or);
+t_error	ast_and_or_dup(void *dst, const void *src);
 void	ast_and_or_free(void *and_or);
 
 void	ast_list_init(t_ast_list *list);
+t_error	ast_list_dup(void *dst, const void *src);
 void	ast_list_free(void *list);
 
 void	ast_if_init(t_ast_if *if_node);
+t_error	ast_if_dup(void *dst, const void *src);
 void	ast_if_free(t_ast_if *if_node);
 
 void	ast_for_init(t_ast_for *for_node);
+t_error	ast_for_dup(void *dst, const void *src);
 void	ast_for_free(t_ast_for *for_node);
 
 void	ast_loop_init(t_ast_loop *loop);
+t_error	ast_loop_dup(void *dst, const void *src);
 void	ast_loop_free(t_ast_loop *loop);
 
 void	ast_case_init(t_ast_case *case_node);
+t_error	ast_case_dup(void *dst, const void *src);
 void	ast_case_free(t_ast_case *case_node);
 
 void	ast_function_def_init(t_ast_function_def *function_def);
+t_error	ast_function_def_dup(void *dst, const void *src);
 void	ast_function_def_free(t_ast_function_def *function_def);
 
 void	ast_command_init(t_ast_command *command);
+t_error	ast_command_dup(void *dst, const void *src);
 void	ast_command_free(void *command);
 
 void	ast_root_init(t_ast_root *root);
+t_error	ast_root_dup(t_ast_root *dst, const t_ast_root *src);
 void	ast_root_free(t_ast_root *root);
 void	ast_root_free_void(void *ast_root);
 
 void	ast_vector_init(t_ast_vector *ast_vector);
+t_error	ast_vector_dup(t_ast_vector *dst, const t_ast_vector *src);
 // @warning returned pointer is valid ONLY until vector is realloc'd
 // @ret ERR_INTERNAL if index is out of bound
 t_error	ast_vector_get(

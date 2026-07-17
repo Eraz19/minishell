@@ -35,17 +35,21 @@ void	redirect_free(t_redirector *redirector)
 	redirector->heredoc_id = 0;
 }
 
-void	redir_init(t_redir *redir, const t_ast_redirection *src)
+t_error	redir_init(t_redir *redir, const t_ast_redirection *src)
 {
+	t_error	err;
+
 	redir->operation = src->operation;
 	redir->expand_heredoc_body = src->expand_heredoc_body;
 	redir->fd = src->fd;
-	redir->word = &src->word;
+	err = token_dup(&redir->word, &src->word);
+	if (err.type)
+		return (err);
 	redir->heredoc_body = &src->heredoc_body;
 	(void)string_init(&redir->expanded_word, 0, NULL, 0);
 	redir->is_location = src->is_location;
-	redir->location = &src->location;
 	(void)string_init(&redir->expanded_location, 0, NULL, 0);
+	return (token_dup(&redir->location, &src->location));
 }
 
 void	redir_free(t_redir *redir)

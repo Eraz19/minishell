@@ -1,4 +1,5 @@
 #include "ast.h"
+#include "utils.h"
 # include <assert.h>	// DEBUG
 
 void	ast_pipeline_init(t_ast_pipeline *pipeline)
@@ -6,6 +7,23 @@ void	ast_pipeline_init(t_ast_pipeline *pipeline)
 	assert(pipeline != NULL);
 	(void)vector_init(&pipeline->commands, sizeof(t_ast_command), 0);
 	pipeline->negated = false;
+}
+
+t_error	ast_pipeline_dup(void *dst, const void *src)
+{
+	t_ast_pipeline			*dst_pipeline;
+	const t_ast_pipeline	*src_pipeline;
+	t_error					err;
+
+	dst_pipeline = (t_ast_pipeline *)dst;
+	src_pipeline = (const t_ast_pipeline *)src;
+	ast_pipeline_init(dst_pipeline);
+	err = vector_deep_dup(&dst_pipeline->commands, &src_pipeline->commands,
+			ast_command_dup, ast_command_free);
+	if (err.type)
+		return (ast_pipeline_free(dst_pipeline), err);
+	dst_pipeline->negated = src_pipeline->negated;
+	return (error(ERR_NO));
 }
 
 void	ast_pipeline_free(void *pipeline)

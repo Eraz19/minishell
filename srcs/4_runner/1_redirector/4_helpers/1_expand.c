@@ -9,7 +9,7 @@
 
 // @ret ERR_POSIX_EXPANSION / ERR_REDIRECTION / ERR_INTERNAL / ERR_LIBC
 static inline t_error	redirect_expand_word(
-							const t_token *token,
+							t_token *token,
 							t_string *out,
 							int *exit_status)
 {
@@ -43,10 +43,10 @@ t_error	redirect_expand(t_redir *redir, int *exit_status)
 			return (error_sys());
 	}
 	else
-		err = redirect_expand_word(redir->word, &redir->expanded_word,
+		err = redirect_expand_word(&redir->word, &redir->expanded_word,
 				exit_status);
 	if (err.type == ERR_NO && redir->is_location)
-		err = redirect_expand_word(redir->location, &redir->expanded_location,
+		err = redirect_expand_word(&redir->location, &redir->expanded_location,
 				exit_status);
 	return (err);
 }

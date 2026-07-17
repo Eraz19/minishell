@@ -7,6 +7,16 @@
 # include <time.h>
 # include "error.h"
 
+// TODO: doc
+typedef t_error (*t_dup_callback)(void *dst_item, const void *src_item);
+typedef void (*t_free_callback)(void *dst_item);
+
+t_error	vector_deep_dup(
+			t_vector *dst,
+			const t_vector *src,
+			t_dup_callback dup_callback,
+			t_free_callback free_callback);
+
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */

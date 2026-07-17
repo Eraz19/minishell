@@ -63,7 +63,7 @@ static inline t_error	cmd_assignment_split(
 
 t_error	cmd_assignment_process(
 			t_cmd *cmd,
-			const t_token *token,
+			t_token *token,
 			t_string *expanded)
 {
 	t_string	name;

@@ -104,7 +104,7 @@ typedef struct s_heredoc_read_args
  *         @c ERR_LIBC (printed) or @c ERR_INTERRUPTED; @c ERR_LIBC (raw)
  *         if the newline append fails; @c ERR_NO on success.
  */
-t_error	heredoc_expand_delim(t_string *out, const t_token *delim);
+t_error	heredoc_expand_delim(t_string *out, t_token *delim);
 
 /**
  * @ingroup heredoc
