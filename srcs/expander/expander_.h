@@ -48,8 +48,8 @@ typedef struct s_expander
 {
 	t_string	ifs;
 	t_error		err;
-	t_exp_flag	flags;
 	t_word		word;
+	t_exp_flag	flags;
 	t_fields	fields;
 	t_word		word_exp;
 	t_fields	fields_exp;
