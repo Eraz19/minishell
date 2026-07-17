@@ -48,6 +48,11 @@ void	runner_handle_errors(t_shell *shell, t_error *err)
 
 	fprintf(stderr, "[RUNNER] handling error %i (%s)\n", (int)err->type, error_to_string(*err));
 	interactive = option_is_active_in(shell->params.options, OPT_INTERACTIVE);
+	if (err->type == ERR_NOT_IMPLEMENTED)
+	{
+		(void)error_print(*err, NULL, NULL);
+		err->type = ERR_NO;
+	}
 	if (err->type == ERR_EOF)
 		runner_handle_eof(err, interactive);
 	else if (err->type == ERR_POSIX_SYNTAX)

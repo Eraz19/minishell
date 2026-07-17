@@ -1,4 +1,5 @@
 #include "token.h"
+#include "ast.h"
 #include <stdlib.h>
 
 void	token_init(t_token *token)
@@ -10,6 +11,7 @@ void	token_init(t_token *token)
 	token->index.start = -1;
 	token->index.error = -1;
 	token->assignment_offset = -1;
+	ast_vector_init(&token->ast_vector);
 }
 
 void	token_free(t_token *token)
@@ -21,6 +23,7 @@ void	token_free(t_token *token)
 	token->index.start = -1;
 	token->index.error = -1;
 	token->assignment_offset = -1;
+	ast_vector_free(&token->ast_vector);
 }
 
 void	token_free_void(void *token)

@@ -3,6 +3,7 @@
 
 # include "libft.h"
 # include "token.h"
+# include "ast_vector_type.h"
 # include <stddef.h>
 
 /* ************************************************************************* */
@@ -189,5 +190,16 @@ void	ast_command_free(void *command);
 
 void	ast_root_init(t_ast_root *root);
 void	ast_root_free(t_ast_root *root);
+void	ast_root_free_void(void *ast_root);
+
+void	ast_vector_init(t_ast_vector *ast_vector);
+// @warning returned pointer is valid ONLY until vector is realloc'd
+// @ret ERR_INTERNAL if index is out of bound
+t_error	ast_vector_get(
+			const t_ast_vector *ast_vector,
+			size_t index,
+			t_ast_root **out_ast_root);
+t_error	ast_vector_push(t_ast_vector *ast_vector, t_ast_root *ast_root);
+void	ast_vector_free(t_ast_vector *ast_vector);
 
 #endif

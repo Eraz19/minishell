@@ -62,17 +62,15 @@ t_error	parser_store_cst(t_parser *parser, t_parser_item *main_item)
 static inline t_error	parser_accept(t_parser *parser)
 {
 	t_parser_item	*main_item;
-	bool				is_EOF;
-	t_error				err;
+	bool			is_EOF;
+	t_error			err;
 
-	is_EOF = parser->lookahead_raw_symbol = SYM_EOF;
+	is_EOF = parser->lookahead_raw_symbol == SYM_EOF;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
 	main_item = parser_item_stack_top(&parser->item_stack);
 	err = parser_store_cst(parser, main_item);
-	if (err.type)
-		return (err);
-	else if (is_EOF)
+	if (err.type == ERR_NO && is_EOF)
 		return (error(ERR_EOF));
 	return (err);
 }
@@ -95,14 +93,14 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 		if (err.type != ERR_NO)
 			return (err);
 		action = machine->actions[lr_state_id][parser->lookahead_symbol];
-		if (action.type == ACTION_ERROR)
-			return (parser_invalid_syntax());
-		else if (action.type == ACTION_ACCEPT)
-			return (parser_accept(parser));
-		else if (action.type == ACTION_SHIFT)
+		if (action.type == ACTION_SHIFT)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)
 			err = parser_reduce(parser, machine, action.payload);
+		if (action.type == ACTION_ACCEPT || err.type == ERR_CMD_SUB_END_FOUND)
+			return (parser_accept(parser));
+		else if (action.type == ACTION_ERROR)
+			return (parser_invalid_syntax());
 	}
 	return (err);
 }

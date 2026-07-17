@@ -3,6 +3,21 @@
 #include "ast.h"
 #include "converter_priv.h"
 # include <assert.h>	// DEBUG
+# include "debug.h"		// DEBUG
+
+static inline t_error	converter_unrecognized_symbol(t_cst_node *node)
+{
+	return (error_print(error(ERR_INTERNAL),
+			"converter", "unrecognized symbol", NULL,
+			"%s", symbol_to_string(node->symbol)));
+}
+
+static inline t_error	converter_subshell_not_found(t_cst_node *node)
+{
+	return (error_print(error(ERR_INTERNAL),
+			"converter", "subshell node not found", NULL,
+			"cst root type = %s", symbol_to_string(node->symbol)));
+}
 
 static inline t_error	convert_complete_commands(
 							t_parser *parser,
@@ -50,8 +65,18 @@ t_error	convert_cst_to_ast(
 	else if (node->symbol == SYM_complete_command)
 		err = convert_list_add(parser, node, ast_root);
 	else
-		return (error(ERR_INCOHERENT_STATE));
+		return (converter_unrecognized_symbol(node));
 	if (err.type)
 		ast_root_free(ast_root);
 	return (err);
+}
+
+t_error	convert_cmd_sub_cst_to_ast(
+			t_parser *parser,
+			t_cst_node *cst_root,
+			t_ast_root *ast_root)
+{
+	if (cst_root->symbol != SYM_subshell)
+		return (converter_subshell_not_found(cst_root));
+	return (convert_list(parser, cst_root->children[1], ast_root));
 }

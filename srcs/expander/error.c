@@ -13,7 +13,7 @@ t_error	expander_error_qualify(t_error err)
 {
 	if (err.type == ERR_NO)
 		return (err);
-	if (err.type == ERR_LIBC)
+	if (err.type == ERR_LIBC || err.type == ERR_NOT_IMPLEMENTED)
 		return (error_print(err, "expander", NULL, NULL));
 	if (err.type >= ERR_INTERRUPTED)
 		return (err);

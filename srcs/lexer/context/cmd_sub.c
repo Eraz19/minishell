@@ -26,7 +26,7 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 		item->end = lexer->token->value.len;
 		return (lexer_consume(lexer, lexer->token->type, 1));
 	}
-	lexer->err = cmd_sub_find_end(&closing_par_index);
+	lexer->err = cmd_sub_find_end(&closing_par_index, &lexer->token->ast_vector);
 	if (lexer->err.type)
 		return (lexer->err);
 	assert(closing_par_index >= 0);
