@@ -1,5 +1,4 @@
 #include "rules__type.h"
-#include "hooks.h"
 
 /*
 Original rule:
@@ -15,5 +14,4 @@ void	rules_build_function_definition(t_rule *rules)
 	rules[RULE_FUNCTION_DEFINITION_1].rhs[3] = SYM_linebreak;
 	rules[RULE_FUNCTION_DEFINITION_1].rhs[4] = SYM_function_body;
 	rules[RULE_FUNCTION_DEFINITION_1].rhs_len = 5;
-	rules[RULE_FUNCTION_DEFINITION_1].hook = hook_decrement_lpar;
 }

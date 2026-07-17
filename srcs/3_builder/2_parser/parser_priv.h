@@ -5,6 +5,9 @@
 # include "lr_machine_type.h"
 # include "token.h"
 
+// TODO: doc
+t_error	parser_handle_syntax_errors(t_parser *parser, const t_lr_machine *machine);
+
 /* ************************************************************************* */
 /*                                   ERROR                                   */
 /* ************************************************************************* */

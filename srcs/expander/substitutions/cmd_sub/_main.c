@@ -18,6 +18,7 @@ static t_error	merge_cmd_res_into_word_exp(
 {
 	t_word	word;
 
+	fprintf(stderr, "%s() cmd_res.len = %zu\n", __func__, cmd_res->len);
 	item_opt->is_expand_res = true;
 	expander->err = from_str(&word, cmd_res, *item_opt);
 	if (expander->err.type)

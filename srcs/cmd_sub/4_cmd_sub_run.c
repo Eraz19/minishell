@@ -15,7 +15,7 @@ t_error	cmd_sub_run_ast(
 	pid_t		pid;
 	t_error		err;
 
-	fprintf(stderr, YELLOW "############## CMD SUB RUN (STRING) ##############\n" NC);
+	fprintf(stderr, YELLOW "############### CMD SUB RUN (AST) ################\n" NC);
 	(void)string_init(out_string, 0, NULL, 0);
 	err = ast_vector_get(ast_vector, index, &ast_root);
 	if (err.type)
@@ -43,7 +43,7 @@ t_error	cmd_sub_run_string(
 	pid_t	pid;
 	t_error	err;
 
-	fprintf(stderr, YELLOW "############### CMD SUB RUN (AST) ################\n" NC);
+	fprintf(stderr, YELLOW "############## CMD SUB RUN (STRING) ##############\n" NC);
 	(void)string_init(out_string, 0, NULL, 0);
 	if (pipe(pipe_fds) == -1)
 		return (error_sys());

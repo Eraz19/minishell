@@ -1,5 +1,4 @@
 #include "rules__type.h"
-#include "hooks.h"
 
 static void	rules_build_pattern_list_1(t_rule *rules);
 static void	rules_build_pattern_list_2(t_rule *rules);
@@ -33,7 +32,6 @@ static void	rules_build_pattern_list_2(t_rule *rules)
 	rules[RULE_PATTERN_LIST_2].rhs[0] = SYM_LPARENTHESIS;
 	rules[RULE_PATTERN_LIST_2].rhs[1] = SYM_WORD;
 	rules[RULE_PATTERN_LIST_2].rhs_len = 2;
-	rules[RULE_PATTERN_LIST_2].hook = hook_decrement_lpar;
 }
 
 // pattern_list -> pattern_list '|' WORD (do NOT apply rule 4)

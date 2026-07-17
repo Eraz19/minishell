@@ -23,7 +23,6 @@ void	parser_cmd_sub_init(
 	cmd_sub_parser->expansion_disabled = false;
 	cmd_sub_parser->search_cmd_sub_end = true;
 	cmd_sub_parser->cmd_sub_end_index = 0;
-	cmd_sub_parser->opening_par = 0;
 }
 
 void	parser_cmd_sub_free(t_parser *cmd_sub_parser)
@@ -40,5 +39,4 @@ void	parser_cmd_sub_free(t_parser *cmd_sub_parser)
 	cmd_sub_parser->expansion_disabled = false;
 	cmd_sub_parser->search_cmd_sub_end = true;
 	cmd_sub_parser->cmd_sub_end_index = 0;
-	cmd_sub_parser->opening_par = 0;
 }

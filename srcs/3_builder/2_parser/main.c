@@ -97,9 +97,38 @@ t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)
 			err = parser_reduce(parser, machine, action.payload);
-		if (action.type == ACTION_ACCEPT || err.type == ERR_CMD_SUB_END_FOUND)
+		if (action.type == ACTION_ACCEPT)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR)
+			return (parser_handle_syntax_errors(parser, machine));
+	}
+	return (err);
+}
+
+t_error	parser_handle_syntax_errors(t_parser *parser, const t_lr_machine *machine)
+{
+	size_t			lr_state_id;
+	const t_token	*token;
+	t_action		action;
+	t_error			err;
+
+	if (parser->search_cmd_sub_end != true
+		|| parser->lookahead_raw_symbol != SYM_RPARENTHESIS)
+		return (parser_invalid_syntax());
+	parser->lookahead_raw_symbol = SYM_EOF;
+	parser->lookahead_symbol = SYM_EOF;
+	token = parser_get_token(parser, parser->lookahead_id);
+	parser->cmd_sub_end_index = token->index.end;
+	err.type = ERR_NO;
+	while (err.type == ERR_NO && parser->cst == NULL)
+	{
+		lr_state_id = parser_item_stack_top(&parser->item_stack)->lr_state_id;
+		action = machine->actions[lr_state_id][parser->lookahead_symbol];
+		if (action.type == ACTION_REDUCE)
+			err = parser_reduce(parser, machine, action.payload);
+		if (action.type == ACTION_ACCEPT)
+			return (parser_accept(parser));
+		else if (action.type == ACTION_ERROR || action.type == ACTION_SHIFT)
 			return (parser_invalid_syntax());
 	}
 	return (err);

@@ -24,7 +24,6 @@ void	parser_init(t_parser *parser, t_scanner *scanner)
 	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
-	parser->opening_par = 0;
 }
 
 void	parser_clear(t_parser *parser)
@@ -43,7 +42,6 @@ void	parser_clear(t_parser *parser)
 	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
-	parser->opening_par = 0;
 }
 
 void	parser_free(t_parser *parser)

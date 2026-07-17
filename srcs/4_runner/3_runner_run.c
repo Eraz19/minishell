@@ -13,14 +13,18 @@ Therefore, only fatal errors should bubble up to the main loop.
 */
 void	runner_run(t_shell *shell)
 {
-	t_ast_root	ast_root;
-	t_error		err;
+	t_parser			*parser;
+	const t_lr_machine	*machine;
+	t_ast_root			ast_root;
+	t_error				err;
 
 	err = error(ERR_NO);
 	ast_root_init(&ast_root);
+	parser = &shell->builder.parser;
+	machine = &shell->builder.lr_machine;
 	while (err.type == ERR_NO)
 	{
-		err = build_ast(&shell->builder, &ast_root);
+		err = build_ast(parser, machine, &ast_root);
 		if (err.type == ERR_NO
 			&& option_is_active_in(shell->params.options, OPT_NOEXEC) == false)
 				err = walk(&shell->runner, &ast_root);

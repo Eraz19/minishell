@@ -23,7 +23,6 @@ typedef struct s_parser
 	bool				expansion_disabled;
 	bool				search_cmd_sub_end;
 	ssize_t				cmd_sub_end_index;
-	size_t				opening_par;
 }	t_parser;
 
 #endif
