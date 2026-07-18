@@ -1,3 +1,4 @@
+#include "shell.h"
 #include "heredoc.h"
 #include "scanner.h"
 #include "scanner_.h"
@@ -44,3 +45,16 @@ t_error	scanner_read_heredoc(
 	scanner->err = scanner_error_qualify(scanner->err, false);
 	return (string_free(&delim_exp), scanner->err);
 }
+
+t_error	scanner_set_cmd_sub_input(const t_string *cmd_string)
+{
+	t_scanner	*scanner;
+
+	scanner = shell_get_scanner();
+	if (scanner == NULL)
+		return (scanner_error_qualify(error(ERR_SHELL_NOT_FOUND), true));
+	scanner->source = cmd_string->data;
+	scanner->mode = INPUT_MODE_STRING;
+	return (scanner->err);
+}
+

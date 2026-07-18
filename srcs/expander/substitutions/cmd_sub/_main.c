@@ -1,6 +1,5 @@
 #include "cmd_sub.h"
 #include "cmd_substitution_.h"
-# include <stdio.h>	// DEBUG
 
 bool	is_cmd_substitution(t_word_item *current_item, uint flags)
 {
@@ -18,7 +17,6 @@ static t_error	merge_cmd_res_into_word_exp(
 {
 	t_word	word;
 
-	fprintf(stderr, "%s() cmd_res.len = %zu\n", __func__, cmd_res->len);
 	item_opt->is_expand_res = true;
 	expander->err = from_str(&word, cmd_res, *item_opt);
 	if (expander->err.type)
@@ -29,8 +27,7 @@ static t_error	merge_cmd_res_into_word_exp(
 		if (expander->err.type)
 			return (word_free(&word), expander->err);
 	}
-	fprintf(stderr, "%s() %zu\n", __func__, item_opt->context_len);
-	expander->err = word_remove(&expander->word, 0, item_opt->context_len + 1);
+	expander->err = word_remove(&expander->word, 0, item_opt->context_len);
 	return (word_free(&word), expander->err);
 }
 
@@ -42,7 +39,8 @@ t_error	cmd_substitution(t_expander *expander)
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type)
 		return (expander->err);
-	fprintf(stderr, "%s() %c\n", __func__, item.c);
+	if (item.opt.context_len == 3)
+		return (expander->err = word_remove(&expander->word, 0, 3));
 	expander->err = cmd_sub_run_ast(
 						expander->ast_vec,
 						expander->ast_i,

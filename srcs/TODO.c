@@ -1,13 +1,6 @@
 #include "error.h"
-#include "scanner.h"
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
-
-t_error	scanner_set_cmd_sub_input(const t_string *cmd_string)
-{
-	(void)cmd_string;
-	return (error(ERR_NO));
-}
 
 /* ---------- TODO: shell ---------- */
 

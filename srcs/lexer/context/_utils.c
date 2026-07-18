@@ -15,12 +15,11 @@ static t_error	context_end(t_lexer *lexer, t_lexer_context_args args)
 {
 	t_context_stack_item	*item;
 
-	if (lexer_consume(lexer, lexer->token->type, args.closing_len).type)
-		return (lexer->err);
 	lexer->err = context_stack_bpop(&lexer->context, &item);
 	if (lexer->err.type)
 		return (lexer->err);
-	return (item->end = lexer->token->value.len, lexer->err);
+	item->end = lexer->token->value.len;
+	return (lexer_consume(lexer, lexer->token->type, args.closing_len));
 }
 
 t_error	lexer_context_unescape(t_lexer *lexer, t_unescape_args args)

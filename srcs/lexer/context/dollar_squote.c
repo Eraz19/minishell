@@ -40,6 +40,7 @@ static t_lexer_context_args	context_dollar_squote_rules(
 	return (res);
 }
 
+#include <stdio.h>
 t_error	lexer_context_dollar_squote(t_lexer *lexer)
 {
 	t_context_stack_item	*item;
@@ -50,5 +51,7 @@ t_error	lexer_context_dollar_squote(t_lexer *lexer)
 	lexer->err = context_stack_push(&lexer->token->contexts, item);
 	if (lexer->err.type)
 		return (lexer->err);
-	return (lexer_context_scan(lexer, context_dollar_squote_rules(item)));
+	lexer_context_scan(lexer, context_dollar_squote_rules(item));
+	printf("%s() | item.start=%zu item.end=%zu\n", __func__, item->start, item->end);
+	return (lexer->err);
 }
