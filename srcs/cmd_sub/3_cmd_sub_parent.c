@@ -11,11 +11,9 @@ static inline t_error	cmd_sub_parent_read_and_close(
 	err = posix_close_if_open(pipe_fds[1]);
 	if (err.type)
 		return (error_priorize(err, posix_close_if_open(pipe_fds[0])));
-	if (!string_read_all(out_string, pipe_fds[0]))	// TODO: use posix_read_all()
-	{
-		err = error_sys();
+	err = posix_read_all(pipe_fds[0], out_string);
+	if (err.type)
 		return (error_priorize(err, posix_close_if_open(pipe_fds[0])));
-	}
 	return (posix_close_if_open(pipe_fds[0]));
 }
 

@@ -87,20 +87,8 @@ t_error	reader_new_input(t_string *res);
  */
 t_error	reader_prompt(const char *name, t_string *dst);
 
-/**
- * @ingroup scanner_reader
- * @brief Builds the fully qualified error for an unrecoverable read error
- *        while reading commands (POSIX 2.8.1).
- *
- * @warning Must be called right after the failed read, before errno is
- *          overwritten.
- * @note Prints the specific diagnostic (source and errno message), then
- *       requalifies it as @c ERR_POSIX_READ.
- * @param source Name of the input source for the diagnostic
- *               (borrowed, read-only).
- * @return @c ERR_POSIX_READ (printed).
- */
-t_error	reader_read_error(const char *source);
+// TODO: doc
+t_error	reader_read_error(t_error err, const char *source);
 
 /**
  * @ingroup scanner_reader

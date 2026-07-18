@@ -1,6 +1,7 @@
 # WIP
 
-- replace all `string_read*()` calls by `posix_read_all()`
+git commit -m "refactor(all): use posix_read_all() and posix_close_if_open()"
+
 - `signals`
 - `builtins`:
 	- `break`
@@ -12,6 +13,13 @@
 - **all**:
 	- ⚠️ retry on `EINTR` => shell only compute signals in *safe points*
 	- handle all `options` properly
+- `shell`:
+	- process `ENV`:
+		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
+		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
+	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
+- `undefined_behaviour()`:
+	- print la tête à Xavier
 - `runner-executor`:
 	- ⚠️ `exec` specific flow
 	- ⚠️ `command` specific flow
@@ -27,13 +35,6 @@
 
 # TODO
 
-- `shell`:
-	- process `ENV`:
-		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
-		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
-	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
-- `undefined_behaviour()`:
-	- print la tête à Xavier
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files
 - `libft`:

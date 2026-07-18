@@ -69,11 +69,9 @@ t_error	readline_(t_string *res, const char *prompt)
 	return (error(ERR_NO));
 }
 
-t_error	reader_read_error(const char *source)
+t_error	reader_read_error(t_error err, const char *source)
 {
-	t_error	err;
-
-	err = error_print(error_sys(), "scanner", source, NULL, NULL);
+	err = error_print(err, "scanner", source, "read error", NULL, NULL);
 	err.type = ERR_POSIX_READ;
 	return (err);
 }

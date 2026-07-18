@@ -79,11 +79,13 @@ t_error	reader_file_input(t_string *res, const char *path)
 	err = reader_open_source(path, &fd);
 	if (err.type)
 		return (err);
-	string_init(res, 0, NULL, 0);
-	if (!string_read_all(res, fd))
-		return (err = reader_read_error(path), posix_close(fd),
-			string_free(res), err);
-	err = posix_close(fd);
+	err = posix_read_all(fd, res);
+	if (err.type == ERR_LIBC)
+	{
+		err = reader_read_error(err, path);
+		return (error_priorize(err, posix_close_if_open(fd)));
+	}
+	err = posix_close_if_open(fd);
 	if (err.type)
 		return (string_free(res), err);
 	if (!string_append_n(res, "\n", 1))

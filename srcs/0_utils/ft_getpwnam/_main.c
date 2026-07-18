@@ -41,20 +41,18 @@ static int	ft_pw_split(char *line, struct passwd *pw, const char *name)
 
 static t_error	ft_pw_slurp(char **out)
 {
-	int		fd;
-	t_error	err;
-	t_buff	buffer;
+	int			fd;
+	t_error		err;
+	t_string	content;
 
 	err = posix_open("/etc/passwd", O_RDONLY, &fd);
 	if (err.type)
 		return (err);
-	buff_init(&buffer, 0, NULL, 0);
-	if (!buff_read_all(&buffer, fd))
-		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
-	*out = buff_get_string(&buffer);
-	if (*out == NULL)
-		return (err = error_sys(), posix_close(fd), buff_free(&buffer), err);
-	return (posix_close(fd), buff_free(&buffer), error(ERR_NO));
+	err = posix_read_all(fd, &content);
+	if (err.type)
+		return (error_priorize(err, posix_close_if_open(fd)));
+	*out = content.data;
+	return (posix_close_if_open(fd));
 }
 
 t_error	ft_getpwnam(const char *name, struct passwd **out_pw)

@@ -3,16 +3,16 @@
 #include "heredoc.h"
 #include "reader_.h"
 #include "scanner_.h"
+#include "posix_helpers.h"
 
 static t_error	scanner_stdin_input(t_string *res)
 {
 	t_error	err;
 
-	string_init(res, 0, NULL, 0);
-	if (!string_read_all(res, STDIN_FILENO))
-		return (err = reader_read_error("standard input"),
-			string_free(res), err);
-	return (error(ERR_NO));
+	err = posix_read_all(STDIN_FILENO, res);
+	if (err.type == ERR_LIBC)
+		return (reader_read_error(err, "stdin"));
+	return (err);
 }
 
 static t_error	scanner_dup_command_input(
