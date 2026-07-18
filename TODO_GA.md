@@ -1,47 +1,14 @@
-- ⚠️ `scanner_set_cmd_sub_input()`
-- replace all `string_read*()` calls
+# WIP
 
-# FIX CMD SUB PARSING
-
-- Don't take `(` in input
-- On `SYNTAX_ERROR`:
-	- if `parser->search_cmd_sub_end == true` && `parser->lookahead_raw_symbol == SYM_RPARENTHESIS`:
-		- set `parser->lookahead_raw_symbol = SYM_EOF`:
-		- if `accept` => found
-		- else => `ERR_SYNTAX`
-
-# WIP (COMMAND SUBSTITUTION PARSING)
-
-```bash
-$(( echo hello ); foo() { echo hello; }; echo bye )
-$( echo hello )
-```
-
-```bash
-alias test="echo before; echo $( echo inside ); echo after"
-```
-
-// TODO: keep cmd sub generated `AST`
-```bash
-echo before; echo $( cat << EOF ); echo after
-# write it manually:
-inside
-EOF
-```
-
-```bash
-bash-5.2$ echo $(echo "hello
-> boy"
-> )
-hello boy
-# historique bash --posix:
-echo $(echo "hello
-boy"
-)
-```
-
-# WIP (OTHER)
-
+- replace all `string_read*()` calls by `posix_read_all()`
+- `signals`
+- `builtins`:
+	- `break`
+	- `continue`
+	- `return`
+	- `wait`
+	- `trap`
+	- `fg` ?
 - **all**:
 	- ⚠️ retry on `EINTR` => shell only compute signals in *safe points*
 	- handle all `options` properly

@@ -82,13 +82,12 @@ t_error	parser_read_next_symbol(t_parser *parser)
 		return (token_free(&token), err);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
 #ifdef DEBUG_PARSING
-	fprintf(stderr, "[PARSER] READ   => [%3zu] %s%s%s",
-		parser->lookahead_id, RED, token_type_to_string(token.type), NC);
+	fprintf(stderr, "[PARSER] READ   => [%3zu] [%3zu - %3zu] %s%s%s",
+		parser->lookahead_id, token.index.start, token.index.end, RED, token_type_to_string(token.type), NC);
 	if (token.type == TOKEN_TOKEN)
 		fprintf(stderr, " (%s%s%s)", BLUE, token.value.data, NC);
-	fprintf(stderr, " [%zu - %zu]", token.index.start, token.index.end);
 	if (token.ast_vector.len > 0)
-		fprintf(stderr, " ast_vector.len=%zu", token.ast_vector.len);
+		fprintf(stderr, " => %zu AST", token.ast_vector.len);
 	if (token.assignment_offset >= 0)
 		fprintf(stderr, " assignment_offset=%zu", token.assignment_offset);
 	fprintf(stderr, "\n");

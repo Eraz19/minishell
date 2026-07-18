@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include "lexer.h"
 #include "cmd_sub.h"
-# include <stdio.h>
 
 t_error	lexer_context_cmd_sub(t_lexer *lexer)
 {
@@ -29,6 +28,5 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	if (closing_par_index < 0 || (size_t)closing_par_index < item->start)
 		return (lexer->err = error(ERR_INCOHERENT_STATE));
 	item->end = (size_t)closing_par_index - lexer->input->i + 2;
-	fprintf(stderr, "%s(), end=%zu\n", __func__, item->end);
 	return (lexer_consume(lexer, lexer->token->type, item->end - 1));
 }

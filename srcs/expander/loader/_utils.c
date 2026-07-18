@@ -1,5 +1,4 @@
 #include "loader_.h"
-# include <stdio.h>
 
 bool	is_char_escaped(t_loader *loader)
 {
@@ -38,7 +37,6 @@ t_error	loader_consume(t_loader *loader, bool escaped)
 	{
 		opt.context = loader->context_item->context;
 		context_len = loader->context_item->end;
-		fprintf(stderr, "%s() end=%zu start=%zu ctx_len=%zu\n", __func__, loader->context_item->end, loader->context_item->start, context_len);
 		opt.context_len = context_len;
 	}
 	opt.i = loader->i;

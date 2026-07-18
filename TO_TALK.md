@@ -1,5 +1,6 @@
 # ALEXANDER
 
+- ⚠️ `scanner_set_cmd_sub_input()`
 - ⚠️ wrong error message:
 	- `wrong "error` puis `CTRL+D` should print `syntax error` / `unexpected end of input` ?
 - ⚠️ docs:

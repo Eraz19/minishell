@@ -1,3 +1,64 @@
+# COMMAND SUBSTITUTION
+
+```bash
+$(true)
+echo "should be 0 => $?"
+$(false)$(true)
+echo "should be 0 => $?"
+$(true)$(false)$(true)
+echo "should be 0 => $?"
+$(false)
+echo "should be 1 => $?"
+$(true)$(false)
+echo "should be 1 => $?"
+$(false)$(true)$(false)
+echo "should be 1 => $?"
+```
+
+```bash
+VAR=$(true)
+echo "should be 0 => $?"
+VAR=$(false)$(true)
+echo "should be 0 => $?"
+VAR=$(true)$(false)$(true)
+echo "should be 0 => $?"
+VAR=$(false)
+echo "should be 1 => $?"
+VAR=$(true)$(false)
+echo "should be 1 => $?"
+VAR=$(false)$(true)$(false)
+echo "should be 1 => $?"
+```
+
+```bash
+$( echo hello )
+echo before$(echo mid)after
+echo before $(echo mid) after
+$(( echo hello ); foo() { echo hello; }; echo bye )
+```
+
+```bash
+alias test="echo before; echo $( echo inside ); echo after"
+```
+
+```bash
+echo before; echo $( cat << EOF ); echo after
+# write it manually:
+inside
+EOF
+```
+
+```bash
+bash-5.2$ echo $(echo "hello
+> boy"
+> )
+hello boy
+# historique bash --posix:
+echo $(echo "hello
+boy"
+)
+```
+
 # WIP
 
 ```bash

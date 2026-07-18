@@ -611,7 +611,7 @@ static void	ast_log_token_ast_vector(
 	while (i < token->ast_vector.len)
 	{
 		root = AST_AT(t_ast_root, &token->ast_vector, i);
-		ast_log_list("NESTED_AST", root, depth + 1, lasts,
+		ast_log_list("AST_ROOT", root, depth + 1, lasts,
 			i + 1 == token->ast_vector.len);
 		i++;
 	}
@@ -637,8 +637,6 @@ static void	ast_log_token_vector(
 		ast_log_head(lasts, depth + 1, i + 1 == vector->len,
 			CYAN, item_name);
 		ast_log_token_value(token);
-		if (token->ast_vector.len > 0)
-			fprintf(stderr, " ast_vector=%zu", token->ast_vector.len);
 		fprintf(stderr, "\n");
 		ast_log_token_ast_vector("TOKEN_AST_VECTOR", token,
 			depth + 2, lasts, true);
