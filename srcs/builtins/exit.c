@@ -1,32 +1,56 @@
 #include "error.h"
 #include "libft.h"
 #include "params.h"
+#include <signal.h>
 
-static bool	exit_parse_status(char *arg, int *status)
+#define EXIT_CIT_START	"POSIX: exit: DESCRIPTION: If n is specified and "
+#define EXIT_CIT_END_1	" the wait status of the shell or subshell is "
+#define EXIT_CIT_END_2	"unspecified."
+#define EXIT_CIT_END	EXIT_CIT_END_1 EXIT_CIT_END_2
+
+#define EXIT_NOT_UINT_	"is not an unsigned decimal integer [...]"
+#define EXIT_NOT_UINT	EXIT_CIT_START EXIT_NOT_UINT_ EXIT_CIT_END
+
+#define EXIT_256_		"[...] has a value of 256 [...]"
+#define EXIT_256		EXIT_CIT_START EXIT_256_ EXIT_CIT_END
+
+#define EXI_GREATER_1	"[...] has a value greater than 256 but not "
+#define EXI_GREATER_2	"corresponding to an exit status the shell assigns to "
+#define EXI_GREATER_3	"commands terminated by a valid signal,"
+#define EXIT_GREATER_	EXI_GREATER_1 EXI_GREATER_2 EXI_GREATER_3
+#define EXIT_GREATER	EXIT_CIT_START EXIT_GREATER_ EXIT_CIT_END
+
+#define EXIT_ERR_STATUS	"wait status representing special builtin error"
+
+static inline bool	exit_status_is_signal(int exit_status)
 {
-	if (!ft_isdigit(arg[0]) || !parse_int(arg, status))
-		return (false);
-	if (*status > 255)
-	{
-		print_unspecified_behaviour(
-			arg, "POSIX: exit: EXIT STATUS: undefined when n is not between"
-			" 0 and 255 inclusively", "value taken modulo 256");
-		*status %= 256;
-	}
-	return (true);
+	int					signo;
+	struct sigaction	sa;
+
+	signo = exit_status - ERR_POSIX_SIGNAL_BASE_CODE;
+	return (sigaction(signo, NULL, &sa) == 0);
 }
 
-static t_error	exit_resolve_status(int argc, char **argv, int *status)
+static inline t_error	exit_parse_status(char *arg, int *exit_status)
 {
-	if (argc > 2)
-		return (error_print(error(ERR_INVALID_USAGE), argv[0],
-				"too many arguments", NULL, NULL));
-	if (argc == 1)
-		return (params_get_last_status(status));
-	if (!exit_parse_status(argv[1], status))
-		return (error_print(error(ERR_INVALID_USAGE), argv[0], argv[1],
-				"not an unsigned decimal integer", NULL, NULL));
-	return (error(ERR_NO));
+	if (arg[0] == '+'
+		|| parse_int(arg, exit_status) == false
+		|| *exit_status < 0)
+	{
+		print_unspecified_behaviour(arg, EXIT_NOT_UINT, EXIT_ERR_STATUS);
+		*exit_status = (int)ERR_POSIX_BUILTIN_SPECIAL;
+	}
+	else if (*exit_status == 256)
+	{
+		print_unspecified_behaviour(arg, EXIT_256, EXIT_ERR_STATUS);
+		*exit_status = (int)ERR_POSIX_BUILTIN_SPECIAL;
+	}
+	else if (*exit_status > 256 && exit_status_is_signal(*exit_status) == false)
+	{
+		print_unspecified_behaviour(arg, EXIT_GREATER, EXIT_ERR_STATUS);
+		*exit_status %= 256;
+	}
+	return (error(ERR_EXIT));
 }
 
 t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
@@ -34,16 +58,22 @@ t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
 	t_error	err;
 
 	(void)envp;
-	err = exit_resolve_status(argc, argv, exit_status);
-	if (err.type == ERR_INVALID_USAGE && argc > 2)
-		return (*exit_status = (int)err.type, err.type = ERR_BUILTIN, err);
-	if (err.type == ERR_INVALID_USAGE)
-		*exit_status = 2;
-	else if (err.type)
+	if (argc == 1)
 	{
-		*exit_status = (int)err.type;
-		err = error_print(err, argv[0], NULL, NULL);
-		return (err.type = ERR_INTERNAL, err);
+		err = params_get_last_status(exit_status);
+		if (err.type)
+		{
+			(void)error_print(err, NULL, NULL);
+			*exit_status = (int)err.type;
+		}
+		return (error(ERR_EXIT_WITH_CURRENT_STATUS));
 	}
-	return (error(ERR_EXIT));
+	else if (argc > 2)
+	{
+		err = error_print(error(ERR_INVALID_USAGE), argv[0],
+				"too many arguments", NULL, NULL);
+		*exit_status = (int)err.type;
+		return (error(ERR_EXIT));
+	}
+	return (exit_parse_status(argv[1], exit_status));
 }
