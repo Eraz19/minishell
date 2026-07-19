@@ -1,7 +1,6 @@
 #include "error.h"
 #include "posix_helpers.h"
 #include <errno.h>
-#include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
 

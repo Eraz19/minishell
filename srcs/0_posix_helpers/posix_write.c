@@ -1,6 +1,5 @@
 #include "error.h"
 #include "posix_helpers.h"
-#include "shell.h"
 #include <errno.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -12,15 +11,10 @@ static inline t_error	write_handle_result(
 	size_t *written,
 	bool *retry)
 {
-	t_error	err;
-
 	*written = 0;
 	*retry = false;
 	if (ret < 0 && errno == EINTR)
 	{
-		err = shell_should_interrupt();
-		if (err.type)
-			return (err);
 		*retry = true;
 		return (error(ERR_NO));
 	}

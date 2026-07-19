@@ -1,6 +1,5 @@
 #include "error.h"
 #include "posix_helpers.h"
-#include "shell.h"
 #include <errno.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -8,11 +7,15 @@
 
 #define CHUNK_LEN	128
 
-t_error	posix_read(int fd, void *buff, size_t len, size_t *bytes_read)
+// @ret ERR_NO / ERR_LIBC
+static inline t_error	posix_read(
+							int fd,
+							void *buff,
+							size_t len,
+							size_t *bytes_read)
 {
 	size_t	chunk_len;
 	ssize_t	ret;
-	t_error	err;
 
 	*bytes_read = 0;
 	if (len > (size_t)SSIZE_MAX)
@@ -25,12 +28,7 @@ t_error	posix_read(int fd, void *buff, size_t len, size_t *bytes_read)
 		if (ret >= 0)
 			return (*bytes_read = (size_t)ret, error(ERR_NO));
 		if (errno == EINTR)
-		{
-			err = shell_should_interrupt();
-			if (err.type)
-				return (err);
 			continue ;
-		}
 		return (error_sys());
 	}
 }
