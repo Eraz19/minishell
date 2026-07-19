@@ -17,3 +17,8 @@ bool	sig_has_pending_trap(int *out_signo)
 	}
 	return (false);
 }
+
+bool	sig_int_is_pending(void)
+{
+	return (g_signals.pending[SIGINT_ID]);
+}

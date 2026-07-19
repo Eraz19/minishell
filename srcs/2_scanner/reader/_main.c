@@ -20,7 +20,7 @@ t_error	reader_new_input(t_string *res)
 		res->len = 0;
 		err = reader_prompt("PS1", &ps1);
 		if (err.type == ERR_NO)
-			err = readline_(res, ps1.data);
+			err = reader_read_next_line(res, ps1.data);
 		string_free(&ps1);
 		if (err.type)
 			return (err);
@@ -43,7 +43,7 @@ t_error	reader_continuation(t_string *res)
 		continuation.len = 0;
 		err = reader_prompt("PS2", &ps2);
 		if (err.type == ERR_NO)
-			err = readline_(&continuation, ps2.data);
+			err = reader_read_next_line(&continuation, ps2.data);
 		string_free(&ps2);
 		if (err.type)
 			return (string_free(&continuation), err);

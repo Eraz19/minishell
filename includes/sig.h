@@ -43,6 +43,9 @@ void	sig_clear(void);
  */
 bool	sig_has_pending_trap(int *out_signo);
 
+// TODO: doc
+bool	sig_int_is_pending(void);
+
 /**
  * @brief Reset trapped signal handlers to defaults for a subshell.
  *

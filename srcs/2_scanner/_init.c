@@ -1,5 +1,7 @@
 #include "scanner.h"
 #include "scanner_.h"
+#include "reader_.h"
+#include <readline/readline.h>
 
 t_error	scanner_init(t_scanner *scanner)
 {
@@ -18,6 +20,8 @@ t_error	scanner_load(t_scanner *scanner, const char *source)
 {
 	t_error	err;
 
+	rl_catch_signals = 0;
+	rl_getc_function = reader_rl_getc;
 	scanner->mode = INPUT_MODE_NONE;
 	err = input_mode_set(&scanner->mode);
 	if (err.type != ERR_NO)

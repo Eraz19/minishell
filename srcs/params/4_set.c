@@ -64,7 +64,9 @@ t_error	params_set_last_status_priv(const char *caller, int value)
 	t_params	*params;
 	t_error		err;
 
-	if (str_cmp(caller, "walk_pipeline") != 0)
+	if (str_cmp(caller, "walk_pipeline") != 0
+		&& str_cmp(caller, "sig_process_cmd") != 0
+		&& str_cmp(caller, "reader_process_rl") != 0)
 	{
 		fprintf(stderr, RED);
 		err = error_print(error(ERR_INTERNAL), __func__, "caller is not allowed", caller, NULL, NULL);

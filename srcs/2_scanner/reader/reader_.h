@@ -3,6 +3,7 @@
 
 # include "error.h"
 # include "libft.h"
+# include <stdio.h>
 
 /** @defgroup scanner_reader Scanner reader
  *  @brief Fetches raw shell input: prompted lines, script files, stdin.
@@ -90,6 +91,9 @@ t_error	reader_prompt(const char *name, t_string *dst);
 // TODO: doc
 t_error	reader_read_error(t_error err, const char *source);
 
+// TODO: doc
+int reader_rl_getc(FILE *stream);
+
 /**
  * @ingroup scanner_reader
  * @brief Low-level prompted read of a single line, newline-terminated.
@@ -106,6 +110,6 @@ t_error	reader_read_error(t_error err, const char *source);
  *         @c ERR_LIBC on allocation failure; @c ERR_SHELL_NOT_FOUND if
  *         the shell data is unavailable; @c ERR_NO on success.
  */
-t_error	readline_(t_string *res, const char *prompt);
+t_error	reader_read_next_line(t_string *res, const char *prompt);
 
 #endif

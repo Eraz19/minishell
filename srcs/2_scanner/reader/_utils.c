@@ -4,6 +4,7 @@
 #include "libft.h"
 #include "shell.h"
 #include "reader_.h"
+#include "sig.h"
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -38,29 +39,65 @@ static inline t_error	reader_set_stdin_to_blocking(void)
 	return (error(ERR_NO));
 }
 
-t_error	readline_(t_string *res, const char *prompt)
+static inline t_error	reader_process_rl(
+							const char *prompt,
+							char **out_input,
+							bool *out_retry)
+{
+	int		signo;
+	t_error	err;
+
+	*out_retry = false;
+	err = sig_process();
+	if (err.type)
+		return (err);
+	err = reader_set_stdin_to_blocking();
+	if (err.type)
+		return (err);
+	*out_input = readline(prompt);
+	if (sig_int_is_pending() == true)
+	{
+		*out_retry = true;
+		err = params_set_last_status(ERR_POSIX_SIGNAL_BASE_CODE + SIGINT);
+	}
+	else if (sig_has_pending_trap(&signo))
+		err = params_set_last_status(ERR_POSIX_SIGNAL_BASE_CODE + signo);
+	if (err.type)
+		return (err);
+	return (sig_process());
+}
+
+static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
+{
+	bool	retry;
+	t_error	err;
+
+	fprintf(stderr, CYAN "####################### IN #######################\n" NC);
+	while (true)
+	{
+		err = reader_process_rl(prompt, out_input, &retry);
+		if (err.type || *out_input != NULL)
+			break ;
+		if (retry == true)
+			continue ;
+		err = shell_should_exit_on_veof();
+		if (err.type)
+			break ;
+	}
+	fprintf(stderr, CYAN "##################################################\n" NC);
+	return (err);
+}
+
+t_error	reader_read_next_line(t_string *res, const char *prompt)
 {
 	t_error	err;
 	char	*input;
 
 	if (prompt == NULL)
 		prompt = "";
-	err = reader_set_stdin_to_blocking();
+	err = reader_rl_loop(prompt, &input);
 	if (err.type)
 		return (err);
-	fprintf(stderr, CYAN "####################### IN #######################\n" NC);
-	input = readline(prompt);
-	while (input == NULL)
-	{
-		err = shell_should_exit_on_veof();
-		if (err.type)
-			return (err);
-		err = reader_set_stdin_to_blocking();
-		if (err.type)
-			return (err);
-		input = readline(prompt);
-	}
-	fprintf(stderr, CYAN "##################################################\n" NC);
 	if (!string_init(res, 0, input, -1))
 		return (free(input), error_sys());
 	free(input);
