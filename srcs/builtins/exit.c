@@ -55,10 +55,14 @@ static inline t_error	exit_parse_status(char *arg, int *exit_status)
 
 t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
 {
+	int		first_operand_index;
 	t_error	err;
 
 	(void)envp;
-	if (argc == 1)
+	first_operand_index = 1;
+	if (argc > 1 && str_cmp(argv[1], "--") == 0)
+		first_operand_index = 2;
+	if (first_operand_index >= argc)
 	{
 		err = params_get_last_status(exit_status);
 		if (err.type)
@@ -68,12 +72,12 @@ t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
 		}
 		return (error(ERR_EXIT_WITH_CURRENT_STATUS));
 	}
-	else if (argc > 2)
+	else if (argc - first_operand_index > 1)
 	{
 		err = error_print(error(ERR_INVALID_USAGE), argv[0],
 				"too many arguments", NULL, NULL);
 		*exit_status = (int)err.type;
 		return (error(ERR_EXIT));
 	}
-	return (exit_parse_status(argv[1], exit_status));
+	return (exit_parse_status(argv[first_operand_index], exit_status));
 }
