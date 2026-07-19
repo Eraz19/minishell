@@ -45,7 +45,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 	initial_error = err;
 	if (cmd->exit_status < 0)
 		cmd->exit_status = (int)err.type;
-	if (err.type)
+	if (err.type && err.type != ERR_EXIT && err.type != ERR_EXIT_WITH_CURRENT_STATUS)
 	{
 		(void)error_print(err, NULL, NULL);
 		if (err.type == ERR_REDIRECTION)
@@ -66,7 +66,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 	}
 	if (redir_applied == true)
 		err = error_priorize(err, redirect_stop(&runner->redirector));
-	if (err.type && cmd->exit_status <= 0)
+	if (err.type && err.type != ERR_EXIT && err.type != ERR_EXIT_WITH_CURRENT_STATUS && cmd->exit_status <= 0)
 		cmd->exit_status = (int)err.type;
 	*exit_status = cmd->exit_status;
 	fprintf(stderr, MAGENTA "##################################################\n" NC);
