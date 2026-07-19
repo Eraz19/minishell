@@ -2,6 +2,7 @@
 #include "posix_helpers.h"
 #include <unistd.h>
 
+// @ret ERR_NO / ERR_INTERNAL / ERR_POSIX_WRITE / ERR_LIBC
 static inline t_error	sig_print_one(t_sig_action *action, t_sig_id sig_id)
 {
 	t_string	out;
@@ -15,7 +16,22 @@ static inline t_error	sig_print_one(t_sig_action *action, t_sig_id sig_id)
 	return (err);
 }
 
-t_error	sig_print_conditions(char **conditions)
+static inline t_error	sig_print_and_absorb(
+							t_error err,
+							const char *builtin_name,
+							const char *arg,
+							int *exit_status)
+{
+	*exit_status = (int)err.type;
+	(void)error_print(err, builtin_name, arg, NULL, NULL);
+	return (error(ERR_NO));
+}
+
+// @ret ERR_NO / ERR_INTERNAL / ERR_POSIX_WRITE / ERR_LIBC
+t_error	sig_print_conditions(
+			const char *builtin_name,
+			char **conditions,
+			int *exit_status)
 {
 	size_t		i;
 	t_sig_id	sig_id;
@@ -33,6 +49,9 @@ t_error	sig_print_conditions(char **conditions)
 			err = sig_parse_name(conditions[i], &signo, &sig_id);
 			if (err.type == ERR_NO)
 				err = sig_print_one(&g_signals.state.actions[sig_id], sig_id);
+			else
+				err = sig_print_and_absorb(
+						err, builtin_name, conditions[i], exit_status);
 		}
 		if (err.type)
 			return (err);

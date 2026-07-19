@@ -22,7 +22,14 @@
 ** realtime range bounds cannot portably be used as enum constants, realtime
 ** signals are not supported.
 */
-// TODO: ajouter doc pour dire que SIGKILL / SIGSTOP ne sont pas listés car POSIX dit que leur comportement est undefined dans trap
+/**
+ * @enum e_sig_id
+ * @brief Internal dense identifier for supported non-realtime signal names.
+ *
+ * @note The enum contents depend on signal macros exposed by @c <signal.h>.
+ * @note @c SIG_EXIT_ID represents the @c EXIT / @c 0 trap condition and is
+ *       not a real signal number.
+ */
 typedef enum e_sig_id
 {
 #ifdef SIGHUP
@@ -161,11 +168,26 @@ typedef enum e_sig_id
 	SIG_EXIT_ID
 }	t_sig_id;
 
+/**
+ * @struct s_sig_state
+ * @brief Stores installed trap state and entry-time signal policy.
+ *
+ * @var s_sig_state::ignored_on_entry Whether each signal was ignored when the
+ *                                    shell loaded signal state.
+ * @var s_sig_state::actions Installed action for each supported signal.
+ * @var s_sig_state::exit_action Installed action for the @c EXIT / @c 0 trap.
+ * @var s_sig_state::is_executing_exit_action Whether the @c EXIT action is
+ *                                            currently running.
+ */
 typedef struct s_sig_state
 {
+	/** @brief Whether each signal was ignored when signal state was loaded. */
 	bool			ignored_on_entry[SIG_ID_COUNT];
+	/** @brief Installed action for each supported signal. */
 	t_sig_action	actions[SIG_ID_COUNT];
+	/** @brief Installed action for the @c EXIT / @c 0 trap. */
 	t_sig_action	exit_action;
+	/** @brief Whether the @c EXIT action is currently running. */
 	bool			is_executing_exit_action;
 }	t_sig_state;
 
@@ -187,29 +209,122 @@ typedef struct s_sig_state
 **   in the handler, not a simple volatile sig_atomic_t assignment.
 ** - state is not accessed (read or write) by the signal handler.
 */
+/**
+ * @struct s_signals
+ * @brief Global signal state shared by the shell and async signal handler.
+ *
+ * @var s_signals::has_pending Async-safe flag set when any signal is pending.
+ * @var s_signals::pending Async-safe per-signal pending table.
+ * @var s_signals::state Shell-side signal state, never accessed from the
+ *                       signal handler.
+ */
 typedef struct s_signals
 {
-	volatile sig_atomic_t	has_pending;			// hint only
+	/** @brief Async-safe flag set when any signal is pending. */
+	volatile sig_atomic_t	has_pending;
+	/** @brief Async-safe per-signal pending table. */
 	volatile sig_atomic_t	pending[SIG_ID_COUNT];
+	/** @brief Shell-side signal state, never accessed from the handler. */
 	t_sig_state				state;
 }	t_signals;
 
 extern t_signals	g_signals;
 
-// TODO: Si *édition de command* en cours => voir *extended description*
-void	sigint_handler(void);
+/* ************************************************************************* */
+/*                                  HELPERS                                  */
+/* ************************************************************************* */
 
-// helpers
-int		sig_id_to_no(t_sig_id sig_id);
-int		sig_no_to_id(int signo);
-t_error	sig_parse_name(const char *name, int *out_signo, t_sig_id *out_sig_id);
+/**
+ * @brief Build the symbolic trap name for @p sig_id.
+ *
+ * @note @p out_name is initialized by the function.
+ *
+ * @param sig_id Internal signal identifier to render.
+ * @param out_name Destination @ref t_string (borrowed, initialized by the
+ *                 function).
+ * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.
+ */
 t_error	sig_build_name(t_sig_id sig_id, t_string *out_name);
 
-// ops
-t_error	sig_install_shell_default_sigint(t_sig_action *sig_action);
-t_error	sig_install_trap(t_sig_action *sig_action, int signo, t_string *cmd);
-t_error	sig_install_default(t_sig_action *sig_action, int signo);
-t_error	sig_install_ignore(t_sig_action *sig_action, int signo);
+/**
+ * @brief Convert an internal signal id to its platform signal number.
+ *
+ * @param sig_id Internal signal identifier to convert.
+ * @return The matching signal number, or @c -1 when @p sig_id is unknown.
+ */
+int		sig_id_to_no(t_sig_id sig_id);
+
+/**
+ * @brief Convert a platform signal number to its internal signal id.
+ *
+ * @param signo Platform signal number to convert.
+ * @return The matching @ref t_sig_id as an @c int, or @c -1 when @p signo is
+ *         unknown.
+ */
+int		sig_no_to_id(int signo);
+
+/**
+ * @brief Parse a trap condition name or supported numeric signal.
+ *
+ * @param name Trap condition without the @c SIG prefix, or a supported numeric
+ *             signal C-string (borrowed, read-only).
+ * @param out_signo Destination receiving the platform signal number (borrowed).
+ * @param out_sig_id Destination receiving the internal signal id (borrowed).
+ * @return @c ERR_NO or @c ERR_VAR_INVALID_NAME.
+ */
+t_error	sig_parse_name(const char *name, int *out_signo, t_sig_id *out_sig_id);
+
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
+
+/**
+ * @brief Build one re-input-safe @c trap output line for an action.
+ *
+ * @note @p out is initialized by the function and must be released by the
+ *       caller with @ref string_free().
+ *
+ * @param action Signal action to serialize (borrowed, read-only).
+ * @param sig_id Signal or @c EXIT condition to print.
+ * @param out Destination @ref t_string (borrowed, initialized by the function).
+ * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.
+ */
 t_error	sig_build_output(t_sig_action *action, t_sig_id sig_id, t_string *out);
+
+/**
+ * @brief Install the default action for @p signo.
+ *
+ * @param sig_action Stored action updated on success (borrowed).
+ * @param signo Platform signal number to install.
+ * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.
+ */
+t_error	sig_install_default(t_sig_action *sig_action, int signo);
+
+/**
+ * @brief Install the ignored action for @p signo.
+ *
+ * @param sig_action Stored action updated on success (borrowed).
+ * @param signo Platform signal number to ignore.
+ * @return @c ERR_NO or @c ERR_LIBC.
+ */
+t_error	sig_install_ignore(t_sig_action *sig_action, int signo);
+
+/**
+ * @brief Install the shell default @c SIGINT behavior.
+ *
+ * @param sig_action Stored @c SIGINT action updated on success (borrowed).
+ * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.
+ */
+t_error	sig_install_shell_default_sigint(t_sig_action *sig_action);
+
+/**
+ * @brief Install a trapped action for @p signo.
+ *
+ * @param sig_action Stored action updated on success (borrowed).
+ * @param signo Platform signal number to trap.
+ * @param cmd Trap command @ref t_string (ownership taken by signal).
+ * @return @c ERR_NO or @c ERR_LIBC.
+ */
+t_error	sig_install_trap(t_sig_action *sig_action, int signo, t_string *cmd);
 
 #endif

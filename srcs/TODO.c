@@ -89,21 +89,6 @@ t_error	builtin_times(int argc, char **argv, char **envp, int *exit_status)
 	(void)exit_status;
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status)
-{
-	/*
-	(use shell_is_subshell())
-	if trap sans opérande && in_subshell && !trap_table_modified_since_subshell_entry:
-		print saved_traps_on_subshell_entry
-	else:
-		print current_traps
-	*/
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
 
 // Intrinsic builtins
 

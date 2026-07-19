@@ -56,11 +56,11 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_SIZE_MAX_REACHED)
 		return ("SIZE_MAX has been reached");
 	else if (err.type == ERR_VAR_INVALID_NAME)
-		return ("invalid variable name");
+		return ("invalid name");
 	else if (err.type == ERR_VAR_MISSING_EQUAL)
 		return ("missing '='");
 	else if (err.type == ERR_VAR_NOT_FOUND)
-		return ("variable not found");
+		return ("not found");
 	else if (err.type == ERR_VAR_READ_ONLY)
 		return ("readonly variable");
 	else if (err.type == ERR_CTX_END_NOT_FOUND)
@@ -93,6 +93,8 @@ const char	*error_to_string(t_error err)
 		return ("not found");
 	else if (err.type == ERR_PID_INVALID)
 		return ("invalid process or job id");
+	else if (err.type == ERR_SIG_WAS_IGNORED_ON_ENTRY)
+		return ("signal was ignored at entry of the non-interactive shell");
 	// posix_write() error
 	else if (err.type == ERR_POSIX_WRITE)
 		return ("write error");
@@ -150,6 +152,8 @@ t_error	error_priv(t_error_type type, const char *file, int line, const char *ca
 {
 	t_error	err;
 
+	if (type == ERR_LIBC)
+		return (error_sys_priv(file, line, caller));
 	err.type = type;
 	if (err.type == ERR_POSIX_WRITE)
 		err.saved_errno = errno;

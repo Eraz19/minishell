@@ -56,6 +56,8 @@ SRCS			:= \
 	$(wildcard srcs/4_runner/2_executor/*/*.c) \
 	$(wildcard srcs/4_runner/3_walker/*.c) \
 	$(wildcard srcs/4_runner/3_walker/*/*.c) \
+	$(wildcard srcs/alias/*.c) \
+	$(wildcard srcs/alias/*/*.c) \
 	$(wildcard srcs/ast/*.c) \
 	$(wildcard srcs/ast/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
@@ -73,8 +75,8 @@ SRCS			:= \
 	$(wildcard srcs/params/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*.c) \
 	$(wildcard srcs/params/*/*/*/*/*.c) \
-	$(wildcard srcs/alias/*.c) \
-	$(wildcard srcs/alias/*/*.c)
+	$(wildcard srcs/signal/*.c) \
+	$(wildcard srcs/signal/*/*.c)
 
 INCLUDES		:= \
 	-I$(READLINE_DIR)/include \
@@ -180,10 +182,7 @@ INCLUDES		:= \
 	-Isrcs/params/5_functions \
 	-Isrcs/params/6_process \
 	-Isrcs/params/6_process/process \
-	-Isrcs/params/signal \
-	-Isrcs/params/signal/signal/sig_action \
-	-Isrcs/params/signal/signal/sig_no_to_id \
-	-Isrcs/params/signal/signal/sig_parse_name
+	-Isrcs/signal
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

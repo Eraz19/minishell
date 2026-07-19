@@ -62,7 +62,9 @@
 	- unignored `traps` are reset to default even if the `command substitution` only contains a `trap` command
 - `signal`:
 	- `SIGTTIN`, `SIGTTOU` and `SIGTSTP` are always ignored at startup, even if `-m` is not active.
+	- `SIGKILL` and `SIGSTOP` are not supported at all because they have POSIX *undefined behaviour* with `trap`
 	- when shell is *interactive* (`-i`), `trap` actions (`reset` or `catch`) are allowed on signals whiche were *ignored on entry*.
+	- `EXIT / 0` traps are not processed when shell exists because of a `signal` for which `trap` action is `default`
 - `exit`:
 	- TODO: cf `srcs/builtins/exit.c`
 - ...

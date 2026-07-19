@@ -58,6 +58,12 @@ t_error	sig_set_default(const char *sig_name)
 	t_error			err;
 
 	sig_state = &g_signals.state;
+	if (str_cmp("EXIT", sig_name) == 0 || str_cmp("0", sig_name) == 0)
+	{
+		string_free(&sig_state->exit_action.cmd);
+		sig_state->exit_action.type = SIG_DEFAULT;
+		return (error(ERR_NO));
+	}
 	err = sig_parse_name(sig_name, &signo, &sig_id);
 	if (err.type)
 		return (err);
@@ -77,6 +83,12 @@ t_error	sig_set_ignore(const char *sig_name)
 	t_error			err;
 
 	sig_state = &g_signals.state;
+	if (str_cmp("EXIT", sig_name) == 0 || str_cmp("0", sig_name) == 0)
+	{
+		string_free(&sig_state->exit_action.cmd);
+		sig_state->exit_action.type = SIG_IGNORED;
+		return (error(ERR_NO));
+	}
 	err = sig_parse_name(sig_name, &signo, &sig_id);
 	if (err.type)
 		return (err);
