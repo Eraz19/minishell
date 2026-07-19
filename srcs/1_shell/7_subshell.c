@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include "runner.h"
+#include "sig.h"
 # include "logs.h"
 
 t_error	shell_is_subshell(bool *out)
@@ -18,14 +19,11 @@ t_error	shell_is_subshell(bool *out)
 	return (error(ERR_NO));
 }
 
-// TODO
-static inline t_error	shell_reset_unignored_traps(t_shell *shell, t_subshell_mode mode)
+static inline t_error	shell_reset_unignored_traps(t_subshell_mode mode)
 {
 	if (mode == SUBSHELL_CMD_SUB_TRAP_ONLY)
 		return (error(ERR_NO));
-	print_warn("%s() not implemented yet => skipping.\n", __func__);
-	(void)shell;
-	return (error(ERR_NO));
+	return (sig_init_subshell());
 }
 
 // @ret ERR_INVALID_USAGE / ERR_INTERRUPTED / ERR_LIBC
@@ -93,7 +91,7 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 	params_init_subshell(&shell->params);
 	scanner_init_subshell(&shell->scanner);
 	runner_init_subshell(&shell->runner);
-	err = shell_reset_unignored_traps(shell, mode);
+	err = shell_reset_unignored_traps(mode);
 	if (err.type == ERR_NO)
 	{
 		option_set(&shell->params.options, OPT_INTERACTIVE, false);

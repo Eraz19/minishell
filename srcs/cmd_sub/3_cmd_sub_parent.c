@@ -33,7 +33,7 @@ t_error	cmd_sub_parent(
 	t_error	err;
 
 	err = cmd_sub_parent_read_and_close(pipe_fds, out_string);
-	err = error_priorize(err, posix_wait(child_pid, out_exit_status));
+	err = error_priorize(err, posix_wait_and_retry(child_pid, out_exit_status));
 	if (err.type)
 		return (err);
 	cmd_sub_parent_trim(out_string);

@@ -99,6 +99,10 @@
 		"-I${workspaceFolder}/srcs/params/4_variables/load/3_up",
 		"-I${workspaceFolder}/srcs/params/5_functions",
 		"-I${workspaceFolder}/srcs/params/6_process",
-		"-I${workspaceFolder}/srcs/params/6_process/process"
+		"-I${workspaceFolder}/srcs/params/6_process/process",
+		"-I${workspaceFolder}/srcs/signal",
+		"-I${workspaceFolder}/srcs/signal/sig_action",
+		"-I${workspaceFolder}/srcs/signal/sig_no_to_id",
+		"-I${workspaceFolder}/srcs/signal/sig_parse_name"
 	]
 }

@@ -18,7 +18,7 @@ static inline t_error	walk_pipe_wait_all(t_pipe_run *run)
 		if (pid == 0)
 			continue ;
 		child_status = -1;
-		last_err = posix_wait(pid, &child_status);
+		last_err = posix_wait_and_retry(pid, &child_status);
 		if (child_status >= 0)
 		{
 			run->exit_status = child_status;

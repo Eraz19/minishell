@@ -1,6 +1,7 @@
 #include "shell_priv.h"
 #include "runner.h"
 #include "options.h"
+#include "sig.h"
 #include <stdlib.h>
 
 void	shell_init(t_shell *shell)
@@ -21,6 +22,7 @@ t_error	shell_clear(t_shell *shell)
 	alias_clear(&shell->alias);
 	history_clear(&shell->history);
 	builder_clear(&shell->builder);
+	sig_clear();
 	shell->is_subshell = false;
 	return (runner_clear(&shell->runner));
 }

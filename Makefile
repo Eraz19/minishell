@@ -1,8 +1,8 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror -O2 -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
+CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
-	-Wall -Wextra -Werror \
+	-Wall -Wextra -Wdeprecated -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
 	-DDEBUG_ERROR_TRACE \
 	-DDEBUG_LOGS \
@@ -179,7 +179,11 @@ INCLUDES		:= \
 	-Isrcs/params/4_variables/load/3_up \
 	-Isrcs/params/5_functions \
 	-Isrcs/params/6_process \
-	-Isrcs/params/6_process/process
+	-Isrcs/params/6_process/process \
+	-Isrcs/params/signal \
+	-Isrcs/params/signal/signal/sig_action \
+	-Isrcs/params/signal/signal/sig_no_to_id \
+	-Isrcs/params/signal/signal/sig_parse_name
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

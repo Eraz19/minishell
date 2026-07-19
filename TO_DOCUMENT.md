@@ -34,6 +34,10 @@
 		- as `setpgid()` / `tcsetpgrp()` / `getpgrp()` / `setsid()` are forbidden, job-control background jobs and non-job-control background jobs are not implemented.
 - `pattern matching`:
 	- as locale-management functions are forbidden, pattern matching ignores locale-dependent collation and character classification; therefore, bracket ranges, equivalence classes, collating symbols, and character classes are only approximated with byte/ASCII-like semantics.
+- `trap`:
+	- as `str2sig()`, `sig2str()`, and `sysconf()` are forbidden, the shell cannot reliably support every implementation-defined signal provided by the host; therefore, signal names are resolved through a handwritten compile-time table, guarded by the macros available in `<signal.h>`, and unsupported implementation-defined signals are reported as invalid trap conditions.
+- `close()`:
+	- as `posix_close()` and `POSIX_CLOSE_RESTART` are forbidden, `posix_close_if_open()` retries `close()` on `EINTR` and `EINPROGRESS` until the fd is either closed or already invalid; any other failure makes the fd tracker state non-recoverable (more details in `srcs/0_posix_helpers/posix_close_if_open.c`).
 
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 
@@ -53,9 +57,14 @@
 	- `$@` / `$*`: always expand as in a *field splitting* context:
 		- `$@` / `$*` / `"$@"`: 1 field per parameter, first field joined with previous one and last field joined with next one
 		- `"$*"`: 1 field joined by first `IFS` character (` ` if *unset*, none if *set but null*)
-- `command substitutions`
+- `command substitutions`:
 	- closing `)` must not be inside an `alias`
 	- unignored `traps` are reset to default even if the `command substitution` only contains a `trap` command
+- `signal`:
+	- `SIGTTIN`, `SIGTTOU` and `SIGTSTP` are always ignored at startup, even if `-m` is not active.
+	- when shell is *interactive* (`-i`), `trap` actions (`reset` or `catch`) are allowed on signals whiche were *ignored on entry*.
+- `exit`:
+	- TODO: cf `srcs/builtins/exit.c`
 - ...
 
 ### `$@` / `$*` UNSPECIFIED CASES IMPLEMENTATIONS

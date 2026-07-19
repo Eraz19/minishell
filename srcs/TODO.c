@@ -3,10 +3,13 @@
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
 
-t_error	scanner_set_cmd_sub_input(const t_string *cmd_string)
+/* ---------- TODO: scanner ---------- */
+
+t_error	scanner_set_cmd_sub_input(t_scanner *scanner, const t_string *cmd)
 {
-	(void)cmd_string;
-	return (error(ERR_NO));
+	(void)scanner;
+	(void)cmd;
+	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
 /* ---------- TODO: shell ---------- */
@@ -200,14 +203,3 @@ t_error	builtin_umask(int argc, char **argv, char **envp, int *exit_status)
 	(void)exit_status;
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
-t_error	builtin_wait(int argc, char **argv, char **envp, int *exit_status)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
-
-// Regular builtins
-

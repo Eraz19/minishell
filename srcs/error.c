@@ -20,7 +20,7 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_ASSIGNMENT_MISSING_NAME)
 		return ("missing assignment name");
 	else if (err.type == ERR_INVALID_USAGE)
-		return ("usage");
+		return ("invalid usage");
 	else if (err.type == ERR_FD_INVALID)
 		return ("invalid file descriptor");
 	else if (err.type == ERR_HOOK_INVALID_RHS_LEN)
@@ -91,6 +91,8 @@ const char	*error_to_string(t_error err)
 		return ("invalid alias name");
 	else if (err.type == ERR_ALIAS_NOT_FOUND)
 		return ("not found");
+	else if (err.type == ERR_PID_INVALID)
+		return ("invalid process or job id");
 	// posix_write() error
 	else if (err.type == ERR_POSIX_WRITE)
 		return ("write error");
@@ -112,6 +114,8 @@ const char	*error_to_string(t_error err)
 		return ("cmd sub closing parenthese found");
 	else if (err.type == ERR_EXIT)
 		return ("exit");
+	else if (err.type == ERR_EXIT_WITH_CURRENT_STATUS)
+		return ("exit with current status");
 	else if (err.type == ERR_INTERRUPTED)
 		return ("interupted by signal");
 	else if (err.type == ERR_UB)
@@ -292,4 +296,35 @@ t_error	error_priorize(t_error previous, t_error new)
 	(void)loser;
 #endif
 	return (winner);
+}
+
+t_error	error_drop_non_fatal(t_error err)
+{
+	bool	is_interactive;
+	t_error	internal_err;
+
+	if (err.type == ERR_NO)
+		return (err);
+	if (err.type < ERR_EXIT_WITH_CURRENT_STATUS)
+	{
+		fprintf(stderr, YELLOW "[ERROR ] non-fatal error dropped (%s)\n" NC,
+			error_to_string(err));
+		return (error(ERR_NO));
+	}
+	if (err.type == ERR_EXIT_WITH_CURRENT_STATUS || err.type == ERR_EXIT
+		|| err.type == ERR_POSIX_READ || err.type == ERR_UB
+		|| err.type == ERR_INTERNAL || err.type == ERR_LIBC
+		|| err.type == ERR_INTERRUPTED)
+		return (err);
+	internal_err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (internal_err.type)
+		return (error_priorize(err, internal_err));
+	if (is_interactive == true)
+	{
+		(void)error_print(err, NULL, NULL);
+		fprintf(stderr, YELLOW "[ERROR ] non-fatal error dropped (%s)\n" NC,
+			error_to_string(err));
+		return (error(ERR_NO));
+	}
+	return (err);
 }

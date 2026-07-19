@@ -139,18 +139,8 @@ t_error	scanner_cmd_sub_init(
 			const t_scanner *main_scanner,
 			t_scanner *cmd_sub_scanner);
 
-/**
- * @ingroup scanner
- * @brief Loads @p cmd_string as the input of the forked subshell's
- *        scanner, replacing the input inherited from the parent.
- *
- * @warning STUB (TODO.c): currently ignores @p cmd_string and returns
- *          @c ERR_NO; the subshell still scans the inherited input.
- * @param cmd_string Command text of the substitution
- *                   (borrowed, read-only).
- * @return @c ERR_NO.
- */
-t_error	scanner_set_cmd_sub_input(const t_string *cmd_string);
+// TODO: doc
+t_error	scanner_set_cmd_sub_input(t_scanner *scanner, const t_string *cmd);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

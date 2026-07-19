@@ -43,6 +43,9 @@ typedef enum e_error_type
 	ERR_PARAM_BAD_SUBSTITUTION,				// [ 1] [EXPANDER]		Requalified as ERR_POSIX_EXPANSION (printed)
 	ERR_ALIAS_NOT_FOUND,					// [ 1] [BUILTINS]		alias/unalias: requalified as ERR_BUILTIN, printed there with the utility name
 	ERR_ALIAS_INVALID_NAME,					// [ 1] [BUILTINS]
+	ERR_SIG_WAS_IGNORED_ON_ENTRY,			// [ 1] [TRAP]			Absorbed by trap special builtin
+	// BUILTIN_WAIT
+	ERR_PID_INVALID,						// [ 1]	[WAIT]			Absorbed by wait builtin
 	// FT_GETOPT
 	ERR_OPT_INVALID,						// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	ERR_OPT_INVALID_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
@@ -63,9 +66,10 @@ typedef enum e_error_type
 	ERR_BREAK = 103,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
 	ERR_RETURN = 104,						// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
 	ERR_CMD_SUB_END_FOUND = 105,			// [ 5] [PARSER]		Absorbed by parser_build_cst()
-	ERR_EXIT = 106,							// [ 5] [-]				Exit builtin has been called
-	ERR_INTERRUPTED = 107,					// [ 5] [-]				[Y-Y-?] Always fatal (TODO: signal manager must set exit status)
-	ERR_UB = 108,							// [ 5] [-]				[?-?-Y]	Always fatal
+	ERR_EXIT_WITH_CURRENT_STATUS = 106,		// [ 5] [SIGNAL]		Requalified as ERR_EXIT after setting $? properly
+	ERR_EXIT = 107,							// [ 5] [-]				Exit builtin has been called with n as argument or ERR_EXIT_WITH_CURRENT_STATUS has been requalified
+	ERR_INTERRUPTED = 108,					// [ 5] [WAIT]			Absorbed by wait builtin
+	ERR_UB = 109,							// [ 5] [-]				[?-?-Y]	Always fatal
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// INTERNAL ERRORS (can be returned by any module or builtin)
 	ERR_INTERNAL = 110,						// [ 9] [-]				[Y-Y-Y]	Always fatal
@@ -162,5 +166,7 @@ void	print_unspecified_behaviour(
 			const char *optional_prefix,
 			const char *posix_citation,
 			const char *implemented_as);
+
+t_error	error_drop_non_fatal(t_error err);
 
 #endif

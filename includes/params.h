@@ -92,6 +92,8 @@ t_error	params_set_function(t_ast_function_def *function_def);
 t_error	params_get_function(const char *name, t_function **out);
 void	params_stop_function(t_function **function);
 t_error	params_unset_function(const char *name);
+
+// @ret ERR_INTERNAL
 t_error	params_get_last_status(int *out);
 int		params_get_last_status_from(t_params *params);
 
@@ -185,11 +187,11 @@ t_error	params_push_positionals(t_positionals *src);
 t_error	params_pop_positionals(void);
 
 // TODO: doc
-// @ret ERR_LIBC / ERR_INTERRUPTED
+// @ret ERR_NO / ERR_LIBC
 t_error	params_reap(t_params *params);
 
 // TODO: doc
-// @ret ERR_INTERNAL
+// @ret ERR_NO / ERR_INTERNAL / ERR_LIBC
 t_error	params_register_process(pid_t pid);
 
 /**
@@ -263,10 +265,10 @@ t_error	params_shift_positionals(size_t n);
  */
 t_error	params_unset_variable(const t_string *name);
 
-// TODO: doc
+// @ret ERR_NO / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
 t_error	params_wait(pid_t pid, int *status);
 
-// TODO: doc
+// @ret ERR_NO / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
 t_error	params_wait_all(int *status);
 
 /* ************************************************************************* */

@@ -21,3 +21,13 @@ VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 		- Utiliser `free_char_ptr_void()` au lieu de `free` comme callback pour les `vector_fre()` contenant des `char *`
 	- replace `string_read_all()` by `posix_read()` and make `posix_read()` use `string_read_all()` (don't retry auto !)
 	- Pour debug sous `Linux` => `launch.json` => `"MIMode": "gdb"`
+- ✅ `exit`:
+	- ✅ fixed: citation (section + wording)
+	- ✅ fixed: didn't handle `--`
+	- ✅ fixed: didn't handle `n < 0` case
+	- ✅ fixed: correctly handle `n == 256` case
+	- ✅ fixed: correctly handle `n > 256` by checking if corresponds to `128 + sig`
+	- ✅ fixed: always return `ERR_EXIT` / `ERR_EXIT_WITH_CURRENT_STATUS`:
+		- "**shall** cause the shell to **exit** from its current execution environment"
+		- "the **wait status** of the shell or subshell is **unspecified**"
+		- user expect to exit

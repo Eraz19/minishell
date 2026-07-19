@@ -68,5 +68,5 @@ t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner)
 		return (error_sys());
 	else if (pid == 0)
 		cmd_exec_child(cmd, runner);
-	return (posix_wait(pid, &cmd->exit_status));
+	return (posix_wait_and_retry(pid, &cmd->exit_status));
 }

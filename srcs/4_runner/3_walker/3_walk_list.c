@@ -83,7 +83,7 @@ static inline t_error	walk_list_in_subshell(
 		shell_free_void();
 		exit(status);
 	}
-	return (posix_wait(pid, exit_status));
+	return (posix_wait_and_retry(pid, exit_status));
 }
 
 t_error	walk_list(t_runner *runner, t_ast_list *list, int *exit_status)
