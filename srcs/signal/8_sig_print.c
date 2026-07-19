@@ -1,4 +1,5 @@
 #include "sig.h"
+#include "sig_priv.h"
 #include "posix_helpers.h"
 #include <unistd.h>
 

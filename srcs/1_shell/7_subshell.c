@@ -49,6 +49,7 @@ static inline t_error	shell_set_stdin_to_dev_null(void)
 }
 
 // @ret ERR_LIBC
+// TODO: let the sig module do it ?!
 static inline t_error	shell_ignore_signal(int signo)
 {
 	struct sigaction	action;

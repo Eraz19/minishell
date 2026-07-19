@@ -1,7 +1,6 @@
 #ifndef SIG_H
 # define SIG_H
 
-# include "sig_priv.h"
 # include "params.h"
 # include "error.h"
 # include <stdbool.h>
@@ -15,15 +14,8 @@
  */
 void	sig_init(void);
 
-/**
- * @brief Load signal state from the process entry state and shell parameters.
- *
- * @param sig_state Signal state to populate (borrowed).
- * @param params Shell parameters used to detect interactive mode (borrowed,
- *               read-only).
- * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.
- */
-t_error	sig_load(t_sig_state *sig_state, t_params *params);
+// @ret ERR_NO / ERR_INTERNAL / ERR_LIBC
+t_error	sig_load(t_params *params);
 
 /**
  * @brief Release all resources owned by the global signal module state.

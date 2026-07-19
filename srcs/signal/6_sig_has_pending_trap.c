@@ -1,4 +1,5 @@
 #include "sig.h"
+#include "sig_priv.h"
 
 bool	sig_has_pending_trap(int *out_signo)
 {

@@ -182,7 +182,8 @@ INCLUDES		:= \
 	-Isrcs/params/5_functions \
 	-Isrcs/params/6_process \
 	-Isrcs/params/6_process/process \
-	-Isrcs/signal
+	-Isrcs/signal \
+	-Isrcs/signal/sig_action
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

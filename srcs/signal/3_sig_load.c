@@ -79,10 +79,12 @@ static inline t_error	sig_ignore_default_signals(t_sig_state *sig_state)
 	return (sig_ignore_default_signals_2(sig_state, &sa));
 }
 
-t_error	sig_load(t_sig_state *sig_state, t_params *params)
+t_error	sig_load(t_params *params)
 {
+	t_sig_state	*sig_state;
 	t_error		err;
 
+	sig_state =&g_signals.state;
 	err = sig_load_ignored_on_entry(sig_state);
 	if (err.type)
 		return (err);

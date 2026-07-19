@@ -1,4 +1,5 @@
 #include "sig.h"
+#include "sig_priv.h"
 #include "builtins.h"
 #include <stdlib.h>
 
