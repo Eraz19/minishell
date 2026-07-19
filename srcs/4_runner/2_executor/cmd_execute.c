@@ -6,6 +6,7 @@
 #include "cmd_searcher.h"
 #include "cmd_dispatcher.h"
 #include "xtrace.h"
+#include "sig.h"
 # include <stdio.h>	// DEBUG
 # include "logs.h"	// DEBUG
 # include "debug.h"	// DEBUG
@@ -22,13 +23,6 @@ static inline t_error	cmd_redirect_start(
 	else
 		err = redirect_start(redirector, &s_cmd->redirs, &cmd->exit_status);
 	return (err);
-}
-
-static inline t_error	cmd_redirect_stop(t_cmd *cmd, t_redirector *redirector)
-{
-	if (cmd->builtin != builtin_exec)
-		return (redirect_stop(redirector));
-	return (error(ERR_NO));
 }
 
 static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
@@ -71,7 +65,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 		}
 	}
 	if (redir_applied == true)
-		err = error_priorize(err, cmd_redirect_stop(cmd, &runner->redirector));
+		err = error_priorize(err, redirect_stop(&runner->redirector));
 	if (err.type && cmd->exit_status <= 0)
 		cmd->exit_status = (int)err.type;
 	*exit_status = cmd->exit_status;
@@ -81,6 +75,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 	fprintf(stderr, "[CMD   ] exit_status => %i => %i => %i\n", initial_exit_status, initial_cmd_status, *exit_status);
 	fprintf(stderr, "[CMD   ] error       = %s => %s\n", error_to_string(initial_error), error_to_string(err));
 	/* ---------- DEBUG (END) ---------- */
+	sig_process();
 	cmd_free(cmd);
 	return (err);
 }
