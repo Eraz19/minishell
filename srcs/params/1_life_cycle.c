@@ -16,6 +16,7 @@ void	params_init(t_params *params)
 
 void	params_init_subshell(t_params *params)
 {
+	option_set(&params->options, OPT_INTERACTIVE, false);
 	process_clear(&params->processes);
 }
 
