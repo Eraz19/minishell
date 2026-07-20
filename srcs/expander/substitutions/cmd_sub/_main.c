@@ -27,7 +27,7 @@ static t_error	merge_cmd_res_into_word_exp(
 		if (expander->err.type)
 			return (word_free(&word), expander->err);
 	}
-	expander->err = word_remove(&expander->word, 0, item_opt->context_len + 1);
+	expander->err = word_remove(&expander->word, 0, item_opt->context_len);
 	return (word_free(&word), expander->err);
 }
 
@@ -39,6 +39,8 @@ t_error	cmd_substitution(t_expander *expander)
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type)
 		return (expander->err);
+	if (item.opt.context_len == 3)
+		return (expander->err = word_remove(&expander->word, 0, 3));
 	expander->err = cmd_sub_run_ast(
 						expander->ast_vec,
 						expander->ast_i,

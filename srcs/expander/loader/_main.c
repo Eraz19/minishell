@@ -56,8 +56,9 @@ t_error	loader_quoted(t_loader *loader)
 	previous_local = loader->local_quoting;
 	loader->quoting = item->context;
 	loader->local_quoting = item->context;
-	while (loader->i < item->end && !loader->err.type)
+	while (loader->i <= item->end && !loader->err.type)
 	{
+
 		if (is_substitution_start(loader))
 			loader_substitution(loader);
 		else if (is_quoting_start(loader))

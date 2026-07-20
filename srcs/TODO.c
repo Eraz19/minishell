@@ -1,16 +1,6 @@
 #include "error.h"
-#include "scanner.h"
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
-
-/* ---------- TODO: scanner ---------- */
-
-t_error	scanner_set_cmd_sub_input(t_scanner *scanner, const t_string *cmd)
-{
-	(void)scanner;
-	(void)cmd;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
 
 /* ---------- TODO: shell ---------- */
 
