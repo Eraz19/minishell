@@ -2,7 +2,7 @@
 #include "qualifiers_priv.h"
 # include <assert.h>	// DEBUG
 
-bool	should_apply_qualifier_word(
+bool	qualifier_should_apply_word(
 		const t_lr_machine *machine,
 		size_t lr_state_id)
 {
@@ -10,7 +10,7 @@ bool	should_apply_qualifier_word(
 	return (machine->actions[lr_state_id][SYM_WORD].type != ACTION_ERROR);
 }
 
-bool	should_apply_qualifier_1(
+bool	qualifier_should_apply_1(
 			const t_lr_machine *machine,
 			size_t lr_state_id)
 {
@@ -24,7 +24,7 @@ bool	should_apply_qualifier_1(
 	return (true);
 }
 
-bool	rule_is_at_target(
+bool	qualifier_rule_is_at_target(
 			const t_rule_state *rule_state,
 			t_rule_id rule_id,
 			size_t target_pos)

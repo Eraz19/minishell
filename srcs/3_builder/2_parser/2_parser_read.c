@@ -1,12 +1,8 @@
 #include "parser_priv.h"
 #include "scanner.h"
-// #ifdef DEBUG_PARSING
-# include "ast.h"
+#ifdef DEBUG_PARSING
 # include <stdio.h>		// DEBUG
-# include "debug.h"		// DEBUG
-// #endif
-#ifdef DEBUG_CMD_SUB
-# include "logs.h"
+# include "logs.h"		// DEBUG
 #endif
 # include <assert.h>	// DEBUG
 

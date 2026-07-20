@@ -1,5 +1,6 @@
 # WIP
 
+- ⚠️ `qualify_2()`
 - `shell`:
 	- process `ENV` at startup:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).

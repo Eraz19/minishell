@@ -15,7 +15,6 @@ void	parser_init(t_parser *parser, t_scanner *scanner)
 	parser_here_stack_init(&parser->here_stack);
 	token_pool_init(&parser->token_pool);
 	parser->cst = NULL;
-	parser->qualifiers = NULL;
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
@@ -24,6 +23,12 @@ void	parser_init(t_parser *parser, t_scanner *scanner)
 	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
+}
+
+void	parser_cmd_sub_init(t_parser *parser, t_scanner *scanner)
+{
+	parser_init(parser, scanner);
+	parser->search_cmd_sub_end = true;
 }
 
 void	parser_clear(t_parser *parser)
@@ -51,6 +56,11 @@ void	parser_free(t_parser *parser)
 	parser_here_stack_free(&parser->here_stack);
 	token_pool_free(&parser->token_pool);
 	cst_node_free(&parser->cst);
-	free(parser->qualifiers);
 	parser_init(parser, NULL);
+}
+
+void	parser_cmd_sub_free(t_parser *parser)
+{
+	parser_free(parser);
+	parser->search_cmd_sub_end = true;
 }

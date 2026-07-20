@@ -67,6 +67,8 @@
 	- `EXIT / 0` traps are not processed when shell exists because of a `signal` for which `trap` action is `default`
 	- Like `bash`, *subshells* always reset *unignored traps* on entry. While no *command* including `trap` with at least one *operand* has been executed since entering the *subshell*, `trap` and `trap -p [condition...]` print *traps* as they were set immediately before entering the *subshell*. This remains true in `bash` and `minishell` even when `trap -p` is given one or more *condition operands* (POSIX is not precise about this specific case).
 	- Unlike `bash`, and in strict conformance with POSIX wording, `trap -p condition...` is treated as a `trap` command with at least one *operand*. Therefore, after such a command has been executed in a *subshell*, the parent *trap* snapshot is no longer available.
+- `eval`:
+	- `--` is handled
 - `exit`:
 	- TODO: cf `srcs/builtins/exit.c`
 - ...

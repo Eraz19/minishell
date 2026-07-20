@@ -11,17 +11,11 @@ void	parser_init(t_parser *parser, t_scanner *scanner);
 void	parser_clear(t_parser *parser);
 void	parser_free(t_parser *parser);
 
-void	parser_cmd_sub_init(
-			const t_parser *main_parser,
-			t_parser *cmd_sub_parser,
-			t_scanner *cmd_sub_scanner);
-void	parser_cmd_sub_free(t_parser *cmd_sub_parser);
+void	parser_cmd_sub_init(t_parser *parser, t_scanner *scanner);
+void	parser_cmd_sub_free(t_parser *parser);
 
 // Ops
 
-t_error	parser_build_qualifiers_table(
-			t_parser *parser,
-			const t_lr_machine *machine);
 t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine);
 t_error	parser_store_cst(t_parser *parser, t_parser_item *main_item);
 

@@ -1,26 +1,17 @@
 #include "rules__pub.h"
 #include "symbols.h"
 #include "first.h"
-#include "lr_state.h"
+#include "lr_state_type.h"
 #include "transition.h"
 #include "transition_type.h"
 #include "action.h"
 #include "goto.h"
-#include <stdlib.h>
+#include "qualifiers.h"
 # include "logs.h"	// DEBUG
 
 #define LR_MACHINE_ERROR_MESSAGE	"unable to build parsing tables"
 #define TRANSITION_INITIAL_CAP		6000
 #define LR_STATE_INITIAL_CAP		2000
-
-void	lr_machine_init(t_lr_machine *machine)
-{
-	rules_init(machine->rules);
-	lr_state_table_init(&machine->lr_states);
-	transition_init(&machine->transitions);
-	action_init(&machine->actions);
-	goto_init(&machine->gotos);
-}
 
 static inline t_error	lr_machine_alloc_tables(t_lr_machine *machine)
 {
@@ -66,14 +57,10 @@ t_error	lr_machine_build_tables(t_lr_machine *machine)
 	if (err.type != ERR_NO)
 		return (lr_machine_build_error(err, LR_MACHINE_ERROR_MESSAGE));
 	print_pass("actions table built                    (entries: %'6zu)\n", machine->lr_states.len * (SYM_TERMINAL_MAX + 1));
+	err = qualifiers_build_table(&machine->qualifiers, machine);
+	if (err.type != ERR_NO)
+		return (lr_machine_build_error(err, LR_MACHINE_ERROR_MESSAGE));
+	print_pass("qualifiers table built                 (entries: %'6zu)\n", machine->lr_states.len);
 	print_result("lr_machine_build_tables()");
 	return (error(ERR_NO));
-}
-
-void	lr_machine_free(t_lr_machine *machine)
-{
-	transition_free(&machine->transitions);
-	action_free(machine->lr_states.len, &machine->actions);
-	goto_free(machine->lr_states.len, &machine->gotos);
-	lr_state_table_free(&machine->lr_states);
 }

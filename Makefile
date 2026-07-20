@@ -114,12 +114,12 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/7_transition \
 	-Isrcs/3_builder/1_lr_machine/8_goto \
 	-Isrcs/3_builder/1_lr_machine/9_action \
+	-Isrcs/3_builder/1_lr_machine/10_qualifiers \
 	-Isrcs/3_builder/2_parser \
 	-Isrcs/builtins/set \
 	-Isrcs/3_builder/0_cst \
-	-Isrcs/3_builder/2_parser/1_qualifiers \
-	-Isrcs/3_builder/2_parser/2_item_stack \
-	-Isrcs/3_builder/2_parser/3_here_stack \
+	-Isrcs/3_builder/2_parser/1_item_stack \
+	-Isrcs/3_builder/2_parser/2_here_stack \
 	-Isrcs/3_builder/3_converter \
 	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \
