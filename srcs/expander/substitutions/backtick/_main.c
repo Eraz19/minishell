@@ -40,7 +40,8 @@ t_error	backtick_substitution(t_expander *expander)
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = to_str(&cmd_str, &expander->word, 0, item.opt.context_len);
+	expander->err = to_str(&cmd_str, &expander->word, 1,
+						item.opt.context_len - 2);
 	if (expander->err.type)
 		return (expander->err);
 	expander->err = cmd_sub_run_string(

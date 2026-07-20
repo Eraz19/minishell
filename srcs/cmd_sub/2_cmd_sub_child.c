@@ -29,9 +29,7 @@ static inline void	cmd_sub_child_init_subshell_string(
 	err = shell_init_subshell(SUBSHELL_NORMAL);
 	if (err.type)
 		exit((int)err.type);
-	err = scanner_set_cmd_sub_input(&shell->scanner, cmd_string);
-	if (err.type)
-		exit((int)err.type);
+	scanner_set_cmd_sub_input(&shell->scanner, cmd_string);
 	builder_clear(&shell->builder);
 }
 

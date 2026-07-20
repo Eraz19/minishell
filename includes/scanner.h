@@ -140,7 +140,7 @@ t_error	scanner_cmd_sub_init(
 			t_scanner *cmd_sub_scanner);
 
 // TODO: doc
-t_error	scanner_set_cmd_sub_input(t_scanner *scanner, const t_string *cmd);
+void	scanner_set_cmd_sub_input(t_scanner *scanner, const t_string *cmd);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
