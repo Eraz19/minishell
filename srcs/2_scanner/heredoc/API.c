@@ -2,6 +2,7 @@
 #include "body_.h"
 #include "heredoc.h"
 #include "expander.h"
+#include "scanner.h"
 
 static t_error	heredoc_read_body(
 					t_string *out,
@@ -63,7 +64,7 @@ t_error	heredoc_prepare_for_expansion(
 			t_string *body)
 {
 	t_error					err;
-	t_lexer					lexer;
+	t_scanner				scanner;
 	t_context_stack_item	*item;
 	t_string				lexer_body;
 
@@ -80,10 +81,10 @@ t_error	heredoc_prepare_for_expansion(
 		return (free(item), err);
 	if (!string_dup(&lexer_body, body))
 		return (error_sys());
-	lexer_init(&lexer);
-	err = lexer_push_input(&lexer, &lexer_body);
+	scanner_init(&scanner);
+	err = lexer_push_input(&scanner.lexer, &lexer_body);
 	if (!err.type)
-		err = lexer_track_context(&lexer,
+		err = lexer_track_context(&scanner.lexer,
 				context_stack_out, ast_vec_out, body_context_rules());
-	return (lexer_free(&lexer), err);
+	return (scanner_free(&scanner), err);
 }

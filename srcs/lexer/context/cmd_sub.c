@@ -6,7 +6,7 @@ static t_error	cmd_sub_consume_body(t_lexer *lexer, t_context_stack_item *item)
 {
 	ssize_t	closing_par_index;
 
-	lexer->err = cmd_sub_find_end(&closing_par_index,
+	lexer->err = cmd_sub_find_end(lexer->scanner, &closing_par_index,
 			&lexer->token->ast_vector);
 	if (lexer->err.type)
 		return (lexer->err);

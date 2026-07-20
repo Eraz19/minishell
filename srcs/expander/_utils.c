@@ -1,5 +1,5 @@
-#include "lexer.h"
 #include "params.h"
+#include "scanner.h"
 #include "expander_.h"
 #include "expansion_.h"
 
@@ -54,7 +54,7 @@ t_error	prepare_str_for_expansion(
 			t_string *src)
 {
 	t_error		err;
-	t_lexer		lexer;
+	t_scanner	scanner;
 	t_string	lexer_src;
 
 	err = lexer_remove_escaped_newlines(src, str_context_rules());
@@ -62,15 +62,15 @@ t_error	prepare_str_for_expansion(
 		return (err);
 	if (!string_dup(&lexer_src, src))
 		return (error_sys());
-	lexer_init(&lexer);
-	err = lexer_push_input(&lexer, &lexer_src);
+	scanner_init(&scanner);
+	err = lexer_push_input(&scanner.lexer, &lexer_src);
 	if (!err.type)
 		err = lexer_track_context(
-				&lexer,
+				&scanner.lexer,
 				context_out,
 				ast_vec_out,
 				str_context_rules());
-	return (lexer_free(&lexer), err);
+	return (lexer_free(&scanner.lexer), err);
 }
 
 t_error	get_ifs(t_string *ifs)

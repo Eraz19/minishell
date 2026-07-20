@@ -5,6 +5,8 @@
 # include "error.h"
 # include "context.h"
 
+typedef struct s_scanner	t_scanner;
+
 /** @defgroup lexer Lexer API
  *  @brief Generic, rule-driven scanning engine over an input stack.
  *
@@ -166,8 +168,9 @@ struct s_lexer
 	t_lexer_rules				rules;
 	t_lexer_input_stack_item	*input;
 	t_token						*token;
-	t_lexer_input_stack			input_stack;
 	t_context_stack				context;
+	t_scanner					*scanner;
+	t_lexer_input_stack			input_stack;
 	t_token_index				last_index;
 	bool						emited_token;
 };
@@ -263,13 +266,8 @@ typedef struct s_lexer_context_args
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
-/**
- * @ingroup lexer
- * @brief Zeroes @p lexer and initializes its empty input stack.
- *
- * @param lexer Lexer initialized by the function (borrowed).
- */
-void			lexer_init(t_lexer *lexer);
+// TODO: doc
+void	lexer_init(t_lexer *state, t_scanner *scanner);
 
 /**
  * @ingroup lexer

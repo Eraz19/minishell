@@ -10,7 +10,7 @@ t_error    scanner_cmd_sub_init(
 	scanner_init(cmd_sub_scanner);
 	cmd_sub_scanner->mode = main_scanner->mode;
 	cmd_sub_scanner->source = main_scanner->source;
-	lexer_init(&cmd_sub_scanner->lexer);
+	lexer_init(&cmd_sub_scanner->lexer, cmd_sub_scanner);
 	err = lexer_input_stack_dup(
 			&cmd_sub_scanner->lexer.input_stack,
 			&main_scanner->lexer.input_stack);

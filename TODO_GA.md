@@ -53,6 +53,8 @@
 		- Switch `t_vector`s to `t_hashmap`
 - `redirection`:
 	- when `filename` expands to more than one field: redirect to one file per field
+- `parser`:
+	- move `qualifiers` to `lr_machine` to enable `parser_cmd_sub_init()` without `main_parser` argument
 
 ---
 

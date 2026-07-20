@@ -1,0 +1,36 @@
+### SCRIPT ###
+g/base/a
+
+### RET ###
+126
+
+### OUTPUT ###
+[PARSER] READ   => [  0] [  0 -   7] [0;31mTOKEN[0m ([0;34mg/base/a[0m)
+[PARSER] READ   => [  0] [  8 -   8] [0;31mNEWLINE[0m
+[PARSER] ACCEPT =======> [0;32mSYM_complete_command[0m (token_start=0 token_count=1)
+[0;32mAST_ROOT[0m and_ors=1 asyncs=1 subshell=false
+ ╰──[0;33mAND_OR[0m pipelines=1 operators=0 async=false
+     ╰──[0;33mPIPELINE[0m negated=false commands=1
+         ╰──[0;34mCOMMAND[0m type=SIMPLE redirs=0
+             ╰──[0;32mSIMPLE_COMMAND[0m assignments=0 words=1 redirs=0
+                 ├──[0;36mASSIGNMENTS[0m count=0
+                 ├──[0;36mWORDS[0m count=1
+                 │   ╰──[0;36mWORD[0m ([0;34mg/base/a[0m)
+                 ╰──[0;31mREDIRS[0m count=0
+[0;35m###################### OUT #######################
+[0m/Users/gui/repos/minishell/minishell: runner: executor: g/base/a: command not executable
+[0;35m##################################################
+[0m[CMD   ] type        => CMD_EXTERNAL
+[CMD   ] exit_status => -1 => 126 => 126
+[CMD   ] error       = success => success
+[0;33m[WALKER] $? = 126[0m
+[0;33m[PARAMS] $? = 126[0m
+[RUNNER] handling error 0 (success)
+[RUNNER] => final error 0 (success)
+--------------------------------------------------
+[PARSER] READ   => [  1] [  9 -   9] [0;31mEOF[0m
+[PARSER] ACCEPT =======> [0;32mSYM_program[0m (token_start=1 token_count=1)
+[RUNNER] handling error 101 (end of file)
+/Users/gui/repos/minishell/minishell: end of file
+[RUNNER] => final error 101 (end of file)
+--------------------------------------------------

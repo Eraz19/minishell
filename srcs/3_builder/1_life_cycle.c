@@ -21,18 +21,3 @@ void	builder_free(t_builder *builder)
 	lr_machine_free(&builder->lr_machine);
 	parser_free(&builder->parser);
 }
-
-void	builder_cmd_sub_init(
-			const t_builder *main_builder,
-			t_cmd_sub_builder *cmd_sub_builder,
-			t_scanner *cmd_sub_scanner)
-{
-	cmd_sub_builder->lr_machine = &main_builder->lr_machine;
-	parser_cmd_sub_init(&main_builder->parser, &cmd_sub_builder->parser, cmd_sub_scanner);
-}
-
-void	builder_cmd_sub_free(t_cmd_sub_builder *cmd_sub_builder)
-{
-	cmd_sub_builder->lr_machine = NULL;
-	parser_cmd_sub_free(&cmd_sub_builder->parser);
-}

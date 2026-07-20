@@ -1466,16 +1466,16 @@ main()
 		echo -e "${GREY}filter:   ids starting with '$FILTER'${NC}"
 	fi
 
-	# run_param_tests
-	# run_pathname_tests
-	# run_field_splitting_tests
-	# run_tilde_tests
-	# run_dollar_squote_tests
-	# run_length_removal_tests
-	# run_special_param_tests
+	run_param_tests
+	run_pathname_tests
+	run_field_splitting_tests
+	run_tilde_tests
+	run_dollar_squote_tests
+	run_length_removal_tests
+	run_special_param_tests
 	run_cmd_sub_tests
-	#run_arith_tests
-	# run_quote_removal_tests
+	# run_arith_tests
+	run_quote_removal_tests
 
 	summary
 }

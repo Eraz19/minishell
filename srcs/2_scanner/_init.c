@@ -6,7 +6,7 @@
 t_error	scanner_init(t_scanner *scanner)
 {
 	*scanner = (t_scanner){0};
-	lexer_init(&scanner->lexer);
+	lexer_init(&scanner->lexer, scanner);
 	return (error(ERR_NO));
 }
 

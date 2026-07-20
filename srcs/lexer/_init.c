@@ -1,6 +1,6 @@
 #include "lexer.h"
 
-void	lexer_init(t_lexer *state)
+void	lexer_init(t_lexer *state, t_scanner *scanner)
 {
 	*state = (t_lexer){0};
 	lexer_input_stack_init(&state->input_stack);
@@ -8,6 +8,7 @@ void	lexer_init(t_lexer *state)
 	state->last_index.start = -1;
 	state->last_index.end = -1;
 	state->last_index.error = -1;
+	state->scanner = scanner;
 }
 
 void	lexer_free(t_lexer *state)
