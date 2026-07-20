@@ -9,6 +9,8 @@
 
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files
+- `signal`:
+	- remove useless `#ifdef` cf [signal.h](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/signal.h.html)
 - `libft`:
 	- update `buff_get_index()` calls to handle new `ssize_t` return type + new form `buff_get_index_c()`
 	- update `buff_append()`, `buff_prepend()`, `buff_insert()` et `buff_dup()` callers

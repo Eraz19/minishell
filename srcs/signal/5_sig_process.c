@@ -1,6 +1,7 @@
 #include "sig.h"
 #include "sig_priv.h"
 #include "builtins.h"
+#include "params.h"
 #include <stdlib.h>
 
 // @ret ERR_LIBC

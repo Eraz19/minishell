@@ -7,10 +7,16 @@ static inline t_error	sig_append_action(t_sig_action *action, t_string *out)
 	t_error		err;
 
 
-	if (action->type == SIG_DEFAULT && !string_append_n(out, "-", 1))
-		return (error_sys());
-	else if (action->type == SIG_IGNORED && !string_append_n(out, "''", 2))
-		return (error_sys());
+	if (action->type == SIG_DEFAULT)
+	{
+		if (!string_append_n(out, "-", 1))
+			return (error_sys());
+	}
+	else if (action->type == SIG_IGNORED)
+	{
+		if (!string_append_n(out, "''", 2))
+			return (error_sys());
+	}
 	else
 	{
 		err = serialize(action->cmd.data, &serialized_cmd);
