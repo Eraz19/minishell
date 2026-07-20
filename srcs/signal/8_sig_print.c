@@ -17,7 +17,7 @@ static inline t_error	sig_print_one(t_sig_action *action, t_sig_id sig_id)
 	return (err);
 }
 
-static inline t_error	sig_print_and_absorb(
+static inline t_error	sig_print_err_and_absorb(
 							t_error err,
 							const char *builtin_name,
 							const char *arg,
@@ -51,7 +51,7 @@ t_error	sig_print_conditions(
 			if (err.type == ERR_NO)
 				err = sig_print_one(&g_signals.state.actions[sig_id], sig_id);
 			else
-				err = sig_print_and_absorb(
+				err = sig_print_err_and_absorb(
 						err, builtin_name, conditions[i], exit_status);
 		}
 		if (err.type)
