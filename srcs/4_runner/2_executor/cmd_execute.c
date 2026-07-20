@@ -35,6 +35,7 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied, int *exit_status)
 {
 	bool	interactive;
+	int		signo;
 	t_error	option_err;
 	int		initial_cmd_status;		// DEBUG
 	int		initial_exit_status;	// DEBUG
@@ -48,6 +49,12 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 	if (err.type && err.type != ERR_EXIT && err.type != ERR_EXIT_WITH_CURRENT_STATUS)
 	{
 		(void)error_print(err, NULL, NULL);
+		if (err.type == ERR_INTERRUPTED)
+		{
+			if (sig_has_pending_trap(&signo))
+				cmd->exit_status = ERR_POSIX_SIGNAL_BASE_CODE + signo;
+			err.type = ERR_NO;
+		}
 		if (err.type == ERR_REDIRECTION)
 		{
 			if (cmd->type == CMD_SPECIAL_BUILTIN)
