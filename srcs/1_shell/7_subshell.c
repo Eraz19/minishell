@@ -2,11 +2,10 @@
 #include "posix_helpers.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include <signal.h>
 #include "runner.h"
 #include "sig.h"
-# include "logs.h"
 
+// @ret ERR_NO / ERR_INTERNAL
 t_error	shell_is_subshell(bool *out)
 {
 	t_shell	*shell;
@@ -19,14 +18,7 @@ t_error	shell_is_subshell(bool *out)
 	return (error(ERR_NO));
 }
 
-static inline t_error	shell_reset_unignored_traps(t_subshell_mode mode)
-{
-	if (mode == SUBSHELL_CMD_SUB_TRAP_ONLY)
-		return (error(ERR_NO));
-	return (sig_init_subshell());
-}
-
-// @ret ERR_INVALID_USAGE / ERR_INTERRUPTED / ERR_LIBC
+// @ret ERR_INVALID_USAGE / ERR_LIBC
 static inline t_error	shell_set_stdin_to_dev_null(void)
 {
 	int		dev_null_fd;
@@ -48,56 +40,24 @@ static inline t_error	shell_set_stdin_to_dev_null(void)
 	return (err);
 }
 
-// @ret ERR_LIBC
-// TODO: let the sig module do it ?!
-static inline t_error	shell_ignore_signal(int signo)
-{
-	struct sigaction	action;
-
-	action.sa_handler = SIG_IGN;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = 0;
-	if (sigaction(signo, &action, NULL) == -1)
-		return (error_sys());
-	return (error(ERR_NO));
-}
-
-// @ret ERR_INVALID_USAGE / ERR_INTERRUPTED / ERR_LIBC
-static inline t_error	shell_handle_async_and_or(t_shell *shell, t_subshell_mode mode)
-{
-	t_error	err;
-
-	if (mode != SUBSHELL_ASYNC_AND_OR)
-		return (error(ERR_NO));
-	if (option_is_active_in(shell->params.options, OPT_MONITOR) == true)
-		return (error(ERR_NO));
-	err = shell_set_stdin_to_dev_null();
-	if (err.type == ERR_NO)
-		err = shell_ignore_signal(SIGINT);
-	if (err.type == ERR_NO)
-		err = shell_ignore_signal(SIGQUIT);
-	return (err);
-}
-
 t_error	shell_init_subshell(t_subshell_mode mode)
 {
 	t_shell	*shell;
+	bool	job_control;
 	t_error	err;
 
 	shell = shell_get();
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL),
 					__func__, "shell not found", NULL, NULL));
+	job_control = option_is_active_in(shell->params.options, OPT_MONITOR);
 	shell->is_subshell = true;
-	params_init_subshell(&shell->params);
+	params_init_subshell(&shell->params);		// sets OPT_INTERACTIVE to false + clear process table
 	scanner_init_subshell(&shell->scanner);
 	runner_init_subshell(&shell->runner);
-	err = shell_reset_unignored_traps(mode);
-	if (err.type == ERR_NO)
-	{
-		option_set(&shell->params.options, OPT_INTERACTIVE, false);
-		err = shell_handle_async_and_or(shell, mode);
-	}
+	err = sig_init_subshell(mode == SUBSHELL_ASYNC_AND_OR && !job_control);
+	if (err.type == ERR_NO && mode == SUBSHELL_ASYNC_AND_OR && !job_control)
+		err = shell_set_stdin_to_dev_null();
 	if (err.type)
 	{
 		err = error_print(err, "subshell initialization failed", NULL, NULL);

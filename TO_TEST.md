@@ -1,8 +1,32 @@
-# BUGS
+# SIGNALS
 
 ```bash
-$(echo echo)$(echo hello)
-#should exit with 127, actually exit with 0
+kill -QUIT $$
+echo "still here after initial QUIT"
+trap 'printf "\n[TRAP QUIT]\n"' QUIT
+kill -QUIT $$
+echo "still here after trapped QUIT"
+trap - QUIT
+kill -QUIT $$
+echo "still here after trap - QUIT"
+
+kill -INT $$
+echo "still here after initial INT"
+trap 'printf "\n[TRAP INT]\n"' INT
+kill -INT $$
+echo "still here after trapped INT"
+trap - INT
+kill -INT $$
+echo "still here after trap - INT"
+
+kill -TERM $$
+echo "still here after initial TERM"
+trap 'printf "\n[TRAP TERM]\n"' TERM
+kill -TERM $$
+echo "still here after trapped TERM"
+trap - TERM
+kill -TERM $$
+echo "still here after trap - TERM"
 ```
 
 # COMMAND SUBSTITUTION

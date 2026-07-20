@@ -1,13 +1,31 @@
 # SIGNAL MANAGE
 
-- 🚨 `functions` in `params` + `runner` wtf ?
+- ⚠️ `signal`:
+	- `sig_init_subshell()`:
+		- utiliser `sig_install_default()`
+		- also restore `EXIT` action
+		- forcer `SIG_IGN` pour `SIGINT` et `SIGQUIT`
+	- remove useless `#ifdef` cf [signal.h](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/signal.h.html)
 
-- ⚠️ `POSIX` requirements before `fork`, etc ?
 - ⚠️ `shell`:
 	- ⚠️ `shell_init_subshell()`:
 		- Do the optional check of cmd sub containing only a trap command (lex only):
-		- too complicated to handle the otherwise statement
-		- document it in unspecified behaviours
+			- too complicated to handle the otherwise statement
+			- document it in unspecified behaviours
 	- ⚠️ `shell_ignore_signal()`:
 		- let `sig` module handle it !
-- Builtin `eval`
+	- ⚠️ process `ENV` at startup:
+		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
+		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
+- `builtins`:
+	- `eval`
+	- `continue`
+	- `break`
+	- `return`
+- `options`:
+	- handle all options properly
+- `undefined_behaviour()`:
+	- print la tête à Xavier
+- `runner-executor`:
+	- ⚠️ `exec` specific flow
+	- ⚠️ `command` specific flow

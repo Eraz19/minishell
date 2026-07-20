@@ -10,7 +10,7 @@ t_error	shell_load(t_shell_loading_options *options)
 	err = params_load(&options->shell->params, options->argc, options->argv,
 			options->envp);
 	if (err.type == ERR_NO)
-		err = sig_load(&options->shell->params);
+		err = sig_load();
 	if (err.type == ERR_NO)
 		err = history_load(&options->shell->history);
 	if (err.type == ERR_NO)

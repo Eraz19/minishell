@@ -1,28 +1,3 @@
-# WIP
-
-- `builtins`:
-	- `break`
-	- `continue`
-	- `return`
-	- `wait`
-	- `trap`
-	- `fg` ?
-- **all**:
-	- ⚠️ retry on `EINTR` => shell only compute signals in *safe points*
-	- handle all `options` properly
-- `shell`:
-	- process `ENV`:
-		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
-		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
-	- `shell_reset_unignored_traps()`: waiting for `trap` / `signal` implementation
-- `undefined_behaviour()`:
-	- print la tête à Xavier
-- `runner-executor`:
-	- ⚠️ `exec` specific flow
-	- ⚠️ `command` specific flow
-
----
-
 # KEEP IN MIND
 
 - 💡 Les erreurs dépendent de l'opération qui a échouée:
