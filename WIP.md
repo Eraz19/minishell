@@ -1,6 +1,7 @@
 # SIGNAL MANAGE
 
-- 🏁 *safe point* après chaque `simple command`
+- 🚨 `functions` in `params` + `runner` wtf ?
+
 - ⚠️ `POSIX` requirements before `fork`, etc ?
 - ⚠️ `shell`:
 	- ⚠️ `shell_init_subshell()`:
@@ -9,3 +10,4 @@
 		- document it in unspecified behaviours
 	- ⚠️ `shell_ignore_signal()`:
 		- let `sig` module handle it !
+- Builtin `eval`

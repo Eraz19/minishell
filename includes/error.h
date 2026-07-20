@@ -66,7 +66,7 @@ typedef enum e_error_type
 	ERR_BREAK = 103,						// [ 5] [LOOP WALKER]	Absorbed by targeted loop (or external one)
 	ERR_RETURN = 104,						// [ 5] [FUNC WALKER]	Absorbed (exit status is produced by the builtin)
 	ERR_CMD_SUB_END_FOUND = 105,			// [ 5] [PARSER]		Absorbed by parser_build_cst()
-	ERR_EXIT_WITH_CURRENT_STATUS = 106,		// [ 5] [SIGNAL]		Requalified as ERR_EXIT after setting $? properly
+	ERR_EXIT_WITH_CURRENT_STATUS = 106,		// [ 5] [SIG / PIPE]	Requalified as ERR_EXIT after setting $? properly
 	ERR_EXIT = 107,							// [ 5] [-]				Exit builtin has been called with n as argument or ERR_EXIT_WITH_CURRENT_STATUS has been requalified
 	ERR_INTERRUPTED = 108,					// [ 5] [WAIT]			Absorbed by wait builtin
 	ERR_UB = 109,							// [ 5] [-]				[?-?-Y]	Always fatal

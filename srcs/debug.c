@@ -617,6 +617,24 @@ static void	ast_log_token_ast_vector(
 	}
 }
 
+static void	ast_log_token_ast_roots(
+	t_token *token,
+	size_t depth,
+	bool *lasts)
+{
+	size_t		i;
+	t_ast_root	*root;
+
+	i = 0;
+	while (i < token->ast_vector.len)
+	{
+		root = AST_AT(t_ast_root, &token->ast_vector, i);
+		ast_log_list("AST_ROOT", root, depth, lasts,
+			i + 1 == token->ast_vector.len);
+		i++;
+	}
+}
+
 static void	ast_log_token_vector(
 	const char *name,
 	const char *item_name,
@@ -638,8 +656,7 @@ static void	ast_log_token_vector(
 			CYAN, item_name);
 		ast_log_token_value(token);
 		fprintf(stderr, "\n");
-		ast_log_token_ast_vector("TOKEN_AST_VECTOR", token,
-			depth + 2, lasts, true);
+		ast_log_token_ast_roots(token, depth + 2, lasts);
 		i++;
 	}
 }

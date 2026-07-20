@@ -1,3 +1,10 @@
+# BUGS
+
+```bash
+$(echo echo)$(echo hello)
+#should exit with 127, actually exit with 0
+```
+
 # COMMAND SUBSTITUTION
 
 ```bash
