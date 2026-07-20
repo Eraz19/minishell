@@ -51,6 +51,6 @@ void	scanner_set_cmd_sub_input(
 {
 	lexer_clear(&scanner->lexer);
 	scanner->source = cmd_string->data;
-	scanner->mode = INPUT_MODE_STRING;
+	scanner->mode = SCAN_MODE_STRING;
 }
 

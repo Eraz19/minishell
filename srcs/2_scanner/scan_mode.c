@@ -1,5 +1,5 @@
 #include "options.h"
-#include "input_mode.h"
+#include "scanner.h"
 
 static inline t_error	scan_compute_options(
 							bool *is_stdin,
@@ -16,7 +16,7 @@ static inline t_error	scan_compute_options(
 	return (err);
 }
 
-t_error	input_mode_set(t_input_mode *mode)
+t_error	scan_mode_set(t_scan_mode *mode)
 {
 	t_error	err;
 	bool	is_stdin;
@@ -27,12 +27,12 @@ t_error	input_mode_set(t_input_mode *mode)
 	if (err.type != ERR_NO)	
 		return (err);
 	if (is_stdin && is_interactive)
-		*mode = INPUT_MODE_STDIN_TTY;
+		*mode = SCAN_MODE_STDIN_TTY;
 	else if (is_stdin)
-		*mode = INPUT_MODE_STDIN_PIPE;
+		*mode = SCAN_MODE_STDIN_PIPE;
 	else if (is_cmd_string)
-		*mode = INPUT_MODE_STRING;
+		*mode = SCAN_MODE_STRING;
 	else
-		*mode = INPUT_MODE_FILE;
+		*mode = SCAN_MODE_FILE;
 	return (error(ERR_NO));
 }

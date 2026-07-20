@@ -42,7 +42,7 @@ t_lexer_rules	scanner_lexer_rules(t_scanner *scanner)
 
 	rules.recognize = scanner_recognize;
 	rules.on_input_end = scanner_lexer_on_input_end;
-	if (scanner->mode == INPUT_MODE_STDIN_TTY)
+	if (scanner->mode == SCAN_MODE_STDIN_TTY)
 		rules.on_eoi = scanner_lexer_continuation;
 	else
 		rules.on_eoi = NULL;
