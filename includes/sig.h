@@ -1,7 +1,6 @@
 #ifndef SIG_H
 # define SIG_H
 
-# include "params.h"
 # include "error.h"
 # include <stdbool.h>
 
@@ -14,8 +13,23 @@
  */
 void	sig_init(void);
 
+/**
+ * @brief Reset trapped signal handlers to defaults for a subshell.
+ *
+ * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.
+ */
+t_error	sig_init_subshell(bool async_no_job_ctrl);
+
 // @ret ERR_NO / ERR_INTERNAL / ERR_LIBC
-t_error	sig_load(t_params *params);
+t_error	sig_load(void);
+
+/**
+ * @brief Clear transient signal module state without uninstalling handlers.
+ *
+ * @note This is currently a no-op because signal state owns no transient
+ *       allocation and pending signal tracking must remain intact.
+ */
+void	sig_clear(void);
 
 /**
  * @brief Release all resources owned by the global signal module state.
@@ -25,14 +39,6 @@ void	sig_free(void);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
-
-/**
- * @brief Clear transient signal module state without uninstalling handlers.
- *
- * @note This is currently a no-op because signal state owns no transient
- *       allocation and pending signal tracking must remain intact.
- */
-void	sig_clear(void);
 
 /**
  * @brief Report whether a trapped signal is pending.
@@ -45,13 +51,6 @@ bool	sig_has_pending_trap(int *out_signo);
 
 // TODO: doc
 bool	sig_int_is_pending(void);
-
-/**
- * @brief Reset trapped signal handlers to defaults for a subshell.
- *
- * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.
- */
-t_error	sig_init_subshell(void);
 
 /**
  * @brief Print all signal actions in @c trap @c -p format.

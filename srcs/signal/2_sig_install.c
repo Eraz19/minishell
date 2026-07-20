@@ -67,8 +67,6 @@ t_error	sig_install_default(t_sig_action *sig_action, int signo)
 {
 	struct sigaction	sa;
 
-	if (signo == SIGINT)
-		return (sig_install_shell_default_sigint(sig_action));
 	sa.sa_handler = SIG_DFL;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
