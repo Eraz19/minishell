@@ -4,7 +4,32 @@
 # include "error.h"
 # include "token.h"
 # include "lexer.h"
-# include "input_mode.h"
+
+/** @defgroup input_mode Input mode API
+ *  @brief Identifies where the shell reads its commands from.
+ *
+ *  The input mode is derived once at startup from the invocation options
+ *  (@c -s, @c -i, @c -c) and drives how the scanner sources its input and
+ *  whether interactive behaviour (prompting) is enabled.
+ */
+
+/**
+ * @ingroup input_mode
+ * @enum e_input_mode
+ * @brief Source the shell reads its commands from.
+ */
+typedef enum e_scan_mode
+{
+	SCAN_MODE_NONE,
+	SCAN_MODE_FILE,
+	SCAN_MODE_STRING,
+	SCAN_MODE_STDIN_TTY,
+	SCAN_MODE_STDIN_PIPE
+}	t_scan_mode;
+
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
 
 /** @defgroup scanner Scanner API
  *  @brief Turns raw shell input into a POSIX token stream.
@@ -65,10 +90,10 @@
  */
 typedef struct s_scanner
 {
-	t_error			err;
-	t_input_mode	mode;
-	t_lexer			lexer;
-	const char		*source;
+	t_error		err;
+	t_scan_mode	mode;
+	t_lexer		lexer;
+	const char	*source;
 }	t_scanner;
 
 /* ************************************************************************* */

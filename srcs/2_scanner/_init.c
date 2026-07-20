@@ -22,11 +22,11 @@ t_error	scanner_load(t_scanner *scanner, const char *source)
 
 	rl_catch_signals = 0;
 	rl_getc_function = reader_rl_getc;
-	scanner->mode = INPUT_MODE_NONE;
-	err = input_mode_set(&scanner->mode);
+	scanner->mode = SCAN_MODE_NONE;
+	err = scan_mode_set(&scanner->mode);
 	if (err.type != ERR_NO)
 		return (scanner->err = scanner_error_qualify(err, false));
-	if (scanner->mode == INPUT_MODE_STRING || scanner->mode == INPUT_MODE_FILE)
+	if (scanner->mode == SCAN_MODE_STRING || scanner->mode == SCAN_MODE_FILE)
 		scanner->source = source;
 	return (scanner->err);
 }
@@ -38,5 +38,5 @@ void	scanner_clear(t_scanner *scanner)
 
 void	scanner_init_subshell(t_scanner *scanner)
 {
-	scanner->mode = INPUT_MODE_STDIN_PIPE;
+	scanner->mode = SCAN_MODE_STDIN_PIPE;
 }

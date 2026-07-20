@@ -5,6 +5,7 @@
 #include "shell.h"
 #include "reader_.h"
 #include "sig.h"
+#include "signal.h"
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <unistd.h>

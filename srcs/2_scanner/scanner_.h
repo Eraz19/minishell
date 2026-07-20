@@ -115,4 +115,6 @@ void		prepare_heredoc_read_args(
 				bool strip,
 				const t_string *delim);
 
+t_error		scan_mode_set(t_scan_mode *mode);
+
 #endif
