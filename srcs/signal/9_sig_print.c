@@ -17,7 +17,7 @@ static inline t_error	sig_print_one(t_sig_action *action, t_sig_id sig_id)
 	return (err);
 }
 
-static inline t_error	sig_print_err_and_absorb(
+static inline t_error	sig_print_and_absorb(
 							t_error err,
 							const char *builtin_name,
 							const char *arg,
@@ -28,67 +28,72 @@ static inline t_error	sig_print_err_and_absorb(
 	return (error(ERR_NO));
 }
 
-// @ret ERR_NO / ERR_INTERNAL / ERR_POSIX_WRITE / ERR_LIBC
 t_error	sig_print_conditions(
-			const char *builtin_name,
+			const char *name,
 			char **conditions,
-			int *exit_status)
+			int *status)
 {
+	t_sig_state	*sig_state;
 	size_t		i;
 	t_sig_id	sig_id;
 	int			signo;
 	t_error		err;
 
+	err = sig_get_printable_state(&sig_state);
 	i = 0;
-	while (conditions[i] != NULL)
+	while (err.type == ERR_NO && conditions[i] != NULL)
 	{
-		if (str_cmp(conditions[i], "EXIT") == 0
-			|| str_cmp(conditions[i], "0") == 0)
-			err = sig_print_one(&g_signals.state.exit_action, SIG_EXIT_ID);
+		if (!str_cmp(conditions[i], "EXIT") || !str_cmp(conditions[i], "0"))
+			err = sig_print_one(&sig_state->exit_action, SIG_EXIT_ID);
 		else
 		{
 			err = sig_parse_name(conditions[i], &signo, &sig_id);
 			if (err.type == ERR_NO)
-				err = sig_print_one(&g_signals.state.actions[sig_id], sig_id);
+				err = sig_print_one(&sig_state->actions[sig_id], sig_id);
 			else
-				err = sig_print_err_and_absorb(
-						err, builtin_name, conditions[i], exit_status);
+				err = sig_print_and_absorb(err, name, conditions[i], status);
 		}
-		if (err.type)
-			return (err);
 		i++;
 	}
-	return (error(ERR_NO));
+	return (err);
 }
 
 // trap -p
 t_error	sig_print_all(void)
 {
+	t_sig_state	*sig_state;
 	t_sig_id	sig_id;
 	t_error		err;
 
+	err = sig_get_printable_state(&sig_state);
+	if (err.type)
+		return (err);
 	sig_id = 0;
 	while (sig_id < SIG_ID_COUNT)
 	{
-		err = sig_print_one(&g_signals.state.actions[sig_id], sig_id);
+		err = sig_print_one(&sig_state->actions[sig_id], sig_id);
 		if (err.type)
 			return (err);
 		sig_id++;
 	}
-	return (sig_print_one(&g_signals.state.exit_action, SIG_EXIT_ID));
+	return (sig_print_one(&sig_state->exit_action, SIG_EXIT_ID));
 }
 
 // trap
 t_error	sig_print_all_except_default(void)
 {
+	t_sig_state		*sig_state;
 	t_sig_id		sig_id;
 	t_sig_action	*action;
 	t_error			err;
-
+	
+	err = sig_get_printable_state(&sig_state);
+	if (err.type)
+		return (err);
 	sig_id = 0;
 	while (sig_id < SIG_ID_COUNT)
 	{
-		action = &g_signals.state.actions[sig_id];
+		action = &sig_state->actions[sig_id];
 		if (action->type != SIG_DEFAULT)
 		{
 			err = sig_print_one(action, sig_id);
@@ -97,7 +102,7 @@ t_error	sig_print_all_except_default(void)
 		}
 		sig_id++;
 	}
-	if (g_signals.state.exit_action.type != SIG_DEFAULT)
-		return (sig_print_one(&g_signals.state.exit_action, SIG_EXIT_ID));
-	return (error(ERR_NO));
+	if (sig_state->exit_action.type != SIG_DEFAULT)
+		return (sig_print_one(&sig_state->exit_action, SIG_EXIT_ID));
+	return (err);
 }

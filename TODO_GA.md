@@ -24,6 +24,7 @@
 	- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
 - `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
 - **ALL REPO**:
+	- replace all `ERR_INDEX_OUT_OF_BOND`, etc by `error_print()` + `ERR_INTERNAL`
 	- use `print_unspecified_behaviour()`
 	- Move `t_tokens` from `runner` to `token` module ?
 	- `const` partout

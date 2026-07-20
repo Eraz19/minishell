@@ -226,6 +226,8 @@ typedef struct s_signals
 	volatile sig_atomic_t	pending[SIG_ID_COUNT];
 	/** @brief Shell-side signal state, never accessed from the handler. */
 	t_sig_state				state;
+	t_sig_state				snapshot;
+	bool					trap_with_operand_has_been_executed;
 }	t_signals;
 
 extern t_signals	g_signals;
@@ -291,6 +293,10 @@ t_error	sig_parse_name(const char *name, int *out_signo, t_sig_id *out_sig_id);
  */
 t_error	sig_build_output(t_sig_action *action, t_sig_id sig_id, t_string *out);
 
+// TODO: doc
+// @ret ERR_INTERNAL
+t_error	sig_get_printable_state(t_sig_state **out_sig_state_ptr);
+
 /**
  * @brief Install the default action for @p signo.
  *
@@ -326,5 +332,8 @@ t_error	sig_install_shell_default_sigint(t_sig_action *sig_action);
  * @return @c ERR_NO or @c ERR_LIBC.
  */
 t_error	sig_install_trap(t_sig_action *sig_action, int signo, t_string *cmd);
+
+// TODO: doc
+void	sig_snapshot(void);
 
 #endif

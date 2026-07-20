@@ -20,6 +20,7 @@ t_error	sig_set_trap(const char *sig_name, const char *cmd)
 	t_sig_action	*action;
 	t_error			err;
 
+	g_signals.trap_with_operand_has_been_executed = true;
 	if (!string_init(&cmd_string, 0, cmd, -1))
 		return (error_sys());
 	if (str_cmp("EXIT", sig_name) == 0 || str_cmp("0", sig_name) == 0)
@@ -52,8 +53,13 @@ static inline t_error	sig_set_shell_default(t_sig_action *action, int signo)
 	else if (signo == SIGINT)
 		return (sig_install_shell_default_sigint(action));
 	else if (signo == SIGQUIT || signo == SIGTERM
-			|| signo == SIGTTIN || signo == SIGTTOU || signo == SIGTSTP)
-		return (sig_install_ignore(action, signo));
+		|| signo == SIGTTIN || signo == SIGTTOU || signo == SIGTSTP)
+	{
+		err = sig_install_ignore(action, signo);
+		if (err.type == ERR_NO)
+			action->type = SIG_DEFAULT;
+		return (err);
+	}
 	return (sig_install_default(action, signo));
 }
 
@@ -65,6 +71,7 @@ t_error	sig_set_default(const char *sig_name)
 	t_sig_action	*action;
 	t_error			err;
 
+	g_signals.trap_with_operand_has_been_executed = true;
 	sig_state = &g_signals.state;
 	if (str_cmp("EXIT", sig_name) == 0 || str_cmp("0", sig_name) == 0)
 	{
@@ -90,6 +97,7 @@ t_error	sig_set_ignore(const char *sig_name)
 	t_sig_action	*action;
 	t_error			err;
 
+	g_signals.trap_with_operand_has_been_executed = true;
 	sig_state = &g_signals.state;
 	if (str_cmp("EXIT", sig_name) == 0 || str_cmp("0", sig_name) == 0)
 	{

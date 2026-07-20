@@ -55,19 +55,19 @@ bool	sig_int_is_pending(void);
 /**
  * @brief Print all signal actions in @c trap @c -p format.
  *
- * @return @c ERR_NO, @c ERR_LIBC or @c ERR_POSIX_WRITE.
+ * @return @c ERR_NO, @c ERR_INTERNAL, @c ERR_LIBC or @c ERR_POSIX_WRITE.
  */
 t_error	sig_print_all(void);
 
 /**
  * @brief Print every non-default signal action in @c trap format.
  *
- * @return @c ERR_NO, @c ERR_LIBC or @c ERR_POSIX_WRITE.
+ * @return @c ERR_NO, @c ERR_INTERNAL, @c ERR_LIBC or @c ERR_POSIX_WRITE.
  */
 t_error	sig_print_all_except_default(void);
 
 // TODO: doc
-// @ret ERR_NO / ERR_POSIX_WRITE / ERR_LIBC
+// @ret ERR_NO / ERR_INTERNAL / ERR_POSIX_WRITE / ERR_LIBC
 t_error	sig_print_conditions(
 			const char *builtin_name,
 			char **conditions,
