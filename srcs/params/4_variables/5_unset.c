@@ -29,6 +29,6 @@ t_error	var_unset(const t_string *name)
 	if (!vector_remove(list, var_index, NULL))
 		return (error(ERR_INDEX_OUT_OF_BOUND));
 	if (str_cmp(name->data, "PATH") == 0)
-		return (cmd_cache_clear_void());
+		cmd_cache_clear(&params->cmd_cache);
 	return (error(ERR_NO));
 }

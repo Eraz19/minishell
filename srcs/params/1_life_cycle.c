@@ -12,6 +12,7 @@ void	params_init(t_params *params)
 	positionals_init_stack(&params->positionals_stack);
 	functions_init(&params->functions);
 	process_init(&params->processes);
+	cmd_cache_init(&params->cmd_cache);
 }
 
 void	params_init_subshell(t_params *params)
@@ -28,6 +29,7 @@ void	params_clear(t_params *params)
 	positionals_clear_stack(&params->positionals_stack);
 	functions_clear(&params->functions);
 	process_clear(&params->processes);
+	cmd_cache_clear(&params->cmd_cache);
 }
 
 void	params_free(t_params *params)
@@ -40,4 +42,5 @@ void	params_free(t_params *params)
 	positionals_free_stack(&params->positionals_stack);
 	functions_free(&params->functions);
 	process_free(&params->processes);
+	cmd_cache_free(&params->cmd_cache);
 }

@@ -9,9 +9,9 @@
 typedef struct s_runner
 {
 	t_redirector	redirector;
-	t_cmd_cache		cmd_cache;
 	size_t			loop_depth;
 	size_t			control_depth;
+	t_cmd_cache		*cmd_cache;
 }	t_runner;
 
 #endif

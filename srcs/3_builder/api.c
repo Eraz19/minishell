@@ -7,15 +7,8 @@
 
 t_error	builder_load(t_builder *builder)
 {
-	t_error	err;
-
 	assert(builder != NULL);
-	err = lr_machine_build_tables(&builder->lr_machine);
-	if (err.type != ERR_NO)
-		return (err);
-	return (parser_build_qualifiers_table(
-		&builder->parser,
-		&builder->lr_machine));
+	return (lr_machine_build_tables(&builder->lr_machine));
 }
 
 t_error	build_ast(t_parser *parser, const t_lr_machine *machine, t_ast_root *dst_ast)

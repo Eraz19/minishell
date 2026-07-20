@@ -9,7 +9,7 @@
 
 // Life cycle
 
-void	runner_init(t_runner *runner);
+void	runner_init(t_runner *runner, t_cmd_cache *cmd_cache);
 void	runner_init_subshell(t_runner *runner);
 t_error	runner_clear(t_runner *runner);
 void	runner_free(t_runner *runner);

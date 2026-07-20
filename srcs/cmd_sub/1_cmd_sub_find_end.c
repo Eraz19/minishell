@@ -24,7 +24,7 @@ t_error	cmd_sub_find_end(
 	err = scanner_cmd_sub_init(scanner, &cmd_sub_scanner);
 	if (err.type)
 		return (err);
-	parser_cmd_sub_init(&builder->parser, &cmd_sub_parser, &cmd_sub_scanner);
+	parser_cmd_sub_init(&cmd_sub_parser, &cmd_sub_scanner);
 	err = build_ast(&cmd_sub_parser, &builder->lr_machine, &ast_root);
 	if (err.type == ERR_NO)
 	{

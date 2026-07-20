@@ -107,7 +107,7 @@ t_error cmd_execute(t_runner *runner, const t_ast_scmd *simple_command, int *exi
 		return (cmd_finalize(&cmd, runner, err, true, exit_status));
 	if (cmd.type == CMD_EXTERNAL)
 	{
-		err = cmd_search_(&cmd, &runner->cmd_cache);
+		err = cmd_search_(&cmd, runner->cmd_cache);
 		if (err.type)
 			return (cmd_finalize(&cmd, runner, err, true, exit_status));
 	}

@@ -11,7 +11,7 @@ void	shell_init(t_shell *shell)
 	alias_init(&shell->alias, &shell->builder.parser);
 	history_init(&shell->history);
 	builder_init(&shell->builder, &shell->scanner);
-	runner_init(&shell->runner);
+	runner_init(&shell->runner, &shell->params.cmd_cache);
 	shell->is_subshell = false;
 }
 
