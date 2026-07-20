@@ -20,7 +20,10 @@ t_error	cmd_search(t_cmd *cmd, t_cmd_cache *cache)
 	}
 	if (err.type == ERR_POSIX_CMD_NOT_FOUND
 		|| err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
+	{
 		err = error_print(err, NULL,
-				"%s", cmd->name.data);
+			"%s", cmd->name.data);
+		cmd->exit_status = (int)err.type;
+	}
 	return (err);
 }
