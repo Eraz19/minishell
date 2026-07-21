@@ -86,7 +86,7 @@ t_error	reader_new_input(t_string *res);
  *         fails; @c ERR_NO otherwise (expansion failures are absorbed,
  *         printed here when not already printed by the expander).
  */
-t_error	reader_prompt(const char *name, t_string *dst);
+t_error	reader_build_prompt(const char *name, t_string *dst);
 
 // TODO: doc
 t_error	reader_read_error(t_error err, const char *source);

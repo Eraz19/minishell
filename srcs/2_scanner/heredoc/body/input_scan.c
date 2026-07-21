@@ -34,16 +34,11 @@ static t_error	body_missing_delimiter(t_body *body)
 
 t_error	body_continuation(t_body *body, bool *continuation)
 {
-	if (body->is_tty)
-	{
-		*continuation = true;
-		body->err = reader_continuation(&body->input);
-		if (body->err.type == ERR_VEOF)
-			return (body_missing_delimiter(body));
-		return (body->err);
-	}
-	else
+	*continuation = true;
+	body->err = reader_continuation(&body->input);
+	if (body->err.type == ERR_VEOF)
 		return (body_missing_delimiter(body));
+	return (body->err);
 }
 
 t_error	get_body_content(t_body *body)

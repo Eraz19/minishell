@@ -72,7 +72,10 @@ t_error	alias_add(const char *name, const char *value)
 }
 
 t_error	alias_expand_token(
-			t_string *expansion, bool *expanded, const t_string *token_value)
+			t_parser *parser,
+			t_string *expansion,
+			bool *expanded,
+			const t_string *token_value)
 {
 	t_alias		*alias;
 	const char	*raw;
@@ -82,7 +85,7 @@ t_error	alias_expand_token(
 	alias = shell_get_alias();
 	if (alias == NULL)
 		return (error(ERR_SHELL_NOT_FOUND));
-	if (!is_token_alias_expandable(alias, token_value->data))
+	if (!is_token_alias_expandable(parser, alias, token_value->data))
 		return (alias->err);
 	name = str_dup(token_value->data);
 	if (name == NULL)

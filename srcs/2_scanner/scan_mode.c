@@ -23,13 +23,12 @@ t_error	scan_mode_set(t_scan_mode *mode)
 	bool	is_interactive;
 	bool	is_cmd_string;
 
+	*mode = SCAN_MODE_NONE;
 	err = scan_compute_options(&is_stdin, &is_interactive, &is_cmd_string);
 	if (err.type != ERR_NO)	
 		return (err);
-	if (is_stdin && is_interactive)
-		*mode = SCAN_MODE_STDIN_TTY;
 	else if (is_stdin)
-		*mode = SCAN_MODE_STDIN_PIPE;
+		*mode = SCAN_MODE_STDIN;
 	else if (is_cmd_string)
 		*mode = SCAN_MODE_STRING;
 	else

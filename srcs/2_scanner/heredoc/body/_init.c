@@ -29,7 +29,6 @@ t_error	body_load(t_body *body, t_heredoc_read_args *args)
 			return (error_sys());
 	body->i = *(args->start);
 	body->mode = args->mode;
-	body->is_tty = args->is_tty;
 	body->delim = *(args->delim);
 	return (error(ERR_NO));
 }

@@ -45,9 +45,7 @@ t_error	scanner_read_heredoc(
 	return (string_free(&delim_exp), scanner->err);
 }
 
-void	scanner_set_cmd_sub_input(
-			t_scanner *scanner,
-			const t_string *cmd_string)
+void	scanner_set_input(t_scanner *scanner, const t_string *cmd_string)
 {
 	lexer_clear(&scanner->lexer);
 	scanner->source = cmd_string->data;

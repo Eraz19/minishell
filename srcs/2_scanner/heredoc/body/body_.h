@@ -36,7 +36,6 @@ typedef struct s_body
 	t_string		input;
 	t_string		delim;
 	t_string		line;
-	bool			is_tty;
 	t_string		content;
 }	t_body;
 

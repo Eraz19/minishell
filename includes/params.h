@@ -7,6 +7,8 @@
 # include "positionals.h"
 # include "functions.h"
 # include "process.h"
+# include "cmd_cache.h"
+# include "fd.h"
 
 /**
  * @struct s_params
@@ -36,6 +38,10 @@ typedef struct s_params
 	t_functions			functions;
 	// TODO: doc
 	t_process_table		processes;
+	// TODO: doc
+	t_cmd_cache			cmd_cache;
+	// TODO: doc
+	t_fd_manager		fd_manager;
 }	t_params;
 
 /**
@@ -68,7 +74,7 @@ void	params_free(t_params *params);
 void	params_init(t_params *params);
 
 // TODO: doc
-void	params_init_subshell(t_params *params);
+void	params_init_subshell(t_params *params, bool async_no_job_ctrl);
 
 // TODO: doc
 void	params_clear(t_params *params);
@@ -90,12 +96,18 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp);
 // TODO: doc
 t_error	params_set_function(t_ast_function_def *function_def);
 t_error	params_get_function(const char *name, t_function **out);
+t_error	params_get_cmd_cache(t_cmd_cache **out_cmd_cache_ptr);
 void	params_stop_function(t_function **function);
 t_error	params_unset_function(const char *name);
 
 // @ret ERR_INTERNAL
 t_error	params_get_last_status(int *out);
+
+// @ret ERR_INTERNAL
 int		params_get_last_status_from(t_params *params);
+
+// @ret ERR_INTERNAL
+t_error	params_get_fd_manager(t_fd_manager **out_fd_manager_ptr);
 
 /**
  * @brief Build the exported environment as a @ref t_vector of C-strings.
@@ -187,8 +199,8 @@ t_error	params_push_positionals(t_positionals *src);
 t_error	params_pop_positionals(void);
 
 // TODO: doc
-// @ret ERR_NO / ERR_LIBC
-t_error	params_reap(t_params *params);
+// @ret ERR_NO / ERR_INTERNAL / ERR_LIBC
+t_error	params_reap(void);
 
 // TODO: doc
 // @ret ERR_NO / ERR_INTERNAL / ERR_LIBC

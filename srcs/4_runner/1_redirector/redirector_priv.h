@@ -3,7 +3,6 @@
 
 # include "error.h"
 # include "ast.h"
-# include "redirector_type.h"
 
 // Type
 
@@ -32,7 +31,6 @@ void	redir_free(t_redir *redir);
 // TODO: doc
 t_error	redirect_apply(
 			const t_ast_redirection *redirection,
-			t_redirector *redirector,
 			bool permanent,
 			int *exit_status);
 
@@ -67,39 +65,14 @@ t_error	redirect_resolve_location(t_redir *redir);
  * @return @c ERR_NO, @c ERR_REDIRECTION, @c ERR_INCOHERENT_STATE or
  *         @c ERR_LIBC.
  */
-t_error	redirect_prepare(
-			t_redir *redirection,
-			t_redirector *redirector,
-			bool permanent);
+t_error	redirect_prepare(t_redir *redirection, bool permanent);
 
 // TODO: doc
 // @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
-t_error	redirect_open(t_redirector *redirector, t_redir *redir, int *out_fd);
+t_error	redirect_open(t_redir *redir, int *out_fd);
 
 // TODO: doc
 // @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
-t_error	redirect_get_heredoc_path(
-			t_redirector *redirector,
-			const t_string *body,
-			char **out_path);
-
-/* ************************************************************************* */
-/*                                   ERRORS                                  */
-/* ************************************************************************* */
-
-/**
- * @brief Print a redirector-scoped error message.
- *
- * @param message Message suffix to print (borrowed, read-only).
- * @return Error descriptor carrying @c ERR_REDIRECTION.
- */
-t_error	redirect_print_error(const char *message);
-
-/**
- * @brief Print the standard "all file descriptors are already used" error.
- *
- * @return Error descriptor carrying @c ERR_REDIRECTION.
- */
-t_error	redirect_print_error_all_fd_used(void);
+t_error	redirect_prepare_heredoc_file(const t_string *body, char **out_path);
 
 #endif

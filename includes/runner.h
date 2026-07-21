@@ -1,21 +1,19 @@
 #ifndef RUNNER_H
 # define RUNNER_H
 
-# include "error.h"
 # include "runner_type.h"
-# include "shell.h"
-
-// TODO: doc
+# include "ast.h"
 
 // Life cycle
 
-void	runner_init(t_runner *runner);
-void	runner_init_subshell(t_runner *runner);
-t_error	runner_clear(t_runner *runner);
+t_error	runner_init(t_runner *runner, t_scan_mode mode);
+void	runner_clear(t_runner *runner);
 void	runner_free(t_runner *runner);
 
 // Ops
 
-void	runner_run(t_shell *shell);
+// TODO: doc
+void	runner_run(t_runner *runner);
+void	runner_run_ast(t_runner *runner, t_ast_root *ast_root);
 
 #endif

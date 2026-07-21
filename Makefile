@@ -61,7 +61,6 @@ SRCS			:= \
 	$(wildcard srcs/ast/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/builtins/*/*.c) \
-	$(wildcard srcs/cmd_cache/*.c) \
 	$(wildcard srcs/cmd_sub/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
@@ -114,21 +113,18 @@ INCLUDES		:= \
 	-Isrcs/3_builder/1_lr_machine/7_transition \
 	-Isrcs/3_builder/1_lr_machine/8_goto \
 	-Isrcs/3_builder/1_lr_machine/9_action \
+	-Isrcs/3_builder/1_lr_machine/10_qualifiers \
 	-Isrcs/3_builder/2_parser \
 	-Isrcs/builtins/set \
 	-Isrcs/3_builder/0_cst \
-	-Isrcs/3_builder/2_parser/1_qualifiers \
-	-Isrcs/3_builder/2_parser/2_item_stack \
-	-Isrcs/3_builder/2_parser/3_here_stack \
+	-Isrcs/3_builder/2_parser/1_item_stack \
+	-Isrcs/3_builder/2_parser/2_here_stack \
 	-Isrcs/3_builder/3_converter \
 	-Isrcs/3_builder/3_converter/1_redirection \
 	-Isrcs/4_runner \
 	-Isrcs/4_runner/0_cmd_expansion \
 	-Isrcs/4_runner/0_xtrace \
 	-Isrcs/4_runner/1_redirector \
-	-Isrcs/4_runner/1_redirector/1_stack_and_frame \
-	-Isrcs/4_runner/1_redirector/2_tracker \
-	-Isrcs/4_runner/1_redirector/3_fd_manager \
 	-Isrcs/4_runner/2_executor \
 	-Isrcs/4_runner/2_executor/0_cmd \
 	-Isrcs/4_runner/2_executor/0_entry_is_target \
@@ -181,8 +177,12 @@ INCLUDES		:= \
 	-Isrcs/params/5_functions \
 	-Isrcs/params/6_process \
 	-Isrcs/params/6_process/process \
-	-Isrcs/signal \
-	-Isrcs/signal/sig_action
+	-Isrcs/params/7_cmd_cache \
+	-Isrcs/params/8_fds \
+	-Isrcs/params/8_fds/1_stack_and_frame \
+	-Isrcs/params/8_fds/2_fd_tracker \
+	-Isrcs/params/9_signal \
+	-Isrcs/params/9_signal/sig_action
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

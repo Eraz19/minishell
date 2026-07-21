@@ -2,6 +2,7 @@
 #include "scanner.h"
 #include "expander_.h"
 #include "expansion_.h"
+#include "parser.h"
 
 bool    flag_is_active(uint bitset, uint flag)
 {
@@ -48,29 +49,34 @@ t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs)
 	return (string_free(&str), err);
 }
 
+// TO_TALK
 t_error	prepare_str_for_expansion(
 			t_context_stack *context_out,
 			t_ast_vector *ast_vec_out,
 			t_string *src)
 {
 	t_error		err;
-	t_scanner	scanner;
+	t_parser	parser;
 	t_string	lexer_src;
 
-	err = lexer_remove_escaped_newlines(src, str_context_rules());
+	err = parser_init(&parser, SCAN_MODE_STRING);
 	if (err.type)
 		return (err);
+	err = lexer_remove_escaped_newlines(
+			&parser.scanner.lexer, src, str_context_rules());
+	if (err.type)
+		return (parser_free(&parser), err);
+	parser_clear(&parser);
 	if (!string_dup(&lexer_src, src))
-		return (error_sys());
-	scanner_init(&scanner);
-	err = lexer_push_input(&scanner.lexer, &lexer_src);
-	if (!err.type)
+		return (err = error_sys(), parser_free(&parser), err);
+	err = lexer_push_input(&parser.scanner.lexer, &lexer_src);
+	if (err.type == ERR_NO)
 		err = lexer_track_context(
-				&scanner.lexer,
+				&parser.scanner.lexer,
 				context_out,
 				ast_vec_out,
 				str_context_rules());
-	return (lexer_free(&scanner.lexer), err);
+	return (parser_free(&parser), err);
 }
 
 t_error	get_ifs(t_string *ifs)

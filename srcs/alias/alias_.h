@@ -45,25 +45,8 @@ t_error	alias_print_all(const t_key_value **pairs);
  */
 t_error	alias_print_one(t_alias *alias, const char *name);
 
-/**
- * @ingroup alias_priv
- * @brief Tests whether a token is eligible for alias expansion
- *        (POSIX 2.3.1).
- *
- * True when @p word is a valid unquoted alias name present in the map, is
- * not already being expanded (absent from the recursion-guard stack) and
- * stands in command position, unless a previous expansion's trailing
- * blank lifted the position requirement.
- *
- * @note A failure of the builder's command-position check is recorded in
- *       @c alias->err and the token is refused: callers returning
- *       @c alias->err on the not-eligible path propagate it.
- * @param alias Alias state (borrowed).
- * @param word Candidate token text, NUL-terminated C-string (borrowed,
- *             read-only).
- * @return True if the token should be expanded, false otherwise.
- */
-bool	is_token_alias_expandable(t_alias *alias, char *word);
+// TODO: doc
+bool	is_token_alias_expandable(t_parser *parser, t_alias *alias, char *word);
 
 /**
  * @ingroup alias_priv

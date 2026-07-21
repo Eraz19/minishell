@@ -62,6 +62,13 @@ echo "should be 1 => $?"
 ```
 
 ```bash
+VAR=value          => status 0
+VAR=$(true)        => status 0
+VAR=$(false)       => status 1
+VAR=${bad syntax}  => ERR_POSIX_EXPANSION
+```
+
+```bash
 $( echo hello )
 echo before$(echo mid)after
 echo before $(echo mid) after

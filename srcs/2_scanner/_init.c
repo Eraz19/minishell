@@ -3,17 +3,27 @@
 #include "reader_.h"
 #include <readline/readline.h>
 
-t_error	scanner_init(t_scanner *scanner)
+t_error	scanner_init(
+			t_scanner *scanner,
+			t_scanner *parent_scanner,
+			t_parser *parser,
+			t_scan_mode mode)
 {
-	*scanner = (t_scanner){0};
-	lexer_init(&scanner->lexer, scanner);
-	return (error(ERR_NO));
-}
+	t_error	err;
 
-void	scanner_free(t_scanner *scanner)
-{
-	lexer_free(&scanner->lexer);
 	*scanner = (t_scanner){0};
+	scanner->parser = parser;
+	scanner->parent_scanner = parent_scanner;
+	lexer_init(&scanner->lexer, scanner);
+	if (mode == SCAN_MODE_AUTO)
+	{
+		err = scan_mode_set(&scanner->mode);
+		if (err.type)
+			return (err);
+	}
+	else
+		scanner->mode = mode;
+	return (error(ERR_NO));
 }
 
 t_error	scanner_load(t_scanner *scanner, const char *source)
@@ -36,7 +46,8 @@ void	scanner_clear(t_scanner *scanner)
 	lexer_clear(&scanner->lexer);
 }
 
-void	scanner_init_subshell(t_scanner *scanner)
+void	scanner_free(t_scanner *scanner)
 {
-	scanner->mode = SCAN_MODE_STDIN_PIPE;
+	lexer_free(&scanner->lexer);
+	*scanner = (t_scanner){0};
 }

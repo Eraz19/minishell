@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "lexer.h"
-#include "scanner.h"
 
 static void	lexer_input_EOF(t_lexer *lexer)
 {
@@ -84,32 +83,32 @@ t_error	lexer_track_context(
 	return (free(item), token_free(&token), lexer->err);
 }
 
+// TO_TALK
 t_error	lexer_remove_escaped_newlines(
+			t_lexer *lexer,
 			t_string *word,
 			t_lexer_context_args args)
 {
 	t_token					token;
-	t_scanner				scanner;
-	t_error					err;
 	t_context_stack_item	*item;
+	t_error					err;
 
-	scanner_init(&scanner);
-	err = lexer_push_input(&scanner.lexer, word);
-	if (!err.type)
-		err = lexer_input_stack_get_last(&scanner.lexer.input_stack, &scanner.lexer.input);
+	err = lexer_push_input(lexer, word);
+	if (err.type == ERR_NO)
+		err = lexer_input_stack_get_last(&lexer->input_stack, &lexer->input);
 	if (err.type)
-		return (lexer_free(&scanner.lexer), err);
+		return (err);
 	err = context_stack_item_init(&item, CONTEXT_NONE);
 	if (err.type)
-		return (lexer_free(&scanner.lexer), err);
+		return (err);
 	token_init(&token);
-	scanner.lexer.token = &token;
+	lexer->token = &token;
 	args.context = CONTEXT_NONE;
 	args.opening_len = 0;
 	args.closing_len = 0;
 	args.stack_item = item;
-	err = lexer_context_scan(&scanner.lexer, args);
-	if (!err.type && !string_dup(word, &token.value))
-		err = error_sys();
-	return (free(item), token_free(&token), lexer_free(&scanner.lexer), err);
+	err = lexer_context_scan(lexer, args);
+	if (err.type == ERR_NO)
+		string_take_string(word, &token.value);
+	return (free(item), token_free(&token), err);
 }

@@ -1,7 +1,7 @@
 #include "libft.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <stdlib.h>
+#include "options.h"
 #include "reader_.h"
 #include "history.h"
 #include "posix_helpers.h"
@@ -18,7 +18,7 @@ t_error	reader_new_input(t_string *res)
 	while (res->len < 2)
 	{
 		res->len = 0;
-		err = reader_prompt("PS1", &ps1);
+		err = reader_build_prompt("PS1", &ps1);
 		if (err.type == ERR_NO)
 			err = reader_read_next_line(res, ps1.data);
 		string_free(&ps1);
@@ -36,12 +36,18 @@ t_error	reader_continuation(t_string *res)
 	t_error		err;
 	t_string	ps2;
 	t_string	continuation;
+	bool		is_interactive;
 
+	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (err.type)
+		return (err);
+	if (!is_interactive)
+		return (error(ERR_POSIX_SYNTAX));
 	(void)string_init(&continuation, 0, NULL, 0);
 	while (continuation.len < 2)
 	{
 		continuation.len = 0;
-		err = reader_prompt("PS2", &ps2);
+		err = reader_build_prompt("PS2", &ps2);
 		if (err.type == ERR_NO)
 			err = reader_read_next_line(&continuation, ps2.data);
 		string_free(&ps2);

@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include "alias.h"
+#include "options.h"
 #include "heredoc.h"
 #include "reader_.h"
 #include "scanner_.h"
@@ -32,6 +33,7 @@ static t_error	scanner_dup_command_input(
 t_error	scanner_read_input(t_scanner *scanner) 
 {
 	t_lexer_input_stack_item	*item;
+	bool						is_interactive;
 
 	scanner->err = lexer_input_stack_item_init(&item);
 	if (scanner->err.type)
@@ -43,10 +45,16 @@ t_error	scanner_read_input(t_scanner *scanner)
 		if (scanner_dup_command_input(scanner, item).type)
 			return (lexer_input_stack_item_free(&item), scanner->err);
 	}
-	else if (scanner->mode == SCAN_MODE_STDIN_PIPE)
-		scanner->err = scanner_stdin_input(&item->str);
-	else if (scanner->mode == SCAN_MODE_STDIN_TTY)
-		scanner->err = reader_new_input(&item->str); 
+	else if (scanner->mode == SCAN_MODE_STDIN)
+	{
+		scanner->err = option_is_active(OPT_INTERACTIVE, &is_interactive);		
+		if (scanner->err.type)
+			return (lexer_input_stack_item_free(&item), scanner->err);
+		if (!is_interactive)
+			scanner->err = scanner_stdin_input(&item->str);
+		else
+			scanner->err = reader_new_input(&item->str);
+	}
 	if (scanner->err.type || item->str.len < 2)
 		return (lexer_input_stack_item_free(&item), scanner->err);
 	scanner->err = lexer_input_stack_push(&scanner->lexer.input_stack, item);
@@ -61,7 +69,7 @@ t_error	scanner_alias_expand(t_scanner *scanner, t_token *token)
 	scanner->err = lexer_input_stack_item_init(&item);
 	if (scanner->err.type)
 		return (scanner->err);
-	scanner->err = alias_expand_token(&item->str, &expanded, &token->value);
+	scanner->err = alias_expand_token(scanner->parser, &item->str, &expanded, &token->value);
 	if (scanner->err.type || !expanded)
 		return (lexer_input_stack_item_free(&item), scanner->err);
 	scanner->err = lexer_input_stack_push(&scanner->lexer.input_stack, item);
@@ -73,7 +81,7 @@ t_error	scanner_alias_expand(t_scanner *scanner, t_token *token)
 	scanner->lexer.input = NULL;
 	token_free(token);
 	if (lexer_get_next_token(&scanner->lexer, token,
-			scanner_lexer_rules(scanner)).type)
+			scanner_lexer_rules()).type)
 		return (scanner->err = scanner->lexer.err);
 	if (token->type == TOKEN_TOKEN)
 		return (scanner_alias_expand(scanner, token));
@@ -100,6 +108,5 @@ void	prepare_heredoc_read_args(
 		out->mode = HEREDOC_MODE_TAB_STRIP;
 	else
 		out->mode = HEREDOC_MODE_NORMAL;
-	out->is_tty = scanner->mode == SCAN_MODE_STDIN_TTY;
 	out->delim = delim;
 }

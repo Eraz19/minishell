@@ -15,7 +15,7 @@ static inline void	walk_pipe_child(t_pipe_run *run)
 
 	err = error(ERR_NO);
 	exit_status = -1;
-	err = shell_init_subshell(SUBSHELL_NORMAL);
+	err = shell_init_subshell(SUBSHELL_NORMAL, &run->runner->parser.scanner);
 	if (err.type == ERR_NO && run->cmd_fds[READ_ID] >= 0)
 		err = posix_dup2(run->cmd_fds[READ_ID], STDIN_FILENO);
 	if (err.type == ERR_NO && run->cmd_fds[WRITE_ID] >= 0)

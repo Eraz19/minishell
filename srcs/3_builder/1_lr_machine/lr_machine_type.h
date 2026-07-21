@@ -4,6 +4,7 @@
 # include "libft.h"
 # include "rules__type.h"
 # include "action_type.h"
+# include "qualifiers_type.h"
 
 typedef struct s_lr_machine
 {
@@ -14,6 +15,7 @@ typedef struct s_lr_machine
 	t_vector	transitions;
 	size_t		**gotos;		// [lr_state][non-terminal_symbol]
 	t_action	**actions;		// [lr_state][terminal_symbol]
+	t_qualifier	*qualifiers;	// [lr_state]
 }	t_lr_machine;
 
 #endif

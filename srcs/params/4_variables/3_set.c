@@ -86,6 +86,6 @@ t_error	var_set(
 	else
 		err = var_create(name, value, export, readonly);
 	if (err.type == ERR_NO && str_cmp(name->data, "PATH") == 0)
-		err = cmd_cache_clear_void();
+		cmd_cache_clear(&params->cmd_cache);
 	return (err);
 }

@@ -60,11 +60,15 @@
 - `command substitutions`:
 	- closing `)` must not be inside an `alias`
 	- unignored `traps` are reset to default even if the `command substitution` only contains a `trap` command
-- `signal`:
+- `trap`:
 	- `SIGTTIN`, `SIGTTOU` and `SIGTSTP` are always ignored in *interactive* shell (`-i`), even if `-m` is not active.
 	- `SIGKILL` and `SIGSTOP` are not supported at all because they have POSIX *undefined behaviour* with `trap`
-	- when shell is *interactive* (`-i`), `trap` actions (`reset` or `catch`) are allowed on signals whiche were *ignored on entry*.
+	- when shell is *interactive* (`-i`), `trap` actions (`reset` or `catch`) are allowed on signals which were *ignored on entry*.
 	- `EXIT / 0` traps are not processed when shell exists because of a `signal` for which `trap` action is `default`
+	- Like `bash`, *subshells* always reset *unignored traps* on entry. While no *command* including `trap` with at least one *operand* has been executed since entering the *subshell*, `trap` and `trap -p [condition...]` print *traps* as they were set immediately before entering the *subshell*. This remains true in `bash` and `minishell` even when `trap -p` is given one or more *condition operands* (POSIX is not precise about this specific case).
+	- Unlike `bash`, and in strict conformance with POSIX wording, `trap -p condition...` is treated as a `trap` command with at least one *operand*. Therefore, after such a command has been executed in a *subshell*, the parent *trap* snapshot is no longer available.
+- `eval`:
+	- `--` is handled
 - `exit`:
 	- TODO: cf `srcs/builtins/exit.c`
 - ...

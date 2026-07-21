@@ -107,3 +107,27 @@ t_error	params_get_last_status(int *out)
 	*out = params_get_last_status_from(params);
 	return (err);
 }
+
+t_error	params_get_cmd_cache(t_cmd_cache **out_cmd_cache_ptr)
+{
+	t_params	*params;
+	t_error		err;
+
+	err = params_get_struct(&params);
+	if (err.type)
+		return (err);
+	*out_cmd_cache_ptr = &params->cmd_cache;
+	return (err);
+}
+
+t_error	params_get_fd_manager(t_fd_manager **out_fd_manager_ptr)
+{
+	t_params	*params;
+	t_error		err;
+
+	err = params_get_struct(&params);
+	if (err.type)
+		return (err);
+	*out_fd_manager_ptr = &params->fd_manager;
+	return (err);
+}

@@ -2,8 +2,6 @@
 #include "posix_helpers.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include "runner.h"
-#include "sig.h"
 
 // @ret ERR_NO / ERR_INTERNAL
 t_error	shell_is_subshell(bool *out)
@@ -40,7 +38,7 @@ static inline t_error	shell_set_stdin_to_dev_null(void)
 	return (err);
 }
 
-t_error	shell_init_subshell(t_subshell_mode mode)
+t_error	shell_init_subshell(t_subshell_mode mode, t_scanner *scanner)
 {
 	t_shell	*shell;
 	bool	job_control;
@@ -52,10 +50,8 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 					__func__, "shell not found", NULL, NULL));
 	job_control = option_is_active_in(shell->params.options, OPT_MONITOR);
 	shell->is_subshell = true;
-	params_init_subshell(&shell->params);		// sets OPT_INTERACTIVE to false + clear process table
-	scanner_init_subshell(&shell->scanner);
-	runner_init_subshell(&shell->runner);
-	err = sig_init_subshell(mode == SUBSHELL_ASYNC_AND_OR && !job_control);
+	params_init_subshell(&shell->params, mode == SUBSHELL_ASYNC_AND_OR && !job_control);
+	scanner_init_subshell(scanner);
 	if (err.type == ERR_NO && mode == SUBSHELL_ASYNC_AND_OR && !job_control)
 		err = shell_set_stdin_to_dev_null();
 	if (err.type)

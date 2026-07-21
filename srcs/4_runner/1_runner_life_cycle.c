@@ -1,31 +1,32 @@
 #include "runner.h"
-#include "redirector.h"
+#include "params.h"
+#include "parser.h"
 
-void	runner_init(t_runner *runner)
+t_error	runner_init(t_runner *runner, t_scan_mode mode)
 {
-	redirect_init(&runner->redirector);
-	cmd_cache_init(&runner->cmd_cache);
+	t_cmd_cache	*cmd_cache;
+	t_error		err;
+
+	err = params_get_cmd_cache(&cmd_cache);
+	if (err.type)
+		return (err);
+	err = parser_init(&runner->parser, mode);
+	runner->cmd_cache = cmd_cache;
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
+	return (err);
 }
 
-void	runner_init_subshell(t_runner *runner)
+void	runner_clear(t_runner *runner)
 {
-	redirect_init_subshell(&runner->redirector);
-}
-
-t_error	runner_clear(t_runner *runner)
-{
-	cmd_cache_clear(&runner->cmd_cache);
+	parser_clear(&runner->parser);
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
-	return (redirect_clear(&runner->redirector, true));
 }
 
 void	runner_free(t_runner *runner)
 {
-	redirect_free(&runner->redirector);
-	cmd_cache_free(&runner->cmd_cache);
+	parser_free(&runner->parser);
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
 }
