@@ -1,5 +1,7 @@
 # WIP
 
+🚨 `parser->search_cmd_sub_end = true;`
+
 - ⚠️ delete `parser_cmd_sub_init()`:
 	- use new API
 	- set `parser.seacrh_cmd_sub_end = true` manually

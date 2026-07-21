@@ -7,15 +7,14 @@
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
-t_error	parser_init(t_parser *parser, t_scan_mode mode)
+t_error	parser_init(
+			t_parser *parser,
+			t_scanner *parent_scanner,
+			t_scan_mode mode)
 {
 	t_error	err;
 
 	assert(parser != NULL);
-	scanner_init(&parser->scanner, parser, mode);
-	err = shell_get_lr_machine(&parser->machine);
-	if (err.type)
-		return (err);
 	parser_item_stack_init(&parser->item_stack);
 	parser_here_stack_init(&parser->here_stack);
 	token_pool_init(&parser->token_pool);
@@ -28,17 +27,10 @@ t_error	parser_init(t_parser *parser, t_scan_mode mode)
 	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
-	return (err);
-}
-
-t_error	parser_cmd_sub_init(const t_parser *parser, t_parser *cmd_sub_parser)
-{
-	parser_init(cmd_sub_parser, parser->scanner.mode);
-	cmd_sub_parser->search_cmd_sub_end = true;
-	return (scanner_cmd_sub_init(
-		&parser->scanner,
-		&cmd_sub_parser->scanner,
-		cmd_sub_parser));
+	err = scanner_init(&parser->scanner, parent_scanner, parser, mode);
+	if (err.type)
+		return (err);
+	return (shell_get_lr_machine(&parser->machine));
 }
 
 void	parser_clear(t_parser *parser)

@@ -25,9 +25,9 @@ typedef enum e_scan_mode
 	SCAN_MODE_NONE,
 	SCAN_MODE_AUTO,
 	SCAN_MODE_FILE,
+	SCAN_MODE_STDIN,
 	SCAN_MODE_STRING,
-	SCAN_MODE_STDIN_TTY,
-	SCAN_MODE_STDIN_PIPE
+	SCAN_MODE_STRING_AND_CONTINUE,
 }	t_scan_mode;
 
 /* ************************************************************************* */
@@ -97,7 +97,8 @@ typedef struct s_scanner
 	t_scan_mode	mode;
 	t_lexer		lexer;
 	const char	*source;
-	t_parser	*parser;	// borrowed
+	t_parser	*parser;			// borrowed
+	t_scanner	*parent_scanner; 	// borrowed
 }	t_scanner;
 
 /* ************************************************************************* */
@@ -106,7 +107,11 @@ typedef struct s_scanner
 
 // TODO: doc
 // @ret ERR_INTERNAL
-t_error	scanner_init(t_scanner *scanner, t_parser *parser, t_scan_mode mode);
+t_error	scanner_init(
+			t_scanner *scanner,
+			t_scanner *parent_scanner,
+			t_parser *parser,
+			t_scan_mode mode);
 
 /**
  * @ingroup scanner

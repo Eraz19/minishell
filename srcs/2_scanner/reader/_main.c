@@ -1,7 +1,7 @@
 #include "libft.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <stdlib.h>
+#include "options.h"
 #include "reader_.h"
 #include "history.h"
 #include "posix_helpers.h"
@@ -36,7 +36,13 @@ t_error	reader_continuation(t_string *res)
 	t_error		err;
 	t_string	ps2;
 	t_string	continuation;
+	bool		is_interactive;
 
+	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (err.type)
+		return (err);
+	if (!is_interactive)
+		return (error(ERR_POSIX_SYNTAX));
 	(void)string_init(&continuation, 0, NULL, 0);
 	while (continuation.len < 2)
 	{

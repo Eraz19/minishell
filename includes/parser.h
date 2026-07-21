@@ -7,12 +7,12 @@
 
 // Life cycle
 
-t_error	parser_init(t_parser *parser, t_scan_mode mode);
+t_error	parser_init(
+			t_parser *parser,
+			t_scanner *parent_scanner,
+			t_scan_mode mode);
 void	parser_clear(t_parser *parser);
 void	parser_free(t_parser *parser);
-
-t_error	parser_cmd_sub_init(const t_parser *parser, t_parser *cmd_sub_parser);
-void	parser_cmd_sub_free(t_parser *parser);
 
 // Ops
 

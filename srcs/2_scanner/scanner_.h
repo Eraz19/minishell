@@ -60,20 +60,9 @@ t_error		scanner_alias_expand(t_scanner *scanner, t_token *token);
  * @param allow_veof Let @c ERR_VEOF cross the API untouched.
  * @return The requalified (and printed) error.
  */
-t_error		scanner_error_qualify(t_error err, bool allow_veof);
+t_error			scanner_error_qualify(t_error err, bool allow_veof);
 
-/**
- * @ingroup scanner_priv
- * @brief Builds the lexer rule set the scanner drives the lexer with.
- *
- * Wires the POSIX recognition dispatcher and the alias-end hook, and
- * selects the end-of-input behaviour: an interactive terminal reads a
- * continuation line, every other source surfaces @c ERR_UNEXPECTED_EOI.
- *
- * @param scanner Scanner state (borrowed).
- * @return The assembled lexer rules.
- */
-t_lexer_rules	scanner_lexer_rules(t_scanner *scanner);
+t_lexer_rules	scanner_lexer_rules();
 
 /**
  * @ingroup scanner_priv

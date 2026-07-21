@@ -83,7 +83,6 @@ typedef struct s_heredoc_read_args
 	const t_string *input;
 	size_t			*start;
 	const t_string	*delim;
-	bool			is_tty;
 }	t_heredoc_read_args;
 
 /* ************************************************************************* */

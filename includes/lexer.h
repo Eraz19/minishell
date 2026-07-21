@@ -109,7 +109,6 @@ typedef struct s_lexer	t_lexer;
 typedef struct s_lexer_rules
 {
 	t_lexer *calling_lexer;
-	t_error	(*on_eoi)(t_lexer *);
 	t_error	(*on_input_end)(t_lexer *);
 	t_error	(*recognize)(t_lexer *, t_context *);
 }	t_lexer_rules;
@@ -135,33 +134,6 @@ typedef struct s_lexer_backup
 	size_t			token_contexts_len;
 }	t_lexer_backup;
 
-/**
- * @ingroup lexer
- * @struct s_lexer
- * @brief State of the rule-driven scanning engine.
- *
- * @var s_lexer::err Last error recorded by the module.
- * @var s_lexer::rules Behaviour injected for the current drive.
- * @var s_lexer::input Current (top) input item (borrowed).
- * @var s_lexer::token Token currently being built (borrowed).
- * @var s_lexer::input_stack Stack of inputs owned by the lexer; alias
- *                           expansions and line continuations are pushed
- *                           on top of the base input.
- * @var s_lexer::context Stack of currently open quoting/expansion
- *                       contexts, shared across the WHOLE input stack so
- *                       a construct opened in a nested input (alias
- *                       expansion) survives that input's pop and can
- *                       close in an outer one; its items are borrowed
- *                       from the token's context stack, which owns them
- *                       (borrowed).
- * @var s_lexer::last_index Span of the last token boundaries recorded on
- *                          the BASE input; a token produced from a nested
- *                          input (alias expansion) inherits these values,
- *                          so its reported position points at the
- *                          originating word in the raw input (error
- *                          positions stay meaningful in the logs).
- * @var s_lexer::emited_token Set when a complete token has been delimited.
- */
 struct s_lexer
 {
 	t_error						err;
@@ -170,8 +142,8 @@ struct s_lexer
 	t_token						*token;
 	t_context_stack				context;
 	t_scanner					*scanner;
-	t_lexer_input_stack			input_stack;
 	t_token_index				last_index;
+	t_lexer_input_stack			input_stack;
 	bool						emited_token;
 };
 
