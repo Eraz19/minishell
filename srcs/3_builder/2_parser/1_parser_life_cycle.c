@@ -7,7 +7,26 @@
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
-t_error	parser_init(
+void	parser_init(t_parser *parser)
+{
+	assert(parser != NULL);
+	parser_item_stack_init(&parser->item_stack);
+	parser_here_stack_init(&parser->here_stack);
+	token_pool_init(&parser->token_pool);
+	parser->cst = NULL;
+	parser->lookahead_id = 0;
+	parser->lookahead_raw_symbol = SYM_NONE;
+	parser->lookahead_symbol = SYM_NONE;
+	parser->function_body_depth = 0;
+	parser->assignment_disabled = false;
+	parser->expansion_disabled = false;
+	parser->search_cmd_sub_end = false;
+	parser->cmd_sub_end_index = 0;
+	scanner_init(&parser->scanner);
+	parser->machine = NULL;
+}
+
+t_error	parser_load(
 			t_parser *parser,
 			t_scanner *parent_scanner,
 			t_scan_mode mode)
@@ -27,7 +46,7 @@ t_error	parser_init(
 	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
-	err = scanner_init(&parser->scanner, parent_scanner, parser, mode);
+	err = scanner_load(&parser->scanner, parent_scanner, parser, mode);
 	if (err.type)
 		return (err);
 	return (shell_get_lr_machine(&parser->machine));

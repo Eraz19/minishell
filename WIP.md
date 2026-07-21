@@ -1,19 +1,8 @@
 # WIP
 
-🚨 `parser->search_cmd_sub_end = true;`
+- `parser_init()`
+- `runner_init()`
 
-- ⚠️ delete `parser_cmd_sub_init()`:
-	- use new API
-	- set `parser.seacrh_cmd_sub_end = true` manually
-- `shell`:
-	- `scanner` => `parent *scanner`
-	- main {`runner` + `child *runner`}
-	- *last* `t_runner *runner`
-	- `shell_instanciate()`:
-		- `lexer`
-		- `scanner`
-		- `parser`
-		- `runner`
 - rename `params` to `env`
 - ⚠️ `qualify_2()`
 - `shell`:

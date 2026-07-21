@@ -1,5 +1,6 @@
 #include "shell_priv.h"
 #include "lr_machine.h"
+#include "runner.h"
 #include <stdlib.h>
 
 void	shell_init(t_shell *shell)
@@ -9,6 +10,8 @@ void	shell_init(t_shell *shell)
 	lr_machine_init(&shell->machine);
 	history_init(&shell->history);
 	alias_init(&shell->alias);
+	shell->runner = NULL;
+	shell->last_runner = NULL;
 }
 
 void	shell_free(t_shell *shell)
@@ -17,6 +20,8 @@ void	shell_free(t_shell *shell)
 	lr_machine_free(&shell->machine);
 	history_free(&shell->history);
 	alias_free(&shell->alias);
+	if (shell->runner != NULL)
+		runner_free(shell->runner);
 	free(shell);
 	shell_set(NULL);
 }

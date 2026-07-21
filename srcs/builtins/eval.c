@@ -2,6 +2,7 @@
 #include "scanner.h"
 #include "params.h"
 #include "runner.h"
+#include "shell.h"
 
 // @ret ERR_NO / ERR_LIBC
 static inline t_error	eval_merge_fields(
@@ -36,7 +37,7 @@ static inline t_error	eval_merge_fields(
 
 t_error	builtin_eval(int argc, char **argv, char **envp, int *exit_status)
 {
-	t_runner	runner;
+	t_runner	*runner;
 	t_string	cmd;
 	bool		only_null_args;
 	t_error		err;
@@ -49,12 +50,12 @@ t_error	builtin_eval(int argc, char **argv, char **envp, int *exit_status)
 		return (err);
 	else if (only_null_args == true)
 		return (string_free(&cmd), *exit_status = 0, error(ERR_NO));
-	err = runner_init(&runner, SCAN_MODE_STRING);
+	err = shell_get_new_runner(&runner, SCAN_MODE_STRING);
 	if (err.type)
 		return (string_free(&cmd), error_print(err, argv[0], NULL, NULL));
-	scanner_set_input(&runner.parser.scanner, &cmd);
-	runner_run(&runner);
-	runner_free(&runner);
+	scanner_set_input(&runner->parser.scanner, &cmd);
+	runner_run(runner);
+	shell_destroy_last_instance();
 	string_free(&cmd);
 	err = params_get_last_status(exit_status);
 	if (err.type)

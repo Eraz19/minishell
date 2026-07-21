@@ -13,6 +13,7 @@ typedef struct s_runner
 	size_t			loop_depth;
 	size_t			control_depth;
 	struct s_runner	*child;
+	struct s_runner	*parent;
 }	t_runner;
 
 #endif

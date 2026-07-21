@@ -7,7 +7,8 @@
 
 // Life cycle
 
-t_error	parser_init(
+void	parser_init(t_parser *parser);
+t_error	parser_load(
 			t_parser *parser,
 			t_scanner *parent_scanner,
 			t_scan_mode mode);

@@ -4,10 +4,14 @@
 
 static t_error	cmd_sub_consume_body(t_lexer *lexer, t_context_stack_item *item)
 {
-	ssize_t	closing_par_index;
+	t_string	cmd;
+	ssize_t		closing_par_index;
 
-	lexer->err = cmd_sub_find_end(lexer->scanner, &closing_par_index,
+	if (!string_init(&cmd, 0, lexer->input->str.data + lexer->input->i, -1))
+		return (error_sys());
+	lexer->err = cmd_sub_find_end(&cmd, &closing_par_index,
 			&lexer->token->ast_vector);
+	string_free(&cmd);
 	if (lexer->err.type)
 		return (lexer->err);
 	if (closing_par_index < 0

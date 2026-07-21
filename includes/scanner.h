@@ -105,9 +105,11 @@ typedef struct s_scanner
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
+void	scanner_init(t_scanner *scanner);
+
 // TODO: doc
 // @ret ERR_INTERNAL
-t_error	scanner_init(
+t_error	scanner_load(
 			t_scanner *scanner,
 			t_scanner *parent_scanner,
 			t_parser *parser,
@@ -124,20 +126,6 @@ void	scanner_free(t_scanner *scanner);
 /* ************************************************************************* */
 /*                                 CMD_SUB                                   */
 /* ************************************************************************* */
-
-/**
- * @ingroup scanner
- * @brief Releases a scanner clone built by @ref scanner_cmd_sub_init.
- *
- * @param cmd_sub_scanner Already initialized clone (borrowed).
- */
-void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
-
-// TODO: doc
-t_error    scanner_cmd_sub_init(
-				const t_scanner *main_scanner,
-				t_scanner *cmd_sub_scanner,
-				t_parser *cmd_sub_parser);
 
 // TODO: doc
 void	scanner_set_input(t_scanner *scanner, const t_string *cmd);

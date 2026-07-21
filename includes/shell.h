@@ -26,7 +26,7 @@ typedef struct s_shell
 	bool			is_subshell;
 	t_params		params;
 	t_lr_machine	machine;
-	t_runner		runner;
+	t_runner		*runner;		// owned (linked)
 	t_runner		*last_runner;	// borrowed
 	t_history		history;		// TODO: move to params
 	t_alias			alias;			// TODO: move to params
@@ -56,6 +56,12 @@ void	shell_free_void(void);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
+
+t_error	shell_get_new_lexer(t_lexer **out_lexer_ptr, t_scan_mode mode);
+t_error	shell_get_new_scanner(t_scanner **out_scanner_ptr, t_scan_mode mode);
+t_error	shell_get_new_parser(t_parser **out_parser_ptr, t_scan_mode mode);
+t_error	shell_get_new_runner(t_runner **out_runner_ptr, t_scan_mode mode);
+t_error	shell_destroy_last_instance(void);
 
 // TODO: doc
 t_error	shell_init_subshell(t_subshell_mode mode);

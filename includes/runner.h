@@ -6,7 +6,8 @@
 
 // Life cycle
 
-t_error	runner_init(
+void	runner_init(t_runner *runner);
+t_error	runner_load(
 			t_runner *runner,
 			t_runner *parent_runner,
 			t_scanner *parent_scanner,

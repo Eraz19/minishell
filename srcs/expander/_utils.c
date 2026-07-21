@@ -3,6 +3,7 @@
 #include "expander_.h"
 #include "expansion_.h"
 #include "parser.h"
+#include "shell.h"
 
 bool    flag_is_active(uint bitset, uint flag)
 {
@@ -49,34 +50,32 @@ t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs)
 	return (string_free(&str), err);
 }
 
-// TO_TALK
 t_error	prepare_str_for_expansion(
 			t_context_stack *context_out,
 			t_ast_vector *ast_vec_out,
 			t_string *src)
 {
 	t_error		err;
-	t_parser	parser;
+	t_lexer		*lexer;
 	t_string	lexer_src;
 
-	err = parser_init(&parser, SCAN_MODE_STRING);
+	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING);
 	if (err.type)
 		return (err);
-	err = lexer_remove_escaped_newlines(
-			&parser.scanner.lexer, src, str_context_rules());
+	err = lexer_remove_escaped_newlines(lexer, src, str_context_rules());
 	if (err.type)
-		return (parser_free(&parser), err);
-	parser_clear(&parser);
+		return (shell_destroy_last_instance(), err);
+	parser_clear(lexer->scanner->parser);
 	if (!string_dup(&lexer_src, src))
-		return (err = error_sys(), parser_free(&parser), err);
-	err = lexer_push_input(&parser.scanner.lexer, &lexer_src);
+		return (err = error_sys(), shell_destroy_last_instance(), err);
+	err = lexer_push_input(lexer, &lexer_src);
 	if (err.type == ERR_NO)
 		err = lexer_track_context(
-				&parser.scanner.lexer,
+				lexer,
 				context_out,
 				ast_vec_out,
 				str_context_rules());
-	return (parser_free(&parser), err);
+	return (shell_destroy_last_instance(), err);
 }
 
 t_error	get_ifs(t_string *ifs)

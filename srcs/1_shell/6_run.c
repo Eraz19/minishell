@@ -44,14 +44,14 @@ static inline t_error	shell_prepare(t_shell_loading_options *options)
 
 static inline t_error	shell_exec(void)
 {
-	t_runner	runner;
+	t_runner	*runner;
 	t_error		err;
 
-	err = runner_init(&runner, SCAN_MODE_AUTO);
+	err = shell_get_new_runner(&runner, SCAN_MODE_AUTO);
 	if (err.type)
 		return (err);
-	runner_run(&runner);
-	runner_free(&runner);
+	runner_run(runner);
+	shell_destroy_last_instance();
 	err = history_save();
 	if (err.type)
 		(void)error_print(err, "history", NULL, NULL);
