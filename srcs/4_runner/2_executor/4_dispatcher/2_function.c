@@ -49,13 +49,12 @@ t_error	cmd_exec_function(t_cmd *cmd, t_runner *runner)
 	err = cmd_update_positionals(cmd);
 	if (err.type)
 		return (err);
-	err = redirect_start(&runner->redirector, &cmd->function->redirs,
-			&cmd->exit_status);
+	err = redirect_start(&cmd->function->redirs, &cmd->exit_status);
 	if (err.type)
 		return (error_priorize(err, params_pop_positionals()));
 	err = walk_command(runner, &cmd->function->body, &cmd->exit_status);
 	if (err.type == ERR_RETURN)
 		err.type = ERR_NO;
-	err = error_priorize(err, redirect_stop(&runner->redirector));
+	err = error_priorize(err, redirect_stop());
 	return (error_priorize(err, params_pop_positionals()));
 }

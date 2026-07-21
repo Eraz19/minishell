@@ -7,21 +7,21 @@
 #include "cmd_dispatcher.h"
 #include "xtrace.h"
 #include "sig.h"
+#include "options.h"
 # include <stdio.h>	// DEBUG
 # include "logs.h"	// DEBUG
 # include "debug.h"	// DEBUG
 
 static inline t_error	cmd_redirect_start(
 							t_cmd *cmd,
-							t_redirector *redirector,
 							const t_ast_scmd *s_cmd)
 {
 	t_error	err;
 
 	if (cmd->builtin == builtin_exec)
-		err = redirect_commit(redirector, &s_cmd->redirs, &cmd->exit_status);
+		err = redirect_commit(&s_cmd->redirs, &cmd->exit_status);
 	else
-		err = redirect_start(redirector, &s_cmd->redirs, &cmd->exit_status);
+		err = redirect_start( &s_cmd->redirs, &cmd->exit_status);
 	return (err);
 }
 
@@ -32,7 +32,7 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 	return (cmd_search(cmd, cache));
 }
 
-t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_applied, int *exit_status)
+t_error	cmd_finalize(t_cmd *cmd, t_error err, bool redir_applied, int *exit_status)
 {
 	bool	interactive;
 	int		signo;
@@ -72,7 +72,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_runner *runner, t_error err, bool redir_appli
 		}
 	}
 	if (redir_applied == true)
-		err = error_priorize(err, redirect_stop(&runner->redirector));
+		err = error_priorize(err, redirect_stop());
 	if (err.type && err.type != ERR_EXIT && err.type != ERR_EXIT_WITH_CURRENT_STATUS && cmd->exit_status <= 0)
 		cmd->exit_status = (int)err.type;
 	*exit_status = cmd->exit_status;
@@ -96,21 +96,21 @@ t_error cmd_execute(t_runner *runner, const t_ast_scmd *simple_command, int *exi
 	cmd_init(&cmd);
 	err = cmd_resolve(&cmd, &simple_command->words);
 	if (err.type == ERR_NO)
-		err = cmd_redirect_start(&cmd, &runner->redirector, simple_command);
+		err = cmd_redirect_start(&cmd, simple_command);
 	if (err.type)
-		return (cmd_finalize(&cmd, runner, err, false, exit_status));
+		return (cmd_finalize(&cmd, err, false, exit_status));
 	err = cmd_assign(&cmd, &simple_command->assignments);
 	if (err.type)
-		return (cmd_finalize(&cmd, runner, err, true, exit_status));
+		return (cmd_finalize(&cmd, err, true, exit_status));
 	err = xtrace_print_argv(&cmd.argv);
 	if (err.type)
-		return (cmd_finalize(&cmd, runner, err, true, exit_status));
+		return (cmd_finalize(&cmd, err, true, exit_status));
 	if (cmd.type == CMD_EXTERNAL)
 	{
 		err = cmd_search_(&cmd, runner->cmd_cache);
 		if (err.type)
-			return (cmd_finalize(&cmd, runner, err, true, exit_status));
+			return (cmd_finalize(&cmd, err, true, exit_status));
 	}
 	err = cmd_dispatch(&cmd, runner);
-	return (cmd_finalize(&cmd, runner, err, true, exit_status));
+	return (cmd_finalize(&cmd, err, true, exit_status));
 }

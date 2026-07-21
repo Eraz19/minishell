@@ -14,5 +14,5 @@ t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner)
 	else if (cmd->type == CMD_FUNCTION)
 		return (cmd_exec_function(cmd, runner));
 	else
-		return (cmd_exec_external(cmd, runner));
+		return (cmd_exec_external(cmd));
 }

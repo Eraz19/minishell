@@ -15,7 +15,6 @@ void	params_init(t_params *params)
 	process_init(&params->processes);
 	cmd_cache_init(&params->cmd_cache);
 	fd_init(&params->fd_manager);
-	sig_init();
 }
 
 void	params_init_subshell(t_params *params, bool async_no_job_ctrl)

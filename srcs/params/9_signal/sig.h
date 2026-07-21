@@ -9,11 +9,6 @@
 /* ************************************************************************* */
 
 /**
- * @brief Initialize the global signal module state.
- */
-void	sig_init(void);
-
-/**
  * @brief Reset trapped signal handlers to defaults for a subshell.
  *
  * @return @c ERR_NO, @c ERR_INTERNAL or @c ERR_LIBC.

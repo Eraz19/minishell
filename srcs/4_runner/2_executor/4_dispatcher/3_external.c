@@ -1,7 +1,5 @@
-#include "redirector.h"
 #include "shell.h"
 #include "cmd_dispatcher_priv.h"
-#include "redirector.h"
 #include "posix_helpers.h"
 #include <unistd.h>
 #include <sys/wait.h>
@@ -31,11 +29,10 @@ static inline int	cmd_exec_in_shell(t_cmd *cmd)
 	return (shell_run(argc, cmd->argv.data, cmd->envp.data, false));
 }
 
-static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
+static inline void	cmd_exec_child(t_cmd *cmd)
 {
 	int	exit_status;
 
-	(void)redirect_clear(&runner->redirector, false);
 	(void)execve(
 			cmd->path.data,
 			(char *const *)cmd->argv.data,
@@ -59,7 +56,7 @@ static inline void	cmd_exec_child(t_cmd *cmd, t_runner *runner)
 	exit(exit_status);
 }
 
-t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner)
+t_error	cmd_exec_external(t_cmd *cmd)
 {
 	pid_t	pid;
 
@@ -67,6 +64,6 @@ t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner)
 	if (pid < 0)
 		return (error_sys());
 	else if (pid == 0)
-		cmd_exec_child(cmd, runner);
+		cmd_exec_child(cmd);
 	return (posix_wait_and_retry(pid, &cmd->exit_status));
 }

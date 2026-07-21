@@ -38,7 +38,7 @@ t_error	cmd_exec_builtin(t_cmd *cmd);
  *         parent wait loop is interrupted and must stop, or @c ERR_LIBC on
  *         @c fork() / @c waitpid() failure.
  */
-t_error	cmd_exec_external(t_cmd *cmd, t_runner *runner);
+t_error	cmd_exec_external(t_cmd *cmd);
 
 /**
  * @brief Execute a shell function already selected in @p cmd.
