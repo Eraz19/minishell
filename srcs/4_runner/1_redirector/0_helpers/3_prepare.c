@@ -1,5 +1,5 @@
 #include "redirector_priv.h"
-#include "fd_manager.h"
+#include "fd.h"
 #include <unistd.h>
 
 #define CITATION_1	"POSIX 2.7.5 / 2.7.6: If word evaluates to something else "
@@ -23,9 +23,7 @@ static inline t_error	redirect_dup_invalid_word(t_redir *redir)
 }
 
 // @ret ERR_REDIRECTION / ERR_LIBC
-static inline t_error	redirect_validate_dup_rhs(
-							t_redir *redir,
-							t_redirector *redirector)
+static inline t_error	redirect_validate_dup_rhs(t_redir *redir)
 {
 	int		rhs_fd;
 	t_error	err;
@@ -35,7 +33,7 @@ static inline t_error	redirect_validate_dup_rhs(
 	else if (redir->expanded_word.len == 0
 		|| redirect_parse_fd(redir->expanded_word.data, &rhs_fd) == false)
 		return (redirect_dup_invalid_word(redir));
-	err = fd_check_dup_rhs(redirector, rhs_fd);
+	err = fd_check_dup_rhs(rhs_fd);
 	if (err.type == ERR_REDIRECTION)
 		return (error_print(err,
 			"file descriptor is not open", NULL,
@@ -43,10 +41,7 @@ static inline t_error	redirect_validate_dup_rhs(
 	return (err);
 }
 
-t_error	redirect_prepare(
-			t_redir *redirection,
-			t_redirector *redirector,
-			bool permanent)
+t_error	redirect_prepare(t_redir *redirection, bool permanent)
 {
 	t_ast_redir_op	operation;
 	t_error			err;
@@ -54,11 +49,11 @@ t_error	redirect_prepare(
 	operation = redirection->operation;
 	if (operation == AST_REDIR_DUP_READ || operation == AST_REDIR_DUP_WRITE)
 	{
-		err = redirect_validate_dup_rhs(redirection, redirector);
+		err = redirect_validate_dup_rhs(redirection);
 		if (err.type)
 			return (err);
 	}
 	if (permanent == true)
-		return (fd_prepare_perm(redirector, redirection->fd));
-	return (fd_save_temp(redirector, redirection->fd));
+		return (fd_prepare_perm(redirection->fd));
+	return (fd_save_temp(redirection->fd));
 }

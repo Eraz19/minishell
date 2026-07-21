@@ -1,19 +1,16 @@
 #include "redirector_priv.h"
 #include "posix_helpers.h"
-#include "fd_manager.h"
+#include "fd.h"
 #include <unistd.h>
 #include <errno.h>
 
 // @ret ERR_REDIRECTION / ERR_INTERRUPTED / ERR_INTERNAL / ERR_LIBC
-static inline t_error	redirect_redirect(
-							t_redirector *redirector,
-							t_redir *redirection,
-							bool *applied)
+static inline t_error	redirect_redirect(t_redir *redirection, bool *applied)
 {
 	int		opened_fd;
 	t_error	err;
 
-	err = redirect_open(redirector, redirection, &opened_fd);
+	err = redirect_open(redirection, &opened_fd);
 	if (err.type)
 		return (err);
 	else if (opened_fd == redirection->fd)
@@ -54,15 +51,12 @@ static inline t_error	redirect_dup(t_redir *redir, bool *applied)
 	return (err);
 }
 
-static inline t_error	redirect_handle_failure(
-							t_redir *redir,
-							t_redirector *redirector,
-							t_error err)
+static inline t_error	redirect_handle_failure(t_redir *redir, t_error err)
 {
 	t_error	restore_err;
 
 	redir_free(redir);
-	restore_err = fd_restore_last_backup(redirector);
+	restore_err = fd_restore_last_backup();
 	if (restore_err.type)
 		return (restore_err);
 	return (err);
@@ -70,7 +64,6 @@ static inline t_error	redirect_handle_failure(
 
 t_error	redirect_apply(
 			const t_ast_redirection *redirection,
-			t_redirector *redirector,
 			bool permanent,
 			int *exit_status)
 {
@@ -86,17 +79,17 @@ t_error	redirect_apply(
 	if (err.type == ERR_NO && redir.is_location == true)
 		err = redirect_resolve_location(&redir);
 	if (err.type == ERR_NO)
-		err = redirect_prepare(&redir, redirector, permanent);
+		err = redirect_prepare(&redir, permanent);
 	if (err.type)
 		return (redir_free(&redir), err);
 	operation = redir.operation;
 	if (operation == AST_REDIR_DUP_READ || operation == AST_REDIR_DUP_WRITE)
 		err = redirect_dup(&redir, &applied);
 	else
-		err = redirect_redirect(redirector, &redir, &applied);
+		err = redirect_redirect(&redir, &applied);
 	if (err.type && permanent == false)
-		return (redirect_handle_failure(&redir, redirector, err));
+		return (redirect_handle_failure(&redir, err));
 	else if (permanent == true && applied == true)
-		fd_save_perm(redirector, redir.fd);
+		fd_save_perm(redir.fd);
 	return (redir_free(&redir), err);
 }

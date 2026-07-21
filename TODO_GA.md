@@ -56,6 +56,12 @@
 	- when `filename` expands to more than one field: redirect to one file per field
 - `parser`:
 	- move `qualifiers` to `lr_machine` to enable `parser_cmd_sub_init()` without `main_parser` argument
+- `params`:
+	- create wrappers for `options` module API
+	- create wrappers for `cmd_cache` module API
+	- create wrappers for `fd` module API
+	- move `alias` table to `params`
+	- move all persistent data into `params` (it should represent the shell environment)
 
 ---
 

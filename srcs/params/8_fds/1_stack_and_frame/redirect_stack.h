@@ -16,25 +16,25 @@ void	redirect_stack_free(t_redir_stack *stack, size_t item_count_to_free);
 // @ret ERR_LIBC
 t_error	redirect_stack_push(t_redir_stack *stack, t_redir_frame *frame);
 
-// @ret ERR_INDEX_OUT_OF_BOUND
+// @ret ERR_INTERNAL
 t_error	redirect_stack_get_frame(
 			const t_redir_stack *stack,
 			size_t index,
 			t_redir_frame **out_frame);
 
-// @ret ERR_INDEX_OUT_OF_BOUND
+// @ret ERR_INTERNAL
 t_error	redirect_stack_get_current_frame(
 			const t_redir_stack *stack,
 			t_redir_frame **out_current_frame);
 
-// @ret ERR_INDEX_OUT_OF_BOUND
+// @ret ERR_INTERNAL
 t_error	redirect_stack_get_backup(
 			const t_redir_stack *stack,
 			size_t frame_index,
 			size_t backup_index,
 			t_redir_backup **out_backup);
 
-// @ret ERR_INDEX_OUT_OF_BOUND
+// @ret ERR_INTERNAL
 t_error	redirect_stack_get_current_backup(
 			const t_redir_stack *stack,
 			t_redir_backup **out_current_backup);
@@ -56,13 +56,13 @@ void	redirect_frame_free(t_redir_frame *frame);
 // @ret ERR_LIBC
 t_error	redirect_frame_push(t_redir_stack *stack, t_redir_backup *backup);
 
-// @ret ERR_INDEX_OUT_OF_BOUND
+// @ret ERR_INTERNAL
 t_error	redirect_frame_get_backup(
 			const t_redir_frame *frame,
 			size_t index,
 			t_redir_backup **out_backup);
 
-// @ret ERR_INDEX_OUT_OF_BOUND
+// @ret ERR_INTERNAL
 t_error	redirect_frame_get_current_backup(
 			const t_redir_frame *frame,
 			t_redir_backup **out_current_backup);

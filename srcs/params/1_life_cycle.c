@@ -13,12 +13,14 @@ void	params_init(t_params *params)
 	functions_init(&params->functions);
 	process_init(&params->processes);
 	cmd_cache_init(&params->cmd_cache);
+	fd_init(&params->fd_manager);
 }
 
 void	params_init_subshell(t_params *params)
 {
 	option_set(&params->options, OPT_INTERACTIVE, false);
 	process_clear(&params->processes);
+	fd_init_subshell(&params->fd_manager);
 }
 
 void	params_clear(t_params *params)
@@ -30,6 +32,7 @@ void	params_clear(t_params *params)
 	functions_clear(&params->functions);
 	process_clear(&params->processes);
 	cmd_cache_clear(&params->cmd_cache);
+	fd_clear(&params->fd_manager, true);
 }
 
 void	params_free(t_params *params)
@@ -43,4 +46,5 @@ void	params_free(t_params *params)
 	functions_free(&params->functions);
 	process_free(&params->processes);
 	cmd_cache_free(&params->cmd_cache);
+	fd_free(&params->fd_manager);
 }

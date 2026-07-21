@@ -1,7 +1,7 @@
 #include "posix_helpers.h"
 #include "fd_tracker.h"
 #include "fd_tracker_priv.h"
-#include "redirector_priv.h"
+#include "fd_tracker_priv.h"
 #include "redirect_stack.h"
 #include <errno.h>
 #include <limits.h>

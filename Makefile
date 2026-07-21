@@ -61,7 +61,6 @@ SRCS			:= \
 	$(wildcard srcs/ast/*/*.c) \
 	$(wildcard srcs/builtins/*.c) \
 	$(wildcard srcs/builtins/*/*.c) \
-	$(wildcard srcs/cmd_cache/*.c) \
 	$(wildcard srcs/cmd_sub/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
@@ -126,9 +125,6 @@ INCLUDES		:= \
 	-Isrcs/4_runner/0_cmd_expansion \
 	-Isrcs/4_runner/0_xtrace \
 	-Isrcs/4_runner/1_redirector \
-	-Isrcs/4_runner/1_redirector/1_stack_and_frame \
-	-Isrcs/4_runner/1_redirector/2_tracker \
-	-Isrcs/4_runner/1_redirector/3_fd_manager \
 	-Isrcs/4_runner/2_executor \
 	-Isrcs/4_runner/2_executor/0_cmd \
 	-Isrcs/4_runner/2_executor/0_entry_is_target \
@@ -181,6 +177,10 @@ INCLUDES		:= \
 	-Isrcs/params/5_functions \
 	-Isrcs/params/6_process \
 	-Isrcs/params/6_process/process \
+	-Isrcs/params/7_cmd_cache \
+	-Isrcs/params/8_fds \
+	-Isrcs/params/8_fds/1_stack_and_frame \
+	-Isrcs/params/8_fds/2_fd_tracker \
 	-Isrcs/signal \
 	-Isrcs/signal/sig_action
 

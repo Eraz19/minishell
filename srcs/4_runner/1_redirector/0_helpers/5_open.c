@@ -100,7 +100,7 @@ static inline t_error	redirect_handle_open_error(
 	return (err);
 }
 
-t_error	redirect_open(t_redirector *redirector, t_redir *redir, int *out_fd)
+t_error	redirect_open(t_redir *redir, int *out_fd)
 {
 	bool	no_clobber;
 	char	*path;
@@ -109,7 +109,7 @@ t_error	redirect_open(t_redirector *redirector, t_redir *redir, int *out_fd)
 
 	err = option_is_active(OPT_NOCLOBBER, &no_clobber);
 	if (err.type == ERR_NO && redir->operation == AST_REDIR_HEREDOC)
-		err = redirect_get_heredoc_path(redirector, &redir->expanded_word, &path);
+		err = redirect_prepare_heredoc_file(&redir->expanded_word, &path);
 	else
 		path = redir->expanded_word.data;
 	if (err.type)

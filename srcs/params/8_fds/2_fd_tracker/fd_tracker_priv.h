@@ -18,4 +18,11 @@ t_error	fd_tracker_backup_priv(
 bool	fd_tracker_fd_is_used_by_user(t_fd_tracker *tracker, int fd);
 bool	fd_tracker_fd_is_used(t_fd_tracker *tracker, int fd);
 
+/**
+ * @brief Print the standard "all file descriptors are already used" error.
+ *
+ * @return Error descriptor carrying @c ERR_REDIRECTION.
+ */
+t_error	redirect_print_error_all_fd_used(void);
+
 #endif

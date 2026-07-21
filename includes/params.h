@@ -8,6 +8,7 @@
 # include "functions.h"
 # include "process.h"
 # include "cmd_cache.h"
+# include "fd.h"
 
 /**
  * @struct s_params
@@ -39,6 +40,8 @@ typedef struct s_params
 	t_process_table		processes;
 	// TODO: doc
 	t_cmd_cache			cmd_cache;
+	// TODO: doc
+	t_fd_manager		fd_manager;
 }	t_params;
 
 /**
@@ -99,7 +102,12 @@ t_error	params_unset_function(const char *name);
 
 // @ret ERR_INTERNAL
 t_error	params_get_last_status(int *out);
+
+// @ret ERR_INTERNAL
 int		params_get_last_status_from(t_params *params);
+
+// @ret ERR_INTERNAL
+t_error	params_get_fd_manager(t_fd_manager **out_fd_manager_ptr);
 
 /**
  * @brief Build the exported environment as a @ref t_vector of C-strings.
