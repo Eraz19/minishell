@@ -8,23 +8,21 @@
 
 static inline void	walk_pipe_child(t_pipe_run *run)
 {
-	t_runner		*runner;
 	t_ast_command	*command;
 	int				exit_status;
 	t_error			err;
 
 	err = error(ERR_NO);
 	exit_status = -1;
-	err = shell_init_subshell(SUBSHELL_NORMAL, &run->runner->parser.scanner);
+	err = shell_init_subshell(SUBSHELL_NORMAL);
 	if (err.type == ERR_NO && run->cmd_fds[READ_ID] >= 0)
 		err = posix_dup2(run->cmd_fds[READ_ID], STDIN_FILENO);
 	if (err.type == ERR_NO && run->cmd_fds[WRITE_ID] >= 0)
 		err = posix_dup2(run->cmd_fds[WRITE_ID], STDOUT_FILENO);
 	command = &((t_ast_command *)run->pipeline->commands.data)[run->command_id];
-	runner = run->runner;
 	walk_pipe_free(run);
 	if (err.type == ERR_NO)
-		err = walk_command(runner, command, &exit_status);
+		err = walk_command(run->runner, command, &exit_status);
 	(void)walk_normalize_output(err, NULL, &exit_status);
 	shell_free_void();
 	exit(exit_status);

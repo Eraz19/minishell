@@ -8,6 +8,7 @@
 #define CMD_SUB_PREFIX	"cmd sub child"
 #define SHELL_NF		"shell not found"
 
+# include <stdio.h>
 static inline void	cmd_sub_child_dup_and_close(int pipe_fds[2])
 {
 	t_error	err;
@@ -40,10 +41,10 @@ void	cmd_sub_child_string(const t_string *cmd_string, int pipe_fds[2])
 	t_error		err;
 
 	cmd_sub_child_dup_and_close(pipe_fds);
-	err = runner_init(&runner, SCAN_MODE_STRING);
+	err = shell_init_subshell(SUBSHELL_NORMAL);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	err = shell_init_subshell(SUBSHELL_NORMAL, &runner.parser.scanner);
+	err = runner_init(&runner, SCAN_MODE_STRING);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
 	scanner_set_input(&runner.parser.scanner, cmd_string);
@@ -62,10 +63,10 @@ void	cmd_sub_child_ast(t_ast_root *ast_root, int pipe_fds[2])
 	t_error		err;
 
 	cmd_sub_child_dup_and_close(pipe_fds);
-	err = runner_init(&runner, SCAN_MODE_STRING);
+	err = shell_init_subshell(SUBSHELL_NORMAL);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	err = shell_init_subshell(SUBSHELL_NORMAL, &runner.parser.scanner);
+	err = runner_init(&runner, SCAN_MODE_STRING);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
 	runner_run_ast(&runner, ast_root);

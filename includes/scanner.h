@@ -110,20 +110,6 @@ t_error	scanner_init(t_scanner *scanner, t_parser *parser, t_scan_mode mode);
 
 /**
  * @ingroup scanner
- * @brief Derives the input mode from the shell invocation options and
- *        records @p source for the FILE and STRING modes.
- *
- * @warning @p source is stored, not copied: it must outlive the scanner.
- * @param scanner Already initialized scanner (borrowed).
- * @param source Script path or command string, ignored for the STDIN
- *               modes (borrowed, read-only).
- * @return @c ERR_INTERNAL (printed) if the shell parameters are
- *         unavailable, @c ERR_NO on success.
- */
-t_error	scanner_load(t_scanner *scanner, const char *source);
-
-/**
- * @ingroup scanner
  * @brief Releases the lexer state of @p scanner and zeroes it.
  *
  * @param scanner Already initialized scanner (borrowed).

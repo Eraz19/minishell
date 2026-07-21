@@ -9,6 +9,7 @@
 t_error	runner_init(t_runner *runner, t_scan_mode mode);
 void	runner_clear(t_runner *runner);
 void	runner_free(t_runner *runner);
+void	runner_free_void(void *runner);
 
 // Ops
 

@@ -2,7 +2,7 @@
 #include "params.h"
 #include "parser.h"
 
-t_error	runner_init(t_runner *runner, t_scan_mode mode)
+t_error	runner_init(t_runner *runner, t_runner *parent, t_scan_mode mode)
 {
 	t_cmd_cache	*cmd_cache;
 	t_error		err;
@@ -29,4 +29,9 @@ void	runner_free(t_runner *runner)
 	parser_free(&runner->parser);
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
+}
+
+void	runner_free_void(void *runner)
+{
+	runner_free(runner);
 }

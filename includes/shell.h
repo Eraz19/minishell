@@ -6,6 +6,7 @@
 # include "params.h"
 # include "history.h"
 # include "lr_machine_type.h"
+# include "runner_type.h"
 
 /**
  * @struct s_shell
@@ -25,8 +26,10 @@ typedef struct s_shell
 	bool			is_subshell;
 	t_params		params;
 	t_lr_machine	machine;
-	t_history		history;	// TODO: move to params
-	t_alias			alias;		// TODO: move to params
+	t_runner		runner;
+	t_runner		*last_runner;	// borrowed
+	t_history		history;		// TODO: move to params
+	t_alias			alias;			// TODO: move to params
 }	t_shell;
 
 typedef enum e_subshell_mode
@@ -55,7 +58,7 @@ void	shell_free_void(void);
 /* ************************************************************************* */
 
 // TODO: doc
-t_error	shell_init_subshell(t_subshell_mode mode, t_scanner *scanner);
+t_error	shell_init_subshell(t_subshell_mode mode);
 
 // TODO: doc
 t_error	shell_is_subshell(bool *out);

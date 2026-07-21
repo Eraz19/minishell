@@ -162,6 +162,9 @@ t_error	params_get_from_const(const char *name, t_string *dst);
  */
 t_error	params_get_positionals(const t_positionals **dst);
 
+// TODO: doc
+t_error	params_get_source(const t_string **source);
+
 /**
  * @brief Print shell parameters in the requested builtin format.
  *

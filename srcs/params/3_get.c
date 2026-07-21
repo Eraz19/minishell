@@ -131,3 +131,15 @@ t_error	params_get_fd_manager(t_fd_manager **out_fd_manager_ptr)
 	*out_fd_manager_ptr = &params->fd_manager;
 	return (err);
 }
+
+t_error	params_get_source(const t_string **source)
+{
+	t_params	*params;
+	t_error		err;
+
+	err = params_get_struct(&params);
+	if (err.type)
+		return (err);
+	*source = &params->specials.source;
+	return (err);
+}
