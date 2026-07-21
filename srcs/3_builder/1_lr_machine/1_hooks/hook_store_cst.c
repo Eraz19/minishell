@@ -9,5 +9,7 @@ t_error	hook_store_cst(
 {
 	(void)rhs;
 	(void)len;
-	return (parser_store_cst(parser, lhs));
+	if (parser->search_cmd_sub_end == false || parser->lookahead_raw_symbol == SYM_RPARENTHESIS)
+		return (parser_store_cst(parser, lhs));
+	return (error(ERR_NO));
 }

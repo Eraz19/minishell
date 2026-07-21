@@ -1,5 +1,11 @@
 # WIP
 
+- `cmd sub` parsing:
+	- tester avec `(` dans l'input:
+		- `reduce` sur `SYM_subshell` => success
+		- `ACTION_ERROR` + last `token` == `SYM_RPARENT` => replace `lookahead` par `SYM_EOF` => `ACTION_ERROR || ACTION_SHIFT` = error
+	- test `bash` hack : `comsub:     DOLPAREN compound_list ')'`
+
 🚨 Don't `accept` on `EOF` while parsing `cmd_sub_end` !!
 
 - `parser_init()`

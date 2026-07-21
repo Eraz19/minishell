@@ -85,6 +85,8 @@ static inline t_error	parser_handle_syntax_errors(t_parser *parser)
 	return (err);
 }
 
+# include <stdio.h>
+# include "debug.h"
 t_error	parser_build_cst(t_parser *parser)
 {
 	size_t			lr_state_id;
@@ -101,7 +103,8 @@ t_error	parser_build_cst(t_parser *parser)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)
 			err = parser_reduce(parser, action.payload);
-		if (action.type == ACTION_ACCEPT)
+		fprintf(stderr, YELLOW "[%s()] parser->search_cmd_sub_end=%s\n" NC, __func__, bool_to_string(parser->search_cmd_sub_end));
+		if (action.type == ACTION_ACCEPT && parser->search_cmd_sub_end == false)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR)
 			return (parser_handle_syntax_errors(parser));
