@@ -7,10 +7,7 @@
 # include <stddef.h>
 
 // @warning ast_vector must have been initialized before calling this function
-t_error	cmd_sub_find_end(
-			const t_string *cmd,
-			ssize_t *out_closing_token_id,
-			t_ast_vector *ast_vector);
+t_error	cmd_sub_find_end(ssize_t *out_closing_token_id, t_ast_vector *ast_vector);
 t_error	cmd_sub_run_string(
 			const t_string *cmd_string,
 			t_string *out_string,

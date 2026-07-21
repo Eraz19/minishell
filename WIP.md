@@ -1,5 +1,7 @@
 # WIP
 
+🚨 Don't `accept` on `EOF` while parsing `cmd_sub_end` !!
+
 - `parser_init()`
 - `runner_init()`
 

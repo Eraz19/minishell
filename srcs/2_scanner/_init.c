@@ -14,6 +14,15 @@ void	scanner_init(t_scanner *scanner)
 	scanner->parent_scanner = NULL;
 }
 
+static inline t_error	scanner_copy(t_scanner *scanner)
+{
+	if (scanner->mode != SCAN_MODE_COPY)
+		return (error(ERR_NO));
+	return (lexer_input_stack_dup(
+		&scanner->lexer.input_stack,
+		&scanner->parent_scanner->lexer.input_stack));
+}
+
 t_error	scanner_load(
 			t_scanner *scanner,
 			t_scanner *parent_scanner,
@@ -27,22 +36,22 @@ t_error	scanner_load(
 	scanner->parser = parser;
 	scanner->parent_scanner = parent_scanner;
 	lexer_init(&scanner->lexer, scanner);
-	if (mode == SCAN_MODE_AUTO)
-	{
-		err = params_get_source(&source);
-		rl_catch_signals = 0;
-		rl_getc_function = reader_rl_getc;
-		scanner->mode = SCAN_MODE_NONE;
-		err = scan_mode_set(&scanner->mode);
-		if (err.type != ERR_NO)
-			return (scanner->err = scanner_error_qualify(err, false));
-		if (scanner->mode == SCAN_MODE_STRING || scanner->mode == SCAN_MODE_FILE)
-			scanner->source = source->data;
-		if (err.type)
-			return (scanner->err);
-	}
-	else
-		scanner->mode = mode;
+	scanner->mode = mode;
+	if (mode != SCAN_MODE_AUTO)
+		return (scanner_copy(scanner));
+	err = params_get_source(&source);
+	if (err.type)
+		return (scanner->err = scanner_error_qualify(err, false));
+	rl_catch_signals = 0;
+	rl_getc_function = reader_rl_getc;
+	scanner->mode = SCAN_MODE_NONE;
+	err = scan_mode_set(&scanner->mode);
+	if (err.type != ERR_NO)
+		return (scanner->err = scanner_error_qualify(err, false));
+	if (scanner->mode == SCAN_MODE_STRING || scanner->mode == SCAN_MODE_FILE)
+		scanner->source = source->data;
+	if (err.type)
+		return (scanner->err);
 	return (error(ERR_NO));
 }
 

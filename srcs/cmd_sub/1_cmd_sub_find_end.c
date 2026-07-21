@@ -5,24 +5,20 @@
 # include <stdio.h>
 # include "logs.h"
 
-t_error	cmd_sub_find_end(
-			const t_string *cmd,
-			ssize_t *out_closing_token_id,
-			t_ast_vector *ast_vector)
+t_error	cmd_sub_find_end(ssize_t *out_closing_token_id, t_ast_vector *ast_vector)
 {
 	t_ast_root	ast_root;
 	t_parser	*parser;
 	t_error		err;
 
 	fprintf(stderr, YELLOW "################# CMD SUB PARSING ################\n" NC);
-	err = shell_get_new_parser(&parser, SCAN_MODE_STRING_AND_CONTINUE);
+	err = shell_get_new_parser(&parser, SCAN_MODE_COPY);
 	if (err.type)
 	{
 		fprintf(stderr, YELLOW "##################################################\n" NC);
 		return (err);
 	}
 	parser->search_cmd_sub_end = true;
-	scanner_set_input(&parser->scanner, cmd);
 	err = parser_get_ast(parser, &ast_root);
 	if (err.type == ERR_NO)
 	{

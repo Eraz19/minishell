@@ -19,13 +19,12 @@ t_error	shell_get_new_runner(t_runner **out_runner_ptr, t_scan_mode mode)
 	if (shell->runner == NULL)
 		err = runner_load(new_runner, NULL, NULL, mode);
 	else
-		err = runner_load(
-				new_runner,
-				shell->last_runner,
-				&shell->last_runner->parser.scanner,
-				mode);
+		err = runner_load(new_runner, shell->last_runner,
+				&shell->last_runner->parser.scanner, mode);
 	if (err.type)
 		return (free(new_runner), err);
+	if (shell->runner == NULL)
+		shell->runner = new_runner;
 	if (shell->last_runner != NULL)
 		shell->last_runner->child = new_runner;
 	shell->last_runner = new_runner;
