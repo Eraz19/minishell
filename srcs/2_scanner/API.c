@@ -13,7 +13,7 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *token)
 		if (scanner->lexer.input_stack.len == 0)
 			return (token_init(token), token->type = TOKEN_EOF, scanner->err);
 	}
-	lexer_rules = scanner_lexer_rules(scanner);
+	lexer_rules = scanner_lexer_rules();
 	if (lexer_get_next_token(&scanner->lexer, token, lexer_rules).type)
 	{
 		scanner->err = scanner_error_qualify(scanner->lexer.err, false);
