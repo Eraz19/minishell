@@ -34,7 +34,7 @@ t_error	parser_read_heredoc(t_parser *parser)
 		fprintf(stderr, "%s[PARSER] scanner_read_heredoc(%p, %s%s%s, %s)%s\n",
 			YELLOW, &io_here->heredoc_body, BLUE, delim->value.data, YELLOW, bool_to_string(strip), NC);
 #endif
-		err = scanner_read_heredoc(parser->scanner, &io_here->heredoc_body,
+		err = scanner_read_heredoc(&parser->scanner, &io_here->heredoc_body,
 				delim, strip);
 		if (err.type)
 			return (err);

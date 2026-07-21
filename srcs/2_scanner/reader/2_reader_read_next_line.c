@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include "libft.h"
-#include "shell.h"
 #include "reader_.h"
+#include "params.h"
 #include "sig.h"
-#include "signal.h"
+#include <signal.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -68,6 +68,20 @@ static inline t_error	reader_process_rl(
 	return (sig_process());
 }
 
+static inline t_error	reader_should_exit_on_veof(void)
+{
+	bool	is_interactive;
+	bool	ignore_eof;
+	t_error	err;
+
+	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (err.type == ERR_NO)
+		err = option_is_active(OPT_IGNOREEOF, &ignore_eof);
+	if (err.type == ERR_NO && is_interactive == true && ignore_eof == false)
+		return (error(ERR_VEOF));
+	return (err);
+}
+
 static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
 {
 	bool	retry;
@@ -81,7 +95,7 @@ static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
 			break ;
 		if (retry == true)
 			continue ;
-		err = shell_should_exit_on_veof();
+		err = reader_should_exit_on_veof();
 		if (err.type)
 			break ;
 	}
@@ -105,11 +119,4 @@ t_error	reader_read_next_line(t_string *res, const char *prompt)
 	if (!string_append_n(res, "\n", 1))
 		return (err = error_sys(), string_free(res), err);
 	return (error(ERR_NO));
-}
-
-t_error	reader_read_error(t_error err, const char *source)
-{
-	err = error_print(err, "scanner", source, "read error", NULL, NULL);
-	err.type = ERR_POSIX_READ;
-	return (err);
 }

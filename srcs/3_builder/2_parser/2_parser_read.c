@@ -70,7 +70,7 @@ t_error	parser_read_next_symbol(t_parser *parser)
 	t_error	err;
 
 	assert(parser != NULL);
-	err = scanner_get_next_token(parser->scanner, &token);
+	err = scanner_get_next_token(&parser->scanner, &token);
 	if (err.type != ERR_NO)
 		return (err);
 	err = sym_conv(token.type, &parser->lookahead_raw_symbol);

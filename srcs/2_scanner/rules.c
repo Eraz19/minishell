@@ -1,5 +1,4 @@
 #include "alias.h"
-#include "shell.h"
 #include "reader_.h"
 #include "scanner_.h"
 #include "scanner_recognition_.h"
@@ -14,9 +13,7 @@ static t_error	scanner_lexer_continuation(t_lexer *lexer)
 	lexer->err = reader_continuation(&lexer->input->str);
 	if (lexer->err.type)
 		return (lexer->err);
-	scanner = shell_get_scanner();
-	if (scanner == NULL)
-		return (lexer->err = error(ERR_SHELL_NOT_FOUND));
+	scanner = lexer->scanner;
 	if (&(scanner->lexer) != lexer && scanner->lexer.input != NULL)
 	{
 		last_input = scanner->lexer.input->str;

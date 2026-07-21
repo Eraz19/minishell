@@ -20,7 +20,7 @@ static inline t_error	walk_and_or_async(
 		return (error_sys());
 	else if (pid == 0)
 	{
-		err = shell_init_subshell(SUBSHELL_ASYNC_AND_OR);
+		err = shell_init_subshell(SUBSHELL_ASYNC_AND_OR, &runner->parser.scanner);
 		if (err.type == ERR_NO)
 			err = walk_and_or(runner, and_or, exit_status);
 		(void)walk_normalize_output(err, NULL, exit_status);
@@ -75,7 +75,7 @@ static inline t_error	walk_list_in_subshell(
 		return (error_sys());
 	else if (pid == 0)
 	{
-		err = shell_init_subshell(SUBSHELL_NORMAL);
+		err = shell_init_subshell(SUBSHELL_NORMAL, &runner->parser.scanner);
 		if (err.type == ERR_NO)
 			err = walk_list_priv(runner, list, exit_status);
 		(void)walk_normalize_output(err, NULL, exit_status);

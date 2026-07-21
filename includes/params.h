@@ -74,7 +74,7 @@ void	params_free(t_params *params);
 void	params_init(t_params *params);
 
 // TODO: doc
-void	params_init_subshell(t_params *params);
+void	params_init_subshell(t_params *params, bool async_no_job_ctrl);
 
 // TODO: doc
 void	params_clear(t_params *params);
@@ -199,8 +199,8 @@ t_error	params_push_positionals(t_positionals *src);
 t_error	params_pop_positionals(void);
 
 // TODO: doc
-// @ret ERR_NO / ERR_LIBC
-t_error	params_reap(t_params *params);
+// @ret ERR_NO / ERR_INTERNAL / ERR_LIBC
+t_error	params_reap(void);
 
 // TODO: doc
 // @ret ERR_NO / ERR_INTERNAL / ERR_LIBC

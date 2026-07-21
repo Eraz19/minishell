@@ -1,5 +1,6 @@
 # WIP
 
+- rename `params` to `env`
 - ⚠️ `qualify_2()`
 - `shell`:
 	- process `ENV` at startup:
@@ -13,8 +14,6 @@
 	- `kill`
 - `options`:
 	- handle all options properly
-- `undefined_behaviour()`:
-	- print la tête à Xavier
 - `runner-executor`:
 	- `exec` specific flow
 	- `command` specific flow

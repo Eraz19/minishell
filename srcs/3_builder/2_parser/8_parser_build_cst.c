@@ -41,10 +41,7 @@ static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 	return (err);
 }
 
-static inline void	parser_build_cycle(
-							t_parser *parser,
-							const t_lr_machine *machine,
-							size_t *lr_state_id)
+static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 {
 	const t_token	*token;
 
@@ -52,16 +49,14 @@ static inline void	parser_build_cycle(
 	token = parser_get_token(parser, parser->lookahead_id);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
 	if (parser->lookahead_symbol == SYM_TOKEN
-		&& machine->qualifiers[*lr_state_id] != NULL)
-		machine->qualifiers[*lr_state_id](
+		&& parser->machine->qualifiers[*lr_state_id] != NULL)
+		parser->machine->qualifiers[*lr_state_id](
 			token,
 			parser->assignment_disabled,
 			&parser->lookahead_symbol);
 }
 
-static inline t_error	parser_handle_syntax_errors(
-							t_parser *parser,
-							const t_lr_machine *machine)
+static inline t_error	parser_handle_syntax_errors(t_parser *parser)
 {
 	size_t			lr_state_id;
 	const t_token	*token;
@@ -79,9 +74,9 @@ static inline t_error	parser_handle_syntax_errors(
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{
 		lr_state_id = parser_item_stack_top(&parser->item_stack)->lr_state_id;
-		action = machine->actions[lr_state_id][parser->lookahead_symbol];
+		action = parser->machine->actions[lr_state_id][parser->lookahead_symbol];
 		if (action.type == ACTION_REDUCE)
-			err = parser_reduce(parser, machine, action.payload);
+			err = parser_reduce(parser, action.payload);
 		if (action.type == ACTION_ACCEPT)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR || action.type == ACTION_SHIFT)
@@ -90,27 +85,26 @@ static inline t_error	parser_handle_syntax_errors(
 	return (err);
 }
 
-t_error	parser_build_cst(t_parser *parser, const t_lr_machine *machine)
+t_error	parser_build_cst(t_parser *parser)
 {
 	size_t			lr_state_id;
 	t_action		action;
 	t_error			err;
 
 	assert(parser != NULL);
-	assert(machine != NULL);
 	err = parser_prepare_to_build_cst(parser);
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{
-		parser_build_cycle(parser, machine, &lr_state_id);
-		action = machine->actions[lr_state_id][parser->lookahead_symbol];
+		parser_build_cycle(parser, &lr_state_id);
+		action = parser->machine->actions[lr_state_id][parser->lookahead_symbol];
 		if (action.type == ACTION_SHIFT)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)
-			err = parser_reduce(parser, machine, action.payload);
+			err = parser_reduce(parser, action.payload);
 		if (action.type == ACTION_ACCEPT)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR)
-			return (parser_handle_syntax_errors(parser, machine));
+			return (parser_handle_syntax_errors(parser));
 	}
 	return (err);
 }

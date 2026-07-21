@@ -100,9 +100,9 @@
 		"-I${workspaceFolder}/srcs/params/8_fds",
 		"-I${workspaceFolder}/srcs/params/8_fds/1_stack_and_frame",
 		"-I${workspaceFolder}/srcs/params/8_fds/2_fd_tracker",
-		"-I${workspaceFolder}/srcs/signal",
-		"-I${workspaceFolder}/srcs/signal/sig_action",
-		"-I${workspaceFolder}/srcs/signal/sig_no_to_id",
-		"-I${workspaceFolder}/srcs/signal/sig_parse_name"
+		"-I${workspaceFolder}/srcs/params/9_signal",
+		"-I${workspaceFolder}/srcs/params/9_signal/sig_action",
+		"-I${workspaceFolder}/srcs/params/9_signal/sig_no_to_id",
+		"-I${workspaceFolder}/srcs/params/9_signal/sig_parse_name"
 	]
 }

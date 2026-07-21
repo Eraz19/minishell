@@ -2,7 +2,6 @@
 # define PARSER_PRIV_H
 
 # include "parser_type.h"
-# include "lr_machine_type.h"
 # include "token.h"
 
 /* ************************************************************************* */
@@ -44,12 +43,10 @@ t_error	parser_read_heredoc(t_parser *parser);
 /*                                  ACTIONS                                  */
 /* ************************************************************************* */
 
-t_error	parser_accept(t_parser *parser);
+t_error	parser_build_cst(t_parser *parser);
 t_error	parser_shift(t_parser *parser, size_t lr_state_id);
-t_error	parser_reduce(
-			t_parser *parser,
-			const t_lr_machine *machine,
-			size_t rule_id);
+t_error	parser_reduce(t_parser *parser, size_t rule_id);
+t_error	parser_accept(t_parser *parser);
 
 /* ************************************************************************* */
 /*                                   DEBUG                                   */

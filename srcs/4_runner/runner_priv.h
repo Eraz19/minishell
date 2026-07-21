@@ -2,9 +2,9 @@
 # define RUNNER_PRIV_H
 
 # include "error.h"
-# include "shell.h"
+# include "runner_type.h"
 
 // TODO: doc
-void	runner_handle_errors(t_shell *shell, t_error *err);
+void	runner_handle_error(t_runner *runner, t_error *err);
 
 #endif

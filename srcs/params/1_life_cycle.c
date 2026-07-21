@@ -1,4 +1,5 @@
 #include "params.h"
+#include "sig.h"
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
@@ -14,13 +15,15 @@ void	params_init(t_params *params)
 	process_init(&params->processes);
 	cmd_cache_init(&params->cmd_cache);
 	fd_init(&params->fd_manager);
+	sig_init();
 }
 
-void	params_init_subshell(t_params *params)
+void	params_init_subshell(t_params *params, bool async_no_job_ctrl)
 {
 	option_set(&params->options, OPT_INTERACTIVE, false);
 	process_clear(&params->processes);
 	fd_init_subshell(&params->fd_manager);
+	sig_init_subshell(async_no_job_ctrl);
 }
 
 void	params_clear(t_params *params)
@@ -33,6 +36,7 @@ void	params_clear(t_params *params)
 	process_clear(&params->processes);
 	cmd_cache_clear(&params->cmd_cache);
 	fd_clear(&params->fd_manager, true);
+	sig_clear();
 }
 
 void	params_free(t_params *params)

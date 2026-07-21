@@ -42,7 +42,7 @@ bool	alias_is_valid_name(const char *name)
 	return (true);
 }
 
-bool	is_token_alias_expandable(t_alias *alias, char *word)
+bool	is_token_alias_expandable(t_parser *parser, t_alias *alias, char *word)
 {
 	bool	can_next_token_be_a_cmd_name;
 
@@ -58,8 +58,8 @@ bool	is_token_alias_expandable(t_alias *alias, char *word)
 	else if (!alias->disable_position)
 	{
 		can_next_token_be_a_cmd_name = false;
-		alias->err = builder_can_next_word_be_a_cmd_name(
-				alias->parser,
+		alias->err = parser_can_next_word_be_a_cmd_name(
+				parser,
 				&can_next_token_be_a_cmd_name);
 		if (alias->err.type || !can_next_token_be_a_cmd_name)
 			return (false);

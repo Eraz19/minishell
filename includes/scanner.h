@@ -5,6 +5,8 @@
 # include "token.h"
 # include "lexer.h"
 
+typedef struct s_parser	t_parser;
+
 /** @defgroup input_mode Input mode API
  *  @brief Identifies where the shell reads its commands from.
  *
@@ -21,6 +23,7 @@
 typedef enum e_scan_mode
 {
 	SCAN_MODE_NONE,
+	SCAN_MODE_AUTO,
 	SCAN_MODE_FILE,
 	SCAN_MODE_STRING,
 	SCAN_MODE_STDIN_TTY,
@@ -94,20 +97,16 @@ typedef struct s_scanner
 	t_scan_mode	mode;
 	t_lexer		lexer;
 	const char	*source;
+	t_parser	*parser;	// borrowed
 }	t_scanner;
 
 /* ************************************************************************* */
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
-/**
- * @ingroup scanner
- * @brief Zeroes @p scanner and initializes its lexer state.
- *
- * @param scanner Scanner initialized by the function (borrowed).
- * @return @c ERR_NO.
- */
-t_error	scanner_init(t_scanner *scanner);
+// TODO: doc
+// @ret ERR_INTERNAL
+t_error	scanner_init(t_scanner *scanner, t_parser *parser, t_scan_mode mode);
 
 /**
  * @ingroup scanner
@@ -143,26 +142,11 @@ void	scanner_free(t_scanner *scanner);
  */
 void	scanner_cmd_sub_free(t_scanner *cmd_sub_scanner);
 
-/**
- * @ingroup scanner
- * @brief Builds an independent scanner clone for a command substitution
- *        parse: copies the mode and source of @p main_scanner and
- *        deep-copies its lexer input stack, cursors included, so the
- *        recursive parse (POSIX 2.6.3) reads the same input without
- *        consuming the main scanner's state.
- *
- * @note @p cmd_sub_scanner is initialized by the function on every
- *       outcome: it is always safe to release it with
- *       @ref scanner_cmd_sub_free.
- * @param main_scanner Scanner whose input is cloned
- *                     (borrowed, read-only).
- * @param cmd_sub_scanner Clone initialized by the function (borrowed).
- * @return @c ERR_LIBC (printed) if the input stack copy fails,
- *         @c ERR_NO on success.
- */
-t_error	scanner_cmd_sub_init(
-			const t_scanner *main_scanner,
-			t_scanner *cmd_sub_scanner);
+// TODO: doc
+t_error    scanner_cmd_sub_init(
+				const t_scanner *main_scanner,
+				t_scanner *cmd_sub_scanner,
+				t_parser *cmd_sub_parser);
 
 // TODO: doc
 void	scanner_set_input(t_scanner *scanner, const t_string *cmd);
@@ -211,6 +195,8 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *token);
  * @brief Switches @p scanner to the pipe input mode after a fork, so
  *        the subshell reads its whole standard input regardless of the
  *        parent's mode (see @c shell_init_subshell).
+ *
+ * sets scanner->mode = SCAN_MODE_STDIN_PIPE
  *
  * @param scanner Already initialized scanner (borrowed).
  */

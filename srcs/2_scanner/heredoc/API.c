@@ -3,6 +3,7 @@
 #include "heredoc.h"
 #include "expander.h"
 #include "scanner.h"
+#include "parser.h"
 
 static t_error	heredoc_read_body(
 					t_string *out,
@@ -58,33 +59,38 @@ t_error	heredoc_expand_delim(t_string *out, t_token *delim)
 	return (error(ERR_NO));
 }
 
+// TO_TALK
 t_error	heredoc_prepare_for_expansion(
 			t_context_stack *context_stack_out,
 			t_ast_vector *ast_vec_out,
 			t_string *body)
 {
 	t_error					err;
-	t_scanner				scanner;
+	t_parser				parser;
 	t_context_stack_item	*item;
 	t_string				lexer_body;
 
-	err = lexer_remove_escaped_newlines(body, body_context_rules());
+	err = parser_init(&parser, SCAN_MODE_STRING);
 	if (err.type)
 		return (err);
+	err = lexer_remove_escaped_newlines(
+			&parser.scanner.lexer, body, body_context_rules());
+	if (err.type)
+		return (parser_free(&parser), err);
+	parser_clear(&parser);
 	err = context_stack_item_init(&item, CONTEXT_HEREDOC);
 	if (err.type)
-		return (err);
+		return (parser_free(&parser), err);
 	item->start = 0;
 	item->end = body->len;
 	err = context_stack_push(context_stack_out, item);
 	if (err.type)
-		return (free(item), err);
+		return (parser_free(&parser), free(item), err);
 	if (!string_dup(&lexer_body, body))
-		return (error_sys());
-	scanner_init(&scanner);
-	err = lexer_push_input(&scanner.lexer, &lexer_body);
-	if (!err.type)
-		err = lexer_track_context(&scanner.lexer,
+		return (err = error_sys(), parser_free(&parser), err);
+	err = lexer_push_input(&parser.scanner.lexer, &lexer_body);
+	if (err.type == ERR_NO)
+		err = lexer_track_context(&parser.scanner.lexer,
 				context_stack_out, ast_vec_out, body_context_rules());
-	return (scanner_free(&scanner), err);
+	return (parser_free(&parser), err);
 }

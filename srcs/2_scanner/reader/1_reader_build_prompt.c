@@ -5,7 +5,7 @@
 #include "expander.h"
 #include "reader_.h"
 
-static bool	prompt_excl_append(t_string *res, const t_string *val, size_t *i)
+static bool	prompt_append_excl(t_string *res, const t_string *val, size_t *i)
 {
 	t_history	*history;
 
@@ -33,7 +33,7 @@ static t_error	prompt_expand_exclamation(t_string *value)
 	string_init(&res, 0, NULL, 0);
 	while (i < value->len)
 	{
-		if (!prompt_excl_append(&res, value, &i))
+		if (!prompt_append_excl(&res, value, &i))
 			return (string_free(&res), error_sys());
 	}
 	string_free(value);
@@ -53,7 +53,7 @@ static t_error	prompt_use_unexpanded(
 	return (error(ERR_NO));
 }
 
-t_error	reader_prompt(const char *name, t_string *dst)
+t_error	reader_build_prompt(const char *name, t_string *dst)
 {
 	t_error		err;
 	t_string	value;

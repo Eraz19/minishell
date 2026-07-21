@@ -1,7 +1,6 @@
 #include "runner_priv.h"
-#include "scanner.h"
-#include "builder.h"
-#include "shell.h"
+#include "parser.h"
+#include "params.h"
 # include "logs.h"	// DEBUG
 # include <stdio.h>	// DEBUG
 
@@ -12,24 +11,23 @@ static inline void	runner_handle_eof(t_error *err, bool interactive)
 }
 
 static inline void	runner_handle_syntax_errors(
-						t_shell *shell,
+						t_runner *runner,
 						t_error *err,
 						bool interactive)
 {
 	*err = error_print(*err, NULL, NULL);
-	params_set_last_status_in(&shell->params, (int)err->type);
+	(void)params_set_last_status((int)err->type);
 	if (interactive == true)
 	{
-		scanner_clear(&shell->scanner);
-		builder_clear(&shell->builder);
+		parser_clear(&runner->parser);
 		err->type = ERR_NO;
 	}
 }
 
-static inline void	runner_handle_read_errors(t_shell *shell, t_error *err)
+static inline void	runner_handle_read_errors(t_error *err)
 {
 	*err = error_print(*err, NULL, NULL);
-	params_set_last_status_in(&shell->params, (int)err->type);
+	(void)params_set_last_status((int)err->type);
 }
 
 static inline void	runner_handle_bad_errors(t_error *err, bool interactive)
@@ -42,12 +40,18 @@ static inline void	runner_handle_bad_errors(t_error *err, bool interactive)
 		RED, (int)err->type, error_to_string(*err), NC);
 }
 
-void	runner_handle_errors(t_shell *shell, t_error *err)
+void	runner_handle_error(t_runner *runner, t_error *err)
 {
 	bool	interactive;
+	t_error	option_err;
 
 	fprintf(stderr, "[RUNNER] handling error %i (%s)\n", (int)err->type, error_to_string(*err));
-	interactive = option_is_active_in(shell->params.options, OPT_INTERACTIVE);
+	option_err = option_is_active(OPT_INTERACTIVE, &interactive);
+	if (option_err.type)
+	{
+		*err = option_err;
+		return ;
+	}
 	if (err->type == ERR_NOT_IMPLEMENTED)
 	{
 		(void)error_print(*err, NULL, NULL);
@@ -56,9 +60,9 @@ void	runner_handle_errors(t_shell *shell, t_error *err)
 	if (err->type == ERR_EOF)
 		runner_handle_eof(err, interactive);
 	else if (err->type == ERR_POSIX_SYNTAX)
-		runner_handle_syntax_errors(shell, err, interactive);
+		runner_handle_syntax_errors(runner, err, interactive);
 	else if (err->type == ERR_POSIX_READ)
-		runner_handle_read_errors(shell, err);
+		runner_handle_read_errors(err);
 	else if (err->type >= ERR_CONTINUE && err->type <= ERR_RETURN)
 	{
 		*err = error_print(*err, NULL, NULL);

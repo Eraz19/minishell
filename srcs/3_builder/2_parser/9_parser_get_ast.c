@@ -1,22 +1,16 @@
-#include "builder.h"
-#include "lr_machine.h"
 #include "parser.h"
+#include "parser_priv.h"
 #include "converter.h"
 # include "debug.h"		// DEBUG
 # include <assert.h>	// DEBUG
 
-t_error	builder_load(t_builder *builder)
-{
-	assert(builder != NULL);
-	return (lr_machine_build_tables(&builder->lr_machine));
-}
-
-t_error	build_ast(t_parser *parser, const t_lr_machine *machine, t_ast_root *dst_ast)
+t_error	parser_get_ast(t_parser *parser, t_ast_root *dst_ast)
 {
 	t_error		err;
 
+	assert(parser != NULL);
 	assert(dst_ast != NULL);
-	err = parser_build_cst(parser, machine);
+	err = parser_build_cst(parser);
 	if (err.type)
 		return (err);
 	debug_dump_cst(parser->cst);

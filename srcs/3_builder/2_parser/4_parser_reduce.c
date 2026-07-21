@@ -5,7 +5,6 @@
 
 static inline t_error	parser_new_lr_state(
 							const t_parser *parser,
-							const t_lr_machine *machine,
 							const t_rule *rule,
 							size_t *dst)
 {
@@ -20,7 +19,7 @@ static inline t_error	parser_new_lr_state(
 	previous_item = &((t_parser_item *)stack->data)[previous_item_id];
 	lr_state_from = previous_item->lr_state_id;
 	lr_state_to = 
-		machine->gotos[lr_state_from][rule->lhs - SYM_NON_TERMINAL_MIN];
+		parser->machine->gotos[lr_state_from][rule->lhs - SYM_NON_TERMINAL_MIN];
 	if (lr_state_to == GOTO_EMPTY)
 		return (error_print(
 			error(ERR_PARSER_EMPTY_GOTO), "parser", NULL, NULL));
@@ -66,10 +65,7 @@ static inline t_error	parser_replace_items(
 	return (error(ERR_NO));
 }
 
-t_error	parser_reduce(
-			t_parser *parser,
-			const t_lr_machine *machine,
-			size_t rule_id)
+t_error	parser_reduce(t_parser *parser, size_t rule_id)
 {
 	const t_rule	*rule;
 	size_t			rhs_start;
@@ -78,12 +74,11 @@ t_error	parser_reduce(
 	t_error			err;
 
 	assert(parser != NULL);
-	assert(machine != NULL);
-	rule = &machine->rules[rule_id];
+	rule = &parser->machine->rules[rule_id];
 	rhs_start = parser->item_stack.len - rule->rhs_len;
 	rhs = &((t_parser_item *)parser->item_stack.data)[rhs_start];
 	item.symbol = rule->lhs;
-	err = parser_new_lr_state(parser, machine, rule, &item.lr_state_id);
+	err = parser_new_lr_state(parser, rule, &item.lr_state_id);
 	if (err.type)
 		return (err);
 	item.tokens_start_id = parser->lookahead_id;

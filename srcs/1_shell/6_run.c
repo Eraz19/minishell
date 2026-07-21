@@ -42,11 +42,26 @@ static inline t_error	shell_prepare(t_shell_loading_options *options)
 	return (shell_load(options));
 }
 
+static inline t_error	shell_exec(void)
+{
+	t_runner	runner;
+	t_error		err;
+
+	err = runner_init(&runner, SCAN_MODE_AUTO);
+	if (err.type)
+		return (err);
+	runner_run(&runner);
+	runner_free(&runner);
+	err = history_save();
+	if (err.type)
+		(void)error_print(err, "history", NULL, NULL);
+	return (err);
+}
+
 int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
 {
 	t_shell_loading_options	options;
 	int						exit_status;
-	t_error					history_err;
 	t_error					err;
 
 	shell_start_logs();
@@ -58,12 +73,7 @@ int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
 	if (err.type == ERR_NO)
 		err = shell_exec_env();
 	if (err.type == ERR_NO)
-	{
-		runner_run(options.shell);
-		history_err = history_save();
-		if (history_err.type)
-			(void)error_print(history_err, "history", NULL, NULL);
-	}
+		shell_exec();
 	exit_status = params_get_last_status_from(&options.shell->params);
 	shell_free(options.shell);
 	shell_stop_logs();

@@ -61,7 +61,7 @@ t_error	scanner_alias_expand(t_scanner *scanner, t_token *token)
 	scanner->err = lexer_input_stack_item_init(&item);
 	if (scanner->err.type)
 		return (scanner->err);
-	scanner->err = alias_expand_token(&item->str, &expanded, &token->value);
+	scanner->err = alias_expand_token(scanner->parser, &item->str, &expanded, &token->value);
 	if (scanner->err.type || !expanded)
 		return (lexer_input_stack_item_free(&item), scanner->err);
 	scanner->err = lexer_input_stack_push(&scanner->lexer.input_stack, item);

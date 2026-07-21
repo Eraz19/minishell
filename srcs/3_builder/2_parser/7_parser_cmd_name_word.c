@@ -85,7 +85,6 @@ static inline t_error	free_and_return(t_vector *vector)
 
 t_error	parser_can_next_token_be_a_cmd_name_or_word(
 			const t_parser *parser,
-			const t_lr_machine *machine,
 			bool *dst)
 {
 	t_vector		lr_state_ids;
@@ -94,7 +93,6 @@ t_error	parser_can_next_token_be_a_cmd_name_or_word(
 	t_error			err;
 
 	assert(parser != NULL);
-	assert(machine != NULL);
 	assert(dst != NULL);
 	err = get_lr_state_ids_from_stack(parser, &lr_state_ids);
 	if (err.type)
@@ -102,12 +100,12 @@ t_error	parser_can_next_token_be_a_cmd_name_or_word(
 	while (true)
 	{
 		lr_state_id = ((size_t *)lr_state_ids.data)[lr_state_ids.len - 1];
-		if (state_expects_cmd_name_or_word(machine, lr_state_id))
+		if (state_expects_cmd_name_or_word(parser->machine, lr_state_id))
 			return (*dst = true, free_and_return(&lr_state_ids));
-		action = &machine->actions[lr_state_id][SYM_WORD];
+		action = &parser->machine->actions[lr_state_id][SYM_WORD];
 		if (action->type != ACTION_REDUCE)
 			return (*dst = false, free_and_return(&lr_state_ids));
-		err = simulate_reduction(machine, &lr_state_ids, action->payload);
+		err = simulate_reduction(parser->machine, &lr_state_ids, action->payload);
 		if (err.type)
 			break ;
 	}

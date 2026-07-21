@@ -416,27 +416,11 @@ t_error			lexer_get_next_token(
  */
 t_error			lexer_push_input(t_lexer *lexer, t_string *str);
 
-/**
- * @ingroup lexer
- * @brief Rewrites @p word without its escaped newlines, scanning it with
- *        @p args on a private lexer.
- *
- * @warning On failure @p word is left as a valid EMPTY string: its
- *          buffer is consumed by the scan and the cleaned copy is only
- *          written back on success.
- *
- * @param word Word to clean; replaced by the cleaned copy (borrowed).
- * @param args Detection configuration for the scan; the context tag,
- *             delimiter lengths and stack item are filled in by the
- *             function.
- * @return @c ERR_LIBC on allocation failure; @c ERR_EMPTY_STACK on an
- *         input stack inconsistency; from the scan: @c ERR_UNEXPECTED_EOI
- *         (printed), @c ERR_NO_INPUT_TO_LEX, @c ERR_NOT_IMPLEMENTED
- *         (printed), @c ERR_INCOHERENT_STATE; @c ERR_NO on success.
- */
-t_error			lexer_remove_escaped_newlines(
-					t_string *word,
-					t_lexer_context_args args);
+// TODO: doc
+t_error	lexer_remove_escaped_newlines(
+			t_lexer *lexer,
+			t_string *word,
+			t_lexer_context_args args);
 
 /**
  * @ingroup lexer

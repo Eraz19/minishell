@@ -77,7 +77,8 @@ typedef struct s_alias
 /*                                LIFE_CYCLE                                 */
 /* ************************************************************************* */
 
-void	alias_init(t_alias *alias, t_parser *parser);
+// TODO: doc
+void	alias_init(t_alias *alias);
 
 // TODO: doc
 void	alias_clear(t_alias *alias);
@@ -111,42 +112,12 @@ void	alias_free(t_alias *alias);
  */
 t_error	alias_add(const char *name, const char *value);
 
-/**
- * @ingroup alias
- * @brief Expands a token to its alias value when eligible (POSIX 2.3.1).
- *
- * Reads the token text from @p token_value and, when it names an alias
- * eligible for expansion (valid unquoted name, not already being expanded,
- * and in command position unless a previous expansion's trailing blank
- * lifted that rule), pushes a copy of the name onto the recursion-guard
- * stack and returns a freshly allocated copy of its value through
- * @p expansion. When the token is not eligible, @p expansion is left
- * untouched. Operates on the global shell alias state.
- *
- * @note On failure after the eligibility check, the recursion-guard stack
- *       is rebalanced: no name stays blocked.
- * @note The recursion-guard entry pushed on a successful expansion is
- *       popped by @ref alias_on_expansion_end when the caller's pushed
- *       input ends: a true @p expanded REQUIRES the caller to feed
- *       @p expansion back as a lexer input (empty expansions included —
- *       POSIX: an empty alias value removes the word).
- * @param expansion String receiving the expansion, initialized by the
- *                  function only when @p expanded is set to true; the
- *                  caller owns it (borrowed).
- * @param expanded Out: whether the token expanded — the ONLY signal to
- *                 test; an empty @p expansion is a valid expansion
- *                 (borrowed).
- * @param token_value Token text to test (borrowed, read-only).
- * @return @c ERR_SHELL_NOT_FOUND if the shell alias or builder state is
- *         unavailable; @c ERR_LIBC on allocation failure;
- *         @c ERR_INCOHERENT_STATE if the map and the eligibility check
- *         disagree; from the command-position check:
- *         @c ERR_PARSER_INVALID_STATE (printed) or
- *         @c ERR_PARSER_EMPTY_GOTO (printed); @c ERR_NO on success,
- *         whether or not the token expanded.
- */
+// TODO: doc
 t_error	alias_expand_token(
-			t_string *expansion, bool *expanded, const t_string *token_value);
+			t_parser *parser,
+			t_string *expansion,
+			bool *expanded,
+			const t_string *token_value);
 
 /**
  * @ingroup alias

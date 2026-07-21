@@ -181,8 +181,8 @@ INCLUDES		:= \
 	-Isrcs/params/8_fds \
 	-Isrcs/params/8_fds/1_stack_and_frame \
 	-Isrcs/params/8_fds/2_fd_tracker \
-	-Isrcs/signal \
-	-Isrcs/signal/sig_action
+	-Isrcs/params/9_signal \
+	-Isrcs/params/9_signal/sig_action
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

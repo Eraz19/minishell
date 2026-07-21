@@ -1,42 +1,64 @@
 #include "error.h"
-#include "builder.h"
 #include "runner.h"
 #include "runner_priv.h"
 #include "walker.h"
 #include "params.h"
-#include "shell.h"
+#include "parser.h"
 #include "sig.h"
 #include <stdbool.h>
+
+static inline t_error	runner_loop_cycle(t_runner *runner, t_ast_root *ast_root)
+{
+	bool	no_exec;
+	t_error	err;
+
+	err = sig_process();
+	if (err.type == ERR_NO)
+		err = parser_get_ast(&runner->parser, ast_root);
+	if (err.type == ERR_NO)
+		err = sig_process();
+	if (err.type == ERR_NO)
+		err = option_is_active(OPT_NOEXEC, &no_exec);
+	if (err.type == ERR_NO && no_exec == false)
+		err = walk(runner, ast_root);
+	if (err.type == ERR_NO)
+		err = sig_process();
+	return (error_priorize(err, params_reap()));
+}
 
 /*
 Non-fatal errors must be handled in walkers.
 Therefore, only fatal errors should bubble up to the main loop.
 */
-void	runner_run(t_shell *shell)
+void	runner_run(t_runner *runner)
 {
-	t_parser			*parser;
-	const t_lr_machine	*machine;
-	t_ast_root			ast_root;
-	t_error				err;
+	t_ast_root	ast_root;
+	t_error		err;
 
-	err = error(ERR_NO);
 	ast_root_init(&ast_root);
-	parser = &shell->builder.parser;
-	machine = &shell->builder.lr_machine;
+	err.type = ERR_NO;
 	while (err.type == ERR_NO)
 	{
-		err = sig_process();
-		if (err.type == ERR_NO)
-			err = build_ast(parser, machine, &ast_root);
-		if (err.type == ERR_NO)
-			err = sig_process();
-		if (err.type == ERR_NO
-			&& option_is_active_in(shell->params.options, OPT_NOEXEC) == false)
-				err = walk(&shell->runner, &ast_root);
-		if (err.type == ERR_NO)
-			err = sig_process();
-		err = error_priorize(err, params_reap(&shell->params));
-		runner_handle_errors(shell, &err);
+		err = runner_loop_cycle(runner, &ast_root);
+		runner_handle_error(runner, &err);
 		ast_root_free(&ast_root);
+		runner_clear(runner);
 	}
+}
+
+void	runner_run_ast(t_runner *runner, t_ast_root *ast_root)
+{
+	bool	no_exec;
+	t_error	err;
+
+	err = sig_process();
+	if (err.type == ERR_NO)
+		err = option_is_active(OPT_NOEXEC, &no_exec);
+	if (err.type == ERR_NO && no_exec == false)
+		err = walk(runner, ast_root);
+	if (err.type == ERR_NO)
+		err = sig_process();
+	err = error_priorize(err, params_reap());
+	runner_handle_error(runner, &err);
+	runner_clear(runner);
 }

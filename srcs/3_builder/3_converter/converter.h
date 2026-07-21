@@ -9,9 +9,5 @@ t_error	convert_cst_to_ast(
 			t_parser *parser,
 			t_cst_node *cst_root,
 			t_ast_root *ast_root);
-t_error	convert_cmd_sub_cst_to_ast(
-			t_parser *parser,
-			t_cst_node *cst_root,
-			t_ast_root *ast_root);
 
 #endif
