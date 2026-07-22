@@ -40,15 +40,8 @@ bool	cmd_name_is_intrinsic_builtin(const char *name, t_builtin *out_builtin);
  */
 bool	cmd_name_is_regular_builtin(const char *name, t_builtin *out_builtin);
 
-/**
- * @brief Test whether a command name is a POSIX special builtin.
- *
- * @param name Command name to classify (borrowed, read-only).
- * @param out_builtin Destination receiving the builtin entry point or @c NULL
- *                    (borrowed).
- * @return True when @p name is a special builtin, false otherwise.
- */
-bool	cmd_name_is_special_builtin(const char *name, t_builtin *out_builtin);
+// TODO: doc
+bool	cmd_name_is_special_builtin(const char *name, t_special_builtin *out_special_builtin);
 
 /**
  * @brief Warn when @p name matches a command name with unspecified POSIX

@@ -1,3 +1,4 @@
+#include "builtins.h"
 #include "params.h"
 #include "ft_getopt.h"
 #include <stdbool.h>
@@ -97,12 +98,12 @@ static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 	return (exit_status);
 }
 
-t_error	builtin_unset(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_unset(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	t_getopt_out	out;
 	t_error			err;
 
-	(void)envp;
+	(void)runner;
 	err = unset_process_options(argc, argv, &out);
 	if (err.type == ERR_NO && unset_has_option(&out, 'f'))
 		err = unset_fun(out.first_operand_index, argc, argv);

@@ -1,6 +1,7 @@
 #include "shell_priv.h"
 #include "runner.h"
 #include <stdlib.h>
+#include "sig.h"
 
 /* -------------------- DEBUG (START) -------------------- */
 # include <locale.h>	// DEBUG
@@ -51,6 +52,7 @@ static inline t_error	shell_exec(void)
 	if (err.type)
 		return (err);
 	runner_run(runner);
+	sig_process_exit();
 	shell_destroy_last_instance();
 	err = history_save();
 	if (err.type)

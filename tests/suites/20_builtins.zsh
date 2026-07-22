@@ -264,7 +264,7 @@ expect_lines "ONLY_5=alone"
 t_end
 
 t_begin ENV.6 "POSIX: env with a utility operand runs the utility"
-t_run 'env /bin/echo via_env'
+t_run 'env echo via_env'
 expect_status 0
 expect_lines "via_env"
 t_end
@@ -466,20 +466,13 @@ tt UNSET.4 "unset of a variable that does not exist is NOT an error" \
 echo rc=$?' 0 "rc=0"
 
 t_begin UNSET.5 "unset -f removes a function definition"
-t_run 'f_u5() { echo defined; }
+T_STDIN='f_u5() { echo defined; }
 unset -f f_u5
 f_u5
 echo rc=$?'
-# removed function -> invoking it is command-not-found; 2.8.1 lets the
-# non-interactive shell exit (status 127) or continue (rc=127 printed).
-# Either way "defined" must not appear: that would mean unset -f failed.
-expect_out_lacks "defined"
-if (( T_RET == 0 )); then
-	expect_out_contains "rc=127"
-else
-	expect_status 127
-	expect_err_contains "not found"
-fi
+t_run_argv -s -i
+expect_status 0
+expect_out_contains "rc=127"
 t_end
 
 t_begin UNSET.6 "unset with an invalid name -> error"
@@ -542,34 +535,24 @@ tt ALIAS.8 "alias is only substituted in command position" \
 echo notcmd_8" 0 "notcmd_8"
 
 t_begin UNALIAS.1 "unalias removes the definition"
-t_run "alias tmp_u1='echo leaked_u1'
+T_STDIN="alias tmp_u1='echo x'
 unalias tmp_u1
 tmp_u1
 echo rc=\$?"
-# removed alias -> command-not-found; 2.8.1: exit 127 or continue.
-# "leaked_u1" appearing would mean the alias still expanded.
-expect_out_lacks "leaked_u1"
-if (( T_RET == 0 )); then
-	expect_lines "rc=127"
-else
-	expect_status 127
-	expect_err_contains "not found"
-fi
+t_run_argv -s -i
+expect_status 0
+expect_out_contains "rc=127"
 t_end
 
 t_begin UNALIAS.2 "unalias -a removes everything"
-t_run "alias a_u2='echo leaked_a_u2'
-alias b_u2='echo leaked_b_u2'
+T_STDIN="alias a_u2='echo a'
+alias b_u2='echo b'
 unalias -a
 a_u2
 echo rc=\$?"
-expect_out_lacks "leaked_a_u2"
-if (( T_RET == 0 )); then
-	expect_lines "rc=127"
-else
-	expect_status 127
-	expect_err_contains "not found"
-fi
+t_run_argv -s -i
+expect_status 0
+expect_out_contains "rc=127"
 t_end
 
 t_begin UNALIAS.3 "unalias of an unknown name -> non-zero + diagnostic"
@@ -592,7 +575,7 @@ tt WAIT.1 "wait with no children returns 0" \
 echo rc=$?' 0 "rc=0"
 
 tt WAIT.2 "wait for a background job" \
-'/bin/sleep 0.1 &
+'sleep 0.1 &
 wait
 echo rc=$?' 0 "rc=0"
 
@@ -626,7 +609,7 @@ t_end
 tt WAIT.8 "wait for several pids" \
 'true &
 P1=$!
-/bin/sleep 0.05 &
+sleep 0.05 &
 P2=$!
 wait $P1 $P2
 echo rc=$?' 0 "rc=0"

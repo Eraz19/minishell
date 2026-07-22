@@ -330,3 +330,8 @@ t_error	error_drop_non_fatal(t_error err)
 	}
 	return (err);
 }
+
+bool	error_is_flow_control(t_error err)
+{
+	return (err.type >= ERR_VEOF && err.type <= ERR_INTERRUPTED);
+}

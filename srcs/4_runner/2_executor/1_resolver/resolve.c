@@ -14,7 +14,7 @@ static inline void	cmd_compute_name(t_cmd *cmd)
 		cmd->type = CMD_EXTERNAL;
 		return ;
 	}
-	else if (cmd_name_is_special_builtin(cmd->name.data, &cmd->builtin))
+	else if (cmd_name_is_special_builtin(cmd->name.data, &cmd->special_builtin))
 	{
 		cmd->type = CMD_SPECIAL_BUILTIN;
 		return ;

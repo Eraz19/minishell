@@ -1,3 +1,4 @@
+#include "builtins.h"
 #include "alias.h"
 #include "ft_getopt.h"
 

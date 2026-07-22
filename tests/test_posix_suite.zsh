@@ -105,14 +105,13 @@ fi
 LOG_ROOT="${SCRIPT_DIR}/logs"
 mkdir -p "$LOG_ROOT" || exit 1
 n=1
-while [[ -e "${LOG_ROOT}/posix_suite.${n}" ]]; do
+while true; do
+	LOG_DIR="${LOG_ROOT}/posix_suite.${n}"
+	mkdir "$LOG_DIR" 2>/dev/null && break
 	n=$((n + 1))
 done
-LOG_DIR="${LOG_ROOT}/posix_suite.${n}"
-mkdir -p "$LOG_DIR" || exit 1
 
-WORK_ROOT="${SCRIPT_DIR}/fixtures/posix_suite"
-rm -rf "$WORK_ROOT"
+WORK_ROOT="${SCRIPT_DIR}/fixtures/posix_suite.${n}"
 mkdir -p "$WORK_ROOT" || exit 1
 
 source "${SUITES_DIR}/harness.zsh"

@@ -310,13 +310,13 @@ t_section "option -h / command hashing (POSIX set -h)"
 
 t_begin OPT-H.1 "set -h: commands still resolve and run"
 t_run 'set -h
-/bin/echo hashed_ok'
+echo hashed_ok'
 expect_status 0
 expect_lines "hashed_ok"
 t_end
 
 t_begin OPT-H.2 "set -h: repeated PATH lookups keep working"
-t_setup 'mkdir -p bin; printf "#!/bin/sh\necho tool_ran\n" > bin/mytool_h2; chmod +x bin/mytool_h2'
+t_setup 'mkdir -p bin; printf "#include <stdio.h>\nint main(void){puts(\"tool_ran\");return 0;}\n" > bin/mytool_h2.c; cc bin/mytool_h2.c -o bin/mytool_h2'
 t_run 'PATH=$PWD/bin:$PATH
 set -h
 mytool_h2
@@ -327,7 +327,7 @@ t_end
 
 t_begin OPT-H.3 "set +h: disabling hashing keeps commands runnable"
 t_run 'set +h
-/bin/echo still_ok'
+echo still_ok'
 expect_status 0
 expect_lines "still_ok"
 t_end
@@ -368,16 +368,9 @@ t_begin OPT-I.5 "non-interactive: command-not-found — 2.8.1 says 'may exit'"
 t_run 'no_such_cmd_xyz
 echo survived'
 # POSIX.1-2024 2.8.1: command not found, non-interactive shell "may exit"
-# (diagnostic required either way; 2.9.1: the failed command's status is 127).
-# Both branches are conformant — assert whichever one the shell took:
-#   continue -> next command runs, final status 0
-#   exit     -> status 127, next command never runs
-if (( T_RET == 0 )); then
-	expect_lines "survived"
-else
-	expect_status 127
-	expect_out_lacks "survived"
-fi
+# This shell chooses to exit in that case.
+expect_status 127
+expect_out_lacks "survived"
 expect_err_contains "not found"
 t_end
 
@@ -527,12 +520,12 @@ echo rc=$?' 0 "rc=1"
 
 tt PIPEFAIL.3 "pipefail: status of the failing element is kept" \
 'set -o pipefail
-/bin/sh -c "exit 3" | true | true
+sh -c "exit 3" | true | true
 echo rc=$?' 0 "rc=3"
 
 tt PIPEFAIL.4 "pipefail: all-success pipeline still returns 0" \
 'set -o pipefail
-echo data | /bin/cat > /dev/null
+echo data | cat > /dev/null
 echo rc=$?' 0 "rc=0"
 
 tt PIPEFAIL.5 "pipefail + ! negation" \

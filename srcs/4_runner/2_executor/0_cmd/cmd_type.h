@@ -48,26 +48,28 @@ typedef enum e_cmd_type
 typedef struct s_cmd
 {
 	/** @brief Command name view borrowed from the first @ref s_cmd::argv item. */
-	t_string	name;
+	t_string			name;
 	/** @brief Resolved command kind. */
-	t_cmd_type	type;
+	t_cmd_type			type;
 	/** @brief Whether the command name is treated as a declaration utility. */
-	bool		is_declaration_utility;
+	bool				is_declaration_utility;
 	/** @brief Expanded argument vector stored as owned @c char * items. */
-	t_vector	argv;
+	t_vector			argv;
 	/** @brief Execution environment stored as owned @c char * items. */
-	t_vector	envp;
+	t_vector			envp;
 	/** @brief Resolved executable path for @c CMD_EXTERNAL commands. */
-	t_string	path;
+	t_string			path;
 	/** @brief Builtin entry point for builtin command kinds. */
-	t_builtin	builtin;
+	t_builtin			builtin;
+	// TODO: doc
+	t_special_builtin	special_builtin;
 	/** @brief Resolved shell function for @c CMD_FUNCTION commands
 	 *         (borrowed, read-only). */
-	t_function	*function;
+	t_function			*function;
 	/** @brief Whether assignment words override @c PATH for this command. */
-	bool		path_is_temporary;
+	bool				path_is_temporary;
 	/** @brief Exit status produced when the command is dispatched. */
-	int			exit_status;
+	int					exit_status;
 }	t_cmd;
 
 #endif

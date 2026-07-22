@@ -1,3 +1,4 @@
+#include "builtins.h"
 #include "error.h"
 #include "libft.h"
 #include "params.h"
@@ -53,12 +54,12 @@ static inline t_error	exit_parse_status(char *arg, int *exit_status)
 	return (error(ERR_EXIT));
 }
 
-t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_exit(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	int		first_operand_index;
 	t_error	err;
 
-	(void)envp;
+	(void)runner;
 	first_operand_index = 1;
 	if (argc > 1 && str_cmp(argv[1], "--") == 0)
 		first_operand_index = 2;
