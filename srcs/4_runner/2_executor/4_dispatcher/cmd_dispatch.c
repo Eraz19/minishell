@@ -10,7 +10,7 @@ t_error	cmd_dispatch(t_cmd *cmd, t_runner *runner)
 		return (error(ERR_NO));
 	}
 	else if (cmd->type == CMD_SPECIAL_BUILTIN || cmd->type == CMD_BUILTIN)
-		return (cmd_exec_builtin(cmd));
+		return (cmd_exec_builtin(cmd, runner));
 	else if (cmd->type == CMD_FUNCTION)
 		return (cmd_exec_function(cmd, runner));
 	else
