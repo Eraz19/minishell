@@ -1,5 +1,6 @@
 # OTHERS
 
+- when shell options are invalid => requalify error in `ERR_INVALID_USAGE`
 - rename `params` to `env`
 - ⚠️ `qualify_2()`
 - `shell`:

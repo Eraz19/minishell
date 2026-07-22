@@ -79,13 +79,11 @@ static t_error	reader_open_source(const char *path, int *fd)
 	return (err);
 }
 
-#include <stdio.h>
 t_error	reader_file_input(t_string *res, const char *path)
 {
 	int			fd;
 	t_error		err;
 
-	printf("read file input: path [%s]\n", path);
 	err = reader_open_source(path, &fd);
 	if (err.type)
 		return (err);
@@ -95,12 +93,10 @@ t_error	reader_file_input(t_string *res, const char *path)
 		err = reader_read_error(err, path);
 		return (error_priorize(err, posix_close_if_open(fd)));
 	}
-	printf("read file input: read [%zu] | [%s] bytes\n", res->len, res->data);
 	err = posix_close_if_open(fd);
 	if (err.type)
 		return (string_free(res), err);
 	if (!string_append_n(res, "\n", 1))
 		return (err = error_sys(), string_free(res), err);
-	printf("read file input: appended newline [%zu] | [%s] bytes\n", res->len, res->data);
 	return (err);
 }

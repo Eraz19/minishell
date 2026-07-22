@@ -48,7 +48,7 @@ tt NEST.9 "subshell inside a pipeline" \
 '(echo from_subshell; exit 0) | /bin/cat' 0 "from_subshell"
 
 tt NEST.10 "pipeline inside a subshell inside &&" \
-'/bin/true && (echo x | /bin/tr x y)' 0 "y"
+'true && (echo x | /bin/tr x y)' 0 "y"
 
 ###############################################################################
 t_section "nesting: control structures inside each other"
@@ -89,17 +89,17 @@ EOF
 f' 0 "u" "v"
 
 tt NEST.15 "brace group inside if inside subshell" \
-'(if /bin/true; then { echo a; echo b; }; fi)' 0 "a" "b"
+'(if true; then { echo a; echo b; }; fi)' 0 "a" "b"
 
 tt NEST.16 "function defined inside an if, then called" \
-'if /bin/true; then
+'if true; then
 	late_f() { echo defined_late; }
 fi
 late_f' 0 "defined_late"
 
 tt NEST.17 "loop over a pipeline of and-ors" \
 'for i in 1 2; do
-	/bin/false || echo rescued_$i
+	false || echo rescued_$i
 done | /bin/cat' 0 "rescued_1" "rescued_2"
 
 tt NEST.18 "nested functions calling each other" \
@@ -123,7 +123,7 @@ t_section "mixing: redirections + heredocs + expansions + pipes"
 ###############################################################################
 
 tt MIX.1 "if with redirected output inside a pipe" \
-'if /bin/true; then echo branch_out; fi > mid.txt
+'if true; then echo branch_out; fi > mid.txt
 /bin/cat mid.txt | /bin/tr a-z A-Z' 0 "BRANCH_OUT"
 
 tt MIX.2 "heredoc into a pipeline stage" \
@@ -193,7 +193,7 @@ expect_err_contains "argv[2] => [two]"
 t_end
 
 tt MIX.13 "exit status flows through nesting: function > if > pipeline" \
-'f() { if /bin/true; then /bin/sh -c "exit 8"; fi; }
+'f() { if true; then /bin/sh -c "exit 8"; fi; }
 f
 echo rc=$?' 0 "rc=8"
 
@@ -220,14 +220,14 @@ tt STRESS.1 "4-deep structure: while(for(if(case)))" \
 while /bin/test -e run_s1; do
 	/bin/rm run_s1
 	for i in hit miss; do
-		if /bin/true; then
+		if true; then
 			case $i in hit) echo case_$i;; esac
 		fi
 	done
 done' 0 "case_hit"
 
 tt STRESS.2 "pipeline where every stage is a compound command" \
-'{ echo b; echo a; } | (/bin/sort) | if /bin/true; then /bin/cat; fi' \
+'{ echo b; echo a; } | (/bin/sort) | if true; then /bin/cat; fi' \
 0 "a" "b"
 
 tt STRESS.3 "10-stage pipeline" \
@@ -235,8 +235,8 @@ tt STRESS.3 "10-stage pipeline" \
 0 "start"
 
 tt STRESS.4 "long && chain with a || fallback at each level" \
-'/bin/true && /bin/true && /bin/false || echo lvl1
-/bin/true && { /bin/false || echo lvl2; }' 0 "lvl1" "lvl2"
+'true && true && false || echo lvl1
+true && { false || echo lvl2; }' 0 "lvl1" "lvl2"
 
 tt STRESS.5 "function redefining itself on first call" \
 'once() { once() { echo second; }; echo first; }

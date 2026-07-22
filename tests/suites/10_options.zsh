@@ -22,7 +22,7 @@ tta INVOC-C.1 "-c runs the command string" 0 "hello" \
 tta INVOC-C.2 "-c empty string does nothing, exit 0" 0 "" \
 	-- -c ''
 tta INVOC-C.3 "-c exit status is last command's" 1 "" \
-	-- -c '/bin/false'
+	-- -c 'false'
 tta INVOC-C.4 "-c command-not-found -> 127" 127 "" \
 	-- -c 'no_such_command_xyz_42'
 
@@ -227,7 +227,7 @@ t_section "option -e / errexit — TD, not implemented (--td to run)"
 td_guard OPT-E.1 "set -e: shell exits on a failing command" && {
 	t_begin OPT-E.1 "set -e: shell exits on a failing command"
 	t_run 'set -e
-/bin/false
+false
 echo unreachable'
 	expect_status 1
 	expect_out_lacks "unreachable"
@@ -237,7 +237,7 @@ echo unreachable'
 td_guard OPT-E.2 "set -e: failure in && / || does not exit" && {
 	t_begin OPT-E.2 "set -e: failure in && / || does not exit"
 	t_run 'set -e
-/bin/false || echo caught
+false || echo caught
 echo alive'
 	expect_status 0
 	expect_lines "caught" "alive"
@@ -247,7 +247,7 @@ echo alive'
 td_guard OPT-E.3 "set -e: failing if-condition does not exit" && {
 	t_begin OPT-E.3 "set -e: failing if-condition does not exit"
 	t_run 'set -e
-if /bin/false; then echo yes; fi
+if false; then echo yes; fi
 echo alive'
 	expect_status 0
 	expect_lines "alive"
@@ -257,7 +257,7 @@ echo alive'
 td_guard OPT-E.4 "set -e: ! negated failure does not exit" && {
 	t_begin OPT-E.4 "set -e: ! negated failure does not exit"
 	t_run 'set -e
-! /bin/false
+! false
 echo alive'
 	expect_status 0
 	expect_lines "alive"
@@ -266,7 +266,7 @@ echo alive'
 
 td_guard OPT-E.5 "command line -e" && {
 	tta OPT-E.5 "command line -e" 1 "" \
-		-- -e -c '/bin/false; echo unreachable'
+		-- -e -c 'false; echo unreachable'
 }
 
 ###############################################################################
@@ -507,17 +507,17 @@ t_section "option -o pipefail (POSIX.1-2024 set -o pipefail)"
 ###############################################################################
 
 tt PIPEFAIL.1 "default: pipeline status = last command" \
-'/bin/false | /bin/true
+'false | true
 echo rc=$?' 0 "rc=0"
 
 tt PIPEFAIL.2 "pipefail: any failing element fails the pipeline" \
 'set -o pipefail
-/bin/false | /bin/true
+false | true
 echo rc=$?' 0 "rc=1"
 
 tt PIPEFAIL.3 "pipefail: status of the failing element is kept" \
 'set -o pipefail
-/bin/sh -c "exit 3" | /bin/true | /bin/true
+/bin/sh -c "exit 3" | true | true
 echo rc=$?' 0 "rc=3"
 
 tt PIPEFAIL.4 "pipefail: all-success pipeline still returns 0" \
@@ -527,13 +527,13 @@ echo rc=$?' 0 "rc=0"
 
 tt PIPEFAIL.5 "pipefail + ! negation" \
 'set -o pipefail
-! /bin/false | /bin/true
+! false | true
 echo rc=$?' 0 "rc=0"
 
 tt PIPEFAIL.6 "set +o pipefail restores last-command semantics" \
 'set -o pipefail
 set +o pipefail
-/bin/false | /bin/true
+false | true
 echo rc=$?' 0 "rc=0"
 
 tth PIPEFAIL.7 "set -o reports pipefail on" \
