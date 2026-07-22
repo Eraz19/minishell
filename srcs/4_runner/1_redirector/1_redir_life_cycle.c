@@ -19,6 +19,8 @@ t_error	redir_init(t_redir *redir, const t_ast_redirection *src)
 
 void	redir_free(t_redir *redir)
 {
+	token_free(&redir->word);
+	token_free(&redir->location);
 	string_free(&redir->expanded_word);
 	string_free(&redir->expanded_location);
 }

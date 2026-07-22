@@ -1,4 +1,5 @@
 #include "ft_getopt_priv.h"
+# include <stdio.h>
 
 // @ret ERR_OPT_INVALID / ERR_LIBC
 static t_error	getopt_process_flags_without_arg(t_getopt_state *state)
@@ -106,6 +107,7 @@ static t_error	getopt_process_flags_with_arg(t_getopt_state *state)
 	option.flag = state->argv[state->arg_i][state->char_i];
 	option.argument = NULL;
 	i = 0;
+	fprintf(stderr, "[%s()] options_with_arg_count=%zu\n", __func__, state->in->options_with_arg_count);
 	while (i < state->in->options_with_arg_count)
 	{
 		curr = &state->in->options_with_arg[i++];

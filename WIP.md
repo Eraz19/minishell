@@ -1,3 +1,12 @@
+# FIX
+
+- `builtin_set`:
+	- shall throw `ERR_INVALID_USAGE` when `-o` / `+o` is used without `option` but `first_operand_index` < `argc`
+- `builtin_env`:
+	- implement `utility` execution:
+		- *resolve* cmd_name => *external* vs *builtin*
+		- *execute* => `fork` + `execve`
+
 # OTHERS
 
 - when shell options are invalid => requalify error in `ERR_INVALID_USAGE`

@@ -43,6 +43,7 @@ t_error	context_stack_dup(t_context_stack *dst, const t_context_stack *src)
 	t_context_stack_item	*src_item;
 	t_context_stack_item	*dst_item;
 
+	context_stack_init(dst);
 	i = 0;
 	while (i < src->len)
 	{

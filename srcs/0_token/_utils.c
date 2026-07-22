@@ -6,6 +6,7 @@ t_error	token_dup(t_token *dst, const t_token *src)
 {
 	t_error	err;
 
+	token_init(dst);
 	if (!string_dup(&dst->value, &src->value))
 		return (error_sys());
 	err = context_stack_dup(&dst->contexts, &src->contexts);
