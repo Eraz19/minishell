@@ -53,7 +53,9 @@ t_error	convert_cst_to_ast(
 			return (error(ERR_NO));
 		node = node->children[1];
 	}
-	if (node->symbol == SYM_complete_commands)
+	if (node->symbol == SYM_cmd_sub)
+		err = convert_list_add(parser, node->children[1], ast_root);
+	else if (node->symbol == SYM_complete_commands)
 		err = convert_complete_commands(parser, node, ast_root);
 	else if (node->symbol == SYM_complete_command)
 		err = convert_list_add(parser, node, ast_root);

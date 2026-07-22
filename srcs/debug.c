@@ -77,9 +77,12 @@ static void	debug_dump_string_value(const t_string *value)
 
 const char	*token_type_to_string(t_token_type token_type)
 {
+	char	*formatted;
+
 	switch (token_type)
 	{
 		case TOKEN_NONE: return ("NONE");
+		case TOKEN_DOLPAREN: return ("DOLPAREN");
 		case TOKEN_TOKEN: return ("TOKEN");
 		case TOKEN_NEWLINE: return ("NEWLINE");
 		case TOKEN_SCOLON: return ("SCOLON");
@@ -103,7 +106,7 @@ const char	*token_type_to_string(t_token_type token_type)
 		case TOKEN_IO_NUMBER: return ("IO_NUMBER");
 		case TOKEN_IO_LOCATION: return ("IO_LOCATION");
 		case TOKEN_EOF: return ("EOF");
-		default: return ("unknown");
+		default: return (asprintf(&formatted, "unknown (%i)", (int)token_type), formatted);
 	}
 }
 
@@ -115,6 +118,10 @@ const char	*symbol_to_string(t_symbol symbol)
 {
 	switch (symbol)
 	{
+		case SYM_accept: return ("SYM_accept");
+		case SYM_start: return ("SYM_start");
+		case SYM_cmd_sub: return ("SYM_cmd_sub");
+		case SYM_DOLPAREN: return ("SYM_DOLPAREN");
 		case SYM_TOKEN: return ("SYM_TOKEN");
 		case SYM_WORD: return ("SYM_WORD");
 		case SYM_NAME: return ("SYM_NAME");
@@ -157,7 +164,6 @@ const char	*symbol_to_string(t_symbol symbol)
 		case SYM_Until: return ("SYM_Until");
 		case SYM_While: return ("SYM_While");
 		case SYM_EOF: return ("SYM_EOF");
-		case SYM_start: return ("SYM_start");
 		case SYM_program: return ("SYM_program");
 		case SYM_complete_commands: return ("SYM_complete_commands");
 		case SYM_complete_command: return ("SYM_complete_command");

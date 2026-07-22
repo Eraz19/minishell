@@ -17,8 +17,7 @@ static t_error	cmd_sub_consume_body(t_lexer *lexer, t_context_stack_item *item)
 			(size_t)closing_par_index - lexer->input->i).type)
 		return (lexer->err);
 	item->end = lexer->token->value.len;
-	// return (lexer_consume(lexer, lexer->token->type, 1));
-	return (lexer->err);
+	return (lexer_consume(lexer, lexer->token->type, 1));
 }
 
 t_error	lexer_context_cmd_sub(t_lexer *lexer)

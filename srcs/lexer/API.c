@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "lexer.h"
+#include "scanner.h"
 
 void	lexer_pop_last_input_stack_on_end(t_lexer *lexer)
 {
@@ -15,6 +16,12 @@ static t_error	lexer_scan_token(t_lexer *lexer, t_token *token)
 
 	token_init(token);
 	lexer->token = token;
+	if (lexer->scanner->mode == SCAN_MODE_CMD_SUB && !lexer->emited_token)
+	{
+		lexer->emited_token = true;
+		return (lexer->err = lexer_consume(lexer, TOKEN_DOLPAREN, 2));
+	}
+	lexer->emited_token = false;
 	if (lexer->input_stack.len == 1)
 		lexer->token->index.start = (ssize_t)lexer->input->i;
 	else
@@ -48,7 +55,6 @@ t_error	lexer_get_next_token(
 			t_lexer_rules rules)
 {
 	lexer->rules = rules;
-	lexer->emited_token = false;
 	if (lexer->input == NULL)
 	{
 		lexer->err = lexer_input_stack_get_last(

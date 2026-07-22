@@ -134,7 +134,7 @@ typedef struct s_lexer_backup
 	size_t			token_contexts_len;
 }	t_lexer_backup;
 
-struct s_lexer
+typedef struct s_lexer
 {
 	t_error						err;
 	t_lexer_rules				rules;
@@ -145,7 +145,7 @@ struct s_lexer
 	t_token_index				last_index;
 	t_lexer_input_stack			input_stack;
 	bool						emited_token;
-};
+}	t_lexer;
 
 /**
  * @ingroup lexer

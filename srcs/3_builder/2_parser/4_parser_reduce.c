@@ -90,7 +90,7 @@ t_error	parser_reduce(t_parser *parser, size_t rule_id)
 	if (err.type == ERR_NO && rule->hook)
 		err = rule->hook(parser, rhs, rule->rhs_len, &item);
 	if (err.type == ERR_NO)
-		err =error_priorize(err, parser_replace_items(parser, rule->rhs_len, &item));
+		err = error_priorize(err, parser_replace_items(parser, rule->rhs_len, &item));
 	if (err.type)
 		cst_node_free(&item.cst_node);
 	return (err);

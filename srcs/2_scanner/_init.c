@@ -21,17 +21,9 @@ static inline t_error	scanner_load_cmd_sub(t_scanner *scanner)
 	if (scanner->parent_scanner->mode != SCAN_MODE_STDIN
 		&& scanner->parent_scanner->mode != SCAN_MODE_CMD_SUB)
 		return (scanner->mode = scanner->parent_scanner->mode, error(ERR_NO));
-	scanner->err = lexer_input_stack_dup(
+	return (scanner->err = lexer_input_stack_dup(
 		&scanner->lexer.input_stack,
-		&scanner->parent_scanner->lexer.input_stack);
-	if (scanner->err.type)
-		return (scanner->err);
-	scanner->err = lexer_input_stack_get_last(
-					&scanner->lexer.input_stack,
-					&scanner->lexer.input);
-	if (scanner->err.type)
-		return (scanner->err);
-	return (scanner->err = lexer_consume(&scanner->lexer, TOKEN_DOLPAREN, 2));
+		&scanner->parent_scanner->lexer.input_stack));
 }
 
 t_error	scanner_load(
