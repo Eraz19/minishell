@@ -35,14 +35,14 @@ static inline t_error	eval_merge_fields(
 	return (error(ERR_NO));
 }
 
-t_error	builtin_eval(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_eval(int argc, char **argv, t_runner *runner, int *exit_status)
 {
-	t_runner	*runner;
+	t_runner	*eval_runner;
 	t_string	cmd;
 	bool		only_null_args;
 	t_error		err;
 
-	(void)envp;
+	(void)runner;
 	if (argc == 1)
 		return (*exit_status = 0, error(ERR_NO));
 	err = eval_merge_fields(argc, argv, &cmd, &only_null_args);
@@ -50,11 +50,11 @@ t_error	builtin_eval(int argc, char **argv, char **envp, int *exit_status)
 		return (err);
 	else if (only_null_args == true)
 		return (string_free(&cmd), *exit_status = 0, error(ERR_NO));
-	err = shell_get_new_runner(&runner, SCAN_MODE_STRING);
+	err = shell_get_new_runner(&eval_runner, SCAN_MODE_STRING);
 	if (err.type)
 		return (string_free(&cmd), error_print(err, argv[0], NULL, NULL));
-	scanner_set_input(&runner->parser.scanner, &cmd);
-	runner_run(runner);
+	scanner_set_input(&eval_runner->parser.scanner, &cmd);
+	runner_run(eval_runner);
 	shell_destroy_last_instance();
 	string_free(&cmd);
 	err = params_get_last_status(exit_status);
