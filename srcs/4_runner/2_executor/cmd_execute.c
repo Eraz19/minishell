@@ -18,7 +18,7 @@ static inline t_error	cmd_redirect_start(
 {
 	t_error	err;
 
-	if (cmd->builtin == builtin_exec)
+	if (cmd->special_builtin == builtin_exec)
 		err = redirect_commit(&s_cmd->redirs, &cmd->exit_status);
 	else
 		err = redirect_start( &s_cmd->redirs, &cmd->exit_status);
@@ -46,7 +46,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_error err, bool redir_applied, int *exit_stat
 	initial_error = err;
 	if (cmd->exit_status < 0)
 		cmd->exit_status = (int)err.type;
-	if (err.type && err.type != ERR_EXIT && err.type != ERR_EXIT_WITH_CURRENT_STATUS)
+	if (err.type && error_is_flow_control(err) == false)
 	{
 		(void)error_print(err, NULL, NULL);
 		if (err.type == ERR_INTERRUPTED)
@@ -73,7 +73,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_error err, bool redir_applied, int *exit_stat
 	}
 	if (redir_applied == true)
 		err = error_priorize(err, redirect_stop());
-	if (err.type && err.type != ERR_EXIT && err.type != ERR_EXIT_WITH_CURRENT_STATUS && cmd->exit_status <= 0)
+	if (err.type && error_is_flow_control(err) == false && cmd->exit_status <= 0)
 		cmd->exit_status = (int)err.type;
 	*exit_status = cmd->exit_status;
 	fprintf(stderr, MAGENTA "##################################################\n" NC);

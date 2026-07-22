@@ -310,7 +310,7 @@ t_section "option -h / command hashing (POSIX set -h)"
 
 t_begin OPT-H.1 "set -h: commands still resolve and run"
 t_run 'set -h
-/bin/echo hashed_ok'
+echo hashed_ok'
 expect_status 0
 expect_lines "hashed_ok"
 t_end
@@ -327,7 +327,7 @@ t_end
 
 t_begin OPT-H.3 "set +h: disabling hashing keeps commands runnable"
 t_run 'set +h
-/bin/echo still_ok'
+echo still_ok'
 expect_status 0
 expect_lines "still_ok"
 t_end
@@ -520,12 +520,12 @@ echo rc=$?' 0 "rc=1"
 
 tt PIPEFAIL.3 "pipefail: status of the failing element is kept" \
 'set -o pipefail
-/bin/sh -c "exit 3" | true | true
+sh -c "exit 3" | true | true
 echo rc=$?' 0 "rc=3"
 
 tt PIPEFAIL.4 "pipefail: all-success pipeline still returns 0" \
 'set -o pipefail
-echo data | /bin/cat > /dev/null
+echo data | cat > /dev/null
 echo rc=$?' 0 "rc=0"
 
 tt PIPEFAIL.5 "pipefail + ! negation" \

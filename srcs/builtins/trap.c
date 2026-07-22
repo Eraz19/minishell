@@ -99,12 +99,12 @@ static inline t_error	trap_process_operands(
 	return (error(ERR_NO));
 }
 
-t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_trap(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	t_getopt_out	out;
 	t_error			err;
 
-	(void)envp;
+	(void)runner;
 	*exit_status = 0;
 	err = trap_process_options(argc, argv, &out);
 	if (err.type == ERR_NO && out.first_operand_index >= (size_t)argc)

@@ -109,8 +109,8 @@ setup_fixtures()
 
 	# scripts for invocation tests
 	: > "$WORK_DIR/empty.sh"
-	printf '/bin/echo from_script\n' > "$WORK_DIR/ok.sh"
-	printf '/bin/echo secret\n' > "$WORK_DIR/unreadable.sh"
+	printf 'echo from_script\n' > "$WORK_DIR/ok.sh"
+	printf 'echo secret\n' > "$WORK_DIR/unreadable.sh"
 	chmod 000 "$WORK_DIR/unreadable.sh"
 
 	# io_location / redirection targets
@@ -327,44 +327,44 @@ run_fixed_tokenization()
 
 	# unterminated constructs, non-interactive -> printed + 121
 	tp "FIXED-SYNTAX.1" "unterminated dquote" \
-		'/bin/echo "oops' 121 "unterminated double quotes"
+		'echo "oops' 121 "unterminated double quotes"
 	tp "FIXED-SYNTAX.2" "unterminated squote" \
-		"/bin/echo 'oops" 121 "unterminated single quotes"
+		"echo 'oops" 121 "unterminated single quotes"
 	tp "FIXED-SYNTAX.3" "unterminated param" \
-		'/bin/echo ${oops' 121 "unterminated"
+		'echo ${oops' 121 "unterminated"
 
 	# IO_NUMBER digits-only fix: +2 is a WORD, not a redirection fd
 	tp "FIXED-IONUM.1" "+2 stays an argument" \
-		'/bin/echo +2>ionum_out
-/bin/cat ionum_out' 0 "+2"
+		'echo +2>ionum_out
+cat ionum_out' 0 "+2"
 
 	# heredoc: unterminated -> missing delimiter + 121 (via scanner)
 	tp "FIXED-HD.1" "unterminated heredoc" \
-		'/bin/cat <<EOF
+		'cat <<EOF
 no delimiter here' 121 "missing delimiter"
 
 	# heredoc: quoted delimiter -> body NOT expanded (HD-2 verifies converter)
 	tp "FIXED-HD.2" "quoted delim, no expansion" \
-		"/bin/cat <<'Q'
+		"cat <<'Q'
 \$HOME
 Q" 0 '$HOME'
 
 	# heredoc: unquoted delimiter -> body expanded
 	tp "FIXED-HD.3" "unquoted delim, expansion" \
 		'X=hello
-/bin/cat <<Q
+cat <<Q
 $X
 Q' 0 "hello"
 
 	# heredoc: POSIX escape set in body (\" stays literal backslash+quote)
 	tp "FIXED-HD.4" "backslash-dquote literal in body" \
-		'/bin/cat <<Q
+		'cat <<Q
 a\"b
 Q' 0 'a\"b'
 
 	# empty heredoc body (expansion_load_empty guard: no crash)
 	tp "FIXED-HD.5" "empty heredoc body" \
-		'/bin/cat <<Q
+		'cat <<Q
 Q' 0
 }
 
@@ -374,27 +374,27 @@ run_fixed_expander()
 
 	# bad substitution -> printed + 125
 	tp "FIXED-EXP.1" '${} -> 125' \
-		'/bin/echo ${}' 125 "bad substitution"
+		'echo ${}' 125 "bad substitution"
 	tp "FIXED-EXP.2" 'invalid operator -> 125' \
-		'/bin/echo ${x^}' 125 "bad substitution"
+		'echo ${x^}' 125 "bad substitution"
 
 	# ${var?word}: custom message printed, 125
 	tp "FIXED-EXP.3" '${UNSET?msg} -> 125 + msg' \
-		'/bin/echo ${UNSETVAR_42?custom_diag}' 125 "custom_diag"
+		'echo ${UNSETVAR_42?custom_diag}' 125 "custom_diag"
 	tp "FIXED-EXP.4" '${UNSET?} -> 125' \
-		'/bin/echo ${UNSETVAR_42?}' 125 "null or not set"
+		'echo ${UNSETVAR_42?}' 125 "null or not set"
 
 	# assignment to unassignable name -> 125
 	tp "FIXED-EXP.5" '${1=x} -> 125' \
-		'/bin/echo ${1=x}' 125
+		'echo ${1=x}' 125
 
 	# quoted tilde stays literal (ERR_QUOTED_TILDE contained, no error)
 	tp "FIXED-TILDE.1" "quoted tilde literal" \
-		"/bin/echo '~'/x" 0 "~/x"
+		"echo '~'/x" 0 "~/x"
 
 	# unset-var expansion is NOT an error
 	tp "FIXED-EXP.6" "unset var -> empty, exit 0" \
-		'/bin/echo a${UNSETVAR_42}b' 0 "ab"
+		'echo a${UNSETVAR_42}b' 0 "ab"
 }
 
 run_fixed_stubs()
@@ -403,15 +403,15 @@ run_fixed_stubs()
 
 	# backtick: was an INFINITE LOOP; now printed not-implemented + 110
 	tp "FIXED-STUB.1" "backtick -> 110 (B3 target: real substitution)" \
-		'/bin/echo `ls`' 110 "not implemented"
+		'echo `ls`' 110 "not implemented"
 
 	# $(...) tokenization blocked on LEX-1 -> printed + 110 (not a hang)
 	tp "FIXED-STUB.2" '$(...) -> 110 (LEX-1 target: tokenizes)' \
-		'/bin/echo $(ls)' 110 "not implemented"
+		'echo $(ls)' 110 "not implemented"
 
 	# arithmetic evaluation stub -> 110 (B2 target: computes)
 	tp "FIXED-STUB.3" '$((1+1)) -> 110 (B2 target: prints 2)' \
-		'/bin/echo $((1+1))' 110 "not implemented"
+		'echo $((1+1))' 110 "not implemented"
 }
 
 ###############################################################################
@@ -431,15 +431,15 @@ run_open_runner_shell()
 	ta "RUN-1.2" "cmds then EOF -> exit 0" 0 "" -- -s -i
 
 	# RUN-2: interactive shell survives an expansion error
-	STDIN_DATA='/bin/echo ${}
-/bin/echo survived
+	STDIN_DATA='echo ${}
+echo survived
 '
 	ta "RUN-2.1" "expansion error, shell continues" 0 "survived" -- -s -i
 
 	# RUN-3 (+ POSIX table): non-interactive cmd-not-found does NOT exit
 	tp "RUN-3.1" "cmd not found, script continues" \
 		'nosuchcommand_xyz_42
-/bin/echo survived' 0 "survived"
+echo survived' 0 "survived"
 
 	# SHELL-1: exit status of the shell = $? of the last command
 	ta "SHELL-1.1" "-c false -> 1" 1 "" -- -c "false"
@@ -456,7 +456,7 @@ run_open_heredoc()
 		local before
 		before=(/tmp/minishell_heredoc_*(N))
 		run_pipe "HD-1.1" "heredoc tmp cleanup" \
-			'/bin/cat <<Q
+			'cat <<Q
 body
 Q' "heredoc leaves no tmp file"
 		local after f new=0
@@ -479,10 +479,10 @@ run_open_alias_builtins()
 
 	# needs the real alias builtin (TODO.c stub today) + expansion path
 	tp "ALIAS-1.1" "define and use an alias" \
-		"alias ll='/bin/echo LL'
+		"alias ll='echo LL'
 ll" 0 "LL"
 	tp "ALIAS-1.2" "recursive alias breaks recursion" \
-		"alias e='/bin/echo e'
+		"alias e='echo e'
 e" 0 "e"
 	tp "ALIAS-1.3" "unknown alias name -> diagnostic" \
 		'alias nosuchalias_42' 1 "not found"
@@ -490,7 +490,7 @@ e" 0 "e"
 	# ${RO:=x} -> 124 (needs the readonly builtin through BUILD-1 dispatch)
 	tp "B-ASSIGN.1" 'readonly ${R:=x} -> 124' \
 		'readonly RDO_42=v
-/bin/echo ${RDO_42:=other}' 124
+echo ${RDO_42:=other}' 124
 }
 
 run_manual_notes()
@@ -504,7 +504,7 @@ run_manual_notes()
 	skip_case "MANUAL.3" "HISTFILE=/unwritable -> warning, shell keeps working" \
 		"run by hand: HISTFILE=/x ./minishell -s -i"
 	skip_case "MANUAL.4" "{a}<file io_location end-to-end" \
-		"redirector io_location semantics unverified; try: /bin/cat {a}<redir_in"
+		"redirector io_location semantics unverified; try: cat {a}<redir_in"
 }
 
 ###############################################################################

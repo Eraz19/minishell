@@ -68,9 +68,9 @@ typedef enum e_error_type
 	ERR_EXIT_WITH_CURRENT_STATUS = 105,		// [ 5] [SIG / PIPE]	Requalified as ERR_EXIT after setting $? properly
 	ERR_EXIT = 106,							// [ 5] [-]				Exit builtin has been called with n as argument or ERR_EXIT_WITH_CURRENT_STATUS has been requalified
 	ERR_INTERRUPTED = 107,					// [ 5] [WAIT]			Absorbed by wait builtin
-	ERR_UB = 108,							// [ 5] [-]				[?-?-Y]	Always fatal
 	/* -------------------- FULLY QUALIFIED ERRORS -------------------- */
 	// INTERNAL ERRORS (can be returned by any module or builtin)
+	ERR_UB = 108,							// [ 5] [-]				[?-?-Y]	Always fatal
 	ERR_INTERNAL = 110,						// [ 9] [-]				[Y-Y-Y]	Always fatal
 	ERR_LIBC = 111,							// [10] [-]				[Y-Y-Y]	Always fatal
 	// POSIX EXIT CODES
@@ -167,5 +167,7 @@ void	print_unspecified_behaviour(
 			const char *implemented_as);
 
 t_error	error_drop_non_fatal(t_error err);
+
+bool	error_is_flow_control(t_error err);
 
 #endif

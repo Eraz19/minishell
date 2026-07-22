@@ -13,14 +13,6 @@ t_error		shell_should_interrupt(void)
 /* ---------- TODO: builtins ---------- */
 
 // Special builtins
-t_error	builtin_break(int argc, char **argv, char **envp, int *exit_status)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
 
 t_error	builtin_continue(int argc, char **argv, char **envp, int *exit_status)
 {

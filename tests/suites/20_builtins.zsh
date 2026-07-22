@@ -264,7 +264,7 @@ expect_lines "ONLY_5=alone"
 t_end
 
 t_begin ENV.6 "POSIX: env with a utility operand runs the utility"
-t_run 'env /bin/echo via_env'
+t_run 'env echo via_env'
 expect_status 0
 expect_lines "via_env"
 t_end
@@ -575,7 +575,7 @@ tt WAIT.1 "wait with no children returns 0" \
 echo rc=$?' 0 "rc=0"
 
 tt WAIT.2 "wait for a background job" \
-'/bin/sleep 0.1 &
+'sleep 0.1 &
 wait
 echo rc=$?' 0 "rc=0"
 
@@ -609,7 +609,7 @@ t_end
 tt WAIT.8 "wait for several pids" \
 'true &
 P1=$!
-/bin/sleep 0.05 &
+sleep 0.05 &
 P2=$!
 wait $P1 $P2
 echo rc=$?' 0 "rc=0"

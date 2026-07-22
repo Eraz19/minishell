@@ -45,7 +45,7 @@ tth CUSTOM.2 "example: stdout contains" \
 
 t_begin CUSTOM.3 "example: full API with a fixture file"
 t_setup 'printf "line_a\n" > seed.txt'
-t_run '/bin/cat seed.txt'
+t_run 'cat seed.txt'
 expect_status 0
 expect_lines "line_a"
 t_end

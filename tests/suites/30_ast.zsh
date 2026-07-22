@@ -12,8 +12,8 @@
 t_section "simple command (2.9.1): words, assignments, search order"
 ###############################################################################
 
-tt SCMD.1 "external command by absolute path" \
-'/bin/echo direct' 0 "direct"
+tt SCMD.1 "external command found through PATH" \
+'printf "direct\n"' 0 "direct"
 
 tt SCMD.2 "external command found through PATH" \
 'echo via_path' 0 "via_path"
@@ -43,18 +43,11 @@ expect_err_contains "not found"
 t_end
 
 t_begin SCMD.6 "file without +x -> 126"
-t_setup 'printf "#!/bin/sh\necho no\n" > noexec.sh'
+t_setup 'printf "echo no\n" > noexec.sh'
 t_run './noexec.sh
 echo rc=$?'
 expect_status 0
 expect_out_contains "rc=126"
-t_end
-
-t_begin SCMD.11 "ENOEXEC binary: diagnosed, no crash, shell continues"
-t_setup 'printf "\x7fELF_not_really_elf_garbage" > bin.bad; chmod +x bin.bad'
-t_run './bin.bad
-echo survived'
-expect_out_contains "survived"
 t_end
 
 tt SCMD.7 "empty command line does nothing, \$? untouched" \
@@ -63,7 +56,7 @@ tt SCMD.7 "empty command line does nothing, \$? untouched" \
 echo rc=$?' 0 "rc=1"
 
 tt SCMD.8 "\$? special parameter tracks the last command" \
-'/bin/sh -c "exit 9"
+'sh -c "exit 9"
 echo rc=$?' 0 "rc=9"
 
 tt SCMD.9 "comment lines are ignored" \
@@ -74,6 +67,13 @@ echo three' 0 "one" "three"
 tt SCMD.10 "line continuation joins the two lines" \
 'echo before\
 after' 0 "beforeafter"
+
+t_begin SCMD.11 "ENOEXEC binary: diagnosed, no crash, shell continues"
+t_setup 'printf "\x7fELF_not_really_elf_garbage" > bin.bad; chmod +x bin.bad'
+t_run './bin.bad
+echo survived'
+expect_out_contains "survived"
+t_end
 
 ###############################################################################
 t_section "expansions inside a simple command (2.6)"
@@ -205,11 +205,11 @@ tt PIPE.6 "! negates a pipeline: false -> 0" \
 echo rc=$?' 0 "rc=0"
 
 tt PIPE.7 "builtin inside a pipeline" \
-'echo builtin_data | /bin/cat' 0 "builtin_data"
+'echo builtin_data | cat' 0 "builtin_data"
 
 tt PIPE.8 "pipeline commands run in subshells (var does not leak)" \
 'PV_8=outer
-echo x | PV_8=inner /bin/cat > /dev/null
+echo x | PV_8=inner cat > /dev/null
 echo $PV_8' 0 "outer"
 
 tt PIPE.9 "early SIGPIPE termination is not an error for the reader" \
@@ -237,7 +237,7 @@ tt ANDOR.5 "left-to-right chain of mixed operators" \
 'true && false || echo fallback' 0 "fallback"
 
 tt ANDOR.6 "chain status is the last executed command" \
-'false || /bin/sh -c "exit 4"
+'false || sh -c "exit 4"
 echo rc=$?' 0 "rc=4"
 
 tt ANDOR.7 "&& || with pipelines as operands" \
@@ -262,11 +262,11 @@ tt LIST.4 "newline separates commands like ;" \
 echo l2' 0 "l1" "l2"
 
 tt ASYNC.1 "& returns immediately with status 0" \
-'/bin/sleep 0.2 &
+'sleep 0.2 &
 echo rc=$?' 0 "rc=0"
 
 t_begin ASYNC.2 "\$! holds the pid of the last async command"
-t_run '/bin/sleep 0.05 &
+t_run 'sleep 0.05 &
 echo $!
 wait'
 expect_status 0
@@ -278,10 +278,10 @@ t_end
 tt ASYNC.3 "async command really runs (observable side effect)" \
 'echo bg_output > bg.txt &
 wait
-/bin/cat bg.txt' 0 "bg_output"
+cat bg.txt' 0 "bg_output"
 
 tt ASYNC.4 "foreground work continues while & job runs" \
-'/bin/sleep 0.3 &
+'sleep 0.3 &
 echo immediate
 wait' 0 "immediate"
 
@@ -356,7 +356,7 @@ tt IF.5 "condition may be a pipeline / list" \
 'if echo probe | grep -q probe; then echo piped; fi' 0 "piped"
 
 tt IF.6 "if status = executed branch's last command" \
-'if true; then /bin/sh -c "exit 5"; fi
+'if true; then sh -c "exit 5"; fi
 echo rc=$?' 0 "rc=5"
 
 tt IF.7 "multiline body with several commands" \
@@ -387,7 +387,7 @@ while test $# != 0; do
 done' 0 "tick" "tick"
 
 tt UNTIL.1 "until runs while the condition is false" \
-'until /bin/test -e made_u1; do
+'until test -e made_u1; do
 	echo creating
 	touch made_u1
 done' 0 "creating"
@@ -440,7 +440,7 @@ expect_lines "it1.fw" "it2.fw"
 t_end
 
 tt FOR.7 "for status = last iteration's last command" \
-'for x in 1 2; do /bin/sh -c "exit $x"; done
+'for x in 1 2; do sh -c "exit $x"; done
 echo rc=$?' 0 "rc=2"
 
 ###############################################################################
@@ -478,7 +478,7 @@ tt CASE.9 ";& falls through to the next arm (Issue 8)" \
 'case a in a) echo one ;& b) echo two ;; esac' 0 "one" "two"
 
 tt CASE.10 "case status = executed arm's last command" \
-'case go in go) /bin/sh -c "exit 6";; esac
+'case go in go) sh -c "exit 6";; esac
 echo rc=$?' 0 "rc=6"
 
 ###############################################################################
@@ -504,7 +504,7 @@ f4 inner
 echo $1:$#' 0 "outer1:2"
 
 tt FUNC.5 "function status = last command of the body" \
-'fail_f5() { /bin/sh -c "exit 3"; }
+'fail_f5() { sh -c "exit 3"; }
 fail_f5
 echo rc=$?' 0 "rc=3"
 
@@ -538,71 +538,71 @@ t_section "redirection nodes (2.7): > >> < <> >| <& >& fd prefixes"
 
 tt REDIR.1 "> creates a file with the command's stdout" \
 'echo content > out_r1.txt
-/bin/cat out_r1.txt' 0 "content"
+cat out_r1.txt' 0 "content"
 
 tt REDIR.2 "> truncates an existing file" \
 'echo first > f_r2.txt
 echo second > f_r2.txt
-/bin/cat f_r2.txt' 0 "second"
+cat f_r2.txt' 0 "second"
 
 tt REDIR.3 ">> appends" \
 'echo one >> f_r3.txt
 echo two >> f_r3.txt
-/bin/cat f_r3.txt' 0 "one" "two"
+cat f_r3.txt' 0 "one" "two"
 
 t_begin REDIR.4 "< feeds a file to stdin"
 t_setup 'printf "from_file\n" > in.txt'
-t_run '/bin/cat < in.txt'
+t_run 'cat < in.txt'
 expect_status 0
 expect_lines "from_file"
 t_end
 
 t_begin REDIR.5 "< on a missing file: error, command not run, shell continues"
-t_run '/bin/cat < no_such_input.txt
+t_run 'cat < no_such_input.txt
 echo rc=$?'
 expect_status 0
 expect_out_lacks "rc=0"
 t_end
 
 tt REDIR.6 "2> redirects stderr by fd number" \
-'/bin/ls no_such_entry_r6 2> err_r6.txt
-/bin/grep -c no_such_entry_r6 err_r6.txt' 0 "1"
+'ls no_such_entry_r6 2> err_r6.txt
+grep -c no_such_entry_r6 err_r6.txt' 0 "1"
 
 tt REDIR.7 "2>&1 duplicates stderr onto stdout's target" \
-'/bin/sh -c "echo to_err >&2" 2>&1 | /bin/cat' 0 "to_err"
+'sh -c "echo to_err >&2" 2>&1 | cat' 0 "to_err"
 
 tt REDIR.8 "order matters: > file 2>&1 captures both" \
-'/bin/sh -c "echo o; echo e >&2" > both_r8.txt 2>&1
-/bin/sort both_r8.txt' 0 "e" "o"
+'sh -c "echo o; echo e >&2" > both_r8.txt 2>&1
+sort both_r8.txt' 0 "e" "o"
 
 tt REDIR.9 ">| clobbers regardless of noclobber" \
 'set -C
 echo old > f_r9.txt 2>/dev/null || :
 echo forced >| f_r9.txt
-/bin/cat f_r9.txt' 0 "forced"
+cat f_r9.txt' 0 "forced"
 
 tt REDIR.10 "<> opens read-write and creates the file" \
 'true <> rw_r10.txt
-/bin/test -e rw_r10.txt
+test -e rw_r10.txt
 echo rc=$?' 0 "rc=0"
 
 tt REDIR.11 "redirection applies to builtins too" \
 'pwd > pwd_r11.txt
-/bin/test -s pwd_r11.txt
+test -s pwd_r11.txt
 echo rc=$?' 0 "rc=0"
 
 tt REDIR.12 "redirection on a compound command (if...fi > file)" \
 'if true; then echo branch; fi > if_r12.txt
-/bin/cat if_r12.txt' 0 "branch"
+cat if_r12.txt' 0 "branch"
 
 tt REDIR.13 "redirection on a loop collects all iterations" \
 'for i in x y; do echo $i; done > loop_r13.txt
-/bin/cat loop_r13.txt' 0 "x" "y"
+cat loop_r13.txt' 0 "x" "y"
 
 tt REDIR.14 "multiple redirections: every file is created, last wins" \
 'echo dest > a_r14.txt > b_r14.txt
-/bin/cat b_r14.txt
-/bin/test -e a_r14.txt -a ! -s a_r14.txt
+cat b_r14.txt
+test -e a_r14.txt -a ! -s a_r14.txt
 echo rc=$?' 0 "dest" "rc=0"
 
 tt REDIR.15 "fds are restored after the command" \
@@ -612,7 +612,7 @@ echo visible' 0 "visible"
 t_begin REDIR.16 "redirection target word is expanded"
 t_run 'NAME=exp_r16
 echo data > ${NAME}.txt
-/bin/cat exp_r16.txt'
+cat exp_r16.txt'
 expect_status 0
 expect_lines "data"
 t_end
@@ -622,46 +622,46 @@ t_section "heredoc nodes (2.7.4): << and <<-"
 ###############################################################################
 
 tt HD.1 "basic heredoc body reaches the command" \
-'/bin/cat <<EOF
+'cat <<EOF
 line1
 line2
 EOF' 0 "line1" "line2"
 
 tt HD.2 "unquoted delimiter: parameters expand in the body" \
 'V=inside
-/bin/cat <<EOF
+cat <<EOF
 value=$V
 EOF' 0 "value=inside"
 
 tt HD.3 "quoted delimiter: body is literal" \
-"/bin/cat <<'EOF'
+"cat <<'EOF'
 \$HOME stays
 EOF" 0 '$HOME stays'
 
 tt HD.4 "<<- strips leading tabs" \
-'/bin/cat <<-EOF
+'cat <<-EOF
 	tabbed
 	EOF' 0 "tabbed"
 
 tt HD.5 "command substitution runs inside an unquoted heredoc" \
-'/bin/cat <<EOF
+'cat <<EOF
 sub=$(echo yes)
 EOF' 0 "sub=yes"
 
 tt HD.6 "empty heredoc body" \
-'/bin/cat <<EOF
+'cat <<EOF
 EOF
 echo after_hd' 0 "after_hd"
 
 tt HD.7 "two heredocs on one line (2.7.4: order of here-docs)" \
-'/bin/cat <<A; /bin/cat <<B
+'cat <<A; cat <<B
 first
 A
 second
 B' 0 "first" "second"
 
 t_begin HD.8 "unterminated heredoc -> syntax-class error (project: 121)"
-t_run '/bin/cat <<EOF
+t_run 'cat <<EOF
 never closed'
 expect_status 121
 t_end

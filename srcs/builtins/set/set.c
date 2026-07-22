@@ -1,3 +1,4 @@
+#include "builtins.h"
 #include "set_.h"
 #include "params.h"
 #include "ft_getopt.h"
@@ -78,12 +79,12 @@ static t_error	set_requalify(t_error err)
 	return (err);
 }
 
-t_error	builtin_set(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_set(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	t_getopt_out	out;
 	t_error			err;
 
-	(void)envp;
+	(void)runner;
 	if (argc == 1)
 		err = params_print(PARAMS_PRINT_SET);
 	else

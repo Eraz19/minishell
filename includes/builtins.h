@@ -2,6 +2,7 @@
 # define BUILTINS_H
 
 # include "error.h"
+# include "runner_type.h"
 # include <stdbool.h>
 
 /** @defgroup builtins Built-in utilities
@@ -35,13 +36,16 @@
  */
 typedef t_error (*t_builtin)(int argc, char **argv, char **envp, int *exit_status);
 
+// TODO: doc
+typedef t_error (*t_special_builtin)(int argc, char **argv, t_runner *runner, int *exit_status);
+
 /* ************************************************************************* */
 /*                             SPECIAL BUILT-INS                             */
 /* ************************************************************************* */
 /* POSIX 2.15: found before PATH search; on error a non-interactive shell
 ** exits (ERR_BUILTIN -> ERR_POSIX_BUILTIN_SPECIAL in the executor). */
 
-t_error	builtin_break(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_break(int argc, char **argv, t_runner *runner, int *exit_status);
 
 /**
  * @ingroup builtins
@@ -53,12 +57,12 @@ t_error	builtin_break(int argc, char **argv, char **envp, int *exit_status);
  * @p exit_status always 0.
  * @return @c ERR_NO.
  */
-t_error	builtin_colon(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_colon(int argc, char **argv, t_runner *runner, int *exit_status);
 
-t_error	builtin_continue(int argc, char **argv, char **envp, int *exit_status);
-t_error	builtin_dot(int argc, char **argv, char **envp, int *exit_status);
-t_error	builtin_eval(int argc, char **argv, char **envp, int *exit_status);
-t_error	builtin_exec(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_continue(int argc, char **argv, t_runner *runner, int *exit_status);
+t_error	builtin_dot(int argc, char **argv, t_runner *runner, int *exit_status);
+t_error	builtin_eval(int argc, char **argv, t_runner *runner, int *exit_status);
+t_error	builtin_exec(int argc, char **argv, t_runner *runner, int *exit_status);
 
 /**
  * @ingroup builtins
@@ -84,7 +88,7 @@ t_error	builtin_exec(int argc, char **argv, char **envp, int *exit_status);
  * @return @c ERR_VEOF (shell terminates with @c $?) / @c ERR_BUILTIN /
  *         @c ERR_INTERNAL.
  */
-t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_exit(int argc, char **argv, t_runner *runner, int *exit_status);
 
 /**
  * @ingroup builtins
@@ -107,7 +111,7 @@ t_error	builtin_exit(int argc, char **argv, char **envp, int *exit_status);
  * @return @c ERR_NO / @c ERR_BUILTIN / @c ERR_INTERRUPTED /
  *         @c ERR_INTERNAL / @c ERR_LIBC.
  */
-t_error	builtin_export(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_export(int argc, char **argv, t_runner *runner, int *exit_status);
 
 /**
  * @ingroup builtins
@@ -124,9 +128,9 @@ t_error	builtin_export(int argc, char **argv, char **envp, int *exit_status);
  * @return @c ERR_NO / @c ERR_BUILTIN / @c ERR_INTERRUPTED /
  *         @c ERR_INTERNAL / @c ERR_LIBC.
  */
-t_error	builtin_readonly(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_readonly(int argc, char **argv, t_runner *runner, int *exit_status);
 
-t_error	builtin_return(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_return(int argc, char **argv, t_runner *runner, int *exit_status);
 
 /**
  * @ingroup builtins
@@ -154,11 +158,11 @@ t_error	builtin_return(int argc, char **argv, char **envp, int *exit_status);
  * @return @c ERR_NO / @c ERR_BUILTIN / @c ERR_INTERRUPTED /
  *         @c ERR_INTERNAL / @c ERR_LIBC.
  */
-t_error	builtin_set(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_set(int argc, char **argv, t_runner *runner, int *exit_status);
 
-t_error	builtin_shift(int argc, char **argv, char **envp, int *exit_status);
-t_error	builtin_times(int argc, char **argv, char **envp, int *exit_status);
-t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_shift(int argc, char **argv, t_runner *runner, int *exit_status);
+t_error	builtin_times(int argc, char **argv, t_runner *runner, int *exit_status);
+t_error	builtin_trap(int argc, char **argv, t_runner *runner, int *exit_status);
 
 /**
  * @ingroup builtins
@@ -177,7 +181,7 @@ t_error	builtin_trap(int argc, char **argv, char **envp, int *exit_status);
  * @c ERR_INDEX_OUT_OF_BOUND / @c ERR_LIBC.
  * @return @c ERR_NO / @c ERR_BUILTIN / @c ERR_INTERNAL / @c ERR_LIBC.
  */
-t_error	builtin_unset(int argc, char **argv, char **envp, int *exit_status);
+t_error	builtin_unset(int argc, char **argv, t_runner *runner, int *exit_status);
 
 /* ************************************************************************* */
 /*                            INTRINSIC BUILT-INS                            */

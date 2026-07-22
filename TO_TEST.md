@@ -1,3 +1,37 @@
+# LEXICALY ENGLOBING LOOPS
+
+⚠️ POSIX unspecified
+```bash
+f() {
+  echo "  in f: before break"
+  break
+  echo "  in f: after break"
+}
+for i in 1 2; do
+  echo "loop i=$i: before f"
+  f
+  echo "loop i=$i: after f"
+done
+echo "after loop"
+
+rm -f /tmp/do_break
+foo() {
+  for j in 1 2; do
+    echo "break 2" >/tmp/do_break
+    echo "  sourcing /tmp/do_break, j=$j"
+    . /tmp/do_break
+    echo "  after dot, j=$j"
+  done
+}
+
+for i in 1 2; do
+  echo "running foo, i=$i"
+  foo
+  echo "after foo, i=$i"
+done
+rm -f /tmp/do_break
+```
+
 # WIP CMD SUB
 
 ```bash

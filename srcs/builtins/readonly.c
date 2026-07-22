@@ -1,3 +1,4 @@
+#include "builtins.h"
 #include "params.h"
 #include "ft_getopt.h"
 #include "utils.h"
@@ -88,12 +89,12 @@ static t_error	readonly_add(size_t first_operand_index, int argc, char **argv)
 	return (err);
 }
 
-t_error	builtin_readonly(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_readonly(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	t_getopt_out	out;
 	t_error			err;
 
-	(void)envp;
+	(void)runner;
 	err = readonly_process_options(argc, argv, &out);
 	if (err.type == ERR_NO && out.options.len > 0)
 		err = params_print(PARAMS_PRINT_READONLY);
