@@ -2,6 +2,7 @@
 #include "reader_.h"
 #include "scanner.h"
 #include "scanner_.h"
+# include "debug.h"	// DEBUG
 
 t_error	scanner_get_next_token(
 			t_scanner *scanner,
@@ -10,6 +11,7 @@ t_error	scanner_get_next_token(
 {
 	t_lexer_rules	lexer_rules;
 
+	fprintf(stderr, "[%s()] continuation=%s\n", __func__, bool_to_string(continuation));
 	if (continuation == true)
 	{
 		scanner->err = scanner_lexer_continuation(&scanner->lexer);
@@ -69,6 +71,7 @@ t_error	scanner_lexer_continuation(t_lexer *lexer)
 	//size_t		last_input_i;
 	//t_string	continuation;
 
+	fprintf(stderr, "[%s()]\n", __func__);
 	if (lexer->scanner->mode != SCAN_MODE_CMD_SUB
 		&& lexer->scanner->mode != SCAN_MODE_STDIN)
 		return (error(ERR_POSIX_SYNTAX));

@@ -44,6 +44,7 @@ t_error	reader_continuation(t_string *res)
 		return (err);
 	if (!is_interactive)
 		return (error(ERR_NO));
+	fprintf(stderr, "[%s()]\n", __func__);
 	(void)string_init(&continuation, 0, NULL, 0);
 	while (continuation.len < 2)
 	{

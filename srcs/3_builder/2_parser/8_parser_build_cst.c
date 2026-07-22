@@ -58,6 +58,26 @@ static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 			&parser->lookahead_symbol);
 }
 
+static inline t_error	parser_try_continuation(
+							t_parser *parser,
+							size_t lr_state_id)
+{
+	t_action	*action;
+	size_t		i;
+
+	if (parser->lookahead_symbol != SYM_EOF)
+		return (parser_invalid_syntax());
+	i = 0;
+	while (i <= SYM_TERMINAL_MAX)
+	{
+		action = &parser->machine->actions[lr_state_id][i];
+		if (action->type != ACTION_ERROR)
+			return (parser_read_next_symbol(parser, true));
+		i++;
+	}
+	return (parser_invalid_syntax());
+}
+
 t_error	parser_build_cst(t_parser *parser)
 {
 	size_t			lr_state_id;
@@ -77,7 +97,11 @@ t_error	parser_build_cst(t_parser *parser)
 		if (action.type == ACTION_ACCEPT)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR)
-			return (parser_invalid_syntax());
+		{
+			err = parser_try_continuation(parser, lr_state_id);
+			if (err.type)
+				return (err);
+		}
 	}
 	return (err);
 }
