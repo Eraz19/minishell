@@ -98,4 +98,6 @@ t_error	cd_canonicalize(t_cd_args *args, const char *utility);
  */
 t_error	cd_apply(t_cd_args *args, const char *utility);
 
+t_error	cd_print_new(void);
+
 #endif

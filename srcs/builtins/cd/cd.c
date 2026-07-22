@@ -2,7 +2,6 @@
 #include "cd_.h"
 #include "params.h"
 #include "ft_getopt.h"
-#include "posix_helpers.h"
 
 static t_error	cd_process_options(int argc, char **argv, t_cd_args *args)
 {
@@ -19,9 +18,7 @@ static t_error	cd_process_options(int argc, char **argv, t_cd_args *args)
 	in.options_with_arg = NULL;
 	in.options_with_arg_count = 0;
 	err = ft_getopt(argc, argv, &in, &out);
-	args->mode = 'L';
-	args->ensure_pwd = false;
-	args->print = false;
+	*args = (t_cd_args){.mode = 'L', .ensure_pwd = false, .print = false};
 	i = 0;
 	while (err.type == ERR_NO && i < out.options.len)
 	{
@@ -35,8 +32,7 @@ static t_error	cd_process_options(int argc, char **argv, t_cd_args *args)
 	return (vector_free(&out.options, NULL), err);
 }
 
-static t_error	cd_from_var(const char *utility, const char *name,
-					t_string *dir)
+t_error	cd_from_var(const char *utility, const char *name, t_string *dir)
 {
 	t_error	err;
 
@@ -51,36 +47,32 @@ static t_error	cd_from_var(const char *utility, const char *name,
 	return (err);
 }
 
-static t_error	cd_resolve_operand(int argc, char **argv, t_cd_args *args,
-					t_string *dir)
+t_error	cd_resolv_operand(int argc, char **argv, t_cd_args *args, t_string *dir)
 {
 	if ((size_t)argc - args->operand_index > 1)
-		return (error_print(error(ERR_INVALID_USAGE), argv[0],
-				"too many arguments", NULL, NULL));
+		return (error_print(error(ERR_INVALID_USAGE),
+					argv[0], "too many arguments", NULL, NULL));
 	if ((size_t)argc == args->operand_index)
 		return (cd_from_var(argv[0], "HOME", dir));
 	if (str_cmp(argv[args->operand_index], "-") == 0)
-	{
-		args->print = true;
-		return (cd_from_var(argv[0], "OLDPWD", dir));
-	}
+		return (args->print = true, cd_from_var(argv[0], "OLDPWD", dir));
 	if (!string_init(dir, 0, argv[args->operand_index], -1))
 		return (error_sys());
 	return (error(ERR_NO));
 }
 
-static t_error	cd_print_new(void)
+static t_error	cd_requalify(t_error err, char *builtin_name)
 {
-	t_string	pwd;
-	t_error		err;
-
-	err = params_get_from_const("PWD", &pwd);
 	if (err.type)
-		return (err);
-	if (!string_append_n(&pwd, "\n", 1))
-		return (string_free(&pwd), error_sys());
-	err = posix_write(STDOUT_FILENO, pwd.data, pwd.len);
-	return (string_free(&pwd), err);
+		err = error_print(err, builtin_name, NULL, NULL);
+	else if (
+		err.type == ERR_VAR_INVALID_NAME
+		|| err.type == ERR_VAR_NOT_FOUND
+		|| err.type == ERR_INVALID_USAGE
+		|| err.type == ERR_UB
+		|| err.type == ERR_POSIX_ASSIGNMENT)
+		err.type = ERR_BUILTIN;
+	return (err);
 }
 
 t_error	builtin_cd(int argc, char **argv, char **envp, int *exit_status)
@@ -93,7 +85,7 @@ t_error	builtin_cd(int argc, char **argv, char **envp, int *exit_status)
 	string_init(&args.curpath, 0, NULL, 0);
 	err = cd_process_options(argc, argv, &args);
 	if (err.type == ERR_NO)
-		err = cd_resolve_operand(argc, argv, &args, &dir);
+		err = cd_resolv_operand(argc, argv, &args, &dir);
 	if (err.type == ERR_NO)
 	{
 		err = cd_build_curpath(&args, &dir);
@@ -107,11 +99,5 @@ t_error	builtin_cd(int argc, char **argv, char **envp, int *exit_status)
 	}
 	string_free(&args.curpath);
 	*exit_status = (int)err.type;
-	if (err.type)
-		err = error_print(err, argv[0], NULL, NULL);
-	if (err.type == ERR_SHELL_NOT_FOUND)
-		err.type = ERR_INTERNAL;
-	else if (err.type != ERR_NO && err.type != ERR_INTERRUPTED)
-		err.type = ERR_BUILTIN;
-	return (err);
+	return (cd_requalify(err, argv[0]));
 }

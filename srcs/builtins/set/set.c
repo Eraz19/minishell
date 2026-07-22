@@ -64,15 +64,16 @@ static t_error	set_assign_positionals(size_t first, int argc, char **argv)
 	return (err);
 }
 
-static t_error	set_requalify(t_error err)
+static t_error	set_requalify(t_error err, char *builtin_name)
 {
+	if (err.type)
+		err = error_print(err, builtin_name, NULL, NULL);
 	if (err.type == ERR_INVALID_USAGE
 		|| err.type == ERR_POSIX_WRITE
-		|| err.type == ERR_UB)
-		err.type = ERR_BUILTIN;
-	else if (err.type == ERR_SHELL_NOT_FOUND
-		|| err.type == ERR_VAR_NOT_FOUND)
-		err.type = ERR_INTERNAL;
+		|| err.type == ERR_UB
+		|| err.type == ERR_OPT_MISSING_ARG
+		|| err.type == ERR_INVALID_USAGE)
+		err.type = ERR_POSIX_BUILTIN_SPECIAL;
 	return (err);
 }
 
@@ -88,14 +89,12 @@ t_error	builtin_set(int argc, char **argv, char **envp, int *exit_status)
 	{
 		err = set_process_options(argc, argv, &out);
 		if (err.type == ERR_NO)
-			err = set_apply_options(&out);
+			err = set_apply_options(&out, (size_t)argc, argv);
 		if (err.type == ERR_NO
 			&& set_has_positionals_request(&out, argc, argv))
 			err = set_assign_positionals(out.first_operand_index, argc, argv);
 		vector_free(&out.options, NULL);
 	}
 	*exit_status = (int)err.type;
-	if (err.type)
-		err = error_print(err, argv[0], NULL, NULL);
-	return (set_requalify(err));
+	return (set_requalify(err, argv[0]));
 }

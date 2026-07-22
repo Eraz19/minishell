@@ -57,7 +57,9 @@ static t_error	cd_update_pwd(t_cd_args *args, const char *utility)
 	return (string_free(&physical), err);
 }
 
-static t_error	cd_chdir_and_update(t_cd_args *args, const t_string *oldpwd,
+static t_error	cd_chdir_and_update(
+					t_cd_args *args,
+					const t_string *oldpwd,
 					const char *utility)
 {
 	const char	*path;

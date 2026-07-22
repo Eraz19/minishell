@@ -2,21 +2,18 @@
 # define SET__H
 
 # include "error.h"
+# include "options.h"
 # include "ft_getopt.h"
 
-/**
- * @brief Applies every parsed @c set option to the live shell state.
- *
- * A @c -o / @c +o without argument prints the current option settings
- * instead (human-readable for @c -o, re-input format for @c +o, POSIX
- * leaves the @c -o format unspecified).
- *
- * @param out Parsed options from @ref ft_getopt (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND if the shell data is unavailable;
- *         @c ERR_INTERRUPTED or @c ERR_POSIX_WRITE from the option
- *         printers; @c ERR_LIBC on system failure; @c ERR_NO on
- *         success.
- */
-t_error	set_apply_options(t_getopt_out *out);
+#define SET_USAGE_1	"set [-abCefhmnuvx] [-o option] [argument...]\n"
+#define SET_USAGE_2	"set [+abCefhmnuvx] [+o option] [argument...]\n"
+#define SET_USAGE_3	"set -- [argument...]\n"
+#define SET_USAGE_4	"set -o\n"
+#define SET_USAGE_5	"set +o\n"
+
+t_error	set_print_options(char sign);
+t_error	set_print_one(char sign, const char *name, bool on);
+bool	set_named_option(size_t i, const char **name, t_option *bit);
+t_error	set_apply_options(t_getopt_out *out, size_t argc, char ** argv);
 
 #endif

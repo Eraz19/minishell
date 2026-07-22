@@ -19,8 +19,11 @@ static bool	cd_starts_with_dot(const char *dir)
 		&& (dir[2] == '\0' || dir[2] == '/'));
 }
 
-static t_error	cd_try_entry(t_cd_args *args, const t_string *dir,
-					const t_string *entry, bool *found)
+static t_error	cd_try_entry(
+					t_cd_args *args,
+					const t_string *dir,
+					const t_string *entry,
+					bool *found)
 {
 	t_string	candidate;
 

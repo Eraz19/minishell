@@ -20,8 +20,7 @@ bool	env_same_name(const char *a, const char *b)
 	i = 0;
 	while (a[i] != '\0' && a[i] != '=' && a[i] == b[i])
 		i++;
-	return ((a[i] == '\0' || a[i] == '=')
-		&& (b[i] == '\0' || b[i] == '='));
+	return ((a[i] == '\0' || a[i] == '=') && (b[i] == '\0' || b[i] == '='));
 }
 
 static t_error	env_process_options(int argc, char **argv, t_getopt_out *out)
