@@ -470,7 +470,16 @@ t_run 'f_u5() { echo defined; }
 unset -f f_u5
 f_u5
 echo rc=$?'
-expect_out_contains "rc=127"
+# removed function -> invoking it is command-not-found; 2.8.1 lets the
+# non-interactive shell exit (status 127) or continue (rc=127 printed).
+# Either way "defined" must not appear: that would mean unset -f failed.
+expect_out_lacks "defined"
+if (( T_RET == 0 )); then
+	expect_out_contains "rc=127"
+else
+	expect_status 127
+	expect_err_contains "not found"
+fi
 t_end
 
 t_begin UNSET.6 "unset with an invalid name -> error"
@@ -532,18 +541,36 @@ tt ALIAS.8 "alias is only substituted in command position" \
 "alias notcmd_8='SHOULD_NOT_EXPAND'
 echo notcmd_8" 0 "notcmd_8"
 
-tt UNALIAS.1 "unalias removes the definition" \
-"alias tmp_u1='echo x'
+t_begin UNALIAS.1 "unalias removes the definition"
+t_run "alias tmp_u1='echo leaked_u1'
 unalias tmp_u1
 tmp_u1
-echo rc=\$?" 0 "rc=127"
+echo rc=\$?"
+# removed alias -> command-not-found; 2.8.1: exit 127 or continue.
+# "leaked_u1" appearing would mean the alias still expanded.
+expect_out_lacks "leaked_u1"
+if (( T_RET == 0 )); then
+	expect_lines "rc=127"
+else
+	expect_status 127
+	expect_err_contains "not found"
+fi
+t_end
 
-tt UNALIAS.2 "unalias -a removes everything" \
-"alias a_u2='echo a'
-alias b_u2='echo b'
+t_begin UNALIAS.2 "unalias -a removes everything"
+t_run "alias a_u2='echo leaked_a_u2'
+alias b_u2='echo leaked_b_u2'
 unalias -a
 a_u2
-echo rc=\$?" 0 "rc=127"
+echo rc=\$?"
+expect_out_lacks "leaked_a_u2"
+if (( T_RET == 0 )); then
+	expect_lines "rc=127"
+else
+	expect_status 127
+	expect_err_contains "not found"
+fi
+t_end
 
 t_begin UNALIAS.3 "unalias of an unknown name -> non-zero + diagnostic"
 t_run 'unalias no_such_alias_u3'
