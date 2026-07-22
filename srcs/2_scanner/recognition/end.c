@@ -7,6 +7,7 @@ bool	is_end(t_lexer *lexer)
 
 t_error	lexer_rule_end(t_lexer *lexer)
 {
+
 	lexer_delimit_token(lexer);
 	if (lexer->token->type == TOKEN_NONE)
 		lexer->token->type = TOKEN_EOF;

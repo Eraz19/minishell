@@ -2,7 +2,6 @@
 #include "reader_.h"
 #include "scanner.h"
 #include "scanner_.h"
-# include "debug.h"	// DEBUG
 
 t_error	scanner_get_next_token(
 			t_scanner *scanner,
@@ -11,29 +10,18 @@ t_error	scanner_get_next_token(
 {
 	t_lexer_rules	lexer_rules;
 
-	fprintf(stderr, "[%s()] continuation=%s\n", __func__, bool_to_string(continuation));
 	if (continuation == true)
 	{
 		scanner->err = scanner_lexer_continuation(&scanner->lexer);
 		if (scanner->err.type)
 			return (scanner->err = scanner_error_qualify(scanner->err, false));
 	}
-	else
+	else if (scanner->lexer.input_stack.len == 0)
 	{
-		if (scanner->lexer.input != NULL && scanner->lexer.input_stack.len == 1
-			&& scanner->lexer.input->str.data[scanner->lexer.input->i] == '\0')
-		{
-			lexer_pop_last_input_stack_on_end(&scanner->lexer);
-			if (scanner->lexer.err.type)
-				return (scanner->err = scanner_error_qualify(scanner->lexer.err, false));
-		}
+		if (scanner_read_input(scanner).type)
+			return (scanner->err = scanner_error_qualify(scanner->err, true));
 		if (scanner->lexer.input_stack.len == 0)
-		{
-			if (scanner_read_input(scanner).type)
-				return (scanner->err = scanner_error_qualify(scanner->err, true));
-			if (scanner->lexer.input_stack.len == 0)
-				return (token_init(token), token->type = TOKEN_EOF, scanner->err);
-		}
+			return (token_init(token), token->type = TOKEN_EOF, scanner->err);
 	}
 	lexer_rules = scanner_lexer_rules();
 	if (lexer_get_next_token(&scanner->lexer, token, lexer_rules).type)
