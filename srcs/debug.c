@@ -5,6 +5,7 @@
 #include "lr_machine_type.h"
 #include "lr_state_type.h"
 #include "rule_state_type.h"
+#include "parser_item_stack_type.h"
 #include "cst_type.h"
 #include "cmd_type.h"
 #include "ast.h"
@@ -292,6 +293,57 @@ const char	*action_type_to_string(t_action_type action_type)
 		case ACTION_ACCEPT: return ("ACTION_ACCEPT");
 		case ACTION_ERROR: return ("ACTION_ERROR");
 		default: return ("unknown");
+	}
+}
+
+/* ************************************************************************* */
+/*                             PARSER ITEM STACK                             */
+/* ************************************************************************* */
+
+void	debug_dump_parser_item_stack(t_parser_item_stack *stack)
+{
+	t_parser_item	*items;
+	t_parser_item	*item;
+	const char		*branch;
+	const char		*color;
+	size_t			i;
+
+	if (stack == NULL)
+		return ((void)fprintf(stderr, "[PARSER STACK] (null)\n"));
+	items = (t_parser_item *)stack->data;
+	fprintf(stderr, "[PARSER] ITEM STACK len=%zu cap=%zu\n",
+		stack->len, stack->cap);
+	i = 0;
+	while (i < stack->len)
+	{
+		item = &items[i];
+		branch = " ├──";
+		if (i + 1 == stack->len)
+			branch = " ╰──";
+		color = NC;
+		if (item->symbol <= SYM_TERMINAL_MAX)
+			color = RED;
+		else if (item->symbol <= SYM_complete_command)
+			color = GREEN;
+		else if (item->symbol <= SYM_NON_TERMINAL_MAX)
+			color = YELLOW;
+		fprintf(stderr,
+			"%s[%3zu] %s%s%s state=%zu tokens=",
+			branch,
+			i,
+			color,
+			symbol_to_string(item->symbol),
+			NC,
+			item->lr_state_id);
+		if (item->tokens_count == 0)
+			fprintf(stderr, "empty");
+		else
+			fprintf(stderr, "%zu-%zu (%zu)",
+				item->tokens_start_id,
+				item->tokens_start_id + item->tokens_count - 1,
+				item->tokens_count);
+		fprintf(stderr, " cst=%p\n", (void *)item->cst_node);
+		i++;
 	}
 }
 
