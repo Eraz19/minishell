@@ -24,7 +24,7 @@ static inline t_error	var_update_value(
 	err = option_is_active(OPT_EXPORT_ALL, &export_all_is_active);
 	if (err.type)
 		return (err);
-	if (value)
+	if (value && value->data)
 	{
 		var->value.len = 0;
 		if (!string_append(&var->value, value))
