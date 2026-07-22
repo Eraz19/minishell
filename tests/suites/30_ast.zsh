@@ -62,7 +62,7 @@ expect_out_contains "survived"
 t_end
 
 tt SCMD.7 "empty command line does nothing, \$? untouched" \
-'/bin/false
+'false
 
 echo rc=$?' 0 "rc=1"
 
@@ -193,19 +193,19 @@ tt PIPE.2 "three-stage pipeline" \
 'printf "b\na\n" | /bin/sort | /bin/head -1' 0 "a"
 
 tt PIPE.3 "pipeline status = last command (no pipefail)" \
-'/bin/false | /bin/true
+'false | true
 echo rc=$?' 0 "rc=0"
 
 tt PIPE.4 "pipeline status = last command (failure)" \
-'/bin/true | /bin/false
+'true | false
 echo rc=$?' 0 "rc=1"
 
 tt PIPE.5 "! negates a pipeline: true -> 1" \
-'! /bin/true
+'! true
 echo rc=$?' 0 "rc=1"
 
 tt PIPE.6 "! negates a pipeline: false -> 0" \
-'! /bin/false
+'! false
 echo rc=$?' 0 "rc=0"
 
 tt PIPE.7 "builtin inside a pipeline" \
@@ -224,24 +224,24 @@ t_section "and-or node (2.9.3): && ||"
 ###############################################################################
 
 tt ANDOR.1 "&& runs the right side on success" \
-'/bin/true && echo ran' 0 "ran"
+'true && echo ran' 0 "ran"
 
 tt ANDOR.2 "&& skips the right side on failure" \
-'/bin/false && echo skipped
+'false && echo skipped
 echo rc=$?' 0 "rc=1"
 
 tt ANDOR.3 "|| runs the right side on failure" \
-'/bin/false || echo rescued' 0 "rescued"
+'false || echo rescued' 0 "rescued"
 
 tt ANDOR.4 "|| skips the right side on success" \
-'/bin/true || echo skipped
+'true || echo skipped
 echo rc=$?' 0 "rc=0"
 
 tt ANDOR.5 "left-to-right chain of mixed operators" \
-'/bin/true && /bin/false || echo fallback' 0 "fallback"
+'true && false || echo fallback' 0 "fallback"
 
 tt ANDOR.6 "chain status is the last executed command" \
-'/bin/false || /bin/sh -c "exit 4"
+'false || /bin/sh -c "exit 4"
 echo rc=$?' 0 "rc=4"
 
 tt ANDOR.7 "&& || with pipelines as operands" \
@@ -255,7 +255,7 @@ tt LIST.1 "semicolon runs both commands in order" \
 'echo one; echo two' 0 "one" "two"
 
 tt LIST.2 "list status is the last command's" \
-'/bin/false; /bin/true
+'false; true
 echo rc=$?' 0 "rc=0"
 
 tt LIST.3 "trailing semicolon is fine" \
@@ -329,30 +329,30 @@ tt GRP.2 "assignments inside { } persist after it" \
 echo $GV_2' 0 "kept"
 
 tt GRP.3 "group status is the last command's" \
-'{ /bin/true; /bin/false; }
+'{ true; false; }
 echo rc=$?' 0 "rc=1"
 
 tt GRP.4 "group as an operand of &&" \
-'/bin/true && { echo a; echo b; }' 0 "a" "b"
+'true && { echo a; echo b; }' 0 "a" "b"
 
 ###############################################################################
 t_section "if node (2.9.4.4): then / elif / else, status"
 ###############################################################################
 
 tt IF.1 "true condition runs then" \
-'if /bin/true; then echo yes; fi' 0 "yes"
+'if true; then echo yes; fi' 0 "yes"
 
 tt IF.2 "false condition skips then; status 0 without else" \
-'if /bin/false; then echo yes; fi
+'if false; then echo yes; fi
 echo rc=$?' 0 "rc=0"
 
 tt IF.3 "else branch on false condition" \
-'if /bin/false; then echo yes; else echo no; fi' 0 "no"
+'if false; then echo yes; else echo no; fi' 0 "no"
 
 tt IF.4 "elif chain picks the first true condition" \
-'if /bin/false; then echo a
-elif /bin/true; then echo b
-elif /bin/true; then echo c
+'if false; then echo a
+elif true; then echo b
+elif true; then echo c
 else echo d
 fi' 0 "b"
 
@@ -360,11 +360,11 @@ tt IF.5 "condition may be a pipeline / list" \
 'if echo probe | /bin/grep -q probe; then echo piped; fi' 0 "piped"
 
 tt IF.6 "if status = executed branch's last command" \
-'if /bin/true; then /bin/sh -c "exit 5"; fi
+'if true; then /bin/sh -c "exit 5"; fi
 echo rc=$?' 0 "rc=5"
 
 tt IF.7 "multiline body with several commands" \
-'if /bin/true; then
+'if true; then
 	echo first
 	echo second
 fi' 0 "first" "second"
@@ -381,7 +381,7 @@ while /bin/test -e flag_w1; do
 done' 0 "iteration"
 
 tt WHILE.2 "false condition: body never runs, status 0" \
-'while /bin/false; do echo never; done
+'while false; do echo never; done
 echo rc=$?' 0 "rc=0"
 
 tt WHILE.3 "while drives multiple iterations" \
@@ -398,7 +398,7 @@ tt UNTIL.1 "until runs while the condition is false" \
 done' 0 "creating"
 
 tt UNTIL.2 "until with an initially-true condition never runs, status 0" \
-'until /bin/true; do echo never; done
+'until true; do echo never; done
 echo rc=$?' 0 "rc=0"
 
 tt LOOPCTL.1 "break leaves the loop (POSIX special built-in)" \
@@ -587,7 +587,7 @@ echo forced >| f_r9.txt
 /bin/cat f_r9.txt' 0 "forced"
 
 tt REDIR.10 "<> opens read-write and creates the file" \
-'/bin/true <> rw_r10.txt
+'true <> rw_r10.txt
 /bin/test -e rw_r10.txt
 echo rc=$?' 0 "rc=0"
 
@@ -597,7 +597,7 @@ tt REDIR.11 "redirection applies to builtins too" \
 echo rc=$?' 0 "rc=0"
 
 tt REDIR.12 "redirection on a compound command (if...fi > file)" \
-'if /bin/true; then echo branch; fi > if_r12.txt
+'if true; then echo branch; fi > if_r12.txt
 /bin/cat if_r12.txt' 0 "branch"
 
 tt REDIR.13 "redirection on a loop collects all iterations" \

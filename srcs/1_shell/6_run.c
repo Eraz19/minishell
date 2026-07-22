@@ -70,11 +70,15 @@ int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
 	options.envp = envp;
 	options.build_parser_tables = build_parser_tables;
 	err = shell_prepare(&options);
-	if (err.type == ERR_NO)
+	if (err.type)
+		exit_status = (int)err.type;
+	else
+	{
 		err = shell_exec_env();
-	if (err.type == ERR_NO)
-		shell_exec();
-	exit_status = params_get_last_status_from(&options.shell->params);
+		if (err.type == ERR_NO)
+			shell_exec();
+		exit_status = params_get_last_status_from(&options.shell->params);
+	}
 	shell_free(options.shell);
 	shell_stop_logs();
 	return (exit_status);

@@ -26,7 +26,7 @@ tt COLON.3 "colon arguments are still expanded (side effects happen)" \
 echo $SIDE_C3' 0 "assigned"
 
 tt COLON.4 "colon resets \$? to 0" \
-'/bin/false
+'false
 :
 echo rc=$?' 0 "rc=0"
 
@@ -274,7 +274,7 @@ t_section "exit — special built-in, POSIX 2.14 exit"
 ###############################################################################
 
 tta EXIT.1 "exit with no operand uses \$? of the last command" 1 "" \
-	-- -c '/bin/false; exit'
+	-- -c 'false; exit'
 tta EXIT.2 "exit 0" 0 "" -- -c 'exit 0'
 tta EXIT.3 "exit 5" 5 "" -- -c 'exit 5'
 tta EXIT.4 "exit 255 (top of the POSIX range)" 255 "" -- -c 'exit 255'
@@ -597,12 +597,12 @@ wait
 echo rc=$?' 0 "rc=0"
 
 tt WAIT.3 "wait \$! returns that child's exit status (success)" \
-'/bin/true &
+'true &
 wait $!
 echo rc=$?' 0 "rc=0"
 
 tt WAIT.4 "wait \$! returns that child's exit status (failure)" \
-'/bin/false &
+'false &
 wait $!
 echo rc=$?' 0 "rc=1"
 
@@ -624,7 +624,7 @@ expect_status_nonzero
 t_end
 
 tt WAIT.8 "wait for several pids" \
-'/bin/true &
+'true &
 P1=$!
 /bin/sleep 0.05 &
 P2=$!
@@ -700,7 +700,7 @@ tt CLASS.3 "assignment prefix on a special built-in persists (POSIX)" \
 echo [$CL_3]' 0 "[persists]"
 
 tt CLASS.4 "assignment prefix on an external command does NOT persist" \
-'CL_4=temp /bin/true
+'CL_4=temp true
 echo [${CL_4:-empty}]' 0 "[empty]"
 
 t_begin CLASS.5 "assignment prefix reaches the child environment only"

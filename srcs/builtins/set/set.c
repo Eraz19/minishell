@@ -1,6 +1,7 @@
 #include "set_.h"
 #include "params.h"
 #include "ft_getopt.h"
+# include <stdio.h>
 
 static t_error	set_process_options(int argc, char **argv, t_getopt_out *out)
 {
@@ -23,6 +24,7 @@ static t_error	set_process_options(int argc, char **argv, t_getopt_out *out)
 	in.valid_plus_flags = "abCefhmnuvx";
 	in.options_with_arg = flags_w_arg;
 	in.options_with_arg_count = sizeof(flags_w_arg) / sizeof(*flags_w_arg);
+	fprintf(stderr, "[%s()] calling ft_getopt()\n", __func__);
 	return (ft_getopt(argc, argv, &in, out));
 }
 
@@ -88,6 +90,7 @@ t_error	builtin_set(int argc, char **argv, char **envp, int *exit_status)
 	else
 	{
 		err = set_process_options(argc, argv, &out);
+		fprintf(stderr, "[%s()] set_process_options() returned err == %s\n", __func__, error_to_string(err));
 		if (err.type == ERR_NO)
 			err = set_apply_options(&out, (size_t)argc, argv);
 		if (err.type == ERR_NO

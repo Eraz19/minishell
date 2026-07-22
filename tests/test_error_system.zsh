@@ -428,7 +428,7 @@ run_open_runner_shell()
 	# -s -i forces SCAN_MODE_STDIN_TTY; empty stdin = immediate EOF.
 	STDIN_DATA=""
 	ta "RUN-1.1" "interactive EOF -> exit 0" 0 "" -- -s -i
-	STDIN_DATA='/bin/true
+	STDIN_DATA='true
 '
 	ta "RUN-1.2" "cmds then EOF -> exit 0" 0 "" -- -s -i
 
@@ -444,9 +444,9 @@ run_open_runner_shell()
 /bin/echo survived' 0 "survived"
 
 	# SHELL-1: exit status of the shell = $? of the last command
-	ta "SHELL-1.1" "-c false -> 1" 1 "" -- -c "/bin/false"
+	ta "SHELL-1.1" "-c false -> 1" 1 "" -- -c "false"
 	ta "SHELL-1.2" "-c cmd-not-found -> 127" 127 "" -- -c "nosuchcommand_xyz_42"
-	tp "SHELL-1.3" "last status via pipe" '/bin/false' 1
+	tp "SHELL-1.3" "last status via pipe" 'false' 1
 }
 
 run_open_heredoc()

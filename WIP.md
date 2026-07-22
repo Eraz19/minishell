@@ -1,11 +1,15 @@
-# FIX GRAMMAR CONTINUATION ISSUE
+# FIX
 
-- Si `SYM_EOF` alors que construction en attente (`SYM_SHIFT possible ?`)
-	- call `scanner_get_next_token()` avec `continuation == true`
-	- drop `SYM_EOF` (lookahead) + `SYM_NEWLINE` (`item_stack`) précédents
+- `builtin_set`:
+	- shall throw `ERR_INVALID_USAGE` when `-o` / `+o` is used without `option` but `first_operand_index` < `argc`
+- `builtin_env`:
+	- implement `utility` execution:
+		- *resolve* cmd_name => *external* vs *builtin*
+		- *execute* => `fork` + `execve`
 
 # OTHERS
 
+- when shell options are invalid => requalify error in `ERR_INVALID_USAGE`
 - rename `params` to `env`
 - ⚠️ `qualify_2()`
 - `shell`:

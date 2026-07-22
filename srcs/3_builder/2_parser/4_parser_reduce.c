@@ -9,10 +9,10 @@ static inline t_error	parser_new_lr_state(
 							size_t *dst)
 {
 	const t_parser_item_stack	*stack;
-	size_t					previous_item_id;
-	t_parser_item		*previous_item;
-	size_t					lr_state_from;
-	size_t					lr_state_to;
+	size_t						previous_item_id;
+	t_parser_item				*previous_item;
+	size_t						lr_state_from;
+	size_t						lr_state_to;
 
 	stack = &parser->item_stack;
 	previous_item_id = stack->len - rule->rhs_len - 1;

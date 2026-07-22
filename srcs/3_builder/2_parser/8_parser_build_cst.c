@@ -60,7 +60,7 @@ static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 
 static inline t_error	parser_try_continuation(
 							t_parser *parser,
-							size_t lr_state_id)
+							size_t *lr_state_id)
 {
 	t_action	*action;
 	size_t		i;
@@ -70,7 +70,7 @@ static inline t_error	parser_try_continuation(
 	i = 0;
 	while (i <= SYM_TERMINAL_MAX)
 	{
-		action = &parser->machine->actions[lr_state_id][i];
+		action = &parser->machine->actions[*lr_state_id][i];
 		if (action->type != ACTION_ERROR)
 			return (parser_read_next_symbol(parser, true));
 		i++;
@@ -98,7 +98,7 @@ t_error	parser_build_cst(t_parser *parser)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR)
 		{
-			err = parser_try_continuation(parser, lr_state_id);
+			err = parser_try_continuation(parser, &lr_state_id);
 			if (err.type)
 				return (err);
 		}

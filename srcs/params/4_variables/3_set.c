@@ -15,16 +15,22 @@ static inline t_error	var_update_value(
 							bool export,
 							bool readonly)
 {
+	bool	export_all_is_active;
+	t_error	err;
+
 	assert(var != NULL);
 	if (var->readonly && value)
 		return (error(ERR_VAR_READ_ONLY));
-	if (value)
+	err = option_is_active(OPT_EXPORT_ALL, &export_all_is_active);
+	if (err.type)
+		return (err);
+	if (value && value->data)
 	{
 		var->value.len = 0;
 		if (!string_append(&var->value, value))
 			return (error_sys());
 	}
-	if (export)
+	if (export || export_all_is_active)
 		var->export = true;
 	if (readonly)
 		var->readonly = true;
