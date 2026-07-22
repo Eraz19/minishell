@@ -12,7 +12,7 @@ t_error	cmd_sub_find_end(ssize_t *out_closing_token_id, t_ast_vector *ast_vector
 	t_error		err;
 
 	fprintf(stderr, YELLOW "################# CMD SUB PARSING ################\n" NC);
-	err = shell_get_new_parser(&parser, SCAN_MODE_COPY);
+	err = shell_get_new_parser(&parser, SCAN_MODE_CMD_SUB);
 	if (err.type)
 	{
 		fprintf(stderr, YELLOW "##################################################\n" NC);

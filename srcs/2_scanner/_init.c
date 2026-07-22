@@ -14,16 +14,24 @@ void	scanner_init(t_scanner *scanner)
 	scanner->parent_scanner = NULL;
 }
 
-static inline t_error	scanner_copy(t_scanner *scanner)
+static inline t_error	scanner_load_cmd_sub(t_scanner *scanner)
 {
-	if (scanner->mode != SCAN_MODE_COPY)
+	if (scanner->mode != SCAN_MODE_CMD_SUB)
 		return (error(ERR_NO));
 	if (scanner->parent_scanner->mode != SCAN_MODE_STDIN
-		&& scanner->parent_scanner->mode != SCAN_MODE_COPY)
+		&& scanner->parent_scanner->mode != SCAN_MODE_CMD_SUB)
 		return (scanner->mode = scanner->parent_scanner->mode, error(ERR_NO));
-	return (lexer_input_stack_dup(
+	scanner->err = lexer_input_stack_dup(
 		&scanner->lexer.input_stack,
-		&scanner->parent_scanner->lexer.input_stack));
+		&scanner->parent_scanner->lexer.input_stack);
+	if (scanner->err.type)
+		return (scanner->err);
+	scanner->err = lexer_input_stack_get_last(
+					&scanner->lexer.input_stack,
+					&scanner->lexer.input);
+	if (scanner->err.type)
+		return (scanner->err);
+	return (scanner->err = lexer_consume(&scanner->lexer, TOKEN_DOLPAREN, 2));
 }
 
 t_error	scanner_load(
@@ -41,7 +49,7 @@ t_error	scanner_load(
 	lexer_init(&scanner->lexer, scanner);
 	scanner->mode = mode;
 	if (mode != SCAN_MODE_AUTO)
-		return (scanner_copy(scanner));
+		return (scanner_load_cmd_sub(scanner));
 	err = params_get_source(&source);
 	if (err.type)
 		return (scanner->err = scanner_error_qualify(err, false));

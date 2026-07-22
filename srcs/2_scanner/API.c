@@ -69,7 +69,7 @@ t_error	scanner_lexer_continuation(t_lexer *lexer)
 	//size_t		last_input_i;
 	//t_string	continuation;
 
-	if (lexer->scanner->mode != SCAN_MODE_COPY
+	if (lexer->scanner->mode != SCAN_MODE_CMD_SUB
 		&& lexer->scanner->mode != SCAN_MODE_STDIN)
 		return (error(ERR_POSIX_SYNTAX));
 	lexer->err = reader_continuation(&lexer->input->str);
