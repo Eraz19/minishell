@@ -364,11 +364,21 @@ expect_out_lacks "not_reached"
 expect_err_contains "invalid syntax"
 t_end
 
-t_begin OPT-I.5 "non-interactive: command-not-found does NOT abort (POSIX table)"
+t_begin OPT-I.5 "non-interactive: command-not-found — 2.8.1 says 'may exit'"
 t_run 'no_such_cmd_xyz
 echo survived'
-expect_status 0
-expect_lines "survived"
+# POSIX.1-2024 2.8.1: command not found, non-interactive shell "may exit"
+# (diagnostic required either way; 2.9.1: the failed command's status is 127).
+# Both branches are conformant — assert whichever one the shell took:
+#   continue -> next command runs, final status 0
+#   exit     -> status 127, next command never runs
+if (( T_RET == 0 )); then
+	expect_lines "survived"
+else
+	expect_status 127
+	expect_out_lacks "survived"
+fi
+expect_err_contains "not found"
 t_end
 
 ###############################################################################

@@ -33,9 +33,18 @@ expect_err_contains "argv[1] => [a b]"
 expect_err_contains "argv[2] => [c]"
 t_end
 
-tt SCMD.5 "command not found -> 127, shell continues" \
-'definitely_not_a_command_xyz
-echo rc=$?' 0 "rc=127"
+t_begin SCMD.5 "command not found -> 127 (2.8.1: non-interactive may exit)"
+t_run 'definitely_not_a_command_xyz
+echo rc=$?'
+# POSIX.1-2024 2.8.1: non-interactive shell "may exit" on command not
+# found; 2.9.1: the failed command's status is 127 either way.
+if (( T_RET == 0 )); then
+	expect_lines "rc=127"
+else
+	expect_status 127
+fi
+expect_err_contains "not found"
+t_end
 
 t_begin SCMD.6 "file without +x -> 126"
 t_setup 'printf "#!/bin/sh\necho no\n" > noexec.sh; chmod 644 noexec.sh'

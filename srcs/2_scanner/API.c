@@ -17,12 +17,12 @@ t_error	scanner_get_next_token(
 			return (scanner->err = scanner_error_qualify(scanner->err, false));
 	}
 	else if (scanner->lexer.input_stack.len == 0)
-	{
-		if (scanner_read_input(scanner).type)
-			return (scanner->err = scanner_error_qualify(scanner->err, true));
-		if (scanner->lexer.input_stack.len == 0)
-			return (token_init(token), token->type = TOKEN_EOF, scanner->err);
-	}
+		{
+			if (scanner_read_input(scanner).type)
+				return (scanner->err = scanner_error_qualify(scanner->err, true));
+			if (scanner->lexer.input_stack.len == 0)
+				return (token_init(token), token->type = TOKEN_EOF, scanner->err);
+		}
 	lexer_rules = scanner_lexer_rules();
 	if (lexer_get_next_token(&scanner->lexer, token, lexer_rules).type)
 		return (scanner->err = scanner_error_qualify(scanner->lexer.err, false));
