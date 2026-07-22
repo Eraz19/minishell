@@ -270,6 +270,8 @@ void			lexer_free(t_lexer *lexer);
  */
 void			lexer_input_stack_free(t_lexer_input_stack *stack);
 
+void			lexer_pop_last_input_stack_on_end(t_lexer *lexer);
+
 /**
  * @ingroup lexer
  * @brief Fetches the top (current) input item without removing it.

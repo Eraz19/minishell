@@ -18,6 +18,9 @@ static inline t_error	scanner_copy(t_scanner *scanner)
 {
 	if (scanner->mode != SCAN_MODE_COPY)
 		return (error(ERR_NO));
+	if (scanner->parent_scanner->mode != SCAN_MODE_STDIN
+		&& scanner->parent_scanner->mode != SCAN_MODE_COPY)
+		return (scanner->mode = scanner->parent_scanner->mode, error(ERR_NO));
 	return (lexer_input_stack_dup(
 		&scanner->lexer.input_stack,
 		&scanner->parent_scanner->lexer.input_stack));
