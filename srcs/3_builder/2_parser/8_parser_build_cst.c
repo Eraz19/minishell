@@ -56,37 +56,6 @@ static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 			&parser->lookahead_symbol);
 }
 
-static inline t_error	parser_handle_syntax_errors(t_parser *parser)
-{
-	size_t			lr_state_id;
-	const t_token	*token;
-	t_action		action;
-	t_error			err;
-
-	if (parser->search_cmd_sub_end == false
-		|| parser->lookahead_raw_symbol != SYM_RPARENTHESIS)
-		return (parser_invalid_syntax());
-	parser->lookahead_raw_symbol = SYM_EOF;
-	parser->lookahead_symbol = SYM_EOF;
-	token = parser_get_token(parser, parser->lookahead_id);
-	parser->cmd_sub_end_index = token->index.end;
-	err.type = ERR_NO;
-	while (err.type == ERR_NO && parser->cst == NULL)
-	{
-		lr_state_id = parser_item_stack_top(&parser->item_stack)->lr_state_id;
-		action = parser->machine->actions[lr_state_id][parser->lookahead_symbol];
-		if (action.type == ACTION_REDUCE)
-			err = parser_reduce(parser, action.payload);
-		if (action.type == ACTION_ACCEPT)
-			return (parser_accept(parser));
-		else if (action.type == ACTION_ERROR || action.type == ACTION_SHIFT)
-			return (parser_invalid_syntax());
-	}
-	return (err);
-}
-
-# include <stdio.h>
-# include "debug.h"
 t_error	parser_build_cst(t_parser *parser)
 {
 	size_t			lr_state_id;
@@ -103,11 +72,10 @@ t_error	parser_build_cst(t_parser *parser)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)
 			err = parser_reduce(parser, action.payload);
-		fprintf(stderr, YELLOW "[%s()] parser->search_cmd_sub_end=%s\n" NC, __func__, bool_to_string(parser->search_cmd_sub_end));
-		if (action.type == ACTION_ACCEPT && parser->search_cmd_sub_end == false)
+		if (action.type == ACTION_ACCEPT)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR)
-			return (parser_handle_syntax_errors(parser));
+			return (parser_invalid_syntax());
 	}
 	return (err);
 }

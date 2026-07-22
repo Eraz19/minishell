@@ -32,12 +32,13 @@ t_error	lexer_context_cmd_sub(t_lexer *lexer)
 	lexer->err = context_stack_push(&lexer->token->contexts, item);
 	if (lexer->err.type)
 		return (free(item), lexer->err);
-	if (lexer_consume(lexer, lexer->token->type, 2).type)
+	if (lexer_consume(lexer, lexer->token->type, 1).type)
 		return (lexer->err);
-	if (lexer->input->str.data[lexer->input->i] == ')')
+	if (lexer->input->str.data[lexer->input->i] == '('
+		&& lexer->input->str.data[lexer->input->i + 1] == ')')
 	{
 		item->end = lexer->token->value.len;
-		return (lexer_consume(lexer, lexer->token->type, 1));
+		return (lexer_consume(lexer, lexer->token->type, 2));
 	}
 	return (cmd_sub_consume_body(lexer, item));
 }

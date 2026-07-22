@@ -39,10 +39,11 @@ void	runner_run(t_runner *runner)
 	err.type = ERR_NO;
 	while (err.type == ERR_NO)
 	{
+		runner->control_depth = 0;
+		runner->loop_depth = 0;
 		err = runner_loop_cycle(runner, &ast_root);
 		runner_handle_error(runner, &err);
 		ast_root_free(&ast_root);
-		runner_clear(runner);
 	}
 }
 
@@ -51,6 +52,8 @@ void	runner_run_ast(t_runner *runner, t_ast_root *ast_root)
 	bool	no_exec;
 	t_error	err;
 
+	runner->control_depth = 0;
+	runner->loop_depth = 0;
 	err = sig_process();
 	if (err.type == ERR_NO)
 		err = option_is_active(OPT_NOEXEC, &no_exec);
@@ -60,5 +63,4 @@ void	runner_run_ast(t_runner *runner, t_ast_root *ast_root)
 		err = sig_process();
 	err = error_priorize(err, params_reap());
 	runner_handle_error(runner, &err);
-	runner_clear(runner);
 }

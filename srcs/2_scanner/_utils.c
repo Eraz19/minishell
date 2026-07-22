@@ -55,7 +55,8 @@ t_error	scanner_read_input(t_scanner *scanner)
 		else
 			scanner->err = reader_new_input(&item->str);
 	}
-	if (scanner->err.type || item->str.len < 2)
+	fprintf(stderr, "[%s()] item->str.len=%zu\n", __func__, item->str.len);
+	if (scanner->err.type)
 		return (lexer_input_stack_item_free(&item), scanner->err);
 	scanner->err = lexer_input_stack_push(&scanner->lexer.input_stack, item);
 	return (scanner->err);

@@ -3,11 +3,11 @@
 #include "rule_state_type.h"
 #include "lr_state_type.h"
 
+// TODO: remove before submit
 // DEBUG (always return ERR_LR_CONFLICT)
 static t_error	print_conflict(t_action *action, size_t lr_state_id, t_symbol symbol, t_action_type target_type, size_t target_payload)
 {
 	t_string	string;
-	char		*format_string;
 
 	string_init(&string, 0, NULL, 0);
 	if (action->type == ACTION_SHIFT)
@@ -23,9 +23,10 @@ static t_error	print_conflict(t_action *action, size_t lr_state_id, t_symbol sym
 	else if (target_type == ACTION_ACCEPT)
 		string_append_n(&string, "ACCEPT", -1);
 	string_append_n(&string, " for lr_state %i and symbol %i (current payload = %i vs target = %i)", -1);
-	fprint_err(false, "⚠️ conflict", format_string,
+	fprint_err(false, "⚠️ conflict", string.data,
 		(int)lr_state_id, (int)symbol,
 		(int)action->payload, (int)target_payload);
+	string_free(&string);
 	return (error(ERR_LR_CONFLICT));
 }
 

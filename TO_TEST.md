@@ -1,3 +1,13 @@
+# WIP CMD SUB
+
+```bash
+$(echo (inside) after)
+```
+```bash
+before$(echo; (inside);
+after)end
+```
+
 # SIGNALS
 
 ```bash
