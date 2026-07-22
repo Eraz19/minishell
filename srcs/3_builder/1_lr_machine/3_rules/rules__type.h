@@ -8,7 +8,10 @@
 
 typedef enum e_rule_id
 {
+	RULE_ACCEPT,					// accept				-> start (⚠️ custom bash-like cmd_sub parsing hack)
 	RULE_START_1,					// start				-> program
+	RULE_START_2,					// start				-> cmd_sub	(⚠️ custom bash-like cmd_sub parsing hack)
+	RULE_CMD_SUB,					// cmd_sub				-> DOLPAREN coumpound_list ')' (⚠️ custom bash-like cmd_sub parsing hack)
 	RULE_PROGRAM_1,					// program				-> linebreak complete_commands linebreak
 	RULE_PROGRAM_2,					// program				-> linebreak
 	RULE_COMPLETE_COMMANDS_1,		// complete_commands	-> complete_commands newline_list complete_command

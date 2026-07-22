@@ -3,15 +3,15 @@
 
 // ERR_NO / ERR_LIBC
 static t_error	build_initial_lr_state(
-	t_lr_machine *machine,
-	t_lr_state *lr_states)
+					t_lr_machine *machine,
+					t_lr_state *lr_states)
 {
 	t_rule_state	rule_state;
 	t_lr_state		lr_state;
 	t_error			err;
 
 	lr_state_init(&lr_state);
-	rule_state.rule_id = RULE_START_1;
+	rule_state.rule_id = RULE_ACCEPT;
 	rule_state.pos = 0;
 	rule_state.lookahead = SYM_EOF;
 	err = lr_state_add_rule_state(&lr_state, rule_state, NULL);
@@ -22,16 +22,16 @@ static t_error	build_initial_lr_state(
 		return (lr_state_free(&lr_state), err);
 	err = lr_state_add(lr_states, &lr_state, NULL);
 	if (err.type != ERR_NO)
-		return (lr_state_free(&lr_state), err);
-	return (error(ERR_NO));
+		lr_state_free(&lr_state);
+	return (err);
 }
 
 // ERR_NO / ERR_LR_STATE_NOT_FOUND / ERR_LIBC
 static t_error	add_transition(
-	t_lr_machine *machine,
-	t_lr_state *from_lr_state,
-	t_symbol symbol,
-	t_lr_state *to_lr_state)
+					t_lr_machine *machine,
+					t_lr_state *from_lr_state,
+					t_symbol symbol,
+					t_lr_state *to_lr_state)
 {
 	t_transition	transition;
 	size_t			from_id;
@@ -51,9 +51,9 @@ static t_error	add_transition(
 
 // ERR_NO / ERR_LR_STATE_NOT_FOUND / ERR_LIBC
 static t_error	build_lr_state_and_transition(
-	t_lr_machine *machine,
-	t_lr_state *lr_state_from,
-	t_symbol symbol)
+					t_lr_machine *machine,
+					t_lr_state *lr_state_from,
+					t_symbol symbol)
 {
 	t_lr_state	lr_state_new;
 	bool		did_add;

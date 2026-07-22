@@ -88,7 +88,7 @@ static t_error	add_reduces_and_accept(
 	rule = machine->rules[rule_state.rule_id];
 	if (rule_state.pos < rule.rhs_len)
 		return (error(ERR_NO));
-	if (rule_state.rule_id == RULE_START_1 && rule_state.lookahead == SYM_EOF)
+	if (rule_state.rule_id == RULE_ACCEPT && rule_state.lookahead == SYM_EOF)
 	{
 		action = &machine->actions[lr_state_id][SYM_EOF];
 		if (action->type != ACTION_ERROR)

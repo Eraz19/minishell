@@ -7,55 +7,58 @@ typedef enum e_symbol
 	//	TERMINALS (ACTION table entries)
 	//		- Unclassified
 	SYM_TOKEN,
+	//		- Custom
+	SYM_DOLPAREN,			// $(		// ⚠️ custom (bash-like cmd_sub parsing hack)
 	//		- Contextual
 	SYM_WORD,
 	SYM_NAME,
 	SYM_ASSIGNMENT_WORD,
 	//		- Control
-	SYM_NEWLINE,		// \n		// AST transparent
-	SYM_SEMI,			// ;		// AST transparent
-	SYM_DSEMI,			// ;;		// AST transparent
-	SYM_SEMI_AND,		// ;&
-	SYM_AMPERSAND,		// &
-	SYM_AND_IF,			// &&
-	SYM_OR_IF,			// ||
-	SYM_PIPE,			// |		// AST transparent
-	SYM_LPARENTHESIS,	// (		// AST transparent
-	SYM_RPARENTHESIS,	// )		// AST transparent
+	SYM_NEWLINE,			// \n		// AST transparent
+	SYM_SEMI,				// ;		// AST transparent
+	SYM_DSEMI,				// ;;		// AST transparent
+	SYM_SEMI_AND,			// ;&
+	SYM_AMPERSAND,			// &
+	SYM_AND_IF,				// &&
+	SYM_OR_IF,				// ||
+	SYM_PIPE,				// |		// AST transparent
+	SYM_LPARENTHESIS,		// (		// AST transparent
+	SYM_RPARENTHESIS,		// )		// AST transparent
 	//		- Redirection
-	SYM_IO_NUMBER,		// [0-9]+
-	SYM_IO_LOCATION,	// 3+ char, begins with '{', ends with '}', and the delimiter character is '<' or '>'
-	SYM_LESS,			// <
-	SYM_DLESS,			// <<		// AST transparent
-	SYM_DLESSDASH,		// <<-		// AST transparent
-	SYM_LESSAND,		// <&
-	SYM_GREAT,			// >
-	SYM_DGREAT,			// >>
-	SYM_GREATAND,		// >&
-	SYM_CLOBBER,		// >|
-	SYM_LESSGREAT,		// <>
+	SYM_IO_NUMBER,			// [0-9]+
+	SYM_IO_LOCATION,		// 3+ char, begins with '{', ends with '}', and the delimiter character is '<' or '>'
+	SYM_LESS,				// <
+	SYM_DLESS,				// <<		// AST transparent
+	SYM_DLESSDASH,			// <<-		// AST transparent
+	SYM_LESSAND,			// <&
+	SYM_GREAT,				// >
+	SYM_DGREAT,				// >>
+	SYM_GREATAND,			// >&
+	SYM_CLOBBER,			// >|
+	SYM_LESSGREAT,			// <>
 	//		- Reserved words
-	SYM_Bang,			// !
-	SYM_Lbrace,			// {		// AST transparent
-	SYM_Rbrace,			// }		// AST transparent
-	SYM_Case,			// case		// AST transparent
-	SYM_Esac,			// esac		// AST transparent
-	SYM_Do,				// do		// AST transparent
-	SYM_Done,			// done		// AST transparent
-	SYM_If,				// if		// AST transparent
-	SYM_Then,			// then		// AST transparent
-	SYM_Elif,			// elif		// AST transparent
-	SYM_Else,			// else		// AST transparent
-	SYM_Fi,				// fi		// AST transparent
-	SYM_For,			// for		// AST transparent
-	SYM_In,				// in		// AST transparent
-	SYM_Until,			// until	// AST transparent
-	SYM_While,			// while	// AST transparent
+	SYM_Bang,				// !
+	SYM_Lbrace,				// {		// AST transparent
+	SYM_Rbrace,				// }		// AST transparent
+	SYM_Case,				// case		// AST transparent
+	SYM_Esac,				// esac		// AST transparent
+	SYM_Do,					// do		// AST transparent
+	SYM_Done,				// done		// AST transparent
+	SYM_If,					// if		// AST transparent
+	SYM_Then,				// then		// AST transparent
+	SYM_Elif,				// elif		// AST transparent
+	SYM_Else,				// else		// AST transparent
+	SYM_Fi,					// fi		// AST transparent
+	SYM_For,				// for		// AST transparent
+	SYM_In,					// in		// AST transparent
+	SYM_Until,				// until	// AST transparent
+	SYM_While,				// while	// AST transparent
 	//		- End of input
 	SYM_EOF,
 	// ----------------------------------------------------
 	// NON_TERMINALS (GOTO table entries)
 	//		- Transparent (irrelevant for AST nodes)
+	SYM_accept,				// ⚠️ custom				(bash-like cmd_sub parsing hack)
 	SYM_start,
 	SYM_program,
 	SYM_cmd_name,
@@ -68,6 +71,8 @@ typedef enum e_symbol
 	SYM_separator,
 	SYM_linebreak,
 	SYM_newline_list,
+	//		- Custom
+	SYM_cmd_sub,			// ⚠️ custom				(bash-like cmd_sub parsing hack)
 	//		- Relevant (used to build AST nodes)
 	SYM_compound_command,	// [if/for/list/case/...]	(dispatcher)
 	SYM_complete_commands,	// [t_ast_list]				(recursive wrapper)
@@ -114,7 +119,7 @@ typedef enum e_symbol
 # define SYM_RESERVED_MIN				SYM_Bang
 # define SYM_RESERVED_MAX				SYM_While
 # define SYM_TERMINAL_MAX				SYM_EOF
-# define SYM_NON_TERMINAL_MIN			SYM_start
+# define SYM_NON_TERMINAL_MIN			SYM_accept
 # define SYM_NON_TERMINAL_MAX			SYM_function_body
 # define SYM_TERMINAL_RELEVANT_MAX		SYM_Bang
 # define SYM_NON_TERMINAL_RELEVANT_MIN	SYM_compound_command
