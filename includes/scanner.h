@@ -145,30 +145,10 @@ void	scanner_set_input(t_scanner *scanner, const t_string *cmd);
  */
 void	scanner_clear(t_scanner *scanner);
 
-/**
- * @ingroup scanner
- * @brief Produces the next POSIX token: reads input when the stack is
- *        empty, drives the lexer with the recognition rules, and
- *        applies alias substitution to word tokens (re-lexing from the
- *        expansion).
- *
- * @note An exhausted source is not an error: @p token is set to
- *       @c TOKEN_EOF and @c ERR_NO is returned.
- * @param scanner Already initialized and loaded scanner (borrowed).
- * @param token Token initialized by the function; the caller owns it
- *              and must release it with @c token_free (borrowed).
- * @return @c ERR_VEOF (raw, unprinted) at the top-level end of input of
- *         an interactive shell (see the ERROR CONTRACT above);
- *         @c ERR_POSIX_SYNTAX (printed) on an unexpected end of input
- *         inside a construct; @c ERR_POSIX_CMD_NOT_FOUND /
- *         @c ERR_POSIX_CMD_NOT_EXECUTABLE (printed) when the script
- *         file cannot be opened; @c ERR_POSIX_READ (printed) on an
- *         unrecoverable read error; @c ERR_INTERRUPTED when a signal
- *         interrupts the read; @c ERR_LIBC (printed) on allocation
- *         failure; @c ERR_INTERNAL (printed) on any scanner, lexer,
- *         alias or history inconsistency; @c ERR_NO on success.
- */
-t_error	scanner_get_next_token(t_scanner *scanner, t_token *token);
+t_error	scanner_get_next_token(
+			t_scanner *scanner,
+			t_token *token,
+			bool continuation);
 
 /**
  * @ingroup scanner

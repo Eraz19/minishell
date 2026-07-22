@@ -1,6 +1,5 @@
 #include "lexer.h"
-#include "scanner.h"
-#include "reader_.h"
+#include "scanner_.h"
 
 static const char	*unterminated_construct(t_lexer *lexer)
 {
@@ -26,37 +25,6 @@ static const char	*unterminated_construct(t_lexer *lexer)
 	if (item->context == CONTEXT_PARAM)
 		return ("unterminated parameter expansion");
 	return (NULL);
-}
-
-static t_error	scanner_lexer_continuation(t_lexer *lexer)
-{
-	//t_scanner	*scanner;
-	//t_string	last_input;
-	//size_t		last_input_i;
-	//t_string	continuation;
-
-	if (lexer->scanner->mode != SCAN_MODE_STRING_AND_CONTINUE
-		&& lexer->scanner->mode != SCAN_MODE_STDIN)
-		return (error(ERR_POSIX_SYNTAX));
-	lexer->err = reader_continuation(&lexer->input->str);
-	if (lexer->err.type)
-		return (lexer->err);
-	// ---- Make this continuation spread in parents
-	
-	// TODO Forward_continuation to parents 
-
-
-	//last_input = scanner->lexer.input->str;
-	//last_input_i = scanner->lexer.input->i;
-	//if (!string_init(&continuation, 0, last_input.data + last_input_i, -1))
-	//	return (lexer->err = error_sys());
-	//last_input = scanner->lexer.input->str;
-	//if (!string_append(&last_input, &continuation))
-	//	lexer->err = error_sys();
-	//string_free(&continuation);
-
-	// ---------
-	return (lexer->err);
 }
 
 t_error	context_EOI(t_lexer *lexer)

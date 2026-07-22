@@ -106,4 +106,6 @@ void		prepare_heredoc_read_args(
 
 t_error		scan_mode_set(t_scan_mode *mode);
 
+t_error		scanner_lexer_continuation(t_lexer *lexer);
+
 #endif

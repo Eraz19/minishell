@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "lexer.h"
 
-static void	lexer_input_EOF(t_lexer *lexer)
+void	lexer_pop_last_input_stack_on_end(t_lexer *lexer)
 {
 	lexer->input = NULL;
 	lexer_input_stack_pop(&lexer->input_stack);
@@ -27,6 +27,21 @@ static t_error	lexer_scan_token(t_lexer *lexer, t_token *token)
 	return (lexer->err);
 }
 
+static t_error	pop_alias_stack_input(
+			t_lexer *lexer,
+			t_token *token,
+			t_lexer_rules rules)
+{
+	if (token->type == TOKEN_EOF && lexer->input_stack.len > 1)
+	{
+		lexer_pop_last_input_stack_on_end(lexer);
+		if (lexer->err.type)
+			return (lexer->err);
+		return (token_free(token), lexer_get_next_token(lexer, token, rules));
+	}
+	return (lexer->err);
+}
+
 t_error	lexer_get_next_token(
 			t_lexer *lexer,
 			t_token *token,
@@ -44,14 +59,7 @@ t_error	lexer_get_next_token(
 	}
 	if (lexer_scan_token(lexer, token).type)
 		return (lexer->err);
-	if (token->type == TOKEN_EOF && lexer->input_stack.len > 0)
-	{
-		lexer_input_EOF(lexer);
-		if (lexer->err.type || lexer->input_stack.len == 0)
-			return (lexer->err);
-		return (token_free(token), lexer_get_next_token(lexer, token, rules));
-	}
-	return (lexer->err);
+	return (pop_alias_stack_input(lexer, token, rules));
 }
 
 t_error	lexer_track_context(
