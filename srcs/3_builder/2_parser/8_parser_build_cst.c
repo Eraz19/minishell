@@ -32,7 +32,7 @@ static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 	parser_here_stack_clear(&parser->here_stack);
 	err = parser_push_initial_state(parser);
 	if (err.type == ERR_NO && parser->lookahead_raw_symbol == SYM_NONE)
-		err = parser_read_next_symbol(parser);
+		err = parser_read_next_symbol(parser, false);
 	cst_node_free(&parser->cst);
 	parser->cst = NULL;
 	parser->function_body_depth = 0;
@@ -46,11 +46,13 @@ static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 	const t_token	*token;
 
 	*lr_state_id = parser_item_stack_top(&parser->item_stack)->lr_state_id;
-	token = parser_get_token(parser, parser->lookahead_id);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
-	if (parser->lookahead_symbol == SYM_TOKEN
-		&& parser->machine->qualifiers[*lr_state_id] != NULL)
-		parser->machine->qualifiers[*lr_state_id](
+	if (parser->lookahead_symbol != SYM_TOKEN)
+		return ;
+	if (parser->machine->qualifiers[*lr_state_id] == NULL)
+		return ;
+	token = parser_get_token(parser, parser->lookahead_id);
+	parser->machine->qualifiers[*lr_state_id](
 			token,
 			parser->assignment_disabled,
 			&parser->lookahead_symbol);

@@ -112,8 +112,6 @@ const char	*error_to_string(t_error err)
 		return ("break is only available in loops");
 	else if (err.type == ERR_RETURN)
 		return ("return is only available in functions");
-	else if (err.type == ERR_CMD_SUB_END_FOUND)
-		return ("cmd sub closing parenthese found");
 	else if (err.type == ERR_EXIT)
 		return ("exit");
 	else if (err.type == ERR_EXIT_WITH_CURRENT_STATUS)

@@ -37,6 +37,8 @@ static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
 {
 	if (token_type == TOKEN_TOKEN)
 		return (*dst_symbol = SYM_TOKEN, error(ERR_NO));
+	else if (token_type == TOKEN_DOLPAREN)
+		return (*dst_symbol = SYM_DOLPAREN, error(ERR_NO));
 	else if (token_type == TOKEN_LESSAND)
 		return (*dst_symbol = SYM_LESSAND, error(ERR_NO));
 	else if (token_type == TOKEN_GREATAND)
@@ -64,13 +66,13 @@ static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
 	return (sym_conv2(token_type, dst_symbol));
 }
 
-t_error	parser_read_next_symbol(t_parser *parser)
+t_error	parser_read_next_symbol(t_parser *parser, bool continuation)
 {
 	t_token	token;
 	t_error	err;
 
 	assert(parser != NULL);
-	err = scanner_get_next_token(&parser->scanner, &token);
+	err = scanner_get_next_token(&parser->scanner, &token, continuation);
 	if (err.type != ERR_NO)
 		return (err);
 	err = sym_conv(token.type, &parser->lookahead_raw_symbol);

@@ -21,7 +21,7 @@ void	parser_stack_item_free(void *raw_item);
 /*                                    READ                                   */
 /* ************************************************************************* */
 
-t_error	parser_read_next_symbol(t_parser *parser);
+t_error	parser_read_next_symbol(t_parser *parser, bool continuation);
 
 /**
  * @brief Reads the pending here-document bodies when the lookahead is

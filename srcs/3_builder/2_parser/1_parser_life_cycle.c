@@ -44,8 +44,8 @@ t_error	parser_load(
 	parser->function_body_depth = 0;
 	parser->assignment_disabled = false;
 	parser->expansion_disabled = false;
-	parser->search_cmd_sub_end = false;
-	parser->cmd_sub_end_index = 0;
+	parser->search_cmd_sub_end = (mode == SCAN_MODE_CMD_SUB);
+	parser->cmd_sub_end_index = -1;
 	err = scanner_load(&parser->scanner, parent_scanner, parser, mode);
 	if (err.type)
 		return (err);

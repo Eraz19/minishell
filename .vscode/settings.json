@@ -104,6 +104,5 @@
 		"-I${workspaceFolder}/srcs/params/9_signal/sig_action",
 		"-I${workspaceFolder}/srcs/params/9_signal/sig_no_to_id",
 		"-I${workspaceFolder}/srcs/params/9_signal/sig_parse_name"
-	],
-	"explorer.sortOrder": "modified"
+	]
 }

@@ -1,16 +1,17 @@
-# WIP
+# FIX CMD SUB PARSING
 
-1. *SYMBOLS*
-`SYM_DOLPAREN` (terminal)
-`SYM_cmd_sub` (non-terminal)
-2. *RULES*
+🚨 Don't `accept` on `EOF` while parsing `cmd_sub_end` !!
+
+0. ✅ add conversion from `TOKEN_DOLPAREN` to `SYM_DOLPAREN`
+1. ✅ *SYMBOLS* `SYM_DOLPAREN` (terminal) + `SYM_cmd_sub` (non-terminal)
+2. ✅ *RULES*
 ```
-start	-> cmd_sub // NO IT COULD BE ANYWHERE ?!
+start	-> cmd_sub
 cmd_sub	-> SYM_DOLPAREN coumpound_list ')'
 ```
-3. call dans `rules_build()`
-4. Add another initial `lr_state` with `RULE_START_2` in `build_initial_lr_state()`
-5. Add `ACTION_ACCEPT` on all symbols when reducing `RULE_CMD_SUB_1`
+3. ✅ call dans `rules_build()`
+4. ✅ Add another initial `lr_state` with `RULE_START_2` in `build_initial_lr_state()`
+5. ✅ Add `ACTION_ACCEPT` on all symbols when reducing `RULE_START_2`
 ```c
 // ERR_NO / ERR_LR_CONFLICT
 static t_error	add_cmd_sub_accepts(
@@ -35,7 +36,7 @@ static t_error	add_cmd_sub_accepts(
 	return (error(ERR_NO));
 }
 ```
-and priorize this `ACTION_ACCEPT` over `RULE_START_1`'s `ACTION_ACCEPT` in `add_reduces_and_accept()`
+✅ and add `ACTION_ACCEPT` on `RULE_START_2` in `add_reduces_and_accept()`
 ```c
 	if (rule_state.rule_id == RULE_CMD_SUB_1)
 		return (add_cmd_sub_accepts(machine, lr_state_id, rule_state));
@@ -48,11 +49,14 @@ and priorize this `ACTION_ACCEPT` over `RULE_START_1`'s `ACTION_ACCEPT` in `add_
 	- `parser` génère un faux `SYM_DOLPAREN` ou `scanner` le génère ?
 		- lors de l'init du nested `scanner` ?
 		- garder un vrai format + input dans le `token`
+
+# FIX GRAMMAR CONTINUATION ISSUE
+
 - Si `SYM_EOF` alors que construction en attente (`SYM_SHIFT possible ?`)
 	- call `scanner_get_next_token()` avec `continuation == true`
 	- drop `SYM_EOF` (lookahead) + `SYM_NEWLINE` (`item_stack`) précédents
 
-🚨 Don't `accept` on `EOF` while parsing `cmd_sub_end` !!
+# OTHERS
 
 - rename `params` to `env`
 - ⚠️ `qualify_2()`
