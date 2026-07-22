@@ -55,12 +55,11 @@ t_section "nesting: control structures inside each other"
 ###############################################################################
 
 tt NEST.11 "if inside a for inside a while" \
-'touch once_n11
-while /bin/test -e once_n11; do
-	/bin/rm once_n11
+'while true; do
 	for i in 1 2 3; do
-		if /bin/test $i = 2; then echo found_$i; fi
+		if test $i = 2; then echo found_$i; fi
 	done
+	break
 done' 0 "found_2"
 
 tt NEST.12 "case inside a for" \
@@ -77,10 +76,9 @@ f | /bin/sort -r' 0 "q" "p"
 
 tt NEST.14 "heredoc on a loop inside a function" \
 'f() {
-	touch once_n14
-	while /bin/test -e once_n14; do
-		/bin/rm once_n14
-		/bin/cat
+	while true; do
+		cat
+		break
 	done <<EOF
 u
 v
@@ -109,13 +107,13 @@ outer' 0 "core"
 
 tt NEST.19 "recursion terminated by a test" \
 'countdown() {
-	if /bin/test -e "f$1"; then
-		/bin/rm "f$1"
+	if test "$1" = 1; then
 		echo lvl$1
 		countdown 2
+	elif test "$1" = 2; then
+		echo lvl$1
 	fi
 }
-touch f1 f2
 countdown 1' 0 "lvl1" "lvl2"
 
 ###############################################################################
@@ -216,14 +214,13 @@ t_section "stress: deeper combinations"
 ###############################################################################
 
 tt STRESS.1 "4-deep structure: while(for(if(case)))" \
-'touch run_s1
-while /bin/test -e run_s1; do
-	/bin/rm run_s1
+'while true; do
 	for i in hit miss; do
 		if true; then
 			case $i in hit) echo case_$i;; esac
 		fi
 	done
+	break
 done' 0 "case_hit"
 
 tt STRESS.2 "pipeline where every stage is a compound command" \

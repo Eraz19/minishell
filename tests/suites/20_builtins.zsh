@@ -466,10 +466,12 @@ tt UNSET.4 "unset of a variable that does not exist is NOT an error" \
 echo rc=$?' 0 "rc=0"
 
 t_begin UNSET.5 "unset -f removes a function definition"
-t_run 'f_u5() { echo defined; }
+T_STDIN='f_u5() { echo defined; }
 unset -f f_u5
 f_u5
 echo rc=$?'
+t_run_argv -s -i
+expect_status 0
 expect_out_contains "rc=127"
 t_end
 
@@ -532,18 +534,26 @@ tt ALIAS.8 "alias is only substituted in command position" \
 "alias notcmd_8='SHOULD_NOT_EXPAND'
 echo notcmd_8" 0 "notcmd_8"
 
-tt UNALIAS.1 "unalias removes the definition" \
-"alias tmp_u1='echo x'
+t_begin UNALIAS.1 "unalias removes the definition"
+T_STDIN="alias tmp_u1='echo x'
 unalias tmp_u1
 tmp_u1
-echo rc=\$?" 0 "rc=127"
+echo rc=\$?"
+t_run_argv -s -i
+expect_status 0
+expect_out_contains "rc=127"
+t_end
 
-tt UNALIAS.2 "unalias -a removes everything" \
-"alias a_u2='echo a'
+t_begin UNALIAS.2 "unalias -a removes everything"
+T_STDIN="alias a_u2='echo a'
 alias b_u2='echo b'
 unalias -a
 a_u2
-echo rc=\$?" 0 "rc=127"
+echo rc=\$?"
+t_run_argv -s -i
+expect_status 0
+expect_out_contains "rc=127"
+t_end
 
 t_begin UNALIAS.3 "unalias of an unknown name -> non-zero + diagnostic"
 t_run 'unalias no_such_alias_u3'

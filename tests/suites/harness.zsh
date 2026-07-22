@@ -151,7 +151,6 @@ t_begin()
 	fi
 	T_DIR="${WORK_ROOT}/${T_ID//[^A-Za-z0-9._-]/_}"
 	T_LOG="${LOG_DIR}/${T_ID//[^A-Za-z0-9._-]/_}"
-	rm -rf "$T_DIR" "$T_LOG"
 	mkdir -p "$T_DIR" "$T_LOG" || exit 1
 	T_OUT_FILE="${T_LOG}/stdout.txt"
 	T_ERR_RAW_FILE="${T_LOG}/stderr.raw.txt"

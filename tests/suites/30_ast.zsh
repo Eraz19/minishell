@@ -33,21 +33,17 @@ expect_err_contains "argv[1] => [a b]"
 expect_err_contains "argv[2] => [c]"
 t_end
 
-t_begin SCMD.5 "command not found -> 127 (2.8.1: non-interactive may exit)"
-t_run 'definitely_not_a_command_xyz
+t_begin SCMD.5 "interactive command not found -> 127 and shell continues"
+T_STDIN='definitely_not_a_command_xyz
 echo rc=$?'
-# POSIX.1-2024 2.8.1: non-interactive shell "may exit" on command not
-# found; 2.9.1: the failed command's status is 127 either way.
-if (( T_RET == 0 )); then
-	expect_lines "rc=127"
-else
-	expect_status 127
-fi
+t_run_argv -s -i
+expect_status 0
+expect_out_contains "rc=127"
 expect_err_contains "not found"
 t_end
 
 t_begin SCMD.6 "file without +x -> 126"
-t_setup 'printf "#!/bin/sh\necho no\n" > noexec.sh; chmod 644 noexec.sh'
+t_setup 'printf "#!/bin/sh\necho no\n" > noexec.sh'
 t_run './noexec.sh
 echo rc=$?'
 expect_status 0
@@ -187,10 +183,10 @@ t_section "pipeline node (2.9.2): |, status, ! negation"
 ###############################################################################
 
 tt PIPE.1 "two-stage pipeline passes data" \
-'echo through | /bin/cat' 0 "through"
+'echo through | cat' 0 "through"
 
 tt PIPE.2 "three-stage pipeline" \
-'printf "b\na\n" | /bin/sort | /bin/head -1' 0 "a"
+'printf "b\na\n" | sort | head -1' 0 "a"
 
 tt PIPE.3 "pipeline status = last command (no pipefail)" \
 'false | true
@@ -217,7 +213,7 @@ echo x | PV_8=inner /bin/cat > /dev/null
 echo $PV_8' 0 "outer"
 
 tt PIPE.9 "early SIGPIPE termination is not an error for the reader" \
-'/usr/bin/yes | /bin/head -1' 0 "y"
+'yes | head -1' 0 "y"
 
 ###############################################################################
 t_section "and-or node (2.9.3): && ||"
@@ -245,7 +241,7 @@ tt ANDOR.6 "chain status is the last executed command" \
 echo rc=$?' 0 "rc=4"
 
 tt ANDOR.7 "&& || with pipelines as operands" \
-'echo a | /bin/grep -q a && echo found' 0 "found"
+'echo a | grep -q a && echo found' 0 "found"
 
 ###############################################################################
 t_section "list node (2.9.3): sequential ; and async &"
@@ -357,7 +353,7 @@ else echo d
 fi' 0 "b"
 
 tt IF.5 "condition may be a pipeline / list" \
-'if echo probe | /bin/grep -q probe; then echo piped; fi' 0 "piped"
+'if echo probe | grep -q probe; then echo piped; fi' 0 "piped"
 
 tt IF.6 "if status = executed branch's last command" \
 'if true; then /bin/sh -c "exit 5"; fi
@@ -374,10 +370,9 @@ t_section "while / until node (2.9.4.5-6)"
 ###############################################################################
 
 tt WHILE.1 "while body runs while the condition is true" \
-'touch flag_w1
-while /bin/test -e flag_w1; do
+'while true; do
 	echo iteration
-	/bin/rm flag_w1
+	break
 done' 0 "iteration"
 
 tt WHILE.2 "false condition: body never runs, status 0" \
@@ -385,10 +380,10 @@ tt WHILE.2 "false condition: body never runs, status 0" \
 echo rc=$?' 0 "rc=0"
 
 tt WHILE.3 "while drives multiple iterations" \
-'touch a_w3 b_w3
-while /bin/test -e a_w3 -o -e b_w3; do
+'set -- a b
+while test $# != 0; do
 	echo tick
-	if /bin/test -e a_w3; then /bin/rm a_w3; else /bin/rm b_w3; fi
+	shift
 done' 0 "tick" "tick"
 
 tt UNTIL.1 "until runs while the condition is false" \
@@ -672,10 +667,9 @@ expect_status 121
 t_end
 
 tt HD.9 "heredoc redirected onto a whole loop" \
-'touch once_hd9
-while /bin/test -e once_hd9; do
-	/bin/rm once_hd9
-	/bin/cat
+'while true; do
+	cat
+	break
 done <<EOF
 a
 b

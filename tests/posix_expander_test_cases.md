@@ -249,7 +249,6 @@ Hypothèses :
 ## Setup
 
 ```sh
-rm -rf g
 mkdir -p g/base g/tree/dir/sub g/tree/empty g/lit
 
 : > g/base/1

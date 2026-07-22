@@ -95,16 +95,16 @@ setup_logs()
 	local n=1
 
 	mkdir -p "$LOG_ROOT" || exit 1
-	while [ -e "${LOG_ROOT}/test_error_system.${n}" ]; do
+	while true; do
+		LOG_DIR="${LOG_ROOT}/test_error_system.${n}"
+		mkdir "$LOG_DIR" 2>/dev/null && break
 		n=$((n + 1))
 	done
-	LOG_DIR="${LOG_ROOT}/test_error_system.${n}"
-	mkdir -p "$LOG_DIR" || exit 1
 }
 
 setup_fixtures()
 {
-	rm -rf "$WORK_DIR"
+	WORK_DIR="${SCRIPT_DIR}/fixtures/test_error_system.${LOG_DIR:t}"
 	mkdir -p "$WORK_DIR" || exit 1
 
 	# scripts for invocation tests
@@ -119,7 +119,7 @@ setup_fixtures()
 
 teardown_fixtures()
 {
-	chmod 644 "$WORK_DIR/unreadable.sh" 2>/dev/null
+	:
 }
 
 section()
@@ -161,7 +161,6 @@ run_pipe()
 		| head -c "$OUTPUT_CAP" > "${CURRENT_LOG}.raw"
 	RET=${pipestatus[2]}
 	raw="$(<"${CURRENT_LOG}.raw")"
-	rm -f "${CURRENT_LOG}.raw"
 	save_log "$raw"
 }
 
@@ -186,7 +185,6 @@ run_argv()
 		| head -c "$OUTPUT_CAP" > "${CURRENT_LOG}.raw"
 	RET=${pipestatus[2]}
 	raw="$(<"${CURRENT_LOG}.raw")"
-	rm -f "${CURRENT_LOG}.raw"
 	STDIN_DATA=""
 	save_log "$raw"
 }
@@ -455,17 +453,22 @@ run_open_heredoc()
 
 	# HD-1: temp files must not accumulate
 	skip_by_filter "HD-1.1" || {
-		rm -f /tmp/minishell_heredoc_* 2>/dev/null
+		local before
+		before=(/tmp/minishell_heredoc_*(N))
 		run_pipe "HD-1.1" "heredoc tmp cleanup" \
 			'/bin/cat <<Q
 body
 Q' "heredoc leaves no tmp file"
-		local leftovers
-		leftovers=(/tmp/minishell_heredoc_*(N))
-		if (( ${#leftovers} > 0 )); then
-			fail_current "leftover: ${#leftovers} /tmp/minishell_heredoc_* file(s)"
+		local after f new=0
+		after=(/tmp/minishell_heredoc_*(N))
+		for f in "${after[@]}"; do
+			if (( ${before[(Ie)$f]} == 0 )); then
+				new=$((new + 1))
+			fi
+		done
+		if (( new > 0 )); then
+			fail_current "leftover: $new new /tmp/minishell_heredoc_* file(s)"
 		fi
-		rm -f /tmp/minishell_heredoc_* 2>/dev/null
 		finish_case
 	}
 }

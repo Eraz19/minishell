@@ -112,22 +112,23 @@ setup_files()
 		exit 1
 	}
 
-	while [ -e "${LOG_ROOT}/test_init.${n}" ]; do
+	while true; do
+		LOG_DIR="${LOG_ROOT}/test_init.${n}"
+		mkdir "$LOG_DIR" 2>/dev/null && break
 		n=$((n + 1))
 	done
 
-	LOG_DIR="${LOG_ROOT}/test_init.${n}"
-	mkdir -p "$LOG_DIR" || {
-		echo -e "${RED}✖ Error: cannot create log dir: $LOG_DIR${NC}"
-		exit 1
-	}
-
-	rm -rf "$FIXTURE_DIR"
+	FIXTURE_DIR="${SCRIPT_DIR}/fixtures/test_init.${n}"
+	PWD_LINK="${FIXTURE_DIR}/pwd_link"
+	PWD_OTHER_DIR="${FIXTURE_DIR}/pwd_other_dir"
+	SPECIAL_SCRIPT="${FIXTURE_DIR}/special_script.sh"
+	PLUS_SPECIAL_SCRIPT="${FIXTURE_DIR}/+special_script.sh"
+	DASH_SCRIPT="${FIXTURE_DIR}/-s"
 	mkdir -p "$FIXTURE_DIR" "$PWD_OTHER_DIR" || {
 		echo -e "${RED}✖ Error: cannot create fixture dirs in: $FIXTURE_DIR${NC}"
 		exit 1
 	}
-	ln -sfn "$PROJECT_ROOT" "$PWD_LINK" || {
+	ln -s "$PROJECT_ROOT" "$PWD_LINK" || {
 		echo -e "${RED}✖ Error: cannot create symlink fixture: $PWD_LINK${NC}"
 		exit 1
 	}
