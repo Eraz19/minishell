@@ -32,14 +32,6 @@ t_error	builtin_exec(int argc, char **argv, char **envp, int *exit_status)
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
-t_error	builtin_return(int argc, char **argv, char **envp, int *exit_status)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
 t_error	builtin_shift(int argc, char **argv, char **envp, int *exit_status)
 {
 	(void)argc;
