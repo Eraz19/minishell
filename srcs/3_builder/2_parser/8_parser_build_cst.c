@@ -35,9 +35,6 @@ static inline t_error	parser_prepare_to_build_cst(t_parser *parser)
 		err = parser_read_next_symbol(parser, false);
 	cst_node_free(&parser->cst);
 	parser->cst = NULL;
-	parser->function_body_depth = 0;
-	parser->assignment_disabled = false;
-	parser->expansion_disabled = false;
 	return (err);
 }
 
@@ -52,10 +49,7 @@ static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 	if (parser->machine->qualifiers[*lr_state_id] == NULL)
 		return ;
 	token = parser_get_token(parser, parser->lookahead_id);
-	parser->machine->qualifiers[*lr_state_id](
-			token,
-			parser->assignment_disabled,
-			&parser->lookahead_symbol);
+	parser->machine->qualifiers[*lr_state_id](token, &parser->lookahead_symbol);
 }
 
 static inline t_error	parser_try_continuation(

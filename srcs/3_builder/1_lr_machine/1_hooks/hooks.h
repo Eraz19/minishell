@@ -11,20 +11,6 @@ t_error	hook_3(
 	size_t len,
 	t_parser_item *lhs);
 
-// Triggered by hook_fname()
-t_error	hook_9_increment(
-	t_parser *parser,
-	t_parser_item *rhs,
-	size_t len,
-	t_parser_item *lhs);
-
-// Triggered on SYM_function_body reduction
-t_error	hook_9_decrement(
-	t_parser *parser,
-	t_parser_item *rhs,
-	size_t len,
-	t_parser_item *lhs);
-
 /*
 * Triggered on SYM_fname reduction
 * Rule 9 starts here

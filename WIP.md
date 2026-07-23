@@ -49,12 +49,8 @@ Not in the body of a function whose function definition command (see 2.9.5 Funct
 # REQUIRED
 
 - ⚠️ `builtins`:
-	- ⚠️ `continue`
-	- ⚠️ `break`
-	- ⚠️ `return`
-	- ⚠️ `shift`
+	- ⚠️ `dot`
 	- ⚠️ `kill`
-- ⚠️ `qualify_2()`
 
 # OTHERS
 
@@ -66,6 +62,8 @@ Not in the body of a function whose function definition command (see 2.9.5 Funct
 		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
 - `options`:
 	- handle all options properly
+- `ast`:
+	- use `t_ast_command` ast `root` instead of `t_ast_list` (`command` can contain a `list` anyway...)
 - `runner-executor`:
 	- `exec` specific flow
 	- `command` specific flow
