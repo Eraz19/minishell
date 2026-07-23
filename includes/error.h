@@ -54,7 +54,7 @@ typedef enum e_error_type
 	// posix_write()
 	ERR_POSIX_WRITE = 90,					// [ 4] [CALLER]		Requalified as ??? (special POSIX treatment required)
 	// OPTIONS (produced by ft_getopt() + posix_open*())
-	ERR_INVALID_USAGE = 91,				// [ 4] [CALLER]		Requalified as ???
+	ERR_INVALID_USAGE = 91,					// [ 4] [CALLER]		Requalified as ???
 	// REDIRECTOR (+ GENERIC ERRORS)
 	ERR_REDIRECTION = 92,					// [ 4] [EXECUTOR]		Requalified as ERR_POSIX_REDIR_SPECIAL or dropped
 	// BUILTINS EXIT CODES (+ GENERIC ERRORS)

@@ -86,7 +86,7 @@ typedef struct s_ast_if
 typedef struct s_ast_for
 {
 	t_token			var_name;
-	t_token_pool	words;			// (set to ["@"] if input doesn't contain any word)
+	t_token_pool	words;
 	t_ast_list		body;
 }	t_ast_for;
 

@@ -4,6 +4,25 @@
 #include "cmd_expansion.h"
 #include "params.h"
 
+static inline t_error	walk_for_expand_default_word(
+							t_expansion *expansions,
+							t_exp_flag flags,
+							int *exit_status)
+{
+	t_string	synthetic_word;
+	t_expansion	expansion;
+	t_error		err;
+
+	if (!string_init(&synthetic_word, 0, "\"$@\"", -1))
+		return (error_sys());
+	err = expand_str(&expansion, &synthetic_word, exit_status, flags);
+	if (err.type)
+		return (err);
+	if (!vector_push(expansions, &expansion))
+		return (err = error_sys(), expansion_free(&expansion), err);
+	return (err);
+}
+
 static inline t_error	walk_for_expand_words(
 							t_token_pool *pool,
 							t_cmd_expansions *expansions,
@@ -15,15 +34,16 @@ static inline t_error	walk_for_expand_words(
 	t_expansion	expansion;
 	t_error		err;
 
-	i = 0;
 	flags = cmd_regular_expansion_flags();
-	err = error(ERR_NO);
+	if (pool->len == 0)
+		return (walk_for_expand_default_word(expansions, flags, exit_status));
+	i = 0;
 	while (i < pool->len)
 	{
 		token = token_pool_get(pool, i++);
 		err = expand_token(&expansion, token, exit_status, flags);
 		if (err.type)
-			break ;
+			return (err);
 		if (expansion.len == 0)
 		{
 			expansion_free(&expansion);
@@ -32,21 +52,7 @@ static inline t_error	walk_for_expand_words(
 		if (!vector_push(expansions, &expansion))
 			return (err = error_sys(), expansion_free(&expansion), err);
 	}
-	return (err);
-}
-
-static inline t_error	walk_for_word(
-							t_runner *runner,
-							t_ast_for *for_clause,
-							t_string *word,
-							int *exit_status)
-{
-	t_error	err;
-
-	err = params_set_variable(&for_clause->var_name.value, word, false, false);
-	if (err.type)
-		return (err);
-	return (walk_list(runner, &for_clause->body, exit_status));
+	return (error(ERR_NO));
 }
 
 static inline t_error	walk_for_word_list(
@@ -64,7 +70,10 @@ static inline t_error	walk_for_word_list(
 	while (i < expansion->len)
 	{
 		word = &((t_string *)expansion->data)[i++];
-		err = walk_for_word(runner, for_clause, word, exit_status);
+		err = params_set_variable(
+				&for_clause->var_name.value, word, false, false);
+		if (err.type == ERR_NO)
+			err = walk_list(runner, &for_clause->body, exit_status);
 		if (walk_loop_must_continue(runner, &err) == true)
 			continue ;
 		if (err.type)

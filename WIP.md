@@ -1,3 +1,18 @@
+# WIP IMMEDIATLY
+
+- `FOR.4`:
+```bash
+set -- m n
+for x; do echo $x; done
+```
+
+`"$@"` => `"m n"` => `"m` + `n"`
+- `ast_for`:
+	- on `ast` building phase: if `word` is `VAR_NOT_FOUND` => let `words` empty
+	- on `ast` execution phase:
+		- if `words.len` == 0 => call `expand_str("$@")`
+		- else => call `expand_token(words[i])`
+
 🚨 Ne pas demander de continuation si `OPT_INTERACTIVE` (`-i`) n'est pas activée !
 
 # UNSPECIFIED BEHAVIOUR TO TALK
@@ -39,8 +54,23 @@ Not in the body of a function whose function definition command (see 2.9.5 Funct
 
 # TO FIX
 
-- `builtin_set`:
-	- shall throw `ERR_INVALID_USAGE` when `-o` / `+o` is used without `option` but `first_operand_index` < `argc`
+- `FOR.4`:
+```bash
+✖ [FOR.4] for without in iterates the positional parameters
+      command  : set -- m n
+               for x; do echo $x; done
+      stdout: differs from expected (see report)
+      expected stdout:
+        | m
+        | n
+      obtained stdout:
+        | "m
+        | n"
+      obtained stderr (filtered):
+        | [set_process_options()] calling ft_getopt()
+        | [builtin_set()] set_process_options() returned err == success
+      log      : /Users/gui/repos/minishell/tests/logs/posix_suite.1/FOR.4/report.txt
+```
 - `builtin_env`:
 	- implement `utility` execution:
 		- *resolve* cmd_name => *external* vs *builtin*
@@ -55,7 +85,6 @@ Not in the body of a function whose function definition command (see 2.9.5 Funct
 # OTHERS
 
 - when shell options are invalid => requalify error in `ERR_INVALID_USAGE`
-- rename `params` to `env`
 - `shell`:
 	- process `ENV` at startup:
 		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
@@ -64,6 +93,7 @@ Not in the body of a function whose function definition command (see 2.9.5 Funct
 	- handle all options properly
 - `ast`:
 	- use `t_ast_command` ast `root` instead of `t_ast_list` (`command` can contain a `list` anyway...)
+- rename `params` to `env`
 - `runner-executor`:
 	- `exec` specific flow
 	- `command` specific flow

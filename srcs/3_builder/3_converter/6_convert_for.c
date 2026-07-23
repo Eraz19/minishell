@@ -37,21 +37,6 @@ static inline t_error	convert_for_wordlist(
 	return (convert_for_transfer(parser, wordlist, 1, out));
 }
 
-
-static inline t_error	convert_for_build_default_word(t_ast_for *out)
-{
-	t_token	default_word;
-	t_error	err;
-
-	token_init(&default_word);
-	if (!string_append_n(&default_word.value, "\"$@\"", -1))
-		return (error_sys());
-	err = token_pool_push(&out->words, &default_word);
-	if (err.type)
-		token_free(&default_word);
-	return (err);
-}
-
 /*
 do_group         : Do compound_list Done
                  ;
@@ -64,14 +49,13 @@ static inline t_error	convert_for_clause(
 	const t_cst_node	*do_group;
 	t_error				err;
 
-	err = error(ERR_NO);
 	converter_take_token(parser, for_clause->children[1], 0, &out->var_name);
-	if (for_clause->child_count <= 4)
-		err = convert_for_build_default_word(out);
-	else if (for_clause->child_count == 7)
+	if (for_clause->child_count == 7)
+	{
 		err = convert_for_wordlist(parser, for_clause->children[4], out);
-	if (err.type)
-		return (err);
+		if (err.type)
+			return (err);
+	}
 	do_group = for_clause->children[for_clause->child_count - 1];
 	return (convert_list(parser, do_group->children[1], &out->body));
 }
