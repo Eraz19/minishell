@@ -1,5 +1,9 @@
 # TO DOCUMENT
 
+## POSIX IMPLEMENTATION DEFINED
+
+- Like `bash`, `minishell` exits after 10 consecutive `EOF` to prevent *infinite loops*
+
 ## POSIX LIMITATIONS DUE 42 FUNCTIONS WHITELIST
 
 - Workarounds and/or asm stubs have been done to emulate the following functions which are not allowed by the official 42 subject:
@@ -51,7 +55,9 @@
 - `redirections`:
 	- `io location` are supported: they must expand to a valid *file descriptor*
 	- `word` expansion producing more than one field : we merge it with first `IFS` character (` ` if *unset*, none if *set but null*)
-	- `heredoc` are stored as a `t_string` inside the `AST`
+	- `heredoc`:
+		- bodies are stored as a `t_string` inside the `AST`
+		- errors are **NOT** treated as *redirection errors*, but a diagnostic is printed.
 - `expansions`:
 	- `$@` / `$*`: always expand as in a *field splitting* context:
 		- `$@` / `$*` / `"$@"`: 1 field per parameter, first field joined with previous one and last field joined with next one

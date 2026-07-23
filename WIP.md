@@ -51,7 +51,6 @@ Not in the body of a function whose function definition command (see 2.9.5 Funct
 - ⚠️ `builtins`:
 	- ⚠️ `dot`
 	- ⚠️ `kill`
-- ⚠️ `qualify_2()`
 
 # OTHERS
 

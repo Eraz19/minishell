@@ -18,9 +18,6 @@ typedef struct s_parser
 	t_symbol			lookahead_raw_symbol;
 	t_symbol			lookahead_symbol;
 	t_cst_node			*cst;					// owned
-	size_t				function_body_depth;
-	bool				assignment_disabled;
-	bool				expansion_disabled;
 	bool				search_cmd_sub_end;
 	ssize_t				cmd_sub_end_index;
 }	t_parser;

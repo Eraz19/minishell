@@ -8,10 +8,10 @@
 # include <assert.h>
 
 t_error	hook_fname(
-	t_parser *parser,
-	t_parser_item *rhs,
-	size_t len,
-	t_parser_item *lhs)
+			t_parser *parser,
+			t_parser_item *rhs,
+			size_t len,
+			t_parser_item *lhs)
 {
 	t_token		*token;
 
@@ -27,5 +27,5 @@ t_error	hook_fname(
 	else
 		fprintf(stderr, "[PARSER] %sfunction name is valid%s\n", YELLOW, NC);
 #endif
-	return (hook_9_increment(parser, rhs, len, lhs));
+	return (error(ERR_NO));
 }

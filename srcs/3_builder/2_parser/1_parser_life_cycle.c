@@ -17,9 +17,6 @@ void	parser_init(t_parser *parser)
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
-	parser->function_body_depth = 0;
-	parser->assignment_disabled = false;
-	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
 	scanner_init(&parser->scanner);
@@ -41,9 +38,6 @@ t_error	parser_load(
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
-	parser->function_body_depth = 0;
-	parser->assignment_disabled = false;
-	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = (mode == SCAN_MODE_CMD_SUB);
 	parser->cmd_sub_end_index = -1;
 	err = scanner_load(&parser->scanner, parent_scanner, parser, mode);
@@ -64,9 +58,6 @@ void	parser_clear(t_parser *parser)
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
-	parser->function_body_depth = 0;
-	parser->assignment_disabled = false;
-	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
 }
@@ -83,9 +74,6 @@ void	parser_free(t_parser *parser)
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
-	parser->function_body_depth = 0;
-	parser->assignment_disabled = false;
-	parser->expansion_disabled = false;
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
 }

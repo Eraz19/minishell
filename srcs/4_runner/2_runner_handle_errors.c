@@ -63,10 +63,10 @@ void	runner_handle_error(t_runner *runner, t_error *err)
 		runner_handle_syntax_errors(runner, err, interactive);
 	else if (err->type == ERR_POSIX_READ)
 		runner_handle_read_errors(err);
-	else if (err->type >= ERR_CONTINUE && err->type <= ERR_RETURN)
+	else if (error_is_flow_control(*err) == true)
 	{
 		*err = error_print(*err, NULL, NULL);
-		if (interactive == true)
+		if (interactive == true && err->type != ERR_VEOF)
 			err->type = ERR_NO;
 	}
 	runner_handle_bad_errors(err, interactive);
