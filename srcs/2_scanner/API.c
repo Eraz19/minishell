@@ -62,8 +62,10 @@ t_error	scanner_lexer_continuation(t_lexer *lexer)
 	fprintf(stderr, "[%s()]\n", __func__);
 	if (lexer->scanner->mode != SCAN_MODE_CMD_SUB
 		&& lexer->scanner->mode != SCAN_MODE_STDIN)
-		return (error(ERR_POSIX_SYNTAX));
+		return (error_print(error(ERR_POSIX_SYNTAX), NULL, NULL));
 	lexer->err = reader_continuation(&lexer->input->str);
+	if (lexer->err.type == ERR_VEOF)
+		return (error_print(error(ERR_POSIX_SYNTAX), NULL, NULL));
 	if (lexer->err.type)
 		return (lexer->err);
 	// ---- Make this continuation spread in parents

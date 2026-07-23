@@ -5,6 +5,9 @@
 # include "libft.h"
 # include <stdio.h>
 
+# define MAX_RETRY_PS1	10
+# define MAX_RETRY_PS2	0
+
 /** @defgroup scanner_reader Scanner reader
  *  @brief Fetches raw shell input: prompted lines, script files, stdin.
  *
@@ -94,22 +97,9 @@ t_error	reader_read_error(t_error err, const char *source);
 // TODO: doc
 int reader_rl_getc(FILE *stream);
 
-/**
- * @ingroup scanner_reader
- * @brief Low-level prompted read of a single line, newline-terminated.
- *
- * Reads one line via readline() and appends a @c '\n'. On end-of-input it
- * lets the shell decide whether to exit; when the shell must not exit
- * (@c ignoreeof), it keeps prompting instead of surfacing @c ERR_VEOF.
- *
- * @param res String receiving the line, initialized by the function
- *            (borrowed).
- * @param prompt Prompt to display, @c NULL for no prompt
- *               (borrowed, read-only).
- * @return @c ERR_VEOF at end of input when the shell must exit;
- *         @c ERR_LIBC on allocation failure; @c ERR_SHELL_NOT_FOUND if
- *         the shell data is unavailable; @c ERR_NO on success.
- */
-t_error	reader_read_next_line(t_string *res, const char *prompt);
+t_error	reader_read_next_line(
+			t_string *res,
+			const char *prompt,
+			size_t max_retry);
 
 #endif

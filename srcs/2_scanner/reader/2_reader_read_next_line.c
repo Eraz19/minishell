@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 # include "logs.h"	// DEBUG
+#include "posix_helpers.h"
 
 // ERR_NO / ERR_LIBC
 static inline t_error	reader_set_stdin_to_blocking(void)
@@ -82,7 +83,10 @@ static inline t_error	reader_should_exit_on_veof(void)
 	return (err);
 }
 
-static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
+static inline t_error	reader_rl_loop(
+							const char *prompt,
+							char **out_input,
+							size_t max_retry)
 {
 	size_t	counter;
 	bool	retry;
@@ -90,7 +94,7 @@ static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
 
 	counter = 0;
 	fprintf(stderr, CYAN "####################### IN #######################\n" NC);
-	while (true)
+	while (++counter)
 	{
 		err = reader_process_rl(prompt, out_input, &retry);
 		if (err.type || *out_input != NULL)
@@ -98,24 +102,32 @@ static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
 		if (retry == true)
 			continue ;
 		err = reader_should_exit_on_veof();
-		if (err.type)
+		if (err.type == ERR_NO && isatty(STDIN_FILENO) != 1)
+			err = posix_write(STDOUT_FILENO, "\n", 1);
+		if (err.type || counter > max_retry)
+		{
+			if (counter > max_retry && max_retry > 0)
+				err = err_infinite_loop();
+			else if (counter > max_retry)
+				err = error(ERR_VEOF);
 			break ;
-		++counter;
-		if (counter > 10)
-			return (err_infinite_loop());
+		}
 	}
 	fprintf(stderr, CYAN "##################################################\n" NC);
 	return (err);
 }
 
-t_error	reader_read_next_line(t_string *res, const char *prompt)
+t_error	reader_read_next_line(
+			t_string *res,
+			const char *prompt,
+			size_t max_retry)
 {
 	t_error	err;
 	char	*input;
 
 	if (prompt == NULL)
 		prompt = "";
-	err = reader_rl_loop(prompt, &input);
+	err = reader_rl_loop(prompt, &input, max_retry);
 	if (err.type)
 		return (err);
 	if (!string_init(res, 0, input, -1))

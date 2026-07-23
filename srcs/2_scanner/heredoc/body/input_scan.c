@@ -24,12 +24,13 @@ bool	is_line_delimiter(t_body *body)
 	return (string_cmp(&body->line, &body->delim));
 }
 
-static t_error	body_missing_delimiter(t_body *body)
+static void	body_missing_delimiter(t_body *body)
 {
 	body->delim.data[body->delim.len - 1] = '\0';
-	body->err = error_print(error(ERR_NO_DELIM), "heredoc",
-		NULL, "'%s'", body->delim.data);
-	return (body->err);
+	if (body->content.len == 0)
+		string_init(&body->content, 0, "", -1);
+	(void)error_print(error(ERR_NO_DELIM), "heredoc", NULL,
+			"'%s'", body->delim.data);
 }
 
 t_error	body_continuation(t_body *body, bool *continuation)
@@ -37,7 +38,7 @@ t_error	body_continuation(t_body *body, bool *continuation)
 	*continuation = true;
 	body->err = reader_continuation(&body->input);
 	if (body->err.type == ERR_VEOF)
-		return (body_missing_delimiter(body));
+		body_missing_delimiter(body);
 	return (body->err);
 }
 
