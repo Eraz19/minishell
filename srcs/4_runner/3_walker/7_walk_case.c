@@ -122,6 +122,7 @@ t_error	walk_case(t_runner *runner, t_ast_case *case_clause, int *exit_status)
 	err = walk_case_expand(&case_clause->word, &word, exit_status);
 	if (err.type)
 		return (walk_normalize_output(err, NULL, exit_status));
+	match = false;
 	i = 0;
 	while (err.type == ERR_NO && i < case_clause->patterns.len)
 	{
@@ -134,7 +135,7 @@ t_error	walk_case(t_runner *runner, t_ast_case *case_clause, int *exit_status)
 		}
 		i++;
 	}
-	if (err.type == ERR_NO && (i == 0 || match == false))
+	if (err.type == ERR_NO && match == false)
 		*exit_status = 0;
 	return (string_free(&word), walk_normalize_output(err, NULL, exit_status));
 }
