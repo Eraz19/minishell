@@ -96,33 +96,14 @@ void	fields_free(t_fields *fields);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-/**
- * @ingroup expander
- * @brief Expands a raw text that never went through tokenization (a
- *        prompt, a here-document body): the string is re-lexed to
- *        recover its constructs — with the here-document rules
- *        (POSIX 2.7.4: quotes literal) when @c EXP_HEREDOC is set, as an
- *        unquoted word (POSIX 2.2: quotes open quoting contexts,
- *        backslash escapes any character) otherwise — then expanded with
- *        @p flags and joined with the first IFS character.
- *
- * @note An empty (or NULL-buffered) @p src expands to an empty @p out.
- * @param out String receiving the joined expansion, initialized by the
- *            function (borrowed).
- * @param src Text to expand (borrowed, read-only).
- * @param exit_status Destination for the exit status of the last command
- *                    substitution; unused until command substitution is
- *                    implemented (borrowed).
- * @param flags Expansions to apply.
- * @return @c ERR_POSIX_EXPANSION (printed) on a user-facing expansion
- *         failure; @c ERR_POSIX_ASSIGNMENT (printed) on a readonly
- *         assignment; @c ERR_INTERRUPTED when a signal interrupts the
- *         work; @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
- *         (printed) on internal inconsistency or unimplemented
- *         substitution; @c ERR_NO on success.
- */
-t_error expand_str(
+t_error expand_str_merged(
 			t_string *out,
+			const t_string *src,
+			int *exit_status,
+			t_exp_flag flags);
+
+t_error expand_str(
+			t_expansion *out,
 			const t_string *src,
 			int *exit_status,
 			t_exp_flag flags);

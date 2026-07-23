@@ -70,7 +70,7 @@ t_error	reader_build_prompt(const char *name, t_string *dst)
 	if (str_cmp(name, "PS1") == 0)
 		err = prompt_expand_exclamation(&value);
 	if (err.type == ERR_NO)
-		err = expand_str(dst, &value, &exit_status, EXP_PARAM);
+		err = expand_str_merged(dst, &value, &exit_status, EXP_PARAM);
 	if (err.type)
 		return (prompt_use_unexpanded(name, dst, &value, err));
 	return (string_free(&value), error(ERR_NO));
