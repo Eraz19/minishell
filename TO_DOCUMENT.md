@@ -16,8 +16,6 @@
 	- `fcntl()` -> `ioctl()`: set `stdin` to blocking mode for `stdin` management
 		- all OS and archs: via `ioctl()` (non-POSIX function) instead of `fcntl()`
 - ⚠️ as `OpenBSD` sends `SIGABRT` when `syscalls` are sent from unauthorized memory addresses, this `shell` is not fully POSIX compliant on this Operating System. A next version of this program may use all the real `libc` functions to enable full POSIX compliance.
-- `heredoc`:
-	- stored as a `t_string` inside the `AST`
 - `redirections`:
 	- as `fcntl()` is forbidden, we check whether the rhs fd of `>&` / `<&` is open, but we do not check whether it is open respectively for writing or reading. This is still POSIX-compliant because POSIX says that a redirection error "may" result in that case.
 	- as `fcntl()` is forbidden, we cannot allocate redirection backup fds atomically with `F_DUPFD`. We use `fstat()` + `dup2()` instead. This is considered safe enough for `minishell` because it is single-threaded and its signal handlers do not open file descriptors.
@@ -51,8 +49,9 @@
 - `errors`:
 	- shell exists on `command not found` error when shell is not interactive
 - `redirections`:
-	- `io location` are supported: must expand to a valid file descriptor
+	- `io location` are supported: they must expand to a valid *file descriptor*
 	- `word` expansion producing more than one field : we merge it with first `IFS` character (` ` if *unset*, none if *set but null*)
+	- `heredoc` are stored as a `t_string` inside the `AST`
 - `expansions`:
 	- `$@` / `$*`: always expand as in a *field splitting* context:
 		- `$@` / `$*` / `"$@"`: 1 field per parameter, first field joined with previous one and last field joined with next one
@@ -61,7 +60,7 @@
 	- closing `)` must not be inside an `alias`
 	- unignored `traps` are reset to default even if the `command substitution` only contains a `trap` command
 - *builtins*:
-	- all builtins are conform to `Utility Syntax Guidelines`
+	- all builtins are conform to `Utility Syntax Guidelines` (except, as specified by POSIX, the *Guidelines* 1 and 2 for `dot` *special builtin*).
 	- `set`:
 		- `-o` prints the current settings of the options in the same format as `+o`
 	- `trap`:
