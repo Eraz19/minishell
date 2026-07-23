@@ -19,10 +19,7 @@ t_error	prepare_src(
 	else
 		err = prepare_str_for_expansion(context_out, ast_vec, &args->value);
 	if (err.type)
-	{
-		context_stack_free(context_out);
 		return (string_free(&args->value), err);
-	}
 	args->flags = flags;
 	return (error(ERR_NO));
 }

@@ -1,3 +1,10 @@
+# A AJOUTER
+
+- Toutes les APIs `*_init()`, `*_clear`, `*_free()` doivent être indempotentes et permettre la réutilisation ultérieure de l'item sans avoir à call `*_init()` à nouveau.
+- Toutes les fonctions en charge du peuplement initial d'un objet doivent *init* cet objet elles-mêmes et le *free* elles-même en cas d'erreur durant le peuplement. C'est seulement une fois que le peuplement est succesful que le *free* ultérieur devient la responsabilité du caller.
+
+# PROMPT
+
 On a fini notre shell fully POSIX-compliant.
 
 On a juste, par manque de temps, fait l'impasse sur certaines `options`, `builtins` et `expansions` qu'on implémentera plus tard.
@@ -29,9 +36,11 @@ Les `expansions` non implémentées sont :
 
 J'ai mis dans to knowledge le fichier `TO_DOCUMENT.md`. C'est le brouillon qui nous servira à rédiger la documentation finale.
 
+Toutes les API `*_init()`, `*_clear()`, `*_free()` doivent être indempotentes et laisser l'objet dans un état permettant sa réutilisation ultérieure sans avoir à `*_init()` à nouveau après avoir `*_clear()` / `*_free()`.
+
 Je vais te donner le code de chaque *module*, un par un.
 Pour chacun d'entre eux je veux que tu vérifies :
-- Si le code est *safe C* (pas de *segfault*, etc):
+- Si le code est *safe C* (pas de *segfault*, pas de *leak*, pas de *use after free*, etc):
 	- On part toujours du principe que les *callers* / *callees* font correctement leur job, donc pas `NULL`-check inutile, pas de zèle sur un potentiel miss-use éventuel, etc. Je veux que tu reportes **UNIQUEMENT** les erreurs / bugs **RÉELS ET CONCRETS**
 - Si les *erreurs* sont correctement requalifiées et printées:
 	- Les *erreurs* retournées doivent faire du sens pour les *callers*

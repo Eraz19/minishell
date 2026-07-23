@@ -105,22 +105,7 @@ typedef struct s_heredoc_read_args
  */
 t_error	heredoc_expand_delim(t_string *out, t_token *delim);
 
-/**
- * @ingroup heredoc
- * @brief Lexes a raw body for expansion: removes escaped newlines from
- *        @p body, then records its @c CONTEXT_HEREDOC context and every
- *        expansion construct into @p out (expander side, raw errors).
- *
- * @param out Destination stack, already initialized by the caller; the
- *            recorded contexts are appended (borrowed).
- * @param body Body text, rewritten without its escaped newlines
- *             (borrowed).
- * @return @c ERR_LIBC on allocation failure; from the scan:
- *         @c ERR_UNEXPECTED_EOI (printed), @c ERR_NO_INPUT_TO_LEX,
- *         @c ERR_NOT_IMPLEMENTED (printed), @c ERR_INCOHERENT_STATE,
- *         @c ERR_EMPTY_STACK, @c ERR_INDEX_OUT_OF_BOUND; @c ERR_NO on
- *         success.
- */
+// TODO: doc
 t_error	heredoc_prepare_for_expansion(
 			t_context_stack *context_stack_out,
 			t_ast_vector *ast_vec_out,

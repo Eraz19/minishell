@@ -70,13 +70,14 @@ t_error	heredoc_prepare_for_expansion(
 	t_context_stack_item	*item;
 	t_string				lexer_body;
 
+	context_stack_init(context_stack_out);
 	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING);
 	if (err.type)
 		return (err);
 	err = lexer_remove_escaped_newlines(lexer, body, body_context_rules());
 	if (err.type)
 		return (shell_destroy_last_instance(), err);
-	parser_clear(lexer->scanner->parser);	// TO TEST
+	parser_clear(lexer->scanner->parser);
 	err = context_stack_item_init(&item, CONTEXT_HEREDOC);
 	if (err.type)
 		return (shell_destroy_last_instance(), err);
@@ -86,10 +87,12 @@ t_error	heredoc_prepare_for_expansion(
 	if (err.type)
 		return (shell_destroy_last_instance(), free(item), err);
 	if (!string_dup(&lexer_body, body))
-		return (err = error_sys(), shell_destroy_last_instance(), err);
+		return (err = error_sys(), shell_destroy_last_instance(), context_stack_free(context_stack_out), err);
 	err = lexer_push_input(lexer, &lexer_body);
 	if (err.type == ERR_NO)
 		err = lexer_track_context(lexer,
 				context_stack_out, ast_vec_out, body_context_rules());
+	if (err.type)
+		context_stack_free(context_stack_out);
 	return (shell_destroy_last_instance(), err);
 }
