@@ -56,7 +56,7 @@ t_error	positionals_shift(t_positionals_stack *stack, size_t n)
 	if (n == 0)
 		return (error(ERR_NO));
 	if (stack->len == 0)
-		return (error(ERR_VAR_NOT_FOUND));
+		return (error(ERR_INTERNAL));
 	positionals = &((t_positionals *)stack->data)[stack->len - 1];
 	if (n > positionals->len)
 		return (error(ERR_SHIFT_INVALID_VALUE));

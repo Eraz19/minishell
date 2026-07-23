@@ -1,4 +1,5 @@
 #include "error.h"
+#include "builtins.h"
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
 
@@ -14,37 +15,29 @@ t_error		shell_should_interrupt(void)
 
 // Special builtins
 
-t_error	builtin_dot(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_dot(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
+	(void)runner;
 	(void)exit_status;
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
-t_error	builtin_exec(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_exec(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
+	(void)runner;
 	(void)exit_status;
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }
 
-t_error	builtin_shift(int argc, char **argv, char **envp, int *exit_status)
+t_error	builtin_times(int argc, char **argv, t_runner *runner, int *exit_status)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
-t_error	builtin_times(int argc, char **argv, char **envp, int *exit_status)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
+	(void)runner;
 	(void)exit_status;
 	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
 }

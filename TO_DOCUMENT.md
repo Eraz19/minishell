@@ -73,6 +73,8 @@
 	- `return`:
 		- if `n` is is not an unsigned decimal integer: returns `$?` value
 		- if `n` is greater than 255: returns `n % 256`
+	- `shift`:
+		- if `n` invalid or is greater than `$#`: *special builtin error*
 	- `break`, `continue`, `return`:
 		- ⚠️ **TODO**: choose a behaviour for `If there is no enclosing loop, the behavior is unspecified.`
 - `exit`:

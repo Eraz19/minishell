@@ -86,5 +86,5 @@ t_error	lexer_context_arith(t_lexer *lexer)
 	}
 	if (lexer_consume(lexer, lexer->token->type, 1).type)
 		return (lexer->err);
-	return (item->end = lexer->token->value.len, lexer->err);
+	return (item->end = lexer->token->value.len - 1, lexer->err);
 }
