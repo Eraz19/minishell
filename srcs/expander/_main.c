@@ -59,6 +59,7 @@ t_error	run_expansion_word(t_fields *out, t_expander_args *args)
 	t_error		err;
 	t_expander	expander;
 
+	fields_init(out);
 	if (run_pipeline(&expander, args).type)
 		return (err = expander.err, expander_free(&expander), err);
 	out->item_size = expander.fields.item_size;

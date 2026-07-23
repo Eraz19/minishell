@@ -19,6 +19,7 @@ t_error	path_comps_load(t_path_comps *comps, const t_word *src)
 	t_path_comp	glob_comp;
 
 	i = 0;
+	path_comps_init(comps);
 	path_comp_init(&glob_comp);
 	while (i < src->len)
 	{

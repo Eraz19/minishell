@@ -19,10 +19,7 @@ t_error	prepare_src(
 	else
 		err = prepare_str_for_expansion(context_out, ast_vec, &args->value);
 	if (err.type)
-	{
-		context_stack_free(context_out);
 		return (string_free(&args->value), err);
-	}
 	args->flags = flags;
 	return (error(ERR_NO));
 }
@@ -51,13 +48,15 @@ t_error expand_str(
 	t_ast_vector	ast_vec;
 	t_context_stack	contexts;
 
+	args = (t_expander_args){0};
 	if (src->data == NULL || src->len == 0)
 		return (string_init(out, 0, NULL, 0), error(ERR_NO));
 	if (!string_dup(&args.value, src))
 		return (error_sys());
 	err = prepare_src(&args, &contexts, &ast_vec, flags);
 	if (err.type)
-		return (expander_args_free(&args), expander_error_qualify(err));
+		return (string_free(&args.ifs), string_free(&args.value),
+			expander_error_qualify(err));
 	args.ast_vec = &ast_vec;
 	args.contexts = &contexts;
 	args.assignment_offset = -1;

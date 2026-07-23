@@ -32,11 +32,36 @@ static inline t_error	cmd_search_(t_cmd *cmd, t_cmd_cache *cache)
 	return (cmd_search(cmd, cache));
 }
 
-t_error	cmd_finalize(t_cmd *cmd, t_error err, bool redir_applied, int *exit_status)
+static inline t_error	cmd_requalify_error(t_cmd *cmd, t_error err)
 {
 	bool	interactive;
 	int		signo;
 	t_error	option_err;
+
+	(void)error_print(err, NULL, NULL);
+	if (err.type == ERR_INTERRUPTED)
+	{
+		if (sig_has_pending_trap(&signo))
+			cmd->exit_status = ERR_POSIX_SIGNAL_BASE_CODE + signo;
+		err.type = ERR_NO;
+	}
+	else if (err.type == ERR_REDIRECTION && cmd->type != CMD_SPECIAL_BUILTIN)
+		err.type = ERR_NO;
+	else if (err.type == ERR_POSIX_CMD_NOT_FOUND || err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
+		err.type = ERR_NO;
+	else if (err.type > ERR_POSIX_SYNTAX && err.type < ERR_POSIX_READ)
+	{
+		option_err = option_is_active(OPT_INTERACTIVE, &interactive);
+		if (option_err.type)
+			err = error_priorize(err, option_err);
+		else if (interactive == true)
+			err.type = ERR_NO;
+	}
+	return (err);
+}
+
+t_error	cmd_finalize(t_cmd *cmd, t_error err, bool redir_applied, int *exit_status)
+{
 	int		initial_cmd_status;		// DEBUG
 	int		initial_exit_status;	// DEBUG
 	t_error	initial_error;			// DEBUG
@@ -47,34 +72,11 @@ t_error	cmd_finalize(t_cmd *cmd, t_error err, bool redir_applied, int *exit_stat
 	if (cmd->exit_status < 0)
 		cmd->exit_status = (int)err.type;
 	if (err.type && error_is_flow_control(err) == false)
-	{
-		(void)error_print(err, NULL, NULL);
-		if (err.type == ERR_INTERRUPTED)
-		{
-			if (sig_has_pending_trap(&signo))
-				cmd->exit_status = ERR_POSIX_SIGNAL_BASE_CODE + signo;
-			err.type = ERR_NO;
-		}
-		if (err.type == ERR_REDIRECTION)
-		{
-			if (cmd->type == CMD_SPECIAL_BUILTIN)
-				err.type = ERR_POSIX_BUILTIN_SPECIAL;
-			else
-				err.type = ERR_NO;
-		}
-		else if (err.type > ERR_POSIX_SYNTAX && err.type < ERR_POSIX_READ)
-		{
-			option_err = option_is_active(OPT_INTERACTIVE, &interactive);
-			if (option_err.type)
-				err = error_priorize(err, option_err);
-			else if (interactive == true)
-				err.type = ERR_NO;
-		}
-	}
+		err = cmd_requalify_error(cmd, err);
 	if (redir_applied == true)
 		err = error_priorize(err, redirect_stop());
-	if (err.type && error_is_flow_control(err) == false && cmd->exit_status <= 0)
-		cmd->exit_status = (int)err.type;
+	// if (err.type && error_is_flow_control(err) == false && cmd->exit_status <= 0)
+	// 	cmd->exit_status = (int)err.type;
 	*exit_status = cmd->exit_status;
 	fprintf(stderr, MAGENTA "##################################################\n" NC);
 	/* ---------- DEBUG (START) ---------- */

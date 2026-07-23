@@ -32,6 +32,7 @@ static inline void	build_posix_rules_2(t_rule *rules)
 	rules_build_subshell(rules);
 	rules_build_term(rules);
 	rules_build_until_clause(rules);
+	rules_build_while_clause(rules);
 	rules_build_wordlist(rules);
 }
 

@@ -1,3 +1,5 @@
+🚨 Ne pas demander de continuation si `OPT_INTERACTIVE` (`-i`) n'est pas activée !
+
 # UNSPECIFIED BEHAVIOUR TO TALK
 
 ```

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "ast.h"
 #include "lexer.h"
 #include "scanner.h"
 
@@ -78,12 +79,16 @@ t_error	lexer_track_context(
 	t_context_stack_item	*item;
 
 	lexer->rules = (t_lexer_rules){0};
+	context_stack_init(context_out);
+	ast_vector_init(ast_vec_out);
 	lexer->err = lexer_input_stack_get_last(&lexer->input_stack, &lexer->input);
 	if (lexer->err.type)
-		return (lexer->err);
+		return (context_stack_free(context_out),
+			ast_vector_free(ast_vec_out), lexer->err);
 	lexer->err = context_stack_item_init(&item, CONTEXT_NONE);
 	if (lexer->err.type)
-		return (lexer->err);
+		return (context_stack_free(context_out),
+			ast_vector_free(ast_vec_out), lexer->err);
 	token_init(&token);
 	lexer->token = &token;
 	args.context = CONTEXT_NONE;
@@ -91,13 +96,14 @@ t_error	lexer_track_context(
 	args.closing_len = 0;
 	args.stack_item = item;
 	if (lexer_context_scan(lexer, args).type)
-		return (free(item), token_free(&token), lexer->err);
+		return (free(item), token_free(&token),
+			context_stack_free(context_out), ast_vector_free(ast_vec_out),
+			lexer->err);
 	vector_take(context_out, &token.contexts);
 	vector_take(ast_vec_out, &token.ast_vector);
 	return (free(item), token_free(&token), lexer->err);
 }
 
-// TO_TALK
 t_error	lexer_remove_escaped_newlines(
 			t_lexer *lexer,
 			t_string *word,

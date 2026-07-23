@@ -1,6 +1,6 @@
 NAME			:= minishell
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 # -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
+CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Wdeprecated -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
@@ -18,8 +18,10 @@ LIBFT			:= $(LIBFT_DIR)/libft.a
 READLINE_DIR	:= $(shell brew --prefix readline 2>/dev/null)
 
 # DEBUG SECTION (START)
+TEST_CFLAGS		:= -Wall -Wextra -Wdeprecated -Werror -O2
 TEST_DIR		:= ./tests
 TESTERS			:= $(wildcard $(TEST_DIR)/*.zsh)
+MAIN_TESTER		:= $(TEST_DIR)/test_posix_suite.zsh
 FIXTURES_DIR	:= $(TEST_DIR)/fixtures
 LOGS_DIR		:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
@@ -205,11 +207,15 @@ debug: CFLAGS := $(DEBUG_CFLAGS)
 debug: re
 
 # DEBUG SECTION (START)
-test: all
-	@for tester in $(TESTERS); do \
-		echo "Running $$tester"; \
-		zsh "$$tester"; \
-	done
+test: CFLAGS := $(TEST_CFLAGS)
+test:
+	@echo "compiling..."
+	@$(MAKE) re >/dev/null
+	$(MAIN_TESTER)
+# 	@for tester in $(TESTERS); do \
+# 		echo "Running $$tester"; \
+# 		zsh "$$tester"; \
+# 	done
 # DEBUG SECTION (END)
 
 clean:

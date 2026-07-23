@@ -79,14 +79,14 @@ void	path_comps_init(t_path_comps *comps);
  *        Characters are rendered through @ref path_comp_push.
  *
  * @warning On failure @p comps is freed (its components included).
- * @param comps Components container (@ref t_path_comps), already
- *              initialized by the caller (borrowed).
+ * @param comps Components container (@ref t_path_comps), initialized by
+ *              the function (borrowed).
  * @param src Word to split (borrowed, read-only).
  * @return @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a word
  *         read inconsistency, @c ERR_LIBC on allocation failure,
  *         @c ERR_NO on success.
  */
-t_error	path_comps_load(t_vector *comps, const t_word *src);
+t_error	path_comps_load(t_path_comps *comps, const t_word *src);
 
 /**
  * @ingroup expander_path_comps

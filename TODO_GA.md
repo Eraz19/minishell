@@ -26,14 +26,13 @@
 - **ALL REPO**:
 	- replace all `ERR_INDEX_OUT_OF_BOND`, etc by `error_print()` + `ERR_INTERNAL`
 	- use `print_unspecified_behaviour()`
-	- Move `t_tokens` from `runner` to `token` module ?
 	- `const` partout
 	- `inline` partout
 	- `assert` partout
 	- `out_` prefix de tous les args qui sont **générés** par une fonction (cf `C#` syntax)
 	- `ref_` prefix de tous les args qui sont **potentiellement modifiés** par une fonction (cf `C#` syntax)
 	- use `posix_write()` instead of `write()`
-	- use `posiw_open()` instead of `open()`
+	- use `posix_open()` instead of `open()`
 	- `errors`:
 		- rename `ERR_LIBC` -> `ERR_SYS`
 		- Ensure no `free()` / `libc` is done before `error_sys()`
@@ -54,13 +53,13 @@
 		- Switch `t_vector`s to `t_hashmap`
 - `redirection`:
 	- when `filename` expands to more than one field: redirect to one file per field
-- `parser`:
-	- move `qualifiers` to `lr_machine` to enable `parser_cmd_sub_init()` without `main_parser` argument
 - `params`:
 	- create wrappers for `options` module API
 	- create wrappers for `cmd_cache` module API
 	- create wrappers for `fd` module API
+	- create wrappers for `signal` module API
 	- move `alias` table to `params`
+	- move `history` table to `params`
 	- move all persistent data into `params` (it should represent the shell environment)
 
 ---

@@ -79,8 +79,8 @@ typedef enum e_error_type
 	ERR_POSIX_REDIR_SPECIAL = 123,			// [ 6] [SCMD WALKER]	[Y-N-Y] Absorbed / bubbled up (walk_scmd / walk_command / walk_function)
 	ERR_POSIX_ASSIGNMENT = 124,				// [ 6] [SCMD WALKER]	[Y-N-Y] Absorbed / bubbled up
 	ERR_POSIX_EXPANSION = 125,				// [ 6] [WALKERS]		[Y-N-Y] Absorbed / bubbled up (TODO: which walkers)
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [SCMD WALKER]	[?-?-?] Absorbed / bubbled up
-	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [SCMD WALKER]	[?-N-Y] Absorbed / bubbled up
+	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,		// [ 6] [SCMD WALKER]	[N-N-N] Absorbed / bubbled up
+	ERR_POSIX_CMD_NOT_FOUND = 127,			// [ 6] [SCMD WALKER]	[N-N-Y] Absorbed / bubbled up
 	ERR_POSIX_READ = 128,					// [ 6] [-]				[Y-Y-Y] Always fatal
 	// POSIX SIGNAL CODES (128 + signal)	// [ 6] [-]				TODO: signal management
 }	t_error_type;

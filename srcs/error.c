@@ -52,7 +52,7 @@ const char	*error_to_string(t_error err)
 	else if (err.type == ERR_SHELL_NOT_FOUND)
 		return ("shell data not found");
 	else if (err.type == ERR_SHIFT_INVALID_VALUE)
-		return ("shift value is out of range");
+		return ("is greater than $#");
 	else if (err.type == ERR_SIZE_MAX_REACHED)
 		return ("SIZE_MAX has been reached");
 	else if (err.type == ERR_VAR_INVALID_NAME)

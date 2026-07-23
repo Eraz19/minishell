@@ -178,24 +178,8 @@ t_error	pattern_from_word(t_string *out, const t_word *pattern);
  */
 t_error	run_expansion(t_expansion *expansion, t_expander_args *args);
 
-/**
- * @ingroup expander_priv
- * @brief Runs one full expansion like @ref run_expansion, but returns
- *        the single resulting field as an annotated word instead of
- *        degrading it to a string: the quoting metadata survives for
- *        pattern matching.
- *
- * @warning Meant for flag sets without @c EXP_FIELD_SPLIT: only the
- *          first resulting field is returned.
- * @param word Word receiving the field; initialized by the function, the
- *             caller owns it and must release it with @c word_free
- *             (borrowed).
- * @param args Input of the run; its IFS stays owned by the caller
- *             (borrowed).
- * @return Same contract as @ref run_expansion, plus @c ERR_EMPTY_STACK
- *         if the run produces no field.
- */
-t_error	run_expansion_word(t_word *word, t_expander_args *args);
+// TODO: doc
+t_error	run_expansion_word(t_fields *word, t_expander_args *args);
 
 /**
  * @ingroup expander_priv
@@ -274,23 +258,7 @@ t_error	get_ifs(t_string *ifs);
  */
 t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs);
 
-/**
- * @ingroup expander_priv
- * @brief Lexes a raw string for expansion: removes escaped newlines from
- *        @p src, then records its quoting and expansion constructs into
- *        @p out using @ref str_context_rules.
- *
- * @param out Destination stack, already initialized by the caller; the
- *            recorded contexts are appended (borrowed).
- * @param src Text to prepare, rewritten without its escaped newlines
- *            (borrowed).
- * @return @c ERR_LIBC on allocation failure; @c ERR_UNEXPECTED_EOI
- *         (printed) on an unterminated construct; @c ERR_NOT_IMPLEMENTED
- *         (printed) from the command substitution stub;
- *         @c ERR_EMPTY_STACK, @c ERR_NO_INPUT_TO_LEX,
- *         @c ERR_INDEX_OUT_OF_BOUND or @c ERR_INCOHERENT_STATE on an
- *         internal inconsistency; @c ERR_NO on success.
- */
+// TODO: doc
 t_error	prepare_str_for_expansion(
 			t_context_stack *out,
 			t_ast_vector *ats_vec_out,

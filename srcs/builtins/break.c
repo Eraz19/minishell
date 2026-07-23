@@ -1,8 +1,8 @@
 #include "builtins.h"
 
+#define TOO_MANY_ARGS	"too many arguments"
 #define NOT_UINT		"is not an unsigned decimal integer "
 #define NOT_UINT_2		"greater than or equal to 1"
-#define TOO_MANY_ARGS	"too many arguments"
 
 static inline t_error	break_too_many_args(
 							const char *builtin_name,
@@ -50,8 +50,7 @@ t_error	builtin_break(int argc, char **argv, t_runner *runner, int *exit_status)
 		return (break_too_many_args(argv[0], exit_status));
 	if (first_operand_i >= argc)
 		return (break_no_arg(runner, exit_status));
-	if (parse_int(argv[first_operand_i], &control_depth) == false
-		|| control_depth <= 0)
+	if (!parse_int(argv[first_operand_i], &control_depth) || control_depth <= 0)
 		return (break_invalid_arg(argv[0], argv[first_operand_i], exit_status));
 	runner->control_depth = (size_t)control_depth;
 	*exit_status = 0;
