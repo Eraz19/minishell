@@ -178,24 +178,8 @@ t_error	pattern_from_word(t_string *out, const t_word *pattern);
  */
 t_error	run_expansion(t_expansion *expansion, t_expander_args *args);
 
-/**
- * @ingroup expander_priv
- * @brief Runs one full expansion like @ref run_expansion, but returns
- *        the single resulting field as an annotated word instead of
- *        degrading it to a string: the quoting metadata survives for
- *        pattern matching.
- *
- * @warning Meant for flag sets without @c EXP_FIELD_SPLIT: only the
- *          first resulting field is returned.
- * @param word Word receiving the field; initialized by the function, the
- *             caller owns it and must release it with @c word_free
- *             (borrowed).
- * @param args Input of the run; its IFS stays owned by the caller
- *             (borrowed).
- * @return Same contract as @ref run_expansion, plus @c ERR_EMPTY_STACK
- *         if the run produces no field.
- */
-t_error	run_expansion_word(t_word *word, t_expander_args *args);
+// TODO: doc
+t_error	run_expansion_word(t_fields *word, t_expander_args *args);
 
 /**
  * @ingroup expander_priv

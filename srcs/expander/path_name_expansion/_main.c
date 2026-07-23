@@ -40,7 +40,6 @@ static t_error	path_name_expansion_word(t_expander *expander)
 		return (expander->err);
 	if (prepare_path_name_word(expander, &original).type)
 		return (word_free(&original), expander->err);
-	path_comps_init(&path_comps);
 	expander->err = path_comps_load(&path_comps, &expander->word_exp);
 	word_free(&expander->word_exp);
 	if (expander->err.type)
