@@ -69,7 +69,10 @@ static t_error	cd_chdir_and_update(
 	if (path == NULL)
 		path = "";
 	if (chdir(path) != 0)
-		return (error_print(error_sys(), utility, path, NULL, NULL));
+	{
+		error_print(error_sys(), utility, path, NULL, NULL);
+		return (error(ERR_BUILTIN));
+	}
 	err = cd_update_pwd(args, utility);
 	if (err.type)
 		return (err);

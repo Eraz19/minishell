@@ -37,7 +37,7 @@ t_error	redirect_expand(t_redir *redir, int *exit_status)
 	{
 		flags = cmd_heredoc_body_expansion_flags();
 		if (redir->expand_heredoc_body)
-			return (expand_str(&redir->expanded_word, redir->heredoc_body,
+			return (expand_str_merged(&redir->expanded_word, redir->heredoc_body,
 						exit_status, flags));
 		else if (!string_dup(&redir->expanded_word, redir->heredoc_body))
 			return (error_sys());

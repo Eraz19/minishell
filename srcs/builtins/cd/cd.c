@@ -3,6 +3,7 @@
 #include "cd_.h"
 #include "params.h"
 #include "ft_getopt.h"
+#include <signal.h>
 
 static t_error	cd_process_options(int argc, char **argv, t_cd_args *args)
 {
@@ -51,8 +52,8 @@ t_error	cd_from_var(const char *utility, const char *name, t_string *dir)
 t_error	cd_resolv_operand(int argc, char **argv, t_cd_args *args, t_string *dir)
 {
 	if ((size_t)argc - args->operand_index > 1)
-		return (error_print(error(ERR_INVALID_USAGE),
-					argv[0], "too many arguments", NULL, NULL));
+		return (error_print(error(ERR_INVALID_USAGE), argv[0],
+			"too many arguments", NULL, NULL));
 	if ((size_t)argc == args->operand_index)
 		return (cd_from_var(argv[0], "HOME", dir));
 	if (str_cmp(argv[args->operand_index], "-") == 0)
