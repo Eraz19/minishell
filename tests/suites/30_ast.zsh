@@ -42,7 +42,7 @@ expect_out_contains "rc=127"
 expect_err_contains "not found"
 t_end
 
-t_begin SCMD.6 "file without +x -> 126"
+t_begin SCMD.6 "non-interactive file without +x -> 126 and shell continues"
 t_setup 'printf "echo no\n" > noexec.sh'
 t_run './noexec.sh
 echo rc=$?'
@@ -701,6 +701,6 @@ expect_status 121
 t_end
 
 t_begin SYN.5 "pipe with no right-hand side -> 121"
-t_run 'echo left |'
+t_run_argv -c 'echo left |'
 expect_status 121
 t_end

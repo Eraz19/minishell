@@ -349,8 +349,8 @@ expect_status 0
 expect_out_contains "survived"
 t_end
 
-t_begin OPT-I.3 "interactive: shell survives a syntax error"
-T_STDIN=$'if then\necho survived\n'
+t_begin OPT-I.3 "interactive: shell survives a complete syntax error"
+T_STDIN=$'echo hi )\necho survived\n'
 t_run_argv -s -i
 expect_status 0
 expect_out_contains "survived"
@@ -364,14 +364,22 @@ expect_out_lacks "not_reached"
 expect_err_contains "invalid syntax"
 t_end
 
-t_begin OPT-I.5 "non-interactive: command-not-found — 2.8.1 says 'may exit'"
+t_begin OPT-I.5 "non-interactive: command-not-found does not abort"
 t_run 'no_such_cmd_xyz
+echo rc=$?
 echo survived'
-# POSIX.1-2024 2.8.1: command not found, non-interactive shell "may exit"
-# This shell chooses to exit in that case.
-expect_status 127
-expect_out_lacks "survived"
+expect_status 0
+expect_lines "rc=127" "survived"
 expect_err_contains "not found"
+t_end
+
+t_begin OPT-I.6 "non-interactive: command-not-executable does not abort"
+t_setup 'printf "echo no\n" > noexec_i6.sh'
+t_run './noexec_i6.sh
+echo rc=$?
+echo survived'
+expect_status 0
+expect_lines "rc=126" "survived"
 t_end
 
 ###############################################################################

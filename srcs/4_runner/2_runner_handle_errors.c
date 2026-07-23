@@ -70,7 +70,7 @@ void	runner_handle_error(t_runner *runner, t_error *err)
 			err->type = ERR_NO;
 	}
 	runner_handle_bad_errors(err, interactive);
-	if (err->type && err->type != ERR_EXIT && err->type != ERR_EXIT_WITH_CURRENT_STATUS)
+	if (err->type && error_is_flow_control(*err) == false)
 		*err = error_print(*err, NULL, NULL);
 	fprintf(stderr, "[RUNNER] => final error %i (%s)\n", (int)err->type, error_to_string(*err));
 	fprintf(stderr, "--------------------------------------------------\n");

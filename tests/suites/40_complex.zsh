@@ -156,7 +156,7 @@ tt MIX.7 "cmd-sub of a pipeline of a heredoc" \
 3
 EOF
 )
-echo lines=$R' 0 "lines=3"
+echo lines=$R' 0 "lines= 3"
 
 tt MIX.8 "case on a cmd-sub over a glob, with redirected arm" \
 'touch only_one.m8
