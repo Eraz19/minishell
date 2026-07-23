@@ -59,7 +59,6 @@ t_error	prepare_str_for_expansion(
 	t_lexer		*lexer;
 	t_string	lexer_src;
 
-	context_stack_init(context_out);
 	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING);
 	if (err.type)
 		return (err);
@@ -76,8 +75,6 @@ t_error	prepare_str_for_expansion(
 				context_out,
 				ast_vec_out,
 				str_context_rules());
-	if (err.type)
-		context_stack_free(context_out);
 	return (shell_destroy_last_instance(), err);
 }
 

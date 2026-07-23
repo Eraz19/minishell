@@ -6,6 +6,23 @@
 #include "parser.h"
 #include "shell.h"
 
+static t_error	heredoc_push_context(t_context_stack *contexts, size_t body_len)
+{
+	t_context_stack_item	*item;
+	t_error					err;
+
+	if (body_len == 0)
+		return (error(ERR_NO));
+	err = context_stack_item_init(&item, CONTEXT_HEREDOC);
+	if (err.type)
+		return (err);
+	item->start = 0;
+	item->end = body_len - 1;
+	if (!vector_insert(contexts, 0, &item))
+		return (err = error_sys(), free(item), err);
+	return (error(ERR_NO));
+}
+
 static t_error	heredoc_read_body(
 					t_string *out,
 					t_body *body,
@@ -67,10 +84,8 @@ t_error	heredoc_prepare_for_expansion(
 {
 	t_error					err;
 	t_lexer					*lexer;
-	t_context_stack_item	*item;
 	t_string				lexer_body;
 
-	context_stack_init(context_stack_out);
 	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING);
 	if (err.type)
 		return (err);
@@ -78,21 +93,19 @@ t_error	heredoc_prepare_for_expansion(
 	if (err.type)
 		return (shell_destroy_last_instance(), err);
 	parser_clear(lexer->scanner->parser);
-	err = context_stack_item_init(&item, CONTEXT_HEREDOC);
-	if (err.type)
-		return (shell_destroy_last_instance(), err);
-	item->start = 0;
-	item->end = body->len;
-	err = context_stack_push(context_stack_out, item);
-	if (err.type)
-		return (shell_destroy_last_instance(), free(item), err);
 	if (!string_dup(&lexer_body, body))
-		return (err = error_sys(), shell_destroy_last_instance(), context_stack_free(context_stack_out), err);
+		return (err = error_sys(), shell_destroy_last_instance(), err);
 	err = lexer_push_input(lexer, &lexer_body);
 	if (err.type == ERR_NO)
-		err = lexer_track_context(lexer,
-				context_stack_out, ast_vec_out, body_context_rules());
+		err = lexer_track_context(lexer, context_stack_out, ast_vec_out,
+				body_context_rules());
 	if (err.type)
+		return (shell_destroy_last_instance(), err);
+	err = heredoc_push_context(context_stack_out, body->len);
+	if (err.type)
+	{
 		context_stack_free(context_stack_out);
+		ast_vector_free(ast_vec_out);
+	}
 	return (shell_destroy_last_instance(), err);
 }
