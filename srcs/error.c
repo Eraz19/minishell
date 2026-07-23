@@ -335,3 +335,9 @@ bool	error_is_flow_control(t_error err)
 {
 	return (err.type >= ERR_VEOF && err.type <= ERR_INTERRUPTED);
 }
+
+t_error	err_infinite_loop(void)
+{
+	// TODO print xav BG face
+	return (error(ERR_VEOF));
+}

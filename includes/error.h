@@ -170,4 +170,6 @@ t_error	error_drop_non_fatal(t_error err);
 
 bool	error_is_flow_control(t_error err);
 
+t_error	err_infinite_loop(void);
+
 #endif

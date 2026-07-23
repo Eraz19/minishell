@@ -84,9 +84,11 @@ static inline t_error	reader_should_exit_on_veof(void)
 
 static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
 {
+	size_t	counter;
 	bool	retry;
 	t_error	err;
 
+	counter = 0;
 	fprintf(stderr, CYAN "####################### IN #######################\n" NC);
 	while (true)
 	{
@@ -98,6 +100,9 @@ static inline t_error	reader_rl_loop(const char *prompt, char **out_input)
 		err = reader_should_exit_on_veof();
 		if (err.type)
 			break ;
+		++counter;
+		if (counter > 10)
+			return (err_infinite_loop());
 	}
 	fprintf(stderr, CYAN "##################################################\n" NC);
 	return (err);
