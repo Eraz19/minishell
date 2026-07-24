@@ -46,6 +46,10 @@ typedef enum e_error_type
 	ERR_SIG_WAS_IGNORED_ON_ENTRY,			// [ 1] [TRAP]			Absorbed by trap special builtin
 	// BUILTIN_WAIT
 	ERR_PID_INVALID,						// [ 1]	[WAIT]			Absorbed by wait builtin
+	// UTILS (SEARCH FILE)
+	ERR_FILE_NOT_FOUND,						// [ 1]	[CALLER]		Requalified as ERR_POSIX_CMD_NOT_FOUND / ERR_SPECIAL_BUITLIN or absorbed
+	ERR_FILE_NOT_EXECUTABLE,				// [ 1]	[CALLER]		Requalified as ERR_POSIX_CMD_NOT_EXECUTABLE or absorbed
+	ERR_FILE_NOT_READABLE,					// [ 1]	[CALLER]		Requalified as ERR_SPECIAL_BUITLIN or absorbed
 	// FT_GETOPT
 	ERR_OPT_INVALID,						// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)
 	ERR_OPT_INVALID_ARG,					// [ 1] [FT_GETOPT]		Requalified as ERR_INVALID_USAGE (printed)

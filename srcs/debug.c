@@ -11,6 +11,7 @@
 #include "ast.h"
 #include "heredoc.h"
 #include "logs.h"
+#include "lexer.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -343,6 +344,127 @@ void	debug_dump_parser_item_stack(t_parser_item_stack *stack)
 				item->tokens_start_id + item->tokens_count - 1,
 				item->tokens_count);
 		fprintf(stderr, " cst=%p\n", (void *)item->cst_node);
+		i++;
+	}
+}
+
+/* ************************************************************************* */
+/*                              LEXER INPUT STACK                            */
+/* ************************************************************************* */
+
+static void	debug_dump_lexer_input_stack_string(const t_string *value)
+{
+	size_t	i;
+	char	c;
+
+	fprintf(stderr, "\"");
+	if (value == NULL || value->data == NULL)
+		return ((void)fprintf(stderr, "\""));
+	i = 0;
+	while (i < value->len)
+	{
+		c = value->data[i];
+		if (c == '\n')
+			fprintf(stderr, "\\n");
+		else if (c == '\t')
+			fprintf(stderr, "\\t");
+		else if (c == '\r')
+			fprintf(stderr, "\\r");
+		else if (c == '\\')
+			fprintf(stderr, "\\\\");
+		else if (c == '"')
+			fprintf(stderr, "\\\"");
+		else if (c >= 32 && c <= 126)
+			fprintf(stderr, "%c", c);
+		else
+			fprintf(stderr, "\\x%02x", (unsigned char)c);
+		i++;
+	}
+	fprintf(stderr, "\"");
+}
+
+void	debug_dump_input_stack(t_lexer_input_stack *stack)
+{
+	t_lexer_input_stack_item	**items;
+	t_lexer_input_stack_item	*item;
+	const char				*branch;
+	size_t					i;
+
+	if (stack == NULL)
+		return ((void)fprintf(stderr, "[LEXER INPUT STACK] (null)\n"));
+	items = (t_lexer_input_stack_item **)stack->data;
+	fprintf(stderr, "[LEXER] INPUT STACK len=%zu cap=%zu\n",
+		stack->len, stack->cap);
+	i = 0;
+	while (i < stack->len)
+	{
+		item = items[i];
+		branch = " ├──";
+		if (i + 1 == stack->len)
+			branch = " ╰──";
+		fprintf(stderr, "%s[%3zu] item=%p", branch, i, (void *)item);
+		if (item == NULL)
+			fprintf(stderr, " (null)\n");
+		else
+		{
+			fprintf(stderr, " i=%zu str={len=%zu cap=%zu data=",
+				item->i, item->str.len, item->str.cap);
+			debug_dump_lexer_input_stack_string(&item->str);
+			fprintf(stderr, "}\n");
+		}
+		i++;
+	}
+}
+
+/* ************************************************************************* */
+/*                                CONTEXT STACK                              */
+/* ************************************************************************* */
+
+static const char	*debug_context_to_string(t_context context)
+{
+	switch (context)
+	{
+		case CONTEXT_NONE: return ("CONTEXT_NONE");
+		case CONTEXT_SQUOTE: return ("CONTEXT_SQUOTE");
+		case CONTEXT_DQUOTE: return ("CONTEXT_DQUOTE");
+		case CONTEXT_DOLLAR_SQUOTE: return ("CONTEXT_DOLLAR_SQUOTE");
+		case CONTEXT_BACKTICK: return ("CONTEXT_BACKTICK");
+		case CONTEXT_CMD_SUB: return ("CONTEXT_CMD_SUB");
+		case CONTEXT_ARITH: return ("CONTEXT_ARITH");
+		case CONTEXT_PARAM: return ("CONTEXT_PARAM");
+		case CONTEXT_HEREDOC: return ("CONTEXT_HEREDOC");
+		default: return ("unknown");
+	}
+}
+
+void	debug_dump_context_stack(t_context_stack *stack)
+{
+	t_context_stack_item	**items;
+	t_context_stack_item	*item;
+	const char			*branch;
+	size_t				i;
+
+	if (stack == NULL)
+		return ((void)fprintf(stderr, "[CONTEXT STACK] (null)\n"));
+	items = (t_context_stack_item **)stack->data;
+	fprintf(stderr, "[CONTEXT] STACK len=%zu cap=%zu\n",
+		stack->len, stack->cap);
+	i = 0;
+	while (i < stack->len)
+	{
+		item = items[i];
+		branch = " ├──";
+		if (i + 1 == stack->len)
+			branch = " ╰──";
+		fprintf(stderr, "%s[%3zu] item=%p", branch, i, (void *)item);
+		if (item == NULL)
+			fprintf(stderr, " (null)\n");
+		else
+			fprintf(stderr, " %s start=%zu end=%zu len=%zu\n",
+				debug_context_to_string(item->context),
+				item->start,
+				item->end,
+				item->end - item->start);
 		i++;
 	}
 }

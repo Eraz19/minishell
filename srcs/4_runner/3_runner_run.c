@@ -30,7 +30,7 @@ static inline t_error	runner_loop_cycle(t_runner *runner, t_ast_root *ast_root)
 Non-fatal errors must be handled in walkers.
 Therefore, only fatal errors should bubble up to the main loop.
 */
-void	runner_run(t_runner *runner)
+t_error	runner_run(t_runner *runner)
 {
 	t_ast_root	ast_root;
 	t_error		err;
@@ -45,9 +45,10 @@ void	runner_run(t_runner *runner)
 		runner_handle_error(runner, &err);
 		ast_root_free(&ast_root);
 	}
+	return (err);
 }
 
-void	runner_run_ast(t_runner *runner, t_ast_root *ast_root)
+t_error	runner_run_ast(t_runner *runner, t_ast_root *ast_root)
 {
 	bool	no_exec;
 	t_error	err;
@@ -63,4 +64,5 @@ void	runner_run_ast(t_runner *runner, t_ast_root *ast_root)
 		err = sig_process();
 	err = error_priorize(err, params_reap());
 	runner_handle_error(runner, &err);
+	return (err);
 }

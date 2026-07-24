@@ -6,8 +6,10 @@
 # include <pwd.h>
 # include <time.h>
 # include "error.h"
+# include "ft_getopt.h"
 
-// TODO: doc
+// TODO: doc (vector_deep_dup)
+
 typedef t_error (*t_dup_callback)(void *dst_item, const void *src_item);
 typedef void (*t_free_callback)(void *dst_item);
 
@@ -16,6 +18,29 @@ t_error	vector_deep_dup(
 			const t_vector *src,
 			t_dup_callback dup_callback,
 			t_free_callback free_callback);
+
+// TODO: doc (serach_file)
+
+typedef enum e_search_file_mode
+{
+	SEARCH_FILE_EXEC,
+	SEARCH_FILE_READ
+}	t_search_file_mode;
+
+// @ret ERR_FILE_NOT_FOUND / ERR_FILE_NOT_EXECUTABLE / ERR_FILE_NOT_READABLE
+// 		/ ERR_LIBC
+t_error	check_file(
+			const t_string *file_path,
+			t_search_file_mode mode,
+			bool *ref_found);
+
+// @ret ERR_FILE_NOT_FOUND / ERR_FILE_NOT_EXECUTABLE / ERR_FILE_NOT_READABLE
+// 		/ ERR_LIBC
+t_error	search_file(
+			const t_string *raw_path,
+			const t_string *filename,
+			t_search_file_mode mode,
+			t_string *out_file_path);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -75,6 +100,23 @@ t_error	deserialize_all(const char *src, t_vector *dst);
  * @param ptr Pointer to a @c char* item passed as @c void* (borrowed).
  */
 void	free_char_ptr_void(void *ptr);
+
+/**
+ * @brief Parse short @c + and @c - options from @p argv.
+ *
+ * @note The function initializes @p out->options and, on success, the caller
+ *       must release it with @c vector_free(&out->options, NULL).
+ * @note This function always prints a diagnostic before returning an error.
+ *
+ * @param argc Argument count.
+ * @param argv Argument array to parse, with the command name at index 0
+ *             (borrowed, read-only).
+ * @param input Parsing specification (borrowed, read-only).
+ * @param out Destination initialized by the function on entry and filled on
+ *            success (borrowed).
+ * @return @c ERR_INVALID_USAGE @c ERR_UB or @c ERR_LIBC.
+ */
+t_error	ft_getopt(int argc, char **argv, t_getopt_in *input, t_getopt_out *out);
 
 /**
  * @brief Look up a passwd entry by login name using @c /etc/passwd.

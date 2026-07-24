@@ -1,7 +1,6 @@
 #ifndef CMD_SEARCHER_PRIV_H
 # define CMD_SEARCHER_PRIV_H
 
-# include "libft.h"
 # include "error.h"
 # include "cmd_cache.h"
 # include "cmd_type.h"
@@ -9,18 +8,6 @@
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
-
-/**
- * @brief Check whether @p cmd_path names an executable non-directory entry.
- *
- * @param cmd_path Candidate command path to validate (borrowed, read-only).
- * @param ref_found Set to @c true when @p cmd_path exists but is not
- *                  executable, left unchanged when the path is simply missing
- *                  (borrowed).
- * @return @c ERR_NO, @c ERR_POSIX_CMD_NOT_FOUND,
- *         @c ERR_POSIX_CMD_NOT_EXECUTABLE or @c ERR_LIBC.
- */
-t_error	cmd_check(const t_string *cmd_path, bool *ref_found);
 
 /**
  * @brief Accept @p cmd->name directly when it already contains a @c /.

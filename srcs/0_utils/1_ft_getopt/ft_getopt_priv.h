@@ -2,6 +2,7 @@
 # define FT_GETOPT_PRIV_H
 
 # include "ft_getopt.h"
+# include "error.h"
 
 /**
  * @struct s_getopt_state
