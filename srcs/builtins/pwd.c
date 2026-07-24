@@ -4,7 +4,7 @@
 #include "error.h"
 #include "libft.h"
 #include "params.h"
-#include "ft_getopt.h"
+#include "utils.h"
 #include "posix_helpers.h"
 
 static t_error	pwd_process_options(int argc, char **argv, char *mode)

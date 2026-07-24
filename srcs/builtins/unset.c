@@ -1,6 +1,6 @@
 #include "builtins.h"
 #include "params.h"
-#include "ft_getopt.h"
+#include "utils.h"
 #include <stdbool.h>
 
 #define UNSET_USAGE	"[-f|-v] name..."

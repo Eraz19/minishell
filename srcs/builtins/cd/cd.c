@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "cd_.h"
 #include "params.h"
-#include "ft_getopt.h"
+#include "utils.h"
 #include <signal.h>
 
 static t_error	cd_process_options(int argc, char **argv, t_cd_args *args)

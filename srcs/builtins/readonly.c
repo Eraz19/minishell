@@ -1,6 +1,5 @@
 #include "builtins.h"
 #include "params.h"
-#include "ft_getopt.h"
 #include "utils.h"
 #include <stdlib.h>
 

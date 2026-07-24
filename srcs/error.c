@@ -95,6 +95,12 @@ const char	*error_to_string(t_error err)
 		return ("invalid process or job id");
 	else if (err.type == ERR_SIG_WAS_IGNORED_ON_ENTRY)
 		return ("signal was ignored at entry of the non-interactive shell");
+	else if (err.type == ERR_FILE_NOT_FOUND)
+		return ("file not found");
+	else if (err.type == ERR_FILE_NOT_EXECUTABLE)
+		return ("file is not executable");
+	else if (err.type == ERR_FILE_NOT_READABLE)
+		return ("file is not readable");
 	// posix_write() error
 	else if (err.type == ERR_POSIX_WRITE)
 		return ("write error");

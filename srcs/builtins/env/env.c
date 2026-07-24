@@ -1,7 +1,7 @@
 #include "builtins.h"
 #include <unistd.h>
 #include "env_.h"
-#include "ft_getopt.h"
+#include "utils.h"
 #include "posix_helpers.h"
 
 t_error	env_print_entry(const char *entry)

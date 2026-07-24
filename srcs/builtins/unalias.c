@@ -1,6 +1,6 @@
 #include "builtins.h"
 #include "alias.h"
-#include "ft_getopt.h"
+#include "utils.h"
 
 #define UNALIAS_USAGE	"-a || alias-name..."
 
