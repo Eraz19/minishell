@@ -51,7 +51,7 @@ static inline t_error	shell_exec(void)
 	err = shell_get_new_runner(&runner, SCAN_MODE_AUTO);
 	if (err.type)
 		return (err);
-	runner_run(runner);
+	(void)runner_run(runner);
 	sig_process_exit();
 	shell_destroy_last_instance();
 	err = history_save();

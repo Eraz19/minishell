@@ -2,6 +2,8 @@
 
 - Toutes les APIs `*_init()`, `*_clear`, `*_free()` doivent être indempotentes et permettre la réutilisation ultérieure de l'item sans avoir à call `*_init()` à nouveau.
 - Toutes les fonctions en charge du peuplement initial d'un objet doivent *init* cet objet elles-mêmes et le *free* elles-même en cas d'erreur durant le peuplement. C'est seulement une fois que le peuplement est succesful que le *free* ultérieur devient la responsabilité du caller.
+- Lorsqu'on requalifie une erreur, il faut utiliser `err.type = ...` et non pas `err = error(...)` sinon on perd le `err.printed` et on risque un double print de l'erreur
+- Tous les builtins doivent utiliser `builtin_print_and_qualify()` pour print / requalifier leurs erreurs avant de retourner
 
 # PROMPT
 

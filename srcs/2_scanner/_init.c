@@ -14,18 +14,6 @@ void	scanner_init(t_scanner *scanner)
 	scanner->parent_scanner = NULL;
 }
 
-static inline t_error	scanner_load_cmd_sub(t_scanner *scanner)
-{
-	if (scanner->mode != SCAN_MODE_CMD_SUB)
-		return (error(ERR_NO));
-	if (scanner->parent_scanner->mode != SCAN_MODE_STDIN
-		&& scanner->parent_scanner->mode != SCAN_MODE_CMD_SUB)
-		return (scanner->mode = scanner->parent_scanner->mode, error(ERR_NO));
-	return (scanner->err = lexer_input_stack_dup(
-		&scanner->lexer.input_stack,
-		&scanner->parent_scanner->lexer.input_stack));
-}
-
 t_error	scanner_load(
 			t_scanner *scanner,
 			t_scanner *parent_scanner,
@@ -40,8 +28,9 @@ t_error	scanner_load(
 	scanner->parent_scanner = parent_scanner;
 	lexer_init(&scanner->lexer, scanner);
 	scanner->mode = mode;
-	if (mode != SCAN_MODE_AUTO)
-		return (scanner_load_cmd_sub(scanner));
+	if (mode == SCAN_MODE_CMD_SUB)
+		return (scanner->err = lexer_input_stack_dup(&scanner->lexer.input_stack,
+								&scanner->parent_scanner->lexer.input_stack));
 	err = params_get_source(&source);
 	if (err.type)
 		return (scanner->err = scanner_error_qualify(err, false));

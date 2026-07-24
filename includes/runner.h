@@ -19,7 +19,7 @@ void	runner_free_void(void *runner);
 // Ops
 
 // TODO: doc
-void	runner_run(t_runner *runner);
-void	runner_run_ast(t_runner *runner, t_ast_root *ast_root);
+t_error	runner_run(t_runner *runner);
+t_error	runner_run_ast(t_runner *runner, t_ast_root *ast_root);
 
 #endif

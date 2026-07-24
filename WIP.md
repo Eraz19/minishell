@@ -1,18 +1,18 @@
 # WIP IMMEDIATLY
 
-- `FOR.4`:
+🤔 `shell_get_new_*()` should take a *nullable* `t_string *arg` to directly set `cmd_string` or `cmd_file` if needed
+
+- move `alias` table and print API in `params`
+
 ```bash
-set -- m n
-for x; do echo $x; done
+cat <<EOF
+sub=$(echo yes)
+EOF
 ```
 
-`"$@"` => `"m n"` => `"m` + `n"`
-- `ast_for`:
-	- on `ast` building phase: if `word` is `VAR_NOT_FOUND` => let `words` empty
-	- on `ast` execution phase:
-		- if `words.len` == 0 => call `expand_str("$@")`
-		- else => call `expand_token(words[i])`
+✅ `FOR.4`
 
+🚨 use `ft_getopt` in ALL builtins
 🚨 Ne pas demander de continuation si `OPT_INTERACTIVE` (`-i`) n'est pas activée !
 
 # UNSPECIFIED BEHAVIOUR TO TALK

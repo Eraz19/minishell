@@ -127,14 +127,4 @@ t_params	*shell_get_params(void);
  */
 int			shell_run(int argc, char **argv, char **envp, bool build_parser_tables);
 
-// TODO
-/**
- * @brief Reports a pending interrupt.
- *
- * @note Placeholder implementation, always returns ERR_INTERRUPTED for now.
- * @return ERR_NO when interruption can be ignored Eor RR_INTERRUPTED when
- *		   interruption should stop the shell.
- */
-t_error		shell_should_interrupt(void);
-
 #endif
