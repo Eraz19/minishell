@@ -3,26 +3,9 @@
 #include <stdbool.h>
 # include <stdio.h>	// DEBUG
 
-/* ---------- TODO: shell ---------- */
-
-t_error		shell_should_interrupt(void)
-{
-	// TODO
-	return (error(ERR_INTERRUPTED));
-}
-
 /* ---------- TODO: builtins ---------- */
 
 // Special builtins
-
-t_error	builtin_dot(int argc, char **argv, t_runner *runner, int *exit_status)
-{
-	(void)argc;
-	(void)argv;
-	(void)runner;
-	(void)exit_status;
-	return (error_print(error(ERR_NOT_IMPLEMENTED), __func__, NULL, NULL));
-}
 
 t_error	builtin_exec(int argc, char **argv, t_runner *runner, int *exit_status)
 {
