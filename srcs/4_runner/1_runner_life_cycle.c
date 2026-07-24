@@ -15,10 +15,11 @@ void	runner_init(t_runner *runner)
 t_error	runner_load(
 			t_runner *runner,
 			t_runner *parent_runner,
-			t_scanner *parent_scanner,
-			t_scan_mode mode)
+			t_scan_mode mode,
+			const char *input)
 {
-	t_error	err;
+	t_scanner	*parent_scanner;
+	t_error		err;
 
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
@@ -30,7 +31,11 @@ t_error	runner_load(
 	err = params_get_cmd_cache(&runner->cmd_cache);
 	if (err.type)
 		return (err);
-	err = parser_load(&runner->parser, parent_scanner, mode);
+	if (parent_runner == NULL)
+		parent_scanner = NULL;
+	else
+		parent_scanner = &parent_runner->parser.scanner;
+	err = parser_load(&runner->parser, parent_scanner, mode, input);
 	if (err.type)
 		runner_free(runner);
 	return (err);

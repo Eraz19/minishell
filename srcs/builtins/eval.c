@@ -50,10 +50,9 @@ t_error	builtin_eval(int argc, char **argv, t_runner *runner, int *exit_status)
 		return (err);
 	else if (only_null_args == true)
 		return (string_free(&cmd), *exit_status = 0, error(ERR_NO));
-	err = shell_get_new_runner(&eval_runner, SCAN_MODE_STRING);
+	err = shell_get_new_runner(&eval_runner, SCAN_MODE_STRING, cmd.data);
 	if (err.type)
 		return (string_free(&cmd), error_print(err, argv[0], NULL, NULL));
-	scanner_set_input(&eval_runner->parser.scanner, &cmd);
 	err = runner_run(eval_runner);
 	shell_destroy_last_instance();
 	string_free(&cmd);

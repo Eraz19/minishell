@@ -11,7 +11,8 @@ void	parser_init(t_parser *parser);
 t_error	parser_load(
 			t_parser *parser,
 			t_scanner *parent_scanner,
-			t_scan_mode mode);
+			t_scan_mode mode,
+			const char *input);
 void	parser_clear(t_parser *parser);
 void	parser_free(t_parser *parser);
 

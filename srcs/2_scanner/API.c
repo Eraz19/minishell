@@ -86,10 +86,9 @@ t_error	scanner_lexer_continuation(t_lexer *lexer)
 	return (lexer->err);
 }
 
-void	scanner_set_input(t_scanner *scanner, const t_string *cmd_string)
+void	scanner_set_input(t_scanner *scanner, const char *input)
 {
 	lexer_clear(&scanner->lexer);
-	scanner->source = cmd_string->data;
-	scanner->mode = SCAN_MODE_STRING;
+	scanner->source = input;
 }
 

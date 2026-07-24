@@ -10,8 +10,8 @@ void	runner_init(t_runner *runner);
 t_error	runner_load(
 			t_runner *runner,
 			t_runner *parent_runner,
-			t_scanner *parent_scanner,
-			t_scan_mode mode);
+			t_scan_mode mode,
+			const char *input);
 void	runner_clear(t_runner *runner);
 void	runner_free(t_runner *runner);
 void	runner_free_void(void *runner);

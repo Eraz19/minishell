@@ -44,10 +44,9 @@ void	cmd_sub_child_string(const t_string *cmd_string, int pipe_fds[2])
 	err = shell_init_subshell(SUBSHELL_NORMAL);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	err = shell_get_new_runner(&runner, SCAN_MODE_STRING);
+	err = shell_get_new_runner(&runner, SCAN_MODE_STRING, cmd_string->data);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	scanner_set_input(&runner->parser.scanner, cmd_string);
 	err = runner_run(runner);
 	shell_destroy_last_instance();
 	if (err.type)
@@ -68,7 +67,7 @@ void	cmd_sub_child_ast(t_ast_root *ast_root, int pipe_fds[2])
 	err = shell_init_subshell(SUBSHELL_NORMAL);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	err = shell_get_new_runner(&runner, SCAN_MODE_STRING);
+	err = shell_get_new_runner(&runner, SCAN_MODE_NONE, NULL);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
 	err = runner_run_ast(runner, ast_root);

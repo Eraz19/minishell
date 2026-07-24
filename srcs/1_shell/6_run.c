@@ -48,7 +48,7 @@ static inline t_error	shell_exec(void)
 	t_runner	*runner;
 	t_error		err;
 
-	err = shell_get_new_runner(&runner, SCAN_MODE_AUTO);
+	err = shell_get_new_runner(&runner, SCAN_MODE_AUTO, NULL);
 	if (err.type)
 		return (err);
 	(void)runner_run(runner);

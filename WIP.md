@@ -1,6 +1,6 @@
 # WIP IMMEDIATLY
 
-🤔 `shell_get_new_*()` should take a *nullable* `t_string *arg` to directly set `cmd_string` or `cmd_file` if needed
+- 🤔 `cmd_sub_child_ast()`: Need a `SCAN_MODE_PARENT` for `shell_get_new_runner()` ?
 
 - move `alias` table and print API in `params`
 

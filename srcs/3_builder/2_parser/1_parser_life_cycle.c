@@ -13,6 +13,7 @@ void	parser_init(t_parser *parser)
 	parser_item_stack_init(&parser->item_stack);
 	parser_here_stack_init(&parser->here_stack);
 	token_pool_init(&parser->token_pool);
+	parser->machine = NULL;
 	parser->cst = NULL;
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
@@ -20,13 +21,13 @@ void	parser_init(t_parser *parser)
 	parser->search_cmd_sub_end = false;
 	parser->cmd_sub_end_index = 0;
 	scanner_init(&parser->scanner);
-	parser->machine = NULL;
 }
 
 t_error	parser_load(
 			t_parser *parser,
 			t_scanner *parent_scanner,
-			t_scan_mode mode)
+			t_scan_mode mode,
+			const char *input)
 {
 	t_error	err;
 
@@ -34,6 +35,7 @@ t_error	parser_load(
 	parser_item_stack_init(&parser->item_stack);
 	parser_here_stack_init(&parser->here_stack);
 	token_pool_init(&parser->token_pool);
+	parser->machine = shell_get_lr_machine();
 	parser->cst = NULL;
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
@@ -41,9 +43,9 @@ t_error	parser_load(
 	parser->search_cmd_sub_end = (mode == SCAN_MODE_CMD_SUB);
 	parser->cmd_sub_end_index = -1;
 	err = scanner_load(&parser->scanner, parent_scanner, parser, mode);
-	if (err.type)
-		return (err);
-	return (shell_get_lr_machine(&parser->machine));
+	if (err.type == ERR_NO && input != NULL)
+		scanner_set_input(&parser->scanner, input);
+	return (err);
 }
 
 void	parser_clear(t_parser *parser)

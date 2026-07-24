@@ -57,10 +57,22 @@ void	shell_free_void(void);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-t_error	shell_get_new_lexer(t_lexer **out_lexer_ptr, t_scan_mode mode);
-t_error	shell_get_new_scanner(t_scanner **out_scanner_ptr, t_scan_mode mode);
-t_error	shell_get_new_parser(t_parser **out_parser_ptr, t_scan_mode mode);
-t_error	shell_get_new_runner(t_runner **out_runner_ptr, t_scan_mode mode);
+t_error	shell_get_new_lexer(
+			t_lexer **out_lexer_ptr,
+			t_scan_mode mode,
+			const char *input);
+t_error	shell_get_new_scanner(
+			t_scanner **out_scanner_ptr,
+			t_scan_mode mode,
+			const char *input);
+t_error	shell_get_new_parser(
+			t_parser **out_parser_ptr,
+			t_scan_mode mode,
+			const char *input);
+t_error	shell_get_new_runner(
+			t_runner **out_runner_ptr,
+			t_scan_mode mode,
+			const char *input);
 t_error	shell_destroy_last_instance(void);
 
 // TODO: doc
@@ -93,7 +105,7 @@ t_alias		*shell_get_alias(void);
 t_history	*shell_get_history(void);
 
 // TODO: doc
-t_error	shell_get_lr_machine(const t_lr_machine **out_lr_machine_ptr);
+const t_lr_machine	*shell_get_lr_machine(void);
 
 /**
  * @brief Returns the shell name.
