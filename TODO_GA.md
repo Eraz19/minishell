@@ -46,24 +46,6 @@
 
 ---
 
-# TODO IF ON A QUE ÇA A FOUTRE
-
-- `params`:
-	- `variables`:
-		- Switch `t_vector`s to `t_hashmap`
-- `redirection`:
-	- when `filename` expands to more than one field: redirect to one file per field
-- `params`:
-	- create wrappers for `options` module API
-	- create wrappers for `cmd_cache` module API
-	- create wrappers for `fd` module API
-	- create wrappers for `signal` module API
-	- move `alias` table to `params`
-	- move `history` table to `params`
-	- move all persistent data into `params` (it should represent the shell environment)
-
----
-
 ## MATHS AND ARITHMETIC EXPANSIONS
 
 - [2.6.4 Arithmetic Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_04)

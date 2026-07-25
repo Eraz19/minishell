@@ -1,4 +1,4 @@
-#include "cmd_sub.h"
+#include "cmd.h"
 #include "cmd_substitution_.h"
 
 bool	is_cmd_substitution(t_word_item *current_item, uint flags)

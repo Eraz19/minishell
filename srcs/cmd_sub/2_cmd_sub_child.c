@@ -8,7 +8,6 @@
 #define CMD_SUB_PREFIX	"cmd sub child"
 #define SHELL_NF		"shell not found"
 
-# include <stdio.h>
 static inline void	cmd_sub_child_dup_and_close(int pipe_fds[2])
 {
 	t_error	err;

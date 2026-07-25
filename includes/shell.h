@@ -44,7 +44,7 @@ typedef enum e_subshell_mode
 /* ************************************************************************* */
 
 // TODO: doc
-void	shell_clear(t_shell *shell);
+void	shell_clear(void);
 
 /**
  * @brief Frees the current global shell instance when one is registered.

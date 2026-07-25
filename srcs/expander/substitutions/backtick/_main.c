@@ -1,4 +1,4 @@
-#include "cmd_sub.h"
+#include "cmd.h"
 #include "backtick_substitution_.h"
 
 bool	is_backtick_substitution(t_word_item *current_item, uint flags)

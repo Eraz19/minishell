@@ -3,6 +3,7 @@
 #include "shell.h"
 #include "runner.h"
 #include "utils.h"
+#include "utils.h"
 
 static inline t_error	dot_parse_args(
 							int argc,
@@ -37,17 +38,17 @@ static inline t_error	dot_search_readable_file(
 	if (str_chr(filename->data, '/') != NULL)
 	{
 		string_take_string(out_file_path, filename);
-		err = check_file(out_file_path, SEARCH_FILE_READ, &found);
+		err = file_check(out_file_path, READABLE, &found);
 		if (err.type)
 			string_free(out_file_path);
 		return (err);
 	}
 	err = params_get_from_const("PATH", &path);
 	if (err.type == ERR_VAR_NOT_FOUND)
-		err.type = ERR_FILE_NOT_FOUND;
+		err.type = ERR_POSIX_CMD_NOT_FOUND;
 	if (err.type)
 		return (err);
-	return (search_file(&path, filename, SEARCH_FILE_READ, out_file_path));
+	return (file_search(&path, filename, READABLE, out_file_path));
 }
 
 static inline t_error	dot_execute(t_string *file_path, int *status)

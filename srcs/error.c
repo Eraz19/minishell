@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdarg.h>
-# include <debug.h>	// DEBUG
+# include "debug.h"	// DEBUG
 #include <stdio.h>	// DEBUG
 #include "logs.h"
 

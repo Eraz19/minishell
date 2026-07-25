@@ -21,26 +21,36 @@ t_error	vector_deep_dup(
 
 // TODO: doc (serach_file)
 
-typedef enum e_search_file_mode
+typedef enum e_file_type
 {
-	SEARCH_FILE_EXEC,
-	SEARCH_FILE_READ
-}	t_search_file_mode;
+	EXECUTABLE,
+	READABLE
+}	t_file_type;
 
 // @ret ERR_FILE_NOT_FOUND / ERR_FILE_NOT_EXECUTABLE / ERR_FILE_NOT_READABLE
 // 		/ ERR_LIBC
-t_error	check_file(
-			const t_string *file_path,
-			t_search_file_mode mode,
-			bool *ref_found);
+t_error	file_check(const t_string *filepath, t_file_type mode, bool *ref_found);
 
 // @ret ERR_FILE_NOT_FOUND / ERR_FILE_NOT_EXECUTABLE / ERR_FILE_NOT_READABLE
 // 		/ ERR_LIBC
-t_error	search_file(
+t_error	file_search(
 			const t_string *raw_path,
 			const t_string *filename,
-			t_search_file_mode mode,
+			t_file_type mode,
 			t_string *out_file_path);
+
+/**
+ * @brief Test whether an environment entry matches a target variable name.
+ *
+ * The comparison succeeds when @p entry starts with @p target and both strings
+ * end or continue with the same character at the first differing position,
+ * which makes the helper suitable for matching @c NAME=... entries.
+ *
+ * @param target Variable name to match (borrowed, read-only).
+ * @param entry Full environment entry to inspect (borrowed, read-only).
+ * @return True when @p entry targets @p target, false otherwise.
+ */
+bool	assignment_is_same_name(const char *target, const char *entry);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

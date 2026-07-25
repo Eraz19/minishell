@@ -1,3 +1,22 @@
+# NESTED FUNCTION DECLARATION
+
+Set hashmap initial cap to 1
+```
+foo()
+{
+	nested_1() { echo 1; }
+	nested_2() { echo 2; }
+	nested_3() { echo 3; }
+	nested_4() { echo 4; }
+	nested_5() { echo 5; }
+	nested_6() { echo 6; }
+	nested_7() { echo 7; }
+	nested_8() { echo 8; }
+	nested_9() { echo 9; }
+	nested_10() { echo 10; }
+}
+```
+
 # LEXICALY ENGLOBING LOOPS
 
 ⚠️ POSIX unspecified

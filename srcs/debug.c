@@ -41,7 +41,7 @@ const char	*cmd_type_to_string(t_cmd_type type)
 }
 
 #if defined DEBUG_CST || defined DEBUG_AST
-static void	debug_dump_string_value(const t_string *value)
+static void	dump_string_value(const t_string *value)
 {
 	size_t	i;
 	char	c;
@@ -224,7 +224,7 @@ const char	*symbol_to_string(t_symbol symbol)
 /*                                   RULE                                    */
 /* ************************************************************************* */
 
-void	debug_dump_rule(t_lr_machine *machine, size_t rule_id)
+void	dump_rule(t_lr_machine *machine, size_t rule_id)
 {
 	t_rule	*rule;
 	size_t	i;
@@ -244,7 +244,7 @@ void	debug_dump_rule(t_lr_machine *machine, size_t rule_id)
 /*                                 LR_STATE                                  */
 /* ************************************************************************* */
 
-void	debug_dump_lr_state(t_lr_machine *machine, size_t lr_state_id)
+void	dump_lr_state(t_lr_machine *machine, size_t lr_state_id)
 {
 	t_lr_state		*state;
 	t_rule_state	*rule_state;
@@ -301,7 +301,7 @@ const char	*action_type_to_string(t_action_type action_type)
 /*                             PARSER ITEM STACK                             */
 /* ************************************************************************* */
 
-void	debug_dump_parser_item_stack(t_parser_item_stack *stack)
+void	dump_parser_item_stack(t_parser_item_stack *stack)
 {
 	t_parser_item	*items;
 	t_parser_item	*item;
@@ -352,7 +352,7 @@ void	debug_dump_parser_item_stack(t_parser_item_stack *stack)
 /*                              LEXER INPUT STACK                            */
 /* ************************************************************************* */
 
-static void	debug_dump_lexer_input_stack_string(const t_string *value)
+static void	dump_lexer_input_stack_string(const t_string *value)
 {
 	size_t	i;
 	char	c;
@@ -383,7 +383,7 @@ static void	debug_dump_lexer_input_stack_string(const t_string *value)
 	fprintf(stderr, "\"");
 }
 
-void	debug_dump_input_stack(t_lexer_input_stack *stack)
+void	dump_input_stack(t_lexer_input_stack *stack)
 {
 	t_lexer_input_stack_item	**items;
 	t_lexer_input_stack_item	*item;
@@ -409,7 +409,7 @@ void	debug_dump_input_stack(t_lexer_input_stack *stack)
 		{
 			fprintf(stderr, " i=%zu str={len=%zu cap=%zu data=",
 				item->i, item->str.len, item->str.cap);
-			debug_dump_lexer_input_stack_string(&item->str);
+			dump_lexer_input_stack_string(&item->str);
 			fprintf(stderr, "}\n");
 		}
 		i++;
@@ -437,7 +437,7 @@ static const char	*debug_context_to_string(t_context context)
 	}
 }
 
-void	debug_dump_context_stack(t_context_stack *stack)
+void	dump_context_stack(t_context_stack *stack)
 {
 	t_context_stack_item	**items;
 	t_context_stack_item	*item;
@@ -520,7 +520,7 @@ static inline void	cst_log_heredoc_body(t_cst_node *node)
 		return ;
 	fprintf(stderr, " heredoc_body={len=%zu cap=%zu data=",
 		node->heredoc_body.len, node->heredoc_body.cap);
-	debug_dump_string_value(&node->heredoc_body);
+	dump_string_value(&node->heredoc_body);
 	fprintf(stderr, "}");
 }
 
@@ -556,7 +556,7 @@ static void	cst_log_node(t_cst_node *node, size_t depth, bool *lasts, bool is_la
 }
 #endif
 
-void	debug_dump_cst(t_cst_node *node)
+void	dump_cst(t_cst_node *node)
 {
 #ifdef DEBUG_CST
 	bool	lasts[256];
@@ -676,7 +676,7 @@ static void	ast_log_string(const char *name, t_string *value)
 {
 	fprintf(stderr, " %s={len=%zu cap=%zu data=",
 		name, value->len, value->cap);
-	debug_dump_string_value(value);
+	dump_string_value(value);
 	fprintf(stderr, "}");
 }
 
@@ -1147,7 +1147,7 @@ static void	ast_log_command(
 }
 #endif
 
-void	debug_dump_ast(t_ast_root *root)
+void	dump_ast(t_ast_root *root)
 {
 #ifdef DEBUG_AST
 	bool	lasts[256];

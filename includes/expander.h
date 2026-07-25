@@ -80,6 +80,9 @@ typedef enum e_exp_flags
  */
 typedef t_vector	t_expansion;
 
+// vector of t_expansion
+typedef t_vector	t_expansions;
+
 /* ************************************************************************* */
 /*                                LIFE CYCLE                                 */
 /* ************************************************************************* */
@@ -91,6 +94,19 @@ typedef t_vector	t_expansion;
  * @param fields Already initialized container (borrowed).
  */
 void	fields_free(t_fields *fields);
+
+void	cmd_expansions_init(t_expansions *expansions);
+void	cmd_expansions_free(t_expansions *expansions);
+
+/* ************************************************************************* */
+/*                                   FLAGS                                   */
+/* ************************************************************************* */
+
+t_exp_flag	expansion_flags_regular(void);
+t_exp_flag	expansion_flags_assignment(void);
+t_exp_flag	expansion_flags_case(void);
+t_exp_flag	expansion_flags_redirection(void);
+t_exp_flag	expansion_flags_heredoc_body(void);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

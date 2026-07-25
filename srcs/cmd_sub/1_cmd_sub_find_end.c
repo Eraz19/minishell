@@ -1,8 +1,6 @@
 #include "cmd_sub.h"
-#include "ast.h"
 #include "parser.h"
 #include "shell.h"
-# include <stdio.h>
 # include "logs.h"
 
 t_error	cmd_sub_find_end(ssize_t *out_closing_token_id, t_ast_vector *ast_vector)
@@ -12,7 +10,7 @@ t_error	cmd_sub_find_end(ssize_t *out_closing_token_id, t_ast_vector *ast_vector
 	t_error		err;
 
 	fprintf(stderr, YELLOW "################# CMD SUB PARSING ################\n" NC);
-	err = shell_get_new_parser(&parser, SCAN_MODE_CMD_SUB);
+	err = shell_get_new_parser(&parser, SCAN_MODE_CMD_SUB, NULL);
 	if (err.type)
 	{
 		fprintf(stderr, YELLOW "##################################################\n" NC);

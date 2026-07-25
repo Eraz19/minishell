@@ -24,6 +24,8 @@ t_token	*parser_get_token(const t_parser *parser, size_t index);
 void	parser_take_token(t_parser *parser, size_t index, t_token *dst);
 
 // @ret ERR_PARSER_INVALID_STATE / ERR_PARSER_EMPTY_GOTO / ERR_LIBC
-t_error	parser_can_next_token_be_a_cmd_name_or_word(const t_parser *parser, bool *dst);
+t_error	parser_can_next_token_be_a_cmd_name_or_word(
+			const t_parser *parser,
+			bool *dst);
 
 #endif
