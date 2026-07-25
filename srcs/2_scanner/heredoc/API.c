@@ -86,7 +86,7 @@ t_error	heredoc_prepare_for_expansion(
 	t_lexer					*lexer;
 	t_string				lexer_body;
 
-	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING);
+	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING, body->data);
 	if (err.type)
 		return (err);
 	err = lexer_remove_escaped_newlines(lexer, body, body_context_rules());

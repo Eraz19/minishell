@@ -34,4 +34,5 @@ t_error	backtick_substitution(t_expander *expander);
  * @param flags Active expansion flags.
  */
 bool	is_backtick_substitution(t_word_item *current_item, uint flags);
+
 #endif

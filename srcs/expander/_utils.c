@@ -59,7 +59,7 @@ t_error	prepare_str_for_expansion(
 	t_lexer		*lexer;
 	t_string	lexer_src;
 
-	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING);
+	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING, src->data);
 	if (err.type)
 		return (err);
 	err = lexer_remove_escaped_newlines(lexer, src, str_context_rules());

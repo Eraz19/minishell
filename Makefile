@@ -40,8 +40,6 @@ SRCS			:= \
 	$(wildcard srcs/0_utils/*/*.c) \
 	$(wildcard srcs/0_utils/*/*/*.c) \
 	$(wildcard srcs/1_shell/*.c) \
-	$(wildcard srcs/lexer/*.c) \
-	$(wildcard srcs/lexer/*/*.c) \
 	$(wildcard srcs/2_scanner/*.c) \
 	$(wildcard srcs/2_scanner/*/*.c) \
 	$(wildcard srcs/2_scanner/*/*/*.c) \
@@ -51,7 +49,6 @@ SRCS			:= \
 	$(wildcard srcs/3_builder/*/*/*/*.c) \
 	$(wildcard srcs/4_runner/*.c) \
 	$(wildcard srcs/4_runner/0_cmd_expansion/*.c) \
-	$(wildcard srcs/4_runner/0_xtrace/*.c) \
 	$(wildcard srcs/4_runner/1_walker/*.c) \
 	$(wildcard srcs/4_runner/1_walker/*/*.c) \
 	$(wildcard srcs/4_runner/2_preparator/*.c) \
@@ -64,12 +61,17 @@ SRCS			:= \
 	$(wildcard srcs/builtins/*/*.c) \
 	$(wildcard srcs/cmd/*.c) \
 	$(wildcard srcs/cmd/*/*.c) \
+	$(wildcard srcs/cmd_sub/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
 	$(wildcard srcs/expander/*/*/*.c) \
 	$(wildcard srcs/expander/*/*/*/*.c) \
 	$(wildcard srcs/history/*.c) \
 	$(wildcard srcs/history/*/*.c) \
+	$(wildcard srcs/lexer/*.c) \
+	$(wildcard srcs/lexer/*/*.c) \
+	$(wildcard srcs/lr_machine/*.c) \
+	$(wildcard srcs/lr_machine/*/*.c) \
 	$(wildcard srcs/params/*.c) \
 	$(wildcard srcs/params/*/*.c) \
 	$(wildcard srcs/params/*/*/*.c) \
@@ -97,26 +99,12 @@ INCLUDES		:= \
 	-Isrcs/0_utils/file \
 	-Isrcs/0_utils/ft_getpwnam \
 	-Isrcs/1_shell \
-	-Isrcs/lexer \
-	-Isrcs/lexer/context \
-	-Isrcs/lexer/input_stack \
 	-Isrcs/2_scanner \
 	-Isrcs/2_scanner/recognition \
 	-Isrcs/2_scanner/recognition/operator \
 	-Isrcs/2_scanner/reader \
 	-Isrcs/2_scanner/heredoc \
 	-Isrcs/2_scanner/heredoc/body \
-	-Isrcs/3_builder/1_lr_machine \
-	-Isrcs/3_builder/1_lr_machine/1_hooks \
-	-Isrcs/3_builder/1_lr_machine/2_symbols \
-	-Isrcs/3_builder/1_lr_machine/3_rules \
-	-Isrcs/3_builder/1_lr_machine/4_first \
-	-Isrcs/3_builder/1_lr_machine/5_rule_state \
-	-Isrcs/3_builder/1_lr_machine/6_lr_state \
-	-Isrcs/3_builder/1_lr_machine/7_transition \
-	-Isrcs/3_builder/1_lr_machine/8_goto \
-	-Isrcs/3_builder/1_lr_machine/9_action \
-	-Isrcs/3_builder/1_lr_machine/10_qualifiers \
 	-Isrcs/3_builder/1_parser \
 	-Isrcs/3_builder/0_cst \
 	-Isrcs/3_builder/1_parser/1_item_stack \
@@ -125,9 +113,9 @@ INCLUDES		:= \
 	-Isrcs/3_builder/2_converter/1_redirection \
 	-Isrcs/4_runner \
 	-Isrcs/4_runner/0_cmd_expansion \
-	-Isrcs/4_runner/0_xtrace \
 	-Isrcs/4_runner/1_walker \
-	-Isrcs/4_runner/1_walker/pipeline \
+	-Isrcs/4_runner/1_walker/0_xtrace \
+	-Isrcs/4_runner/1_walker/walk_pipeline \
 	-Isrcs/4_runner/2_preparator \
 	-Isrcs/4_runner/2_preparator/1_resolve \
 	-Isrcs/4_runner/2_preparator/2_assign \
@@ -144,7 +132,7 @@ INCLUDES		:= \
 	-Isrcs/cmd \
 	-Isrcs/cmd/cmd_execute \
 	-Isrcs/cmd/cmd_search \
-	-Isrcs/cmd/cmd_sub \
+	-Isrcs/cmd_sub \
 	-Isrcs/expander \
 	-Isrcs/expander/expansion \
 	-Isrcs/expander/field \
@@ -171,6 +159,20 @@ INCLUDES		:= \
 	-Isrcs/history/file \
 	-Isrcs/history/list \
 	-Isrcs/history/readline \
+	-Isrcs/lexer \
+	-Isrcs/lexer/context \
+	-Isrcs/lexer/input_stack \
+	-Isrcs/lr_machine \
+	-Isrcs/lr_machine/1_hooks \
+	-Isrcs/lr_machine/2_symbols \
+	-Isrcs/lr_machine/3_rules \
+	-Isrcs/lr_machine/4_first \
+	-Isrcs/lr_machine/5_rule_state \
+	-Isrcs/lr_machine/6_lr_state \
+	-Isrcs/lr_machine/7_transition \
+	-Isrcs/lr_machine/8_goto \
+	-Isrcs/lr_machine/9_action \
+	-Isrcs/lr_machine/10_qualifiers \
 	-Isrcs/params/1_options \
 	-Isrcs/params/2_specials \
 	-Isrcs/params/3_positionals \

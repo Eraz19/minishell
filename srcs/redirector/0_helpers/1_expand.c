@@ -1,6 +1,5 @@
 #include "redirector_priv.h"
 #include "expander.h"
-#include "cmd_expansion.h"
 
 #define CITATION_1		"POSIX 2.10.2: The expansions specified in 2.7 "
 #define CITATION_2		"Redirection shall occur. As specified there, exactly "

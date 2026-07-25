@@ -7,7 +7,7 @@
 #include "rule_state_type.h"
 #include "parser_item_stack_type.h"
 #include "cst_type.h"
-#include "cmd_type.h"
+#include "cmd.h"
 #include "ast.h"
 #include "heredoc.h"
 #include "logs.h"
