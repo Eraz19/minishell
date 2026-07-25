@@ -53,7 +53,8 @@ static inline t_error	env_exec(int argc, char **argv, t_vector *env, int *status
 	cmd.argv.data = argv;
 	vector_take(&cmd.envp, env);
 	err = cmd_execute(&cmd, true, status);
-	return (cmd_finalize_and_free(&cmd, err, status));
+	cmd_free(&cmd);
+	return (err);
 }
 
 t_error	builtin_env(int argc, char **argv, char **envp, int *status)

@@ -9,7 +9,7 @@ static inline t_error	cmd_qualify_error(t_cmd *cmd, t_error err, int *status)
 	int		signo;
 	t_error	option_err;
 
-	(void)error_print(err, NULL, NULL);
+	(void)error_print(err, cmd->name.data, NULL, NULL);
 	if (err.type == ERR_INTERRUPTED)
 	{
 		if (sig_has_pending_trap(&signo))
