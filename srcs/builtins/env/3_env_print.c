@@ -9,7 +9,7 @@ t_error	env_print(t_vector *envp, int *exit_status)
 	t_error	err;
 
 	i = 0;
-	while (i < envp->len)
+	while (i < envp->len - 1)
 	{
 		entry = ((char **)envp->data)[i];
 		err = posix_write(STDOUT_FILENO, entry, str_len(entry));

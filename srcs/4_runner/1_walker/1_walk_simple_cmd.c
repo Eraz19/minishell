@@ -2,6 +2,7 @@
 #include "cmd.h"
 #include "redirector.h"
 #include "xtrace.h"
+#include "logs.h"
 
 static inline t_error	walk_simple_cmd_exec(
 							t_cmd *cmd,
@@ -20,7 +21,10 @@ static inline t_error	walk_simple_cmd_exec(
 		return (error_priorize(err, redirect_stop()));
 	}
 	else if (type == CMD_SPECIAL_BUILTIN)
+	{
+		fprintf(stderr, MAGENTA "############## SPECIAL BUILTIN %s (START) ##############\n" NC, cmd->name.data);
 		err = cmd->entry.data.special_builtin(cmd->argc, cmd->argv.data, runner, status);
+	}
 	else
 		err = walk_function(cmd, runner, status);
 	err = error_priorize(err, redirect_stop());

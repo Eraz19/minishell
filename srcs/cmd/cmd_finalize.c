@@ -34,8 +34,9 @@ static inline t_error	cmd_qualify_error(t_cmd *cmd, t_error err, int *status)
 t_error	cmd_finalize(t_cmd *cmd, t_error err, int *exit_status)
 {
 	/* ---------- DEBUG (START) ---------- */
-	int		initial_exit_status;
-	t_error	initial_error;
+	int			initial_exit_status;
+	t_error		initial_error;
+	const char	*prefix;
 
 	initial_exit_status = *exit_status;
 	initial_error = err;
@@ -45,10 +46,20 @@ t_error	cmd_finalize(t_cmd *cmd, t_error err, int *exit_status)
 	if (err.type && error_is_flow_control(err) == false)
 		err = cmd_qualify_error(cmd, err, exit_status);
 	/* ---------- DEBUG (START) ---------- */
-	fprintf(stderr, MAGENTA "##################################################\n" NC);
+	if (cmd->entry.type == CMD_BUILTIN)
+		prefix = "BUILTIN ";
+	else if (cmd->entry.type == CMD_SPECIAL_BUILTIN)
+		prefix = "SPECIAL BUILTIN ";
+	else if (cmd->entry.type == CMD_EXTERNAL)
+		prefix = "EXTERNAL ";
+	else
+		prefix = "";
+	if (cmd->entry.type == CMD_NONE)
+		fprintf(stderr, MAGENTA "############## %s%s (START) ##############\n" NC, prefix, cmd->name.data);
+	fprintf(stderr, MAGENTA "############## %s%s (STOP) ###############\n" NC, prefix, cmd->name.data);
 	fprintf(stderr, "[CMD   ] type        => %s\n", cmd_type_to_string(cmd->entry.type));
 	fprintf(stderr, "[CMD   ] exit_status => %i => %i\n", initial_exit_status, *exit_status);
-	fprintf(stderr, "[CMD   ] error       = %s => %s\n", error_to_string(initial_error), error_to_string(err));
+	fprintf(stderr, "[CMD   ] error       => %s => %s\n", error_to_string(initial_error), error_to_string(err));
 	/* ---------- DEBUG (END) ---------- */
 	sig_process();
 	return (err);

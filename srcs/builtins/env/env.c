@@ -49,6 +49,7 @@ static inline t_error	env_exec(int argc, char **argv, t_vector *env, int *status
 
 	cmd_init(&cmd);
 	cmd.name.data = argv[0];
+	cmd.name.len = str_len(argv[0]);
 	cmd.argc = argc;
 	cmd.argv.data = argv;
 	vector_take(&cmd.envp, env);
@@ -66,14 +67,15 @@ t_error	builtin_env(int argc, char **argv, char **envp, int *status)
 	t_error		err;
 
 	err = env_parse_args(argc, argv, &i_is_active, &first_operand_index);
-	if (err.type == ERR_NO)
-		err = env_init_envp(envp, i_is_active, &env);
 	if (err.type)
 		return (builtin_print_and_qualify(argv[0], err, false, status));
 	utility_i = (int)first_operand_index;
 	while (utility_i < argc && str_chr(argv[utility_i], '=') != NULL)
 		utility_i++;
-	err = env_update_envp(
+	if (i_is_active == true)
+		envp = NULL;
+	err = env_build_envp(
+			envp,
 			argv + first_operand_index,
 			utility_i - first_operand_index,
 			&env);
