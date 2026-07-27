@@ -13,16 +13,16 @@ void	var_free_one(void *var)
 
 	assert(var != NULL);
 	var_casted = (t_var *)var;
-	string_free(&var_casted->name);
 	string_free(&var_casted->value);
 	var_casted->export = false;
 	var_casted->readonly = false;
+	free(var);
 }
 
 void	var_init(t_var_list *variables)
 {
 	assert(variables != NULL);
-	vector_init(variables, sizeof(t_var), 0);
+	(void)hashmap_init(variables, 0, var_free_one);
 }
 
 t_error	var_load(t_var_list *variables, char **envp)
@@ -48,11 +48,11 @@ t_error	var_load(t_var_list *variables, char **envp)
 void	var_clear(t_var_list *variables)
 {
 	assert(variables != NULL);
-	vector_clear(variables, var_free_one);
+	hashmap_clear(variables);
 }
 
 void	var_free(t_var_list *variables)
 {
 	assert(variables != NULL);
-	vector_free(variables, var_free_one);
+	hashmap_free(variables);
 }

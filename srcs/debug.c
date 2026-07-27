@@ -1,4 +1,5 @@
 #include "debug.h"
+#include "shell.h"
 #include "symbols_type.h"
 #include "action_type.h"
 #include "token.h"
@@ -15,6 +16,67 @@
 #include "lexer.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include "variables_priv.h"
+#include <stdlib.h>
+# include <assert.h>	// DEBUG
+
+/* ************************************************************************* */
+/*                                 VARIABLES                                 */
+/* ************************************************************************* */
+
+static inline void	dump_var_one_priv(const char *name, const t_var *var)
+{
+	const char	*value;
+
+	if (var->value.data)
+		value = var->value.data;
+	else
+		value = "(NULL)";
+	fprintf(stderr, "VAR name='%s' value='%s' exported=%s readonly=%s\n",
+		name,
+		value,
+		bool_to_string(var->export),
+		bool_to_string(var->readonly));
+}
+
+void	dump_var_one(const char *name)
+{
+	t_params 	*params;
+	const t_var	*value;
+
+	assert(name != NULL);
+	params = shell_get_params();
+	assert(params != NULL);
+	value = hashmap_get_const(&params->variables, name);
+	if (value == NULL)
+		fprintf(stderr, "VAR '%s' is not set.\n", name);
+	else
+		dump_var_one_priv(name, value);
+}
+
+void	dump_variables(void)
+{
+	t_params 			*params;
+	const t_key_value	**list;
+	size_t				i;
+
+	fprintf(stderr, "\nDUMP VARIABLES\n");
+	params = shell_get_params();
+	assert(params != NULL);
+	list = hashmap_get_all(&params->variables);
+	if (list == NULL)
+	{
+		(void)error_print(error_sys(), __func__, NULL, NULL);
+		return ;
+	}
+	i = 0;
+	while (list[i] != NULL)
+	{
+		dump_var_one_priv(list[i]->key, list[i]->value);
+		i++;
+	}
+	free(list);
+}
 
 /* ************************************************************************* */
 /*                                 INSTANCE                                  */

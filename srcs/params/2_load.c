@@ -69,7 +69,7 @@ t_error	params_load(t_params *params, int argc, char **argv, char **envp)
 		return (err);
 #ifdef DDEBUG_PARAMS
 	/* ---------- DEBUG: START ---------- */
-	var_dump();
+	dump_variables();
 	options_dump();
 	specials_dump();
 	positionals_dump();

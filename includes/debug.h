@@ -34,5 +34,6 @@ void		dump_scanner_instance(t_scanner *scanner);
 void		dump_parser_instance(t_parser *parser);
 void		dump_runner_instance(t_runner *runner);
 void		dump_shell_instance(t_runner *runner, const char *caller);
+void		dump_var_one(const char *name);
 
 #endif

@@ -10,24 +10,20 @@ t_error	var_unset(const t_string *name)
 {
 	t_params	*params;
 	t_var_list	*list;
-	size_t		var_index;
-	t_var		*var;
+	const t_var	*var;
 
 	assert(name != NULL);
 	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	params = shell_get_params();
-	if (!params)
-		return (error(ERR_SHELL_NOT_FOUND));
+	assert(params != NULL);
 	list = &params->variables;
-	if (!var_find(list, name, &var_index))
+	var = hashmap_get(list, name->data);
+	if (var == NULL)
 		return (error(ERR_NO));
-	var = &((t_var *)list->data)[var_index];
 	if (var->readonly)
 		return (error(ERR_VAR_READ_ONLY));
-	var_free_one(var);
-	if (!vector_remove(list, var_index, NULL))
-		return (error(ERR_INDEX_OUT_OF_BOUND));
+	(void)hashmap_remove(list, name->data);
 	if (str_cmp(name->data, "PATH") == 0)
 		cmd_cache_clear(&params->cmd_cache);
 	return (error(ERR_NO));

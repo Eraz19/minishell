@@ -9,10 +9,7 @@
 /*                                   TYPES                                   */
 /* ************************************************************************* */
 
-/**
- * @brief Variable list stored as a vector of @ref t_var entries.
- */
-typedef t_vector	t_var_list;
+typedef t_hashmap	t_var_list;
 
 /**
  * @enum e_var_print_mode
@@ -88,8 +85,7 @@ t_error	var_build_envp(const t_var_list *variables, t_vector *dst_envp);
  *
  * @param name Variable name (borrowed, read-only).
  * @param dst_val Initialized destination string (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_NOT_FOUND
- *         or @c ERR_LIBC.
+ * @return @c ERR_VAR_INVALID_NAME, @c ERR_VAR_NOT_FOUND or @c ERR_LIBC.
  */
 t_error	var_get(const t_string *name, t_string *dst_val);
 
@@ -123,8 +119,7 @@ bool	var_is_readonly(const t_var_list *variables, const char *name);
  * @brief Print variables in export or readonly format.
  *
  * @param mode Output mode.
- * @return @c ERR_SHELL_NOT_FOUND, @c ERR_INTERRUPTED, @c ERR_POSIX_WRITE
- *			or @c ERR_LIBC.
+ * @return @c ERR_POSIX_WRITE or @c ERR_LIBC.
  */
 t_error	var_print(t_var_print_mode mode);
 
@@ -152,18 +147,8 @@ t_error	var_set(
  * @brief Remove a variable by name.
  *
  * @param name Variable name (borrowed, read-only).
- * @return @c ERR_SHELL_NOT_FOUND, @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY
- *         or @c ERR_INDEX_OUT_OF_BOUND.
+ * @return @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY.
  */
 t_error	var_unset(const t_string *name);
-
-/* ************************************************************************* */
-/*                                   DEBUG                                   */
-/* ************************************************************************* */
-
-/**
- * @brief Dump the variable list to stderr.
- */
-void	var_dump(void);
 
 #endif

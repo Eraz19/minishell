@@ -43,23 +43,5 @@
 	- add doc + `make doc` / `github action`
 	- **include** prototype header
 	- ⚠️ don't call `undefined_behaviour()` when it's `unspecified`
-
----
-
-## MATHS AND ARITHMETIC EXPANSIONS
-
-- [2.6.4 Arithmetic Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_04)
-- [1.1.2.1 Arithmetic Precision and Operations](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_01)
-- [1.1.2.2 Mathematical Functions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_02)
-
----
-
-# BEFORE SUBMIT
-
-- delete `assert()` calls
-- delete `logs` lib
-- delete `printf()` calls
-- delete `*_dump.c` files and `*_dump()` functions
-- delete `debug.h` and `debug.c`
-- delete all `DEBUG` sections
-- check all `TODO` comments
+- 😂 `redirection`:
+	- when `filename` expands to more than one field: redirect to one file per field
