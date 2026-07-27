@@ -1,3 +1,63 @@
+# `-e` OPTION
+
+```bash
+echo "$(false)"
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+! true
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+false && echo no
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+true && false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+false || echo survived && false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+f()
+{
+    false
+    echo SHOULD NOT HAVE SURVIVED
+}
+
+f
+```
+
+```bash
+f()
+{
+    false
+    echo survived
+}
+
+f || echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+false && echo no
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
 # NESTED FUNCTION DECLARATION
 
 Set hashmap initial cap to 1

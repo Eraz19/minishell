@@ -10,10 +10,14 @@ t_error	walk_pipeline(
 			t_ast_pipeline *pipeline,
 			int *exit_status)
 {
+	bool	old_errexit_ignored;
 	t_error	err;
 
 	assert(pipeline->commands.len > 0);
 	*exit_status = -1;
+	old_errexit_ignored = runner->errexit_ignored;
+	if (pipeline->negated == true)
+		runner->errexit_ignored = true;
 	if (pipeline->commands.len == 1)
 		err = walk_pipe_single_command(runner, pipeline, exit_status);
 	else
@@ -22,5 +26,6 @@ t_error	walk_pipeline(
 		*exit_status = (int)err.type;
 	fprintf(stderr, "%s[WALKER] $? = %i%s\n", YELLOW, *exit_status, NC);
 	params_set_last_status(*exit_status);
+	runner->errexit_ignored = old_errexit_ignored;
 	return (err);
 }

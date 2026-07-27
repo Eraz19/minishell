@@ -6,6 +6,15 @@
 #include <stdlib.h>
 # include <assert.h>
 
+/*
+après chaque and_or exécuté :
+    si -e actif
+    && errexit_ignored == 0
+    && status != 0
+    && dernier pipeline exécuté non negated
+        quitter l’environnement courant
+*/
+
 static inline t_error	walk_and_or_async(
 							t_runner *runner,
 							t_ast_and_or *and_or,

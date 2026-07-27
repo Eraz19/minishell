@@ -2,6 +2,21 @@
 #include "walker_priv.h"
 # include <assert.h>
 
+static inline t_error	walk_if_condition(
+							t_runner *runner,
+							t_ast_list *condition,
+							int *exit_status)
+{
+	bool	old_errexit_ignored;
+	t_error	err;
+
+	old_errexit_ignored = runner->errexit_ignored;
+	runner->errexit_ignored = true;
+	err = walk_list(runner, condition, exit_status);
+	runner->errexit_ignored = old_errexit_ignored;
+	return (err);
+}
+
 t_error	walk_if(t_runner *runner, t_ast_if *if_node, int *exit_status)
 {
 	size_t		i;
@@ -15,7 +30,7 @@ t_error	walk_if(t_runner *runner, t_ast_if *if_node, int *exit_status)
 	while (i < if_node->conditions.len)
 	{
 		condition = &((t_ast_list *)if_node->conditions.data)[i];
-		err = walk_list(runner, condition, exit_status);
+		err = walk_if_condition(runner, condition, exit_status);
 		if (err.type)
 			return (err);
 		else if (*exit_status == 0)

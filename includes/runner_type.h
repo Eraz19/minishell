@@ -12,6 +12,7 @@ typedef struct s_runner
 	t_cmd_cache		*cmd_cache;		// borrowed
 	size_t			loop_depth;
 	size_t			control_depth;
+	bool			errexit_ignored;
 	struct s_runner	*parent;
 	struct s_runner	*child;
 }	t_runner;

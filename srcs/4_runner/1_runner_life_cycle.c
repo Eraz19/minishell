@@ -8,6 +8,7 @@ void	runner_init(t_runner *runner)
 	runner->cmd_cache = NULL;
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
+	runner->errexit_ignored = false;
 	runner->child = NULL;
 	runner->parent = NULL;
 }
@@ -46,6 +47,7 @@ void	runner_clear(t_runner *runner)
 	parser_clear(&runner->parser);
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
+	runner->errexit_ignored = false;
 }
 
 void	runner_free(t_runner *runner)
@@ -56,6 +58,7 @@ void	runner_free(t_runner *runner)
 	parser_free(&runner->parser);
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
+	runner->errexit_ignored = false;
 }
 
 void	runner_free_void(void *runner)

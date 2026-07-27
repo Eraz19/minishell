@@ -1,6 +1,21 @@
 #include "error.h"
 #include "walker_priv.h"
 
+static inline t_error	walk_loop_condition(
+							t_runner *runner,
+							t_ast_list *condition,
+							int *exit_status)
+{
+	bool	old_errexit_ignored;
+	t_error	err;
+
+	old_errexit_ignored = runner->errexit_ignored;
+	runner->errexit_ignored = true;
+	err = walk_list(runner, condition, exit_status);
+	runner->errexit_ignored = old_errexit_ignored;
+	return (err);
+}
+
 static inline bool	walk_loop_must_execute(
 						t_runner *runner,
 						t_ast_loop *loop,
@@ -12,7 +27,7 @@ static inline bool	walk_loop_must_execute(
 		return (false);
 	while (true)
 	{
-		*err = walk_list(runner, &loop->condition, &status);
+		*err = walk_loop_condition(runner, &loop->condition, &status);
 		if (walk_loop_must_continue(runner, err) == false)
 			break ;
 	}
