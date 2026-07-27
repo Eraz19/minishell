@@ -7,7 +7,7 @@
 void	shell_init(t_shell *shell)
 {
 	shell->is_subshell = false;
-	params_init(&shell->params);
+	env_init(&shell->params);
 	lr_machine_init(&shell->machine);
 	history_init(&shell->history);
 	alias_init(&shell->alias);
@@ -22,7 +22,7 @@ void	shell_clear(void)
 	shell = shell_get();
 	assert(shell != NULL);
 	shell->is_subshell = false;
-	params_clear(&shell->params);
+	env_clear(&shell->params);
 	alias_clear(&shell->alias);
 	if (shell->runner != NULL)
 		runner_free(shell->runner);
@@ -30,7 +30,7 @@ void	shell_clear(void)
 
 void	shell_free(t_shell *shell)
 {
-	params_free(&shell->params);
+	env_free(&shell->params);
 	lr_machine_free(&shell->machine);
 	history_free(&shell->history);
 	alias_free(&shell->alias);

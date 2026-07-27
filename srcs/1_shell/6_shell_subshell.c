@@ -52,7 +52,7 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 	job_control = option_is_active_in(shell->params.options, OPT_MONITOR);
 	shell->is_subshell = true;
 	async_no_job_ctrl = mode == SUBSHELL_ASYNC_AND_OR && !job_control;
-	params_init_subshell(&shell->params, async_no_job_ctrl);
+	env_init_subshell(&shell->params, async_no_job_ctrl);
 	if (async_no_job_ctrl)
 	{
 		err = shell_set_stdin_to_dev_null();

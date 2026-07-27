@@ -1,4 +1,4 @@
-#include "params.h"
+#include "env.h"
 #include "param_braced_.h"
 
 t_error	braced_use_value(
@@ -64,7 +64,7 @@ t_error	braced_assign(
 	expander->err = braced_operand_str(expander, operand, &operand_str);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = params_set_variable(name, &operand_str, false, false);
+	expander->err = env_set_variable(name, &operand_str, false, false);
 	if (expander->err.type == ERR_VAR_READ_ONLY)
 		expander->err = error_print(expander->err, name->data, NULL, NULL);
 	if (expander->err.type)

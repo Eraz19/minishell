@@ -1,6 +1,6 @@
 #include "builtins.h"
 #include "scanner.h"
-#include "params.h"
+#include "env.h"
 #include "runner.h"
 #include "shell.h"
 
@@ -58,7 +58,7 @@ t_error	builtin_eval(int argc, char **argv, t_runner *runner, int *exit_status)
 	string_free(&cmd);
 	if (err.type)
 		return (error_print(err, argv[0], NULL, NULL));
-	err = params_get_last_status(exit_status);
+	err = env_get_last_status(exit_status);
 	if (err.type)
 		return (error_print(err, argv[0], NULL, NULL));
 	return (err);

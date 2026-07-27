@@ -1,4 +1,4 @@
-#include "params.h"
+#include "env.h"
 #include "param_braced_.h"
 
 static t_word_item_opt	braced_result_opt(t_word_item_opt in)
@@ -38,7 +38,7 @@ t_error	braced_expect_close(t_expander *expander)
 
 t_error	braced_lookup(t_expander *expander, const t_string *name, t_string *out)
 {
-	expander->err = params_get_from_const(name->data, out);
+	expander->err = env_get_from_const(name->data, out);
 	if (expander->err.type == ERR_VAR_NOT_FOUND)
 	{
 		if (!string_init(out, 0, "", -1))

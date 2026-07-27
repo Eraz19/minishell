@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include "error.h"
 #include "libft.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 #include "posix_helpers.h"
 
@@ -71,7 +71,7 @@ static t_error	pwd_resolve(char mode, t_string *path)
 
 	if (mode == 'L')
 	{
-		err = params_get_from_const("PWD", path);
+		err = env_get_from_const("PWD", path);
 		if (err.type == ERR_NO && path->len > 0 && path->data[0] == '/'
 			&& !pwd_has_dot_component(path->data)
 			&& pwd_names_cwd(path->data))

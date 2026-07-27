@@ -129,7 +129,7 @@ void	scanner_free(t_scanner *scanner);
 /* ************************************************************************* */
 
 // TODO: doc
-void	scanner_set_input(t_scanner *scanner, const char *input);
+void	scanner_bind_input(t_scanner *scanner, const char *input);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

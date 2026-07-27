@@ -1,4 +1,4 @@
-#include "params.h"
+#include "env.h"
 #include "scanner.h"
 #include "expander_.h"
 #include "expansion_.h"
@@ -83,7 +83,7 @@ t_error	get_ifs(t_string *ifs)
 	t_error	err;
 
 	string_init(ifs, 0, NULL, 0);
-	err = params_get_from_const("IFS", ifs);
+	err = env_get_from_const("IFS", ifs);
 	if (err.type != ERR_NO && err.type != ERR_VAR_NOT_FOUND)
 		return (string_free(ifs), err);
 	if (err.type == ERR_VAR_NOT_FOUND)

@@ -1,5 +1,5 @@
 #include "builtins.h"
-#include "params.h"
+#include "env.h"
 
 #define TOO_MANY_ARGS	"too many arguments"
 #define NOT_UINT		"is not an unsigned decimal integer"
@@ -51,7 +51,7 @@ static inline t_error	return_no_arg(int *exit_status)
 {
 	t_error	err;
 
-	err = params_get_last_status(exit_status);
+	err = env_get_last_status(exit_status);
 	if (err.type)
 	{
 		*exit_status = (int)err.type;

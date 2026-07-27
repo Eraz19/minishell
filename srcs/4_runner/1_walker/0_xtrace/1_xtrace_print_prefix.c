@@ -1,5 +1,5 @@
 #include "xtrace_priv.h"
-#include "params.h"
+#include "env.h"
 #include "posix_helpers.h"
 #include <unistd.h>
 
@@ -7,7 +7,7 @@ static inline t_error	xtrace_get_prefix(t_string *out_prefix)
 {
 	t_error	err;
 
-	err = params_get_from_const("PS4", out_prefix);
+	err = env_get_from_const("PS4", out_prefix);
 	if (err.type == ERR_VAR_NOT_FOUND)
 	{
 		if (!string_init(out_prefix, 1, "", 0))

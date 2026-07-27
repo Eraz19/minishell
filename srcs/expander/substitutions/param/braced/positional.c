@@ -1,4 +1,4 @@
-#include "params.h"
+#include "env.h"
 #include "param_braced_.h"
 #include "param_expansion_.h"
 
@@ -92,7 +92,7 @@ static t_error	braced_positional_op(
 	if (braced_expect_close(expander).type
 		|| word_remove(&expander->word, 0, 1).type)
 		return (word_free(&positional_exp->operand_word), expander->err);
-	expander->err = params_get_positionals(&params);
+	expander->err = env_get_positionals(&params);
 	if (expander->err.type)
 		return (word_free(&positional_exp->operand_word), expander->err);
 	(void)colon;

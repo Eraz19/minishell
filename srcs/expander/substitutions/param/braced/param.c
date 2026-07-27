@@ -1,4 +1,4 @@
-#include "params.h"
+#include "env.h"
 #include "param_braced_.h"
 #include "param_expansion_.h"
 
@@ -9,7 +9,7 @@ static t_error	braced_param_state(
 					bool *is_set)
 {
 	*is_set = true;
-	expander->err = params_get_from_const(name->data, value);
+	expander->err = env_get_from_const(name->data, value);
 	if (expander->err.type == ERR_VAR_NOT_FOUND)
 	{
 		*is_set = false;

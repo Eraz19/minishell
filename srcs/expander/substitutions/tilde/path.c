@@ -1,5 +1,5 @@
 #include "utils.h"
-#include "params.h"
+#include "env.h"
 #include "expander_.h"
 #include "tilde_expansion_.h"
 
@@ -64,7 +64,7 @@ t_error	resolve_path(
 			return (expander->err = error_sys());
 		return (*ok = true, expander->err);
 	}
-	expander->err = params_get_from_const("HOME", &home);
+	expander->err = env_get_from_const("HOME", &home);
 	if (expander->err.type == ERR_VAR_NOT_FOUND)
 		return (expander->err = error(ERR_NO));
 	if (expander->err.type)

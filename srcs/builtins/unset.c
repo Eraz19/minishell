@@ -1,5 +1,5 @@
 #include "builtins.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 #include <stdbool.h>
 
@@ -66,7 +66,7 @@ static t_error	unset_var(size_t first_operand_index, int argc, char **argv)
 		tmp.data = argv[i];
 		tmp.len = (str_len(tmp.data));
 		tmp.cap = 0;
-		last_exit_status = params_unset_variable(&tmp);
+		last_exit_status = env_unset_variable(&tmp);
 		if (last_exit_status.type != ERR_NO)
 		{
 			exit_status = error_print(
@@ -87,7 +87,7 @@ static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 	i = (int)first_operand_index;
 	while (i < argc)
 	{
-		last_exit_status = params_unset_function(argv[i]);
+		last_exit_status = env_unset_function(argv[i]);
 		if (last_exit_status.type != ERR_NO)
 		{
 			exit_status = error_print(

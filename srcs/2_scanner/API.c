@@ -86,7 +86,7 @@ t_error	scanner_lexer_continuation(t_lexer *lexer)
 	return (lexer->err);
 }
 
-void	scanner_set_input(t_scanner *scanner, const char *input)
+void	scanner_bind_input(t_scanner *scanner, const char *input)
 {
 	lexer_clear(&scanner->lexer);
 	scanner->source = input;

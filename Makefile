@@ -63,6 +63,11 @@ SRCS			:= \
 	$(wildcard srcs/cmd/*.c) \
 	$(wildcard srcs/cmd/*/*.c) \
 	$(wildcard srcs/cmd_sub/*.c) \
+	$(wildcard srcs/env/*.c) \
+	$(wildcard srcs/env/*/*.c) \
+	$(wildcard srcs/env/*/*/*.c) \
+	$(wildcard srcs/env/*/*/*/*.c) \
+	$(wildcard srcs/env/*/*/*/*/*.c) \
 	$(wildcard srcs/expander/*.c) \
 	$(wildcard srcs/expander/*/*.c) \
 	$(wildcard srcs/expander/*/*/*.c) \
@@ -73,11 +78,6 @@ SRCS			:= \
 	$(wildcard srcs/lexer/*/*.c) \
 	$(wildcard srcs/lr_machine/*.c) \
 	$(wildcard srcs/lr_machine/*/*.c) \
-	$(wildcard srcs/params/*.c) \
-	$(wildcard srcs/params/*/*.c) \
-	$(wildcard srcs/params/*/*/*.c) \
-	$(wildcard srcs/params/*/*/*/*.c) \
-	$(wildcard srcs/params/*/*/*/*/*.c) \
 	$(wildcard srcs/redirector/*.c) \
 	$(wildcard srcs/redirector/*/*.c)
 
@@ -121,8 +121,6 @@ INCLUDES		:= \
 	-Isrcs/4_runner/2_preparator/1_resolve \
 	-Isrcs/4_runner/2_preparator/2_assign \
 	-Isrcs/4_runner/2_preparator/3_dispatch \
-	-Isrcs/alias \
-	-Isrcs/alias/stack \
 	-Isrcs/ast \
 	-Isrcs/builtins \
 	-Isrcs/builtins/0_error \
@@ -134,6 +132,28 @@ INCLUDES		:= \
 	-Isrcs/cmd/cmd_execute \
 	-Isrcs/cmd/cmd_search \
 	-Isrcs/cmd_sub \
+	-Isrcs/env/1_options \
+	-Isrcs/env/2_specials \
+	-Isrcs/env/3_positionals \
+	-Isrcs/env/4_variables \
+	-Isrcs/env/4_variables/load \
+	-Isrcs/env/4_variables/load/1_envp \
+	-Isrcs/env/4_variables/load/2_mandatory \
+	-Isrcs/env/4_variables/load/2_mandatory/ft_getppid \
+	-Isrcs/env/4_variables/load/3_up \
+	-Isrcs/env/5_functions \
+	-Isrcs/env/6_process \
+	-Isrcs/env/6_process/process \
+	-Isrcs/env/7_cmd_cache \
+	-Isrcs/env/8_fds \
+	-Isrcs/env/8_fds/1_stack_and_frame \
+	-Isrcs/env/8_fds/2_fd_tracker \
+	-Isrcs/env/9_signal \
+	-Isrcs/env/9_signal/sig_action \
+	-Isrcs/env/10_alias \
+	-Isrcs/env/10_alias/1_alias_table \
+	-Isrcs/env/10_alias/2_alias_stack \
+	-Isrcs/env/10_alias/3_alias_forbidden \
 	-Isrcs/expander \
 	-Isrcs/expander/expansion \
 	-Isrcs/expander/field \
@@ -174,24 +194,6 @@ INCLUDES		:= \
 	-Isrcs/lr_machine/8_goto \
 	-Isrcs/lr_machine/9_action \
 	-Isrcs/lr_machine/10_qualifiers \
-	-Isrcs/params/1_options \
-	-Isrcs/params/2_specials \
-	-Isrcs/params/3_positionals \
-	-Isrcs/params/4_variables \
-	-Isrcs/params/4_variables/load \
-	-Isrcs/params/4_variables/load/1_envp \
-	-Isrcs/params/4_variables/load/2_mandatory \
-	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
-	-Isrcs/params/4_variables/load/3_up \
-	-Isrcs/params/5_functions \
-	-Isrcs/params/6_process \
-	-Isrcs/params/6_process/process \
-	-Isrcs/params/7_cmd_cache \
-	-Isrcs/params/8_fds \
-	-Isrcs/params/8_fds/1_stack_and_frame \
-	-Isrcs/params/8_fds/2_fd_tracker \
-	-Isrcs/params/9_signal \
-	-Isrcs/params/9_signal/sig_action \
 	-Isrcs/redirector
 
 OBJ_DIR			:= obj

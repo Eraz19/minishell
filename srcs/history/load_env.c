@@ -1,4 +1,4 @@
-#include "params.h"
+#include "env.h"
 #include "history.h"
 #include "history_.h"
 # include "logs.h"	// DEBUG
@@ -10,7 +10,7 @@ t_error	history_load_path_env(t_history *state)
 	
 	module = "history";
 	err_message = "no valid history file path found";
-	state->err = params_get_from_const("HISTFILE", &state->file.path);
+	state->err = env_get_from_const("HISTFILE", &state->file.path);
 	if (state->err.type == ERR_NO && state->file.path.len > 0)
 	{
 		print_pass("history file path from $HISTFILE       '%s%s%s'\n", BLUE, state->file.path.data, GREY);
@@ -18,7 +18,7 @@ t_error	history_load_path_env(t_history *state)
 	}
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
-	state->err = params_get_from_const("HOME", &state->file.path);
+	state->err = env_get_from_const("HOME", &state->file.path);
 	if (state->err.type == ERR_NO && state->file.path.len > 0)
 	{
 		if (!string_append_n(&state->file.path, "/.sh_history", -1))
@@ -37,7 +37,7 @@ t_error	history_load_size_env(t_history *state)
 	long		max;
 	t_string	max_str;
 
-	state->err = params_get_from_const("HISTSIZE", &max_str);
+	state->err = env_get_from_const("HISTSIZE", &max_str);
 	if (state->err.type && state->err.type != ERR_VAR_NOT_FOUND)
 		return (state->err);
 	if (state->err.type == ERR_VAR_NOT_FOUND || max_str.len == 0)

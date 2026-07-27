@@ -1,6 +1,6 @@
 #include "walker.h"
 #include "walker_priv.h"
-#include "params.h"
+#include "env.h"
 #include "redirector.h"
 # include "debug.h"
 # include <assert.h>
@@ -27,7 +27,7 @@ static inline t_error	walk_command_dispatch(
 		return (walk_case(runner, &command->data.case_clause, exit_status));
 	else if (command->type == AST_CMD_FUNCTION_DEF)
 	{
-		err = params_set_function(&command->data.function_def);
+		err = env_set_function(&command->data.function_def);
 		if (err.type == ERR_NO)
 			*exit_status = 0;
 		return (err);

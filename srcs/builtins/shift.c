@@ -1,5 +1,5 @@
 #include "builtins.h"
-#include "params.h"
+#include "env.h"
 
 #define TOO_MANY_ARGS	"too many arguments"
 #define NOT_UINT		"is not an unsigned decimal integer"
@@ -46,7 +46,7 @@ static inline t_error	shift_n(
 {
 	t_error	err;
 
-	err = params_shift_positionals((size_t)n);
+	err = env_shift_positionals((size_t)n);
 	if (err.type == ERR_NO)
 		return (*exit_status = 0, err);
 	if (err.type == ERR_SHIFT_INVALID_VALUE)

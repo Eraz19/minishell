@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include "cd_.h"
-#include "params.h"
+#include "env.h"
 #include "posix_helpers.h"
 
 static t_error	cd_set_var(const char *name, const t_string *value)
@@ -11,7 +11,7 @@ static t_error	cd_set_var(const char *name, const t_string *value)
 
 	if (!string_init(&name_str, 0, name, -1))
 		return (error_sys());
-	err = params_set_variable(&name_str, value, true, false);
+	err = env_set_variable(&name_str, value, true, false);
 	return (string_free(&name_str), err);
 }
 
@@ -84,7 +84,7 @@ t_error	cd_apply(t_cd_args *args, const char *utility)
 	t_string	oldpwd;
 	t_error		err;
 
-	err = params_get_from_const("PWD", &oldpwd);
+	err = env_get_from_const("PWD", &oldpwd);
 	if (err.type == ERR_VAR_NOT_FOUND)
 	{
 		err = error(ERR_NO);

@@ -1,7 +1,7 @@
 #include "builtins.h"
 #include <unistd.h>
 #include "cd_.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 #include <signal.h>
 
@@ -38,7 +38,7 @@ t_error	cd_from_var(const char *utility, const char *name, t_string *dir)
 {
 	t_error	err;
 
-	err = params_get_from_const(name, dir);
+	err = env_get_from_const(name, dir);
 	if (err.type == ERR_NO && dir->len == 0)
 	{
 		string_free(dir);

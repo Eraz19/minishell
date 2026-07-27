@@ -1,6 +1,6 @@
 #include <sys/stat.h>
 #include "cd_.h"
-#include "params.h"
+#include "env.h"
 
 bool	cd_is_directory(const char *path)
 {
@@ -60,7 +60,7 @@ static t_error	cd_search_cdpath(t_cd_args *args, const t_string *dir,
 	size_t		start;
 
 	*found = false;
-	err = params_get_from_const("CDPATH", &cdpath);
+	err = env_get_from_const("CDPATH", &cdpath);
 	if (err.type == ERR_VAR_NOT_FOUND)
 		return (error(ERR_NO));
 	if (err.type)

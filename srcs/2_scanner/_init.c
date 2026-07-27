@@ -1,7 +1,7 @@
 #include "scanner.h"
 #include "scanner_.h"
 #include "reader_.h"
-#include "params.h"
+#include "env.h"
 #include <readline/readline.h>
 
 void	scanner_init(t_scanner *scanner)
@@ -31,7 +31,7 @@ t_error	scanner_load(
 	if (mode == SCAN_MODE_CMD_SUB)
 		return (scanner->err = lexer_input_stack_dup(&scanner->lexer.input_stack,
 								&scanner->parent_scanner->lexer.input_stack));
-	err = params_get_source(&source);
+	err = env_get_source(&source);
 	if (err.type)
 		return (scanner->err = scanner_error_qualify(err, false));
 	rl_catch_signals = 0;

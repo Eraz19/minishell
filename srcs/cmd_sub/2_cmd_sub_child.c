@@ -50,7 +50,7 @@ void	cmd_sub_child_string(const t_string *cmd_string, int pipe_fds[2])
 	shell_destroy_last_instance();
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	err = params_get_last_status(&exit_status);
+	err = env_get_last_status(&exit_status);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
 	exit(exit_status);
@@ -73,7 +73,7 @@ void	cmd_sub_child_ast(t_ast_root *ast_root, int pipe_fds[2])
 	shell_destroy_last_instance();
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	err = params_get_last_status(&exit_status);
+	err = env_get_last_status(&exit_status);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
 	exit(exit_status);

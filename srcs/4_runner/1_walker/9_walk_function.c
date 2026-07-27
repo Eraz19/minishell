@@ -1,6 +1,6 @@
 #include "walker.h"
 #include "redirector.h"
-#include "params.h"
+#include "env.h"
 # include "logs.h"
 
 static inline t_error	walk_function_add_positional(
@@ -37,7 +37,7 @@ static inline t_error	walk_function_update_positionals(t_cmd *cmd)
 		i++;
 	}
 	if (err.type == ERR_NO)
-		err = params_push_positionals(&positionals);
+		err = env_push_positionals(&positionals);
 	if (err.type)
 		vector_free(&positionals, string_free_void);
 	return (err);
@@ -54,14 +54,14 @@ t_error	walk_function(t_cmd *cmd, t_runner *runner, int *status)
 		return (err);
 	err = redirect_start(&function->redirs, status);
 	if (err.type)
-		return (error_priorize(err, params_pop_positionals()));
+		return (error_priorize(err, env_pop_positionals()));
 	fprintf(stderr, YELLOW "############## FUNCTION %s (START) ##############\n" NC, cmd->name.data);
 	err = walk_command(runner, &function->body, status);
 	fprintf(stderr, YELLOW "############## FUNCTION %s (STOP) ###############\n" NC, cmd->name.data);
 	if (err.type == ERR_RETURN)
 		err.type = ERR_NO;
 	err = error_priorize(err, redirect_stop());
-	err = error_priorize(err, params_pop_positionals());
-	params_stop_function(&function);
+	err = error_priorize(err, env_pop_positionals());
+	env_stop_function(&function);
 	return (err);
 }

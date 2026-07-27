@@ -1,7 +1,7 @@
 #include "cmd.h"
 #include "cmd_assign_priv.h"
 #include "expander.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 
 static inline t_error	cmd_assignment_build_envp(t_cmd *cmd)
@@ -13,7 +13,7 @@ static inline t_error	cmd_assignment_build_envp(t_cmd *cmd)
 		(void)vector_init(&cmd->envp, sizeof(char *), 0);
 		return (error(ERR_NO));
 	}
-	return (params_build_envp(&cmd->envp));
+	return (env_build_envp(&cmd->envp));
 }
 
 static inline t_error	cmd_assignment_finalize_envp(t_vector *envp)

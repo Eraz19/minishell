@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include "set_.h"
-#include "params.h"
+#include "env.h"
 #include "ft_getopt.h"
 
 bool	set_named_option(size_t i, const char **name, t_option *bit)
@@ -77,7 +77,7 @@ t_error	set_apply_options(t_getopt_out *out, size_t argc, char **argv)
 		{
 			err = set_option_bit(&opt, &bit);
 			if (err.type == ERR_NO)
-				err = params_set_option(bit, opt.sign == '-');
+				err = env_set_option(bit, opt.sign == '-');
 		}
 		if (err.type)
 			return (err);

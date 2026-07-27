@@ -1,6 +1,6 @@
 #include "builtins.h"
 #include "libft.h"
-#include "params.h"
+#include "env.h"
 
 static inline t_error	builtin_wait_one(char *name, char *arg, int *status)
 {
@@ -9,7 +9,7 @@ static inline t_error	builtin_wait_one(char *name, char *arg, int *status)
 
 	if (ft_isdigit(arg[0]) == false || parse_int(arg, &pid) == false)
 		return (error_print(error(ERR_PID_INVALID), name, arg, NULL, NULL));
-	err = params_wait(pid, status);
+	err = env_wait(pid, status);
 	if (err.type && err.type != ERR_INTERRUPTED)
 		return (error_print(err, name, arg, NULL, NULL));
 	return (err);
@@ -42,7 +42,7 @@ static inline t_error	builtin_wait_all(const char *name, int *exit_status)
 {
 	t_error	err;
 
-	err = params_wait_all(exit_status);
+	err = env_wait_all(exit_status);
 	if (err.type == ERR_INTERRUPTED)
 		err.type = ERR_NO;
 	if (err.type)

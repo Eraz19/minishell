@@ -36,7 +36,7 @@ static inline t_error	walk_and_or_async(
 		shell_free_void();
 		exit(status);
 	}
-	err = params_register_process(pid);
+	err = env_register_process(pid);
 	*exit_status = 0;
 	return (err);
 }

@@ -1,6 +1,6 @@
 #include "runner_priv.h"
 #include "parser.h"
-#include "params.h"
+#include "env.h"
 # include "logs.h"	// DEBUG
 # include <stdio.h>	// DEBUG
 
@@ -16,7 +16,7 @@ static inline void	runner_handle_syntax_errors(
 						bool interactive)
 {
 	*err = error_print(*err, NULL, NULL);
-	(void)params_set_last_status((int)err->type);
+	(void)env_set_last_status((int)err->type);
 	if (interactive == true)
 	{
 		parser_clear(&runner->parser);
@@ -27,7 +27,7 @@ static inline void	runner_handle_syntax_errors(
 static inline void	runner_handle_read_errors(t_error *err)
 {
 	*err = error_print(*err, NULL, NULL);
-	(void)params_set_last_status((int)err->type);
+	(void)env_set_last_status((int)err->type);
 }
 
 static inline void	runner_handle_bad_errors(t_error *err, bool interactive)

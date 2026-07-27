@@ -1,4 +1,4 @@
-#include "params.h" 
+#include "env.h" 
 #include "param_expansion_.h"
 
 t_error	expand_positional_single(t_expander *expander, t_word_item_opt opt)
@@ -10,7 +10,7 @@ t_error	expand_positional_single(t_expander *expander, t_word_item_opt opt)
 	expander->err = get_param_name(expander, &param_name, false);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = params_get_from_const(param_name.data, &param_exp);
+	expander->err = env_get_from_const(param_name.data, &param_exp);
 	if (expander->err.type != ERR_NO && expander->err.type != ERR_VAR_NOT_FOUND)
 		return (string_free(&param_name), expander->err);
 	expander->err = error(ERR_NO);

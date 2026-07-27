@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include "params.h"
+#include "env.h"
 #include "posix_helpers.h"
 
 t_error	cd_print_new(void)
@@ -7,7 +7,7 @@ t_error	cd_print_new(void)
 	t_string	pwd;
 	t_error		err;
 
-	err = params_get_from_const("PWD", &pwd);
+	err = env_get_from_const("PWD", &pwd);
 	if (err.type)
 		return (err);
 	if (!string_append_n(&pwd, "\n", 1))

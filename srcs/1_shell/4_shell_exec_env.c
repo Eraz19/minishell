@@ -1,5 +1,5 @@
 #include "shell_priv.h"
-#include "params.h"
+#include "env.h"
 #include "asm_stubs.h"
 #include "expander.h"
 #include "runner.h"
@@ -46,7 +46,7 @@ static inline t_error	shell_get_raw_env_path(
 	t_error	err;
 
 	*has_env = false;
-	err = params_get_from_const(ENV_NAME, out_raw_env);
+	err = env_get_from_const(ENV_NAME, out_raw_env);
 	if (err.type == ERR_VAR_NOT_FOUND)
 	{
 		print_warn("no ENV file to execute                       => %sENV execution skipped%s\n", YELLOW, NC);

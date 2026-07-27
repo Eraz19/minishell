@@ -1,7 +1,7 @@
 #include "builtins.h"
 #include "error.h"
 #include "libft.h"
-#include "params.h"
+#include "env.h"
 #include <signal.h>
 
 #define EXIT_CIT_START	"POSIX: exit: DESCRIPTION: If n is specified and "
@@ -65,7 +65,7 @@ t_error	builtin_exit(int argc, char **argv, t_runner *runner, int *exit_status)
 		first_operand_index = 2;
 	if (first_operand_index >= argc)
 	{
-		err = params_get_last_status(exit_status);
+		err = env_get_last_status(exit_status);
 		if (err.type)
 		{
 			(void)error_print(err, NULL, NULL);

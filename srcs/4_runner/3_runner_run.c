@@ -2,7 +2,7 @@
 #include "runner.h"
 #include "runner_priv.h"
 #include "walker.h"
-#include "params.h"
+#include "env.h"
 #include "parser.h"
 #include "sig.h"
 #include <stdbool.h>
@@ -23,7 +23,7 @@ static inline t_error	runner_loop_cycle(t_runner *runner, t_ast_root *ast_root)
 		err = walk(runner, ast_root);
 	if (err.type == ERR_NO)
 		err = sig_process();
-	return (error_priorize(err, params_reap()));
+	return (error_priorize(err, env_reap()));
 }
 
 /*
@@ -62,7 +62,7 @@ t_error	runner_run_ast(t_runner *runner, t_ast_root *ast_root)
 		err = walk(runner, ast_root);
 	if (err.type == ERR_NO)
 		err = sig_process();
-	err = error_priorize(err, params_reap());
+	err = error_priorize(err, env_reap());
 	runner_handle_error(runner, &err);
 	return (err);
 }

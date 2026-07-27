@@ -44,7 +44,7 @@ t_error	parser_load(
 	parser->cmd_sub_end_index = -1;
 	err = scanner_load(&parser->scanner, parent_scanner, parser, mode);
 	if (err.type == ERR_NO && input != NULL)
-		scanner_set_input(&parser->scanner, input);
+		scanner_bind_input(&parser->scanner, input);
 	return (err);
 }
 

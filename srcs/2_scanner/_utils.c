@@ -33,7 +33,7 @@ static t_error	scanner_dup_command_input(
 t_error	scanner_read_input(t_scanner *scanner) 
 {
 	t_lexer_input_stack_item	*item;
-	bool						is_interactive;
+	// bool						is_interactive;
 
 	scanner->err = lexer_input_stack_item_init(&item);
 	if (scanner->err.type)
@@ -47,12 +47,12 @@ t_error	scanner_read_input(t_scanner *scanner)
 	}
 	else if (scanner->mode == SCAN_MODE_STDIN)
 	{
-		scanner->err = option_is_active(OPT_INTERACTIVE, &is_interactive);		
-		if (scanner->err.type)
-			return (lexer_input_stack_item_free(&item), scanner->err);
-		if (!is_interactive)
-			scanner->err = scanner_stdin_input(&item->str);
-		else
+		// scanner->err = option_is_active(OPT_INTERACTIVE, &is_interactive);		
+		// if (scanner->err.type)
+		// 	return (lexer_input_stack_item_free(&item), scanner->err);
+		// if (!is_interactive)
+		// 	scanner->err = scanner_stdin_input(&item->str);
+		// else
 			scanner->err = reader_new_input(&item->str);
 	}
 	if (scanner->err.type)

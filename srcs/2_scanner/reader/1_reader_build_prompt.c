@@ -1,6 +1,6 @@
 #include "libft.h"
 #include "shell.h"
-#include "params.h"
+#include "env.h"
 #include "history.h"
 #include "expander.h"
 #include "reader_.h"
@@ -60,7 +60,7 @@ t_error	reader_build_prompt(const char *name, t_string *dst)
 	int			exit_status;
 
 	string_init(dst, 0, NULL, 0);
-	err = params_get_from_const(name, &value);
+	err = env_get_from_const(name, &value);
 	if (err.type == ERR_VAR_NOT_FOUND)
 		return (error(ERR_NO));
 	if (err.type)

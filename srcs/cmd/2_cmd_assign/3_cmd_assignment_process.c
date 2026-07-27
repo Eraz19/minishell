@@ -1,5 +1,5 @@
 #include "cmd_assign_priv.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 #include "xtrace.h"
 #include <stdlib.h>
@@ -87,7 +87,7 @@ t_error	cmd_assignment_process(
 		err = cmd_assignment_split(expanded, offset, &name, &value);
 		if (err.type)
 			return (string_free(expanded), err);
-		err = params_set_variable(&name, &value, false, false);
+		err = env_set_variable(&name, &value, false, false);
 		string_free(expanded);
 		return (string_free(&name), string_free(&value), err);
 	}

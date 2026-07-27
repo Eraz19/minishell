@@ -1,5 +1,5 @@
 #include "runner.h"
-#include "params.h"
+#include "env.h"
 #include "parser.h"
 
 void	runner_init(t_runner *runner)
@@ -29,7 +29,7 @@ t_error	runner_load(
 		parent_runner->child = runner;
 		runner->parent = parent_runner;
 	}
-	err = params_get_cmd_cache(&runner->cmd_cache);
+	err = env_get_cmd_cache(&runner->cmd_cache);
 	if (err.type)
 		return (err);
 	if (parent_runner == NULL)

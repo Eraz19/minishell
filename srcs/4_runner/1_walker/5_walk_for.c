@@ -1,7 +1,7 @@
 #include "error.h"
 #include "walker_priv.h"
 #include "expander.h"
-#include "params.h"
+#include "env.h"
 
 static inline t_error	walk_for_expand_default_word(
 							t_expansion *expansions,
@@ -69,7 +69,7 @@ static inline t_error	walk_for_word_list(
 	while (i < expansion->len)
 	{
 		word = &((t_string *)expansion->data)[i++];
-		err = params_set_variable(
+		err = env_set_variable(
 				&for_clause->var_name.value, word, false, false);
 		if (err.type == ERR_NO)
 			err = walk_list(runner, &for_clause->body, exit_status);

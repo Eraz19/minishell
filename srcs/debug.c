@@ -21,6 +21,138 @@
 # include <assert.h>	// DEBUG
 
 /* ************************************************************************* */
+/*                                    ENV                                    */
+/* ************************************************************************* */
+
+static void	dump_env_scalar(const t_string *name)
+{
+	t_string	value;
+	t_error		err;
+
+	assert(name != NULL);
+	assert(name->len > 0);
+	err = env_get(name, &value);
+	if (err.type != ERR_NO)
+	{
+		fprintf(stderr, "PARAMS '%s'=[ERROR: '%s']\n", name->data, error_to_string(err));
+		return ;
+	}
+	if (value.data)
+	{
+		fprintf(stderr, "PARAMS '%s'='%s'\n", name->data, value.data);
+		string_free(&value);
+	}
+	else
+		fprintf(stderr, "PARAMS '%s'=NULL\n", name->data);
+}
+
+static void	dump_env_scalar_cst(const char *name_cst)
+{
+	t_string	value;
+	t_error		err;
+
+	assert(name_cst != NULL);
+	assert(name_cst[0] != '\0');
+	err = env_get_from_const(name_cst, &value);
+	if (err.type != ERR_NO)
+	{
+		fprintf(stderr, "PARAMS '%s'=[ERROR: '%s']\n", name_cst, error_to_string(err));
+		return ;
+	}
+	if (value.data)
+	{
+		fprintf(stderr, "PARAMS '%s'='%s'\n", name_cst, value.data);
+		string_free(&value);
+	}
+	else
+		fprintf(stderr, "PARAMS '%s'=NULL\n", name_cst);
+}
+
+static void	dump_env_variables(void)
+{
+	t_shell 	*shell;
+	t_var_list	*var_list;
+	t_var		*var;
+	size_t		i;
+
+	shell = shell_get();
+	if (!shell)
+		error_print(error(ERR_SHELL_NOT_FOUND), "dump_env_variables()", NULL, NULL);
+	var_list = &shell->params.variables;
+	i = 0;
+	while (i < var_list->len)
+	{
+		var = &((t_var *)var_list->data)[i];
+		dump_env_scalar(&var->name);
+		i++;
+	}
+}
+
+static void	dump_env_options(void)
+{
+	dump_env_scalar_cst("-");
+}
+
+static void	dump_env_specials(void)
+{
+	dump_env_scalar_cst("0");
+	dump_env_scalar_cst("$");
+	dump_env_scalar_cst("!");
+	dump_env_scalar_cst("?");
+}
+
+static void	dump_env_positionals(void)
+{
+	t_shell		*shell;
+	t_error		err;
+	t_string	name_string;
+	t_string	count_s;
+	size_t		count;
+	size_t		i;
+	char		*name;
+
+	shell = shell_get();
+	if (!shell)
+	{
+		error_print(error(ERR_SHELL_NOT_FOUND), "dump_env_positionals()", NULL, NULL);
+		return ;
+	}
+	string_init(&name_string, 0, "#", -1);
+	err = positionals_get_one(&shell->params.positionals_stack, &name_string, &count_s);
+	string_free(&name_string);
+	if (err.type != ERR_NO)
+	{
+		error_print(err, "dump_env_positionals()", NULL, NULL);
+		return ;
+	}
+	count = ft_atozu(count_s.data);
+	string_free(&count_s);
+	i = 1;
+	while (i <= count)
+	{
+		name = ft_zutoa(i);
+		if (!name)
+		{
+			error_print(error_sys(), "dump_env_positionals()", NULL, NULL);
+			break ;
+		}
+		dump_env_scalar_cst(name);
+		free(name);
+		i++;
+	}
+	dump_env_scalar_cst("#");
+}
+
+void	dump_env(void)
+{
+	fprintf(stderr, "\nDUMP PARAMS\n");
+	dump_env_variables();
+	dump_env_options();
+	dump_env_specials();
+	dump_env_positionals();
+}
+
+/* ************************************************************************* */
 /*                                 VARIABLES                                 */
 /* ************************************************************************* */
 

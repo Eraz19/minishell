@@ -1,5 +1,5 @@
 #include "expander.h"
-#include "params.h"
+#include "env.h"
 
 #define NO_FIELD		"converts 0 field into empty field"
 #define MULTIPLE_FIELDS	"merging fields with first IFS character"
@@ -17,7 +17,7 @@ static inline t_error	expansion_get_ifs_first_char(char *out, bool *sep)
 	t_error		err;
 
 	(void)string_init(&ifs, 0, NULL, 0);
-	err = params_get_from_const("IFS", &ifs);
+	err = env_get_from_const("IFS", &ifs);
 	if (err.type == ERR_VAR_NOT_FOUND)
 	{
 		*out = ' ';

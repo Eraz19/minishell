@@ -43,7 +43,7 @@ static inline t_error	dot_search_readable_file(
 			string_free(out_file_path);
 		return (err);
 	}
-	err = params_get_from_const("PATH", &path);
+	err = env_get_from_const("PATH", &path);
 	if (err.type == ERR_VAR_NOT_FOUND)
 		err.type = ERR_POSIX_CMD_NOT_FOUND;
 	if (err.type)
@@ -64,7 +64,7 @@ static inline t_error	dot_execute(t_string *file_path, int *status)
 	string_free(file_path);
 	if (err.type)
 		return (err);
-	return (params_get_last_status(status));
+	return (env_get_last_status(status));
 }
 
 t_error	builtin_dot(int argc, char **argv, t_runner *runner, int *status)

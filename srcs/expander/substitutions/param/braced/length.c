@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "params.h"
+#include "env.h"
 #include "param_braced_.h"
 #include "param_expansion_.h"
 
@@ -27,7 +27,7 @@ static t_error	braced_count(t_expander *expander, t_word_item_opt opt)
 
 	if (braced_expect_close(expander).type)
 		return (expander->err);
-	expander->err = params_get_from_const("#", &count);
+	expander->err = env_get_from_const("#", &count);
 	if (expander->err.type)
 		return (expander->err);
 	if (count.data == NULL && !string_init(&count, 0, "0", -1))

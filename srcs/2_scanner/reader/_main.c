@@ -6,7 +6,7 @@
 #include "reader_.h"
 #include "history.h"
 #include "posix_helpers.h"
-#include "params.h"
+#include "env.h"
 
 t_error	reader_new_input(t_string *res)
 {
@@ -76,12 +76,12 @@ static t_error	reader_open_source(const char *path, int *fd)
 	if (err.saved_errno == ENOENT)
 	{
 		err.type = ERR_POSIX_CMD_NOT_FOUND;
-		err = error_priorize(err, params_set_last_status((int)err.type));
+		err = error_priorize(err, env_set_last_status((int)err.type));
 	}
 	else
 	{
 		err.type = ERR_POSIX_CMD_NOT_EXECUTABLE;
-		err = error_priorize(err, params_set_last_status((int)err.type));
+		err = error_priorize(err, env_set_last_status((int)err.type));
 	}
 	return (err);
 }

@@ -1,14 +1,14 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include "cd_.h"
-#include "params.h"
+#include "env.h"
 
 static t_error	cd_prepend_pwd(t_cd_args *args)
 {
 	t_string	pwd;
 	t_error		err;
 
-	err = params_get_from_const("PWD", &pwd);
+	err = env_get_from_const("PWD", &pwd);
 	if (err.type)
 		return (err);
 	if ((pwd.len == 0 || pwd.data[pwd.len - 1] != '/')

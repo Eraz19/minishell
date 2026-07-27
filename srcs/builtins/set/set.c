@@ -1,6 +1,6 @@
 #include "builtins.h"
 #include "set_.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 
 static t_error	set_process_options(int argc, char **argv, t_getopt_out *out)
@@ -59,7 +59,7 @@ static t_error	set_assign_positionals(size_t first, int argc, char **argv)
 		}
 		i++;
 	}
-	err = params_replace_positionals(&positionals);
+	err = env_replace_positionals(&positionals);
 	if (err.type)
 		vector_free(&positionals, string_free_void);
 	return (err);
@@ -85,7 +85,7 @@ t_error	builtin_set(int argc, char **argv, t_runner *runner, int *exit_status)
 
 	(void)runner;
 	if (argc == 1)
-		err = params_print(PARAMS_PRINT_SET);
+		err = env_print(ENV_PRINT_SET);
 	else
 	{
 		err = set_process_options(argc, argv, &out);

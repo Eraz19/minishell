@@ -5,6 +5,7 @@
 - Lorsqu'on requalifie une erreur, il faut utiliser `err.type = ...` et non pas `err = error(...)` sinon on perd le `err.printed` et on risque un double print de l'erreur.
 - Tous les builtins doivent utiliser `ft_getopt()` s'ils acceptent au moins une option, sinon ils doivent au moins gérer le `--`.
 - Tous les builtins doivent utiliser `builtin_print_and_qualify()` pour print / requalifier leurs erreurs avant de retourner.
+- Tous les noms de fonctions doivent contenir un verbe qui explicite clairement ce qu'elles font.
 
 # PROMPT
 

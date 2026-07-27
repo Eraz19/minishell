@@ -1,5 +1,5 @@
 #include "builtins.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 #include <stdlib.h>
 
@@ -63,7 +63,7 @@ static t_error	readonly_add_one(const char *builtin_name, const char *string)
 		err = error_print(err, builtin_name, string, NULL, NULL);
 	if (err.type)
 		return (err);
-	err = params_set_variable(&name, &value, false, true);
+	err = env_set_variable(&name, &value, false, true);
 	string_free(&name);
 	string_free(&value);
 	return (err);
@@ -96,7 +96,7 @@ t_error	builtin_readonly(int argc, char **argv, t_runner *runner, int *exit_stat
 	(void)runner;
 	err = readonly_process_options(argc, argv, &out);
 	if (err.type == ERR_NO && out.options.len > 0)
-		err = params_print(PARAMS_PRINT_READONLY);
+		err = env_print(ENV_PRINT_READONLY);
 	else if (err.type == ERR_NO)
 		err = readonly_add(out.first_operand_index, argc, argv);
 	*exit_status = (int)err.type;

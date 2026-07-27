@@ -3,7 +3,7 @@
 #include <readline/readline.h>
 #include "libft.h"
 #include "reader_.h"
-#include "params.h"
+#include "env.h"
 #include "sig.h"
 #include <signal.h>
 #include <sys/ioctl.h>
@@ -60,10 +60,10 @@ static inline t_error	reader_process_rl(
 	if (sig_int_is_pending() == true)
 	{
 		*out_retry = true;
-		err = params_set_last_status(ERR_POSIX_SIGNAL_BASE_CODE + SIGINT);
+		err = env_set_last_status(ERR_POSIX_SIGNAL_BASE_CODE + SIGINT);
 	}
 	else if (sig_has_pending_trap(&signo))
-		err = params_set_last_status(ERR_POSIX_SIGNAL_BASE_CODE + signo);
+		err = env_set_last_status(ERR_POSIX_SIGNAL_BASE_CODE + signo);
 	if (err.type)
 		return (err);
 	return (sig_process());

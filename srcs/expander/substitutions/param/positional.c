@@ -1,4 +1,4 @@
-#include "params.h"
+#include "env.h"
 #include "param_expansion_.h"
 
 t_error	append_param_as_field(
@@ -59,7 +59,7 @@ t_error	expand_positional_star(t_expander *expander, t_word_item_opt opt)
 	t_word				word_exp;
 	t_string			param_exp;
 
-	expander->err = params_get_positionals(&params);
+	expander->err = env_get_positionals(&params);
 	if (expander->err.type)
 		return (expander->err);
 	if (expander->ifs.len == 0)
@@ -87,7 +87,7 @@ t_error	expand_positional_at(t_expander *expander, t_word_item_opt opt)
 	const t_positionals	*params;
 	t_word				word_exp;
 
-	expander->err = params_get_positionals(&params);
+	expander->err = env_get_positionals(&params);
 	if (expander->err.type)
 		return (expander->err);
 	if (params->len == 0 && opt.quoted == CONTEXT_DQUOTE)

@@ -1,5 +1,5 @@
 #include "cmd_search_priv.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 
 t_error	cmd_search_try_cache(
@@ -11,7 +11,7 @@ t_error	cmd_search_try_cache(
 	bool			found;
 	t_error			err;
 
-	err = params_get_cmd_cache(&cmd_cache);
+	err = env_get_cmd_cache(&cmd_cache);
 	if (err.type == ERR_NO)
 		err = cmd_cache_get(cmd_cache, cmd_name, &cmd_path_from_cache);
 	if (err.type)

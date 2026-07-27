@@ -1,5 +1,5 @@
 #include "cmd_assign_priv.h"
-#include "params.h"
+#include "env.h"
 
 t_error	cmd_assignment_check(const t_token *token)
 {
@@ -9,7 +9,7 @@ t_error	cmd_assignment_check(const t_token *token)
 
 	c = token->value.data[token->assignment_offset];
 	token->value.data[token->assignment_offset] = '\0';
-	err = params_is_readonly(token->value.data, &is_readonly);
+	err = env_is_readonly(token->value.data, &is_readonly);
 	if (err.type == ERR_NO && is_readonly == true)
 	{
 		err = error(ERR_VAR_READ_ONLY);

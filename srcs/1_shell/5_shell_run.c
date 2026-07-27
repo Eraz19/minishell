@@ -60,7 +60,7 @@ static inline int	shell_exec(t_shell *shell)
 	err = history_save();
 	if (err.type)
 		(void)error_print(err, "history", NULL, NULL);
-	return (params_get_last_status_from(&shell->params));
+	return (env_get_last_status_from(&shell->params));
 }
 
 int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)

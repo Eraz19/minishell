@@ -1,5 +1,5 @@
 #include "cmd_search_priv.h"
-#include "params.h"
+#include "env.h"
 #include "utils.h"
 
 #define PATH_TARGET				"PATH="
@@ -53,7 +53,7 @@ t_error	cmd_search_try_envp_path(
 	out_entry_point->type = CMD_EXTERNAL;
 	if (path_is_temporary == false)
 	{
-		err = params_get_cmd_cache(&cmd_cache);
+		err = env_get_cmd_cache(&cmd_cache);
 		if (err.type == ERR_NO)
 			err = cmd_cache_set(cmd_cache, cmd_name, &out_entry_point->data.cmd_path);
 		if (err.type)
