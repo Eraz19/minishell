@@ -57,23 +57,33 @@ void	shell_free_void(void);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-t_error	shell_get_new_lexer(
+#define shell_get_new_lexer(out_lexer_ptr, mode, input) shell_get_new_lexer_priv(out_lexer_ptr, mode, input, __func__)
+#define shell_get_new_scanner(out_scanner_ptr, mode, input) shell_get_new_scanner_priv(out_scanner_ptr, mode, input, __func__)
+#define shell_get_new_parser(out_parser_ptr, mode, input) shell_get_new_parser_priv(out_parser_ptr, mode, input, __func__)
+#define shell_get_new_runner(out_runner_ptr, mode, input) shell_get_new_runner_priv(out_runner_ptr, mode, input, __func__)
+#define shell_destroy_last_instance() shell_destroy_last_instance_priv(__func__)
+
+t_error	shell_get_new_lexer_priv(
 			t_lexer **out_lexer_ptr,
 			t_scan_mode mode,
-			const char *input);
-t_error	shell_get_new_scanner(
+			const char *input,
+			const char *caller);
+t_error	shell_get_new_scanner_priv(
 			t_scanner **out_scanner_ptr,
 			t_scan_mode mode,
-			const char *input);
-t_error	shell_get_new_parser(
+			const char *input,
+			const char *caller);
+t_error	shell_get_new_parser_priv(
 			t_parser **out_parser_ptr,
 			t_scan_mode mode,
-			const char *input);
-t_error	shell_get_new_runner(
+			const char *input,
+			const char *caller);
+t_error	shell_get_new_runner_priv(
 			t_runner **out_runner_ptr,
 			t_scan_mode mode,
-			const char *input);
-t_error	shell_destroy_last_instance(void);
+			const char *input,
+			const char *caller);
+t_error	shell_destroy_last_instance_priv(const char *caller);
 
 // TODO: doc
 t_error	shell_init_subshell(t_subshell_mode mode);

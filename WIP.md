@@ -1,13 +1,9 @@
 # WIP
 
-- ⚠️ `shell`:
-	- process `ENV` at startup:
-		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
-		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
 - ⚠️ when shell options are invalid => requalify error in `ERR_INVALID_USAGE`
 - ⚠️ implement *TD* `options`
 - ⚠️ `builtin_kill`
-- ⚠️ use `ft_getopt` in ALL `builtins`
+- ⚠️ use `ft_getopt()` + `builtin_print_and_qualify()` in **ALL** `builtins`
 - 👉 `params`:
 	- rename to `env`
 	- `variables`: use `hashmap` instead of `vector`

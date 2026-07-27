@@ -11,10 +11,12 @@
 # include "utils.h"
 # include "logs.h"
 # include "lexer.h"
+# include "scanner.h"
 
 const char	*bool_to_string(bool value);
 const char	*action_type_to_string(t_action_type type);
 const char	*cmd_type_to_string(t_cmd_type type);
+const char	*scan_mode_to_string(t_scan_mode mode);
 const char	*symbol_to_string(t_symbol symbol);
 const char	*ast_command_type_to_string(t_ast_command_type type);
 void		dump_rule(t_lr_machine *machine, size_t rule_id);
@@ -27,5 +29,10 @@ void		dump_ast(t_ast_root *root);
 void		dump_getopt_in(t_getopt_in *in);
 void		dump_getopt_out(t_getopt_out *out);
 void		dump_getopt_all(t_getopt_in *in, t_getopt_out *out);
+void		dump_lexer_instance(t_lexer *lexer);
+void		dump_scanner_instance(t_scanner *scanner);
+void		dump_parser_instance(t_parser *parser);
+void		dump_runner_instance(t_runner *runner);
+void		dump_shell_instance(t_runner *runner, const char *caller);
 
 #endif

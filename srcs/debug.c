@@ -10,11 +10,57 @@
 #include "cmd.h"
 #include "ast.h"
 #include "heredoc.h"
+#include "parser_priv.h"
 #include "logs.h"
 #include "lexer.h"
-
 #include <stdio.h>
 #include <stdbool.h>
+
+/* ************************************************************************* */
+/*                                 INSTANCE                                  */
+/* ************************************************************************* */
+
+void	dump_lexer_instance(t_lexer *lexer)
+{
+	fprintf(stderr, " ╰─────── LEXER   => [%p | inputs=%zu | input='%s' [%zu] | token='%s' (%s) | emitted=%s]\n",
+		lexer,
+		lexer->input_stack.len,
+		lexer->input ? lexer->input->str.data : NULL,
+		lexer->input ? lexer->input->i : 0,
+		lexer->token ? lexer->token->value.data : NULL,
+		lexer->token ? token_type_to_string(lexer->token->type) : NULL,
+		bool_to_string(lexer->emited_token));
+}
+
+void	dump_scanner_instance(t_scanner *scanner)
+{
+	fprintf(stderr, " ├─────── SCANNER => [%p | mode=%s | source='%s' | parent=%p]\n",
+		scanner, scan_mode_to_string(scanner->mode), scanner->source, scanner->parent_scanner);
+}
+
+void	dump_parser_instance(t_parser *parser)
+{
+	fprintf(stderr, " ├─────── PARSER  => [%p | lookahead='%s'->'%s' | tokens=%zu | items=%zu | here=%zu | cst=%p | search=%s | end_i=%ld]\n",
+		parser, symbol_to_string(parser->lookahead_symbol), symbol_to_string(parser->lookahead_raw_symbol),
+		parser->token_pool.len, parser->item_stack.len, parser->here_stack.len,
+		parser->cst, bool_to_string(parser->search_cmd_sub_end), parser->cmd_sub_end_index);
+}
+
+void	dump_runner_instance(t_runner *runner)
+{
+	fprintf(stderr, " ├─────── RUNNER  => [%p | loop_depth=%zu | control_depth=%zu | parent=%p | child=%p]\n",
+		runner, runner->loop_depth, runner->control_depth, runner->parent, runner->child);
+}
+
+void	dump_shell_instance(t_runner *runner, const char *caller)
+{
+	fprintf(stderr, YELLOW "[SHELL ] new instance from %s():\n", caller);
+	dump_runner_instance(runner);
+	dump_parser_instance(&runner->parser);
+	dump_scanner_instance(&runner->parser.scanner);
+	dump_lexer_instance(&runner->parser.scanner.lexer);
+	fprintf(stderr, NC);
+}
 
 /* ************************************************************************* */
 /*                                   BOOL                                    */
@@ -36,6 +82,21 @@ const char	*cmd_type_to_string(t_cmd_type type)
 		case CMD_FUNCTION: return ("CMD_FUNCTION");
 		case CMD_BUILTIN: return ("CMD_BUILTIN");
 		case CMD_EXTERNAL: return ("CMD_EXTERNAL");
+		default: return ("unknown");
+	}
+}
+
+const char	*scan_mode_to_string(t_scan_mode mode)
+{
+	switch (mode)
+	{
+		case SCAN_MODE_NONE: return ("SCAN_MODE_NONE");
+		case SCAN_MODE_AUTO: return ("SCAN_MODE_AUTO");
+		case SCAN_MODE_FILE: return ("SCAN_MODE_FILE");
+		case SCAN_MODE_CMD_SUB: return ("SCAN_MODE_CMD_SUB");
+		case SCAN_MODE_STDIN: return ("SCAN_MODE_STDIN");
+		case SCAN_MODE_STRING: return ("SCAN_MODE_STRING");
+		case SCAN_MODE_STRING_AND_CONTINUE: return ("SCAN_MODE_STRING_AND_CONTINUE");
 		default: return ("unknown");
 	}
 }

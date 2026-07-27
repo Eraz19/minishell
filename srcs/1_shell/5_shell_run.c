@@ -43,21 +43,24 @@ static inline t_error	shell_prepare(t_shell_loading_options *options)
 	return (shell_load(options));
 }
 
-static inline t_error	shell_exec(void)
+static inline int	shell_exec(t_shell *shell)
 {
 	t_runner	*runner;
 	t_error		err;
 
 	err = shell_get_new_runner(&runner, SCAN_MODE_AUTO, NULL);
 	if (err.type)
-		return (err);
+	{
+		(void)error_print(err, NULL, NULL);
+		return ((int)err.type);
+	}
 	(void)runner_run(runner);
 	sig_process_exit();
 	shell_destroy_last_instance();
 	err = history_save();
 	if (err.type)
 		(void)error_print(err, "history", NULL, NULL);
-	return (err);
+	return (params_get_last_status_from(&shell->params));
 }
 
 int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
@@ -77,9 +80,10 @@ int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
 	else
 	{
 		err = shell_exec_env();
-		if (err.type == ERR_NO)
-			shell_exec();
-		exit_status = params_get_last_status_from(&options.shell->params);
+		if (err.type)
+			exit_status = (int)err.type;
+		else
+			exit_status = shell_exec(options.shell);
 	}
 	shell_free(options.shell);
 	shell_stop_logs();

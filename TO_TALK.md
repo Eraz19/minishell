@@ -1,5 +1,14 @@
 # TO TALK
 
+- 🚨 en mode `SCAN_MODE_STRING` il ne faut **jamais** lire sur `stdin` même si `-i` est actif:
+```bash
+# Bash exit après avoir exécuté la string (nous on infinite loop):
+bash --posix -ic "echo hello"
+# Bash ne demande pas de continuation (nous oui et on reste bloqués dans la continuation, même CTRL+D n'exit pas):
+bash --posix -ic "cat << EOF"
+# Cette commande ne ressort jamais du builtin eval dans minishell:
+eval echo hello
+```
 - 🤔 `cmd_sub_child_ast()`: Need a `SCAN_MODE_PARENT` for `shell_get_new_runner()` ?
 - 🚨 `cmd sub` dans une `fonction`:
 	- premier run va free l'`ast` / la `string` de la `cmd_sub` ??

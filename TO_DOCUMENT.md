@@ -19,6 +19,7 @@
 		- `freeBSD` / all (all archs): workaround via `/proc/curproc/status` / `/proc/self/status`
 	- `fcntl()` -> `ioctl()`: set `stdin` to blocking mode for `stdin` management
 		- all OS and archs: via `ioctl()` (non-POSIX function) instead of `fcntl()`
+	- `getuid()`, `geteuid()`, `getgid()` and `getegid()` to check `ENV` processing conditions.
 - ⚠️ as `OpenBSD` sends `SIGABRT` when `syscalls` are sent from unauthorized memory addresses, this `shell` is not fully POSIX compliant on this Operating System. A next version of this program may use all the real `libc` functions to enable full POSIX compliance.
 - `redirections`:
 	- as `fcntl()` is forbidden, we check whether the rhs fd of `>&` / `<&` is open, but we do not check whether it is open respectively for writing or reading. This is still POSIX-compliant because POSIX says that a redirection error "may" result in that case.
@@ -44,6 +45,11 @@
 ## POSIX UNSPECIFIED IMPLEMENTATIONS
 
 ⚠️ Search for `print_unspecified_behaviour()` usage
+- `ENV`:
+	- if `parameter expansion` of `ENV` value does'nt expand on an *absolute path*, no processing of the `ENV` file is done.
+	- if `parameter expansion` of `ENV` value expands on an *absolute path* but the file cannot be opened (does not exists, does not have read permission...), a *warning* is printed but the shell continues its execution.
+	- `ENV` file is processed even if the file can be written by any user other than the user identified by the real (and effective) user ID of the shell process.
+	- if first line of `ENV` file is a *shebang* (`#!`), shell treats it as a normal *comment* and ignores it.
 - `options`:
 	- `i` and `c` are printed in `$-` expansion
 - `executor`:
