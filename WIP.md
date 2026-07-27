@@ -1,8 +1,6 @@
 # WIP
 
 - ⚠️ when shell options are invalid => requalify error in `ERR_INVALID_USAGE`
-- ⚠️ implement *TD* `options`
-- ⚠️ `builtin_kill`
 - ⚠️ use `ft_getopt()` + `builtin_print_and_qualify()` in **ALL** `builtins`
 - 👉 `params`:
 	- rename to `env`
@@ -15,6 +13,12 @@
 	- move `history` table to `params`
 	- ensure all persistent data is stored into `params`
 - 👉 `ast`: use `t_ast_command` ast `root` instead of `t_ast_list` (`command` can contain a `list` anyway...)
+- 👉 `options`:
+	- `-u` (`expander`):
+		- `parameter expansion` and `arithmetic expansion` must fail if *variable is not set*
+		- **except** for `$@`, `$*` and *parameters* which handles *unset variables* (`${foo-word}`, `${foo=word}`, `${foo+word}`, ...)
+	- `-v` (`reader`):
+		- print input lines as read (on `stderr`)
 - 👉 `builtins`:
 	- `exec`
 	- `command`

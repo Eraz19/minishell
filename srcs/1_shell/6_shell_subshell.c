@@ -42,6 +42,7 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 {
 	t_shell	*shell;
 	bool	job_control;
+	bool	async_no_job_ctrl;
 	t_error	err;
 
 	shell = shell_get();
@@ -50,8 +51,9 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 					__func__, "shell not found", NULL, NULL));
 	job_control = option_is_active_in(shell->params.options, OPT_MONITOR);
 	shell->is_subshell = true;
-	params_init_subshell(&shell->params, mode == SUBSHELL_ASYNC_AND_OR && !job_control);
-	if (mode == SUBSHELL_ASYNC_AND_OR && !job_control)
+	async_no_job_ctrl = mode == SUBSHELL_ASYNC_AND_OR && !job_control;
+	params_init_subshell(&shell->params, async_no_job_ctrl);
+	if (async_no_job_ctrl)
 	{
 		err = shell_set_stdin_to_dev_null();
 		if (err.type)

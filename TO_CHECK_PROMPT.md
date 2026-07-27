@@ -12,7 +12,6 @@ On a fini notre shell fully POSIX-compliant.
 On a juste, par manque de temps, fait l'impasse sur certaines `options`, `builtins` et `expansions` qu'on implémentera plus tard.
 Les `options` non implémentées sont :
 - `-b`: immediate notification of terminated jobs
-- `-e`: exit on command error
 - `-m`: enable job control (partially implemented)
 - `-u`: error on unset variables
 - `-v`: print input lines as read
