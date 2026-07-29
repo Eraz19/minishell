@@ -17,6 +17,8 @@
 		"-I${workspaceFolder}/libft/src/hashmap/key_value",
 		"-I${workspaceFolder}/1_grammar/includes",
 		"-I${workspaceFolder}/2_generator/includes",
+		"-I${workspaceFolder}/2_generator/srcs/2_serialize",
+		"-I${workspaceFolder}/2_generator/srcs/2_serialize/write_c_file",
 		"-I${workspaceFolder}/3_generated/includes",
 		"-I${workspaceFolder}/4_shell/includes",
 		"-I${workspaceFolder}/lr_generator",

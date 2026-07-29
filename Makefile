@@ -1,7 +1,10 @@
 NAME			:= minishell
 CC				:= cc
 DEPFLAGS		:= -MMD -MP
-CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 -DDEBUG_PARSING -DDEBUG_AST -DDEBUG_INSTANCES	# -DNDEBUG (disable assert())
+CFLAGS			:= \
+	-Wall -Wextra -Wdeprecated -Werror \
+	-O2 \
+	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_INSTANCES	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Wdeprecated -Werror \
 	-O0 -g3 -fsanitize=address,undefined \

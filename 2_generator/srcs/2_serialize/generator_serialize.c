@@ -23,7 +23,8 @@ bool	generator_serialize(const t_lr_generator *generator)
 	if (!generator_write_header(h_fd, generator))
 		return (generator_report_serialization_failure(h_fd, c_fd), false);
 	print_pass("header_generated\n");
-	// TODO: generator_write_c_file(c_fd, generator);
+	if (!generator_write_c_file(c_fd, generator))
+		return (generator_report_serialization_failure(h_fd, c_fd), false);
 	(void)close(h_fd);
 	(void)close(c_fd);
 	return (true);
