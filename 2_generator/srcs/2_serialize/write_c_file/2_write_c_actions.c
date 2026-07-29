@@ -10,6 +10,8 @@ static inline bool	generator_write_c_action(int c_fd, const t_action *action)
 		return (false);
 	if (!generator_write(c_fd, ", "))
 		return (false);
+	if (action->payload == ACTION_PAYLOAD_EMPTY)
+		return (generator_write(c_fd, "ACTION_PAYLOAD_EMPTY"));
 	return (generator_write_zu(c_fd, NULL, action->payload));
 }
 

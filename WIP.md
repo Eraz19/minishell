@@ -1,14 +1,12 @@
 # WIP (LR MACHINE)
 
-- compute and store in `generator`:
-	- `ACTION_COL_COUNT`
-	- `ACTION_COUNT`
-	- `GOTO_COL_COUNT`
-	- `GOTO_COUNT`
-
-- `qualifiers` required data:
-	- `const char *token_value` -> `token->value.data`
-	- `ssize_t assignment_offset` -> `token->assignment_offset`
+- `generator`:
+	- compute and store in `lr_generator`:
+		- `ACTION_COL_COUNT`
+		- `ACTION_COUNT`
+		- `GOTO_COL_COUNT`
+		- `GOTO_COUNT`
+	- only store `t_qualifier_id` in `lr_generator`
 
 - Previous `hooks`:
 	- `RULE_COMPLETE_COMMAND_1` + `RULE_COMPLETE_COMMAND_2` => `hook_store_cst`

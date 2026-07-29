@@ -2,7 +2,8 @@
 #include "write_c_file_priv.h"
 
 #define INCLUDE_1		"#include \"lr_tables.h\"\n"
-#define INCLUDE_2		"#include \"grammar_rules.h\"\n\n"
+#define INCLUDE_2		"#include \"grammar_rules.h\"\n"
+#define INCLUDE_3		"#include \"grammar_gotos.h\"\n\n"
 
 #define FUNC_START		"void\tlr_tables_load(t_lr_tables *tables)\n{\n"
 
@@ -19,7 +20,7 @@ bool	generator_write_c_file(int c_fd, const t_lr_generator *gen)
 {
 	const char	*content;
 
-	content = INCLUDE_1 INCLUDE_2 FUNC_START;
+	content = INCLUDE_1 INCLUDE_2 INCLUDE_3 FUNC_START;
 	if (!generator_write(c_fd, content))
 		return (false);
 	if (!generator_write_c_rules(c_fd, gen))
@@ -28,7 +29,8 @@ bool	generator_write_c_file(int c_fd, const t_lr_generator *gen)
 		return (false);
 	if (!generator_write_c_gotos(c_fd, gen))
 		return (false);
-	// TODO
+	if (!generator_write_c_qualifiers(c_fd, gen))
+		return (false);
 	if (!generator_write_c_expects(c_fd, gen))
 		return (false);
 	content = FUNC_ASSIGN_1 FUNC_ASSIGN_2 FUNC_ASSIGN_3 FUNC_ASSIGN_4

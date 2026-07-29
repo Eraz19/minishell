@@ -1,4 +1,5 @@
 #include "generator_goto.h"
+#include "grammar_gotos.h"
 
 bool	go_to(
 			const size_t *gotos,

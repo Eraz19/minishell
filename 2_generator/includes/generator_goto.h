@@ -5,8 +5,6 @@
 # include "libft.h"
 # include <stdint.h>
 
-# define GOTO_EMPTY	SIZE_MAX
-
 /*
 For performance and const-casting purposes, gotos table is contigously alloc'd.
 Therefore, instead of accessing it via gotos[lr_state][non-terminal_symbol],

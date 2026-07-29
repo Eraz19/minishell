@@ -1,5 +1,6 @@
 #include "generator_goto.h"
 #include "generator_transitions.h"
+#include "grammar_gotos.h"
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>

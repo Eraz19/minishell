@@ -1,5 +1,6 @@
 #include "write_c_file_priv.h"
 #include "generator_serialize_priv.h"
+#include "grammar_gotos.h"
 #include "logs.h"
 
 #define GOTO_VAR	"size_t\t\t\tgotos[GOTO_COUNT]"
@@ -17,7 +18,12 @@ static inline bool	generator_write_all_gotos(
 	i = 0;
 	while (i < count)
 	{
-		if (!generator_write_zu(c_fd, NULL, gen->gotos[i]))
+		if (gen->gotos[i] == GOTO_EMPTY)
+		{
+			if (!generator_write(c_fd, "GOTO_EMPTY"))
+				return (false);
+		}
+		else if (!generator_write_zu(c_fd, NULL, gen->gotos[i]))
 			return (false);
 		if (i < count - 1)
 		{
