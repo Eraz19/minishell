@@ -11,12 +11,13 @@ static inline void	reset_result(bool *result)
 }
 
 void	first(
-			const bool first[SYM_COUNT][SYM_TERMINAL_MAX + 1],
+			const bool first[SYM_COUNT * (SYM_TERMINAL_MAX + 1)],
 			const bool nullable_symbols[SYM_COUNT],
 			t_first_param *param)
 {
 	size_t		pos;
 	t_symbol	symbol;
+	size_t		offset;
 
 	reset_result(param->result);
 	pos = 0;
@@ -28,7 +29,8 @@ void	first(
 			param->result[symbol] = true;
 			return ;
 		}
-		first_add_list(param->result, first[symbol], NULL);
+		offset = symbol * (SYM_TERMINAL_MAX + 1);
+		first_add_list(param->result, first + offset, NULL);
 		if (nullable_symbols[symbol] == false)
 			return ;
 	}

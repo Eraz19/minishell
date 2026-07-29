@@ -4,6 +4,7 @@
 #include "generator_goto.h"
 #include "generator_actions.h"
 #include "generator_qualifiers.h"
+#include "generator_expects.h"
 
 void	generator_init(t_lr_generator *generator)
 {
@@ -12,6 +13,7 @@ void	generator_init(t_lr_generator *generator)
 	goto_init(&generator->gotos);
 	action_init(&generator->actions);
 	qualifiers_init(&generator->qualifiers);
+	expects_init(&generator->expects);
 }
 
 void	generator_free(t_lr_generator *generator)
@@ -21,4 +23,5 @@ void	generator_free(t_lr_generator *generator)
 	goto_free(&generator->gotos);
 	action_free(&generator->actions);
 	qualifiers_free(&generator->qualifiers);
+	expects_free(&generator->expects);
 }

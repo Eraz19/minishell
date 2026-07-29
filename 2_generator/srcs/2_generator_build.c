@@ -7,6 +7,7 @@
 #include "generator_goto.h"
 #include "generator_actions.h"
 #include "generator_qualifiers.h"
+#include "generator_expects.h"
 #include <stdio.h>
 # include "logs.h"
 
@@ -59,5 +60,8 @@ bool	generator_build_tables(t_lr_generator *gen)
 			gen->actions))
 		return (false);
 	print_pass("qualifiers table built                 (entries: %'6zu)\n", gen->lr_states.len);
+	if (!expects_build_table(&gen->expects, gen->rules, &gen->lr_states))
+		return (false);
+	print_pass("expects table built                    (entries: %'6zu)\n", gen->lr_states.len);
 	return (true);
 }

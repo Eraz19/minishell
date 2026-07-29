@@ -14,12 +14,12 @@ typedef struct s_first_param
 }	t_first_param;
 
 void	first(
-			const bool first[SYM_COUNT][SYM_TERMINAL_MAX + 1],
+			const bool first[SYM_COUNT * (SYM_TERMINAL_MAX + 1)],
 			const bool nullable_symbols[SYM_COUNT],
 			t_first_param *param);
 void	first_build_table(
 			const t_rule rules[RULE_COUNT],
 			const bool nullable_symbols[SYM_COUNT],
-			bool first[SYM_COUNT][SYM_TERMINAL_MAX + 1]);
+			bool first[SYM_COUNT * (SYM_TERMINAL_MAX + 1)]);
 
 #endif

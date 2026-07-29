@@ -54,10 +54,15 @@ GEN_INCLUDES	:= \
 	-I$(GEN_DIR)/srcs/9_qualifiers
 GEN_SRCS		:= \
 	$(wildcard $(GEN_DIR)/srcs/*.c) \
-	$(wildcard $(GEN_DIR)/srcs/*/*.c)
+	$(wildcard $(GEN_DIR)/srcs/*/*.c) \
+	$(wildcard $(GEN_DIR)/srcs/*/*/*.c)
 GEN_CORE_OBJS	:= $(GEN_SRCS:%.c=$(OBJ_DIR)/%.o)
 GEN_OBJS		:= $(GEN_CORE_OBJS) $(GRAM_OBJS) $(LOGS_OBJS)
 GEN_DEPS		:= $(GEN_OBJS:.o=.d)
+LR_TABLES_DIR		:= 3_lr_tables
+LR_TABLES_BASE_DIR	:= $(LR_TABLES_DIR)/1_base
+LR_TABLES_GEN_DIR	:= $(LR_TABLES_DIR)/2_generated
+LR_TABLES_FILES		:= lr_tables.h lr_tables.c
 # GENERATOR (END)
 
 # DEBUG SECTION (START)
@@ -268,6 +273,7 @@ gen:
 	@$(MAKE) -s $(LOGS_OBJS)
 	@echo "compiling generator..."
 	@$(MAKE) -s $(GEN_NAME)
+	@mkdir -p $(LR_TABLES_GEN_DIR)
 	@./$(GEN_NAME)
 
 $(GEN_NAME): $(GEN_OBJS) $(LIBFT)
@@ -296,6 +302,9 @@ clean:
 
 fclean: clean
 	rm -f $(NAME) $(GEN_NAME)
+	@mkdir -p $(LR_TABLES_GEN_DIR)
+	@cp $(addprefix $(LR_TABLES_BASE_DIR)/,$(LR_TABLES_FILES)) \
+		$(LR_TABLES_GEN_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all

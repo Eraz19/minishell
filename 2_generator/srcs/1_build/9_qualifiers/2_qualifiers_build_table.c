@@ -114,7 +114,7 @@ bool	qualifiers_build_table(
 	if (state_count > SIZE_MAX / sizeof(**qualifiers))
 		return (qualifiers_report_overflow());
 	*qualifiers = malloc(state_count * sizeof(**qualifiers));
-	if (!*qualifiers)
+	if (*qualifiers == NULL)
 		return (perror("generator"), false);
 	lr_state_id = 0;
 	while (lr_state_id < state_count)

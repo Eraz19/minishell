@@ -13,7 +13,7 @@
 
 - ⚠️ `scanner` + `SCAN_MODE_FILE` from `sh` vs `dot` / `eval` / `env`...:
 	- Pas le même système de fallback ? (`dot` cherche lui-même alors que `sh` délègue le search)
-	- qui doit `path search`
+	- qui doit `path search` ?
 - ⚠️ `set`:
 	- "If no options or arguments are specified, set shall write the names and values of all shell variables in the collation sequence of the current locale" => create `merge_sort()` (or quivalent) in `libft/sort/` and use it in `builtin_set`...
 - ⚠️ `alias`:
