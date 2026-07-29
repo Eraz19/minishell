@@ -15,6 +15,8 @@
 
 # WIP
 
+- **ALEX**:
+	- `gitignore` add `2_generator/lr_generator` and `3_lr_tables/2_generated/*`
 - ⚠️ `exit`:
 	- quid `EINTR` lors du `write()`
 - ⚠️ `scanner` + `SCAN_MODE_FILE` from `sh` vs `dot` / `eval` / `env`...:
