@@ -15,5 +15,6 @@ bool	generator_write_brack_last(int c_fd);
 // vars
 
 bool	generator_write_c_rules(int c_fd, const t_lr_generator *gen);
+bool	generator_write_c_actions(int c_fd, const t_lr_generator *gen);
 
 #endif

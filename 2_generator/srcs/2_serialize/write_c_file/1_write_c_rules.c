@@ -1,5 +1,6 @@
 #include "write_c_file_priv.h"
 #include "generator_serialize_priv.h"
+#include "logs.h"
 
 #define RULE_VAR	"t_lr_rule\t\trules[RULE_COUNT]"
 
@@ -36,5 +37,7 @@ bool	generator_write_c_rules(int c_fd, const t_lr_generator *gen)
 			return (false);
 		i++;
 	}
-	return (generator_write_c_var_end(c_fd));
+	if (!generator_write_c_var_end(c_fd))
+		return (false);
+	return (print_pass("rules generated\n"), true);
 }

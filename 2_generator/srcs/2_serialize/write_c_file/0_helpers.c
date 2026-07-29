@@ -2,12 +2,12 @@
 #include "generator_serialize_priv.h"
 
 #define VAR_START		"\tstatic const "
-#define VAR_BRACK_START	" = {\n"
-#define VAR_BRACK_END	"\t};\n"
+#define VAR_BRACK_START	" = {"
+#define VAR_BRACK_END	"};\n"
 
-#define BRACK_START		"\t\t\t\t\t\t\t\t\t{"
-#define BRACK_END		"},\n"
-#define BRACK_LAST		"}\n"
+#define BRACK_START		"{"
+#define BRACK_END		"},"
+#define BRACK_LAST		"}"
 
 bool	generator_write_c_var_start(int c_fd, const char *var_def)
 {

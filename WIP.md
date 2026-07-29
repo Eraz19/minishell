@@ -1,5 +1,11 @@
 # WIP (LR MACHINE)
 
+- compute and store in `generator`:
+	- `ACTION_COL_COUNT`
+	- `ACTION_COUNT`
+	- `GOTO_COL_COUNT`
+	- `GOTO_COUNT`
+
 - `qualifiers` required data:
 	- `const char *token_value` -> `token->value.data`
 	- `ssize_t assignment_offset` -> `token->assignment_offset`

@@ -54,7 +54,9 @@ GEN_INCLUDES	:= \
 	-I$(GEN_DIR)/srcs/3_first \
 	-I$(GEN_DIR)/srcs/5_lr_state \
 	-I$(GEN_DIR)/srcs/8_action \
-	-I$(GEN_DIR)/srcs/9_qualifiers
+	-I$(GEN_DIR)/srcs/9_qualifiers \
+	-I$(GEN_DIR)/srcs/2_serialize \
+	-I$(GEN_DIR)/srcs/2_serialize/write_c_file
 GEN_SRCS		:= \
 	$(wildcard $(GEN_DIR)/srcs/*.c) \
 	$(wildcard $(GEN_DIR)/srcs/*/*.c) \

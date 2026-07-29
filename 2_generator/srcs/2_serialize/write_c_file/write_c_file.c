@@ -7,10 +7,10 @@
 #define FUNC_START		"void\tlr_tables_load(t_lr_tables *tables)\n{\n"
 
 #define FUNC_ASSIGN_1	"\n\ttables->rules = rules;\n"
-#define FUNC_ASSIGN_2	"\n\ttables->actions = actions;\n"
-#define FUNC_ASSIGN_3	"\n\ttables->gotos = gotos;\n"
-#define FUNC_ASSIGN_4	"\n\ttables->qualifiers = qualifiers;\n"
-#define FUNC_ASSIGN_5	"\n\ttables->expects_cmd_name_or_word = "
+#define FUNC_ASSIGN_2	"\ttables->actions = actions;\n"
+#define FUNC_ASSIGN_3	"\ttables->gotos = gotos;\n"
+#define FUNC_ASSIGN_4	"\ttables->qualifiers = qualifiers;\n"
+#define FUNC_ASSIGN_5	"\ttables->expects_cmd_name_or_word = "
 #define FUNC_ASSIGN_6	"expects_cmd_name_or_word;\n"
 
 #define FUNC_END		"}\n"
