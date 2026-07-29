@@ -26,7 +26,7 @@ t_error	var_get(const t_string *name, t_string *dst_val)
 {
 	assert(name != NULL);
 	assert(dst_val != NULL);
-	if (!name_is_valid(name))
+	if (!name_is_valid_str(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	return (var_get_priv(name->data, dst_val));
 }
@@ -35,7 +35,7 @@ t_error	var_get_from_const(const char *name, t_string *dst_val)
 {
 	assert(name != NULL);
 	assert(dst_val != NULL);
-	if (!name_is_valid_from_const(name))
+	if (!name_is_valid(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	return (var_get_priv(name, dst_val));
 }

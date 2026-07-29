@@ -160,16 +160,7 @@ time_t	get_now_unix_seconds(void);
  * @return True when @p name starts with an alphabetic character or @c _ and
  *         contains only alphanumeric characters or @c _ afterwards.
  */
-bool	name_is_valid(const t_string *name);
-
-/**
- * @brief Const-string variant of @ref name_is_valid().
- *
- * @param name Name to validate (borrowed, read-only).
- * @return True when @p name starts with an alphabetic character or @c _ and
- *         contains only alphanumeric characters or @c _ afterwards.
- */
-bool	name_is_valid_from_const(const char *name);
+bool	name_is_valid_str(const t_string *name);
 
 /**
  * @brief Serialize a string into a single-quoted representation.

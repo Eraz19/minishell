@@ -148,6 +148,8 @@ However, a future version of this program may only print such a warning when it 
 - *case pattern* using `$@` or `$*`:
 	- if *expansion* produces 0 *field*, *pattern* is skipped (equivalent to a *pattern* which doesn't match the *case word*).
 	- if *expansion* produces more than one *field*, each *field* is treated as a separate *pattern* to be matched against the *case word*.
+- `comand_file`:
+	- This program does perform a search for an *executable file* using the value of `PATH` when the *pathname* does not contain one or more <slash> characters and the file is not in the *current working directory*.
 
 ---
 

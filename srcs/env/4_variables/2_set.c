@@ -79,7 +79,7 @@ t_error	var_set(
 	t_error		err;
 
 	assert(name != NULL);
-	if (!name_is_valid(name))
+	if (!name_is_valid_str(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	params = shell_get_params();
 	assert(params != NULL);

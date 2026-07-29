@@ -1,5 +1,6 @@
 NAME			:= minishell
 CC				:= cc
+DEPFLAGS		:= -MMD -MP
 CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 -DDEBUG_PARSING -DDEBUG_AST -DDEBUG_INSTANCES	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS	:= \
 	-Wall -Wextra -Wdeprecated -Werror \
@@ -13,18 +14,59 @@ DEBUG_CFLAGS	:= \
 	-DDEBUG_HISTORY \
 	-DDEBUG_CMD_SUB \
 	-DDEBUG_INSTANCES
+OBJ_DIR			:= obj
 
+# LIBFT (START)
 LIBFT_DIR		:= libft
+LIBFT_INCLUDES	:= -I$(LIBFT_DIR)
 LIBFT			:= $(LIBFT_DIR)/libft.a
 READLINE_DIR	:= $(shell brew --prefix readline 2>/dev/null)
+# LIBFT (END)
+
+# LOGS (START)
+LOGS_DIR		:= logs
+LOGS_INCLUDES	:= -I$(LOGS_DIR)
+LOGS_SRCS		:= $(wildcard $(LOGS_DIR)/*.c)
+LOGS_OBJS		:= $(LOGS_SRCS:%.c=$(OBJ_DIR)/%.o)
+# LOGS (END)
+
+# GRAMMAR (START)
+GRAM_DIR		:= 1_grammar
+GRAM_INCLUDES	:= -I$(GRAM_DIR)/includes
+GRAM_SRCS		:= \
+	$(wildcard $(GRAM_DIR)/srcs/*.c) \
+	$(wildcard $(GRAM_DIR)/srcs/*/*.c)
+GRAM_OBJS		:= $(GRAM_SRCS:%.c=$(OBJ_DIR)/%.o)
+# GRAMMAR (END)
+
+# GENERATOR (START)
+GEN_DIR			:= 2_generator
+GEN_NAME		:= $(GEN_DIR)/lr_generator
+GEN_INCLUDES	:= \
+	$(GRAM_INCLUDES) \
+	$(LIBFT_INCLUDES) \
+	$(LOGS_INCLUDES) \
+	-I$(GEN_DIR)/includes \
+	-I$(GEN_DIR)/srcs/2_rules \
+	-I$(GEN_DIR)/srcs/3_first \
+	-I$(GEN_DIR)/srcs/5_lr_state \
+	-I$(GEN_DIR)/srcs/8_action \
+	-I$(GEN_DIR)/srcs/9_qualifiers
+GEN_SRCS		:= \
+	$(wildcard $(GEN_DIR)/srcs/*.c) \
+	$(wildcard $(GEN_DIR)/srcs/*/*.c)
+GEN_CORE_OBJS	:= $(GEN_SRCS:%.c=$(OBJ_DIR)/%.o)
+GEN_OBJS		:= $(GEN_CORE_OBJS) $(GRAM_OBJS) $(LOGS_OBJS)
+GEN_DEPS		:= $(GEN_OBJS:.o=.d)
+# GENERATOR (END)
 
 # DEBUG SECTION (START)
 TEST_CFLAGS		:= -Wall -Wextra -Wdeprecated -Werror -O2
 TEST_DIR		:= ./tests
-TESTERS			:= $(wildcard $(TEST_DIR)/*.zsh)
-MAIN_TESTER		:= $(TEST_DIR)/test_posix_suite.zsh
-FIXTURES_DIR	:= $(TEST_DIR)/fixtures
-LOGS_DIR		:= $(TEST_DIR)/logs
+TEST_SCRIPTS	:= $(wildcard $(TEST_DIR)/*.zsh)
+TEST_MAIN		:= $(TEST_DIR)/test_posix_suite.zsh
+TEST_FIXT_DIR	:= $(TEST_DIR)/fixtures
+TEST_LOGS_DIR	:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
 
 SRCS			:= \
@@ -196,22 +238,42 @@ INCLUDES		:= \
 	-Isrcs/lr_machine/10_qualifiers \
 	-Isrcs/redirector
 
-OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
+DEPS			:= $(OBJS:.o=.d)
+
+$(OBJS): BUILD_INCLUDES := $(INCLUDES)
+$(GEN_OBJS): BUILD_INCLUDES := $(GEN_INCLUDES)
 
 all: $(NAME)
 
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@echo "compiling libft..."
+	@$(MAKE) -s -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L$(READLINE_DIR)/lib -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L$(READLINE_DIR)/lib -lreadline -o $(NAME)
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(DEPFLAGS) $(CFLAGS) $(BUILD_INCLUDES) -c $< -o $@
 
 bonus: all
+
+# GENERATOR (START)
+gen:
+	@echo "compiling grammar..."
+	@$(MAKE) -s $(GRAM_OBJS)
+	@$(MAKE) -s $(LIBFT)
+	@echo "compiling logs..."
+	@$(MAKE) -s $(LOGS_OBJS)
+	@echo "compiling generator..."
+	@$(MAKE) -s $(GEN_NAME)
+	@./$(GEN_NAME)
+
+$(GEN_NAME): $(GEN_OBJS) $(LIBFT)
+	@$(CC) $(CFLAGS) $(GEN_OBJS) $(LIBFT) -o $(GEN_NAME)
+
+# GENERATOR (END)
 
 debug: CFLAGS := $(DEBUG_CFLAGS)
 debug: re
@@ -221,21 +283,24 @@ test: CFLAGS := $(TEST_CFLAGS)
 test:
 	@echo "compiling..."
 	@$(MAKE) re >/dev/null
-	$(MAIN_TESTER)
-# 	@for tester in $(TESTERS); do \
+	$(TEST_MAIN)
+# 	@for tester in $(TEST_SCRIPTS); do \
 # 		echo "Running $$tester"; \
 # 		zsh "$$tester"; \
 # 	done
 # DEBUG SECTION (END)
 
 clean:
-	rm -rf $(OBJ_DIR) $(FIXTURES_DIR) $(LOGS_DIR)
+	rm -rf $(OBJ_DIR) $(TEST_FIXT_DIR) $(TEST_LOGS_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME) $(TEST_GETOPT_BIN) $(TEST_GETOPT_BIN).dSYM
+	rm -f $(NAME) $(GEN_NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all bonus debug test_getopt test clean fclean re
+-include $(DEPS)
+-include $(GEN_DEPS)
+
+.PHONY: all bonus gen debug test clean fclean re

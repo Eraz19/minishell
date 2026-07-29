@@ -6,7 +6,7 @@ bool	qualify_try_name(const t_token *token, t_symbol *dst_symbol)
 {
 	assert(token != NULL);
 	assert(dst_symbol != NULL);
-	if (!name_is_valid(&token->value))
+	if (!name_is_valid_str(&token->value))
 		return (false);
 	*dst_symbol = SYM_NAME;
 	return (true);

@@ -32,10 +32,8 @@ typedef enum e_error_type
 	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_EMPTY_STACK,						// [ 1]
 	ERR_HISTORY_DISABLED,					// [ 1]
-	ERR_INCOHERENT_STATE,					// [ 1]
 	ERR_NO_DELIM,							// [ 1] [SCANNER]		Missing here-doc delimiter, printed at production by the heredoc; requalified as ERR_POSIX_SYNTAX (documented choice, POSIX 2.7.4 "should, but need not, treat this as a redirection error")
 	ERR_NOT_IMPLEMENTED,					// [ 1] 
-	ERR_UNEXPECTED_EOI,						// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_NO_INPUT_TO_LEX,					// [ 1] 
 	ERR_EXP_RESULT_INCOHERENT,				// [ 1] 
 	ERR_QUOTED_TILDE,						// [ 1] [EXPANDER]		Internal control flow, never escapes: a quoted tilde stays literal
@@ -109,71 +107,18 @@ typedef struct s_error
 	bool			printed;
 }	t_error;
 
-/**
- * @brief Builds an error descriptor from an internal error type.
- *
- * The saved errno value is set to 0.
- *
- * @warning Use error_sys() instead when the error comes from a failed libc or
- * POSIX call and errno must be preserved.
- *
- * @param type Error type to store.
- * @return Error descriptor containing type and no saved errno.
- */
-t_error	error_priv(t_error_type type, const char *file, int line, const char *caller);	// DEBUG
-
-/**
- * @brief Builds a libc error descriptor and saves the current errno value.
- *
- * This function must be called immediately after a failed libc or POSIX call,
- * before any other call can overwrite errno.
- *
- * @return Error descriptor containing ERR_LIBC and the current errno value.
- */
-t_error	error_sys_priv(const char *file, int line, const char *caller);	// DEBUG
-
-/**
- * @brief Prints a formatted shell error message to stderr.
- *
- * The shell name prefix is printed automatically by this function, since its value
- * depends on the current shell context. Additional prefixes passed by the caller
- * are printed after it, in order, and separated with ": ".
- *
- * The variadic argument list must follow this exact layout:
- * prefixes..., NULL, fstring, fstring arguments...
- *
- * The NULL separator marks the end of the caller-provided prefix list. If fstring
- * is not NULL, it is used as a printf-like format string and must be followed by
- * the matching arguments. If fstring is NULL, no format arguments are read.
- *
- * Example:
- * error_print(error(ERR_OPT_INVALID), "export", "-x", NULL, "%i", my_integer);
- *
- * @warning The caller-provided prefix list must always be terminated by NULL.
- * @warning fstring arguments must match the conversion specifiers used by fstring.
- *
- * @param error Error descriptor to print and return.
- * @param ... Additional prefixes, NULL separator, optional format string, optional arguments.
- * @return The error descriptor received as argument.
- */
-t_error	error_print(t_error err, ...);
-
-t_error	error_priorize(t_error previous, t_error new);
-
+t_error		error_priv(t_error_type type, const char *file, int line, const char *caller);	// DEBUG
+t_error		error_sys_priv(const char *file, int line, const char *caller);	// DEBUG
+t_error		error_print(t_error err, ...);
+t_error		error_priorize(t_error previous, t_error new);
 const char	*error_to_string(t_error err);
-
-// @ret ERR_UB
-t_error	undefined_behaviour(const char *message);
-
-void	print_unspecified_behaviour(
-			const char *optional_prefix,
-			const char *posix_citation,
-			const char *implemented_as);
-
-t_error	error_drop_non_fatal(t_error err);
-
-bool	error_is_flow_control(t_error err);
-
-t_error	err_infinite_loop(void);
+t_error		undefined_behaviour(const char *message);
+void		print_unspecified_behaviour(
+				const char *optional_prefix,
+				const char *posix_citation,
+				const char *implemented_as);
+t_error		error_drop_non_fatal(t_error err);
+bool		error_is_flow_control(t_error err);
+t_error		err_infinite_loop(void);
 
 #endif

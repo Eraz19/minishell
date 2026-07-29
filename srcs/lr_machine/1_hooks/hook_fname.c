@@ -20,7 +20,7 @@ t_error	hook_fname(
 	assert(rhs != NULL);
 	assert(len == 1);
 	token = parser_get_token(parser, rhs[0].tokens_start_id);
-	if (!name_is_valid(&token->value))
+	if (!name_is_valid_str(&token->value))
 		return (error_print(error(ERR_POSIX_SYNTAX),
 			"parser", "invalid function name", NULL, "%s", token->value.data));
 #ifdef DEBUG_PARSING

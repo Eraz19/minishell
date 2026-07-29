@@ -8,10 +8,10 @@
 #include <sys/stat.h>
 
 static inline t_error	posix_open_priv(
-	const char *path,
-	int oflag,
-	mode_t *mode,
-	int *out_fd)
+							const char *path,
+							int oflag,
+							mode_t *mode,
+							int *out_fd)
 {
 	t_error	err;
 
@@ -39,10 +39,10 @@ t_error	posix_open(const char *path, int oflag, int *out_fd)
 }
 
 t_error	posix_open_with_mode(
-	const char *path,
-	int oflag,
-	mode_t mode,
-	int *out_fd)
+			const char *path,
+			int oflag,
+			mode_t mode,
+			int *out_fd)
 {
 	return (posix_open_priv(path, oflag, &mode, out_fd));
 }
