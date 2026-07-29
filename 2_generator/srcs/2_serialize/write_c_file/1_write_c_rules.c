@@ -13,13 +13,13 @@ static inline bool	generator_write_c_rule(int c_fd, const t_rule *rule)
 	return (generator_write_zu(c_fd, NULL, rule->rhs_len));
 }
 
-bool	generator_write_c_rules(int c_fd, const t_lr_generator *gen)
+static inline bool	generator_write_all_rules(
+						int c_fd,
+						const t_lr_generator *gen)
 {
 	const t_rule	*rule;
 	size_t			i;
 
-	if (!generator_write_c_var_start(c_fd, RULE_VAR))
-		return (false);
 	i = 0;
 	while (i < RULE_COUNT)
 	{
@@ -37,6 +37,15 @@ bool	generator_write_c_rules(int c_fd, const t_lr_generator *gen)
 			return (false);
 		i++;
 	}
+	return (true);
+}
+
+bool	generator_write_c_rules(int c_fd, const t_lr_generator *gen)
+{
+	if (!generator_write_c_var_start(c_fd, RULE_VAR))
+		return (false);
+	if (!generator_write_all_rules(c_fd, gen))
+		return (false);
 	if (!generator_write_c_var_end(c_fd))
 		return (false);
 	return (print_pass("rules generated\n"), true);

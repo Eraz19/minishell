@@ -24,7 +24,13 @@ bool	generator_write_c_file(int c_fd, const t_lr_generator *gen)
 		return (false);
 	if (!generator_write_c_rules(c_fd, gen))
 		return (false);
+	if (!generator_write_c_actions(c_fd, gen))
+		return (false);
+	if (!generator_write_c_gotos(c_fd, gen))
+		return (false);
 	// TODO
+	if (!generator_write_c_expects(c_fd, gen))
+		return (false);
 	content = FUNC_ASSIGN_1 FUNC_ASSIGN_2 FUNC_ASSIGN_3 FUNC_ASSIGN_4
 		FUNC_ASSIGN_5 FUNC_ASSIGN_6 FUNC_END;
 	return (generator_write(c_fd, content));

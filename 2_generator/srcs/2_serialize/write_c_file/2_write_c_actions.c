@@ -46,7 +46,6 @@ static inline bool	generator_write_all_actions(
 
 bool	generator_write_c_actions(int c_fd, const t_lr_generator *gen)
 {
-
 	if (!generator_write_c_var_start(c_fd, ACTION_VAR))
 		return (false);
 	if (!generator_write_all_actions(c_fd, gen))

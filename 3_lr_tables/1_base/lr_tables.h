@@ -7,15 +7,17 @@
 # include <stdbool.h>
 # include <stddef.h>
 
-// lr states
+// lr_states.len (1.775)
 # define LR_STATE_COUNT		1
 
-// actions
+// SYM_TERMINAL_MAX + 1 (43)
 # define ACTION_COL_COUNT	1
+// lr_states.len * ACTION_COL_COUNT (76.325)
 # define ACTION_COUNT		1
 
-// gotos
+// SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1 (50)
 # define GOTO_COL_COUNT		1
+// lr_states.len * GOTO_COL_COUNT (88.750)
 # define GOTO_COUNT			1
 
 typedef struct s_lr_rule
