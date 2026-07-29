@@ -2,7 +2,6 @@
 # define SHELL_H
 
 # include <stdint.h>
-# include "alias.h"
 # include "params.h"
 # include "history.h"
 # include "lr_machine_type.h"
@@ -29,7 +28,6 @@ typedef struct s_shell
 	t_runner		*runner;		// owned (linked)
 	t_runner		*last_runner;	// borrowed
 	t_history		history;		// TODO: move to params
-	t_alias			alias;			// TODO: move to params
 }	t_shell;
 
 typedef enum e_subshell_mode
@@ -75,14 +73,6 @@ t_error	shell_is_subshell(bool *out);
  * @return Shell state, or NULL when the shell is unavailable (borrowed).
  */
 t_shell		*shell_get(void);
-
-/**
- * @brief Returns the alias state stored in the global shell.
- *
- * @return Alias state managed by the alias submodule, or NULL when
- *         the shell is unavailable. (borrowed)
- */
-t_alias		*shell_get_alias(void);
 
 /**
  * @brief Returns the history state stored in the global shell.

@@ -44,6 +44,7 @@ SRCS			:= \
 	$(wildcard srcs/2_scanner/*.c) \
 	$(wildcard srcs/2_scanner/*/*.c) \
 	$(wildcard srcs/2_scanner/*/*/*.c) \
+	$(wildcard srcs/2_scanner/*/*/*.c) \
 	$(wildcard srcs/3_builder/*.c) \
 	$(wildcard srcs/3_builder/*/*.c) \
 	$(wildcard srcs/3_builder/*/*/*.c) \
@@ -85,10 +86,10 @@ INCLUDES		:= \
 	-Ilibft \
 	-Ilibft/src/buff \
 	-Ilibft/src/buff/format \
-	-Isrcs/0_context \
-	-Isrcs/0_context/expansion \
-	-Isrcs/0_context/quoting \
-	-Isrcs/0_context/stack \
+	-Isrcs/0_token/context \
+	-Isrcs/0_token/context/context_stack \
+	-Isrcs/0_token/context/context_stack_item \
+	-Isrcs/0_token/token_pool \
 	-Isrcs/0_posix_helpers \
 	-Isrcs/0_posix_helpers/posix_open \
 	-Isrcs/0_utils \
@@ -96,15 +97,19 @@ INCLUDES		:= \
 	-Isrcs/0_utils/2_serializer \
 	-Isrcs/0_utils/ft_getpwnam \
 	-Isrcs/1_shell \
-	-Isrcs/lexer \
-	-Isrcs/lexer/context \
-	-Isrcs/lexer/input_stack \
 	-Isrcs/2_scanner \
-	-Isrcs/2_scanner/recognition \
-	-Isrcs/2_scanner/recognition/operator \
-	-Isrcs/2_scanner/reader \
 	-Isrcs/2_scanner/heredoc \
 	-Isrcs/2_scanner/heredoc/body \
+	-Isrcs/2_scanner/lexer \
+	-Isrcs/2_scanner/lexer/backup \
+	-Isrcs/2_scanner/lexer/input_stack \
+	-Isrcs/2_scanner/lexer/input_stack_item \
+	-Isrcs/2_scanner/lexer/token_recognition \
+	-Isrcs/2_scanner/lexer/token_recognition/context \
+	-Isrcs/2_scanner/lexer/token_recognition/context/scan \
+	-Isrcs/2_scanner/lexer/token_recognition/operator \
+	-Isrcs/2_scanner/reader \
+	-Isrcs/2_scanner/reader/interactive \
 	-Isrcs/3_builder/1_lr_machine \
 	-Isrcs/3_builder/1_lr_machine/1_hooks \
 	-Isrcs/3_builder/1_lr_machine/2_symbols \
@@ -136,8 +141,6 @@ INCLUDES		:= \
 	-Isrcs/4_runner/2_executor/4_dispatcher \
 	-Isrcs/4_runner/3_walker \
 	-Isrcs/4_runner/3_walker/pipeline \
-	-Isrcs/alias \
-	-Isrcs/alias/stack \
 	-Isrcs/ast \
 	-Isrcs/builtins \
 	-Isrcs/cmd_sub \

@@ -203,18 +203,7 @@ void	expansion_free(t_expansion *expansion);
  */
 void	expansion_free_void(void *expansion);
 
-/**
- * @ingroup expander
- * @brief Reads the field at index @p i without removing it.
- *
- * @param out Set to a shallow copy of the field; its text is still owned
- *            by @p expansion, do not free it (borrowed).
- * @param expansion Already initialized expansion (borrowed, read-only).
- * @param i Position of the field to read.
- * @return @c ERR_INDEX_OUT_OF_BOUND if @p i is past the last field,
- *         @c ERR_NO on success.
- */
-t_error	expansion_get(t_string *out, const t_expansion *expansion, size_t i);
+void	expansion_get(t_string *out, const t_expansion *expansion, size_t i);
 
 // TODO: doc (frees src anyway)
 // @ret ERR_INTERNAL / ERR_LIBC
@@ -223,18 +212,7 @@ t_error	expansion_merge(
 			const char *posix_citation,
 			t_expansion *src,
 			t_string *out);
-
-/**
- * @ingroup expander
- * @brief Removes the field at index @p i and hands it to the caller.
- *
- * @param exp Already initialized expansion (borrowed).
- * @param i Position of the field to take.
- * @param out Set to the removed field; the caller becomes the owner of
- *            its text and must release it with @c string_free (borrowed).
- * @return @c ERR_INDEX_OUT_OF_BOUND if @p i is past the last field,
- *         @c ERR_NO on success.
- */
-t_error expansion_take(t_expansion *exp, size_t i, t_string *out);
+			
+void expansion_take(t_expansion *exp, size_t i, t_string *out);
 
 #endif

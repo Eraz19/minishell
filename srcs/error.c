@@ -73,8 +73,6 @@ const char	*error_to_string(t_error err)
 		return ("incoherent state");
 	else if (err.type == ERR_NOT_IMPLEMENTED)
 		return ("not implemented");
-	else if (err.type == ERR_UNEXPECTED_EOI)
-		return ("unexpected end of input");
 	else if (err.type == ERR_NO_DELIM)
 		return ("missing delimiter");
 	else if (err.type == ERR_NO_INPUT_TO_LEX)

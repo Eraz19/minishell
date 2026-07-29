@@ -47,7 +47,7 @@ void	cmd_sub_child_string(const t_string *cmd_string, int pipe_fds[2])
 	err = shell_get_new_runner(&runner, SCAN_MODE_STRING);
 	if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
-	scanner_set_input(&runner->parser.scanner, cmd_string);
+	scanner_bind_input(&runner->parser.scanner, cmd_string);
 	runner_run(runner);
 	shell_destroy_last_instance();
 	err = params_get_last_status(&exit_status);

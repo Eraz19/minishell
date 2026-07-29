@@ -29,13 +29,12 @@ typedef enum e_error_type
 	ERR_VAR_NOT_FOUND,						// [ 1]
 	ERR_VAR_READ_ONLY,						// [ 1]
 	// Lexer failures
-	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
+	ERR_CTX_END_NOT_FOUND,					// [ 1] [SCANNER]		Internal signal: $(( did not close as arithmetic; absorbed by the cmd_sub rescan inside the lexer (qualify retype to ERR_POSIX_SYNTAX = safety net only)
 	ERR_EMPTY_STACK,						// [ 1]
 	ERR_HISTORY_DISABLED,					// [ 1]
 	ERR_INCOHERENT_STATE,					// [ 1]
-	ERR_NO_DELIM,							// [ 1] [SCANNER]		Missing here-doc delimiter, printed at production by the heredoc; requalified as ERR_POSIX_SYNTAX (documented choice, POSIX 2.7.4 "should, but need not, treat this as a redirection error")
+	ERR_NO_DELIM,							// [ 1] [SCANNER]		Missing here-doc delimiter, printed at production by the heredoc; requalified as ERR_NO at the scanner exit (documented benign choice, POSIX 2.7.4 "should, but need not, treat this as a redirection error")
 	ERR_NOT_IMPLEMENTED,					// [ 1] 
-	ERR_UNEXPECTED_EOI,						// [ 1] [SCANNER]		Requalified as ERR_POSIX_SYNTAX (printed)
 	ERR_NO_INPUT_TO_LEX,					// [ 1] 
 	ERR_EXP_RESULT_INCOHERENT,				// [ 1] 
 	ERR_QUOTED_TILDE,						// [ 1] [EXPANDER]		Internal control flow, never escapes: a quoted tilde stays literal
