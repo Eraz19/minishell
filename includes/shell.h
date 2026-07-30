@@ -2,8 +2,8 @@
 # define SHELL_H
 
 # include <stdint.h>
-# include "alias.h"
 # include "env.h"
+# include "lexer.h"
 # include "history.h"
 # include "lr_tables.h"
 # include "runner_type.h"
@@ -96,14 +96,6 @@ t_error	shell_is_subshell(bool *out);
  * @return Shell state, or NULL when the shell is unavailable (borrowed).
  */
 t_shell		*shell_get(void);
-
-/**
- * @brief Returns the alias state stored in the global shell.
- *
- * @return Alias state managed by the alias submodule, or NULL when
- *         the shell is unavailable. (borrowed)
- */
-t_alias		*shell_get_alias(void);
 
 /**
  * @brief Returns the history state stored in the global shell.

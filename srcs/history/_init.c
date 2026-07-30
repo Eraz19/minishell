@@ -1,51 +1,37 @@
-#include "error.h"
 #include "history.h"
-#include "history_.h"
-# include "logs.h"	// DEBUG
+#include "history_priv.h"
+#include "history_load_env.h"
 
-void	history_init(t_history *state)
+void	history_init(t_history *history)
 {
-	*state = (t_history){0};
-	history_list_init(&state->list);
-	history_file_init(&state->file);
-	history_rl_init(&state->rl_history);
-	string_init(&state->current_input, 0, NULL, 0);
+	*history = (t_history){0};
+	history_list_init(&history->list);
+	history_file_init(&history->file);
+	history_adapter_init(&history->adapter);
+	string_init(&history->current_input, 0, NULL, 0);
 }
 
-void	history_clear(t_history *state)
+void	history_free(t_history *history)
 {
-	state->err = (t_error){0};
-	history_list_clear(&state->list);
-	history_file_clear(&state->file);
-	if (state->current_input.data != NULL)
-		state->current_input.data[0] = '\0';
-	state->current_input.len = 0;
-	history_rl_free(&state->rl_history);
+	history_list_free(&history->list);
+	history_file_free(&history->file);
+	string_free(&history->current_input);
+	history_adapter_free(&history->adapter);
 }
 
-void	history_free(t_history *state)
-{
-	history_list_free(&state->list);
-	history_file_free(&state->file);
-	string_free(&state->current_input);
-	history_rl_free(&state->rl_history);
-	*state = (t_history){0};
-}
-
-t_error	history_load(t_history *state)
+t_error	history_load(t_history *history)
 {
 	ssize_t	max;
 
-	print_title("%s()", __func__);
-	if (history_load_path_env(state).type)
-		return (state->err = history_error_qualify(state->err));
-	if (history_load_size_env(state).type)
-		return (state->err = history_error_qualify(state->err));
-	max = state->rl_history.max;
-	if (history_file_load(&state->file, &state->list, max).type)
-		return (state->err = history_error_qualify(state->file.err));
-	if (history_rl_load(&state->rl_history, &state->list).type)
-		return (state->err = history_error_qualify(state->rl_history.err));
-	print_result("%s()", __func__);
-	return (state->err);
+	history_load_start_logs(__func__);
+	if (load_history_path_from_env(history).type)
+		return (history->err);
+	if (load_history_max_size_env(history).type)
+		return (history->err);
+	max = history->adapter.max;
+	if (history_file_load(&history->file, &history->list, max).type)
+		return (history->err);
+	history_adapter_load(&history->adapter, &history->list);
+	history_load_start_logs(__func__);
+	return (history->err);
 }

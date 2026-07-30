@@ -1,9 +1,9 @@
 #include "env.h"
 #include "scanner.h"
-#include "expander_.h"
 #include "expansion_.h"
-#include "parser.h"
 #include "shell.h"
+#include "lexer.h"
+#include "token_recognition_context.h"
 
 bool    flag_is_active(uint bitset, uint flag)
 {
@@ -56,26 +56,23 @@ t_error	prepare_str_for_expansion(
 			t_string *src)
 {
 	t_error		err;
+	t_token		token;
 	t_lexer		*lexer;
-	t_string	lexer_src;
 
 	err = shell_get_new_lexer(&lexer, SCAN_MODE_STRING, src->data);
 	if (err.type)
 		return (err);
-	err = lexer_remove_escaped_newlines(lexer, src, str_context_rules());
-	if (err.type)
-		return (shell_destroy_last_instance(), err);
-	parser_clear(lexer->scanner->parser);
-	if (!string_dup(&lexer_src, src))
-		return (err = error_sys(), shell_destroy_last_instance(), err);
-	err = lexer_push_input(lexer, &lexer_src);
-	if (err.type == ERR_NO)
-		err = lexer_track_context(
-				lexer,
-				context_out,
-				ast_vec_out,
-				str_context_rules());
-	return (shell_destroy_last_instance(), err);
+	bind_lexer_token(lexer, &token);
+	if (scan_none_context(lexer).type)
+	{
+		token_free(&token);
+		return (err = lexer->err, shell_destroy_last_instance(), err);
+	}
+	string_free(src);
+	vector_take(context_out, &token.contexts);
+	vector_take(ast_vec_out, &token.ast_vector);
+	string_take_string(src, &token.value);
+	return (token_free(&token), shell_destroy_last_instance());
 }
 
 t_error	get_ifs(t_string *ifs)

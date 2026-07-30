@@ -5,7 +5,6 @@ static bool	is_expansion_user_error(t_error_type type)
 	return (type == ERR_PARAM_BAD_SUBSTITUTION
 		|| type == ERR_PARAM_NULL_OR_UNSET
 		|| type == ERR_VAR_INVALID_NAME
-		|| type == ERR_UNEXPECTED_EOI
 		|| type == ERR_CTX_END_NOT_FOUND);
 }
 
