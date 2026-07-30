@@ -3,5 +3,5 @@
 
 t_error	recognize_token_quoting_context(t_lexer *lexer, t_context context)
 {
-	return (token_recognize_consume_context(lexer, context));
+	return (token_recognition_consume_context(lexer, context));
 }

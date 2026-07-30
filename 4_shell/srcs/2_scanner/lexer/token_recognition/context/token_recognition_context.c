@@ -1,7 +1,7 @@
 #include <assert.h> // DEBUG
 #include "token_recognition_context.h"
 
-t_error	token_recognize_consume_context(t_lexer *lexer, t_context context)
+t_error	token_recognition_consume_context(t_lexer *lexer, t_context context)
 {
 	if (context == CONTEXT_SQUOTE)
 		return (scan_squote_context(lexer));
