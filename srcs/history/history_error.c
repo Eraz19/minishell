@@ -2,5 +2,5 @@
 
 t_error	requalify_history_error(t_error err)
 {
-
+	return (err);
 }

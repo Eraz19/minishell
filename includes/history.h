@@ -31,5 +31,10 @@ void	history_free(t_history *state);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
+t_error	history_save(void);
+
+t_error	history_save_entry(void);
+
+t_error	history_append_to_entry(t_string *entry);
 
 #endif
