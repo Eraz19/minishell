@@ -36,27 +36,7 @@ t_error	alias_add(const char *name, const char *value)
 	return (error(ERR_NO));
 }
 
-bool	alias_is_valid_name(const char *name)
-{
-	size_t	i;
 
-	if (name == NULL || *name == '\0')
-		return (false);
-	i = 0;
-	while (name[i] != '\0')
-	{
-		if (!ft_isalnum(name[i]) &&
-			name[i] != '_' &&
-			name[i] != '!' &&
-			name[i] != '%' &&
-			name[i] != ',' &&
-			name[i] != '-' &&
-			name[i] != '@')
-			return (false);
-		i++;
-	}
-	return (true);
-}
 
 void	alias_init(t_alias *alias)
 {

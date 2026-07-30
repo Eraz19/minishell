@@ -108,99 +108,55 @@ TEST_LOGS_DIR		:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
 
 # SHELL (START)
-SHELL_DIR			:= .
+SHELL_DIR			:= 4_shell
 SHELL_SRCS			:= \
 	$(wildcard $(SHELL_DIR)/srcs/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_asm_stubs/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_context/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_context/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_posix_helpers/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_posix_helpers/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_token/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_token/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_utils/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_utils/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/0_utils/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/1_shell/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/2_scanner/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/2_scanner/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/2_scanner/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/3_builder/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/3_builder/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/3_builder/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/3_builder/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/4_runner/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/4_runner/0_cmd_expansion/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/4_runner/1_walker/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/4_runner/1_walker/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/4_runner/2_preparator/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/4_runner/2_preparator/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/alias/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/alias/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/ast/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/ast/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/builtins/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/builtins/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/cmd/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/cmd/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/cmd_sub/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/env/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/env/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/env/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/env/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/env/*/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/expander/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/expander/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/expander/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/expander/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/history/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/history/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/lexer/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/lexer/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/redirector/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/redirector/*/*.c)
-
+	$(wildcard $(SHELL_DIR)/srcs/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*/*/*.c)
 SHELL_INCLUDES		:= \
 	$(LR_TAB_INCLUDES) \
 	$(LIBFT_INCLUDES) \
 	$(LOGS_INCLUDES) \
 	$(READLINE_INCLUDES) \
 	-I$(SHELL_DIR)/includes \
-	-I$(SHELL_DIR)/srcs/0_context \
-	-I$(SHELL_DIR)/srcs/0_context/expansion \
-	-I$(SHELL_DIR)/srcs/0_context/quoting \
-	-I$(SHELL_DIR)/srcs/0_context/stack \
-	-I$(SHELL_DIR)/srcs/0_posix_helpers \
-	-I$(SHELL_DIR)/srcs/0_posix_helpers/posix_open \
-	-I$(SHELL_DIR)/srcs/0_utils \
+	-I$(SHELL_DIR)/srcs/0_posix_helpers/ \
+	-I$(SHELL_DIR)/srcs/0_token/context \
+	-I$(SHELL_DIR)/srcs/0_token/context/context_stack \
+	-I$(SHELL_DIR)/srcs/0_token/context/context_stack_item \
+	-I$(SHELL_DIR)/srcs/0_token/token_pool \
 	-I$(SHELL_DIR)/srcs/0_utils/ft_getopt \
 	-I$(SHELL_DIR)/srcs/0_utils/serializer \
 	-I$(SHELL_DIR)/srcs/0_utils/file \
-	-I$(SHELL_DIR)/srcs/0_utils/ft_getpwnam \
 	-I$(SHELL_DIR)/srcs/1_shell \
 	-I$(SHELL_DIR)/srcs/2_scanner \
-	-I$(SHELL_DIR)/srcs/2_scanner/recognition \
-	-I$(SHELL_DIR)/srcs/2_scanner/recognition/operator \
-	-I$(SHELL_DIR)/srcs/2_scanner/reader \
 	-I$(SHELL_DIR)/srcs/2_scanner/heredoc \
 	-I$(SHELL_DIR)/srcs/2_scanner/heredoc/body \
-	-I$(SHELL_DIR)/srcs/3_builder/1_parser \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/backup \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/input_stack \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/input_stack_item \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition/context \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition/context/scan \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition/operator \
+	-I$(SHELL_DIR)/srcs/2_scanner/reader \
+	-I$(SHELL_DIR)/srcs/2_scanner/reader/interactive \
 	-I$(SHELL_DIR)/srcs/3_builder/0_cst \
+	-I$(SHELL_DIR)/srcs/3_builder/1_parser \
 	-I$(SHELL_DIR)/srcs/3_builder/1_parser/1_item_stack \
 	-I$(SHELL_DIR)/srcs/3_builder/1_parser/2_here_stack \
 	-I$(SHELL_DIR)/srcs/3_builder/2_converter \
-	-I$(SHELL_DIR)/srcs/3_builder/2_converter/1_redirection \
+	-I$(SHELL_DIR)/srcs/3_builder/2_converter/0_convert_io_redir \
 	-I$(SHELL_DIR)/srcs/4_runner \
-	-I$(SHELL_DIR)/srcs/4_runner/0_cmd_expansion \
 	-I$(SHELL_DIR)/srcs/4_runner/1_walker \
 	-I$(SHELL_DIR)/srcs/4_runner/1_walker/0_xtrace \
 	-I$(SHELL_DIR)/srcs/4_runner/1_walker/walk_pipeline \
-	-I$(SHELL_DIR)/srcs/4_runner/2_preparator \
-	-I$(SHELL_DIR)/srcs/4_runner/2_preparator/1_resolve \
-	-I$(SHELL_DIR)/srcs/4_runner/2_preparator/2_assign \
-	-I$(SHELL_DIR)/srcs/4_runner/2_preparator/3_dispatch \
-	-I$(SHELL_DIR)/srcs/alias \
-	-I$(SHELL_DIR)/srcs/alias/stack \
 	-I$(SHELL_DIR)/srcs/ast \
 	-I$(SHELL_DIR)/srcs/builtins \
 	-I$(SHELL_DIR)/srcs/builtins/0_error \
@@ -209,8 +165,10 @@ SHELL_INCLUDES		:= \
 	-I$(SHELL_DIR)/srcs/builtins/env \
 	-I$(SHELL_DIR)/srcs/builtins/set \
 	-I$(SHELL_DIR)/srcs/cmd \
-	-I$(SHELL_DIR)/srcs/cmd/cmd_execute \
-	-I$(SHELL_DIR)/srcs/cmd/cmd_search \
+	-I$(SHELL_DIR)/srcs/cmd/1_cmd_resolve \
+	-I$(SHELL_DIR)/srcs/cmd/2_cmd_assign \
+	-I$(SHELL_DIR)/srcs/cmd/3_cmd_search \
+	-I$(SHELL_DIR)/srcs/cmd/4_cmd_execute \
 	-I$(SHELL_DIR)/srcs/cmd_sub \
 	-I$(SHELL_DIR)/srcs/env/1_options \
 	-I$(SHELL_DIR)/srcs/env/2_specials \
@@ -219,17 +177,19 @@ SHELL_INCLUDES		:= \
 	-I$(SHELL_DIR)/srcs/env/4_variables/load \
 	-I$(SHELL_DIR)/srcs/env/4_variables/load/1_envp \
 	-I$(SHELL_DIR)/srcs/env/4_variables/load/2_mandatory \
-	-I$(SHELL_DIR)/srcs/env/4_variables/load/2_mandatory/ft_getppid \
 	-I$(SHELL_DIR)/srcs/env/4_variables/load/3_up \
 	-I$(SHELL_DIR)/srcs/env/5_functions \
 	-I$(SHELL_DIR)/srcs/env/6_process \
-	-I$(SHELL_DIR)/srcs/env/6_process/process \
 	-I$(SHELL_DIR)/srcs/env/7_cmd_cache \
 	-I$(SHELL_DIR)/srcs/env/8_fds \
 	-I$(SHELL_DIR)/srcs/env/8_fds/1_stack_and_frame \
 	-I$(SHELL_DIR)/srcs/env/8_fds/2_fd_tracker \
 	-I$(SHELL_DIR)/srcs/env/9_signal \
 	-I$(SHELL_DIR)/srcs/env/9_signal/sig_action \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_build_name \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_id_to_no \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_no_to_id \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_parse_name \
 	-I$(SHELL_DIR)/srcs/env/10_alias \
 	-I$(SHELL_DIR)/srcs/env/10_alias/1_alias_table \
 	-I$(SHELL_DIR)/srcs/env/10_alias/2_alias_stack \
@@ -240,29 +200,28 @@ SHELL_INCLUDES		:= \
 	-I$(SHELL_DIR)/srcs/expander/field_splitting \
 	-I$(SHELL_DIR)/srcs/expander/loader \
 	-I$(SHELL_DIR)/srcs/expander/loader/context \
+	-I$(SHELL_DIR)/srcs/expander/match_pattern \
 	-I$(SHELL_DIR)/srcs/expander/path_name_expansion \
-	-I$(SHELL_DIR)/srcs/expander/path_name_expansion/path_comps \
 	-I$(SHELL_DIR)/srcs/expander/path_name_expansion/globbing \
+	-I$(SHELL_DIR)/srcs/expander/path_name_expansion/path_comps \
 	-I$(SHELL_DIR)/srcs/expander/path_name_expansion/path_matches \
 	-I$(SHELL_DIR)/srcs/expander/quote_removal \
 	-I$(SHELL_DIR)/srcs/expander/quote_removal/context \
 	-I$(SHELL_DIR)/srcs/expander/substitutions \
-	-I$(SHELL_DIR)/srcs/expander/substitutions/tilde \
-	-I$(SHELL_DIR)/srcs/expander/substitutions/param \
-	-I$(SHELL_DIR)/srcs/expander/substitutions/param/unbraced \
-	-I$(SHELL_DIR)/srcs/expander/substitutions/param/braced \
-	-I$(SHELL_DIR)/srcs/expander/substitutions/cmd_sub \
-	-I$(SHELL_DIR)/srcs/expander/substitutions/dollar_squote \
 	-I$(SHELL_DIR)/srcs/expander/substitutions/arith \
 	-I$(SHELL_DIR)/srcs/expander/substitutions/backtick \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/cmd_sub \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/dollar_squote \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/param \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/param/braced \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/param/unbraced \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/tilde \
 	-I$(SHELL_DIR)/srcs/expander/word \
 	-I$(SHELL_DIR)/srcs/history \
+	-I$(SHELL_DIR)/srcs/history/adapter \
 	-I$(SHELL_DIR)/srcs/history/file \
 	-I$(SHELL_DIR)/srcs/history/list \
-	-I$(SHELL_DIR)/srcs/history/readline \
-	-I$(SHELL_DIR)/srcs/lexer \
-	-I$(SHELL_DIR)/srcs/lexer/context \
-	-I$(SHELL_DIR)/srcs/lexer/input_stack \
+	-I$(SHELL_DIR)/srcs/history/load_env \
 	-I$(SHELL_DIR)/srcs/redirector
 SHELL_CORE_OBJS		:= $(SHELL_SRCS:%.c=$(OBJ_DIR)/%.o)
 SHELL_OBJS			:= $(SHELL_CORE_OBJS) $(LR_TAB_OBJS) $(LOGS_OBJS)
@@ -272,10 +231,10 @@ SHELL_DEPS			:= $(SHELL_CORE_OBJS:.o=.d)
 # BUILD MACRO (START)
 define BUILD_SECTION
 	@status=0; \
-	$(MAKE) -srq $(1) || status=$$?; \
+	$(MAKE) -srq CFLAGS="$(CFLAGS)" $(1) || status=$$?; \
 	if [ $$status -eq 1 ]; then \
 		echo "🧠 compiling  $(2)..."; \
-		$(MAKE) -sr $(1); \
+		$(MAKE) -sr CFLAGS="$(CFLAGS)" $(1); \
 	elif [ $$status -ne 0 ]; then \
 		exit $$status; \
 	fi
@@ -307,7 +266,7 @@ _compile_grammar:
 
 _build_generator: $(LIBFT) _compile_logs _compile_grammar
 	$(call BUILD_SECTION,$(GEN_CORE_OBJS),generator)
-	@$(MAKE) -s $(GEN_NAME)
+	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(GEN_NAME)
 
 _generate_tables: 
 	@if [ ! -f $(LR_TAB_MARKER) ] \
@@ -315,14 +274,14 @@ _generate_tables:
 		|| [ ! -f $(LR_TAB_GEN_DIR)/lr_tables.c ]; then \
 		rm -f $(LR_TAB_MARKER); \
 	fi
-	@$(MAKE) -s $(LR_TAB_MARKER)
+	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(LR_TAB_MARKER)
 
 _compile_tables: _generate_tables
 	$(call BUILD_SECTION,$(LR_TAB_CORE_OBJS),lr tables)
 
 _build_shell: $(LIBFT) _compile_logs _compile_tables
 	$(call BUILD_SECTION,$(SHELL_CORE_OBJS),shell)
-	@$(MAKE) -s $(NAME)
+	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(NAME)
 # PRIVATE RULES (END)
 
 $(LIBFT): _force_libft
