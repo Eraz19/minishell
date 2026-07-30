@@ -28,16 +28,11 @@ t_error	parser_load(
 			t_scan_mode mode,
 			const char *input)
 {
-	t_error	err;
-
 	assert(parser != NULL);
 	parser->tables = shell_get_lr_tables();
 	parser->search_cmd_sub_end = (mode == SCAN_MODE_CMD_SUB);
 	scanner_load(&parser->scanner, parent_scanner, parser, mode);
-	err.type = ERR_NO;
-	if (input != NULL)
-		err = scanner_bind_input(&parser->scanner, input);
-	return (err);
+	return (scanner_bind_input(&parser->scanner, input));
 }
 
 void	parser_clear(t_parser *parser)

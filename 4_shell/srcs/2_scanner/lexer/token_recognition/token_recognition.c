@@ -13,7 +13,7 @@ t_error	token_recognize_rules_dispatch(t_lexer *lexer)
 	if (is_context_none_ending(*current_char_ptr, NULL))
 		return (recognize_token_input_end(lexer));
 	else if (is_inside_operator(lexer))
-		return (token_recognition_consume_operator(lexer));
+		return (recognize_token_inside_operator(lexer));
 	else if (is_quoting_context_start(current_char_ptr, &context))
 		return (recognize_token_quoting_context(lexer, context));
 	else if (is_expansion_context_start(current_char_ptr, &context))

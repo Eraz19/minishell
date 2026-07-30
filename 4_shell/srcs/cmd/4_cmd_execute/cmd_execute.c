@@ -9,7 +9,7 @@ t_error	cmd_execute(t_cmd *cmd, bool path_is_temporary, int *exit_status)
 	t_error	err;
 
 	assert(cmd->entry.type == CMD_NONE || cmd->entry.type == CMD_EXTERNAL || cmd->entry.type == CMD_BUILTIN);
-	if (cmd->entry.type == CMD_NONE || cmd->entry.type == CMD_EXTERNAL)
+	if (cmd->entry.type == CMD_EXTERNAL)
 	{
 		err = cmd_search(cmd, path_is_temporary);
 		if (err.type)

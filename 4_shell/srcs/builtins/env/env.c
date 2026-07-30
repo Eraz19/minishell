@@ -48,6 +48,7 @@ static inline t_error	env_exec(int argc, char **argv, t_vector *env, int *status
 	t_error		err;
 
 	cmd_init(&cmd);
+	cmd.entry.type = CMD_EXTERNAL;
 	cmd.name.data = argv[0];
 	cmd.name.len = str_len(argv[0]);
 	cmd.argc = argc;

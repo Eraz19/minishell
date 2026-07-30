@@ -25,6 +25,6 @@ t_error	scan_cmd_sub_context(t_lexer *lexer)
 	// Checks if the cmd_sub_find_end return a possible value
 	assert(closing_index >= (ssize_t)lexer->input->i);
 	cmd_sub_len = (size_t)closing_index - lexer->input->i + 1;
-	item->end = lexer->token->value.len + cmd_sub_len;
+	item->end = lexer->token->value.len + cmd_sub_len - 1;
 	return (token_recognition_consume(lexer, lexer->token->type, cmd_sub_len));
 }
