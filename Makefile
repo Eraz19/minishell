@@ -1,7 +1,11 @@
-NAME			:= minishell
-CC				:= cc
-CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 -DDEBUG_PARSING -DDEBUG_AST	# -DNDEBUG (disable assert())
-DEBUG_CFLAGS	:= \
+NAME				:= minishell
+CC					:= cc
+DEPFLAGS			:= -MMD -MP
+CFLAGS				:= \
+	-Wall -Wextra -Wdeprecated -Werror \
+	-O2 \
+	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_INSTANCES	# -DNDEBUG (disable assert())
+DEBUG_CFLAGS		:= \
 	-Wall -Wextra -Wdeprecated -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
 	-DDEBUG_ERROR_TRACE \
@@ -11,199 +15,296 @@ DEBUG_CFLAGS	:= \
 	-DDEBUG_CST \
 	-DDEBUG_AST \
 	-DDEBUG_HISTORY \
-	-DDEBUG_CMD_SUB
+	-DDEBUG_CMD_SUB \
+	-DDEBUG_INSTANCES
+OBJ_DIR				:= obj
 
-LIBFT_DIR		:= libft
-LIBFT			:= $(LIBFT_DIR)/libft.a
-READLINE_DIR	:= $(shell brew --prefix readline 2>/dev/null)
+# LIBFT (START)
+LIBFT_DIR			:= libft
+LIBFT_INCLUDES		:= -I$(LIBFT_DIR)
+LIBFT				:= $(LIBFT_DIR)/libft.a
+# LIBFT (END)
+
+# LOGS (START)
+LOGS_DIR			:= logs
+LOGS_INCLUDES		:= \
+	$(LIBFT_INCLUDES) \
+	-I$(LOGS_DIR)
+LOGS_SRCS			:= $(wildcard $(LOGS_DIR)/*.c)
+LOGS_OBJS			:= $(LOGS_SRCS:%.c=$(OBJ_DIR)/%.o)
+LOGS_DEPS			:= $(LOGS_OBJS:.o=.d)
+# LOGS (END)
+
+# GRAMMAR (START)
+GRAM_DIR			:= 1_grammar
+GRAM_INCLUDES		:= \
+	$(LIBFT_INCLUDES) \
+	-I$(GRAM_DIR)/includes
+GRAM_SRCS			:= \
+	$(wildcard $(GRAM_DIR)/srcs/*.c) \
+	$(wildcard $(GRAM_DIR)/srcs/*/*.c)
+GRAM_OBJS			:= $(GRAM_SRCS:%.c=$(OBJ_DIR)/%.o)
+GRAM_DEPS			:= $(GRAM_OBJS:.o=.d)
+# GRAMMAR (END)
+
+# GENERATOR (START)
+GEN_DIR				:= 2_generator
+GEN_NAME			:= $(GEN_DIR)/lr_generator
+GEN_INCLUDES		:= \
+	$(GRAM_INCLUDES) \
+	$(LIBFT_INCLUDES) \
+	$(LOGS_INCLUDES) \
+	-I$(GEN_DIR)/includes \
+	-I$(GEN_DIR)/srcs/2_rules \
+	-I$(GEN_DIR)/srcs/3_first \
+	-I$(GEN_DIR)/srcs/5_lr_state \
+	-I$(GEN_DIR)/srcs/8_action \
+	-I$(GEN_DIR)/srcs/9_qualifiers \
+	-I$(GEN_DIR)/srcs/2_serialize \
+	-I$(GEN_DIR)/srcs/2_serialize/write_c_file
+GEN_SRCS			:= \
+	$(wildcard $(GEN_DIR)/srcs/*.c) \
+	$(wildcard $(GEN_DIR)/srcs/*/*.c) \
+	$(wildcard $(GEN_DIR)/srcs/*/*/*.c)
+GEN_CORE_OBJS		:= $(GEN_SRCS:%.c=$(OBJ_DIR)/%.o)
+GEN_OBJS			:= $(GEN_CORE_OBJS) $(GRAM_OBJS) $(LOGS_OBJS)
+GEN_DEPS			:= $(GEN_CORE_OBJS:.o=.d)
+# GENERATOR (END)
+
+# LR_TABLES (START)
+LR_TAB_DIR			:= 3_lr_tables
+LR_TAB_BASE_DIR		:= $(LR_TAB_DIR)/1_base
+LR_TAB_GEN_DIR		:= $(LR_TAB_DIR)/2_generated
+LR_TAB_FILES		:= lr_tables.h lr_tables.c
+LR_TAB_GEN_FILES	:= $(addprefix $(LR_TAB_GEN_DIR)/,$(LR_TAB_FILES))
+LR_TAB_BASE_FILES	:= $(addprefix $(LR_TAB_BASE_DIR)/,$(LR_TAB_FILES))
+LR_TAB_INPUTS		:= \
+	$(shell find $(GRAM_DIR) $(GEN_DIR) $(LOGS_DIR) $(LIBFT_DIR)/src \
+		-type f \( -name '*.c' -o -name '*.h' \)) \
+	$(wildcard $(LIBFT_DIR)/*.h)
+LR_TAB_MARKER		:= $(LR_TAB_GEN_DIR)/.generated
+LR_TAB_INCLUDES		:= \
+	$(GRAM_INCLUDES) \
+	-I$(LR_TAB_GEN_DIR)
+LR_TAB_SRCS			:= $(LR_TAB_GEN_DIR)/lr_tables.c
+LR_TAB_CORE_OBJS	:= $(LR_TAB_SRCS:%.c=$(OBJ_DIR)/%.o)
+LR_TAB_OBJS			:= $(LR_TAB_CORE_OBJS) $(GRAM_OBJS)
+LR_TAB_DEPS			:= $(LR_TAB_CORE_OBJS:.o=.d)
+# LR_TABLES (END)
+
+# READLINE (START)
+READLINE_DIR		:= $(shell brew --prefix readline 2>/dev/null)
+READLINE_INCLUDES	:= -I$(READLINE_DIR)/include
+READLINE_LIBS		:= -L$(READLINE_DIR)/lib -lreadline
+# READLINE (END)
 
 # DEBUG SECTION (START)
-TEST_CFLAGS		:= -Wall -Wextra -Wdeprecated -Werror -O2
-TEST_DIR		:= ./tests
-TESTERS			:= $(wildcard $(TEST_DIR)/*.zsh)
-MAIN_TESTER		:= $(TEST_DIR)/test_posix_suite.zsh
-FIXTURES_DIR	:= $(TEST_DIR)/fixtures
-LOGS_DIR		:= $(TEST_DIR)/logs
+TEST_CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2
+TEST_DIR			:= ./tests
+TEST_SCRIPTS		:= $(wildcard $(TEST_DIR)/*.zsh)
+TEST_MAIN			:= $(TEST_DIR)/test_posix_suite.zsh
+TEST_FIXT_DIR		:= $(TEST_DIR)/fixtures
+TEST_LOGS_DIR		:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
 
-SRCS			:= \
-	$(wildcard logs/*.c) \
-	$(wildcard srcs/*.c) \
-	$(wildcard srcs/0_asm_stubs/*/*.c) \
-	$(wildcard srcs/0_context/*.c) \
-	$(wildcard srcs/0_context/*/*.c) \
-	$(wildcard srcs/0_posix_helpers/*.c) \
-	$(wildcard srcs/0_posix_helpers/*/*.c) \
-	$(wildcard srcs/0_token/*.c) \
-	$(wildcard srcs/0_token/*/*.c) \
-	$(wildcard srcs/0_utils/*.c) \
-	$(wildcard srcs/0_utils/*/*.c) \
-	$(wildcard srcs/1_shell/*.c) \
-	$(wildcard srcs/lexer/*.c) \
-	$(wildcard srcs/lexer/*/*.c) \
-	$(wildcard srcs/2_scanner/*.c) \
-	$(wildcard srcs/2_scanner/*/*.c) \
-	$(wildcard srcs/2_scanner/*/*/*.c) \
-	$(wildcard srcs/2_scanner/*/*/*.c) \
-	$(wildcard srcs/3_builder/*.c) \
-	$(wildcard srcs/3_builder/*/*.c) \
-	$(wildcard srcs/3_builder/*/*/*.c) \
-	$(wildcard srcs/3_builder/*/*/*/*.c) \
-	$(wildcard srcs/4_runner/*.c) \
-	$(wildcard srcs/4_runner/0_cmd_expansion/*.c) \
-	$(wildcard srcs/4_runner/0_xtrace/*.c) \
-	$(wildcard srcs/4_runner/1_redirector/*.c) \
-	$(wildcard srcs/4_runner/1_redirector/*/*.c) \
-	$(wildcard srcs/4_runner/2_executor/*.c) \
-	$(wildcard srcs/4_runner/2_executor/*/*.c) \
-	$(wildcard srcs/4_runner/3_walker/*.c) \
-	$(wildcard srcs/4_runner/3_walker/*/*.c) \
-	$(wildcard srcs/alias/*.c) \
-	$(wildcard srcs/alias/*/*.c) \
-	$(wildcard srcs/ast/*.c) \
-	$(wildcard srcs/ast/*/*.c) \
-	$(wildcard srcs/builtins/*.c) \
-	$(wildcard srcs/builtins/*/*.c) \
-	$(wildcard srcs/cmd_sub/*.c) \
-	$(wildcard srcs/expander/*.c) \
-	$(wildcard srcs/expander/*/*.c) \
-	$(wildcard srcs/expander/*/*/*.c) \
-	$(wildcard srcs/expander/*/*/*/*.c) \
-	$(wildcard srcs/history/*.c) \
-	$(wildcard srcs/history/*/*.c) \
-	$(wildcard srcs/params/*.c) \
-	$(wildcard srcs/params/*/*.c) \
-	$(wildcard srcs/params/*/*/*.c) \
-	$(wildcard srcs/params/*/*/*/*.c) \
-	$(wildcard srcs/params/*/*/*/*/*.c) \
-	$(wildcard srcs/signal/*.c) \
-	$(wildcard srcs/signal/*/*.c)
+# SHELL (START)
+SHELL_DIR			:= 4_shell
+SHELL_SRCS			:= \
+	$(wildcard $(SHELL_DIR)/srcs/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*/*.c) \
+	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*/*/*.c)
+SHELL_INCLUDES		:= \
+	$(LR_TAB_INCLUDES) \
+	$(LIBFT_INCLUDES) \
+	$(LOGS_INCLUDES) \
+	$(READLINE_INCLUDES) \
+	-I$(SHELL_DIR)/includes \
+	-I$(SHELL_DIR)/srcs/0_posix_helpers/ \
+	-I$(SHELL_DIR)/srcs/0_token/context \
+	-I$(SHELL_DIR)/srcs/0_token/context/context_stack \
+	-I$(SHELL_DIR)/srcs/0_token/context/context_stack_item \
+	-I$(SHELL_DIR)/srcs/0_token/token_pool \
+	-I$(SHELL_DIR)/srcs/0_utils/ft_getopt \
+	-I$(SHELL_DIR)/srcs/0_utils/serializer \
+	-I$(SHELL_DIR)/srcs/0_utils/file \
+	-I$(SHELL_DIR)/srcs/1_shell \
+	-I$(SHELL_DIR)/srcs/2_scanner \
+	-I$(SHELL_DIR)/srcs/2_scanner/heredoc \
+	-I$(SHELL_DIR)/srcs/2_scanner/heredoc/body \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/backup \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/input_stack \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/input_stack_item \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition/context \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition/context/scan \
+	-I$(SHELL_DIR)/srcs/2_scanner/lexer/token_recognition/operator \
+	-I$(SHELL_DIR)/srcs/2_scanner/reader \
+	-I$(SHELL_DIR)/srcs/2_scanner/reader/interactive \
+	-I$(SHELL_DIR)/srcs/3_builder/0_cst \
+	-I$(SHELL_DIR)/srcs/3_builder/1_parser \
+	-I$(SHELL_DIR)/srcs/3_builder/1_parser/1_item_stack \
+	-I$(SHELL_DIR)/srcs/3_builder/1_parser/2_here_stack \
+	-I$(SHELL_DIR)/srcs/3_builder/2_converter \
+	-I$(SHELL_DIR)/srcs/3_builder/2_converter/0_convert_io_redir \
+	-I$(SHELL_DIR)/srcs/4_runner \
+	-I$(SHELL_DIR)/srcs/4_runner/1_walker \
+	-I$(SHELL_DIR)/srcs/4_runner/1_walker/0_xtrace \
+	-I$(SHELL_DIR)/srcs/4_runner/1_walker/walk_pipeline \
+	-I$(SHELL_DIR)/srcs/ast \
+	-I$(SHELL_DIR)/srcs/builtins \
+	-I$(SHELL_DIR)/srcs/builtins/0_error \
+	-I$(SHELL_DIR)/srcs/builtins/cd \
+	-I$(SHELL_DIR)/srcs/builtins/echo \
+	-I$(SHELL_DIR)/srcs/builtins/env \
+	-I$(SHELL_DIR)/srcs/builtins/set \
+	-I$(SHELL_DIR)/srcs/cmd \
+	-I$(SHELL_DIR)/srcs/cmd/1_cmd_resolve \
+	-I$(SHELL_DIR)/srcs/cmd/2_cmd_assign \
+	-I$(SHELL_DIR)/srcs/cmd/3_cmd_search \
+	-I$(SHELL_DIR)/srcs/cmd/4_cmd_execute \
+	-I$(SHELL_DIR)/srcs/cmd_sub \
+	-I$(SHELL_DIR)/srcs/env/1_options \
+	-I$(SHELL_DIR)/srcs/env/2_specials \
+	-I$(SHELL_DIR)/srcs/env/3_positionals \
+	-I$(SHELL_DIR)/srcs/env/4_variables \
+	-I$(SHELL_DIR)/srcs/env/4_variables/load \
+	-I$(SHELL_DIR)/srcs/env/4_variables/load/1_envp \
+	-I$(SHELL_DIR)/srcs/env/4_variables/load/2_mandatory \
+	-I$(SHELL_DIR)/srcs/env/4_variables/load/3_up \
+	-I$(SHELL_DIR)/srcs/env/5_functions \
+	-I$(SHELL_DIR)/srcs/env/6_process \
+	-I$(SHELL_DIR)/srcs/env/7_cmd_cache \
+	-I$(SHELL_DIR)/srcs/env/8_fds \
+	-I$(SHELL_DIR)/srcs/env/8_fds/1_stack_and_frame \
+	-I$(SHELL_DIR)/srcs/env/8_fds/2_fd_tracker \
+	-I$(SHELL_DIR)/srcs/env/9_signal \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_action \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_build_name \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_id_to_no \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_no_to_id \
+	-I$(SHELL_DIR)/srcs/env/9_signal/sig_parse_name \
+	-I$(SHELL_DIR)/srcs/env/10_alias \
+	-I$(SHELL_DIR)/srcs/env/10_alias/1_alias_table \
+	-I$(SHELL_DIR)/srcs/env/10_alias/2_alias_stack \
+	-I$(SHELL_DIR)/srcs/env/10_alias/3_alias_forbidden \
+	-I$(SHELL_DIR)/srcs/expander \
+	-I$(SHELL_DIR)/srcs/expander/expansion \
+	-I$(SHELL_DIR)/srcs/expander/field \
+	-I$(SHELL_DIR)/srcs/expander/field_splitting \
+	-I$(SHELL_DIR)/srcs/expander/loader \
+	-I$(SHELL_DIR)/srcs/expander/loader/context \
+	-I$(SHELL_DIR)/srcs/expander/match_pattern \
+	-I$(SHELL_DIR)/srcs/expander/path_name_expansion \
+	-I$(SHELL_DIR)/srcs/expander/path_name_expansion/globbing \
+	-I$(SHELL_DIR)/srcs/expander/path_name_expansion/path_comps \
+	-I$(SHELL_DIR)/srcs/expander/path_name_expansion/path_matches \
+	-I$(SHELL_DIR)/srcs/expander/quote_removal \
+	-I$(SHELL_DIR)/srcs/expander/quote_removal/context \
+	-I$(SHELL_DIR)/srcs/expander/substitutions \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/arith \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/backtick \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/cmd_sub \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/dollar_squote \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/param \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/param/braced \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/param/unbraced \
+	-I$(SHELL_DIR)/srcs/expander/substitutions/tilde \
+	-I$(SHELL_DIR)/srcs/expander/word \
+	-I$(SHELL_DIR)/srcs/history \
+	-I$(SHELL_DIR)/srcs/history/adapter \
+	-I$(SHELL_DIR)/srcs/history/file \
+	-I$(SHELL_DIR)/srcs/history/list \
+	-I$(SHELL_DIR)/srcs/history/load_env \
+	-I$(SHELL_DIR)/srcs/redirector
+SHELL_CORE_OBJS		:= $(SHELL_SRCS:%.c=$(OBJ_DIR)/%.o)
+SHELL_OBJS			:= $(SHELL_CORE_OBJS) $(LR_TAB_OBJS) $(LOGS_OBJS)
+SHELL_DEPS			:= $(SHELL_CORE_OBJS:.o=.d)
+# SHELL (END)
 
-INCLUDES		:= \
-	-I$(READLINE_DIR)/include \
-	-Iincludes \
-	-Ilogs \
-	-Ilibft \
-	-Ilibft/src/buff \
-	-Ilibft/src/buff/format \
-	-Isrcs/0_token/context \
-	-Isrcs/0_token/context/context_stack \
-	-Isrcs/0_token/context/context_stack_item \
-	-Isrcs/0_token/token_pool \
-	-Isrcs/0_posix_helpers \
-	-Isrcs/0_posix_helpers/posix_open \
-	-Isrcs/0_utils \
-	-Isrcs/0_utils/1_ft_getopt \
-	-Isrcs/0_utils/2_serializer \
-	-Isrcs/0_utils/ft_getpwnam \
-	-Isrcs/1_shell \
-	-Isrcs/2_scanner \
-	-Isrcs/2_scanner/heredoc \
-	-Isrcs/2_scanner/heredoc/body \
-	-Isrcs/2_scanner/lexer \
-	-Isrcs/2_scanner/lexer/backup \
-	-Isrcs/2_scanner/lexer/input_stack \
-	-Isrcs/2_scanner/lexer/input_stack_item \
-	-Isrcs/2_scanner/lexer/token_recognition \
-	-Isrcs/2_scanner/lexer/token_recognition/context \
-	-Isrcs/2_scanner/lexer/token_recognition/context/scan \
-	-Isrcs/2_scanner/lexer/token_recognition/operator \
-	-Isrcs/2_scanner/reader \
-	-Isrcs/2_scanner/reader/interactive \
-	-Isrcs/3_builder/1_lr_machine \
-	-Isrcs/3_builder/1_lr_machine/1_hooks \
-	-Isrcs/3_builder/1_lr_machine/2_symbols \
-	-Isrcs/3_builder/1_lr_machine/3_rules \
-	-Isrcs/3_builder/1_lr_machine/4_first \
-	-Isrcs/3_builder/1_lr_machine/5_rule_state \
-	-Isrcs/3_builder/1_lr_machine/6_lr_state \
-	-Isrcs/3_builder/1_lr_machine/7_transition \
-	-Isrcs/3_builder/1_lr_machine/8_goto \
-	-Isrcs/3_builder/1_lr_machine/9_action \
-	-Isrcs/3_builder/1_lr_machine/10_qualifiers \
-	-Isrcs/3_builder/2_parser \
-	-Isrcs/builtins/set \
-	-Isrcs/3_builder/0_cst \
-	-Isrcs/3_builder/2_parser/1_item_stack \
-	-Isrcs/3_builder/2_parser/2_here_stack \
-	-Isrcs/3_builder/3_converter \
-	-Isrcs/3_builder/3_converter/1_redirection \
-	-Isrcs/4_runner \
-	-Isrcs/4_runner/0_cmd_expansion \
-	-Isrcs/4_runner/0_xtrace \
-	-Isrcs/4_runner/1_redirector \
-	-Isrcs/4_runner/2_executor \
-	-Isrcs/4_runner/2_executor/0_cmd \
-	-Isrcs/4_runner/2_executor/0_entry_is_target \
-	-Isrcs/4_runner/2_executor/1_resolver \
-	-Isrcs/4_runner/2_executor/2_assignator \
-	-Isrcs/4_runner/2_executor/3_searcher \
-	-Isrcs/4_runner/2_executor/4_dispatcher \
-	-Isrcs/4_runner/3_walker \
-	-Isrcs/4_runner/3_walker/pipeline \
-	-Isrcs/ast \
-	-Isrcs/builtins \
-	-Isrcs/cmd_sub \
-	-Isrcs/expander \
-	-Isrcs/expander/expansion \
-	-Isrcs/expander/field \
-	-Isrcs/expander/field_splitting \
-	-Isrcs/expander/loader \
-	-Isrcs/expander/loader/context \
-	-Isrcs/expander/path_name_expansion \
-	-Isrcs/expander/path_name_expansion/path_comps \
-	-Isrcs/expander/path_name_expansion/globbing \
-	-Isrcs/expander/path_name_expansion/path_matches \
-	-Isrcs/expander/quote_removal \
-	-Isrcs/expander/quote_removal/context \
-	-Isrcs/expander/substitutions \
-	-Isrcs/expander/substitutions/tilde \
-	-Isrcs/expander/substitutions/param \
-	-Isrcs/expander/substitutions/param/unbraced \
-	-Isrcs/expander/substitutions/param/braced \
-	-Isrcs/expander/substitutions/cmd_sub \
-	-Isrcs/expander/substitutions/dollar_squote \
-	-Isrcs/expander/substitutions/arith \
-	-Isrcs/expander/substitutions/backtick \
-	-Isrcs/expander/word \
-	-Isrcs/history \
-	-Isrcs/history/file \
-	-Isrcs/history/list \
-	-Isrcs/history/adapter \
-	-Isrcs/history/load_env \
-	-Isrcs/params/1_options \
-	-Isrcs/params/2_specials \
-	-Isrcs/params/3_positionals \
-	-Isrcs/params/4_variables \
-	-Isrcs/params/4_variables/load \
-	-Isrcs/params/4_variables/load/1_envp \
-	-Isrcs/params/4_variables/load/2_mandatory \
-	-Isrcs/params/4_variables/load/2_mandatory/ft_getppid \
-	-Isrcs/params/4_variables/load/3_up \
-	-Isrcs/params/5_functions \
-	-Isrcs/params/6_process \
-	-Isrcs/params/6_process/process \
-	-Isrcs/params/7_cmd_cache \
-	-Isrcs/params/8_fds \
-	-Isrcs/params/8_fds/1_stack_and_frame \
-	-Isrcs/params/8_fds/2_fd_tracker \
-	-Isrcs/params/9_signal \
-	-Isrcs/params/9_signal/sig_action
+# BUILD MACRO (START)
+define BUILD_SECTION
+	@status=0; \
+	$(MAKE) -srq CFLAGS="$(CFLAGS)" $(1) || status=$$?; \
+	if [ $$status -eq 1 ]; then \
+		echo "🧠 compiling  $(2)..."; \
+		$(MAKE) -sr CFLAGS="$(CFLAGS)" $(1); \
+	elif [ $$status -ne 0 ]; then \
+		exit $$status; \
+	fi
+endef
+# BUILD MACRO (END)
 
-OBJ_DIR			:= obj
-OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
+# INCLUDES SELECTION (START)
+$(LOGS_OBJS): BUILD_INCLUDES := $(LOGS_INCLUDES)
+$(GRAM_OBJS): BUILD_INCLUDES := $(GRAM_INCLUDES)
+$(GEN_CORE_OBJS): BUILD_INCLUDES := $(GEN_INCLUDES)
+$(LR_TAB_CORE_OBJS): BUILD_INCLUDES := $(LR_TAB_INCLUDES)
+$(SHELL_CORE_OBJS): BUILD_INCLUDES := $(SHELL_INCLUDES)
+# INCLUDES SELECTION (END)
 
-all: $(NAME)
+# PUBLIC RULES (START)
+all: _build_shell
 
-$(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR)
+tables: _generate_tables
+# PUBLIC RULES (END)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L$(READLINE_DIR)/lib -lreadline -o $(NAME)
+# PRIVATE RULES (START)
+_force_libft:
+
+_compile_logs:
+	$(call BUILD_SECTION,$(LOGS_OBJS),logs)
+
+_compile_grammar:
+	$(call BUILD_SECTION,$(GRAM_OBJS),grammar)
+
+_build_generator: $(LIBFT) _compile_logs _compile_grammar
+	$(call BUILD_SECTION,$(GEN_CORE_OBJS),generator)
+	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(GEN_NAME)
+
+_generate_tables: 
+	@if [ ! -f $(LR_TAB_MARKER) ] \
+		|| [ ! -f $(LR_TAB_GEN_DIR)/lr_tables.h ] \
+		|| [ ! -f $(LR_TAB_GEN_DIR)/lr_tables.c ]; then \
+		rm -f $(LR_TAB_MARKER); \
+	fi
+	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(LR_TAB_MARKER)
+
+_compile_tables: _generate_tables
+	$(call BUILD_SECTION,$(LR_TAB_CORE_OBJS),lr tables)
+
+_build_shell: $(LIBFT) _compile_logs _compile_tables
+	$(call BUILD_SECTION,$(SHELL_CORE_OBJS),shell)
+	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(NAME)
+# PRIVATE RULES (END)
+
+$(LIBFT): _force_libft
+	@$(MAKE) -s -C $(LIBFT_DIR)
+
+$(GEN_NAME): $(GEN_OBJS) $(LIBFT)
+	@echo "👉 linking    generator..."
+	@$(CC) $(CFLAGS) $(GEN_OBJS) $(LIBFT) -o $(GEN_NAME)
+
+$(LR_TAB_MARKER): $(LR_TAB_INPUTS)
+	@$(MAKE) -s _build_generator
+	@echo "🧮 generating lr tables..."
+	@mkdir -p $(LR_TAB_GEN_DIR)
+	@./$(GEN_NAME)
+	@touch $(LR_TAB_MARKER)
+
+$(NAME): $(SHELL_OBJS) $(LIBFT)
+	@echo "👉 linking    shell..."
+	@$(CC) $(CFLAGS) $(SHELL_OBJS) $(LIBFT) $(READLINE_LIBS) -o $(NAME)
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(DEPFLAGS) $(CFLAGS) $(BUILD_INCLUDES) -c $< -o $@
 
 bonus: all
 
@@ -215,21 +316,32 @@ test: CFLAGS := $(TEST_CFLAGS)
 test:
 	@echo "compiling..."
 	@$(MAKE) re >/dev/null
-	$(MAIN_TESTER)
-# 	@for tester in $(TESTERS); do \
+	$(TEST_MAIN)
+# 	@for tester in $(TEST_SCRIPTS); do \
 # 		echo "Running $$tester"; \
 # 		zsh "$$tester"; \
 # 	done
 # DEBUG SECTION (END)
 
 clean:
-	rm -rf $(OBJ_DIR) $(FIXTURES_DIR) $(LOGS_DIR)
+	rm -rf $(OBJ_DIR) $(TEST_FIXT_DIR) $(TEST_LOGS_DIR)
+	rm -f $(GEN_NAME)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME) $(TEST_GETOPT_BIN) $(TEST_GETOPT_BIN).dSYM
+	rm -f $(NAME) $(LR_TAB_MARKER)
+	@mkdir -p $(LR_TAB_GEN_DIR)
+	@cp $(LR_TAB_BASE_FILES) $(LR_TAB_GEN_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all bonus debug test_getopt test clean fclean re
+-include $(wildcard $(LOGS_DEPS))
+-include $(wildcard $(GRAM_DEPS))
+-include $(wildcard $(GEN_DEPS))
+-include $(wildcard $(LR_TAB_DEPS))
+-include $(wildcard $(SHELL_DEPS))
+
+.PHONY: all tables bonus debug test clean fclean re \
+	_force_libft _compile_logs _compile_grammar _compile_tables \
+	_build_generator _generate_tables _build_shell

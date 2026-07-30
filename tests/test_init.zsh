@@ -449,7 +449,7 @@ expect_option_dump_any_bool()
 	fi
 }
 
-params_hyphen_flags()
+env_hyphen_flags()
 {
 	if [[ "$OUTPUT" =~ "PARAMS '-'='([^']*)'" ]]; then
 		printf '%s' "$match[1]"
@@ -470,7 +470,7 @@ params_hyphen_flags()
 expect_param_flag_present()
 {
 	local flag="$1"
-	local flags="$(params_hyphen_flags)"
+	local flags="$(env_hyphen_flags)"
 
 	if [[ "$flags" != *"$flag"* ]]; then
 		fail_current "PARAMS '-': missing flag '$flag' in '${flags}'"
@@ -480,7 +480,7 @@ expect_param_flag_present()
 expect_param_flag_absent()
 {
 	local flag="$1"
-	local flags="$(params_hyphen_flags)"
+	local flags="$(env_hyphen_flags)"
 
 	if [[ "$flags" == *"$flag"* ]]; then
 		fail_current "PARAMS '-': unexpected flag '$flag' in '${flags}'"

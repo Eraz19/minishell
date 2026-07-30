@@ -1,99 +1,55 @@
-# WIP IMMEDIATLY
+# WIP (LR MACHINE)
 
-- `FOR.4`:
-```bash
-set -- m n
-for x; do echo $x; done
-```
+- `generator`:
+	- compute and store in `lr_generator`:
+		- `ACTION_COL_COUNT`
+		- `ACTION_COUNT`
+		- `GOTO_COL_COUNT`
+		- `GOTO_COUNT`
+	- only store `t_qualifier_id` in `lr_generator`
 
-`"$@"` => `"m n"` => `"m` + `n"`
-- `ast_for`:
-	- on `ast` building phase: if `word` is `VAR_NOT_FOUND` => let `words` empty
-	- on `ast` execution phase:
-		- if `words.len` == 0 => call `expand_str("$@")`
-		- else => call `expand_token(words[i])`
+# WIP
 
-🚨 Ne pas demander de continuation si `OPT_INTERACTIVE` (`-i`) n'est pas activée !
+- **ALEX**:
+	- `libft` updated
+	- `gitignore` add `2_generator/lr_generator` and `3_lr_tables/2_generated/*`
+- ⚠️ `exit`:
+	- quid `EINTR` lors du `write()`
+- ⚠️ `scanner` + `SCAN_MODE_FILE` from `sh` vs `dot` / `eval` / `env`...:
+	- Pas le même système de fallback ? (`dot` cherche lui-même alors que `sh` délègue le search)
+	- qui doit `path search` ?
+- ⚠️ `set`:
+	- "If no options or arguments are specified, set shall write the names and values of all shell variables in the collation sequence of the current locale" => create `merge_sort()` (or quivalent) in `libft/sort/` and use it in `builtin_set`...
+- ⚠️ `alias`:
+	- "the alias definition shall not affect the parent process of the current shell nor any utility environment invoked by the shell" => `alias` should not be expanded while `scanner` is used inside a `utility` (`env`, `dot`, `eval`...?)
+- 👉 `params`:
+	- remove wrappers ? 
+	- move `history` table to `params` ?
+- 👉 précompiler les tables `LR`
+- 👉 `ast`: use `t_ast_command` ast `root` instead of `t_ast_list` (`command` can contain a `list` anyway...)
+- 👉 `options`:
+	- `-u` (`expander`):
+		- `parameter expansion` and `arithmetic expansion` must fail if *variable is not set*
+		- **except** for `$@`, `$*` and *parameters* which handles *unset variables* (`${foo-word}`, `${foo=word}`, `${foo+word}`, ...)
+	- `-v` (`reader`):
+		- print input lines as read (on `stderr`)
+- 👉 **all** *sub-modules*:
+	- *print* / *qualify* errors if needed
+	- use `assert()` instead of `t_error` when possible
 
-# UNSPECIFIED BEHAVIOUR TO TALK
+---
 
-```
-- Caveat worth a deliberate decision: no_such_cmd || echo fallback also
-  exits before the || is evaluated. Spec-permitted, but every mainstream
-  shell (bash, dash, ksh, zsh) continues, so the common cmd || fallback
-  idiom breaks. Per our convention, whichever way you keep it should be
-  written down as the documented choice.
-```
+# BEFORE SUBMIT
 
-- should `break` stop the main loop in this kind of cases ?
-```bash
-f() {
-  echo "  in f: before break"
-  break
-  echo "  in f: after break"
-}
-for i in 1 2; do
-  echo "loop i=$i: before f"
-  f
-  echo "loop i=$i: after f"
-done
-echo "after loop"
-```
+- regénérer **toute** la doc
+- créer une doc en ligne comme pour `libft`
 
-# TO TEST
+**FORK**
 
-- `reader` / `scanner`:
-	- must distingu `\` + `n` from real `\n` ?
-```
-A loop shall enclose a break or continue command if the loop lexically encloses the command. A loop lexically encloses a break or continue command if the command is:
-
-Executing in the same execution environment (see 2.13 Shell Execution Environment) as the compound-list of the loop's do-group (see 2.10.2 Shell Grammar Rules), and
-Contained in a compound-list associated with the loop (either in the compound-list of the loop's do-group or, if the loop is a while or until loop, in the compound-list following the while or until reserved word), and
-Not in the body of a function whose function definition command (see 2.9.5 Function Definition Command) is contained in a compound-list associated with the loop.
-```
-
-# TO FIX
-
-- `FOR.4`:
-```bash
-✖ [FOR.4] for without in iterates the positional parameters
-      command  : set -- m n
-               for x; do echo $x; done
-      stdout: differs from expected (see report)
-      expected stdout:
-        | m
-        | n
-      obtained stdout:
-        | "m
-        | n"
-      obtained stderr (filtered):
-        | [set_process_options()] calling ft_getopt()
-        | [builtin_set()] set_process_options() returned err == success
-      log      : /Users/gui/repos/minishell/tests/logs/posix_suite.1/FOR.4/report.txt
-```
-- `builtin_env`:
-	- implement `utility` execution:
-		- *resolve* cmd_name => *external* vs *builtin*
-		- *execute* => `fork` + `execve`
-
-# REQUIRED
-
-- ⚠️ `builtins`:
-	- ⚠️ `dot`
-	- ⚠️ `kill`
-
-# OTHERS
-
-- when shell options are invalid => requalify error in `ERR_INVALID_USAGE`
-- `shell`:
-	- process `ENV` at startup:
-		- See `ENVIRONMENT VARIABLES` -> `ENV` section in [sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html).
-		- `If the expanded value of ENV is not an absolute pathname, the results are unspecified` ([sh](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/sh.html) -> `ENVIRONMENT VARIABLES` -> `ENV`)
-- `options`:
-	- handle all options properly
-- `ast`:
-	- use `t_ast_command` ast `root` instead of `t_ast_list` (`command` can contain a `list` anyway...)
-- rename `params` to `env`
-- `runner-executor`:
-	- `exec` specific flow
-	- `command` specific flow
+- delete `assert()` calls
+- delete `logs` lib
+- delete `printf()` calls
+- delete `*_dump.c` files and `*_dump()` functions
+- delete `debug.h` and `debug.c`
+- delete all `DEBUG` sections
+- check all `TODO` comments
