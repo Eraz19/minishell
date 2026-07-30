@@ -504,7 +504,7 @@ static void	dump_lr_state_gotos(const t_lr_tables *tables, size_t lr_state_id)
 	i = 0;
 	while (i < GOTO_COL_COUNT)
 	{
-		symbol = SYM_NON_TERMINAL_MIN + i;
+		symbol = (t_symbol)(SYM_NON_TERMINAL_MIN + i);
 		lr_state_to = tables->gotos[lr_state_id * GOTO_COL_COUNT + i];
 		if (lr_state_to != GOTO_EMPTY)
 			fprintf(stderr, "goto[%s]=%zu\n",

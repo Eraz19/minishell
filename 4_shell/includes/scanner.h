@@ -94,25 +94,7 @@ typedef struct s_scanner
  */
 void	scanner_init(t_scanner *scanner);
 
-/**
- * @ingroup scanner
- * @brief Binds @p scanner to @p parser and @p mode, re-initializes the
- *        lexer, installs the readline hooks, binds the params source as
- *        @c source for @c SCAN_MODE_STRING / @c SCAN_MODE_FILE and, for
- *        @c SCAN_MODE_CMD_SUB, deep-copies @p parent_scanner's input
- *        stack.
- *
- * @param scanner Already initialized scanner (borrowed).
- * @param parent_scanner Scanner to fork the input from; only read for
- *                       @c SCAN_MODE_CMD_SUB (borrowed).
- * @param parser Parser consuming the tokens (borrowed).
- * @param mode Input acquisition mode.
- * @return @c ERR_NO on success; @c ERR_LIBC (@c SCAN_MODE_CMD_SUB input
- *         stack duplication failed) on module-produced failure.
- *         Module-external errors (shell instance lookup) bubble through
- *         unlisted.
- */
-t_error	scanner_load(t_scanner *scanner, t_scanner *parent_scanner, t_parser *parser, t_scan_mode mode);
+void	scanner_load(t_scanner *scanner, t_scanner *parent_scanner, t_parser *parser, t_scan_mode mode);
 
 /**
  * @ingroup scanner
@@ -127,19 +109,7 @@ void	scanner_free(t_scanner *scanner);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-/**
- * @ingroup scanner
- * @brief Clears the lexer state and binds @p cmd_string's text as the
- *        new @c source.
- *
- * @note The mode is left untouched: the caller is expected to run the
- *       scanner in @c SCAN_MODE_STRING over @p cmd_string.
- *
- * @param scanner Already loaded scanner (borrowed).
- * @param cmd_string Command text to scan; must outlive the scanner use
- *                   (borrowed, read-only).
- */
-void	scanner_bind_input(t_scanner *scanner, const char *cmd_string);
+t_error	scanner_bind_input(t_scanner *scanner, const char *cmd_string);
 
 /**
  * @ingroup scanner

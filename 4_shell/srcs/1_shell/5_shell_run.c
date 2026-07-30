@@ -45,11 +45,12 @@ static inline t_error	shell_prepare(t_shell_loading_options *options)
 
 static inline t_scan_mode	shell_resolve_scan_mode(t_shell *shell)
 {
-	t_error	err;
-	bool	is_interactive;
-	bool	is_stdin;
-
-	if (option_is_active_in(shell->params.options, OPT_INTERACTIVE))
+	if (option_is_active_in(shell->params.options, OPT_STDIN_INPUT))
+		return (SCAN_MODE_STDIN);
+	else if (option_is_active_in(shell->params.options, OPT_CMD_STRING))
+		return (SCAN_MODE_STRING);
+	else
+		return (SCAN_MODE_FILE);
 }
 
 static inline int	shell_exec(t_shell *shell)
