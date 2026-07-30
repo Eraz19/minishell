@@ -27,20 +27,6 @@ t_error	bind_lexer_input(t_lexer *lexer, t_string *input);
 
 /**
  * @ingroup lexer
- * @brief Binds @p out as the token under construction, initializing it —
- *        only when no token is bound: a non-NULL binding marks an
- *        in-flight recognition (mid-construct re-entry) whose token must
- *        survive untouched.
- *
- * @param lexer Already initialized lexer (borrowed).
- * @param out Token storage for this recognition; initialized by the
- *            function on a fresh bind, untouched when a recognition is
- *            already in flight (borrowed).
- */
-void	bind_lexer_token(t_lexer *lexer, t_token *out);
-
-/**
- * @ingroup lexer
  * @brief Releases the token binding without touching the token: called at
  *        every recognition exit (token delivered to the caller, or error)
  *        so the next @ref bind_lexer_token initializes fresh storage.

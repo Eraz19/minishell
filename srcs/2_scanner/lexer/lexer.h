@@ -143,6 +143,20 @@ t_error	lexer_scan_word(t_lexer *lexer, t_token *out, t_string *src,
 
 /**
  * @ingroup lexer
+ * @brief Binds @p out as the token under construction, initializing it —
+ *        only when no token is bound: a non-NULL binding marks an
+ *        in-flight recognition (mid-construct re-entry) whose token must
+ *        survive untouched.
+ *
+ * @param lexer Already initialized lexer (borrowed).
+ * @param out Token storage for this recognition; initialized by the
+ *            function on a fresh bind, untouched when a recognition is
+ *            already in flight (borrowed).
+ */
+void	bind_lexer_token(t_lexer *lexer, t_token *out);
+
+/**
+ * @ingroup lexer
  * @brief Pops the finished top input and rebinds @c lexer->input to the
  *        new top; then, between tokens (the current token is the
  *        @c TOKEN_EOF placeholder) it is reset, unbound and relexed from

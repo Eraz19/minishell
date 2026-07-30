@@ -169,7 +169,8 @@ INCLUDES		:= \
 	-Isrcs/history \
 	-Isrcs/history/file \
 	-Isrcs/history/list \
-	-Isrcs/history/readline \
+	-Isrcs/history/adapter \
+	-Isrcs/history/load_env \
 	-Isrcs/params/1_options \
 	-Isrcs/params/2_specials \
 	-Isrcs/params/3_positionals \

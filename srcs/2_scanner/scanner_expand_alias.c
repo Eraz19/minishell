@@ -66,14 +66,14 @@ t_error	expand_alias(t_scanner *scanner, t_token *out)
 	{
 		if (scanner->err.type == ERR_VAR_NOT_FOUND)
 			return (scanner->err = error(ERR_NO));
-		return (scanner->err = scanner_requalify_error(scanner->err));
+		return (scanner->err = requalify_scanner_error(scanner->err));
 	}
 	if (alias_value == NULL)
 		return (scanner->err = error(ERR_NO));
 	if (!string_dup(&alias_exp.str, alias_value))
-		return (scanner_requalify_error(scanner->err = error_sys()));
+		return (requalify_scanner_error(scanner->err = error_sys()));
 	current_input->alias_position_exempt = ends_in_blank(&alias_exp);
 	if (lexer_push_alias(&scanner->lexer, &alias_exp).type)
 		string_free(&alias_exp.str);
-	return (scanner->err = scanner_requalify_error(scanner->lexer.err));
+	return (scanner->err = requalify_scanner_error(scanner->lexer.err));
 }

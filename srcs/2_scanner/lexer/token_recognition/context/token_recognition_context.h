@@ -299,15 +299,11 @@ t_error	scan_dquote_context(t_lexer *lexer);
 /*                                   NONE                                    */
 /* ************************************************************************* */
 
-/**
- * @ingroup lexer
- * @brief Escape rules outside any construct: consume the @c \\ and the
- *        next character when it belongs to the unquoted whitelist.
- *
- * @param lexer Already initialized lexer (borrowed).
- * @return Same set as @ref arith_context_escape_rules.
- */
 t_error	none_context_escape_rules(t_lexer *lexer);
+
+t_error	none_context_unescape_rules(t_lexer *lexer, void *_);
+
+t_error	scan_none_context(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                  PARAM                                    */

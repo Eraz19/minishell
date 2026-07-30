@@ -1,84 +1,44 @@
-#include <stdlib.h>
 #include "utils.h"
-#include "history_file_.h"
-# include "logs.h"	// DEBUG
+#include "history_list.h"
+#include "history_file.h"
+#include "history_file_priv.h"
 
-void	history_file_init(t_history_file *state)
+void	history_file_init(t_history_file *history_file)
 {
-	*state = (t_history_file){0};
-	(void)string_init(&state->path, 0, NULL, 0);
-	(void)string_init(&state->content, 0, NULL, 0);
+	*history_file = (t_history_file){0};
+	(void)string_init(&history_file->path, 0, NULL, 0);
+	(void)string_init(&history_file->content, 0, NULL, 0);
 }
 
-void	history_file_clear(t_history_file *state)
+void	history_file_free(t_history_file *history_file)
 {
-	if (state->path.data)
-		state->path.data[0] = '\0';
-	state->path.len = 0;
-	if (state->content.data)
-		state->content.data[0] = '\0';
-	state->content.len = 0;
-	state->err = (t_error){0};
-	state->loaded_count = 0;
+	history_file->loaded_count = 0;
+	string_free(&history_file->path);
+	string_free(&history_file->content);
 }
 
-void	history_file_free(t_history_file *state)
+t_error	history_file_load(t_history_file *history_file, t_history_list *history_list, ssize_t max)
 {
-	string_free(&state->path);
-	string_free(&state->content);
-	*state = (t_history_file){0};
-}
-
-static inline t_error	history_file_take_entry(
-							t_history_file *state,
-							t_history_list *list,
-							t_vector *file_entries,
-							size_t index)
-{
-	t_string	*entry;
-
-	entry = &((t_string *)file_entries->data)[index];
-	state->err = history_list_push(list, entry);
-	if (state->err.type)
-		return (state->err);
-	entry->cap = 0;
-	entry->len = 0;
-	entry->data = NULL;
-	return (state->err);
-}
-
-t_error	history_file_load(
-			t_history_file *state,
-			t_history_list *list,
-			ssize_t max)
-{
-	t_vector	file_entries;
 	size_t		index;
+	t_vector	file_entries;
 
-	if (history_file_read(state).type)
-		return (state->err);
-	if (state->content.len == 0)
-	{
-		print_warn("entries loaded from history file       %s0%s\n", YELLOW, NC);
-		return (state->err);
-	}
-	state->err = deserialize_all(state->content.data, &file_entries);
-	if (state->err.type)
-		return (state->err);
+	if (read_history_file(history_file).type)
+		return (history_file->err);
+	if (history_file->content.len == 0)
+		return (empty_history_file_load_log(), history_file->err);
+	history_file->err = deserialize_all(history_file->content.data, &file_entries);
+	if (history_file->err.type)
+		return (history_file->err);
 	if (max < 0 || (size_t)max >= file_entries.len)
 		index = 0;
 	else
 		index = file_entries.len - (size_t)max;
-	state->loaded_count = 0;
-	while (index < file_entries.len)
-	{
-		if (history_file_take_entry(state, list, &file_entries, index).type)
-			break ;
-		index++;
-		state->loaded_count++;
-	}
+	history_file->err = history_list_load(history_list, &file_entries, index);
+	if (history_file->err.type)
+		return (vector_free(&file_entries, string_free_void), history_file->err);
+	history_file->loaded_count = history_list->len;
 	vector_free(&file_entries, string_free_void);
-	string_free(&state->content);
-	print_pass("entries loaded from history file       %i\n", (int)state->loaded_count);
-	return (state->err);
+	string_free(&history_file->content);
+	success_history_file_load_log(history_file);
+	return (history_file->err);
 }

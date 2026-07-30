@@ -34,7 +34,7 @@
 **	- env/alias		env_get_alias (post-merge: VAR_NOT_FOUND absorbed at
 **					expand_alias, anything else passes)
 */
-t_error	scanner_requalify_error(t_error err)
+t_error	requalify_scanner_error(t_error err)
 {
 	if (err.type == ERR_NO_DELIM)
 		err.type = ERR_NO;

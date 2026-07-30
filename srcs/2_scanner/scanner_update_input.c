@@ -51,12 +51,12 @@ t_error	update_input(t_scanner *scanner, t_token *out, bool ps2)
 	if (ps2)
 	{
 		read_and_propagate_PS2(scanner);
-		return (scanner->err = scanner_requalify_error(scanner->err));
+		return (scanner->err = requalify_scanner_error(scanner->err));
 	}
 	else if (scanner->lexer.input_stack.len == 0)
 	{
 		if (update_input_dispatch(scanner).type)
-			return (scanner->err = scanner_requalify_error(scanner->err));
+			return (scanner->err = requalify_scanner_error(scanner->err));
 		if (scanner->lexer.input_stack.len == 0)
 			return (token_init(out), out->type = TOKEN_EOF, scanner->err);
 	}

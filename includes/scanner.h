@@ -57,7 +57,7 @@ typedef enum e_scan_mode
  * @brief Token producer bound to one parser: acquires input per
  *        @ref t_scan_mode, delegates recognition to its lexer and
  *        requalifies the errors leaving the module
- *        (@ref scanner_requalify_error).
+ *        (@ref requalify_scanner_error).
  *
  * @var s_scanner::err Last error recorded by a scanner operation; mirror
  *                     of the value returned by the failing call.
@@ -159,7 +159,7 @@ void	scanner_clear(t_scanner *scanner);
  *        @ref expand_alias when it is a word.
  *
  * @warning @c ERR_VEOF leaves the scanner verbatim (exit contract,
- *          @ref scanner_requalify_error) and only means "interactive
+ *          @ref requalify_scanner_error) and only means "interactive
  *          input ended between tokens" (@c CTRL+D at PS1): a continuation
  *          impossible in @c SCAN_MODE_FILE / @c SCAN_MODE_STRING is
  *          reported as @c ERR_POSIX_SYNTAX at production, and any
@@ -178,7 +178,7 @@ void	scanner_clear(t_scanner *scanner);
  * @param ps2 True to grow the current input with a PS2 continuation
  *            instead of stacking a new one.
  * @return @c ERR_NO on success. Module-produced failures, after
- *         @ref scanner_requalify_error:
+ *         @ref requalify_scanner_error:
  *         @c ERR_VEOF (end of input, verbatim on every lane),
  *         @c ERR_POSIX_SYNTAX (printed, unterminated
  *         construct), @c ERR_POSIX_READ, @c ERR_POSIX_CMD_NOT_FOUND and

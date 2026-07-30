@@ -32,7 +32,7 @@
  * @param out Word token to expand; kept on lookup miss, freed and
  *            replaced by the first token of the expansion on success
  *            (borrowed).
- * @return Through @ref scanner_requalify_error: @c ERR_NO on success or
+ * @return Through @ref requalify_scanner_error: @c ERR_NO on success or
  *         lookup miss, @c ERR_POSIX_SYNTAX (printed, relex hit an
  *         unterminated construct) or @c ERR_LIBC (printed; module
  *         allocation failure) on module-produced failure.
@@ -107,7 +107,7 @@ t_error	scanner_load_cmd_sub(t_scanner *scanner);
  *            initialized as a @c TOKEN_EOF token (borrowed).
  * @param ps2 True to grow the current input instead of stacking one.
  * @return @c ERR_NO on success or when the input stack is already
- *         non-empty. Both lanes through @ref scanner_requalify_error:
+ *         non-empty. Both lanes through @ref requalify_scanner_error:
  *         @c ERR_VEOF (end of input), @c ERR_POSIX_READ,
  *         @c ERR_POSIX_CMD_NOT_FOUND and @c ERR_POSIX_CMD_NOT_EXECUTABLE
  *         (printed, @c SCAN_MODE_FILE acquisition) or @c ERR_LIBC
@@ -135,6 +135,6 @@ t_error	update_input(t_scanner *scanner, t_token *out, bool ps2);
  * @param err Error reaching a scanner exit point.
  * @return The requalified error (see contract above).
  */
-t_error	scanner_requalify_error(t_error err);
+t_error	requalify_scanner_error(t_error err);
 
 #endif
