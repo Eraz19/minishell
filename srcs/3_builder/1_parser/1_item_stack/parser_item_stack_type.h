@@ -1,9 +1,9 @@
 #ifndef PARSER_ITEM_STACK_TYPE_H
 # define PARSER_ITEM_STACK_TYPE_H
 
+# include "grammar_symbols.h"
 # include "libft.h"
 # include "cst_type.h"
-# include "symbols_type.h"
 # include <stddef.h>
 
 typedef struct s_parser_item

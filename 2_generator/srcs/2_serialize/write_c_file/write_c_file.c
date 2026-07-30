@@ -5,7 +5,7 @@
 #define INCLUDE_2		"#include \"grammar_rules.h\"\n"
 #define INCLUDE_3		"#include \"grammar_gotos.h\"\n\n"
 
-#define FUNC_START		"void\tlr_tables_load(t_lr_tables *tables)\n{\n"
+#define FUNC_START		"void\tlr_tables_init(t_lr_tables *tables)\n{\n"
 
 #define FUNC_ASSIGN_1	"\n\ttables->rules = rules;\n"
 #define FUNC_ASSIGN_2	"\ttables->actions = actions;\n"

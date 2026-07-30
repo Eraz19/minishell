@@ -40,6 +40,6 @@ typedef struct s_lr_tables
 	const bool			*expects_cmd_name_or_word;
 }	t_lr_tables;
 
-void	lr_tables_load(t_lr_tables *tables);
+void	lr_tables_init(t_lr_tables *tables);
 
 #endif

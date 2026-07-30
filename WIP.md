@@ -1,5 +1,7 @@
 # WIP (LR MACHINE)
 
+- `includes/debug.h` + `srcs/debug.c` => update with AI
+
 - `generator`:
 	- compute and store in `lr_generator`:
 		- `ACTION_COL_COUNT`
@@ -7,11 +9,6 @@
 		- `GOTO_COL_COUNT`
 		- `GOTO_COUNT`
 	- only store `t_qualifier_id` in `lr_generator`
-
-- Previous `hooks`:
-	- `RULE_COMPLETE_COMMAND_1` + `RULE_COMPLETE_COMMAND_2` => `hook_store_cst`
-	- `RULE_FNAME_1` => `hook_fname`
-	- `RULE_IO_HERE_1` + `RULE_IO_HERE_2` => `hook_3`
 
 # WIP
 

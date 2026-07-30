@@ -1,9 +1,9 @@
 #ifndef CST_TYPE_H
 # define CST_TYPE_H
 
+# include "grammar_symbols.h"
+# include "grammar_rules.h"
 # include "libft.h"
-# include "symbols_type.h"
-# include "rules__type.h"
 # include <stddef.h>
 
 typedef void	(*t_cst_free_data)(void *data);

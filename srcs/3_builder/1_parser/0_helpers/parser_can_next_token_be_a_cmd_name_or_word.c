@@ -1,9 +1,6 @@
 #include "parser_type.h"
 #include "parser.h"
-#include "lr_machine_type.h"
-#include "lr_state_type.h"
-#include "rule_state_type.h"
-#include "goto.h"
+#include "grammar_gotos.h"
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
 
@@ -28,47 +25,24 @@ static inline t_error	get_lr_state_ids_from_stack(
 	return (error(ERR_NO));
 }
 
-static inline bool	state_expects_cmd_name_or_word(
-						const t_lr_machine *machine,
-						size_t lr_state_id)
-{
-	const t_lr_state	*state;
-	const t_rule_state	*item;
-	const t_rule		*rule;
-	size_t				i;
-
-	state = &((t_lr_state *)machine->lr_states.data)[lr_state_id];
-	i = 0;
-	while (i < state->len)
-	{
-		item = &((t_rule_state *)state->data)[i];
-		rule = &machine->rules[item->rule_id];
-		if ((rule->lhs == SYM_cmd_name || rule->lhs == SYM_cmd_word)
-			&& item->pos < rule->rhs_len
-			&& rule->rhs[item->pos] == SYM_WORD)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 // @ret ERR_PARSER_INVALID_STATE / ERR_PARSER_EMPTY_GOTO / ERR_LIBC
 static inline t_error	simulate_reduction(
-							const t_lr_machine *machine,
+							const t_lr_tables *tables,
 							t_vector *lr_state_ids,
 							size_t rule_id)
 {
-	const t_rule	*rule;
+	const t_lr_rule	*rule;
 	size_t			lr_state_from;
 	size_t			lr_state_to;
 
-	rule = &machine->rules[rule_id];
+	rule = &tables->rules[rule_id];
 	if (rule->rhs_len >= lr_state_ids->len)
 		return (error_print(error(ERR_PARSER_INVALID_STATE), "parser",
 			"unable to simulate reduction", NULL, NULL));
 	lr_state_ids->len -= rule->rhs_len;
 	lr_state_from = ((size_t *)lr_state_ids->data)[lr_state_ids->len - 1];
-	lr_state_to = machine->gotos[lr_state_from][rule->lhs - SYM_NON_TERMINAL_MIN];
+	lr_state_to = tables->gotos[
+		lr_state_from * GOTO_COL_COUNT + rule->lhs - SYM_NON_TERMINAL_MIN];
 	if (lr_state_to == GOTO_EMPTY)
 		return (error_print(error(ERR_PARSER_EMPTY_GOTO), "parser",
 			"unable to simulate reduction", NULL, NULL));
@@ -100,12 +74,14 @@ t_error	parser_can_next_token_be_a_cmd_name_or_word(
 	while (true)
 	{
 		lr_state_id = ((size_t *)lr_state_ids.data)[lr_state_ids.len - 1];
-		if (state_expects_cmd_name_or_word(parser->machine, lr_state_id))
+		if (parser->tables->expects_cmd_name_or_word[lr_state_id] == true)
 			return (*dst = true, free_and_return(&lr_state_ids));
-		action = &parser->machine->actions[lr_state_id][SYM_WORD];
+		action = &parser->tables->actions[
+			lr_state_id * ACTION_COL_COUNT + SYM_WORD];
 		if (action->type != ACTION_REDUCE)
 			return (*dst = false, free_and_return(&lr_state_ids));
-		err = simulate_reduction(parser->machine, &lr_state_ids, action->payload);
+		err = simulate_reduction(
+				parser->tables, &lr_state_ids, action->payload);
 		if (err.type)
 			break ;
 	}

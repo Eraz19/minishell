@@ -1,7 +1,7 @@
 #include "lr_tables.h"
 #include "grammar_rules.h"
 
-void	lr_tables_load(t_lr_tables *tables)
+void	lr_tables_init(t_lr_tables *tables)
 {
 	static const t_lr_rule		rules[RULE_COUNT];
 	static const t_action		actions[ACTION_COUNT];

@@ -1,16 +1,17 @@
 #ifndef PARSER_TYPE_H
 # define PARSER_TYPE_H
 
+# include "grammar_symbols.h"
+# include "lr_tables.h"
 # include "parser_item_stack_type.h"
 # include "parser_here_stack_type.h"
 # include "token.h"
 # include "scanner.h"
-# include "lr_machine_type.h"
 
 typedef struct s_parser
 {
 	t_scanner			scanner;
-	const t_lr_machine	*machine;				// borrowed
+	const t_lr_tables	*tables;				// borrowed
 	t_parser_item_stack	item_stack;
 	t_parser_here_stack	here_stack;
 	t_token_pool		token_pool;

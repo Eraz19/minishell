@@ -9,12 +9,11 @@ static inline bool	parser_is_reducing_cmd_sub(
 {
 	const t_action	*action;
 
-	if (!parser->search_cmd_sub_end)
+	if (parser->search_cmd_sub_end == false
+		|| parser->lookahead_symbol != SYM_RPARENTHESIS)
 		return (false);
-	if (parser->lookahead_symbol != SYM_RPARENTHESIS)
-		return (false);
-	action = &parser->machine->actions[lr_state_id][SYM_EOF];
-	return (action->payload == RULE_CMD_SUB && action->type == ACTION_REDUCE);
+	action = &parser->tables->actions[lr_state_id * ACTION_COL_COUNT + SYM_EOF];
+	return (action->type == ACTION_REDUCE && action->payload == RULE_CMD_SUB);
 }
 
 static inline t_error	parser_add_item(t_parser *parser, size_t lr_state_id)

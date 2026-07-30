@@ -33,7 +33,7 @@
 #define T_LR_TABLE_13		"\tconst bool\t\t\t*expects_cmd_name_or_word;\n"
 #define T_LR_TABLE_14		"}	t_lr_tables;\n\n"
 
-#define PROTO				"void\tlr_tables_load(t_lr_tables *tables);\n\n"
+#define PROTO				"void\tlr_tables_init(t_lr_tables *tables);\n\n"
 
 #define END_GUARD			"#endif\n"
 

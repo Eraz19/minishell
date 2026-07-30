@@ -13,13 +13,13 @@ void	parser_init(t_parser *parser)
 	parser_item_stack_init(&parser->item_stack);
 	parser_here_stack_init(&parser->here_stack);
 	token_pool_init(&parser->token_pool);
-	parser->machine = NULL;
+	parser->tables = NULL;
 	parser->cst = NULL;
 	parser->lookahead_id = 0;
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
 	parser->search_cmd_sub_end = false;
-	parser->cmd_sub_end_index = 0;
+	parser->cmd_sub_end_index = -1;
 	scanner_init(&parser->scanner);
 }
 
@@ -32,16 +32,8 @@ t_error	parser_load(
 	t_error	err;
 
 	assert(parser != NULL);
-	parser_item_stack_init(&parser->item_stack);
-	parser_here_stack_init(&parser->here_stack);
-	token_pool_init(&parser->token_pool);
-	parser->machine = shell_get_lr_machine();
-	parser->cst = NULL;
-	parser->lookahead_id = 0;
-	parser->lookahead_raw_symbol = SYM_NONE;
-	parser->lookahead_symbol = SYM_NONE;
+	parser->tables = shell_get_lr_tables();
 	parser->search_cmd_sub_end = (mode == SCAN_MODE_CMD_SUB);
-	parser->cmd_sub_end_index = -1;
 	err = scanner_load(&parser->scanner, parent_scanner, parser, mode);
 	if (err.type == ERR_NO && input != NULL)
 		scanner_bind_input(&parser->scanner, input);
@@ -61,7 +53,7 @@ void	parser_clear(t_parser *parser)
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
 	parser->search_cmd_sub_end = false;
-	parser->cmd_sub_end_index = 0;
+	parser->cmd_sub_end_index = -1;
 }
 
 void	parser_free(t_parser *parser)
@@ -77,7 +69,7 @@ void	parser_free(t_parser *parser)
 	parser->lookahead_raw_symbol = SYM_NONE;
 	parser->lookahead_symbol = SYM_NONE;
 	parser->search_cmd_sub_end = false;
-	parser->cmd_sub_end_index = 0;
+	parser->cmd_sub_end_index = -1;
 }
 
 void	parser_cmd_sub_free(t_parser *parser)

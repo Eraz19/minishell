@@ -7,18 +7,19 @@
 /*
 brace_group      : Lbrace compound_list Rbrace
                  ;
+subshell         : '(' compound_list ')'
+                 ;
 */
 static inline t_error	convert_to_list(
 							t_parser *parser,
 							const t_cst_node *node,
 							t_ast_command *out)
 {
+	assert(node->symbol == SYM_brace_group || node->symbol == SYM_subshell);
 	out->type = AST_CMD_LIST;
 	if (node->symbol == SYM_brace_group)
 		return (convert_list(parser, node->children[1], &out->data.list));
-	else if (node->symbol == SYM_subshell)
-		return (convert_list(parser, node, &out->data.list));
-	return (error(ERR_INCOHERENT_STATE));
+	return (convert_list(parser, node, &out->data.list));
 }
 
 /*

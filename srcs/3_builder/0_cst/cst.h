@@ -1,6 +1,7 @@
 #ifndef CST_H
 # define CST_H
 
+# include "error.h"
 # include "parser_item_stack_type.h"
 
 t_error	cst_node_new(

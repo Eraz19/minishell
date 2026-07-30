@@ -5,7 +5,7 @@
 # include "alias.h"
 # include "env.h"
 # include "history.h"
-# include "lr_machine_type.h"
+# include "lr_tables.h"
 # include "runner_type.h"
 
 /**
@@ -23,13 +23,12 @@
  */
 typedef struct s_shell
 {
-	bool			is_subshell;
-	t_params		params;
-	t_lr_machine	machine;
-	t_runner		*runner;		// owned (linked)
-	t_runner		*last_runner;	// borrowed
-	t_history		history;		// TODO: move to params
-	t_alias			alias;			// TODO: move to params
+	bool		is_subshell;
+	t_lr_tables	lr_tables;
+	t_params	params;
+	t_runner	*runner;		// owned (linked)
+	t_runner	*last_runner;	// borrowed
+	t_history	history;
 }	t_shell;
 
 typedef enum e_subshell_mode
@@ -115,7 +114,7 @@ t_alias		*shell_get_alias(void);
 t_history	*shell_get_history(void);
 
 // TODO: doc
-const t_lr_machine	*shell_get_lr_machine(void);
+const t_lr_tables	*shell_get_lr_tables(void);
 
 /**
  * @brief Returns the shell name.

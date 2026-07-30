@@ -46,6 +46,11 @@ t_error	parser_read_heredoc(t_parser *parser);
 t_error	parser_build_cst(t_parser *parser);
 t_error	parser_shift(t_parser *parser, size_t lr_state_id);
 t_error	parser_reduce(t_parser *parser, size_t rule_id);
+t_error	parser_process_reduce_hooks(
+			t_parser *parser,
+			size_t rule_id,
+			t_parser_item *lhs,
+			t_parser_item *rhs);
 t_error	parser_accept(t_parser *parser);
 
 /* ************************************************************************* */

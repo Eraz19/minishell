@@ -46,25 +46,28 @@ static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
 	if (parser->lookahead_symbol != SYM_TOKEN)
 		return ;
-	if (parser->machine->qualifiers[*lr_state_id] == NULL)
+	if (parser->tables->qualifiers[*lr_state_id] == NULL)
 		return ;
 	token = parser_get_token(parser, parser->lookahead_id);
-	parser->machine->qualifiers[*lr_state_id](token, &parser->lookahead_symbol);
+	parser->tables->qualifiers[*lr_state_id](
+						token->value.data,
+						token->assignment_offset,
+						&parser->lookahead_symbol);
 }
 
 static inline t_error	parser_try_continuation(
 							t_parser *parser,
 							size_t *lr_state_id)
 {
-	t_action	*action;
-	size_t		i;
+	const t_action	*action;
+	size_t			i;
 
 	if (parser->lookahead_symbol != SYM_EOF)
 		return (parser_invalid_syntax());
 	i = 0;
 	while (i <= SYM_TERMINAL_MAX)
 	{
-		action = &parser->machine->actions[*lr_state_id][i];
+		action = &parser->tables->actions[*lr_state_id * ACTION_COL_COUNT + i];
 		if (action->type != ACTION_ERROR)
 			return (parser_read_next_symbol(parser, true));
 		i++;
@@ -83,7 +86,8 @@ t_error	parser_build_cst(t_parser *parser)
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{
 		parser_build_cycle(parser, &lr_state_id);
-		action = parser->machine->actions[lr_state_id][parser->lookahead_symbol];
+		action = parser->tables->actions[
+			lr_state_id * ACTION_COL_COUNT + parser->lookahead_symbol];
 		if (action.type == ACTION_SHIFT)
 			err = parser_shift(parser, action.payload);
 		else if (action.type == ACTION_REDUCE)

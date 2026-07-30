@@ -2,6 +2,7 @@
 # define CONVERTER_PRIV_H
 
 # include "cst_type.h"
+# include "parser_type.h"
 # include "ast.h"
 # include <stdbool.h>
 

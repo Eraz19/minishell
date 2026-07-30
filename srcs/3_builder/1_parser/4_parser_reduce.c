@@ -1,11 +1,11 @@
 #include "parser_priv.h"
-#include "goto.h"
+#include "grammar_gotos.h"
 #include "cst.h"
 # include <assert.h>	// DEBUG
 
 static inline t_error	parser_new_lr_state(
 							const t_parser *parser,
-							const t_rule *rule,
+							const t_lr_rule *rule,
 							size_t *dst)
 {
 	const t_parser_item_stack	*stack;
@@ -18,8 +18,8 @@ static inline t_error	parser_new_lr_state(
 	previous_item_id = stack->len - rule->rhs_len - 1;
 	previous_item = &((t_parser_item *)stack->data)[previous_item_id];
 	lr_state_from = previous_item->lr_state_id;
-	lr_state_to = 
-		parser->machine->gotos[lr_state_from][rule->lhs - SYM_NON_TERMINAL_MIN];
+	lr_state_to = parser->tables->gotos[
+		lr_state_from * GOTO_COL_COUNT + rule->lhs - SYM_NON_TERMINAL_MIN];
 	if (lr_state_to == GOTO_EMPTY)
 		return (error_print(
 			error(ERR_PARSER_EMPTY_GOTO), "parser", NULL, NULL));
@@ -31,9 +31,9 @@ static inline size_t	parser_tokens_count_sum(
 							const t_parser_item *rhs_items,
 							size_t count)
 {
-	size_t						i;
+	size_t				i;
 	const t_parser_item	*item;
-	size_t						token_count;
+	size_t				token_count;
 
 	token_count = 0;
 	i = 0;
@@ -67,14 +67,14 @@ static inline t_error	parser_replace_items(
 
 t_error	parser_reduce(t_parser *parser, size_t rule_id)
 {
-	const t_rule	*rule;
+	const t_lr_rule	*rule;
 	size_t			rhs_start;
 	t_parser_item	*rhs;
 	t_parser_item	item;
 	t_error			err;
 
 	assert(parser != NULL);
-	rule = &parser->machine->rules[rule_id];
+	rule = &parser->tables->rules[rule_id];
 	rhs_start = parser->item_stack.len - rule->rhs_len;
 	rhs = &((t_parser_item *)parser->item_stack.data)[rhs_start];
 	item.symbol = rule->lhs;
@@ -87,10 +87,10 @@ t_error	parser_reduce(t_parser *parser, size_t rule_id)
 	item.tokens_count = parser_tokens_count_sum(rhs, rule->rhs_len);
 	item.cst_node = NULL;
 	err = cst_node_new(&item, rhs, rule->rhs_len, (t_rule_id)rule_id);
-	if (err.type == ERR_NO && rule->hook)
-		err = rule->hook(parser, rhs, rule->rhs_len, &item);
 	if (err.type == ERR_NO)
-		err = error_priorize(err, parser_replace_items(parser, rule->rhs_len, &item));
+		err = parser_process_reduce_hooks(parser, rule_id, &item, rhs);
+	if (err.type == ERR_NO)
+		err = parser_replace_items(parser, rule->rhs_len, &item);
 	if (err.type)
 		cst_node_free(&item.cst_node);
 	return (err);
