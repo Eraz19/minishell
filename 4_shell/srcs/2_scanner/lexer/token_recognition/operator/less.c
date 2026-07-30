@@ -17,6 +17,6 @@ t_error	token_recognition_consume_less(t_lexer *lexer)
 		return (token_recognition_consume(lexer, TOKEN_DLESS, 1));
 	else if (lexer->token->type == TOKEN_NONE)
 		return (token_recognition_consume(lexer, TOKEN_LESS, 1));
-	assert(false);
-	return (error(ERR_NO));
+	else
+		return (lexer->err = error(ERR_POSIX_SYNTAX));
 }

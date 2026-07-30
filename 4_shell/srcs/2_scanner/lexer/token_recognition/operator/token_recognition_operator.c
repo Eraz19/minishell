@@ -64,6 +64,6 @@ t_error	token_recognition_consume_operator(t_lexer *lexer)
 		return (token_recognition_consume_great(lexer));
 	else if (current_char == '-')
 		return (token_recognition_consume(lexer, TOKEN_DLESSDASH, 1));
-	assert(false);
-	return (error(ERR_NO));
+	else
+		return (lexer->err = error(ERR_POSIX_SYNTAX));
 }

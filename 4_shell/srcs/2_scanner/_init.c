@@ -25,9 +25,11 @@ void	scanner_free(t_scanner *scanner)
 	lexer_free(&scanner->lexer);
 	scanner->mode = SCAN_MODE_NONE;
 	scanner->parent_scanner = NULL;
+	scanner->err.type = ERR_NO;
 }
 
 void	scanner_clear(t_scanner *scanner)
 {
 	lexer_clear(&scanner->lexer);
+	scanner->err.type = ERR_NO;
 }

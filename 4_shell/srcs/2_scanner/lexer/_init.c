@@ -19,6 +19,7 @@ void	lexer_free(t_lexer *lexer)
 	lexer->emited_token = false;
 	lexer->last_index.start = -1;
 	lexer->last_index.error = -1;
+	lexer->err.type = ERR_NO;
 	lexer_input_stack_free(&lexer->input_stack);
 }
 
@@ -30,6 +31,7 @@ void	lexer_clear(t_lexer *lexer)
 	lexer->emited_token = false;
 	lexer->last_index.start = -1;
 	lexer->last_index.error = -1;
+	lexer->err.type = ERR_NO;
 	while (lexer->input_stack.len > 0)
 		lexer_input_stack_pop(&lexer->input_stack);
 }

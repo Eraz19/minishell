@@ -21,6 +21,6 @@ t_error	token_recognition_consume_great(t_lexer *lexer)
 		return (token_recognition_consume(lexer, TOKEN_DGREAT, 1));
 	else if (lexer->token->type == TOKEN_NONE)
 		return (token_recognition_consume(lexer, TOKEN_GREAT, 1));
-	assert(false);
-	return (error(ERR_NO));
+	else
+		return (lexer->err = error(ERR_POSIX_SYNTAX));
 }

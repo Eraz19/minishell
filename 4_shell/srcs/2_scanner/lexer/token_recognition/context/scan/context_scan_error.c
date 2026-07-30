@@ -1,4 +1,5 @@
 #include "token_recognition_context_scan_priv.h"
+#include "env.h"
 
 bool	has_innermost_unterminated_context(t_context *out, t_token *token)
 {
@@ -46,7 +47,8 @@ t_error	error_unterminated_construct(t_lexer *lexer)
 
 	if (!get_message_on_unterminated_context(&error_message, lexer))
 		error_message = "unexpected end of input";
-	if (lexer->err.type == ERR_VEOF)
-		lexer->err = error(ERR_POSIX_SYNTAX);
-	return (lexer->err = error_print(lexer->err, "scanner", error_message, NULL, NULL));
+	error_print(error(ERR_POSIX_SYNTAX), "scanner", error_message, NULL, NULL);
+	env_set_last_status((int)ERR_POSIX_SYNTAX);
+	lexer->err.printed = true;
+	return (lexer->err);
 }

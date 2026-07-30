@@ -8,8 +8,8 @@ t_error	update_input_file(t_scanner *scanner, t_lexer_input_stack_item *out)
 	scanner->err = reader_read_file(&out->str, scanner->source);
 	if (scanner->err.type)
 		return (scanner->err);
-	if (!string_append_n(&out->str, "\n", 1))
-		return (scanner->err = error_sys());
+	// if (!string_append_n(&out->str, "\n", 1))
+	// 	return (scanner->err = error_sys());
 	return (scanner->err);
 }
 
@@ -17,8 +17,8 @@ t_error	update_input_string(t_scanner *scanner, t_lexer_input_stack_item *out)
 {
 	if (!string_init(&out->str, 0, scanner->source, -1))
 		return (scanner->err = error_sys());
-	if (!string_append_n(&out->str, "\n", 1))
-		return (scanner->err = error_sys());
+	// if (!string_append_n(&out->str, "\n", 1))
+	// 	return (scanner->err = error_sys());
 	return (scanner->err);
 }
 

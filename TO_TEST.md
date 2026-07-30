@@ -1,3 +1,12 @@
+# `bash` infinite loop avoidance
+
+```bash
+# 1
+echo "cat << EOF" | bash --posix -i -o ignoreeof
+# 2
+echo "echo hello |" | bash --posix -i -o ignoreeof
+```
+
 # `-e` OPTION
 
 ```bash

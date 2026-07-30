@@ -34,16 +34,12 @@ int	reader_readline_hook(FILE *stream)
 t_error	reader_read_PS1(t_string *out)
 {
 	t_error	err;
-	bool	is_interactive;
 	bool	is_reading_stdin;
 
 	err = option_is_active(OPT_STDIN_INPUT, &is_reading_stdin);
 	if (err.type)
 		return (err);
-	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
-	if (err.type)
-		return (err);
-	if (!is_interactive || !is_reading_stdin)
+	if (!is_reading_stdin)
 		return (error(ERR_VEOF));
 	err = history_save_entry();
 	if (err.type)
@@ -61,17 +57,13 @@ t_error	reader_read_PS2(t_string *out)
 {
 	t_error		err;
 	t_string	continuation;
-	bool		is_interactive;
 	bool		is_reading_stdin;
 
 	err = option_is_active(OPT_STDIN_INPUT, &is_reading_stdin);
 	if (err.type)
 		return (err);
-	err = option_is_active(OPT_INTERACTIVE, &is_interactive);
-	if (err.type)
-		return (err);
-	if (!is_interactive || !is_reading_stdin)
-		return (error(ERR_POSIX_SYNTAX));
+	if (!is_reading_stdin)
+		return (error(ERR_VEOF));
 	err = read_interactive(&continuation, PROMPT_PS2, MAX_RETRY_PS2);
 	if (err.type)
 		return (err);

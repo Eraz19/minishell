@@ -105,7 +105,7 @@ const char	*error_to_string(t_error err)
 		return ("builtin error");
 	// Flow control errors
 	else if (err.type == ERR_VEOF)
-		return ("end of input");
+		return ("end of input (V)");
 	else if (err.type == ERR_EOF)
 		return ("end of file");
 	else if (err.type == ERR_CONTINUE)

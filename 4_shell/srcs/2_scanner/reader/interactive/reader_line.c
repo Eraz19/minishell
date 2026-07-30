@@ -7,8 +7,8 @@
 #include "sig.h"
 #include "logs.h"	// DEBUG
 #include "options.h"
-#include "posix_helpers.h"
 #include "reader_interactive_priv.h"
+#include "posix_helpers.h"
 
 static t_error	ensure_reader_stdin_is_blocking(void)
 {
@@ -54,15 +54,7 @@ static t_error	read_line_secured(const char *prompt, char **out, bool *retry)
 	return (sig_process());
 }
 
-static t_error	on_max_retry_reached(size_t counter, size_t max_retry)
-{
-	if (counter > max_retry && max_retry > 0)
-		return (err_infinite_loop());
-	else if (counter > max_retry)
-		return (error(ERR_VEOF));
-	return (error(ERR_NO));
-}
-
+// On s'est suffisamment pris la tête, ne PAS retoucher à cette merde
 static t_error	read_line_until(const char *prompt, char **out, size_t max_retry)
 {
 	t_error	err;
@@ -82,13 +74,14 @@ static t_error	read_line_until(const char *prompt, char **out, size_t max_retry)
 		err = option_is_active(OPT_IGNOREEOF, &ignore_eof);
 		if (err.type == ERR_NO && ignore_eof == false)
 			err = error(ERR_VEOF);
-		if (err.type == ERR_NO && isatty(STDIN_FILENO) != 1)
+		else if (err.type == ERR_NO && isatty(STDIN_FILENO) == 1)
+			continue ;
+		else if (err.type == ERR_NO && counter > max_retry)
+			err = err_infinite_loop();
+		else if (err.type == ERR_NO)
 			err = posix_write(STDOUT_FILENO, "\n", 1);
-		if (err.type || counter > max_retry)
-		{
-			err = on_max_retry_reached(counter, max_retry);
+		if (err.type)
 			break ;
-		}
 	}
 	fprintf(stderr, CYAN "##################################################\n" NC);
 	return (err);

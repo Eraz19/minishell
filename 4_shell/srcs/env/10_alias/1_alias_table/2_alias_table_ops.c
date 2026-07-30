@@ -26,7 +26,7 @@ t_error	alias_table_get(
 			const t_string **out_value)
 {
 	*out_value = hashmap_get_const(table, name);
-	if (out_value == NULL)
+	if (*out_value == NULL)
 		return (error(ERR_VAR_NOT_FOUND));
 	return (error(ERR_NO));
 }

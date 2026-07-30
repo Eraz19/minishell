@@ -31,7 +31,7 @@ t_error	scanner_scan_word(t_scanner *scanner, t_token *out, t_token_recognition_
 	return (requalify_scanner_error(scanner->err));
 }
 
-void	scanner_bind_input(t_scanner *scanner, const t_string *cmd_string)
+t_error	scanner_bind_input(t_scanner *scanner, const char *cmd_string)
 {
 	t_lexer_input_stack	*input_stack;
 	t_lexer_input_stack	*parent_input_stack;

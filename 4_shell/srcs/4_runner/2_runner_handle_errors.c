@@ -46,18 +46,20 @@ void	runner_handle_error(t_runner *runner, t_error *err)
 	t_error	option_err;
 
 	fprintf(stderr, "[RUNNER] handling error %i (%s)\n", (int)err->type, error_to_string(*err));
+	if (err->type == ERR_EXIT || err->type == ERR_VEOF || err->type == ERR_EXIT_WITH_CURRENT_STATUS)
+		return ;
+	if (err->type == ERR_NOT_IMPLEMENTED)
+	{
+		(void)error_print(*err, NULL, NULL);
+		err->type = ERR_NO;
+	}
 	option_err = option_is_active(OPT_INTERACTIVE, &interactive);
 	if (option_err.type)
 	{
 		*err = option_err;
 		return ;
 	}
-	if (err->type == ERR_NOT_IMPLEMENTED)
-	{
-		(void)error_print(*err, NULL, NULL);
-		err->type = ERR_NO;
-	}
-	if (err->type == ERR_EOF)
+	else if (err->type == ERR_EOF)
 		runner_handle_eof(err, interactive);
 	else if (err->type == ERR_POSIX_SYNTAX)
 		runner_handle_syntax_errors(runner, err, interactive);
@@ -69,7 +71,8 @@ void	runner_handle_error(t_runner *runner, t_error *err)
 		if (interactive == true && err->type != ERR_VEOF)
 			err->type = ERR_NO;
 	}
-	runner_handle_bad_errors(err, interactive);
+	else
+		runner_handle_bad_errors(err, interactive);
 	if (err->type && error_is_flow_control(*err) == false)
 		*err = error_print(*err, NULL, NULL);
 	fprintf(stderr, "[RUNNER] => final error %i (%s)\n", (int)err->type, error_to_string(*err));
