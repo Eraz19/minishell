@@ -51,9 +51,10 @@ t_error	scan_heredoc_body_context(t_lexer *lexer, t_token *out, t_string *body)
 	t_context_stack_item		*heredoc_context;
 
 	scan_args = heredoc_body_context_rules(lexer);
-	lexer->err = context_stack_item_init(&scan_args.context_item, CONTEXT_NONE);
-	if (lexer->err.type)
-		return (lexer->err);
+	scanner_scan_word()
+	//lexer->err = context_stack_item_init(&scan_args.context_item, CONTEXT_NONE);
+	//if (lexer->err.type)
+	//	return (lexer->err);
 	if (lexer_scan_word(lexer, out, body, &scan_args).type)
 		return (lexer->err);
 	lexer->err = context_stack_item_init(&heredoc_context, CONTEXT_HEREDOC);

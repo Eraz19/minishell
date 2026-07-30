@@ -303,7 +303,7 @@ t_error	none_context_escape_rules(t_lexer *lexer);
 
 t_error	none_context_unescape_rules(t_lexer *lexer, void *_);
 
-t_error	scan_none_context(t_lexer *lexer);
+t_token_recognition_context	none_context_rules(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                  PARAM                                    */

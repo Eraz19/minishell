@@ -118,28 +118,7 @@ void	lexer_clear(t_lexer *lexer);
  */
 t_error	lexer_get_next_token(t_lexer *lexer, t_token *out);
 
-/**
- * @ingroup lexer
- * @brief Scans @p src as one word with the @p args rules: pushes it as the
- *        current input, binds @p out as the token under construction and
- *        runs @ref scan_context until the rules' end condition.
- *
- * @param lexer Already initialized lexer (borrowed).
- * @param out Receives the scanned token; initialized by the function,
- *            untouched when pushing @p src fails. The caller releases it
- *            with @ref token_free (borrowed).
- * @param src Text to scan; must be initialized by the caller, left holding
- *            an empty string except when pushing it fails, where the
- *            caller keeps the text (borrowed; ownership of the text taken
- *            by the input stack).
- * @param args Rule set of the scan; its @c context_item is freed by the
- *             function on every path (borrowed).
- * @return @c ERR_NO on success; the @ref scan_context failure set:
- *         @c ERR_LIBC, @c ERR_POSIX_SYNTAX (printed) and @c ERR_VEOF,
- *         with module-external errors bubbling through unlisted.
- */
-t_error	lexer_scan_word(t_lexer *lexer, t_token *out, t_string *src,
-			t_token_recognition_context *args);
+t_error	lexer_scan_word(t_lexer *lexer, t_token *out, t_token_recognition_context *args);
 
 /**
  * @ingroup lexer
