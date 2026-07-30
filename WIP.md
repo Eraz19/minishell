@@ -1,7 +1,3 @@
-# WIP (MAKEFILE)
-
-- `$(LR_TAB_GEN_FILES):` suit les `.c`, mais pas encore les `.h` du `generator` et de la `grammar`.
-
 # WIP (LR MACHINE)
 
 - `generator`:
@@ -15,6 +11,7 @@
 # WIP
 
 - **ALEX**:
+	- `libft` updated
 	- `gitignore` add `2_generator/lr_generator` and `3_lr_tables/2_generated/*`
 - ⚠️ `exit`:
 	- quid `EINTR` lors du `write()`

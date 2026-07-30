@@ -1,20 +1,8 @@
 #include <unistd.h>
-#include "alias.h"
-#include "options.h"
+#include "_OLD_alias.h"
 #include "heredoc.h"
 #include "reader_.h"
 #include "scanner_.h"
-#include "posix_helpers.h"
-
-static t_error	scanner_stdin_input(t_string *res)
-{
-	t_error	err;
-
-	err = posix_read_all(STDIN_FILENO, res);
-	if (err.type == ERR_LIBC)
-		return (reader_read_error(err, "stdin"));
-	return (err);
-}
 
 static t_error	scanner_dup_command_input(
 					t_scanner *scanner,

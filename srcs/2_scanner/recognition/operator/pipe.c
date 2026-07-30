@@ -1,4 +1,5 @@
 #include "scanner_recognition_.h"
+# include <assert.h>
 
 bool	is_operator_char_pipe(t_lexer *lexer)
 {
@@ -19,5 +20,5 @@ t_error	operator_add_pipe(t_lexer *lexer)
 		return (lexer_consume(lexer, TOKEN_CLOBBER, 1));
 	else if (lexer->token->type == TOKEN_NONE)
 		return (lexer_consume(lexer, TOKEN_PIPE, 1));
-	return (lexer->err = error(ERR_INCOHERENT_STATE));
+	assert(false);
 }

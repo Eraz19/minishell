@@ -199,6 +199,8 @@ SHELL_INCLUDES		:= \
 	-I$(SHELL_DIR)/srcs/4_runner/2_preparator/1_resolve \
 	-I$(SHELL_DIR)/srcs/4_runner/2_preparator/2_assign \
 	-I$(SHELL_DIR)/srcs/4_runner/2_preparator/3_dispatch \
+	-I$(SHELL_DIR)/srcs/alias \
+	-I$(SHELL_DIR)/srcs/alias/stack \
 	-I$(SHELL_DIR)/srcs/ast \
 	-I$(SHELL_DIR)/srcs/builtins \
 	-I$(SHELL_DIR)/srcs/builtins/0_error \

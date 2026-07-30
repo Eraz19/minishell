@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include "alias.h"
 #include "shell.h"
 #include "alias_stack_.h"
+#include "_OLD_alias.h"
 
 void	alias_init(t_alias *alias)
 {

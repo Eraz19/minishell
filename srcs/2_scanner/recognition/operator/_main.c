@@ -1,4 +1,5 @@
 #include "scanner_recognition_.h"
+# include <assert.h>
 
 bool	is_operator_char(t_lexer *lexer)
 {
@@ -49,5 +50,5 @@ t_error	lexer_add_char_into_token_operator(t_lexer *lexer)
 		return (operator_add_great(lexer));
 	else if (input_ptr[0] == '-')
 		return (lexer_consume(lexer, TOKEN_DLESSDASH, 1));
-	return (lexer->err = error(ERR_INCOHERENT_STATE));
+	assert(false);
 }

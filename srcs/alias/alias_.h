@@ -1,7 +1,7 @@
 #ifndef ALIAS__H
 # define ALIAS__H
 
-# include "alias.h"
+# include "_OLD_alias.h"
 
 /** @defgroup alias_priv Alias internals
  *  @brief Eligibility, position tracking and printing helpers behind the

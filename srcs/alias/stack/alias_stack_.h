@@ -2,7 +2,7 @@
 # define ALIAS_STACK__H
 
 # include "error.h"
-# include "alias.h"
+# include "_OLD_alias.h"
 
 /** @defgroup alias_stack Alias recursion-guard stack
  *  @brief Records the aliases currently being expanded to break expansion

@@ -3,6 +3,9 @@
 #include "runner.h"
 #include <stdlib.h>
 # include "logs.h"
+#ifdef DEBUG_INSTANCES
+# include "debug.h"
+#endif
 
 t_error	shell_get_new_runner_priv(
 			t_runner **out_runner_ptr,
