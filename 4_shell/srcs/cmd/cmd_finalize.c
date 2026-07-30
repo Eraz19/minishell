@@ -1,7 +1,9 @@
 #include "cmd.h"
 #include "sig.h"
 #include "options.h"
+#ifdef DEBUG_CMD
 # include "debug.h"	// DEBUG
+#endif
 
 static inline t_error	cmd_qualify_error(t_cmd *cmd, t_error err, int *status)
 {
@@ -34,18 +36,21 @@ static inline t_error	cmd_qualify_error(t_cmd *cmd, t_error err, int *status)
 t_error	cmd_finalize(t_cmd *cmd, t_error err, int *exit_status)
 {
 	/* ---------- DEBUG (START) ---------- */
+#ifdef DEBUG_CMD
 	int			initial_exit_status;
 	t_error		initial_error;
 	const char	*prefix;
 
 	initial_exit_status = *exit_status;
 	initial_error = err;
+#endif
 	/* ---------- DEBUG (END) ---------- */
 	if (*exit_status < 0)
 		*exit_status = (int)err.type;
 	if (err.type && error_is_flow_control(err) == false)
 		err = cmd_qualify_error(cmd, err, exit_status);
 	/* ---------- DEBUG (START) ---------- */
+#ifdef DEBUG_CMD
 	if (cmd->entry.type == CMD_BUILTIN)
 		prefix = "BUILTIN ";
 	else if (cmd->entry.type == CMD_SPECIAL_BUILTIN)
@@ -60,6 +65,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_error err, int *exit_status)
 	fprintf(stderr, "[CMD   ] type        => %s\n", cmd_type_to_string(cmd->entry.type));
 	fprintf(stderr, "[CMD   ] exit_status => %i => %i\n", initial_exit_status, *exit_status);
 	fprintf(stderr, "[CMD   ] error       => %s => %s\n", error_to_string(initial_error), error_to_string(err));
+#endif
 	/* ---------- DEBUG (END) ---------- */
 	sig_process();
 	return (err);
@@ -67,7 +73,7 @@ t_error	cmd_finalize(t_cmd *cmd, t_error err, int *exit_status)
 
 t_error	cmd_finalize_and_free(t_cmd *cmd, t_error err, int *exit_status)
 {
-	cmd_finalize(cmd, err, exit_status);
+	err = cmd_finalize(cmd, err, exit_status);
 	cmd_free(cmd);
 	return (err);
 }

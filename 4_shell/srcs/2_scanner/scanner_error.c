@@ -34,12 +34,11 @@
 **	- env/alias		env_get_alias (post-merge: VAR_NOT_FOUND absorbed at
 **					expand_alias, anything else passes)
 */
-t_error	requalify_scanner_error(t_error err)
+t_error	requalify_scanner_error(t_scanner *scanner)
 {
-	if (err.type == ERR_NO_DELIM)
-		err.type = ERR_NO;
-	if (err.type == ERR_NO || err.type == ERR_VEOF || err.type == ERR_LIBC)
-		return (err);
-	else
-		return (error_print(err, "scanner", NULL, NULL));
+	if (scanner->err.type == ERR_NO_DELIM)
+		scanner->err.type = ERR_POSIX_SYNTAX;
+	else if (scanner->err.type == ERR_NO || scanner->err.type == ERR_VEOF || scanner->err.type == ERR_LIBC)
+		return (scanner->err);
+	return (scanner->err = error_print(scanner->err, "scanner", NULL, NULL));
 }

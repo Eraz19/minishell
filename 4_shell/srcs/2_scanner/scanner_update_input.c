@@ -1,5 +1,6 @@
 #include "reader.h"
 #include "scanner.h"
+#include "options.h"
 #include "scanner_priv.h"
 #include "lexer_input_stack.h"
 
@@ -24,7 +25,15 @@ t_error	update_input_string(t_scanner *scanner, t_lexer_input_stack_item *out)
 
 t_error	update_input_stdin(t_scanner *scanner, t_lexer_input_stack_item *out)
 {
-	return (scanner->err = reader_read_PS1(&out->str));
+	bool	is_interactive;
+
+	scanner->err = option_is_active(OPT_INTERACTIVE, &is_interactive);
+	if (scanner->err.type)
+		return (scanner->err);
+	else if (is_interactive == true)
+		return (scanner->err = reader_read_PS1(&out->str));
+	else
+		return (scanner->err = reader_read_stdin(&out->str));
 }
 
 t_error	update_input_dispatch(t_scanner *scanner) 
@@ -50,13 +59,13 @@ t_error	update_input(t_scanner *scanner, t_token *out, bool ps2)
 {
 	if (ps2)
 	{
-		read_and_propagate_PS2(scanner);
-		return (scanner->err = requalify_scanner_error(scanner->err));
+		scanner->err = read_and_propagate_PS2(scanner);
+		return (requalify_scanner_error(scanner));
 	}
 	else if (scanner->lexer.input_stack.len == 0)
 	{
 		if (update_input_dispatch(scanner).type)
-			return (scanner->err = requalify_scanner_error(scanner->err));
+			return (requalify_scanner_error(scanner));
 		if (scanner->lexer.input_stack.len == 0)
 			return (token_init(out), out->type = TOKEN_EOF, scanner->err);
 	}

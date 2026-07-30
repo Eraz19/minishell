@@ -6,7 +6,9 @@
 #include <errno.h>
 #include <stdlib.h>
 # include <assert.h>	// DEBUG
+#ifdef DEBUG_CMD
 # include "logs.h"	// DEBUG
+#endif
 
 #define FALLBACK_ERR	"unable to edit argv in execve fallback"
 
@@ -75,7 +77,9 @@ t_error	exec_external(t_cmd *cmd, int *exit_status)
 {
 	pid_t	pid;
 
+#ifdef DEBUG_CMD
 	fprintf(stderr, MAGENTA "############## EXTERNAL %s (START) ##############\n" NC, cmd->name.data);
+#endif
 	pid = fork();
 	if (pid < 0)
 		return (error_sys());

@@ -57,9 +57,9 @@ t_error	scan_heredoc_body_context(t_scanner *scanner, t_token *out)
 	scanner->err = context_stack_item_init(&heredoc_context, CONTEXT_HEREDOC);
 	if (scanner->err.type)
 		return (scanner->err);
-	if (scanner->lexer.token->value.len > 0)
-		heredoc_context->end = scanner->lexer.token->value.len - 1;
-	if (!vector_insert(&scanner->lexer.token->contexts, 0, &heredoc_context))
+	if (out->value.len > 0)
+		heredoc_context->end = out->value.len - 1;
+	if (!vector_insert(&out->contexts, 0, &heredoc_context))
 	{
 		scanner->err = error_sys();
 		free(heredoc_context);

@@ -121,20 +121,6 @@ t_error	update_input(t_scanner *scanner, t_token *out, bool ps2);
 /*                                 ERROR                                     */
 /* ************************************************************************* */
 
-/**
- * @ingroup scanner
- * @brief Applies the scanner exit contract to @p err (see the rule sheet
- *        and module-external producer inventory in scanner_error.c):
- *        @c ERR_NO_DELIM is absorbed to @c ERR_NO (benign missing
- *        delimiter, POSIX 2.7.4, diagnostic already printed at
- *        production); @c ERR_NO, @c ERR_VEOF and @c ERR_LIBC pass
- *        verbatim, unprinted; everything else passes with its type kept,
- *        printed at this frontier when still unprinted (guarded no-op on
- *        errors printed at production).
- *
- * @param err Error reaching a scanner exit point.
- * @return The requalified error (see contract above).
- */
-t_error	requalify_scanner_error(t_error err);
+t_error	requalify_scanner_error(t_scanner *scanner);
 
 #endif

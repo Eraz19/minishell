@@ -1,0 +1,2 @@
+- Tests à activer car les features ont été implémentées :
+	- option `-e`

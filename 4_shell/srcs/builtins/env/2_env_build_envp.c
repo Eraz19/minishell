@@ -84,7 +84,7 @@ t_error	builtin_env_build_envp(
 	i = 0;
 	while (i < count && err.type == ERR_NO)
 	{
-		existing_entry_index = env_get_existing_index(out_envp->data, argv[i]);
+		existing_entry_index = env_get_existing_index(out_envp, argv[i]);
 		if (existing_entry_index >= 0)
 			err = env_update_entry(out_envp, existing_entry_index, argv[i]);
 		else

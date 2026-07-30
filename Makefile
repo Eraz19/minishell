@@ -4,7 +4,7 @@ DEPFLAGS			:= -MMD -MP
 CFLAGS				:= \
 	-Wall -Wextra -Wdeprecated -Werror \
 	-O2 \
-	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_INSTANCES	# -DNDEBUG (disable assert())
+	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_INSTANCES -DDEBUG_CMD	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS		:= \
 	-Wall -Wextra -Wdeprecated -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
@@ -16,7 +16,8 @@ DEBUG_CFLAGS		:= \
 	-DDEBUG_AST \
 	-DDEBUG_HISTORY \
 	-DDEBUG_CMD_SUB \
-	-DDEBUG_INSTANCES
+	-DDEBUG_INSTANCES \
+	-DDEBUG_CMD
 OBJ_DIR				:= obj
 
 # LIBFT (START)
@@ -97,15 +98,6 @@ READLINE_DIR		:= $(shell brew --prefix readline 2>/dev/null)
 READLINE_INCLUDES	:= -I$(READLINE_DIR)/include
 READLINE_LIBS		:= -L$(READLINE_DIR)/lib -lreadline
 # READLINE (END)
-
-# DEBUG SECTION (START)
-TEST_CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2
-TEST_DIR			:= ./tests
-TEST_SCRIPTS		:= $(wildcard $(TEST_DIR)/*.zsh)
-TEST_MAIN			:= $(TEST_DIR)/test_posix_suite.zsh
-TEST_FIXT_DIR		:= $(TEST_DIR)/fixtures
-TEST_LOGS_DIR		:= $(TEST_DIR)/logs
-# DEBUG SECTION (END)
 
 # SHELL (START)
 SHELL_DIR			:= 4_shell
@@ -228,6 +220,15 @@ SHELL_OBJS			:= $(SHELL_CORE_OBJS) $(LR_TAB_OBJS) $(LOGS_OBJS)
 SHELL_DEPS			:= $(SHELL_CORE_OBJS:.o=.d)
 # SHELL (END)
 
+# TEST (START)
+TEST_CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2
+TEST_DIR			:= ./tests
+TEST_SCRIPTS		:= $(wildcard $(TEST_DIR)/*.zsh)
+TEST_MAIN			:= $(TEST_DIR)/test_posix_suite.zsh
+TEST_FIXT_DIR		:= $(TEST_DIR)/fixtures
+TEST_LOGS_DIR		:= $(TEST_DIR)/logs
+# TEST (END)
+
 # BUILD MACRO (START)
 define BUILD_SECTION
 	@status=0; \
@@ -314,8 +315,8 @@ debug: re
 # DEBUG SECTION (START)
 test: CFLAGS := $(TEST_CFLAGS)
 test:
-	@echo "compiling..."
-	@$(MAKE) re >/dev/null
+	@echo "🧪 preparing for tests..."
+	@$(MAKE) re CFLAGS="$(CFLAGS)"
 	$(TEST_MAIN)
 # 	@for tester in $(TEST_SCRIPTS); do \
 # 		echo "Running $$tester"; \

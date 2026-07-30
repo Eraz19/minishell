@@ -43,24 +43,25 @@ static inline t_error	shell_prepare(t_shell_loading_options *options)
 	return (shell_load(options));
 }
 
-static inline t_scan_mode	shell_resolve_scan_mode(t_shell *shell)
+static inline t_error	shell_load_runner(t_shell *shell, t_runner **runner)
 {
+	const char	*input;
+
 	if (option_is_active_in(shell->params.options, OPT_STDIN_INPUT))
-		return (SCAN_MODE_STDIN);
-	else if (option_is_active_in(shell->params.options, OPT_CMD_STRING))
-		return (SCAN_MODE_STRING);
+		return (shell_get_new_runner(runner, SCAN_MODE_STDIN, NULL));
+	input = shell->params.specials.source.data;
+	if (option_is_active_in(shell->params.options, OPT_CMD_STRING))
+		return (shell_get_new_runner(runner, SCAN_MODE_STRING, input));
 	else
-		return (SCAN_MODE_FILE);
+		return (shell_get_new_runner(runner, SCAN_MODE_FILE, input));
 }
 
 static inline int	shell_exec(t_shell *shell)
 {
-	t_scan_mode	mode;
 	t_runner	*runner;
 	t_error		err;
 
-	mode = shell_resolve_scan_mode(shell);
-	err = shell_get_new_runner(&runner, mode, NULL);
+	err = shell_load_runner(shell, &runner);
 	if (err.type)
 	{
 		(void)error_print(err, NULL, NULL);

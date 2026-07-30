@@ -13,6 +13,8 @@ t_error	builtin_env_print(t_vector *envp, int *exit_status)
 	{
 		entry = ((char **)envp->data)[i];
 		err = posix_write(STDOUT_FILENO, entry, str_len(entry));
+		if (err.type == ERR_NO)
+			err = posix_write(STDOUT_FILENO, "\n", 1);
 		if (err.type)
 			return (err);
 		i++;

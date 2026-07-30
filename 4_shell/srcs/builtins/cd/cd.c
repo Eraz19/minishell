@@ -3,7 +3,6 @@
 #include "cd_.h"
 #include "env.h"
 #include "utils.h"
-#include <signal.h>
 
 static t_error	cd_process_options(int argc, char **argv, t_cd_args *args)
 {
@@ -65,10 +64,11 @@ t_error	cd_resolv_operand(int argc, char **argv, t_cd_args *args, t_string *dir)
 
 static t_error	cd_requalify(t_error err, char *builtin_name)
 {
-	if (err.type)
-		err = error_print(err, builtin_name, NULL, NULL);
-	else if (
-		err.type == ERR_VAR_INVALID_NAME
+	if (err.type == ERR_NO)
+		return (err);
+	err = error_print(err, builtin_name, NULL, NULL);
+	if (err.type == ERR_INVALID_USAGE
+		|| err.type == ERR_VAR_INVALID_NAME
 		|| err.type == ERR_VAR_NOT_FOUND
 		|| err.type == ERR_INVALID_USAGE
 		|| err.type == ERR_UB
