@@ -2,9 +2,9 @@
 # define DEBUG_H
 
 # include <stdbool.h>
-# include "action_type.h"
-# include "symbols_type.h"
-# include "lr_machine_type.h"
+# include "grammar_actions.h"
+# include "grammar_symbols.h"
+# include "lr_tables.h"
 # include "parser_item_stack_type.h"
 # include "ast.h"
 # include "cmd.h"
@@ -19,8 +19,8 @@ const char	*cmd_type_to_string(t_cmd_type type);
 const char	*scan_mode_to_string(t_scan_mode mode);
 const char	*symbol_to_string(t_symbol symbol);
 const char	*ast_command_type_to_string(t_ast_command_type type);
-void		dump_rule(t_lr_machine *machine, size_t rule_id);
-void		dump_lr_state(t_lr_machine *machine, size_t lr_state_id);
+void		dump_rule(const t_lr_tables *tables, size_t rule_id);
+void		dump_lr_state(const t_lr_tables *tables, size_t lr_state_id);
 void		dump_parser_item_stack(t_parser_item_stack *stack);
 void		dump_input_stack(t_lexer_input_stack *stack);
 void		dump_context_stack(t_context_stack *stack);

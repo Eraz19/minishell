@@ -1,11 +1,10 @@
 #include "debug.h"
 #include "shell.h"
-#include "symbols_type.h"
-#include "action_type.h"
+#include "grammar_actions.h"
+#include "grammar_gotos.h"
+#include "grammar_symbols.h"
 #include "token.h"
-#include "lr_machine_type.h"
-#include "lr_state_type.h"
-#include "rule_state_type.h"
+#include "lr_tables.h"
 #include "parser_item_stack_type.h"
 #include "cst_type.h"
 #include "cmd.h"
@@ -23,28 +22,6 @@
 /* ************************************************************************* */
 /*                                    ENV                                    */
 /* ************************************************************************* */
-
-static void	dump_env_scalar(const t_string *name)
-{
-	t_string	value;
-	t_error		err;
-
-	assert(name != NULL);
-	assert(name->len > 0);
-	err = env_get(name, &value);
-	if (err.type != ERR_NO)
-	{
-		fprintf(stderr, "PARAMS '%s'=[ERROR: '%s']\n", name->data, error_to_string(err));
-		return ;
-	}
-	if (value.data)
-	{
-		fprintf(stderr, "PARAMS '%s'='%s'\n", name->data, value.data);
-		string_free(&value);
-	}
-	else
-		fprintf(stderr, "PARAMS '%s'=NULL\n", name->data);
-}
 
 static void	dump_env_scalar_cst(const char *name_cst)
 {
@@ -70,22 +47,29 @@ static void	dump_env_scalar_cst(const char *name_cst)
 
 static void	dump_env_variables(void)
 {
-	t_shell 	*shell;
-	t_var_list	*var_list;
-	t_var		*var;
-	size_t		i;
+	t_shell				*shell;
+	const t_key_value	**var_list;
+	size_t				i;
 
 	shell = shell_get();
 	if (!shell)
-		error_print(error(ERR_SHELL_NOT_FOUND), "dump_env_variables()", NULL, NULL);
-	var_list = &shell->params.variables;
-	i = 0;
-	while (i < var_list->len)
 	{
-		var = &((t_var *)var_list->data)[i];
-		dump_env_scalar(&var->name);
+		error_print(error(ERR_SHELL_NOT_FOUND), "dump_env_variables()", NULL, NULL);
+		return ;
+	}
+	var_list = hashmap_get_all(&shell->params.variables);
+	if (var_list == NULL)
+	{
+		error_print(error_sys(), "dump_env_variables()", NULL, NULL);
+		return ;
+	}
+	i = 0;
+	while (var_list[i] != NULL)
+	{
+		dump_env_scalar_cst(var_list[i]->key);
 		i++;
 	}
+	free(var_list);
 }
 
 static void	dump_env_options(void)
@@ -479,61 +463,70 @@ const char	*symbol_to_string(t_symbol symbol)
 /*                                   RULE                                    */
 /* ************************************************************************* */
 
-void	dump_rule(t_lr_machine *machine, size_t rule_id)
+void	dump_rule(const t_lr_tables *tables, size_t rule_id)
 {
-	t_rule	*rule;
-	size_t	i;
+	const t_lr_rule	*rule;
 
-	rule = &machine->rules[rule_id];
-	fprintf(stderr, "[RULE] %zu lhs=%s rhs=", rule_id, symbol_to_string(rule->lhs));
-	i = 0;
-	while (i < rule->rhs_len)
-	{
-		fprintf(stderr, "%s ", symbol_to_string(rule->rhs[i]));
-		i++;
-	}
-	fprintf(stderr, "rhs_len=%zu hook=%p\n", rule->rhs_len, rule->hook);
+	if (tables == NULL)
+		return ((void)fprintf(stderr, "[RULE] (null tables)\n"));
+	rule = &tables->rules[rule_id];
+	fprintf(stderr, "[RULE] %zu lhs=%s rhs_len=%zu\n",
+		rule_id,
+		symbol_to_string(rule->lhs),
+		rule->rhs_len);
 }
 
 /* ************************************************************************* */
 /*                                 LR_STATE                                  */
 /* ************************************************************************* */
 
-void	dump_lr_state(t_lr_machine *machine, size_t lr_state_id)
+static void	dump_lr_state_action(
+				const t_lr_tables *tables,
+				size_t lr_state_id,
+				t_symbol symbol)
 {
-	t_lr_state		*state;
-	t_rule_state	*rule_state;
-	t_rule			*rule;
-	t_symbol		next;
-	size_t			i;
+	const t_action	*action;
 
-	state = &((t_lr_state *)machine->lr_states.data)[lr_state_id];
-	fprintf(stderr, "\n[STATE %zu]\n", lr_state_id);
+	if ((size_t)symbol >= ACTION_COL_COUNT)
+		return ;
+	action = &tables->actions[lr_state_id * ACTION_COL_COUNT + symbol];
+	fprintf(stderr, "action[%s]=%s:%zu\n",
+		symbol_to_string(symbol),
+		action_type_to_string(action->type),
+		action->payload);
+}
+
+static void	dump_lr_state_gotos(const t_lr_tables *tables, size_t lr_state_id)
+{
+	size_t		i;
+	size_t		lr_state_to;
+	t_symbol	symbol;
+
 	i = 0;
-	while (i < state->len)
+	while (i < GOTO_COL_COUNT)
 	{
-		rule_state = &((t_rule_state *)state->data)[i];
-		rule = &machine->rules[rule_state->rule_id];
-		next = SYM_NONE;
-		if (rule_state->pos < rule->rhs_len)
-			next = rule->rhs[rule_state->pos];
-		fprintf(stderr, "rule=%zu pos=%zu lhs=%s next=%s lookahead=%s\n",
-			rule_state->rule_id,
-			rule_state->pos,
-			symbol_to_string(rule->lhs),
-			symbol_to_string(next),
-			symbol_to_string(rule_state->lookahead));
+		symbol = SYM_NON_TERMINAL_MIN + i;
+		lr_state_to = tables->gotos[lr_state_id * GOTO_COL_COUNT + i];
+		if (lr_state_to != GOTO_EMPTY)
+			fprintf(stderr, "goto[%s]=%zu\n",
+				symbol_to_string(symbol),
+				lr_state_to);
 		i++;
 	}
-	fprintf(stderr, "action[Lbrace]=%s:%zu\n",
-		action_type_to_string(machine->actions[lr_state_id][SYM_Lbrace].type),
-		machine->actions[lr_state_id][SYM_Lbrace].payload);
-	fprintf(stderr, "action[WORD]=%s:%zu\n",
-		action_type_to_string(machine->actions[lr_state_id][SYM_WORD].type),
-		machine->actions[lr_state_id][SYM_WORD].payload);
-	fprintf(stderr, "action[NEWLINE]=%s:%zu\n",
-		action_type_to_string(machine->actions[lr_state_id][SYM_NEWLINE].type),
-		machine->actions[lr_state_id][SYM_NEWLINE].payload);
+}
+
+void	dump_lr_state(const t_lr_tables *tables, size_t lr_state_id)
+{
+	if (tables == NULL)
+		return ((void)fprintf(stderr, "[STATE] (null tables)\n"));
+	fprintf(stderr, "\n[STATE %zu]\n", lr_state_id);
+	fprintf(stderr, "qualifier=%p expects_cmd_name_or_word=%s\n",
+		tables->qualifiers[lr_state_id],
+		bool_to_string(tables->expects_cmd_name_or_word[lr_state_id]));
+	dump_lr_state_action(tables, lr_state_id, SYM_Lbrace);
+	dump_lr_state_action(tables, lr_state_id, SYM_WORD);
+	dump_lr_state_action(tables, lr_state_id, SYM_NEWLINE);
+	dump_lr_state_gotos(tables, lr_state_id);
 }
 
 /* ************************************************************************* */
