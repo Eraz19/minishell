@@ -27,7 +27,9 @@ LIBFT				:= $(LIBFT_DIR)/libft.a
 
 # LOGS (START)
 LOGS_DIR			:= logs
-LOGS_INCLUDES		:= -I$(LOGS_DIR)
+LOGS_INCLUDES		:= \
+	$(LIBFT_INCLUDES) \
+	-I$(LOGS_DIR)
 LOGS_SRCS			:= $(wildcard $(LOGS_DIR)/*.c)
 LOGS_OBJS			:= $(LOGS_SRCS:%.c=$(OBJ_DIR)/%.o)
 LOGS_DEPS			:= $(LOGS_OBJS:.o=.d)
@@ -35,7 +37,9 @@ LOGS_DEPS			:= $(LOGS_OBJS:.o=.d)
 
 # GRAMMAR (START)
 GRAM_DIR			:= 1_grammar
-GRAM_INCLUDES		:= -I$(GRAM_DIR)/includes
+GRAM_INCLUDES		:= \
+	$(LIBFT_INCLUDES) \
+	-I$(GRAM_DIR)/includes
 GRAM_SRCS			:= \
 	$(wildcard $(GRAM_DIR)/srcs/*.c) \
 	$(wildcard $(GRAM_DIR)/srcs/*/*.c)
@@ -74,6 +78,10 @@ LR_TAB_GEN_DIR		:= $(LR_TAB_DIR)/2_generated
 LR_TAB_FILES		:= lr_tables.h lr_tables.c
 LR_TAB_GEN_FILES	:= $(addprefix $(LR_TAB_GEN_DIR)/,$(LR_TAB_FILES))
 LR_TAB_BASE_FILES	:= $(addprefix $(LR_TAB_BASE_DIR)/,$(LR_TAB_FILES))
+LR_TAB_INPUTS		:= \
+	$(shell find $(GRAM_DIR) $(GEN_DIR) $(LOGS_DIR) $(LIBFT_DIR)/src \
+		-type f \( -name '*.c' -o -name '*.h' \)) \
+	$(wildcard $(LIBFT_DIR)/*.h)
 LR_TAB_MARKER		:= $(LR_TAB_GEN_DIR)/.generated
 LR_TAB_INCLUDES		:= \
 	$(GRAM_INCLUDES) \
@@ -100,7 +108,7 @@ TEST_LOGS_DIR		:= $(TEST_DIR)/logs
 # DEBUG SECTION (END)
 
 # SHELL (START)
-SHELL_DIR			:= 4_shell
+SHELL_DIR			:= .
 SHELL_SRCS			:= \
 	$(wildcard $(SHELL_DIR)/srcs/*.c) \
 	$(wildcard $(SHELL_DIR)/srcs/0_asm_stubs/*/*.c) \
@@ -259,19 +267,18 @@ SHELL_OBJS			:= $(SHELL_CORE_OBJS) $(LR_TAB_OBJS) $(LOGS_OBJS)
 SHELL_DEPS			:= $(SHELL_CORE_OBJS:.o=.d)
 # SHELL (END)
 
-# LOGS MACRO (START)
+# BUILD MACRO (START)
 define BUILD_SECTION
-	@$(MAKE) -sq $(1) || { \
-		status=$$?; \
-		if [ $$status -eq 1 ]; then \
-			echo "compiling $(2)..."; \
-			$(MAKE) -s $(1); \
-		else \
-			exit $$status; \
-		fi; \
-	}
+	@status=0; \
+	$(MAKE) -srq $(1) || status=$$?; \
+	if [ $$status -eq 1 ]; then \
+		echo "🧠 compiling  $(2)..."; \
+		$(MAKE) -sr $(1); \
+	elif [ $$status -ne 0 ]; then \
+		exit $$status; \
+	fi
 endef
-# LOGS MACRO (END)
+# BUILD MACRO (END)
 
 # INCLUDES SELECTION (START)
 $(LOGS_OBJS): BUILD_INCLUDES := $(LOGS_INCLUDES)
@@ -282,50 +289,56 @@ $(SHELL_CORE_OBJS): BUILD_INCLUDES := $(SHELL_INCLUDES)
 # INCLUDES SELECTION (END)
 
 # PUBLIC RULES (START)
-all: $(NAME)
+all: _build_shell
 
-tables:
-	@if [ ! -f $(LR_TAB_MARKER) ] \
-		|| [ ! -f $(LR_TAB_GEN_DIR)/lr_tables.h ] \
-		|| [ ! -f $(LR_TAB_GEN_DIR)/lr_tables.c ]; then \
-		rm -f $(LR_TAB_MARKER); \
-	fi
-	@$(MAKE) -s $(LR_TAB_MARKER)
+tables: _generate_tables
 # PUBLIC RULES (END)
 
 # PRIVATE RULES (START)
+_force_libft:
+
 _compile_logs:
 	$(call BUILD_SECTION,$(LOGS_OBJS),logs)
 
 _compile_grammar:
 	$(call BUILD_SECTION,$(GRAM_OBJS),grammar)
 
-_compile_generator: | _compile_logs _compile_grammar
+_build_generator: $(LIBFT) _compile_logs _compile_grammar
 	$(call BUILD_SECTION,$(GEN_CORE_OBJS),generator)
+	@$(MAKE) -s $(GEN_NAME)
 
-_compile_tables:
+_generate_tables: 
+	@if [ ! -f $(LR_TAB_MARKER) ] \
+		|| [ ! -f $(LR_TAB_GEN_DIR)/lr_tables.h ] \
+		|| [ ! -f $(LR_TAB_GEN_DIR)/lr_tables.c ]; then \
+		rm -f $(LR_TAB_MARKER); \
+	fi
+	@$(MAKE) -s $(LR_TAB_MARKER)
+
+_compile_tables: _generate_tables
 	$(call BUILD_SECTION,$(LR_TAB_CORE_OBJS),lr tables)
 
-_compile_shell:
+_build_shell: $(LIBFT) _compile_logs _compile_tables
 	$(call BUILD_SECTION,$(SHELL_CORE_OBJS),shell)
+	@$(MAKE) -s $(NAME)
 # PRIVATE RULES (END)
 
-$(LIBFT):
-	@echo "compiling libft..."
+$(LIBFT): _force_libft
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
-$(GEN_NAME): $(GEN_OBJS) $(LIBFT) | _compile_generator
-	@echo "linking generator..."
+$(GEN_NAME): $(GEN_OBJS) $(LIBFT)
+	@echo "👉 linking    generator..."
 	@$(CC) $(CFLAGS) $(GEN_OBJS) $(LIBFT) -o $(GEN_NAME)
 
-$(LR_TAB_MARKER): $(GRAM_SRCS) $(GEN_SRCS) | $(GEN_NAME)
-	@echo "generating lr tables..."
+$(LR_TAB_MARKER): $(LR_TAB_INPUTS)
+	@$(MAKE) -s _build_generator
+	@echo "🧮 generating lr tables..."
 	@mkdir -p $(LR_TAB_GEN_DIR)
 	@./$(GEN_NAME)
 	@touch $(LR_TAB_MARKER)
 
 $(NAME): $(SHELL_OBJS) $(LIBFT)
-	@echo "linking shell..."
+	@echo "👉 linking    shell..."
 	@$(CC) $(CFLAGS) $(SHELL_OBJS) $(LIBFT) $(READLINE_LIBS) -o $(NAME)
 
 $(OBJ_DIR)/%.o : %.c
@@ -362,10 +375,12 @@ fclean: clean
 
 re: fclean all
 
--include $(LOGS_DEPS)
--include $(GRAM_DEPS)
--include $(GEN_DEPS)
--include $(LR_TAB_DEPS)
--include $(SHELL_DEPS)
+-include $(wildcard $(LOGS_DEPS))
+-include $(wildcard $(GRAM_DEPS))
+-include $(wildcard $(GEN_DEPS))
+-include $(wildcard $(LR_TAB_DEPS))
+-include $(wildcard $(SHELL_DEPS))
 
-.PHONY: all bonus gen debug test clean fclean re
+.PHONY: all tables bonus debug test clean fclean re \
+	_force_libft _compile_logs _compile_grammar _compile_tables \
+	_build_generator _generate_tables _build_shell

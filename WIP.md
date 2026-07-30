@@ -1,7 +1,6 @@
 # WIP (MAKEFILE)
 
 - `$(LR_TAB_GEN_FILES):` suit les `.c`, mais pas encore les `.h` du `generator` et de la `grammar`.
-- `libft` logs
 
 # WIP (LR MACHINE)
 

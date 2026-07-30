@@ -27,5 +27,6 @@ bool	generator_serialize(const t_lr_generator *generator)
 		return (generator_report_serialization_failure(h_fd, c_fd), false);
 	(void)close(h_fd);
 	(void)close(c_fd);
+	print_pass("files closed\n");
 	return (true);
 }
