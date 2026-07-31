@@ -318,6 +318,7 @@ static void	dump_string_value(const t_string *value)
 const char	*token_type_to_string(t_token_type token_type)
 {
 	char	*formatted;
+	int		ret;
 
 	switch (token_type)
 	{
@@ -346,7 +347,10 @@ const char	*token_type_to_string(t_token_type token_type)
 		case TOKEN_IO_NUMBER: return ("IO_NUMBER");
 		case TOKEN_IO_LOCATION: return ("IO_LOCATION");
 		case TOKEN_EOF: return ("EOF");
-		default: return (asprintf(&formatted, "unknown (%i)", (int)token_type), formatted);
+		default:
+			ret = asprintf(&formatted, "unknown (%i)", (int)token_type);
+			(void)ret;
+			return (formatted);
 	}
 }
 

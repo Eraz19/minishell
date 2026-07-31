@@ -61,7 +61,7 @@ static t_error	unalias_remove_operands(
 		if (last_exit_status.type != ERR_NO)
 		{
 			exit_status = error_print(
-					last_exit_status, argv[0], argv[i], NULL, NULL);
+							last_exit_status, argv[0], argv[i], NULL, NULL);
 		}
 		i++;
 	}
@@ -82,7 +82,7 @@ t_error	builtin_unalias(int argc, char **argv, char **envp, int *exit_status)
 	*exit_status = (err.type != ERR_NO);
 	if (err.type)
 		err = error_print(err, argv[0], NULL, NULL);
-	if (err.type == ERR_ALIAS_NOT_FOUND
+	if (err.type == ERR_VAR_NOT_FOUND
 		|| err.type == ERR_INVALID_USAGE
 		|| err.type == ERR_POSIX_WRITE || err.type == ERR_UB)
 		err.type = ERR_BUILTIN;

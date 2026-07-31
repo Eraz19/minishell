@@ -124,20 +124,6 @@ const char	*shell_get_name(void);
  */
 t_params	*shell_get_params(void);
 
-/**
- * @brief Allocates, runs and frees the global shell instance.
- *
- * @note The function allocates the shell state, initializes and loads all
- *       submodules, executes the startup @c ENV hook, runs
- *       @ref runner_run(), saves history, then frees the shell before
- *       returning.
- *
- * @param argc Argument count.
- * @param argv Argument array (borrowed, read-only).
- * @param envp Environment array (borrowed, read-only).
- * @param build_lr_tables Specifies if parser tables need to be built.
- * @return Integer form of the final error type, or @c ERR_NO on success.
- */
-int			shell_run(int argc, char **argv, char **envp, bool build_parser_tables);
+int	shell_run(int argc, char **argv, char **envp, bool must_init);
 
 #endif

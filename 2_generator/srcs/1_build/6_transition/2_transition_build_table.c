@@ -8,7 +8,10 @@
 
 static inline bool	lr_state_not_found(void)
 {
-	(void)write(STDERR_FILENO, LR_STATE_NOT_FOUND, str_len(LR_STATE_NOT_FOUND));
+	ssize_t	osef;
+
+	osef = write(STDERR_FILENO, LR_STATE_NOT_FOUND, str_len(LR_STATE_NOT_FOUND));
+	(void)osef;
 	return (false);
 }
 

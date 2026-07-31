@@ -94,6 +94,7 @@ t_error	shell_get_new_parser_priv(
 t_error	shell_destroy_last_instance_priv(const char *caller)
 {
 	t_shell		*shell;
+	t_runner	*victim;
 	t_runner	*prev_runner;
 
 #ifdef DEBUG_INSTANCES
@@ -101,16 +102,20 @@ t_error	shell_destroy_last_instance_priv(const char *caller)
 #else
 	(void)caller;
 #endif
-	prev_runner = NULL;
 	shell = shell_get();
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL), "shell not found", NULL, NULL));
 	if (shell->last_runner == NULL)
 		return (error_print(error(ERR_INTERNAL), "no shell instance", NULL, NULL));
-	if (shell->last_runner->parent != NULL)
-		prev_runner = shell->last_runner->parent;
-	runner_free(shell->last_runner);
+	victim = shell->last_runner;
+	prev_runner = victim->parent;
+	runner_free(victim);
+	free(victim);
 	shell->last_runner = prev_runner;
+	if (prev_runner == NULL)
+		shell->runner = NULL;
+	else
+		prev_runner->child = NULL;
 	return (error(ERR_NO));
 }
 

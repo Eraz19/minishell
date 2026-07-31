@@ -173,8 +173,14 @@ _t_exec()
 
 	if (( LEAK )); then
 		tmo="$VG_TIMEOUT"
-		cmd=(valgrind -q --suppressions="$VG_SUPP" --leak-check=full \
-			--show-leak-kinds=definite,indirect \
+		cmd=(valgrind -q --suppressions="$VG_SUPP" \
+			--leak-check=full \
+			--show-leak-kinds=all \
+			--errors-for-leak-kinds=all \
+			--track-origins=yes \
+			--num-callers=40 \
+			--error-limit=no \
+			--track-fds=yes \
 			--log-file="${T_LOG}/valgrind.%p.log" "$@")
 	else
 		cmd=("$@")
@@ -188,6 +194,7 @@ _t_exec()
 		> "$T_OUT_FILE" 2> "$T_ERR_RAW_FILE"
 	T_RET=$?
 	msh_filter_stderr < "$T_ERR_RAW_FILE" > "$T_ERR_FILE"
+	t_cleanup_valgrind_logs
 	if (( T_RET == 139 )); then
 		T_SEGV=1
 		t_fail "SEGFAULT: shell (or its pipeline) died with SIGSEGV (exit 139)"
@@ -198,6 +205,23 @@ _t_exec()
 		t_fail "TIMEOUT: killed after ${tmo}s (exit 137) — possible infinite loop"
 	fi
 	t_check_valgrind
+}
+
+t_cleanup_valgrind_logs()
+{
+	(( LEAK )) || return 0
+	local vg
+	for vg in "${T_LOG}"/valgrind.*.log(N); do
+		if [[ ! -s "$vg" ]]; then
+			rm -f "$vg"
+			continue
+		fi
+		perl -0pi -e '
+			s/^==(\d+)== FILE DESCRIPTORS: [^\n]*\n((?:==\1== Open file descriptor \d+: [^\n]*\/valgrind\.\d+\.log\n==\1==    <inherited from parent>\n==\1== \n)+)//mg;
+			s/^==(\d+)== Open file descriptor \d+: [^\n]*\/valgrind\.\d+\.log\n==\1==    <inherited from parent>\n==\1== \n//mg;
+		' "$vg"
+	done
+	return 0
 }
 
 t_run()
@@ -222,11 +246,17 @@ t_check_valgrind()
 	(( LEAK )) || return 0
 	local vg bad=""
 	for vg in "${T_LOG}"/valgrind.*.log(N); do
-		if grep -Eq "definitely lost: [1-9]|indirectly lost: [1-9]" "$vg"; then
+		if grep -Eq "((definitely|indirectly|possibly) lost|still reachable): [1-9]|[1-9][0-9,]* bytes in [1-9][0-9,]* blocks are ((definitely|indirectly|possibly) lost|still reachable)" "$vg"; then
 			bad="leak"
 		fi
 		if grep -Eq "^==[0-9]+== (Invalid (read|write)|Conditional jump|Use of uninitialised|Syscall param)" "$vg"; then
 			bad="${bad:+$bad+}error"
+		fi
+		if grep -Eq "^==[0-9]+== ERROR SUMMARY: [1-9][0-9,]* errors? from" "$vg"; then
+			bad="${bad:+$bad+}error"
+		fi
+		if grep -Eq "^==[0-9]+== Open file descriptor [0-9]+:" "$vg"; then
+			bad="${bad:+$bad+}fd"
 		fi
 	done
 	[[ -n "$bad" ]] && t_fail "VALGRIND ($bad): see ${T_LOG}/valgrind.*.log"

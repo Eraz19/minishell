@@ -60,6 +60,7 @@ t_error	fd_tracker_backup_priv(
 			return (error(ERR_NO));
 		return (error_sys());
 	}
+	backup_fd = -1;
 	err = fd_tracker_get_candidate(tracker, &backup_fd);
 	if (err.type)
 		return (err);

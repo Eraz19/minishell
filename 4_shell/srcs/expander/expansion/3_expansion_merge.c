@@ -78,6 +78,7 @@ t_error	expansion_merge(
 	bool	sep;
 	t_error	err;
 
+	sep = false;
 	if (src->len == 0)
 		print_unspecified_behaviour(raw_value, posix_citation, NO_FIELD);
 	else if (src->len > 1)
@@ -90,8 +91,7 @@ t_error	expansion_merge(
 		if (!string_init(out, 1, "", 0))
 		{
 			err = error_print(error_sys(), NULL, NULL);
-			expansion_free(src);
-			return (err);
+			return (expansion_free(src), err);
 		}
 		expansion_free(src);
 		return (err);

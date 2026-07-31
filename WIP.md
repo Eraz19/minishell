@@ -30,25 +30,21 @@ peut **ou pas** expandre `x` en `echo ok`
 
 # WIP
 
-- ⚠️ `cd`:
-	- requalify `errors`
 - **ALEX**:
 	- `libft` updated
 	- `gitignore` add `2_generator/lr_generator` and `3_lr_tables/2_generated/*`
-	- review `alias` behaviour (`table`-`stack`-`forbidden`)
 - ⚠️ `exit`:
 	- quid `EINTR` lors du `write()`
 - ⚠️ `scanner` + `SCAN_MODE_FILE` from `sh` vs `dot` / `eval` / `env`...:
 	- Pas le même système de fallback ? (`dot` cherche lui-même alors que `sh` délègue le search)
 	- qui doit `path search` ?
 - ⚠️ `set`:
-	- "If no options or arguments are specified, set shall write the names and values of all shell variables in the collation sequence of the current locale" => create `merge_sort()` (or quivalent) in `libft/sort/` and use it in `builtin_set`...
+	- "If no options or arguments are specified, set shall write the names and values of all shell variables in the collation sequence of the current locale" => create `merge_sort()` in `libft/sort/` and use it in `builtin_set`...
 - ⚠️ `alias`:
 	- "the alias definition shall not affect the parent process of the current shell nor any utility environment invoked by the shell" => `alias` should not be expanded while `scanner` is used inside a `utility` (`env`, `dot`, `eval`...?)
 - 👉 `params`:
 	- remove wrappers ? 
 	- move `history` table to `params` ?
-- 👉 précompiler les tables `LR`
 - 👉 `ast`: use `t_ast_command` ast `root` instead of `t_ast_list` (`command` can contain a `list` anyway...)
 - 👉 `options`:
 	- `-u` (`expander`):

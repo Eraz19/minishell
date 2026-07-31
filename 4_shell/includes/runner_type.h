@@ -1,6 +1,7 @@
 #ifndef RUNNER_TYPE_H
 # define RUNNER_TYPE_H
 
+# include "ast.h"
 # include "cmd_cache.h"
 # include "parser_type.h"
 # include <stddef.h>
@@ -15,6 +16,7 @@ typedef struct s_runner
 	bool			errexit_ignored;
 	struct s_runner	*parent;
 	struct s_runner	*child;
+	t_ast_root		ast_root;
 }	t_runner;
 
 #endif

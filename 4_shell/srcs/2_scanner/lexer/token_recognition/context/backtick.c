@@ -38,6 +38,7 @@ t_error	backtick_context_unescape_rules(t_lexer *lexer, void *_)
 {
 	t_token_recognition_unescape	args;
 
+	(void)_;
 	args.lexer = lexer;
 	args.special_args = NULL;
 	args.special_handler = NULL;

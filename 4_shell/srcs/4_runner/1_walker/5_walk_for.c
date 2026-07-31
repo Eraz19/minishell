@@ -4,7 +4,7 @@
 #include "env.h"
 
 static inline t_error	walk_for_expand_default_word(
-							t_expansion *expansions,
+							t_expansions *expansions,
 							t_exp_flag flags,
 							int *exit_status)
 {
@@ -15,6 +15,7 @@ static inline t_error	walk_for_expand_default_word(
 	if (!string_init(&synthetic_word, 0, "\"$@\"", -1))
 		return (error_sys());
 	err = expand_str(&expansion, &synthetic_word, exit_status, flags);
+	string_free(&synthetic_word);
 	if (err.type)
 		return (err);
 	if (!vector_push(expansions, &expansion))
@@ -24,6 +25,7 @@ static inline t_error	walk_for_expand_default_word(
 
 static inline t_error	walk_for_expand_words(
 							t_token_pool *pool,
+							bool has_in,
 							t_expansions *expansions,
 							int *exit_status)
 {
@@ -34,7 +36,7 @@ static inline t_error	walk_for_expand_words(
 	t_error		err;
 
 	flags = expansion_flags_regular();
-	if (pool->len == 0)
+	if (pool->len == 0 && has_in == false)
 		return (walk_for_expand_default_word(expansions, flags, exit_status));
 	i = 0;
 	while (i < pool->len)
@@ -114,7 +116,11 @@ t_error	walk_for(t_runner *runner, t_ast_for *for_clause, int *exit_status)
 
 	runner->loop_depth++;
 	cmd_expansions_init(&expansions);
-	err = walk_for_expand_words(&for_clause->words, &expansions, exit_status);
+	err = walk_for_expand_words(
+			&for_clause->words,
+			for_clause->has_in,
+			&expansions,
+			exit_status);
 	if (err.type == ERR_NO)
 		err = walk_for_loop(runner, for_clause, &expansions, exit_status);
 	cmd_expansions_free(&expansions);

@@ -88,6 +88,7 @@ typedef struct s_ast_for
 	t_token			var_name;
 	t_token_pool	words;
 	t_ast_list		body;
+	bool			has_in;
 }	t_ast_for;
 
 typedef struct s_ast_loop

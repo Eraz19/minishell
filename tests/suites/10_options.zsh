@@ -88,11 +88,16 @@ t_run_argv ./no_such_script.sh
 expect_status 127
 t_end
 
-t_begin INVOC-F.4 "script not readable -> 126"
-t_setup 'printf "echo secret\n" > locked.sh; chmod 000 locked.sh'
-t_run_argv ./locked.sh
-expect_status 126
-t_end
+if (( EUID == 0 )); then
+	t_manual INVOC-F.4 "script not readable -> 126" \
+		"not meaningful when tests run as root"
+else
+	t_begin INVOC-F.4 "script not readable -> 126"
+	t_setup 'printf "echo secret\n" > locked.sh; chmod 000 locked.sh'
+	t_run_argv ./locked.sh
+	expect_status 126
+	t_end
+fi
 
 t_begin INVOC-F.5 "empty script -> exit 0"
 t_setup ': > empty.sh'

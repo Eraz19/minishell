@@ -11,13 +11,15 @@ static inline bool	action_malloc_table(
 						t_action **actions,
 						size_t lr_states_count)
 {
+	ssize_t	osef;
 	size_t	col_count;
 
 	col_count = SYM_TERMINAL_MAX + 1;
 	if (col_count > SIZE_MAX / sizeof(**actions)
 		|| lr_states_count > SIZE_MAX / (col_count * sizeof(**actions)))
 	{
-		(void)write(STDERR_FILENO, ACTION_TOO_BIG, str_len(ACTION_TOO_BIG));
+		osef = write(STDERR_FILENO, ACTION_TOO_BIG, str_len(ACTION_TOO_BIG));
+		(void)osef;
 		return (false);
 	}
 	*actions = malloc(lr_states_count * col_count * sizeof(**actions));

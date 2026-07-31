@@ -2,23 +2,11 @@
 
 #define DEFAULT_NAME	"minishell"
 
-static t_shell	*shell_singleton(t_shell *addr)
-{
-	static t_shell *shell = NULL;
-
-	if (addr)
-		shell = addr;
-	return (shell);
-}
-
-void	shell_set(t_shell *addr)
-{
-	(void)shell_singleton(addr);
-}
-
 t_shell	*shell_get(void)
 {
-	return (shell_singleton(NULL));
+	static t_shell shell;
+
+	return (&shell);
 }
 
 const char	*shell_get_name(void)

@@ -3,11 +3,13 @@
 
 bool	is_context_param_ending(char c, void *_)
 {
+	(void)_;
 	return (c == '}');
 }
 
 bool	is_context_backtick_ending(char c, void *_)
 {
+	(void)_;
 	return (c == '`');
 }
 

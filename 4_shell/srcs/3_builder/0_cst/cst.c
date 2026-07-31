@@ -60,8 +60,6 @@ void	cst_node_free(t_cst_node **node)
 	t_cst_node	*tmp;
 	size_t		i;
 
-	assert(node != NULL);
-	assert(node != NULL);
 	if (!node || !*node)
 		return ;
 	tmp = *node;
@@ -70,5 +68,6 @@ void	cst_node_free(t_cst_node **node)
 		cst_node_free(&tmp->children[i++]);
 	free(tmp->children);
 	string_free(&tmp->heredoc_body);
+	free(tmp);
 	*node = NULL;
 }

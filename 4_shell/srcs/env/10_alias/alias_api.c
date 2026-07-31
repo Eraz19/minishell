@@ -15,13 +15,23 @@ t_error	alias_get(
 			const t_string *name,
 			const t_string **out_value)
 {
-	t_error	err;
+	size_t			i;
+	const t_string	*curr_alias;
+	t_error			err;
 
 	assert(alias != NULL);
 	assert(name != NULL);
+	assert(name->data != NULL);
 	assert(name->len > 0);
 	assert(out_value != NULL);
-	// VAR_NOT_FOUND if stack contains alias
+	i = 0;
+	while (i < alias->stack.len)
+	{
+		curr_alias = &((const t_string *)alias->stack.data)[i];
+		if (string_cmp(name, curr_alias) == true)
+			return (error(ERR_VAR_NOT_FOUND));
+		i++;
+	}
 	err = alias_table_get(&alias->table, name->data, out_value);
 	if (err.type == ERR_NO)
 		err = alias_stack_push(&alias->stack, name);

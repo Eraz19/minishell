@@ -10,7 +10,10 @@
 
 static inline bool	qualifiers_report_overflow(void)
 {
-	(void)write(STDERR_FILENO, QUALIFIERS_TOO_BIG, str_len(QUALIFIERS_TOO_BIG));
+	ssize_t	osef;
+
+	osef = write(STDERR_FILENO, QUALIFIERS_TOO_BIG, str_len(QUALIFIERS_TOO_BIG));
+	(void)osef;
 	return (false);
 }
 

@@ -35,22 +35,24 @@ static inline t_error	posix_read(
 
 t_error	posix_read_all(int fd, t_string *out)
 {
+	t_buff	buff;
 	size_t	read;
 	t_error	err;
 
-	(void)string_init(out, 0, NULL, 0);
+	(void)buff_init(&buff, 0, NULL, 0);
 	while (true)
 	{
-		if (!string_grow(out, out->cap + CHUNK_LEN))
-			return (err = error_sys(), string_free(out), err);
-		err = posix_read(fd, out->data + out->len, out->cap - out->len, &read);
+		if (!buff_grow(&buff, buff.cap + CHUNK_LEN))
+			return (err = error_sys(), buff_free(&buff), err);
+		err = posix_read(fd, buff.data + buff.len, buff.cap - buff.len, &read);
 		if (err.type)
-			return (string_free(out), err);
+			return (buff_free(&buff), err);
 		else if (read == 0)
 			break ;
-		out->len += read;
+		buff.len += read;
 	}
-	if (!string_append_n(out, "", 0))
-		return (err = error_sys(), string_free(out), err);
+	if (!buff_append_n(&buff, "", 1))
+		return (err = error_sys(), buff_free(&buff), err);
+	string_take(out, buff.data, buff.cap, (ssize_t)buff.len - 1);
 	return (err);
 }

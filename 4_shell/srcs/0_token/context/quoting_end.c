@@ -3,11 +3,13 @@
 
 bool	is_context_dquote_ending(char c, void *_)
 {
+	(void)_;
 	return (c == '\"');
 }
 
 bool	is_context_squote_ending(char c, void *_)
 {
+	(void)_;
 	return (c == '\'');
 }
 
@@ -25,5 +27,6 @@ bool	is_quoting_ending(char c, t_context context)
 
 bool	is_context_dollar_squote_ending(char c, void *_)
 {
+	(void)_;
 	return (c == '\'');
 }

@@ -55,6 +55,7 @@ t_error	fd_tracker_grow(t_fd_tracker *tracker, size_t min_cap)
 
 	if (min_cap <= tracker->cap)
 		return (error(ERR_NO));
+	new_cap = 0;
 	err = fd_tracker_get_new_cap(tracker->cap, min_cap, &new_cap);
 	if (err.type)
 		return (err);

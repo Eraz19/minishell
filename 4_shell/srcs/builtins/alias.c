@@ -49,7 +49,7 @@ static t_error	alias_interpret_operand(const char *operand)
 		if (name == NULL)
 			return (error_sys());
 		if (!alias_is_valid_name(name))
-			return (free(name), error(ERR_ALIAS_INVALID_NAME));
+			return (free(name), error(ERR_VAR_INVALID_NAME));
 		value_len = str_len(equal_sign + 1);
 		value = str_sub(operand, (uint)(equal_sign - operand + 1), value_len);
 		if (value == NULL)
@@ -98,8 +98,8 @@ t_error	builtin_alias(int argc, char **argv, char **envp, int *exit_status)
 	*exit_status = (err.type != ERR_NO);
 	if (err.type)
 		err = error_print(err, argv[0], NULL, NULL);
-	if (err.type == ERR_ALIAS_NOT_FOUND
-		|| err.type == ERR_ALIAS_INVALID_NAME
+	if (err.type == ERR_VAR_NOT_FOUND
+		|| err.type == ERR_VAR_INVALID_NAME
 		|| err.type == ERR_POSIX_WRITE)
 		err.type = ERR_BUILTIN;
 	else if (err.type == ERR_SHELL_NOT_FOUND)

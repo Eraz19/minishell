@@ -48,6 +48,7 @@ t_error deserialize(const char *src, t_string *dst)
 	buff = malloc(src_len + 1);
 	if (!buff)
 		return (error_sys());
+	dst_len = 0;
 	err = copy_and_remove_escape(src, buff, src_len, &dst_len);
 	if (err.type)
 		return (free(buff), err);

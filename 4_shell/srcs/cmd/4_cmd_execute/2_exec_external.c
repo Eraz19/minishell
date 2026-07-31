@@ -33,6 +33,7 @@ static inline void	cmd_exec_fallback(t_cmd *cmd, int *exit_status)
 {
 	char		**cmd_name;
 	int			argc;
+	t_shell		*shell;
 	t_error		err;
 
 	err = cmd_exec_add_shell_name_to_argv(&cmd->argv);
@@ -48,6 +49,9 @@ static inline void	cmd_exec_fallback(t_cmd *cmd, int *exit_status)
 	argc = (int)cmd->argv.len - 1;
 	shell_init_subshell(SUBSHELL_NORMAL);
 	shell_clear();
+	shell = shell_get();
+	assert(shell != NULL);
+	history_free(&shell->history);
 	*exit_status = shell_run(argc, cmd->argv.data, cmd->envp.data, false);
 }
 

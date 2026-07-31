@@ -1,5 +1,6 @@
 #include "env.h"
 #include "lexer.h"
+#include "scanner.h"
 
 t_error	lexer_push_alias(t_lexer *lexer, t_lexer_input_stack_item *alias)
 {
@@ -11,7 +12,7 @@ t_error	lexer_push_alias(t_lexer *lexer, t_lexer_input_stack_item *alias)
 	lexer_input_stack_get_last(&lexer->input_stack, &lexer->input);
 	out = lexer->token;
 	lexer_unbind_token(lexer);
-	return (lexer_get_next_token(lexer, out));
+	return (scanner_get_next_token(lexer->scanner, out, false));
 }
 
 t_error	lexer_pop_alias(t_lexer *lexer)
@@ -26,5 +27,5 @@ t_error	lexer_pop_alias(t_lexer *lexer)
 	out = lexer->token;
 	token_free(out);
 	lexer_unbind_token(lexer);
-	return (lexer_get_next_token(lexer, out));
+	return (scanner_get_next_token(lexer->scanner, out, false));
 }

@@ -2,5 +2,6 @@
 
 bool	is_context_none_ending(char c, void *_)
 {
+	(void)_;
 	return (c == '\0');
 }

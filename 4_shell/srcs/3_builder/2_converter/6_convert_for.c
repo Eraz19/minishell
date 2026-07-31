@@ -50,6 +50,7 @@ static inline t_error	convert_for_clause(
 	t_error				err;
 
 	converter_take_token(parser, for_clause->children[1], 0, &out->var_name);
+	out->has_in = for_clause->child_count >= 6;
 	if (for_clause->child_count == 7)
 	{
 		err = convert_for_wordlist(parser, for_clause->children[4], out);

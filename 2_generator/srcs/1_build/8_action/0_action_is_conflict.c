@@ -1,4 +1,3 @@
-#include "generator_actions.h"
 #include "generator_actions_priv.h"
 #include "libft.h"
 #include <unistd.h>
@@ -13,21 +12,24 @@ static inline bool	action_report_conflict(
 						const t_action *action,
 						t_action_type new_action_type)
 {
-	(void)write(STDERR_FILENO, CONFLICT_PREFIX, str_len(CONFLICT_PREFIX));
+	ssize_t	osef;
+
+	osef = write(STDERR_FILENO, CONFLICT_PREFIX, str_len(CONFLICT_PREFIX));
 	if (action->type == ACTION_SHIFT)
-		(void)write(STDERR_FILENO, SHIFT, str_len(SHIFT));
+		osef = write(STDERR_FILENO, SHIFT, str_len(SHIFT));
 	else if (action->type == ACTION_REDUCE)
-		(void)write(STDERR_FILENO, REDUCE, str_len(REDUCE));
+		osef = write(STDERR_FILENO, REDUCE, str_len(REDUCE));
 	else if (action->type == ACTION_ACCEPT)
-		(void)write(STDERR_FILENO, ACCEPT, str_len(ACCEPT));
-	(void)write(STDERR_FILENO, "-", 1);
+		osef = write(STDERR_FILENO, ACCEPT, str_len(ACCEPT));
+	osef = write(STDERR_FILENO, "-", 1);
 	if (new_action_type == ACTION_SHIFT)
-		(void)write(STDERR_FILENO, SHIFT, str_len(SHIFT));
+		osef = write(STDERR_FILENO, SHIFT, str_len(SHIFT));
 	else if (new_action_type == ACTION_REDUCE)
-		(void)write(STDERR_FILENO, REDUCE, str_len(REDUCE));
+		osef = write(STDERR_FILENO, REDUCE, str_len(REDUCE));
 	else if (new_action_type == ACTION_ACCEPT)
-		(void)write(STDERR_FILENO, ACCEPT, str_len(ACCEPT));
-	(void)write(STDERR_FILENO, CONFLICT_SUFFIX, str_len(CONFLICT_SUFFIX));
+		osef = write(STDERR_FILENO, ACCEPT, str_len(ACCEPT));
+	osef = write(STDERR_FILENO, CONFLICT_SUFFIX, str_len(CONFLICT_SUFFIX));
+	(void)osef;
 	return (true);
 }
 

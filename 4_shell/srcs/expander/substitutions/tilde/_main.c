@@ -23,7 +23,7 @@ bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item)
 	escaped = current_item->opt.escaped;
 	if (current_item->opt.i == 0 && current_item->c == '~')
 		return (current_item->opt.quoted == CONTEXT_NONE && !escaped);
-	if (tilde_flag == EXP_TILDE_NORMAL)
+	if (tilde_flag == EXP_TILDE_NORMAL || expander->word.len < 2)
 		return (false);
 	err = word_get(&item, &expander->word, 1);
 	if (err.type)

@@ -26,23 +26,6 @@ static inline void	shell_stop_logs(void)
 
 /* -------------------- DEBUG (STOP) -------------------- */
 
-static inline t_error	shell_prepare(t_shell_loading_options *options)
-{
-	t_shell	*shell;
-
-	assert(options->argc > 0);
-	assert(options->argv != NULL);
-	assert(options->envp != NULL);
-	options->shell = malloc(sizeof(*shell));
-	if (!options->shell)
-		return (error_print(error_sys(),
-					"unable to malloc shell data struct", NULL, NULL));
-	shell_init(options->shell);
-	shell_set(options->shell);
-	print_pass("shell initialized\n");
-	return (shell_load(options));
-}
-
 static inline t_error	shell_load_runner(t_shell *shell, t_runner **runner)
 {
 	const char	*input;
@@ -76,18 +59,24 @@ static inline int	shell_exec(t_shell *shell)
 	return (env_get_last_status_from(&shell->params));
 }
 
-int	shell_run(int argc, char **argv, char **envp, bool build_parser_tables)
+int	shell_run(int argc, char **argv, char **envp, bool must_init)
 {
 	t_shell_loading_options	options;
 	int						exit_status;
 	t_error					err;
 
 	shell_start_logs();
+	options.shell = shell_get();
+	assert(options.shell != NULL);
 	options.argc = argc;
 	options.argv = argv;
 	options.envp = envp;
-	options.build_parser_tables = build_parser_tables;
-	err = shell_prepare(&options);
+	if (must_init == true)
+	{
+		shell_init(options.shell);
+		print_pass("shell initialized\n");
+	}
+	err = shell_load(options.shell, options.argc, options.argv, options.envp);
 	if (err.type)
 		exit_status = (int)err.type;
 	else

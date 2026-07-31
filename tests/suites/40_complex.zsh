@@ -149,14 +149,23 @@ tt MIX.6 "assignment prefix + redirection + external in one command" \
 'MIXV=6 '"$TEST_EXEC"' > /dev/null 2> caught.txt
 grep -c "MIXV=6" caught.txt' 0 "1"
 
-tt MIX.7 "cmd-sub of a pipeline of a heredoc" \
-'R=$(cat <<EOF | wc -l
+t_begin MIX.7 "cmd-sub of a pipeline of a heredoc"
+t_run 'R=$(cat <<EOF | wc -l
 1
 2
 3
 EOF
 )
-echo lines=$R' 0 "lines= 3"
+echo lines=$R'
+expect_status 0
+T_EXP_OUT_FILE="${T_LOG}/stdout.expected.txt"
+printf '%s\n' "lines= 3" > "$T_EXP_OUT_FILE"
+printf '%s\n' "lines=3" > "${T_LOG}/stdout.expected.alt.txt"
+if ! cmp -s "$T_EXP_OUT_FILE" "$T_OUT_FILE" \
+	&& ! cmp -s "${T_LOG}/stdout.expected.alt.txt" "$T_OUT_FILE"; then
+	t_fail "stdout: differs from expected alternatives (see report)"
+fi
+t_end
 
 tt MIX.8 "case on a cmd-sub over a glob, with redirected arm" \
 'touch only_one.m8

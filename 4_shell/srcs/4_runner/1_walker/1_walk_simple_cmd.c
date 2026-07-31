@@ -43,6 +43,7 @@ t_error	walk_simple_cmd(t_runner *runner, t_ast_scmd *command, int *status)
 		err = redirect_start(&command->redirs, status);
 	if (err.type)
 		return (cmd_finalize_and_free(&cmd, err, status));
+	path_is_temporary = false;
 	err = cmd_assign(&cmd, &command->assignments, &path_is_temporary, status);
 	if (err.type == ERR_NO)
 		err = xtrace_print_argv(&cmd.argv);

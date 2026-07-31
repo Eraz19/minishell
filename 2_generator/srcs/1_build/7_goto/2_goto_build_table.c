@@ -12,19 +12,24 @@
 
 static inline bool	goto_report_conflict(void)
 {
-	(void)write(STDERR_FILENO, GOTO_CONFLICT, str_len(GOTO_CONFLICT));
+	ssize_t	osef;
+
+	osef = write(STDERR_FILENO, GOTO_CONFLICT, str_len(GOTO_CONFLICT));
+	(void)osef;
 	return (false);
 }
 
 static inline bool	goto_malloc_table(size_t **gotos, size_t lr_states_count)
 {
+	ssize_t	osef;
 	size_t	col_count;
 
 	col_count = SYM_NON_TERMINAL_MAX - SYM_NON_TERMINAL_MIN + 1;
 	if (col_count > SIZE_MAX / sizeof(**gotos)
 		|| lr_states_count > SIZE_MAX / (col_count * sizeof(**gotos)))
 	{
-		(void)write(STDERR_FILENO, GOTO_TOO_BIG, str_len(GOTO_TOO_BIG));
+		osef = write(STDERR_FILENO, GOTO_TOO_BIG, str_len(GOTO_TOO_BIG));
+		(void)osef;
 		return (false);
 	}
 	*gotos = malloc(lr_states_count * col_count * sizeof(**gotos));

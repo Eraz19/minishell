@@ -11,6 +11,7 @@ void	runner_init(t_runner *runner)
 	runner->errexit_ignored = false;
 	runner->child = NULL;
 	runner->parent = NULL;
+	ast_root_init(&runner->ast_root);
 }
 
 t_error	runner_load(
@@ -48,6 +49,7 @@ void	runner_clear(t_runner *runner)
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
 	runner->errexit_ignored = false;
+	ast_root_free(&runner->ast_root);
 }
 
 void	runner_free(t_runner *runner)
@@ -59,6 +61,7 @@ void	runner_free(t_runner *runner)
 	runner->loop_depth = 0;
 	runner->control_depth = 0;
 	runner->errexit_ignored = false;
+	ast_root_free(&runner->ast_root);
 }
 
 void	runner_free_void(void *runner)

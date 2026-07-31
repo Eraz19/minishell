@@ -9,7 +9,6 @@ typedef struct s_shell_loading_options
 	int 	argc;
 	char	**argv;
 	char	**envp;
-	bool	build_parser_tables;
 }	t_shell_loading_options;
 
 /* ************************************************************************* */
@@ -24,7 +23,7 @@ typedef struct s_shell_loading_options
 void	shell_init(t_shell *shell);
 
 // TODO: doc
-t_error	shell_load(t_shell_loading_options *options);
+t_error	shell_load(t_shell *shell, int argc, char **argv, char **envp);
 
 /**
  * @brief Releases the global shell state and clears the singleton.
@@ -46,13 +45,5 @@ void	shell_free(t_shell *shell);
  *         unavailable, or ERR_LIBC on allocation or POSIX failure.
  */
 t_error	shell_exec_env(void);
-
-/**
- * @brief Registers the global shell singleton.
- *
- * @param addr Shell instance to register (borrowed, read-only), or NULL to
- *             clear the singleton.
- */
-void	shell_set(t_shell *addr);
 
 #endif

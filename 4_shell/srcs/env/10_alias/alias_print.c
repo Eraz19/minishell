@@ -62,5 +62,6 @@ t_error	alias_print_all(t_alias *alias)
 			return (free(list), err);
 		i++;
 	}
+	free(list);
 	return (err);
 }

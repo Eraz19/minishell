@@ -1,6 +1,5 @@
 #include "shell_priv.h"
 #include "lr_tables.h"
-#include "runner.h"
 #include <stdlib.h>
 # include <assert.h>
 
@@ -22,18 +21,16 @@ void	shell_clear(void)
 	assert(shell != NULL);
 	shell->is_subshell = false;
 	env_clear(&shell->params);
-	if (shell->runner != NULL)
-		runner_free(shell->runner);
+	while (shell->runner != NULL)
+		(void)shell_destroy_last_instance();
 }
 
 void	shell_free(t_shell *shell)
 {
 	env_free(&shell->params);
 	history_free(&shell->history);
-	if (shell->runner != NULL)
-		runner_free(shell->runner);
-	free(shell);
-	shell_set(NULL);
+	while (shell->runner != NULL)
+		(void)shell_destroy_last_instance();
 }
 
 void	shell_free_void(void)

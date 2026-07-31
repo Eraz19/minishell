@@ -1,12 +1,14 @@
+MAKEFLAGS			+= --no-print-directory
+
 NAME				:= minishell
 CC					:= cc
 DEPFLAGS			:= -MMD -MP
 CFLAGS				:= \
-	-Wall -Wextra -Wdeprecated -Werror \
+	-Wall -Wextra -Wdeprecated -Werror -D_GNU_SOURCE \
 	-O2 \
 	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_CMD	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS		:= \
-	-Wall -Wextra -Wdeprecated -Werror \
+	-Wall -Wextra -Wdeprecated -Werror -D_GNU_SOURCE \
 	-O0 -g3 -fsanitize=address,undefined \
 	-DDEBUG_ERROR_TRACE \
 	-DDEBUG_LOGS \
@@ -221,7 +223,7 @@ SHELL_DEPS			:= $(SHELL_CORE_OBJS:.o=.d)
 # SHELL (END)
 
 # TEST (START)
-TEST_CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2
+TEST_CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 -D_GNU_SOURCE
 TEST_DIR			:= ./tests
 TEST_SCRIPTS		:= $(wildcard $(TEST_DIR)/*.zsh)
 TEST_MAIN			:= $(TEST_DIR)/test_posix_suite.zsh

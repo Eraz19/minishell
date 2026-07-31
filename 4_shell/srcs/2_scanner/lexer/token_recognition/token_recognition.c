@@ -51,7 +51,11 @@ t_error	recognize_token(t_lexer *lexer, t_token *out)
 	while (!lexer->emited_token)
 	{
 		if (token_recognize_rules_dispatch(lexer).type)
+		{
+			token_free(out);
+			lexer_unbind_token(lexer);
 			return (lexer->err);
+		}
 	}
 	return (lexer->err);
 }

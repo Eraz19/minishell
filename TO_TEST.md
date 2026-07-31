@@ -6,6 +6,14 @@ alias_1
 # bash et minishell n'infinite loop pas en fait (il doit y avoir un max de process children ??)
 ```
 
+# nested alias
+
+```bash
+alias def='expanded'
+alias abc='def'
+abc
+```
+
 # `bash` infinite loop avoidance
 
 ```bash
