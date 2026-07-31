@@ -4,8 +4,17 @@
 
 t_error env_print(t_env_print_mode mode)
 {
-	assert(mode == ENV_PRINT_EXPORT || mode == ENV_PRINT_READONLY || mode == ENV_PRINT_SET);
-	return var_print((t_var_print_mode)mode);
+	t_params	*params;
+
+	assert(mode == ENV_PRINT_EXPORT
+		|| mode == ENV_PRINT_READONLY
+		|| mode == ENV_PRINT_SET
+		|| mode == ENV_PRINT_ALIAS);
+	params = shell_get_params();
+	assert(params != NULL);
+	if (mode == ENV_PRINT_ALIAS)
+		return (alias_print_all(&params->alias));
+	return (var_print((t_var_print_mode)mode));
 }
 
 t_error	env_print_one_alias(const char *name)

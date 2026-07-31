@@ -1,10 +1,9 @@
+#include "env.h"
 #include "token.h"
 #include "lexer.h"
 #include "parser.h"
 #include "scanner.h"
 #include "scanner_priv.h"
-
-t_error    env_get_alias(const t_string *name, const t_string **out_value, bool add_to_stack);
 
 static bool	ends_in_blank(const t_lexer_input_stack_item *alias_exp)
 {
@@ -48,7 +47,7 @@ t_error	find_alias_value(t_scanner *scanner, const t_string **out, t_token *src)
 	}
 	if (!expandable)
 		return (*out = NULL, scanner->err = error(ERR_NO));
-	scanner->err = env_get_alias(&src->value, out, true);
+	scanner->err = env_get_alias(&src->value, out);
 	if (scanner->err.type)
 		return (scanner->err);
 	return (token_free(src), scanner->err);

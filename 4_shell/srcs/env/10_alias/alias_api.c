@@ -13,8 +13,7 @@ t_error	alias_set(t_alias *alias, const char *name, const char *value)
 t_error	alias_get(
 			t_alias *alias,
 			const t_string *name,
-			const t_string **out_value,
-			bool add_to_stack)
+			const t_string **out_value)
 {
 	t_error	err;
 
@@ -22,16 +21,13 @@ t_error	alias_get(
 	assert(name != NULL);
 	assert(name->len > 0);
 	assert(out_value != NULL);
+	// VAR_NOT_FOUND if stack contains alias
 	err = alias_table_get(&alias->table, name->data, out_value);
-	if (err.type)
-		return (err);
-	if (add_to_stack == true)
-	{
+	if (err.type == ERR_NO)
 		err = alias_stack_push(&alias->stack, name);
-		if (err.type)
-			return (err);
-	}
-	return (alias_forbidden_set(&alias->forbidden, name->data));
+	if (err.type == ERR_NO)
+		err = alias_forbidden_set(&alias->forbidden, name->data);
+	return (err);
 }
 
 bool	alias_is_forbidden(t_alias *alias, const char *name)

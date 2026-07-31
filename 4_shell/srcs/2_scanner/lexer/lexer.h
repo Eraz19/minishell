@@ -37,7 +37,7 @@ typedef struct s_token_recognition_context	t_token_recognition_context;
  *                     @c input_stack (borrowed).
  * @var s_lexer::token Token under construction; bound for the duration
  *                     of one recognition and released by
- *                     @ref unbind_lexer_token at every
+ *                     @ref lexer_unbind_token at every
  *                     @ref lexer_get_next_token / @ref lexer_scan_word
  *                     exit — @ref bind_lexer_token initializes only on a
  *                     NULL binding, so a non-NULL value marks an
@@ -98,6 +98,16 @@ void	lexer_clear(t_lexer *lexer);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
+
+/**
+ * @ingroup lexer
+ * @brief Releases the token binding without touching the token: called at
+ *        every recognition exit (token delivered to the caller, or error)
+ *        so the next @ref bind_lexer_token initializes fresh storage.
+ *
+ * @param lexer Already initialized lexer (borrowed).
+ */
+void	lexer_unbind_token(t_lexer *lexer);
 
 /**
  * @ingroup lexer

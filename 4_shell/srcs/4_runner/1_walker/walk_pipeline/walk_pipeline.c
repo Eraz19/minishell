@@ -2,8 +2,10 @@
 #include "walk_pipeline_priv.h"
 #include "env.h"
 # include <assert.h>	// DEBUG
+#ifdef DEBUG_CMD
 # include <stdio.h>		// DEBUG
 # include "logs.h"		// DEBUG
+#endif
 
 t_error	walk_pipeline(
 			t_runner *runner,
@@ -24,7 +26,9 @@ t_error	walk_pipeline(
 		err = walk_pipe_multiple_commands(runner, pipeline, exit_status);
 	if (*exit_status < 0)
 		*exit_status = (int)err.type;
+#ifdef DEBUG_CMD
 	fprintf(stderr, "%s[WALKER] $? = %i%s\n", YELLOW, *exit_status, NC);
+#endif
 	env_set_last_status(*exit_status);
 	runner->errexit_ignored = old_errexit_ignored;
 	return (err);

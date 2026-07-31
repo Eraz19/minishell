@@ -4,13 +4,13 @@ DEPFLAGS			:= -MMD -MP
 CFLAGS				:= \
 	-Wall -Wextra -Wdeprecated -Werror \
 	-O2 \
-	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_INSTANCES -DDEBUG_CMD	# -DNDEBUG (disable assert())
+	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_CMD	# -DNDEBUG (disable assert())
 DEBUG_CFLAGS		:= \
 	-Wall -Wextra -Wdeprecated -Werror \
 	-O0 -g3 -fsanitize=address,undefined \
 	-DDEBUG_ERROR_TRACE \
 	-DDEBUG_LOGS \
-	-DDEBUG_PARAMS \
+	-DDEBUG_ENV \
 	-DDEBUG_PARSING \
 	-DDEBUG_CST \
 	-DDEBUG_AST \

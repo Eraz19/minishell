@@ -5,7 +5,9 @@
 #include <sys/ioctl.h>
 #include <readline/readline.h>
 #include "sig.h"
-#include "logs.h"	// DEBUG
+#ifdef DEBUG_CMD
+# include "logs.h"	// DEBUG
+#endif
 #include "options.h"
 #include "reader_interactive_priv.h"
 #include "posix_helpers.h"
@@ -25,14 +27,18 @@ static t_error	ensure_reader_stdin_is_blocking(void)
 		is_fifo = S_ISFIFO(stat_buff.st_mode);
 		if (!is_fifo)
 		{
+#ifdef DEBUG_CMD
 			print_pass("stdin is not a fifo: not set to blocking mode\n");
+#endif
 			return (error(ERR_NO));
 		}
 	}
 	enabled = 0;
 	if (ioctl(STDIN_FILENO, FIONBIO, &enabled) == -1)
 		return (error_print(error_sys(), "Unable to set stdin to blocking mode", NULL, NULL));
+#ifdef DEBUG_CMD
 	print_pass("stdin set to blocking mode\n");
+#endif
 	return (error(ERR_NO));
 }
 
@@ -63,7 +69,9 @@ static t_error	read_line_until(const char *prompt, char **out, size_t max_retry)
 	bool	ignore_eof;
 
 	counter = 0;
+#ifdef DEBUG_CMD
 	fprintf(stderr, CYAN "####################### IN #######################\n" NC);
+#endif
 	while (++counter)
 	{
 		err = read_line_secured(prompt, out, &retry);
@@ -83,7 +91,9 @@ static t_error	read_line_until(const char *prompt, char **out, size_t max_retry)
 		if (err.type)
 			break ;
 	}
+#ifdef DEBUG_CMD
 	fprintf(stderr, CYAN "##################################################\n" NC);
+#endif
 	return (err);
 }
 

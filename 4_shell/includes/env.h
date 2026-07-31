@@ -56,10 +56,7 @@ t_error	env_get_last_status(int *out);
 int		env_get_last_status_from(t_params *params);
 t_error	env_get_fd_manager(t_fd_manager **out_fd_manager_ptr);
 t_error	env_get(const t_string *name, t_string *dst);
-t_error	env_get_alias(
-			const t_string *name,
-			const t_string **out_value,
-			bool add_to_stack);
+t_error	env_get_alias(const t_string *name, const t_string **out_value);
 t_error	env_get_from_const(const char *name, t_string *dst);
 t_error	env_get_positionals(const t_positionals **dst);
 t_error	env_get_source(const t_string **source);

@@ -1,3 +1,11 @@
+# `bash` alias infinite loop 😈
+
+```bash
+alias alias_1='expanded `alias_1`'
+alias_1
+# bash et minishell n'infinite loop pas en fait (il doit y avoir un max de process children ??)
+```
+
 # `bash` infinite loop avoidance
 
 ```bash

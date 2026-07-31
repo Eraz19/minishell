@@ -26,8 +26,7 @@ t_error	alias_set(t_alias *alias, const char *name, const char *value);
 t_error	alias_get(
 			t_alias *alias,
 			const t_string *name,
-			const t_string **out_value,
-			bool add_to_stack);
+			const t_string **out_value);
 bool	alias_is_forbidden(t_alias *alias, const char *name);
 void	alias_pop_from_stack(t_alias *alias);
 t_error	alias_unset(t_alias *alias, const char *name);

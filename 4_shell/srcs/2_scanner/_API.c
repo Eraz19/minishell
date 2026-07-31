@@ -6,12 +6,13 @@
 t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2)
 {
 	if (update_input(scanner, out, ps2).type)
-		return (scanner->err);
+		return (lexer_unbind_token(&scanner->lexer), scanner->err);
 	scanner->err = lexer_get_next_token(&scanner->lexer, out);
 	if (scanner->err.type)
-		return (requalify_scanner_error(scanner));
-	if (out->type == TOKEN_TOKEN)
-		return (expand_alias(scanner, out));
+		scanner->err = requalify_scanner_error(scanner);
+	else if (out->type == TOKEN_TOKEN)
+		scanner->err = expand_alias(scanner, out);
+	lexer_unbind_token(&scanner->lexer);
 	return (scanner->err);
 }
 
@@ -25,11 +26,11 @@ t_error	scanner_read_heredoc(t_scanner *scanner, t_string *out, t_token *delim, 
 t_error	scanner_scan_word(t_scanner *scanner, t_token *out, t_token_recognition_context args)
 {
 	if (update_input(scanner, out, false).type)
-		return (requalify_scanner_error(scanner));
+		return (lexer_unbind_token(&scanner->lexer), scanner->err);
 	scanner->err = context_stack_item_init(&args.context_item, CONTEXT_NONE);
-	if (scanner->err.type)
-		return (requalify_scanner_error(scanner));
-	scanner->err = lexer_scan_word(&scanner->lexer, out, &args);
+	if (scanner->err.type == ERR_NO)
+		scanner->err = lexer_scan_word(&scanner->lexer, out, &args);
+	lexer_unbind_token(&scanner->lexer);
 	return (requalify_scanner_error(scanner));
 }
 

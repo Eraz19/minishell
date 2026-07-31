@@ -11,16 +11,13 @@ t_error	env_set_alias(const char *name, const char *value)
 	return (alias_set(&params->alias, name, value));
 }
 
-t_error	env_get_alias(
-			const t_string *name,
-			const t_string **out_value,
-			bool add_to_stack)
+t_error	env_get_alias(const t_string *name, const t_string **out_value)
 {
 	t_params	*params;
 	
 	params = shell_get_params();
 	assert(params != NULL);
-	return (alias_get(&params->alias, name, out_value, add_to_stack));
+	return (alias_get(&params->alias, name, out_value));
 }
 
 bool	env_alias_is_forbidden(const t_string *name)

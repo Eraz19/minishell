@@ -2,8 +2,8 @@
 #include "runner_type.h"
 #include "runner.h"
 #include <stdlib.h>
-# include "logs.h"
 #ifdef DEBUG_INSTANCES
+# include "logs.h"
 # include "debug.h"
 #endif
 
@@ -37,8 +37,9 @@ t_error	shell_get_new_runner_priv(
 	shell->last_runner = new_runner;
 #ifdef DEBUG_INSTANCES
 	dump_shell_instance(shell->last_runner, caller);
-#endif
+#else
 	(void)caller;
+#endif
 	return (*out_runner_ptr = shell->last_runner, err);
 }
 
@@ -95,7 +96,11 @@ t_error	shell_destroy_last_instance_priv(const char *caller)
 	t_shell		*shell;
 	t_runner	*prev_runner;
 
+#ifdef DEBUG_INSTANCES
 	fprintf(stderr, YELLOW "[SHELL ] instance destroyed by %s()\n", caller);
+#else
+	(void)caller;
+#endif
 	prev_runner = NULL;
 	shell = shell_get();
 	if (shell == NULL)

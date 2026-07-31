@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define CMD_SUB_PREFIX	"cmd sub child"
+#define CMD_SUB_PREFIX	"cmd sub"
 #define SHELL_NF		"shell not found"
 
 static inline void	cmd_sub_child_dup_and_close(int pipe_fds[2])
@@ -48,7 +48,9 @@ void	cmd_sub_child_string(const t_string *cmd_string, int pipe_fds[2])
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
 	err = runner_run(runner);
 	shell_destroy_last_instance();
-	if (err.type)
+	if (err.type == ERR_EOF || err.type == ERR_VEOF)
+		err.type = ERR_NO;
+	else if (err.type)
 		exit((int)error_print(err, CMD_SUB_PREFIX, NULL, NULL).type);
 	err = env_get_last_status(&exit_status);
 	if (err.type)

@@ -6,7 +6,7 @@
 # tests/test_rules.txt: -a -C -e -f -h -i -n -u -v -x, -o pipefail,
 # -o ignoreeof, plus `set`-level option management.
 #
-# TD options (-e, -u, -v) are written but guarded by td_guard (--td to run).
+# TD options (-u, -v) are written but guarded by td_guard (--td to run).
 #
 # Project contracts asserted on purpose (documented choices, error.h):
 #   121 syntax error | 126 not executable | 127 not found
@@ -221,53 +221,43 @@ expect_file_lines exists.txt "keep"
 t_end
 
 ###############################################################################
-t_section "option -e / errexit — TD, not implemented (--td to run)"
+t_section "option -e / errexit"
 ###############################################################################
 
-td_guard OPT-E.1 "set -e: shell exits on a failing command" && {
-	t_begin OPT-E.1 "set -e: shell exits on a failing command"
-	t_run 'set -e
+t_begin OPT-E.1 "set -e: shell exits on a failing command"
+t_run 'set -e
 false
 echo unreachable'
-	expect_status 1
-	expect_out_lacks "unreachable"
-	t_end
-}
+expect_status 1
+expect_out_lacks "unreachable"
+t_end
 
-td_guard OPT-E.2 "set -e: failure in && / || does not exit" && {
-	t_begin OPT-E.2 "set -e: failure in && / || does not exit"
-	t_run 'set -e
+t_begin OPT-E.2 "set -e: failure in && / || does not exit"
+t_run 'set -e
 false || echo caught
 echo alive'
-	expect_status 0
-	expect_lines "caught" "alive"
-	t_end
-}
+expect_status 0
+expect_lines "caught" "alive"
+t_end
 
-td_guard OPT-E.3 "set -e: failing if-condition does not exit" && {
-	t_begin OPT-E.3 "set -e: failing if-condition does not exit"
-	t_run 'set -e
+t_begin OPT-E.3 "set -e: failing if-condition does not exit"
+t_run 'set -e
 if false; then echo yes; fi
 echo alive'
-	expect_status 0
-	expect_lines "alive"
-	t_end
-}
+expect_status 0
+expect_lines "alive"
+t_end
 
-td_guard OPT-E.4 "set -e: ! negated failure does not exit" && {
-	t_begin OPT-E.4 "set -e: ! negated failure does not exit"
-	t_run 'set -e
+t_begin OPT-E.4 "set -e: ! negated failure does not exit"
+t_run 'set -e
 ! false
 echo alive'
-	expect_status 0
-	expect_lines "alive"
-	t_end
-}
+expect_status 0
+expect_lines "alive"
+t_end
 
-td_guard OPT-E.5 "command line -e" && {
-	tta OPT-E.5 "command line -e" 1 "" \
-		-- -e -c 'false; echo unreachable'
-}
+tta OPT-E.5 "command line -e" 1 "" \
+	-- -e -c 'false; echo unreachable'
 
 ###############################################################################
 t_section "option -f / noglob (POSIX set -f)"

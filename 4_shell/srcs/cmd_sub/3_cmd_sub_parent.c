@@ -1,6 +1,8 @@
 #include "cmd_sub_priv.h"
 #include "posix_helpers.h"
+#ifdef DEBUG_CMD_SUB
 # include "logs.h"	// DEBUG
+#endif
 
 static inline t_error	cmd_sub_parent_read_and_close(
 							int pipe_fds[2],
@@ -37,6 +39,8 @@ t_error	cmd_sub_parent(
 	if (err.type)
 		return (err);
 	cmd_sub_parent_trim(out_string);
+#ifdef DEBUG_CMD_SUB
 	fprintf(stderr, YELLOW "##################################################\n" NC);
+#endif
 	return (err);
 }

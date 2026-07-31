@@ -1,7 +1,9 @@
 #include "shell.h"
 # include <assert.h>	// DEBUG
+#ifdef DEBUG_CMD
 # include "logs.h"
 # include <stdio.h>
+#endif
 
 // TODO: refactor
 static inline t_error	env_get_struct(t_params **dst)
@@ -47,7 +49,9 @@ t_error	env_unset_variable(const t_string *name)
 void	env_set_last_status_in(t_params *params, int value)
 {
 	specials_set_last_status(&params->specials, value);
+#ifdef DEBUG_CMD
 	fprintf(stderr, "%s[PARAMS] $? = %i%s\n", YELLOW, value, NC);
+#endif
 }
 
 t_error	env_set_last_status(int value)

@@ -1,3 +1,23 @@
+# WIP (ALIAS)
+
+> "With both the backquoted and $(commands) forms, the commands string shall be tokenized and parsed. It is unspecified whether the commands string is parsed and executed incrementally as a program (as for a shell script), or is parsed as a single compound_list that is executed after the string has been completely parsed.”
+
+`2.6.3 Command Substitution`:
+> “If the commands string is parsed as a single compound_list, before any commands are executed, alias and unalias commands in commands have no effect during parsing.”
+
+Changements incrémentaux d'alias dans une cmd_sub sont *unspecified* donc
+```bash
+echo $(alias abc='echo ok'; abc)
+# POSIX autorise [abc: cmd not found] ou [ok] (bash produit cmd not found)
+alias abc='echo ok' && echo $(abc)
+# POSIX autorise [abc: cmd not found] ou [ok] (bash produit cmd not found)
+echo `alias abc='echo ok'; abc`
+# POSIX autorise [abc: cmd not found] ou [ok] (bash produit "ok")
+alias abc='echo ok' && echo `abc`
+# POSIX autorise [abc: cmd not found] ou [ok] (bash produit "ok")
+```
+peut **ou pas** expandre `x` en `echo ok`
+
 # WIP (LR MACHINE)
 
 - `generator`:

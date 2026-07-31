@@ -45,7 +45,9 @@ void	runner_handle_error(t_runner *runner, t_error *err)
 	bool	interactive;
 	t_error	option_err;
 
+#ifdef DEBUG_CMD
 	fprintf(stderr, "[RUNNER] handling error %i (%s)\n", (int)err->type, error_to_string(*err));
+#endif
 	if (err->type == ERR_EXIT || err->type == ERR_VEOF || err->type == ERR_EXIT_WITH_CURRENT_STATUS)
 		return ;
 	if (err->type == ERR_NOT_IMPLEMENTED)
@@ -75,6 +77,8 @@ void	runner_handle_error(t_runner *runner, t_error *err)
 		runner_handle_bad_errors(err, interactive);
 	if (err->type && error_is_flow_control(*err) == false)
 		*err = error_print(*err, NULL, NULL);
+#ifdef DEBUG_CMD
 	fprintf(stderr, "[RUNNER] => final error %i (%s)\n", (int)err->type, error_to_string(*err));
 	fprintf(stderr, "--------------------------------------------------\n");
+#endif
 }

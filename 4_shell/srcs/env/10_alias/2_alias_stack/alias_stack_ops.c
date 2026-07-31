@@ -8,7 +8,7 @@ t_error	alias_stack_push(t_alias_stack *stack, const t_string *name)
 
 	if (!string_init(&dup, name->len + 1, name->data, (long)name->len))
 		return (error_sys());
-	if (vector_push(stack, &dup))
+	if (!vector_push(stack, &dup))
 		return (err = error_sys(), string_free(&dup), err);
 	return (error(ERR_NO));
 }
