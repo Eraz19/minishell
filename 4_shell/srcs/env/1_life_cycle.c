@@ -53,5 +53,6 @@ void	env_free(t_params *params)
 	process_free(&params->processes);
 	cmd_cache_free(&params->cmd_cache);
 	fd_free(&params->fd_manager);
+	sig_free();
 	alias_free(&params->alias);
 }
