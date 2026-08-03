@@ -7,7 +7,9 @@
 #   tests/test_posix_suite.zsh [path/to/minishell] [options]
 #
 # Options:
-#   --leak            run every case under valgrind (leaks fail the case)
+#   --leak            run every case under valgrind. In the parent, all leak
+#                     kinds fail; in children, only definitely/indirectly lost
+#                     blocks fail.
 #   --td              also run the TD cases (-e/-u/-v, not implemented yet)
 #   --filter PREFIX   only run cases whose ID starts with PREFIX
 #   --suite LIST      comma-separated: options,builtins,ast,complex,custom

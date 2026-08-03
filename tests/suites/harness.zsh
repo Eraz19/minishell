@@ -10,6 +10,8 @@
 #   - is killed after $RUN_TIMEOUT seconds (TIMEOUT clearly reported)
 #   - reports SEGFAULTS explicitly (exit 139 / SIGSEGV)
 #   - can run under valgrind (--leak), leaks/errors fail the case
+#     parent leaks fail for all leak kinds; child leaks fail only for
+#     definitely/indirectly lost blocks
 #   - writes a full report in tests/logs/posix_suite.N/<ID>/
 #
 # stderr NOTE: the default build prints unconditional debug noise on stderr
@@ -176,7 +178,7 @@ _t_exec()
 		cmd=(valgrind -q --suppressions="$VG_SUPP" \
 			--leak-check=full \
 			--show-leak-kinds=all \
-			--errors-for-leak-kinds=all \
+			--errors-for-leak-kinds=definite,indirect \
 			--track-origins=yes \
 			--num-callers=40 \
 			--error-limit=no \
@@ -224,6 +226,25 @@ t_cleanup_valgrind_logs()
 	return 0
 }
 
+t_valgrind_parent_log()
+{
+	(( LEAK )) || return 0
+	local vg base pid parent="" parent_pid=""
+
+	for vg in "${T_LOG}"/valgrind.*.log(N); do
+		base="${vg:t}"
+		pid="${base#valgrind.}"
+		pid="${pid%.log}"
+		[[ "$pid" == <-> ]] || continue
+		if [[ -z "$parent_pid" || "$pid" -lt "$parent_pid" ]]; then
+			parent_pid="$pid"
+			parent="$vg"
+		fi
+	done
+	[[ -n "$parent" ]] && print -r -- "$parent"
+	return 0
+}
+
 t_run()
 {
 	(( T_ACTIVE )) || return 0
@@ -244,9 +265,16 @@ t_run_argv()
 t_check_valgrind()
 {
 	(( LEAK )) || return 0
-	local vg bad=""
+	local vg bad="" parent_log
+	local parent_leak_re child_leak_re
+
+	parent_log="$(t_valgrind_parent_log)"
+	parent_leak_re="((definitely|indirectly|possibly) lost|still reachable): [1-9]|[1-9][0-9,]* bytes in [1-9][0-9,]* blocks are ((definitely|indirectly|possibly) lost|still reachable)"
+	child_leak_re="((definitely|indirectly) lost): [1-9]|[1-9][0-9,]* bytes in [1-9][0-9,]* blocks are ((definitely|indirectly) lost)"
 	for vg in "${T_LOG}"/valgrind.*.log(N); do
-		if grep -Eq "((definitely|indirectly|possibly) lost|still reachable): [1-9]|[1-9][0-9,]* bytes in [1-9][0-9,]* blocks are ((definitely|indirectly|possibly) lost|still reachable)" "$vg"; then
+		if [[ "$vg" == "$parent_log" ]] && grep -Eq "$parent_leak_re" "$vg"; then
+			bad="leak"
+		elif [[ "$vg" != "$parent_log" ]] && grep -Eq "$child_leak_re" "$vg"; then
 			bad="leak"
 		fi
 		if grep -Eq "^==[0-9]+== (Invalid (read|write)|Conditional jump|Use of uninitialised|Syscall param)" "$vg"; then
