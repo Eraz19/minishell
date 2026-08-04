@@ -1,6 +1,6 @@
 #include "ast.h"
 #include "utils.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	ast_pipeline_init(t_ast_pipeline *pipeline)
 {

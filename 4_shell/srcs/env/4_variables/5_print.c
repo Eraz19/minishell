@@ -4,7 +4,7 @@
 #include "utils.h"
 #include <unistd.h>
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline bool	var_must_be_printed(const t_var *var, t_var_print_mode mode)
 {

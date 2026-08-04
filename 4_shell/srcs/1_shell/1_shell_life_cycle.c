@@ -1,7 +1,7 @@
 #include "shell_priv.h"
 #include "lr_tables.h"
 #include <stdlib.h>
-# include <assert.h>
+#include <assert.h>
 
 void	shell_init(t_shell *shell)
 {

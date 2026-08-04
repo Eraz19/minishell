@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "grammar_name.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 // @ret ERR_VAR_NOT_FOUND / ERR_LIBC
 static inline t_error	var_get_priv(const char *name, t_string *dst_val)

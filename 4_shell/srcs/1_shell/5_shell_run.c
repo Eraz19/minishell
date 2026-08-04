@@ -6,7 +6,7 @@
 /* -------------------- DEBUG (START) -------------------- */
 # include <locale.h>	// DEBUG
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline void	shell_start_logs(void)
 {

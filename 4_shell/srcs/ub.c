@@ -2,6 +2,7 @@
 #include "posix_helpers.h"
 #include "shell.h"
 #include <unistd.h>
+#include <string.h>
 
 #define COND_PREFIX	": warning: unspecified behaviour: "
 #define IMPL_PREFIX	": implemented as: "
@@ -83,5 +84,5 @@ t_error	undefined_behaviour(const char *message)
 	(void)posix_write(STDERR_FILENO, "\"", 1);
 	(void)posix_write(STDERR_FILENO, message, str_len(message));
 	(void)posix_write(STDERR_FILENO, UB_SUFFIX, str_len(UB_SUFFIX));
-	return (error_print(error(ERR_UB)));
+	return (error_print(error(ERR_UB), NULL, NULL));
 }

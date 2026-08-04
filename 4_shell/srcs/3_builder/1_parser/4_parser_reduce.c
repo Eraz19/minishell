@@ -1,7 +1,7 @@
 #include "parser_priv.h"
 #include "grammar_gotos.h"
 #include "cst.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline t_error	parser_new_lr_state(
 							const t_parser *parser,

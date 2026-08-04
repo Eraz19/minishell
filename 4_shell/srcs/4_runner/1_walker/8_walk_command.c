@@ -3,7 +3,7 @@
 #include "env.h"
 #include "redirector.h"
 # include "debug.h"
-# include <assert.h>
+#include <assert.h>
 
 static inline t_error	walk_command_dispatch(
 							t_runner *runner,

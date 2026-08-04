@@ -1,5 +1,5 @@
 #include "ft_getopt_priv.h"
-# include <stdio.h>
+#include <stdio.h>
 
 // @ret ERR_OPT_INVALID / ERR_LIBC
 static t_error	getopt_process_flags_without_arg(t_getopt_state *state)

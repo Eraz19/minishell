@@ -5,7 +5,7 @@
 #include "var_load_up.h"
 #include <stdlib.h>
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	var_free_one(void *var)
 {

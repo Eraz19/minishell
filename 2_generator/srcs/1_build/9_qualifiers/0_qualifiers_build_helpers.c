@@ -1,5 +1,5 @@
 #include "generator_qualifiers_priv.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 bool	qualifier_should_apply_word(
 			const t_action *actions,

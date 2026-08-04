@@ -1,5 +1,5 @@
 #include "alias_stack_internal.h"
-# include <assert.h>
+#include <assert.h>
 
 t_error	alias_stack_push(t_alias_stack *stack, const t_string *name)
 {

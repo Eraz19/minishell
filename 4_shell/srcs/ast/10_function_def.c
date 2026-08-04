@@ -1,6 +1,6 @@
 #include "ast.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	ast_function_def_init(t_ast_function_def *function_def)
 {

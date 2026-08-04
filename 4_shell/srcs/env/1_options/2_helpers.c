@@ -1,7 +1,7 @@
 #include "shell.h"
 #include <stdlib.h>
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error	option_is_active(t_option option, bool *out)
 {

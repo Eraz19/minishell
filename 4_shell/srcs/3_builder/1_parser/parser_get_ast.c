@@ -2,7 +2,7 @@
 #include "parser_priv.h"
 #include "converter.h"
 # include "debug.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error	parser_get_ast(t_parser *parser, t_ast_root *dst_ast)
 {

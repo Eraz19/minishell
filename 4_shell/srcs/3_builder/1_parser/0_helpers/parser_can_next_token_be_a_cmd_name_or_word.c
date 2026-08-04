@@ -2,7 +2,7 @@
 #include "parser.h"
 #include "grammar_gotos.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 // @ret ERR_LIBC
 static inline t_error	get_lr_state_ids_from_stack(

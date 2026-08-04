@@ -1,7 +1,7 @@
 #include "positionals.h"
 #include "positionals_priv.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error	positionals_push(
 	t_positionals_stack *stack,

@@ -1,7 +1,7 @@
 #include "positionals.h"
 #include <stdlib.h>
 # include "logs.h"	// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline t_error	positionals_load_string(
 							t_positionals *positionals,

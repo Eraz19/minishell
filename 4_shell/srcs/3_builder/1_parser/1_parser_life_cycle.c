@@ -4,7 +4,7 @@
 #include "cst.h"
 #include "shell.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	parser_init(t_parser *parser)
 {

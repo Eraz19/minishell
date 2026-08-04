@@ -1,5 +1,5 @@
 #include "ast.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	ast_simple_command_init(t_ast_scmd *simple_command)
 {

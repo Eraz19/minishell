@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   grammar_symbols.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 14:50:54 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/04 14:56:00 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GRAMMAR_SYMBOLS_H
 # define GRAMMAR_SYMBOLS_H
 
@@ -7,7 +19,7 @@ typedef enum e_symbol
 	//		- Unclassified
 	SYM_TOKEN,
 	//		- Custom
-	SYM_DOLPAREN,			// $(		// ⚠️ custom (bash-like cmd_sub parsing hack)
+	SYM_DOLPAREN,			// $(		// ⚠️ custom (bash-like cmd_sub hack)
 	//		- Contextual
 	SYM_WORD,
 	SYM_NAME,
@@ -25,7 +37,7 @@ typedef enum e_symbol
 	SYM_RPARENTHESIS,		// )		// AST transparent
 	//		- Redirection
 	SYM_IO_NUMBER,			// [0-9]+
-	SYM_IO_LOCATION,		// 3+ char, begins with '{', ends with '}', and the delimiter character is '<' or '>'
+	SYM_IO_LOCATION,		// "{*}" + delimiter character '<' or '>'
 	SYM_LESS,				// <
 	SYM_DLESS,				// <<		// AST transparent
 	SYM_DLESSDASH,			// <<-		// AST transparent
@@ -57,7 +69,7 @@ typedef enum e_symbol
 	// ----------------------------------------------------
 	// NON_TERMINALS (GOTO table entries)
 	//		- Transparent (irrelevant for AST nodes)
-	SYM_accept,				// ⚠️ custom				(bash-like cmd_sub parsing hack)
+	SYM_accept,				// ⚠️ custom				(bash-like cmd_sub hack)
 	SYM_start,
 	SYM_program,
 	SYM_cmd_name,
@@ -71,12 +83,12 @@ typedef enum e_symbol
 	SYM_linebreak,
 	SYM_newline_list,
 	//		- Custom
-	SYM_cmd_sub,			// ⚠️ custom				(bash-like cmd_sub parsing hack)
+	SYM_cmd_sub,			// ⚠️ custom				(bash-like cmd_sub hack)
 	//		- Relevant (used to build AST nodes)
 	SYM_compound_command,	// [if/for/list/case/...]	(dispatcher)
 	SYM_complete_commands,	// [t_ast_list]				(recursive wrapper)
 	SYM_complete_command,	// [t_ast_list]				(wrapper)
-	SYM_separator_op,		// [t_ast_list]				async ('&' = true | ';' = false)
+	SYM_separator_op,		// [t_ast_list]				async ('&' = true)
 	SYM_list,				// [t_ast_list]				(recursive wrapper)
 	SYM_compound_list,		// [t_ast_list]				(recursive wrapper)
 	SYM_term,				// [t_ast_list]				content
@@ -93,13 +105,13 @@ typedef enum e_symbol
 	SYM_io_redirect,		// [t_ast_redirection]		(wrapper)
 	SYM_io_file,			// [t_ast_redirection]		operation
 	SYM_io_here,			// [t_ast_redirection]		heredoc (mode)
-	SYM_here_end,			// [t_ast_redirection]		heredoc (delimiter + metadata)
+	SYM_here_end,			// [t_ast_redirection]		heredoc (delimiter)
 	SYM_if_clause,			// [t_ast_if]				conditions + bodies
 	SYM_else_part,			// [t_ast_if]				else_body
 	SYM_for_clause,			// [t_ast_for]				words
 	SYM_wordlist,			// [t_ast_for]				words
-	SYM_while_clause,		// [t_ast_loop]				condition_must_be_true = true
-	SYM_until_clause,		// [t_ast_loop]				condition_must_be_true = false
+	SYM_while_clause,		// [t_ast_loop]				condition_must_be_true
+	SYM_until_clause,		// [t_ast_loop]				!condition_must_be_true
 	SYM_do_group,			// [for/while/until]		body
 	SYM_case_clause,		// [t_ast_case]				word
 	SYM_case_list_ns,		// [t_ast_case]				(wrapper)

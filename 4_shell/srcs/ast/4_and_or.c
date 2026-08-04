@@ -1,6 +1,6 @@
 #include "ast.h"
 #include "utils.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	ast_and_or_init(t_ast_and_or *and_or)
 {

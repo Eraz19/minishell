@@ -1,6 +1,6 @@
 #include "libft.h"
 #include "shell.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define SPECIALS	"0$!?"
 

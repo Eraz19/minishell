@@ -1,6 +1,6 @@
 #include "ft_getopt.h"
 # include "debug.h"
-# include <stdio.h>
+#include <stdio.h>
 
 static void	ft_getopt_dump_flag_with_arg(t_getopt_flag_with_arg *flag)
 {

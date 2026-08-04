@@ -4,11 +4,11 @@
 #include "parser_priv.h"
 #include "parser_here_stack.h"
 #ifdef DEBUG_PARSING
-# include <stdio.h>	// DEBUG
+#include <stdio.h>	// DEBUG
 # include "logs.h"	// DEBUG
 # include "debug.h"	// DEBUG
 #endif
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error	parser_read_heredoc(t_parser *parser)
 {

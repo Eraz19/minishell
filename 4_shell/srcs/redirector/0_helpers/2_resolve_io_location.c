@@ -1,6 +1,6 @@
 #include "redirector_priv.h"
 #include <unistd.h>
-# include <assert.h>
+#include <assert.h>
 
 t_error	redirect_resolve_location(t_redir *redir)
 {

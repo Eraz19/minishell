@@ -2,7 +2,7 @@
 #include "cst_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 # include "debug.h"		// DEBUG
 
 static inline t_error	converter_unrecognized_symbol(t_cst_node *node)

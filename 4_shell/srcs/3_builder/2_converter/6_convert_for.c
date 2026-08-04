@@ -3,7 +3,7 @@
 #include "ast.h"
 #include "converter_priv.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline t_error	convert_for_transfer(
 							t_parser *parser,

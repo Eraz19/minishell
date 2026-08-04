@@ -1,7 +1,7 @@
 #include "error.h"
 #include "builtins.h"
 #include <stdbool.h>
-# include <stdio.h>	// DEBUG
+#include <stdio.h>	// DEBUG
 
 /* ---------- TODO: builtins ---------- */
 

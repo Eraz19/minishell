@@ -2,7 +2,7 @@
 #include "convert_io_priv.h"
 #include <stdlib.h>
 #include <unistd.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 # include "debug.h"
 
 static inline t_error	convert_io_operator(

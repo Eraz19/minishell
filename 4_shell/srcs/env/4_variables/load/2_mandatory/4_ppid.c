@@ -2,7 +2,7 @@
 #include "variables.h"
 #include <stdlib.h>
 # include "logs.h"	// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define PPID_NAME	"PPID"
 

@@ -2,7 +2,7 @@
 #include "sig.h"
 #include "alias.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	env_init(t_params *params)
 {

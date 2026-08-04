@@ -1,5 +1,5 @@
 #include "alias.h"
-# include <assert.h>
+#include <assert.h>
 
 t_error	alias_set(t_alias *alias, const char *name, const char *value)
 {

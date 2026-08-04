@@ -5,7 +5,7 @@
 #include "runner.h"
 #include <stdlib.h>
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define ENV_NAME	"ENV"
 #define POSIX_CIT_1	"POSIX 2.5.3: If the expanded value of ENV is not an "

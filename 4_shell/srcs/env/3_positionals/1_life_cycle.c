@@ -1,5 +1,5 @@
 #include "positionals.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	positionals_init_stack(t_positionals_stack *stack)
 {

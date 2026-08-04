@@ -1,6 +1,6 @@
 #include "variables.h"
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define IFS_NAME	"IFS"
 #define IFS_VALUE	" \t\n\0"

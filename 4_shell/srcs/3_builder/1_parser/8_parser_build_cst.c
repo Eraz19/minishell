@@ -6,9 +6,9 @@
 #ifdef DEBUG_PARSING
 # include "debug.h"		// DEBUG
 # include "logs.h"		// DEBUG
-# include <stdio.h>		// DEBUG
+#include <stdio.h>		// DEBUG
 #endif
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline t_error	parser_push_initial_state(t_parser *parser)
 {

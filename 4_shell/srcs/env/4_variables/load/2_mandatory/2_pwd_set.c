@@ -7,7 +7,7 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define PWD_NAME	"PWD"
 

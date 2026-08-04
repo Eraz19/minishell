@@ -1,6 +1,6 @@
 #include "error.h"
 #include "walker_priv.h"
-# include <assert.h>
+#include <assert.h>
 
 static inline t_error	walk_if_condition(
 							t_runner *runner,

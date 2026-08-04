@@ -17,7 +17,7 @@
 #include <stdbool.h>
 #include "variables_priv.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 /* ************************************************************************* */
 /*                                    ENV                                    */

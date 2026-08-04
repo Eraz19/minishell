@@ -3,9 +3,9 @@
 #ifdef DEBUG_PARSING
 # include "debug.h"		// DEBUG
 # include "logs.h"		// DEBUG
-# include <stdio.h>		// DEBUG
+#include <stdio.h>		// DEBUG
 #endif
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error	parser_store_cst(t_parser *parser, t_parser_item *main_item)
 {

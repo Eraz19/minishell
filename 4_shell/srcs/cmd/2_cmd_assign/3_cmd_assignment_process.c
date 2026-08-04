@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "xtrace.h"
 #include <stdlib.h>
-# include <assert.h>
+#include <assert.h>
 
 #define PATH_TARGET		"PATH="
 #define PATH_TARGET_LEN	5

@@ -4,7 +4,7 @@
 #include "variables_priv.h"
 #include "utils.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error	var_unset(const t_string *name)
 {

@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define EXPECTS_TOO_BIG	"generator: expects table size overflow\n"
 

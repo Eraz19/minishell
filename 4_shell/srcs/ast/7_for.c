@@ -1,6 +1,6 @@
 #include "ast.h"
 #include "utils.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	ast_for_init(t_ast_for *for_node)
 {

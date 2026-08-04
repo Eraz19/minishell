@@ -1,7 +1,7 @@
 #include "parser_priv.h"
 #include "parser.h"
 #include "utils.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 #ifdef DEBUG_PARSING
 # include "logs.h"	// DEBUG
 #endif

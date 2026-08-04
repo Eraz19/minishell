@@ -1,6 +1,6 @@
 #include "walker_priv.h"
 #include "options.h"
-# include <assert.h>
+#include <assert.h>
 
 static inline t_error	walk_and_or_pipeline(
 							t_runner *runner,

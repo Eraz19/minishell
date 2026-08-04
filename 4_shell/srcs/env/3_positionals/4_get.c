@@ -1,7 +1,7 @@
 #include "positionals.h"
 #include <stdint.h>
 #include <stdlib.h>
-# include <assert.h>
+#include <assert.h>
 
 t_error	positionals_get(
 	const t_positionals_stack *stack,

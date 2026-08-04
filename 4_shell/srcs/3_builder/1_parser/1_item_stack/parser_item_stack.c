@@ -1,7 +1,7 @@
 #include "parser_item_stack_type.h"
 #include "parser_item_stack.h"
 #include "cst.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static void	parser_item_free(void *raw_item)
 {

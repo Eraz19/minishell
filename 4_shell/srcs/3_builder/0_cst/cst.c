@@ -2,7 +2,7 @@
 #include "parser_item_stack_type.h"
 #include "cst_type.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline t_error	cst_node_set_children(
 							t_cst_node *node,

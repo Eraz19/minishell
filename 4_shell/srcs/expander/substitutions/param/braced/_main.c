@@ -1,5 +1,5 @@
 #include "param_braced_.h"
-# include <assert.h>
+#include <assert.h>
 
 static t_error	braced_origin(
 					t_expander *expander,

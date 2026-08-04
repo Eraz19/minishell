@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "grammar_name.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 bool	name_is_valid_str(const t_string *name)
 {

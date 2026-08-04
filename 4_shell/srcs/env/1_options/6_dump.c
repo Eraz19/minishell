@@ -1,5 +1,5 @@
 #include "options.h"
-# include <stdio.h>
+#include <stdio.h>
 # include "debug.h"
 
 const char	*option_to_string(t_option option)

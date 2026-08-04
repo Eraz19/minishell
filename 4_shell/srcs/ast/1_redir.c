@@ -1,6 +1,6 @@
 #include "ast.h"
 #include "utils.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	ast_redirection_init(t_ast_redirection *redirection)
 {

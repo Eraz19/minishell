@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define PS1_NAME	"PS1"
 #define PS1_VALUE	"$ "

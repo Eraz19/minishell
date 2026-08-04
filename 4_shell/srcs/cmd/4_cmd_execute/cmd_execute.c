@@ -1,7 +1,7 @@
 #include "cmd.h"
 #include "cmd_priv.h"
 #include "cmd_execute_priv.h"
-# include <assert.h>
+#include <assert.h>
 #ifdef DEBUG_CMD
 # include "logs.h"
 #endif

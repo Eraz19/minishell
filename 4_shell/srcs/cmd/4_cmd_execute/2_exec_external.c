@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 #ifdef DEBUG_CMD
 # include "logs.h"	// DEBUG
 #endif

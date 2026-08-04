@@ -2,7 +2,7 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 /*
 pattern_list     :                  WORD

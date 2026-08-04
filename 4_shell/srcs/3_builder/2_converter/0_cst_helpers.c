@@ -3,7 +3,7 @@
 #include "cst_type.h"
 #include "token.h"
 #include <stdbool.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline size_t	cst_token_id(const t_cst_node *node, size_t token_id)
 {

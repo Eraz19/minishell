@@ -2,7 +2,7 @@
 #include "variables_priv.h"
 #include "utils.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 // @ret ERR_LIBC
 static inline t_error	var_envp_add_entry(

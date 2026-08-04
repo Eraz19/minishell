@@ -1,5 +1,5 @@
 #include "shell.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_history	*shell_get_history(void)
 {

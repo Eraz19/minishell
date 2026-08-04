@@ -1,5 +1,5 @@
 #include "cmd_assign_priv.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define CITATION_1	"POSIX 2.9.1.1: Each variable assignment shall be expanded "
 #define CITATION_2	"for [...] but no field splitting -> POSIX 2.6: [...] shall"

@@ -1,5 +1,5 @@
 #include "shell.h"
-# include <stdio.h>	// DEBUG
+#include <stdio.h>	// DEBUG
 
 static inline void	positionals_dump_depth(t_positionals_stack *stack, size_t depth)
 {

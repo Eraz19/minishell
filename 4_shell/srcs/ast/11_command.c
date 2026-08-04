@@ -1,6 +1,6 @@
 #include "ast.h"
 #include "debug.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	ast_command_init(t_ast_command *command)
 {

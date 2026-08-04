@@ -3,7 +3,7 @@
 #include "ast.h"
 #include "converter_priv.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 /*
 function_body    : compound_command

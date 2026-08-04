@@ -2,7 +2,7 @@
 #include "utils.h"
 #include <stdlib.h>
 # include "logs.h"		// DEBUG
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 // @ret ERR_LIBC.
 static inline t_error	process_entry(t_string *name, t_string *value)

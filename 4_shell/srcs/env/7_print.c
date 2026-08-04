@@ -1,6 +1,6 @@
 #include "env.h"
 #include "shell.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error env_print(t_env_print_mode mode)
 {

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static bool pwd_has_no_dot_components(const char *pwd)
 {

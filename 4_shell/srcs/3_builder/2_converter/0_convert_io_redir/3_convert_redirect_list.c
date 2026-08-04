@@ -1,5 +1,5 @@
 #include "converter_priv.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 /*
 redirect_list    :               io_redirect

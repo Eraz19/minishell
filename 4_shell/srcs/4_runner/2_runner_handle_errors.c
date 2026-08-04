@@ -2,7 +2,7 @@
 #include "parser.h"
 #include "env.h"
 # include "logs.h"	// DEBUG
-# include <stdio.h>	// DEBUG
+#include <stdio.h>	// DEBUG
 
 static inline void	runner_handle_eof(t_error *err, bool interactive)
 {

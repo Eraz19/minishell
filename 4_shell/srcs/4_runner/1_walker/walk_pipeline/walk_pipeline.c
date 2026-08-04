@@ -1,9 +1,9 @@
 #include "walker_priv.h"
 #include "walk_pipeline_priv.h"
 #include "env.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 #ifdef DEBUG_CMD
-# include <stdio.h>		// DEBUG
+#include <stdio.h>		// DEBUG
 # include "logs.h"		// DEBUG
 #endif
 

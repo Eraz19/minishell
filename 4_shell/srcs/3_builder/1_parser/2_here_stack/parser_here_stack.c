@@ -1,7 +1,7 @@
 #include "parser_here_stack_type.h"
 #include "parser_here_stack.h"
 #include "cst_type.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 void	parser_here_stack_init(t_parser_here_stack *stack)
 {

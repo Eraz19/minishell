@@ -4,7 +4,7 @@
 #include "posix_helpers.h"
 #include <unistd.h>
 #include <stdlib.h>
-# include <assert.h>
+#include <assert.h>
 
 /*
 après chaque and_or exécuté :

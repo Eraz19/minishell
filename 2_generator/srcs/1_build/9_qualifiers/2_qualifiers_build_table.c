@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 #define QUALIFIERS_TOO_BIG	"generator: qualifiers table size overflow\n"
 

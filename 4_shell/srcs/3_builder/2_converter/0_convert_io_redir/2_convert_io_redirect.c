@@ -2,7 +2,7 @@
 #include "convert_io_priv.h"
 #include <stdlib.h>
 #include <unistd.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline t_error	convert_io_number(
 							t_parser *parser,

@@ -1,6 +1,6 @@
 #include "env.h"
 #include "shell.h"
-# include <assert.h>
+#include <assert.h>
 
 t_error	env_set_alias(const char *name, const char *value)
 {

@@ -1,6 +1,6 @@
 #include "env.h"
 #include <stdlib.h>
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 // TODO: check what POSIX means by "If both '-' and '--' are given as **ARGUMENTS**"
 static void	env_catch_undefined_1(int argc, char **argv)

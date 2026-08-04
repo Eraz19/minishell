@@ -1,7 +1,7 @@
 #include "parser.h"
 #include "parser_priv.h"
 #include "cst.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline bool	parser_is_reducing_cmd_sub(
 						const t_parser *parser,

@@ -2,7 +2,7 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 static inline t_error	parse_rec(
 							t_parser *parser,

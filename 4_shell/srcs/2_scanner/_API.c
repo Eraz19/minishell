@@ -16,7 +16,7 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2)
 	return (scanner->err);
 }
 
-# include <stdio.h>
+#include <stdio.h>
 t_error	scanner_read_heredoc(t_scanner *scanner, t_string *out, t_token *delim, bool strip)
 {
 	scanner->err = heredoc_read_body(&scanner->lexer, out, delim, strip);

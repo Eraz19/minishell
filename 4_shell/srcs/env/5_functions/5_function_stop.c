@@ -1,5 +1,5 @@
 #include "functions_priv.h"
-# include <assert.h>
+#include <assert.h>
 
 void	function_stop(t_function **function)
 {

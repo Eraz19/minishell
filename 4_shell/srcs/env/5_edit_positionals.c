@@ -1,5 +1,5 @@
 #include "shell.h"
-# include <assert.h>	// DEBUG
+#include <assert.h>	// DEBUG
 
 t_error	env_push_positionals(t_positionals *src)
 {

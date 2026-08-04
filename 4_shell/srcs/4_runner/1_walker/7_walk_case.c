@@ -1,8 +1,8 @@
 #include "error.h"
 #include "walker_priv.h"
 #include "expander.h"
-# include <assert.h>	// DEBUG
-# include <stdio.h>		// DEBUG
+#include <assert.h>	// DEBUG
+#include <stdio.h>		// DEBUG
 
 #define CITATION_1	"POSIX 2.9.4.3: case shall execute "
 #define CITATION_2	"the compound-list corresponding to the first pattern [...]"
