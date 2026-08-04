@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reader.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:15:05 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:59:45 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef READER_H
 # define READER_H
 
@@ -37,7 +49,7 @@
  *         @c ERR_POSIX_READ (printed) on failure; the @ref file_check
  *         errors (external) pass through unqualified.
  */
-t_error	reader_read_file(t_string * out, const char *path);
+t_error	reader_read_file(t_string *out, const char *path);
 
 /**
  * @ingroup scanner_reader
@@ -56,7 +68,7 @@ t_error	reader_read_file(t_string * out, const char *path);
  *         params, history, sig, EOF newline echo) bubble through
  *         unlisted.
  */
-t_error	reader_read_PS1(t_string *out);
+t_error	reader_read_ps1(t_string *out);
 
 /**
  * @ingroup scanner_reader
@@ -78,7 +90,7 @@ t_error	reader_read_PS1(t_string *out);
  *         errors (options, params, history, sig, EOF newline echo)
  *         bubble through unlisted.
  */
-t_error	reader_read_PS2(t_string *out);
+t_error	reader_read_ps2(t_string *out);
 
 /**
  * @ingroup scanner_reader

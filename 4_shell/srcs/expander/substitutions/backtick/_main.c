@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:46:24 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:42:22 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd_sub.h"
 #include "backtick_substitution_.h"
 
@@ -40,14 +52,16 @@ t_error	backtick_substitution(t_expander *expander)
 	expander->err = word_get(&item, &expander->word, 0);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = to_str(&cmd_str, &expander->word, 1,
-						item.opt.context_len - 2);
+	expander->err = to_str(
+			&cmd_str,
+			&expander->word, 1,
+			item.opt.context_len - 2);
 	if (expander->err.type)
 		return (expander->err);
 	expander->err = cmd_sub_run_string(
-						&cmd_str,
-						&cmd_res,
-						expander->exit_status);
+			&cmd_str,
+			&cmd_res,
+			expander->exit_status);
 	if (expander->err.type)
 		return (string_free(&cmd_str), expander->err);
 	string_free(&cmd_str);

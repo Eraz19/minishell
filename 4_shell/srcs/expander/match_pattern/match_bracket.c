@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion_end.c                                    :+:      :+:    :+:   */
+/*   match_bracket.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/04 15:25:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 15:25:36 by adouieb          ###   ########.fr       */
+/*   Created: 2026/08/04 18:15:03 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:16:12 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "context.h"
+#include "match_patern_.h"
 
-bool	is_context_param_ending(char c, void *_)
+bool	match_bracket(const char *pattern, const char *str, size_t len)
 {
-	(void)_;
-	return (c == '}');
-}
+	size_t	exp_len;
 
-bool	is_context_backtick_ending(char c, void *_)
-{
-	(void)_;
-	return (c == '`');
-}
-
-bool	is_context_arith_ending(char c, void *nesting_depth)
-{
-	if (nesting_depth == NULL)
+	if (len == 0)
 		return (false);
-	return (c == ')' && *((size_t *)nesting_depth) == 0);
+	exp_len = 0;
+	if (valid_bracket_exp_len(pattern + 1, &exp_len))
+	{
+		if (match_bracket_c(pattern, exp_len, *str))
+			return (match_pattern(pattern + exp_len + 2, str + 1, len - 1));
+	}
+	else if (*str == '[')
+		return (match_pattern(pattern + 1, str + 1, len - 1));
+	return (false);
 }

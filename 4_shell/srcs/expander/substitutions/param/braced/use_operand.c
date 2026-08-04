@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   use_operand.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:35 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:52:35 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "param_braced_.h"
 #include "expander_substitutions_.h"
 
@@ -84,8 +96,8 @@ static t_error	emit_operand_fields(
 		if (i != 0)
 		{
 			expander->err = fields_push(
-								&expander->fields_exp,
-								expander->word_exp);
+					&expander->fields_exp,
+					expander->word_exp);
 			if (expander->err.type)
 				return (expander->err);
 			word_init(&expander->word_exp);

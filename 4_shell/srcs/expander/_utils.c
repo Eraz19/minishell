@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _utils.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:35 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:57:44 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include "scanner.h"
 #include "expansion_.h"
@@ -5,9 +17,9 @@
 #include "lexer.h"
 #include "token_recognition_context.h"
 
-bool    flag_is_active(uint bitset, uint flag)
+bool	flag_is_active(uint bitset, uint flag)
 {
-    return ((bitset & flag) != 0);
+	return ((bitset & flag) != 0);
 }
 
 t_error	forward_word_item(t_word *word_exp, t_word *word)

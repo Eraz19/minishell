@@ -1,5 +1,17 @@
-#ifndef INPUT_STACK_ITEM_H
-# define INPUT_STACK_ITEM_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_input_stack_item.h                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:09 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:33:34 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef LEXER_INPUT_STACK_ITEM_H
+# define LEXER_INPUT_STACK_ITEM_H
 
 # include "libft.h"
 

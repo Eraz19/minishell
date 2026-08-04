@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   saving_file_content.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:09:32 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:13:42 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "utils.h"
 #include "history.h"
@@ -24,9 +36,12 @@ t_error	history_prepare_entry(t_history *history, const t_string *entry)
 
 t_error	history_build_from_current(t_history *history)
 {
-	if (history->current_input.len == 0)
+	t_string	current_input_len;
+
+	current_input_len = history->current_input.len;
+	if (current_input_len == 0)
 		return (history->err);
-	else if (history->current_input.data[history->current_input.len - 1] == '\n')
+	else if (history->current_input.data[current_input_len - 1] == '\n')
 	{
 		history->current_input.data[history->current_input.len - 1] = '\0';
 		history->current_input.len--;

@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote_removal_context_.h                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:45:59 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:38:55 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef QUOTE_REMOVAL_CONTEXT__H
 # define QUOTE_REMOVAL_CONTEXT__H
 
-#include "expander_.h"
+# include "expander_.h"
 
 /** @defgroup expander_quote_removal_context Quote removal contexts
  *  @brief Per-quoting-context scans of quote removal: each one forwards
@@ -37,7 +49,7 @@ typedef struct s_context_args
 {
 	t_word		*word;
 	t_word		*word_expanded;
-	bool		(*is_end)(char, void *);
+	bool		(*is_end)(char _, void *);
 	bool		(*is_in_whitelist)(char);
 }	t_context_args;
 

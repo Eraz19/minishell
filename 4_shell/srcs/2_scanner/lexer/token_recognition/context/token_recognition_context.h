@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_recognition_context.h                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:13:07 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:51:46 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TOKEN_RECOGNITION_CONTEXT_H
 # define TOKEN_RECOGNITION_CONTEXT_H
 
@@ -94,7 +106,7 @@ typedef struct s_token_recognition_context
 	t_context_stack_item	*context_item;
 	void					*unescaped_args;
 	t_error					(*escape)(t_lexer *);
-	bool					(*is_end)(char, void *);
+	bool					(*is_end)(char _, void *);
 	t_error					(*unescaped)(t_lexer *, void *);
 	t_error					(*quoting)(t_lexer *, t_context);
 	bool					(*is_quoting)(char *, t_context *);
@@ -121,7 +133,9 @@ typedef struct s_token_recognition_context
  *         @c ERR_CTX_END_NOT_FOUND when a @c CONTEXT_ARITH scan finds no
  *         closing @c ) .
  */
-t_error	token_recognition_consume_context(t_lexer *lexer, t_context context);
+t_error						token_recognition_consume_context(
+								t_lexer *lexer,
+								t_context context);
 
 /* ************************************************************************* */
 /*                                  ARITH                                    */
@@ -134,11 +148,11 @@ t_error	token_recognition_consume_context(t_lexer *lexer, t_context context);
  *
  * @param lexer Already initialized lexer (borrowed).
  * @return @c ERR_NO on success, @c ERR_LIBC on allocation failure; at end
- *         of input the continuation set of @ref on_context_scan_EOI
+ *         of input the continuation set of @ref on_context_scan_eoi
  *         (@c ERR_POSIX_SYNTAX printed, @c ERR_VEOF, @c ERR_LIBC), with
  *         module-external errors bubbling through unlisted.
  */
-t_error	arith_context_escape_rules(t_lexer *lexer);
+t_error						arith_context_escape_rules(t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -152,7 +166,9 @@ t_error	arith_context_escape_rules(t_lexer *lexer);
  *         of input the same continuation set as
  *         @ref arith_context_escape_rules.
  */
-t_error	arith_context_unescape_rules(t_lexer *lexer, void *nesting_depth);
+t_error						arith_context_unescape_rules(
+								t_lexer *lexer,
+								void *nesting_depth);
 
 /**
  * @ingroup lexer
@@ -165,7 +181,7 @@ t_error	arith_context_unescape_rules(t_lexer *lexer, void *nesting_depth);
  *         command substitution); otherwise the same failure set as
  *         @ref token_recognition_consume_context.
  */
-t_error	scan_arith_context(t_lexer *lexer);
+t_error						scan_arith_context(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                BACKTICK                                   */
@@ -180,7 +196,7 @@ t_error	scan_arith_context(t_lexer *lexer);
  * @param lexer Already initialized lexer (borrowed).
  * @return Same set as @ref arith_context_escape_rules.
  */
-t_error	backtick_context_escape_rules(t_lexer *lexer);
+t_error						backtick_context_escape_rules(t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -191,7 +207,9 @@ t_error	backtick_context_escape_rules(t_lexer *lexer);
  * @param _ Unused.
  * @return Same set as @ref arith_context_unescape_rules.
  */
-t_error	backtick_context_unescape_rules(t_lexer *lexer, void *_);
+t_error						backtick_context_unescape_rules(
+								t_lexer *lexer,
+								void *_);
 
 /**
  * @ingroup lexer
@@ -202,7 +220,7 @@ t_error	backtick_context_unescape_rules(t_lexer *lexer, void *_);
  * @return @c ERR_NO on success; otherwise the same failure set as
  *         @ref token_recognition_consume_context.
  */
-t_error	scan_backtick_context(t_lexer *lexer);
+t_error						scan_backtick_context(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                 CMD_SUB                                   */
@@ -220,7 +238,7 @@ t_error	scan_backtick_context(t_lexer *lexer);
  *         embedded command-substitution parse (cmd_sub module, context
  *         stack) and bubbles through unlisted.
  */
-t_error	scan_cmd_sub_context(t_lexer *lexer);
+t_error						scan_cmd_sub_context(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                              DOLLAR_SQUOTE                                */
@@ -234,7 +252,8 @@ t_error	scan_cmd_sub_context(t_lexer *lexer);
  * @param lexer Already initialized lexer (borrowed).
  * @return Same set as @ref arith_context_escape_rules.
  */
-t_error	dollar_squote_context_escape_rules(t_lexer *lexer);
+t_error						dollar_squote_context_escape_rules(
+								t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -245,7 +264,9 @@ t_error	dollar_squote_context_escape_rules(t_lexer *lexer);
  * @param _ Unused.
  * @return Same set as @ref arith_context_unescape_rules.
  */
-t_error	dollar_squote_context_unescape_rules(t_lexer *lexer, void *_);
+t_error						dollar_squote_context_unescape_rules(
+								t_lexer *lexer,
+								void *_);
 
 /**
  * @ingroup lexer
@@ -256,7 +277,7 @@ t_error	dollar_squote_context_unescape_rules(t_lexer *lexer, void *_);
  * @return @c ERR_NO on success; otherwise the same failure set as
  *         @ref token_recognition_consume_context.
  */
-t_error	scan_dollar_squote_context(t_lexer *lexer);
+t_error						scan_dollar_squote_context(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                  DQUOTE                                   */
@@ -271,7 +292,7 @@ t_error	scan_dollar_squote_context(t_lexer *lexer);
  * @param lexer Already initialized lexer (borrowed).
  * @return Same set as @ref arith_context_escape_rules.
  */
-t_error	dquote_context_escape_rules(t_lexer *lexer);
+t_error						dquote_context_escape_rules(t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -282,7 +303,9 @@ t_error	dquote_context_escape_rules(t_lexer *lexer);
  * @param _ Unused.
  * @return Same set as @ref arith_context_unescape_rules.
  */
-t_error	dquote_context_unescape_rules(t_lexer *lexer, void *_);
+t_error						dquote_context_unescape_rules(
+								t_lexer *lexer,
+								void *_);
 
 /**
  * @ingroup lexer
@@ -293,15 +316,17 @@ t_error	dquote_context_unescape_rules(t_lexer *lexer, void *_);
  * @return @c ERR_NO on success; otherwise the same failure set as
  *         @ref token_recognition_consume_context.
  */
-t_error	scan_dquote_context(t_lexer *lexer);
+t_error						scan_dquote_context(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                   NONE                                    */
 /* ************************************************************************* */
 
-t_error	none_context_escape_rules(t_lexer *lexer);
+t_error						none_context_escape_rules(t_lexer *lexer);
 
-t_error	none_context_unescape_rules(t_lexer *lexer, void *_);
+t_error						none_context_unescape_rules(
+								t_lexer *lexer,
+								void *_);
 
 t_token_recognition_context	none_context_rules(t_lexer *lexer);
 
@@ -317,7 +342,7 @@ t_token_recognition_context	none_context_rules(t_lexer *lexer);
  * @param lexer Already initialized lexer (borrowed).
  * @return Same set as @ref arith_context_escape_rules.
  */
-t_error	param_context_escape_rules(t_lexer *lexer);
+t_error						param_context_escape_rules(t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -328,7 +353,9 @@ t_error	param_context_escape_rules(t_lexer *lexer);
  * @param _ Unused.
  * @return Same set as @ref arith_context_unescape_rules.
  */
-t_error	param_context_unescape_rules(t_lexer *lexer, void *_);
+t_error						param_context_unescape_rules(
+								t_lexer *lexer,
+								void *_);
 
 /**
  * @ingroup lexer
@@ -339,7 +366,7 @@ t_error	param_context_unescape_rules(t_lexer *lexer, void *_);
  * @return @c ERR_NO on success; otherwise the same failure set as
  *         @ref token_recognition_consume_context.
  */
-t_error	scan_param_context(t_lexer *lexer);
+t_error						scan_param_context(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                  SQUOTE                                   */
@@ -354,7 +381,7 @@ t_error	scan_param_context(t_lexer *lexer);
  * @param lexer Already initialized lexer (borrowed).
  * @return Same set as @ref arith_context_escape_rules.
  */
-t_error	squote_context_escape_rules(t_lexer *lexer);
+t_error						squote_context_escape_rules(t_lexer *lexer);
 
 /**
  * @ingroup lexer
@@ -365,7 +392,9 @@ t_error	squote_context_escape_rules(t_lexer *lexer);
  * @param _ Unused.
  * @return Same set as @ref arith_context_unescape_rules.
  */
-t_error	squote_context_unescape_rules(t_lexer *lexer, void *_);
+t_error						squote_context_unescape_rules(
+								t_lexer *lexer,
+								void *_);
 
 /**
  * @ingroup lexer
@@ -376,6 +405,7 @@ t_error	squote_context_unescape_rules(t_lexer *lexer, void *_);
  * @return @c ERR_NO on success; otherwise the same failure set as
  *         @ref token_recognition_consume_context.
  */
-t_error	scan_squote_context(t_lexer *lexer);
+t_error						scan_squote_context(
+								t_lexer *lexer);
 
 #endif

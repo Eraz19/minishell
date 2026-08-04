@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   backtick.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:43 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:49:42 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "token_recognition.h"
 #include "token_recognition_priv.h"
@@ -17,7 +29,8 @@ bool	is_backtick_dquote_surrounded(t_lexer *lexer)
 		context_stack_get(&lexer->token->contexts, &item, --i);
 		if (item->end != SIZE_MAX)
 			continue ;
-		return (item->context == CONTEXT_DQUOTE || item->context == CONTEXT_ARITH);
+		return (item->context == CONTEXT_DQUOTE
+			|| item->context == CONTEXT_ARITH);
 	}
 	return (false);
 }
@@ -45,7 +58,9 @@ t_error	backtick_context_unescape_rules(t_lexer *lexer, void *_)
 	return (scan_context_unescape(args));
 }
 
-t_token_recognition_context	backtick_context_rules(t_lexer *lexer, t_context_stack_item *item)
+t_token_recognition_context	backtick_context_rules(
+								t_lexer *lexer,
+								t_context_stack_item *item)
 {
 	return ((t_token_recognition_context)
 		{

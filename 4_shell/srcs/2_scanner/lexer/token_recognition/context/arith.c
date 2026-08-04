@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arith.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:40 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:37:06 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "lexer_backup.h"
 #include "token_recognition.h"
@@ -39,14 +51,17 @@ t_error	arith_context_escape_rules(t_lexer *lexer)
 t_error	arith_context_unescape_rules(t_lexer *lexer, void *nesting_depth)
 {
 	t_token_recognition_unescape	args;
-	
+
 	args.lexer = lexer;
 	args.special_args = nesting_depth;
 	args.special_handler = arith_context_unescape_special;
 	return (scan_context_unescape(args));
 }
 
-t_token_recognition_context	arith_context_rules(t_lexer *lexer, t_context_stack_item *item, size_t *nesting_depth)
+t_token_recognition_context	arith_context_rules(
+						t_lexer *lexer,
+						t_context_stack_item *item,
+						size_t *nesting_depth)
 {
 	return ((t_token_recognition_context)
 		{

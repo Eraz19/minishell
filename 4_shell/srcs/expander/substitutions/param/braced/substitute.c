@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   substitute.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:32 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:52:04 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include "param_braced_.h"
 
@@ -21,8 +33,11 @@ t_error	braced_error(
 	if (operand->len == 0)
 	{
 		word_free(operand);
-		return (expander->err = error_print(error(ERR_PARAM_NULL_OR_UNSET),
-					name->data, NULL, NULL));
+		expander->err = error_print(
+				error(ERR_PARAM_NULL_OR_UNSET),
+				name->data,
+				NULL, NULL);
+		return (expander->err);
 	}
 	expander->err = braced_operand_str(expander, operand, &msg);
 	if (expander->err.type)

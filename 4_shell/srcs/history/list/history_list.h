@@ -1,5 +1,17 @@
-#ifndef HISTORY_LIST__H
-# define HISTORY_LIST__H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   history_list.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:08:56 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:33:19 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef HISTORY_LIST_H
+# define HISTORY_LIST_H
 
 # include "error.h"
 # include "libft.h"
@@ -18,7 +30,10 @@ void	history_list_init(t_history_list *list);
 
 void	history_list_free(t_history_list *list);
 
-t_error	history_list_load(t_history_list *history_list, t_vector *entries, size_t start);
+t_error	history_list_load(
+			t_history_list *history_list,
+			t_vector *entries,
+			size_t start);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */

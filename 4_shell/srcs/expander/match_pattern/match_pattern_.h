@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   match_pattern_.h                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:44:47 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:34:14 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MATCH_PATTERN__H
 # define MATCH_PATTERN__H
 
@@ -18,6 +30,9 @@
  *  the engine directly.
  */
 
+bool	match_bracket(const char *pattern, const char *str, size_t len);
+bool	match_asterisk(const char *pattern, const char *str, size_t len);
+
 bool	ft_isxdigit(char c);
 bool	match_char(char c1, char c2, size_t *len);
 bool	set_negation(const char *pattern, size_t *i);
@@ -33,4 +48,3 @@ bool	valid_char_class_exp_len(const char *pattern, size_t *len);
 bool	valid_col_symbol_exp_len(const char *pattern, size_t *len);
 
 #endif
-

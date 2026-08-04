@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:45 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:58:28 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXPANDER__H
 # define EXPANDER__H
 
@@ -34,7 +46,7 @@
  *                                         assignment word, @c -1
  *                                         otherwise.
  */
-typedef	struct s_expander_args
+typedef struct s_expander_args
 {
 	t_string		ifs;
 	t_string		value;
@@ -215,7 +227,7 @@ t_error	expander_error_qualify(t_error err);
  * @param bitset Flag bitset to test.
  * @param flag Flag to look for.
  */
-bool    flag_is_active(uint bitset, uint flag);
+bool	flag_is_active(uint bitset, uint flag);
 
 /**
  * @ingroup expander_priv

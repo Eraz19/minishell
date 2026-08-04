@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_recognition_context_scan.h                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:37 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:51:46 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TOKEN_RECOGNITION_CONTEXT_SCAN_H
 # define TOKEN_RECOGNITION_CONTEXT_SCAN_H
 
@@ -51,7 +63,7 @@ t_error	scan_context_end(t_token_recognition_context args);
  *
  * @param args Escape rules of the construct being scanned.
  * @return @c ERR_NO on success, @c ERR_LIBC on allocation failure; at end
- *         of input the continuation set of @ref on_context_scan_EOI (see
+ *         of input the continuation set of @ref on_context_scan_eoi (see
  *         @ref scan_context for the full list).
  */
 t_error	scan_context_escape(t_token_recognition_escape args);
@@ -77,7 +89,7 @@ t_error	scan_context_start(t_token_recognition_context args);
  *
  * @param args Unescaped-character rules of the construct being scanned.
  * @return @c ERR_NO on success, @c ERR_LIBC on allocation failure; at end
- *         of input the continuation set of @ref on_context_scan_EOI (see
+ *         of input the continuation set of @ref on_context_scan_eoi (see
  *         @ref scan_context for the full list).
  */
 t_error	scan_context_unescape(t_token_recognition_unescape args);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:44:17 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:59:47 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "loader_.h"
 #include "loader_context_.h"
@@ -56,7 +68,6 @@ t_error	loader_quoted(t_loader *loader)
 	loader->local_quoting = item->context;
 	while (loader->i <= item->end && !loader->err.type)
 	{
-
 		if (is_substitution_start(loader))
 			loader_substitution(loader);
 		else if (is_quoting_start(loader))

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   param.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:19 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:46:50 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include "param_braced_.h"
 #include "param_expansion_.h"
@@ -47,15 +59,15 @@ static t_error	braced_operator(
 					size_t remaining)
 {
 	expander->err = parse_braced_op(expander,
-						&param_exp->has_colon,
-						&param_exp->op_char,
-						&param_exp->op_span);
+			&param_exp->has_colon,
+			&param_exp->op_char,
+			&param_exp->op_span);
 	if (expander->err.type)
 		return (string_free(&param_exp->param_name), expander->err);
 	expander->err = braced_take_operand(
-						expander,
-						remaining - param_exp->op_span,
-						&param_exp->operand_word);
+			expander,
+			remaining - param_exp->op_span,
+			&param_exp->operand_word);
 	if (expander->err.type)
 		return (string_free(&param_exp->param_name), expander->err);
 	if (braced_expect_close(expander).type
@@ -87,8 +99,8 @@ t_error	expand_braced_param(
 		return (expander->err);
 	if (len_before - expander->word.len == body_len)
 		return (braced_param_simple(expander,
-					&param_exp.param_name,
-					param_exp.result_opt));
+				&param_exp.param_name,
+				param_exp.result_opt));
 	operator_len = body_len - (len_before - expander->word.len);
 	return (braced_operator(expander, &param_exp, operator_len));
 }

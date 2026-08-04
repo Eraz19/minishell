@@ -1,5 +1,17 @@
-#include "token_recognition_context_scan_priv.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   context_scan_error.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:18 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:52:33 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
+#include "token_recognition_context_scan_priv.h"
 
 bool	has_innermost_unterminated_context(t_context *out, t_token *token)
 {
@@ -38,7 +50,7 @@ bool	get_message_on_unterminated_context(const char **out, t_lexer *lexer)
 	else if (context == CONTEXT_PARAM)
 		return (*out = "unterminated parameter expansion", true);
 	else
-	 	return (*out = "unterminated unknown context", true);
+		return (*out = "unterminated unknown context", true);
 }
 
 t_error	error_unterminated_construct(t_lexer *lexer)

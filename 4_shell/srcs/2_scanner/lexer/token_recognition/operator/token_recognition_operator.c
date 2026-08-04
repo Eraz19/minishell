@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_recognition_operator.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:13:25 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:53:50 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <assert.h> // DEBUG
 #include "token_recognition_priv.h"
 #include "token_recognition_operator.h"
@@ -36,7 +48,7 @@ bool	is_operator_char(t_lexer *lexer)
 bool	is_inside_operator(t_lexer *lexer)
 {
 	t_token_type	type;
-	
+
 	type = lexer->token->type;
 	return (type != TOKEN_NONE && type != TOKEN_TOKEN);
 }

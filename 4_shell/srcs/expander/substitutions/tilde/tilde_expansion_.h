@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tilde_expansion_.h                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:06 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:53:40 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TILDE_EXPANSION__H
 # define TILDE_EXPANSION__H
 
-#include "expander_.h"
+# include "expander_.h"
 
 /** @defgroup expander_tilde Tilde expansion
  *  @brief POSIX 2.6.1: replaces an unquoted tilde prefix with the home

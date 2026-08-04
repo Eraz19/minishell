@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:14:26 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:31:10 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LEXER_H
 # define LEXER_H
 
@@ -128,7 +140,10 @@ void	lexer_unbind_token(t_lexer *lexer);
  */
 t_error	lexer_get_next_token(t_lexer *lexer, t_token *out);
 
-t_error	lexer_scan_word(t_lexer *lexer, t_token *out, t_token_recognition_context *args);
+t_error	lexer_scan_word(
+			t_lexer *lexer,
+			t_token *out,
+			t_token_recognition_context *args);
 
 /**
  * @ingroup lexer

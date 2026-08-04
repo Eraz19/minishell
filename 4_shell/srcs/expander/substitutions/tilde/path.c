@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:03 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:58:04 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "utils.h"
 #include "env.h"
 #include "expander_.h"
@@ -52,6 +64,7 @@ t_error	resolve_path(
 			bool *ok)
 {
 	t_string		home;
+	const char		*out_str;
 	struct passwd	*password;
 
 	*ok = false;
@@ -69,7 +82,10 @@ t_error	resolve_path(
 		return (expander->err = error(ERR_NO));
 	if (expander->err.type)
 		return (expander->err);
-	if (!string_init(out, 0, home.data ? home.data : "", -1))
+	out_str = "";
+	if (home.data)
+		out_str = home.data;
+	if (!string_init(out, 0, out_str, -1))
 		return (string_free(&home), expander->err = error_sys());
 	return (*ok = true, string_free(&home), expander->err);
 }

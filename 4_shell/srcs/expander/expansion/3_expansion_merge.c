@@ -1,16 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_expansion_merge.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:43:05 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:43:14 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "expander.h"
 #include "env.h"
 
 #define NO_FIELD		"converts 0 field into empty field"
 #define MULTIPLE_FIELDS	"merging fields with first IFS character"
 
-/*
-- If IFS contains at least one character => use first IFS character
-- If IFS is unset => use ' '
-- If IFS is set but null => don't use separator
-*/
-
-// @ret ERR_INTERNAL / ERR_LIBC
 static inline t_error	expansion_get_ifs_first_char(char *out, bool *sep)
 {
 	t_string	ifs;

@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   body_error.c                                       :+:      :+:    :+:   */
+/*   match_asterisk.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/04 16:11:21 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:29:15 by adouieb          ###   ########.fr       */
+/*   Created: 2026/08/04 18:17:18 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:33:25 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heredoc_body_priv.h"
+#include "match_pattern_.h"
 
-t_error	error_missing_delimiter(t_body *body)
+bool	match_asterisk(const char *pattern, const char *str, size_t len)
 {
-	body->delim.data[body->delim.len - 1] = '\0';
-	body->err = error_print(
-			error(ERR_NO_DELIM),
-			"heredoc",
-			NULL,
-			"'%s'",
-			body->delim.data);
-	return (body->err);
+	size_t	i;
+	size_t	j;
+	size_t	pattern_len;
+
+	i = 0;
+	pattern_len = str_len(pattern);
+	while (i < pattern_len && pattern[i] == '*')
+		i++;
+	if (i == pattern_len)
+		return (true);
+	j = 0;
+	while (j < len)
+	{
+		if (match_pattern(pattern + i, str + j, len - j))
+			return (true);
+		j++;
+	}
+	return (false);
 }

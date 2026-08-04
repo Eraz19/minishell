@@ -1,4 +1,16 @@
-#ifndef	TOKEN_RECOGNITION_PRIV_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_recognition_priv.h                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:14:01 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:51:46 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef TOKEN_RECOGNITION_PRIV_H
 # define TOKEN_RECOGNITION_PRIV_H
 
 # include "lexer.h"
@@ -32,7 +44,10 @@ void	token_recognition_advance(t_lexer *lexer, size_t offset);
  * @return @c ERR_NO on success, @c ERR_LIBC if growing the token value
  *         fails.
  */
-t_error	token_recognition_consume(t_lexer *lexer, t_token_type type, size_t iter);
+t_error	token_recognition_consume(
+			t_lexer *lexer,
+			t_token_type type,
+			size_t iter);
 
 /**
  * @ingroup lexer
@@ -123,7 +138,7 @@ t_error	recognize_token_inside_operator(t_lexer *lexer);
  * @param lexer Already initialized lexer (borrowed).
  * @return @c ERR_NO on success, @c ERR_LIBC on allocation failure; a
  *         trailing escape triggers the end-of-input continuation, adding
- *         the @ref on_context_scan_EOI module set (@c ERR_POSIX_SYNTAX
+ *         the @ref on_context_scan_eoi module set (@c ERR_POSIX_SYNTAX
  *         printed, @c ERR_VEOF, @c ERR_LIBC) with module-external errors
  *         bubbling through unlisted.
  */
@@ -160,7 +175,7 @@ t_error	recognize_token_new_operator(t_lexer *lexer);
  * @param lexer Already initialized lexer (borrowed).
  * @return @c ERR_NO on success, @c ERR_LIBC on allocation failure; a
  *         trailing escape triggers the end-of-input continuation, adding
- *         the @ref on_context_scan_EOI module set (@c ERR_POSIX_SYNTAX
+ *         the @ref on_context_scan_eoi module set (@c ERR_POSIX_SYNTAX
  *         printed, @c ERR_VEOF, @c ERR_LIBC) with module-external errors
  *         bubbling through unlisted.
  */

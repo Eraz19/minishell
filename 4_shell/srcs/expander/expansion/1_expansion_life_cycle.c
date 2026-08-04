@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_expansion_life_cycle.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:42:55 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:59:05 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "expansion_.h"
 
 void	expansion_init(t_expansion *expansion)
@@ -39,4 +51,3 @@ t_error	expansion_load(t_expansion *out, t_fields *src)
 	}
 	return (error(ERR_NO));
 }
-

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _API.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:08:05 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:09:52 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "error.h"
 #include "history.h"
@@ -6,7 +18,7 @@
 t_error	history_save_entry(void)
 {
 	t_history	*history;
-	
+
 	history = shell_get_history();
 	if (history->current_input.len == 0)
 		return (error(ERR_NO));

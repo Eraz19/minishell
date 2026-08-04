@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   escape.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:46:50 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:44:49 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdint.h>
 #include "dollar_squote_expansion_.h"
 
@@ -22,7 +34,7 @@ bool	dollar_squote_build_map(t_hashmap *escapes)
 
 static bool	dollar_squote_simple_escape(char c, char *out, t_hashmap *escapes)
 {
-	char	key[2];
+	char		key[2];
 	const char	*value;
 
 	key[0] = c;

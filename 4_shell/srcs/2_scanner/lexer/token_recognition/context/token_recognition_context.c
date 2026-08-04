@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_recognition_context.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:13:04 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:37:49 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <assert.h> // DEBUG
 #include "token_recognition_context.h"
 
@@ -17,7 +29,6 @@ t_error	token_recognition_consume_context(t_lexer *lexer, t_context context)
 		return (scan_param_context(lexer));
 	if (context == CONTEXT_CMD_SUB)
 		return (scan_cmd_sub_context(lexer));
-	// No other context should be reacheable in this function
 	assert(false);
 	return (lexer->err);
 }

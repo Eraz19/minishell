@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 19:01:09 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 19:07:52 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
@@ -65,7 +77,6 @@ typedef enum e_exp_flags
 	EXP_FIELD_SPLIT			= (1u << 6),	/**< IFS field splitting. */
 	EXP_PATH_NAME			= (1u << 7),	/**< Pathname expansion. */
 	EXP_QUOTE_REMOVAL		= (1u << 8),	/**< Quote removal. */
-
 	EXP_HEREDOC				= (1u << 9),	/**< Re-lex the raw string of
 												 @ref expand_str with the
 												 here-document rules
@@ -93,10 +104,10 @@ typedef t_vector	t_expansions;
  *
  * @param fields Already initialized container (borrowed).
  */
-void	fields_free(t_fields *fields);
+void		fields_free(t_fields *fields);
 
-void	cmd_expansions_init(t_expansions *expansions);
-void	cmd_expansions_free(t_expansions *expansions);
+void		cmd_expansions_init(t_expansions *expansions);
+void		cmd_expansions_free(t_expansions *expansions);
 
 /* ************************************************************************* */
 /*                                   FLAGS                                   */
@@ -112,17 +123,17 @@ t_exp_flag	expansion_flags_heredoc_body(void);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-t_error expand_str_merged(
-			t_string *out,
-			const t_string *src,
-			int *exit_status,
-			t_exp_flag flags);
+t_error		expand_str_merged(
+				t_string *out,
+				const t_string *src,
+				int *exit_status,
+				t_exp_flag flags);
 
-t_error expand_str(
-			t_expansion *out,
-			const t_string *src,
-			int *exit_status,
-			t_exp_flag flags);
+t_error		expand_str(
+				t_expansion *out,
+				const t_string *src,
+				int *exit_status,
+				t_exp_flag flags);
 
 /**
  * @ingroup expander
@@ -138,11 +149,11 @@ t_error expand_str(
  * @param flags Expansions to apply.
  * @return Same contract as @ref expand_str.
  */
-t_error	expand_token(
-			t_expansion *out,
-			t_token *src,
-			int *exit_status,
-			t_exp_flag flags);
+t_error		expand_token(
+				t_expansion *out,
+				t_token *src,
+				int *exit_status,
+				t_exp_flag flags);
 
 /**
  * @ingroup expander
@@ -158,18 +169,26 @@ t_error	expand_token(
  * @param flags Expansions to apply.
  * @return Same contract as @ref expand_str.
  */
-t_error	expand_token_merged(
-			t_string *out,
-			t_token *src,
-			int *exit_status,
-			t_exp_flag flags);
+t_error		expand_token_merged(
+				t_string *out,
+				t_token *src,
+				int *exit_status,
+				t_exp_flag flags);
 
 // TODO: doc
-t_error	expand_token_word(
-			t_fields *out,
-			t_token *src,
-			int *exit_status,
-			t_exp_flag flags);
+t_error		expand_token_word(
+				t_fields *out,
+				t_token *src,
+				int *exit_status,
+				t_exp_flag flags);
+
+t_error		prepare_src(
+				t_expander_args	*args,
+				t_context_stack *context_out,
+				t_ast_vector *ast_vec,
+				t_exp_flag flags);
+
+t_error		run_and_merge_expansion(t_string *out, t_expander_args *args);
 
 /**
  * @ingroup expander
@@ -191,11 +210,11 @@ t_error	expand_token_word(
  * @return @c ERR_LIBC (printed) on system failure; @c ERR_INTERNAL
  *         (printed) on internal inconsistency; @c ERR_NO on success.
  */
-t_error	word_match_pattern(
-			bool *match,
-			const t_word *pattern,
-			const char *str,
-			size_t len);
+t_error		word_match_pattern(
+				bool *match,
+				const t_word *pattern,
+				const char *str,
+				size_t len);
 
 /* ************************************************************************* */
 /*                              EXPANSION OPS                                */
@@ -207,7 +226,7 @@ t_error	word_match_pattern(
  *
  * @param expansion Already initialized expansion (borrowed).
  */
-void	expansion_free(t_expansion *expansion);
+void		expansion_free(t_expansion *expansion);
 
 /**
  * @ingroup expander
@@ -217,18 +236,21 @@ void	expansion_free(t_expansion *expansion);
  * @note Signature matches the @c vector_free element destructor callback.
  * @param expansion Expansion to free, as an untyped pointer (borrowed).
  */
-void	expansion_free_void(void *expansion);
+void		expansion_free_void(void *expansion);
 
-t_error	expansion_get(t_string *out, const t_expansion *expansion, size_t i);
+t_error		expansion_get(
+				t_string *out,
+				const t_expansion *expansion,
+				size_t i);
 
 // TODO: doc (frees src anyway)
 // @ret ERR_INTERNAL / ERR_LIBC
-t_error	expansion_merge(
-			const char *raw_value,
-			const char *posix_citation,
-			t_expansion *src,
-			t_string *out);
-			
-t_error expansion_take(t_expansion *exp, size_t i, t_string *out);
+t_error		expansion_merge(
+				const char *raw_value,
+				const char *posix_citation,
+				t_expansion *src,
+				t_string *out);
+
+t_error		expansion_take(t_expansion *exp, size_t i, t_string *out);
 
 #endif

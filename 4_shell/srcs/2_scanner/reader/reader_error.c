@@ -1,9 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reader_error.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:14:56 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:57:00 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include "reader_priv.h"
 
 t_error	on_read_error(t_error err, const char *path)
 {
-	err = error_print(err, "scanner", path, "Unrecoverable read error", NULL, NULL);
+	err = error_print(
+			err,
+			"scanner",
+			path,
+			"Unrecoverable read error",
+			NULL, NULL);
 	err.type = ERR_POSIX_READ;
 	return (err);
 }

@@ -1,8 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:11:38 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:26:47 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "heredoc.h"
 #include "heredoc_body.h"
 
-t_error	heredoc_read_body(t_lexer *lexer, t_string *out, t_token *delim, bool strip)
+t_error	heredoc_read_body(
+			t_lexer *lexer,
+			t_string *out,
+			t_token *delim,
+			bool strip)
 {
 	t_body	body;
 
@@ -24,7 +40,10 @@ t_error	heredoc_read_body(t_lexer *lexer, t_string *out, t_token *delim, bool st
 	return (lexer->err = body.err, body_free(&body), lexer->err);
 }
 
-t_error	heredoc_lex_body(t_context_stack *stack_out, t_ast_vector *vec_out, t_string *body)
+t_error	heredoc_lex_body(
+			t_context_stack *stack_out,
+			t_ast_vector *vec_out,
+			t_string *body)
 {
 	t_error		err;
 	t_token		token;

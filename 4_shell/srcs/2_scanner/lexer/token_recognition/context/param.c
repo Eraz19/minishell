@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   param.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:59 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:50:40 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "token_recognition.h"
 #include "token_recognition_priv.h"
@@ -27,7 +39,9 @@ t_error	param_context_unescape_rules(t_lexer *lexer, void *_)
 	return (scan_context_unescape(args));
 }
 
-t_token_recognition_context	param_context_rules(t_lexer *lexer, t_context_stack_item *item)
+t_token_recognition_context	param_context_rules(
+								t_lexer *lexer,
+								t_context_stack_item *item)
 {
 	return ((t_token_recognition_context)
 		{

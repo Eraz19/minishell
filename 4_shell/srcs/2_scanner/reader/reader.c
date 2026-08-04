@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reader.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:15:02 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:00:15 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <errno.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -31,7 +43,7 @@ int	reader_readline_hook(FILE *stream)
 	}
 }
 
-t_error	reader_read_PS1(t_string *out)
+t_error	reader_read_ps1(t_string *out)
 {
 	t_error	err;
 	bool	is_reading_stdin;
@@ -53,7 +65,7 @@ t_error	reader_read_PS1(t_string *out)
 	return (err);
 }
 
-t_error	reader_read_PS2(t_string *out)
+t_error	reader_read_ps2(t_string *out)
 {
 	t_error		err;
 	t_string	continuation;
@@ -75,7 +87,7 @@ t_error	reader_read_PS2(t_string *out)
 	return (string_free(&continuation), err);
 }
 
-t_error	reader_read_file(t_string * out, const char *path)
+t_error	reader_read_file(t_string *out, const char *path)
 {
 	return (read_file(out, path));
 }

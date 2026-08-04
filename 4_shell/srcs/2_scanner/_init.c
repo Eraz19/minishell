@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _init.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:15:12 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:22:40 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "reader.h"
 #include "scanner.h"
 #include <readline/readline.h>
@@ -8,7 +20,11 @@ void	scanner_init(t_scanner *scanner)
 	lexer_init(&scanner->lexer, scanner);
 }
 
-void	scanner_load(t_scanner *scanner, t_scanner *parent_scanner, t_parser *parser, t_scan_mode mode)
+void	scanner_load(
+			t_scanner *scanner,
+			t_scanner *parent_scanner,
+			t_parser *parser,
+			t_scan_mode mode)
 {
 	scanner->mode = mode;
 	rl_catch_signals = 0;

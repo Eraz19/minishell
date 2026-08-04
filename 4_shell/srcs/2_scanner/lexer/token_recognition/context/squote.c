@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   squote.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:13:02 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:50:56 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "token_recognition_context.h"
 #include "token_recognition_context_scan.h"
@@ -25,7 +37,9 @@ t_error	squote_context_unescape_rules(t_lexer *lexer, void *_)
 	return (scan_context_unescape(args));
 }
 
-t_token_recognition_context	squote_context_rules(t_lexer *lexer, t_context_stack_item *item)
+t_token_recognition_context	squote_context_rules(
+								t_lexer *lexer,
+								t_context_stack_item *item)
 {
 	return ((t_token_recognition_context)
 		{

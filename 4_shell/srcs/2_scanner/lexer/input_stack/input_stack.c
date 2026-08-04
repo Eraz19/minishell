@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_stack.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:11:57 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:32:40 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <assert.h> // DEBUG
 #include "lexer_input_stack.h"
 
@@ -10,7 +22,9 @@ void	lexer_input_stack_pop(t_lexer_input_stack *stack)
 	lexer_input_stack_item_free(&last_item);
 }
 
-t_error	lexer_input_stack_dup(t_lexer_input_stack *out, const t_lexer_input_stack *in)
+t_error	lexer_input_stack_dup(
+			t_lexer_input_stack *out,
+			const t_lexer_input_stack *in)
 {
 	size_t						i;
 	t_error						err;
@@ -36,14 +50,18 @@ t_error	lexer_input_stack_dup(t_lexer_input_stack *out, const t_lexer_input_stac
 	return (error(ERR_NO));
 }
 
-t_error	lexer_input_stack_push(t_lexer_input_stack *stack, t_lexer_input_stack_item *item)
+t_error	lexer_input_stack_push(
+			t_lexer_input_stack *stack,
+			t_lexer_input_stack_item *item)
 {
 	if (!vector_push(stack, item))
 		return (error_sys());
 	return (error(ERR_NO));
 }
 
-void	lexer_input_stack_get_last(t_lexer_input_stack *stack, t_lexer_input_stack_item **item)
+void	lexer_input_stack_get_last(
+			t_lexer_input_stack *stack,
+			t_lexer_input_stack_item **item)
 {
 	assert(stack->len > 0);
 	*item = &((t_lexer_input_stack_item *)stack->data)[stack->len - 1];

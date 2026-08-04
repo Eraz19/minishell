@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:01 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:45:28 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "param_braced_.h"
-# include <assert.h>
+#include <assert.h> // DEBUG
 
 static t_error	braced_origin(
 					t_expander *expander,

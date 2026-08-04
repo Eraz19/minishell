@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:33 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:01:58 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "expander_.h"
 #include "expansion_.h"
 #include "quote_removal_.h"
@@ -38,7 +50,7 @@ static t_error	run_pipeline(t_expander *expander, t_expander_args *args)
 		if (substitutions(expander).type)
 			return (expander->err);
 	}
-	expander->flags = args->flags & (uint)~EXP_DOLLAR_SQUOTE;
+	expander->flags = args->flags & (uint) ~ EXP_DOLLAR_SQUOTE;
 	return (expand_word(expander));
 }
 

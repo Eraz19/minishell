@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _API.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:15:09 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:22:22 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "heredoc.h"
 #include "scanner.h"
 #include "scanner_priv.h"
@@ -16,14 +28,20 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2)
 	return (scanner->err);
 }
 
-# include <stdio.h>
-t_error	scanner_read_heredoc(t_scanner *scanner, t_string *out, t_token *delim, bool strip)
+t_error	scanner_read_heredoc(
+			t_scanner *scanner,
+			t_string *out,
+			t_token *delim,
+			bool strip)
 {
 	scanner->err = heredoc_read_body(&scanner->lexer, out, delim, strip);
 	return (requalify_scanner_error(scanner));
 }
 
-t_error	scanner_scan_word(t_scanner *scanner, t_token *out, t_token_recognition_context args)
+t_error	scanner_scan_word(
+			t_scanner *scanner,
+			t_token *out,
+			t_token_recognition_context args)
 {
 	if (update_input(scanner, out, false).type)
 		return (lexer_unbind_token(&scanner->lexer), scanner->err);

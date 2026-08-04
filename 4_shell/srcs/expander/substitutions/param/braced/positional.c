@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   positional.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:25 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:50:41 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include "param_braced_.h"
 #include "param_expansion_.h"
@@ -7,9 +19,9 @@ static t_error	braced_positional_bare(
 					t_positional_exp *positional_exp)
 {
 	expander->err = emit_positionals(
-		expander,
-		positional_exp->symbol,
-		positional_exp->result_opt);
+			expander,
+			positional_exp->symbol,
+			positional_exp->result_opt);
 	if (expander->err.type)
 		return (expander->err);
 	if (braced_expect_close(expander).type)
@@ -32,9 +44,9 @@ static t_error	braced_positional_error(
 		return (word_free(&positional_exp->operand_word), expander->err);
 	}
 	expander->err = braced_error(
-						expander,
-						&name,
-						&positional_exp->operand_word);
+			expander,
+			&name,
+			&positional_exp->operand_word);
 	return (string_free(&name), expander->err);
 }
 
@@ -52,19 +64,20 @@ static t_error	braced_positional_apply(
 		if (positional_exp->is_triggered)
 			return (word_free(&positional_exp->operand_word), expander->err);
 		return (braced_use_operand(expander,
-					&positional_exp->operand_word,
-					positional_exp->result_opt));
+				&positional_exp->operand_word,
+				positional_exp->result_opt));
 	}
 	if (!positional_exp->is_triggered)
-		return (word_free(
-			&positional_exp->operand_word),
-			emit_positionals(expander,
+		return (word_free(&positional_exp->operand_word),
+			emit_positionals(
+				expander,
 				positional_exp->symbol,
 				positional_exp->result_opt));
 	if (positional_exp->op_char == '-')
-		return (braced_use_operand(expander,
-					&positional_exp->operand_word,
-					positional_exp->result_opt));
+		return (braced_use_operand(
+				expander,
+				&positional_exp->operand_word,
+				positional_exp->result_opt));
 	return (braced_positional_error(expander, positional_exp));
 }
 
@@ -78,15 +91,15 @@ static t_error	braced_positional_op(
 	const t_positionals	*params;
 
 	expander->err = parse_braced_op(
-						expander,
-						&colon,
-						&positional_exp->op_char,
-						&op_items);
+			expander,
+			&colon,
+			&positional_exp->op_char,
+			&op_items);
 	if (expander->err.type)
 		return (expander->err);
 	expander->err = braced_take_operand(expander,
-						body_len - 1 - op_items,
-						&positional_exp->operand_word);
+			body_len - 1 - op_items,
+			&positional_exp->operand_word);
 	if (expander->err.type)
 		return (expander->err);
 	if (braced_expect_close(expander).type

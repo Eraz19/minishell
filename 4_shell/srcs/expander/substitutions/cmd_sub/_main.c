@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:46:31 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:44:09 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd_sub.h"
 #include "cmd_substitution_.h"
 
@@ -42,10 +54,10 @@ t_error	cmd_substitution(t_expander *expander)
 	if (item.opt.context_len == 3)
 		return (expander->err = word_remove(&expander->word, 0, 3));
 	expander->err = cmd_sub_run_ast(
-						expander->ast_vec,
-						expander->ast_i,
-						&cmd_res,
-						expander->exit_status);
+			expander->ast_vec,
+			expander->ast_i,
+			&cmd_res,
+			expander->exit_status);
 	if (expander->err.type)
 		return (expander->err);
 	++expander->ast_i;

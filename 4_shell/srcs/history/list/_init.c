@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _init.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:08:50 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:32:19 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "history_list.h"
 
 void	history_list_init(t_history_list *list)
@@ -10,7 +22,10 @@ void	history_list_free(t_history_list *list)
 	vector_free(list, (void *)string_free);
 }
 
-t_error	history_list_load(t_history_list *history_list, t_vector *entries, size_t start)
+t_error	history_list_load(
+			t_history_list *history_list,
+			t_vector *entries,
+			size_t start)
 {
 	size_t		i;
 	t_error		err;
