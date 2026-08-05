@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:09:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:09:21 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 19:00:38 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "debug.h"
 #include "history.h"
-#include "history_priv.h"
 #include "history_load_env.h"
 
 void	history_init(t_history *history)
@@ -41,9 +41,10 @@ t_error	history_load(t_history *history)
 	if (load_history_max_size_env(history).type)
 		return (history->err);
 	max = history->adapter.max;
-	if (history_file_load(&history->file, &history->list, max).type)
+	history->err = history_file_load(&history->file, &history->list, max);
+	if (history->err.type)
 		return (history->err);
 	history_adapter_load(&history->adapter, &history->list);
-	history_load_start_logs(__func__);
+	history_load_end_logs(__func__);
 	return (history->err);
 }

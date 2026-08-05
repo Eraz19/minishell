@@ -81,6 +81,7 @@ static t_error	read_line_until(
 	bool	ignore_eof;
 
 	counter = 0;
+	err = error(ERR_NO);
 	while (err.type == ERR_NO && ++counter)
 	{
 		err = read_line_secured(prompt, out, &retry);

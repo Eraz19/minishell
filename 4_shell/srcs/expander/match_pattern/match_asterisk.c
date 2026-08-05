@@ -3,13 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   match_asterisk.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 18:17:18 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 18:33:25 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:48:52 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "expander_.h"
 #include "match_pattern_.h"
 
 bool	match_asterisk(const char *pattern, const char *str, size_t len)

@@ -16,6 +16,8 @@
 
 void	history_adapter_init(t_history_adapter *history_adapter)
 {
+	history_adapter->err = error(ERR_NO);
+	history_adapter->max = -1;
 	history_adapter->count = 0;
 }
 

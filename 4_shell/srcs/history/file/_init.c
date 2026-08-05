@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:08:26 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:31:34 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 19:02:29 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "debug.h"
 #include "utils.h"
 #include "history_list.h"
 #include "history_file.h"

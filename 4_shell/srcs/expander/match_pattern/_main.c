@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:44:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 18:32:57 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:47:15 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "expander_.h"
 #include "match_pattern_.h"
 
-bool	match_bracket_c_check(const char *pattern, size_t *i)
+bool	match_bracket_c_check(const char *pattern, char c, size_t *i)
 {
 	if (pattern[*i] == '\\')
 	{
@@ -47,7 +46,7 @@ bool	match_bracket_c(const char *pattern, size_t len, char c)
 	is_negated = set_negation(pattern + 1, &i);
 	while (i <= len)
 	{
-		if (match_bracket_c_check(pattern, &i))
+		if (match_bracket_c_check(pattern, c, &i))
 			return (!is_negated);
 	}
 	return (is_negated);

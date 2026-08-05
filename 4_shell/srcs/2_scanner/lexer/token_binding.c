@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token_binding.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:14:29 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:14:30 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 16:13:26 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "lexer_priv.h"
 
 void	bind_lexer_token(t_lexer *lexer, t_token *out)
 {

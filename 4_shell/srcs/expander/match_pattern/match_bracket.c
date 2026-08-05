@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   match_bracket.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 18:15:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 18:16:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:50:31 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "match_patern_.h"
+#include "expander_.h"
+#include "match_pattern_.h"
 
 bool	match_bracket(const char *pattern, const char *str, size_t len)
 {

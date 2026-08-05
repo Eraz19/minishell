@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:45 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:58:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:35:53 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,14 @@ void	expander_args_free(t_expander_args *args);
 /* ************************************************************************* */
 /*                                    OPS                                    */
 /* ************************************************************************* */
+
+t_error		prepare_src(
+				t_expander_args	*args,
+				t_context_stack *context_out,
+				t_ast_vector *ast_vec,
+				t_exp_flag flags);
+
+t_error		run_and_merge_expansion(t_string *out, t_expander_args *args);
 
 /**
  * @ingroup expander_priv

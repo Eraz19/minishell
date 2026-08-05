@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _API.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:22:22 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 18:18:59 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2)
 	else if (out->type == TOKEN_TOKEN)
 		scanner->err = expand_alias(scanner, out);
 	lexer_unbind_token(&scanner->lexer);
-	return (scanner->err);
+	return (requalify_scanner_error(scanner));
 }
 
 t_error	scanner_read_heredoc(
@@ -65,5 +65,5 @@ t_error	scanner_bind_input(t_scanner *scanner, const char *cmd_string)
 		parent_input_stack = &scanner->parent_scanner->lexer.input_stack;
 		scanner->err = lexer_input_stack_dup(input_stack, parent_input_stack);
 	}
-	return (scanner->err);
+	return (requalify_scanner_error(scanner));
 }

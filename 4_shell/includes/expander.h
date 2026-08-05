@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 19:01:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 19:07:52 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:35:35 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,14 +181,6 @@ t_error		expand_token_word(
 				t_token *src,
 				int *exit_status,
 				t_exp_flag flags);
-
-t_error		prepare_src(
-				t_expander_args	*args,
-				t_context_stack *context_out,
-				t_ast_vector *ast_vec,
-				t_exp_flag flags);
-
-t_error		run_and_merge_expansion(t_string *out, t_expander_args *args);
 
 /**
  * @ingroup expander

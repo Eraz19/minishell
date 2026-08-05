@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   history_load_env_error.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:09:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:09:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 19:04:19 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "error.h"
 #include "history_load_env_priv.h"
 

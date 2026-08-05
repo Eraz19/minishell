@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   file_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:09:01 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:09:02 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 19:04:36 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
+#include "debug.h"
 #include "history_load_env.h"
 #include "history_load_env_priv.h"
 
@@ -18,7 +19,7 @@ bool	load_file_path(t_history *history, const char *var_name)
 {
 	history->err = env_get_from_const(var_name, &history->file.path);
 	if (history->err.type || history->file.path.len <= 0)
-		return (false);
+		return (string_free(&history->file.path), false);
 	history_load_file_path_from_logs(history->file.path.data, var_name);
 	return (true);
 }

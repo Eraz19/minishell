@@ -118,5 +118,6 @@
 		"-I${workspaceFolder}/4_shell/srcs/history/list",
 		"-I${workspaceFolder}/4_shell/srcs/history/load_env",
 		"-I${workspaceFolder}/4_shell/srcs/redirector"
-	]
+	],
+	"explorer.sortOrder": "modified"
 }

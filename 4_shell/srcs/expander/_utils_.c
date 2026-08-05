@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _utils_.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:54:07 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:55:55 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:45:02 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
+#include "expander_.h"
+#include "heredoc.h"
 
 t_error	prepare_src(
 			t_expander_args	*args,

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   match_pattern_.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:44:47 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 18:34:14 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:50:23 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 
 bool	match_bracket(const char *pattern, const char *str, size_t len);
 bool	match_asterisk(const char *pattern, const char *str, size_t len);
+
+bool	valid_bracket_exp_len(const char *pattern, size_t *len);
+bool	match_bracket_c(const char *pattern, size_t len, char c);
 
 bool	ft_isxdigit(char c);
 bool	match_char(char c1, char c2, size_t *len);

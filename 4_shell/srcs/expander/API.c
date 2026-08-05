@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   API.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:39 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:55:58 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 15:36:06 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
-#include "heredoc.h"
 #include "expander.h"
 #include "expander_.h"
 #include "expansion_.h"
