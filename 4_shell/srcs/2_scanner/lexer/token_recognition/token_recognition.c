@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_recognition.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:14:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:14:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:24:54 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,7 @@ t_error	recognize_token(t_lexer *lexer, t_token *out)
 	while (!lexer->emited_token)
 	{
 		if (token_recognize_rules_dispatch(lexer).type)
-		{
-			token_free(out);
-			lexer_unbind_token(lexer);
-			return (lexer->err);
-		}
+			return (token_free(out), lexer_unbind_token(lexer), lexer->err);
 	}
 	return (lexer->err);
 }

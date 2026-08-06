@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/06 16:16:56 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:32:16 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@
 
 t_error	update_input_file(t_scanner *scanner, t_lexer_input_stack_item *out)
 {
-	scanner->err = reader_read_file(&out->str, scanner->source);
-	if (scanner->err.type)
-		return (scanner->err);
-	return (scanner->err);
+	return (scanner->err = reader_read_file(&out->str, scanner->source));
 }
 
 t_error	update_input_string(t_scanner *scanner, t_lexer_input_stack_item *out)
@@ -57,6 +54,8 @@ t_error	update_input_dispatch(t_scanner *scanner)
 	else if (scanner->mode == SCAN_MODE_STDIN)
 		update_input_stdin(scanner, &new_input);
 	if (scanner->err.type)
+		return (lexer_input_stack_item_free(&new_input), scanner->err);
+	if (new_input.str.data == NULL)
 		return (lexer_input_stack_item_free(&new_input), scanner->err);
 	input_stack = &scanner->lexer.input_stack;
 	scanner->err = lexer_input_stack_push(input_stack, &new_input);
