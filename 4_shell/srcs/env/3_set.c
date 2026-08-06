@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   4_set.c                                            :+:      :+:    :+:   */
+/*   3_set.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:56 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:17:51 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:47:27 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <assert.h>	// DEBUG
-#ifdef DEBUG_CMD
-#include "logs.h"
-#include <stdio.h>
-#endif
-
-// TODO: refactor
-static inline t_error	env_get_struct(t_params **dst)
-{
-	t_error	err;
-
-	*dst = shell_get_params();
-	if (*dst == NULL)
-	{
-		err = error_print(error(ERR_SHELL_NOT_FOUND), "params", NULL, NULL);
-		err.type = ERR_INTERNAL;
-		return (err);
-	}
-	return (error(ERR_NO));
-}
 
 t_error	env_set_variable(
 	const t_string *name,
@@ -40,8 +20,6 @@ t_error	env_set_variable(
 {
 	t_error	err;
 
-	assert(name != NULL);
-	assert(value != NULL);
 	err = var_set(name, value, export, readonly);
 	if (err.type)
 	{
@@ -54,38 +32,28 @@ t_error	env_set_variable(
 
 t_error	env_unset_variable(const t_string *name)
 {
-	assert(name != NULL);
 	return (var_unset(name));
 }
 
 void	env_set_last_status_in(t_params *params, int value)
 {
 	specials_set_last_status(&params->specials, value);
-#ifdef DEBUG_CMD
-	fprintf(stderr, "%s[PARAMS] $? = %i%s\n", YELLOW, value, NC);
-#endif
 }
 
 t_error	env_set_last_status(int value)
 {
 	t_params	*params;
-	t_error		err;
 
-	err = env_get_struct(&params);
-	if (err.type)
-		return (err);
+	params = shell_get_params();
 	env_set_last_status_in(params, value);
-	return (err);
+	return (error(ERR_NO));
 }
 
 t_error	env_set_option(t_option option, bool on)
 {
 	t_params	*params;
-	t_error		err;
 
-	err = env_get_struct(&params);
-	if (err.type)
-		return (err);
+	params = shell_get_params();
 	option_set(&params->options, option, on);
-	return (err);
+	return (error(ERR_NO));
 }

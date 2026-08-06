@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:52 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:16:26 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:45:58 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <assert.h>	// DEBUG
 
-// TODO: check what POSIX means by "If both '-' and '--' are given as **ARGUMENTS**"
 static void	env_catch_undefined_1(int argc, char **argv)
 {
 	int		i;
@@ -67,27 +66,15 @@ t_error	env_load(t_params *params, int argc, char **argv, char **envp)
 	params->name = argv[0];
 	start_index = 1;
 	err = options_load(&params->options, argc, argv, &start_index);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
 	env_catch_undefined_2(argc, argv, (int)start_index);
 	err = specials_load(&params->specials, argc, argv, &start_index);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
 	err = positionals_load_stack(&params->positionals_stack, argc, argv,
 			start_index);
-	if (err.type != ERR_NO)
+	if (err.type)
 		return (err);
-	err = var_load(&params->variables, envp);
-	if (err.type != ERR_NO)
-		return (err);
-#ifdef DDEBUG_ENV
-	/* ---------- DEBUG: START ---------- */
-	dump_variables();
-	options_dump();
-	specials_dump();
-	positionals_dump();
-	dump_env();
-	/* ---------- DEBUG: END ---------- */
-#endif
-	return (error(ERR_NO));
+	return (var_load(&params->variables, envp));
 }

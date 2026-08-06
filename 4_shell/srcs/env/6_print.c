@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   7_print.c                                          :+:      :+:    :+:   */
+/*   6_print.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:15:01 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:15:02 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:48:03 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "shell.h"
 #include <assert.h>	// DEBUG
 
-t_error env_print(t_env_print_mode mode)
+t_error	env_print(t_env_print_mode mode)
 {
 	t_params	*params;
 

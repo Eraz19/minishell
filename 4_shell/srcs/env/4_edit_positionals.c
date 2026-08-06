@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   5_edit_positionals.c                               :+:      :+:    :+:   */
+/*   4_edit_positionals.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:58 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:14:59 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:47:36 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <assert.h>	// DEBUG
 
 t_error	env_push_positionals(t_positionals *src)
 {
 	t_params	*params;
 
-	assert(src != NULL);
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
@@ -38,7 +36,6 @@ t_error	env_replace_positionals(t_positionals *src)
 {
 	t_params	*params;
 
-	assert(src != NULL);
 	params = shell_get_params();
 	if (!params)
 		return (error(ERR_SHELL_NOT_FOUND));
