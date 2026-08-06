@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:56:46 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:56:47 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:51:49 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static inline void	cmd_exec_fallback(t_cmd *cmd, int *exit_status)
 	shell_init_subshell(SUBSHELL_NORMAL);
 	shell_clear();
 	shell = shell_get();
-	assert(shell != NULL);
 	history_free(&shell->history);
 	*exit_status = shell_run(argc, cmd->argv.data, cmd->envp.data, false);
 }

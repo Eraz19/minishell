@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:56:58 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:04:01 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:51:39 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ t_error	shell_is_subshell(bool *out)
 	t_shell	*shell;
 
 	shell = shell_get();
-	if (shell == NULL)
-		return (error_print(error(ERR_INTERNAL),
-				"shell not found", NULL, NULL));
 	*out = shell->is_subshell;
 	return (error(ERR_NO));
 }
@@ -58,9 +55,6 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 	t_error	err;
 
 	shell = shell_get();
-	if (shell == NULL)
-		return (error_print(error(ERR_INTERNAL),
-				__func__, "shell not found", NULL, NULL));
 	job_control = option_is_active_in(shell->params.options, OPT_MONITOR);
 	shell->is_subshell = true;
 	async_no_job_ctrl = mode == SUBSHELL_ASYNC_AND_OR && !job_control;

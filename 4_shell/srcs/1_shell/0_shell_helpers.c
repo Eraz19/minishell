@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:56:40 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:56:41 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:50:25 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 t_shell	*shell_get(void)
 {
-	static t_shell shell;
+	static t_shell	shell;
 
 	return (&shell);
 }
@@ -26,7 +26,7 @@ const char	*shell_get_name(void)
 	t_shell	*shell;
 
 	shell = shell_get();
-	if (!shell)
+	if (shell->params.name == NULL)
 		return (DEFAULT_NAME);
 	return (shell->params.name);
 }

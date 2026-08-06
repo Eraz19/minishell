@@ -10,8 +10,8 @@
 - `reader`:
 	- Read line by line even in *non-interactive* mode
 ```bash
-printf 'read x\nfoo' | ./minishell piped into a script that reads — the read builtin
-  gets the next line, proving no read-ahead.
+printf 'read x\nfoo' | ./minishell
+# piped into a script that reads — the read builtin gets the next line, proving no read-ahead.
 ```
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files

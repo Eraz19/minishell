@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:02:26 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 19:09:51 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:51:46 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ t_error	shell_get_new_runner(
 	t_error		err;
 
 	shell = shell_get();
-	if (shell == NULL)
-		return (error_print(error(ERR_INTERNAL), "shell not found", NULL, NULL));
 	new_runner = malloc(sizeof(*new_runner));
 	if (new_runner == NULL)
 		return (error_print(error_sys(), __func__, NULL, NULL));
@@ -97,10 +95,6 @@ t_error	shell_destroy_last_instance_priv(void)
 	t_runner	*prev_runner;
 
 	shell = shell_get();
-	if (shell == NULL)
-		return (error_print(error(ERR_INTERNAL), "shell not found", NULL, NULL));
-	if (shell->last_runner == NULL)
-		return (error_print(error(ERR_INTERNAL), "no shell instance", NULL, NULL));
 	victim = shell->last_runner;
 	prev_runner = victim->parent;
 	runner_free(victim);
@@ -112,4 +106,3 @@ t_error	shell_destroy_last_instance_priv(void)
 		prev_runner->child = NULL;
 	return (error(ERR_NO));
 }
-

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:57:02 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:57:03 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:52:23 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 typedef struct s_shell_loading_options
 {
 	t_shell	*shell;
-	int 	argc;
+	int		argc;
 	char	**argv;
 	char	**envp;
 }	t_shell_loading_options;

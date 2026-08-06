@@ -1,9 +1,11 @@
 # NOW
 
+- `tcgetattr()` avant de run une `utility`
+- Si la utility exit sur un signal => reset avec ` tcsetatt()`
+
 - Norme:
 	- `4_shell/srcs/0_asm_stubs/*`
 	- `4_shell/srcs/0_posix_helpers/posix_open/guard.c`
-
 
 	- keep comments for `42_SH`:
 		- `error.h`
