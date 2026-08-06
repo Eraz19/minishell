@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:11 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:10:16 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:40:31 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 #include "parser_item_stack.h"
 #include "parser_here_stack.h"
 #include "cst.h"
-#ifdef DEBUG_PARSING
-# include "debug.h"		// DEBUG
-# include "logs.h"		// DEBUG
-# include <stdio.h>		// DEBUG
-#endif
-#include <assert.h>	// DEBUG
 
 static inline t_error	parser_push_initial_state(t_parser *parser)
 {
@@ -93,7 +87,6 @@ t_error	parser_build_cst(t_parser *parser)
 	t_action		action;
 	t_error			err;
 
-	assert(parser != NULL);
 	err = parser_prepare_to_build_cst(parser);
 	while (err.type == ERR_NO && parser->cst == NULL)
 	{

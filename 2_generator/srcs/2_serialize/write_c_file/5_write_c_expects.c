@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:19:30 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:19:31 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:39:46 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "write_c_file_priv.h"
 #include "generator_serialize_priv.h"
-#include "logs.h"
 
 #define EXPECT_VAR	"bool\t\t\texpects_cmd_name_or_word[LR_STATE_COUNT]"
 
@@ -47,5 +46,5 @@ bool	generator_write_c_expects(int c_fd, const t_lr_generator *gen)
 		return (false);
 	if (!generator_write_c_var_end(c_fd))
 		return (false);
-	return (print_pass("expects generated\n"), true);
+	return (true);
 }

@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:19:22 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:19:23 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:39:24 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "write_c_file_priv.h"
 #include "generator_serialize_priv.h"
-#include "logs.h"
 
 #define ACTION_VAR	"t_action\t\tactions[ACTION_COUNT]"
 
@@ -66,5 +65,5 @@ bool	generator_write_c_actions(int c_fd, const t_lr_generator *gen)
 		return (false);
 	if (!generator_write_c_var_end(c_fd))
 		return (false);
-	return (print_pass("actions generated\n"), true);
+	return (true);
 }

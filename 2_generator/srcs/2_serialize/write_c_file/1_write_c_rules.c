@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:19:20 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:19:21 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:39:15 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "write_c_file_priv.h"
 #include "generator_serialize_priv.h"
-#include "logs.h"
 
 #define RULE_VAR	"t_lr_rule\t\trules[RULE_COUNT]"
 
@@ -60,5 +59,5 @@ bool	generator_write_c_rules(int c_fd, const t_lr_generator *gen)
 		return (false);
 	if (!generator_write_c_var_end(c_fd))
 		return (false);
-	return (print_pass("rules generated\n"), true);
+	return (true);
 }

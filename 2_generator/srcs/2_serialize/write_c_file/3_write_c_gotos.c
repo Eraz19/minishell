@@ -6,14 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:19:25 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:19:26 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:39:31 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "write_c_file_priv.h"
 #include "generator_serialize_priv.h"
 #include "grammar_gotos.h"
-#include "logs.h"
 
 #define GOTO_VAR	"size_t\t\t\tgotos[GOTO_COUNT]"
 
@@ -55,5 +54,5 @@ bool	generator_write_c_gotos(int c_fd, const t_lr_generator *gen)
 		return (false);
 	if (!generator_write_c_var_end(c_fd))
 		return (false);
-	return (print_pass("gotos generated\n"), true);
+	return (true);
 }

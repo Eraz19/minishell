@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:14:47 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/06 19:54:21 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:40:06 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@
 #include <sys/ioctl.h>
 #include <readline/readline.h>
 #include "sig.h"
-#ifdef DEBUG_CMD
-# include "logs.h"	// DEBUG
-#endif
 #include "options.h"
 #include "reader_interactive_priv.h"
 #include "posix_helpers.h"

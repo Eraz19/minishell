@@ -3,9 +3,6 @@
 - `tcgetattr()` avant de run une `utility`
 - Si la utility exit sur un signal => reset avec ` tcsetatt()`
 
-- Norme:
-	- `4_shell/srcs/0_asm_stubs/*`
-	- `4_shell/srcs/0_posix_helpers/posix_open/guard.c`
 - ⚠️ remove all `logs.h`
 - ⚠️ remove all `assert.h`
 - ⚠️ remove all `printf()` / `fprintf()` calls
