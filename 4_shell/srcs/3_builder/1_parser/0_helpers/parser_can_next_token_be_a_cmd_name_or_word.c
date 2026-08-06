@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:06:34 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:18:26 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:58:29 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser.h"
 #include "grammar_gotos.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 // @ret ERR_LIBC
 static inline t_error	get_lr_state_ids_from_stack(
@@ -78,8 +77,6 @@ t_error	parser_can_next_token_be_a_cmd_name_or_word(
 	const t_action	*action;
 	t_error			err;
 
-	assert(parser != NULL);
-	assert(dst != NULL);
 	err = get_lr_state_ids_from_stack(parser, &lr_state_ids);
 	if (err.type)
 		return (err);

@@ -6,17 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:06:40 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:16:49 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:58:12 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser_priv.h"
 #include "parser.h"
 #include "utils.h"
-#include <assert.h>	// DEBUG
-#ifdef DEBUG_PARSING
-# include "logs.h"	// DEBUG
-#endif
 
 static inline t_error	parser_check_fname(
 							const t_parser *parser,
@@ -29,28 +25,15 @@ static inline t_error	parser_check_fname(
 		return (error_print(error(ERR_POSIX_SYNTAX),
 				"parser", "invalid function name", NULL,
 				"%s", token->value.data));
-#ifdef DEBUG_PARSING
-	else
-		fprintf(stderr, "[PARSER] %sfunction name is valid%s\n", YELLOW, NC);
-#endif
 	return (error(ERR_NO));
 }
 
 static inline t_error	parser_register_heredoc(
 							t_parser *parser,
-							t_parser_item *lhs,
-							t_parser_item *rhs)
+							t_parser_item *lhs)
 {
 	if (!vector_push(&parser->here_stack, &lhs->cst_node))
 		return (error_sys());
-#ifdef DEBUG_PARSING
-	fprintf(stderr, YELLOW "[PARSER] heredoc registered (%s%s%s)\n" NC,
-		BLUE,
-		parser_get_token(parser, rhs[1].tokens_start_id)->value.data,
-		YELLOW);
-#else
-	(void)rhs;
-#endif
 	return (error(ERR_NO));
 }
 
@@ -63,7 +46,7 @@ t_error	parser_process_reduce_hooks(
 	if (rule_id == RULE_FNAME_1)
 		return (parser_check_fname(parser, rhs));
 	else if (rule_id == RULE_IO_HERE_1 || rule_id == RULE_IO_HERE_2)
-		return (parser_register_heredoc(parser, lhs, rhs));
+		return (parser_register_heredoc(parser, lhs));
 	else if (parser->search_cmd_sub_end == false
 		&& (rule_id == RULE_COMPLETE_COMMAND_1
 			|| rule_id == RULE_COMPLETE_COMMAND_2))

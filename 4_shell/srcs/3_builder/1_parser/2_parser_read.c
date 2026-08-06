@@ -6,17 +6,28 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:02 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:13:27 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:57:29 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser_priv.h"
 #include "scanner.h"
-#ifdef DEBUG_PARSING
-# include <stdio.h>		// DEBUG
-# include "logs.h"		// DEBUG
-#endif
-#include <assert.h>	// DEBUG
+
+static inline t_error	sym_conv3(t_token_type token_type, t_symbol *dst_symbol)
+{
+	if (token_type == TOKEN_IO_NUMBER)
+		return (*dst_symbol = SYM_IO_NUMBER, error(ERR_NO));
+	else if (token_type == TOKEN_IO_LOCATION)
+		return (*dst_symbol = SYM_IO_LOCATION, error(ERR_NO));
+	else if (token_type == TOKEN_EOF)
+		return (*dst_symbol = SYM_EOF, error(ERR_NO));
+	else
+	{
+		*dst_symbol = SYM_error;
+		return (error_print(error(ERR_POSIX_SYNTAX),
+				"parser", "unkown token type", NULL, "%i", token_type));
+	}
+}
 
 static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
 {
@@ -40,9 +51,8 @@ static inline t_error	sym_conv2(t_token_type token_type, t_symbol *dst_symbol)
 		return (*dst_symbol = SYM_LPARENTHESIS, error(ERR_NO));
 	else if (token_type == TOKEN_RPARENTHESIS)
 		return (*dst_symbol = SYM_RPARENTHESIS, error(ERR_NO));
-	*dst_symbol = SYM_error;
-	return (error_print(error(ERR_POSIX_SYNTAX),
-			"parser", "unkown token type", NULL, "%i", token_type));
+	else
+		return (sym_conv3(token_type, dst_symbol));
 }
 
 static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
@@ -69,12 +79,6 @@ static inline t_error	sym_conv(t_token_type token_type, t_symbol *dst_symbol)
 		return (*dst_symbol = SYM_DLESS, error(ERR_NO));
 	else if (token_type == TOKEN_DLESSDASH)
 		return (*dst_symbol = SYM_DLESSDASH, error(ERR_NO));
-	else if (token_type == TOKEN_IO_NUMBER)
-		return (*dst_symbol = SYM_IO_NUMBER, error(ERR_NO));
-	else if (token_type == TOKEN_IO_LOCATION)
-		return (*dst_symbol = SYM_IO_LOCATION, error(ERR_NO));
-	else if (token_type == TOKEN_EOF)
-		return (*dst_symbol = SYM_EOF, error(ERR_NO));
 	return (sym_conv2(token_type, dst_symbol));
 }
 
@@ -83,7 +87,6 @@ t_error	parser_read_next_symbol(t_parser *parser, bool continuation)
 	t_token	token;
 	t_error	err;
 
-	assert(parser != NULL);
 	err = scanner_get_next_token(&parser->scanner, &token, continuation);
 	if (err.type != ERR_NO)
 		return (err);
@@ -91,17 +94,6 @@ t_error	parser_read_next_symbol(t_parser *parser, bool continuation)
 	if (err.type != ERR_NO)
 		return (token_free(&token), err);
 	parser->lookahead_symbol = parser->lookahead_raw_symbol;
-#ifdef DEBUG_PARSING
-	fprintf(stderr, "[PARSER] READ   => [%3zu] [%3zu - %3zu] %s%s%s",
-		parser->lookahead_id, token.index.start, token.index.end, RED, token_type_to_string(token.type), NC);
-	if (token.type == TOKEN_TOKEN)
-		fprintf(stderr, " (%s%s%s)", BLUE, token.value.data, NC);
-	if (token.ast_vector.len > 0)
-		fprintf(stderr, " => %zu AST", token.ast_vector.len);
-	if (token.assignment_offset >= 0)
-		fprintf(stderr, " assignment_offset=%zu", token.assignment_offset);
-	fprintf(stderr, "\n");
-#endif
 	if (token.type == TOKEN_NEWLINE)
 	{
 		err = parser_read_heredoc(parser);
