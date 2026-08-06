@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:11:09 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:11:10 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:39:25 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 #include "utils.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 static inline bool	var_must_be_printed(const t_var *var, t_var_print_mode mode)
 {
-	assert(var != NULL);
 	if (mode == VAR_PRINT_EXPORT)
 		return (var->export);
 	if (mode == VAR_PRINT_READONLY)
@@ -47,8 +45,6 @@ static inline t_error	var_print_one(
 	t_string	serialized_value;
 	t_error		err;
 
-	assert(name != NULL);
-	assert(var != NULL);
 	if (!string_init(&output, 0, var_select_prefix(mode), -1))
 		return (error_sys());
 	if (!string_append_n(&output, name, -1))
@@ -98,9 +94,7 @@ t_error	var_print(t_var_print_mode mode)
 	t_params			*params;
 	const t_key_value	**var_list;
 
-	assert(mode == VAR_PRINT_EXPORT || mode == VAR_PRINT_READONLY || mode == VAR_PRINT_SET);
 	params = shell_get_params();
-	assert(params != NULL);
 	var_list = hashmap_get_all(&params->variables);
 	if (var_list == NULL)
 		return (error_sys());

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:10:42 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:04:11 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:42:41 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-#include <assert.h>	// DEBUG
 
 static bool	pwd_has_no_dot_components(const char *pwd)
 {
@@ -24,7 +23,6 @@ static bool	pwd_has_no_dot_components(const char *pwd)
 	size_t	start;
 	size_t	len;
 
-	assert(pwd != NULL);
 	i = 1;
 	while (pwd[i] != '\0')
 	{
@@ -42,18 +40,12 @@ static bool	pwd_has_no_dot_components(const char *pwd)
 	return (true);
 }
 
-/*
-cf [POSIX.1-2024, Base Definitions, header <sys/stat.h>](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/sys_stat.h.html)
-	- "A file identity is uniquely determined by the combination of st_dev and st_ino"
-*/
 // @ret ERR_LIBC.
 static t_error	pwd_is_the_current_working_dir(const char *pwd, bool *res)
 {
 	struct stat	current;
 	struct stat	from_pwd;
 
-	assert(pwd != NULL);
-	assert(res != NULL);
 	*res = false;
 	if (stat(".", &current) == -1)
 		return (error_sys());
@@ -72,15 +64,8 @@ static t_error	pwd_is_the_current_working_dir(const char *pwd, bool *res)
 	return (error(ERR_NO));
 }
 
-/*
-cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05_03)
-	- "the value is an absolute pathname"
-	- "the value does not contain any components that are dot or dot-dot"
-	- "the value is [...] the current working directory"
-*/
 t_error	var_pwd_is_valid(const char *pwd, bool *res)
 {
-	assert(res != NULL);
 	*res = false;
 	if (!pwd)
 		return (error(ERR_NO));

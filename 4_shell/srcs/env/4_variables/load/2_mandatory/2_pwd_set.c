@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:10:44 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:04:43 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:43:00 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-#include "logs.h"		// DEBUG
-#include <assert.h>	// DEBUG
 
 #define PWD_NAME	"PWD"
 
@@ -28,7 +26,6 @@ static inline void	pwd_build_name(t_string *out)
 	static char	name[] = PWD_NAME;
 	size_t		len;
 
-	assert(out != NULL);
 	len = sizeof(PWD_NAME) - 1;
 	string_take(out, name, len + 1, (ssize_t)len);
 }
@@ -40,7 +37,6 @@ static inline t_error	set_default_pwd(t_string *name, bool export)
 	t_string	value;
 	t_error		err;
 
-	assert(name != NULL);
 	string_init(&value, 0, NULL, 0);
 	err = posix_getcwd(&value);
 	if (err.type == ERR_LIBC && err.saved_errno == EACCES)
@@ -51,8 +47,6 @@ static inline t_error	set_default_pwd(t_string *name, bool export)
 	else if (err.type)
 		return (string_free(&value), err);
 	err = var_set(name, &value, export, false);
-	if (err.type == ERR_NO)
-		print_pass("'PWD'  initialized                     '%s'\n", value.data);
 	string_free(&value);
 	return (err);
 }
@@ -63,21 +57,14 @@ static inline t_error	process_existing_pwd(t_string *name, t_string *value)
 	bool	is_valid;
 	t_error	err;
 
-	assert(name != NULL);
-	assert(value != NULL);
 	err = var_pwd_is_valid(value->data, &is_valid);
 	if (err.type)
 		return (err);
 	else if (is_valid)
-		return (print_pass("'PWD'  is already valid                '%s%s%s'\n", BLUE, value->data, GREY), error(ERR_NO));
+		return (err);
 	return (set_default_pwd(name, true));
 }
 
-/*
-cf [2.5.3 Shell Variables](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05_03)
-	a) "If a value for PWD is passed to the shell in the environment when it is executed, the value is an absolute pathname of the current working directory [...optional...] and the value does not contain any components that are dot or dot-dot, then the shell shall set PWD to the value from the environment"
-	b) "Otherwise, the sh utility sets PWD to the pathname that would be output by pwd -P" (= getcwd())
-*/
 t_error	var_set_pwd(void)
 {
 	t_string	name;

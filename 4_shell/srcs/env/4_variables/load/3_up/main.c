@@ -6,15 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:10:58 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:05:18 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:42:10 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "variables.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include "logs.h"		// DEBUG
-#include <assert.h>	// DEBUG
 
 #define PS1_NAME	"PS1"
 #define PS1_VALUE	"$ "
@@ -29,8 +27,6 @@ static inline void	up_build_ps1(t_string *out_name, t_string *out_value)
 	static char	value[] = PS1_VALUE;
 	size_t		len;
 
-	assert(out_name != NULL);
-	assert(out_value != NULL);
 	len = sizeof(PS1_NAME) - 1;
 	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS1_VALUE) - 1;
@@ -43,8 +39,6 @@ static inline void	up_build_ps2(t_string *out_name, t_string *out_value)
 	static char	value[] = PS2_VALUE;
 	size_t		len;
 
-	assert(out_name != NULL);
-	assert(out_value != NULL);
 	len = sizeof(PS2_NAME) - 1;
 	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS2_VALUE) - 1;
@@ -57,8 +51,6 @@ static inline void	up_build_ps4(t_string *out_name, t_string *out_value)
 	static char	value[] = PS4_VALUE;
 	size_t		len;
 
-	assert(out_name != NULL);
-	assert(out_value != NULL);
 	len = sizeof(PS4_NAME) - 1;
 	string_take(out_name, name, len + 1, (ssize_t)len);
 	len = sizeof(PS4_VALUE) - 1;
@@ -71,18 +63,11 @@ static t_error	var_init_target_up(t_string *name, t_string *value)
 	t_error		err;
 	t_string	current_value;
 
-	assert(name != NULL);
-	assert(value != NULL);
 	err = var_get(name, &current_value);
 	if (err.type == ERR_NO)
-	{
-		string_free(&current_value);
-		return (error(ERR_NO));
-	}
+		return (string_free(&current_value), err);
 	if (err.type == ERR_VAR_NOT_FOUND)
-		err = var_set(name, value, false, false);
-	if (err.type == ERR_NO)
-		print_pass("'%s'  initialized                     '%s'\n", name->data, value->data);
+		return (var_set(name, value, false, false));
 	return (err);
 }
 
