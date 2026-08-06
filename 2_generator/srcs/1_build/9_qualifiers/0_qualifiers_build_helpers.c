@@ -6,12 +6,11 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:16:24 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:16:25 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 18:45:30 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "generator_qualifiers_priv.h"
-#include <assert.h>	// DEBUG
 
 bool	qualifier_should_apply_word(
 			const t_action *actions,
@@ -19,7 +18,6 @@ bool	qualifier_should_apply_word(
 {
 	size_t	index;
 
-	assert(actions != NULL);
 	index = lr_state_id * (SYM_TERMINAL_MAX + 1) + SYM_WORD;
 	return (actions[index].type != ACTION_ERROR);
 }
@@ -30,7 +28,6 @@ bool	qualifier_should_apply_1(
 {
 	size_t	row_offset;
 
-	assert(actions != NULL);
 	row_offset = lr_state_id * (SYM_TERMINAL_MAX + 1);
 	if (actions[row_offset + SYM_WORD].type != ACTION_ERROR)
 		return (false);
@@ -46,7 +43,6 @@ bool	qualifier_rule_is_at_target(
 			t_rule_id rule_id,
 			size_t target_pos)
 {
-	assert(rule_state != NULL);
 	return (rule_state->rule_id == rule_id && rule_state->pos == target_pos);
 }
 
@@ -56,8 +52,6 @@ t_qualifier_id	qualifier_default_id(
 {
 	const t_rule	*rule;
 
-	assert(rules != NULL);
-	assert(rule_state != NULL);
 	rule = &rules[rule_state->rule_id];
 	if (rule_state->pos >= rule->rhs_len)
 		return (QUALIFIER_NONE);
@@ -74,8 +68,6 @@ t_qualifier_id	qualifier_6_choose_variant(
 	const t_rule		*rule;
 	size_t				i;
 
-	assert(rules != NULL);
-	assert(lr_state != NULL);
 	i = 0;
 	while (i < lr_state->len)
 	{
