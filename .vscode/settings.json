@@ -88,7 +88,6 @@
 		"-I${workspaceFolder}/4_shell/srcs/env/10_alias",
 		"-I${workspaceFolder}/4_shell/srcs/env/10_alias/1_alias_table",
 		"-I${workspaceFolder}/4_shell/srcs/env/10_alias/2_alias_stack",
-		"-I${workspaceFolder}/4_shell/srcs/env/10_alias/3_alias_forbidden",
 		"-I${workspaceFolder}/4_shell/srcs/expander",
 		"-I${workspaceFolder}/4_shell/srcs/expander/expansion",
 		"-I${workspaceFolder}/4_shell/srcs/expander/field",

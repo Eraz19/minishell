@@ -187,7 +187,6 @@ SHELL_INCLUDES		:= \
 	-I$(SHELL_DIR)/srcs/env/10_alias \
 	-I$(SHELL_DIR)/srcs/env/10_alias/1_alias_table \
 	-I$(SHELL_DIR)/srcs/env/10_alias/2_alias_stack \
-	-I$(SHELL_DIR)/srcs/env/10_alias/3_alias_forbidden \
 	-I$(SHELL_DIR)/srcs/expander \
 	-I$(SHELL_DIR)/srcs/expander/expansion \
 	-I$(SHELL_DIR)/srcs/expander/field \

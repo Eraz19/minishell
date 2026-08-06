@@ -9,7 +9,6 @@
 		- `0_utils/ft_getpwnam.c`
 	- ⚠️ **TODO**:
 		- 🚨 `ast.h` ???
-		- supprimer `alias_forbidden`
 		- `3_builder/1_parser/4_parser_reduce.c`
 		- `3_builder/2_convert/10_convert_command.c`
 		- `4_runner/2_runner_handle_errors.c`

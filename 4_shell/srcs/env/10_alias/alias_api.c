@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:43 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:14:44 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 16:50:59 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,7 @@ t_error	alias_get(
 	err = alias_table_get(&alias->table, name->data, out_value);
 	if (err.type == ERR_NO)
 		err = alias_stack_push(&alias->stack, name);
-	if (err.type == ERR_NO)
-		err = alias_forbidden_set(&alias->forbidden, name->data);
 	return (err);
-}
-
-bool	alias_is_forbidden(t_alias *alias, const char *name)
-{
-	assert(alias != NULL);
-	assert(name != NULL);
-	return (alias_forbidden_contains(&alias->forbidden, name));
 }
 
 void	alias_pop_from_stack(t_alias *alias)

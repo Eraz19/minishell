@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:13 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:32:27 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 16:50:15 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,7 @@ void	env_free(t_params *params);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-bool	env_alias_is_forbidden(const t_string *name);
 t_error	env_build_envp(t_vector *dst_envp);
-void	env_clear_forbidden_aliases(void);
 t_error	env_get_cmd_cache(t_cmd_cache **out_cmd_cache_ptr);
 t_error	env_get_function(const char *name, t_function **out);
 t_error	env_get_last_status(int *out);
