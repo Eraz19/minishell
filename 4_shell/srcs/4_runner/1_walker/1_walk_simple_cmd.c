@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:28 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:28:05 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:03:32 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "cmd.h"
 #include "redirector.h"
 #include "xtrace.h"
-#include "logs.h"
 
 static inline t_error	walk_simple_cmd_exec(
 							t_cmd *cmd,
@@ -34,7 +33,6 @@ static inline t_error	walk_simple_cmd_exec(
 	}
 	else if (type == CMD_SPECIAL_BUILTIN)
 	{
-		fprintf(stderr, MAGENTA "############## SPECIAL BUILTIN %s (START) ##############\n" NC, cmd->name.data);
 		err = cmd->entry.data.special_builtin(
 				cmd->argc,
 				cmd->argv.data,

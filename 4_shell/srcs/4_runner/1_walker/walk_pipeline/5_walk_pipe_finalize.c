@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:16 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:23:17 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:04:03 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,6 @@ static inline t_error	walk_pipe_wait_all(t_pipe_run *run)
 	return (err);
 }
 
-/*
-pipefail off, ! off: status = status de la dernière command
-pipefail off, ! on: status = 0 si dernière command != 0, sinon 1
-pipefail on, ! off: status = 0 si toutes les commands ont status 0, sinon status de la dernière/rightmost command non-zero
-pipefail on, ! on: status = 0 si au moins une command a status non-zero, sinon 1
-*/
 t_error	walk_pipe_finalize(t_pipe_run *run)
 {
 	t_error	err;
@@ -63,7 +57,7 @@ t_error	walk_pipe_finalize(t_pipe_run *run)
 				run->exit_status = (int)(run->last_failure == 0);
 		}
 		else if (run->pipeline->negated == true)
-				run->exit_status = (int)(run->exit_status == 0);
+			run->exit_status = (int)(run->exit_status == 0);
 	}
 	return (err);
 }

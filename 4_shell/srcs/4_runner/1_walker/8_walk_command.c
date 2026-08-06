@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:43 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:30:32 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:03:19 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "walker_priv.h"
 #include "env.h"
 #include "redirector.h"
-#include "debug.h"
-#include <assert.h>
 
 static inline t_error	walk_command_dispatch(
 							t_runner *runner,
@@ -24,7 +22,6 @@ static inline t_error	walk_command_dispatch(
 {
 	t_error	err;
 
-	assert((command->type != AST_CMD_SIMPLE && command->type != AST_CMD_FUNCTION_DEF) || command->redirs.len == 0);
 	if (command->type == AST_CMD_SIMPLE)
 		return (walk_simple_cmd(runner, &command->data.simple, exit_status));
 	else if (command->type == AST_CMD_LIST)
@@ -45,7 +42,7 @@ static inline t_error	walk_command_dispatch(
 		return (err);
 	}
 	return (error_print(error(ERR_NOT_IMPLEMENTED), "walker", NULL,
-			"command type %s", ast_command_type_to_string(command->type)));
+			"command type %i", (int)command->type));
 }
 
 t_error	walk_command(t_runner *runner, t_ast_command *command, int *exit_status)

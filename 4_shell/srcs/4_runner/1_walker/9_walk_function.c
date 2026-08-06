@@ -6,14 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:46 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:30:47 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:02:53 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "walker.h"
 #include "redirector.h"
 #include "env.h"
-#include "logs.h"
 
 static inline t_error	walk_function_add_positional(
 							t_positionals *positionals,
@@ -67,9 +66,7 @@ t_error	walk_function(t_cmd *cmd, t_runner *runner, int *status)
 	err = redirect_start(&function->redirs, status);
 	if (err.type)
 		return (error_priorize(err, env_pop_positionals()));
-	fprintf(stderr, YELLOW "############## FUNCTION %s (START) ##############\n" NC, cmd->name.data);
 	err = walk_command(runner, &function->body, status);
-	fprintf(stderr, YELLOW "############## FUNCTION %s (STOP) ###############\n" NC, cmd->name.data);
 	if (err.type == ERR_RETURN)
 		err.type = ERR_NO;
 	err = error_priorize(err, redirect_stop());

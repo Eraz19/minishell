@@ -6,19 +6,17 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:41 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:30:13 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:02:38 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "walker_priv.h"
 #include "expander.h"
-#include <assert.h>	// DEBUG
-#include <stdio.h>		// DEBUG
 
-#define CITATION_1	"POSIX 2.9.4.3: case shall execute "
-#define CITATION_2	"the compound-list corresponding to the first pattern [...]"
-#define CITATION_3	" that is matched by the string resulting from [expansions]"
+#define CITATION	"POSIX 2.9.4.3: case shall execute \
+the compound-list corresponding to the first pattern [...]\
+ that is matched by the string resulting from [expansions]"
 
 static inline t_error	walk_case_expand(
 							t_token *token,
@@ -35,11 +33,7 @@ static inline t_error	walk_case_expand(
 	if (err.type)
 		return (err);
 	if (expansion.len != 1)
-		return (expansion_merge(
-				token->value.data,
-				CITATION_1 CITATION_2 CITATION_3,
-				&expansion,
-				dst));
+		return (expansion_merge(token->value.data, CITATION, &expansion, dst));
 	expanded = &((t_string *)expansion.data)[0];
 	string_take_string(dst, expanded);
 	expansion_free(&expansion);
@@ -109,7 +103,6 @@ static inline t_error	walk_case_exec(
 	bool		fallthrough;
 	t_error		err;
 
-	assert(case_clause->bodies.len == case_clause->fallthrough.len);
 	err = error(ERR_NO);
 	while (index < case_clause->bodies.len)
 	{
@@ -131,8 +124,6 @@ t_error	walk_case(t_runner *runner, t_ast_case *case_clause, int *exit_status)
 	bool			match;
 	t_error			err;
 
-	assert(case_clause->patterns.len == case_clause->bodies.len);
-	assert(case_clause->bodies.len == case_clause->fallthrough.len);
 	err = walk_case_expand(&case_clause->word, &word, exit_status);
 	if (err.type)
 		return (err);
