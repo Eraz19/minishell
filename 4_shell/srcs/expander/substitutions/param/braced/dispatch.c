@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "param_braced_.h"
+#include "param_expansion_.h"
 
 static bool	braced_triggered(const t_param_exp *param_exp)
 {
@@ -49,7 +50,12 @@ static t_error	braced_untriggered_action(
 t_error	braced_dispatch(t_expander *expander, t_param_exp *param_exp)
 {
 	if (param_exp->op_char == '#' || param_exp->op_char == '%')
+	{
+		if (!param_exp->param_is_set && param_nounset_error(expander,
+				param_exp->param_name.data).type)
+			return (word_free(&param_exp->operand_word), expander->err);
 		return (braced_remove(expander, param_exp));
+	}
 	if (braced_triggered(param_exp))
 		return (braced_triggered_action(expander, param_exp));
 	return (braced_untriggered_action(expander, param_exp));

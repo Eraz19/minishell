@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_expansion_life_cycle.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:42:55 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:59:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:06:35 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ t_error	expansion_load(t_expansion *out, t_fields *src)
 	expansion_init(out);
 	while (src->len > 0)
 	{
-		err = fields_fpop(&word, src);
-		if (err.type)
-			return (expansion_free(out), err);
+		fields_fpop(&word, src);
 		err = to_str(&str, &word, 0, word.len);
 		if (err.type)
 			return (word_free(&word), expansion_free(out), err);

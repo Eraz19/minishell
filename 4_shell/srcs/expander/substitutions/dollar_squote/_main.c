@@ -25,17 +25,13 @@ static t_error	dollar_squote_strip_opening(t_expander *expander)
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == '$' && !item.opt.escaped)
 	{
 		expander->err = word_remove(&expander->word, 0, 1);
 		if (expander->err.type)
 			return (expander->err);
-		expander->err = word_get(&item, &expander->word, 0);
-		if (expander->err.type)
-			return (expander->err);
+		word_get(&item, &expander->word, 0);
 	}
 	if (item.c == '\'' && !item.opt.escaped)
 		return (expander->err = word_remove(&expander->word, 0, 1));
@@ -49,9 +45,7 @@ static t_error	dollar_squote_next(
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == '\\' && !item.opt.escaped)
 		return (dollar_squote_escape(expander, opt, escapes));
 	if (dollar_squote_emit(expander, item.c, opt).type)
@@ -68,9 +62,7 @@ static t_error	dollar_squote_body(
 
 	while (expander->word.len > 0)
 	{
-		expander->err = word_get(&item, &expander->word, 0);
-		if (expander->err.type)
-			return (expander->err);
+		word_get(&item, &expander->word, 0);
 		if (item.opt.quoted != CONTEXT_DOLLAR_SQUOTE)
 			break ;
 		if (item.c == '\'' && !item.opt.escaped)
@@ -87,9 +79,7 @@ t_error	dollar_squote_expansion(t_expander *expander)
 	t_word_item_opt	opt;
 	t_hashmap		escapes;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	opt = dollar_squote_result_opt(item.opt);
 	if (dollar_squote_strip_opening(expander).type)
 		return (expander->err);

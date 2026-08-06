@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:46:15 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:46:16 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 00:23:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,13 @@ t_error	extract_arith_word(t_expander *expander, t_word *word)
 	size_t		len;
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	i = 0;
 	len = item.opt.context_len;
 	word_init(word);
 	while (i < len)
 	{
-		expander->err = word_fpop(&item, &expander->word);
-		if (expander->err.type)
-			return (word_free(word), expander->err);
+		word_fpop(&item, &expander->word);
 		if (i > 2 && i < len - 2)
 		{
 			item.opt.quoted = CONTEXT_DQUOTE;
@@ -71,8 +67,12 @@ t_error	build_arith_expander(
 t_error	compute_arith_expression(t_expander *expander, t_expansion *expansion)
 {
 	(void)expansion;
-	expander->err = error_print(error(ERR_NOT_IMPLEMENTED),
-			__func__, NULL, NULL);
+	expander->err = error_print(
+			error(ERR_NOT_IMPLEMENTED),
+			"expander",
+			"arithmetic expansion not implemented",
+			NULL, NULL);
+	expander->err.type = ERR_INTERNAL;
 	return (expander->err);
 }
 

@@ -22,9 +22,9 @@ static inline t_error	redirect_expand_word(
 		return (err);
 	else if (expansion.len != 1)
 		return (expansion_merge(token->value.data, CITATION, &expansion, out));
-	err = expansion_take(&expansion, 0, out);
+	expansion_take(&expansion, 0, out);
 	expansion_free(&expansion);
-	return (err);
+	return (error(ERR_NO));
 }
 
 t_error	redirect_expand(t_redir *redir, int *exit_status)

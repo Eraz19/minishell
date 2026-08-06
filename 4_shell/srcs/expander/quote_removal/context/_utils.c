@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:45:48 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:45:49 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:19:43 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h> // DEBUG
 #include "quote_removal_context_.h"
 
 static t_error	context_escape(
@@ -19,9 +20,7 @@ static t_error	context_escape(
 {
 	t_word_item	escaped_item;
 
-	expander->err = word_fpop(&escaped_item, args.word);
-	if (expander->err.type)
-		return (expander->err);
+	word_fpop(&escaped_item, args.word);
 	if (!args.is_in_whitelist(escaped_item.c))
 	{
 		expander->err = word_push(args.word_expanded, item);
@@ -35,20 +34,20 @@ t_error	context_scan(t_expander *expander, t_context_args args)
 {
 	t_word_item	item;
 
-	while (true)
+	while (args.word->len > 0)
 	{
-		expander->err = word_fpop(&item, args.word);
-		if (expander->err.type)
-			return (expander->err);
+		word_fpop(&item, args.word);
 		if (!item.opt.is_expand_res && args.is_end != NULL
 			&& args.is_end(item.c, NULL))
 			return (expander->err);
 		if (!item.opt.is_expand_res && item.c == '\\'
-			&& args.is_in_whitelist != NULL)
+			&& args.is_in_whitelist != NULL && args.word->len > 0)
 			expander->err = context_escape(expander, args, item);
 		else
 			expander->err = word_push(args.word_expanded, item);
 		if (expander->err.type)
 			return (expander->err);
 	}
+	assert(args.is_end == NULL);
+	return (expander->err);
 }

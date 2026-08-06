@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   param_braced_.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:47:16 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:47:17 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 14:20:35 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARAM_BRACED__H
 # define PARAM_BRACED__H
 
+# include "env.h"
 # include "expander_.h"
 
 /**
@@ -61,7 +62,9 @@ typedef struct s_param_exp
  * @var s_positional_exp::operand_word The unexpanded "word" following the
  *                                     operator.
  * @var s_positional_exp::is_triggered True when there are no positional
- *                                     parameters (the operator's alternate
+ *                                     parameters — or, for the ':op'
+ *                                     forms, when their joined value is
+ *                                     null (the operator's alternate
  *                                     branch applies).
  */
 typedef struct s_positional_exp
@@ -81,7 +84,8 @@ typedef struct s_positional_exp
  * @note Diagnostic funnel of the braced forms: an
  *       @c ERR_PARAM_BAD_SUBSTITUTION or @c ERR_VAR_INVALID_NAME escaping
  *       a handler is printed here with the whole construct text, the
- *       most specific context available.
+ *       most specific context available, then requalified in place to
+ *       @c ERR_POSIX_EXPANSION.
  * @param expander Expander state holding the input word at the ${ token.
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
  *         success.
@@ -122,7 +126,11 @@ t_error	expand_braced_length(
 			t_word_item_opt opt);
 
 /**
- * @brief Handles the positional forms ${@ ...} and ${* ...}.
+ * @brief Handles the positional forms ${@ ...} and ${* ...}: bare, the
+ *        '-'/'='/'?'/'+' operators (POSIX leaves them unspecified for @
+ *        and *; documented choice: '=' is rejected, the others apply to
+ *        the list with the ':' null test on the joined value), and the
+ *        '#'/'##'/'%'/'%%' operators applied to each positional.
  *
  * @param expander Expander state positioned on the '@' or '*' item.
  * @param body_len Number of items between the braces.
@@ -137,9 +145,11 @@ t_error	expand_braced_positional(
 			t_word_item_opt origin);
 
 /**
- * @brief Applies the operator of a ${name op word} expansion, selecting the
- *        triggered branch (parameter unset, or null for a ':op' form) or the
- *        untriggered branch accordingly.
+ * @brief Applies the operator of a ${name op word} expansion: routes '#'/'%'
+ *        to @ref braced_remove (failing first under set -u when the
+ *        parameter is unset, see @ref param_nounset_error), then selects
+ *        the triggered branch (parameter unset, or null for a ':op' form)
+ *        or the untriggered branch accordingly.
  *
  * @param expander Expander state receiving the produced result.
  * @param param_exp Fully parsed working state of the expansion.
@@ -210,7 +220,8 @@ t_error	braced_finish(
  * @param op Receives the operator character.
  * @param op_items Receives the number of items the operator spans (1 or 2).
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
- *         success, ERR_NOT_IMPLEMENTED for an unsupported operator.
+ *         success, ERR_PARAM_BAD_SUBSTITUTION for an invalid operator —
+ *         including the ':#' and ':%' forms, which POSIX does not define.
  */
 t_error	parse_braced_op(
 			t_expander *expander,
@@ -220,7 +231,9 @@ t_error	parse_braced_op(
 
 /**
  * @brief Moves the first operand_len items of the input word into a freshly
- *        initialised operand word.
+ *        initialised operand word, renumbering their raw offsets (opt.i)
+ *        from 0 so position rules — the tilde prefix of the word operand
+ *        (POSIX 2.6.2) — apply within the operand.
  *
  * @param expander Expander state whose input word is consumed.
  * @param operand_len Number of leading items to take.
@@ -249,8 +262,14 @@ t_error	braced_operand_str(
 			t_string *out);
 
 /**
- * @brief Expands the operand word and pushes the result of the expansion.
+ * @brief Expands the operand word and pushes the result of the expansion,
+ *        keeping the fields separate when a $@ inside produced several.
  *
+ * @note Single-field results are quote-removed locally (2.6.2 in-word
+ *       quote removal, needed by pipelines without the final stage) and
+ *       stamped is_expand_res; multi-field results defer quote removal to
+ *       the final stage — where the synthetic field-boundary quotes pair
+ *       with the construct's enclosing quotes — and keep their item flags.
  * @param expander Expander state whose result word is extended.
  * @param operand Operand word to expand (freed by this call).
  * @param opt Quoting/context to stamp onto the produced items.
@@ -288,9 +307,10 @@ t_error	braced_use_value(t_expander *expander,
  * @param operand Operand word to expand and assign (freed by this call).
  * @return The resulting error descriptor (expander->err); .type is ERR_NO on
  *         success, ERR_VAR_INVALID_NAME for a non-assignable name (printed
- *         by @ref expand_braced with the construct text), ERR_VAR_READ_ONLY
- *         (printed with the variable name) for a readonly variable,
- *         ERR_SHELL_NOT_FOUND or ERR_LIBC from the assignment.
+ *         by @ref expand_braced with the construct text),
+ *         ERR_POSIX_ASSIGNMENT (printed by the env module) for a readonly
+ *         variable, ERR_INTERNAL (printed by the env module) or
+ *         ERR_LIBC from the assignment.
  */
 t_error	braced_assign(t_expander *expander,
 			const t_string *name,
@@ -305,7 +325,7 @@ t_error	braced_assign(t_expander *expander,
  * @param name Name of the unset/null parameter.
  * @param operand Operand word used as the error message (freed by this call).
  * @return The resulting error descriptor (expander->err), of type
- *         ERR_PARAM_NULL_OR_UNSET.
+ *         ERR_POSIX_EXPANSION (printed then requalified in place).
  */
 t_error	braced_error(t_expander *expander,
 			const t_string *name,
@@ -377,5 +397,52 @@ t_error	braced_build_pattern(
  *         success.
  */
 t_error	braced_remove(t_expander *expander, t_param_exp *param_exp);
+
+/**
+ * @brief Removes the prefix of @p value matching @p pattern: the largest
+ *        match for '##', the smallest for '#' (POSIX 2.6.2); no match
+ *        keeps the whole value.
+ *
+ * @param value Value to strip (borrowed, read-only).
+ * @param pattern Rendered pattern C-string, from @ref braced_build_pattern
+ *                (borrowed, read-only).
+ * @param largest True for the greedy '##' form.
+ * @param out Stripped copy, initialized by the function (borrowed).
+ * @return ERR_LIBC on allocation failure, ERR_NO on success.
+ */
+t_error	remove_prefix(
+			const t_string *value,
+			const char *pattern,
+			bool largest,
+			t_string *out);
+
+/**
+ * @brief Removes the suffix of @p value matching @p pattern: the largest
+ *        match for '%%', the smallest for '%' (POSIX 2.6.2); no match
+ *        keeps the whole value.
+ *
+ * @param value Value to strip (borrowed, read-only).
+ * @param pattern Rendered pattern C-string, from @ref braced_build_pattern
+ *                (borrowed, read-only).
+ * @param largest True for the greedy '%%' form.
+ * @param out Stripped copy, initialized by the function (borrowed).
+ * @return ERR_LIBC on allocation failure, ERR_NO on success.
+ */
+t_error	remove_suffix(
+			const t_string *value,
+			const char *pattern,
+			bool largest,
+			t_string *out);
+
+t_error	braced_positional_remove(
+			t_expander *expander,
+			t_positional_exp *positional_exp,
+			bool largst);
+
+bool	positionals_all_empty(const t_positionals *params);
+
+t_error	braced_positional_apply(
+			t_expander *expander,
+			t_positional_exp *positional_exp);
 
 #endif

@@ -67,8 +67,9 @@ typedef struct s_context_args
  *          @c '\'' (see @ref quote_remove_char).
  * @param expander Expander state whose @c word is scanned into
  *                 @c word_exp (borrowed).
- * @return @c ERR_EMPTY_STACK if the closing quote is missing,
- *         @c ERR_LIBC if a pop or push fails, @c ERR_NO on success.
+ * @note A missing closing quote is a lexer-guarantee violation, caught
+ *       by assertion.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	context_dollar_squote(t_expander *expander);
 
@@ -80,9 +81,9 @@ t_error	context_dollar_squote(t_expander *expander);
  *
  * @param expander Expander state whose @c word is scanned into
  *                 @c word_exp (borrowed).
- * @return @c ERR_EMPTY_STACK if the closing quote is missing or a
- *         backslash ends the word, @c ERR_LIBC if a pop or push fails,
- *         @c ERR_NO on success.
+ * @note A missing closing quote or a dangling backslash is a
+ *       lexer-guarantee violation, caught by assertion.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	context_dquote(t_expander *expander);
 
@@ -98,7 +99,7 @@ t_error	context_dquote(t_expander *expander);
  * @param expander Expander state whose @c word may provide the escaped
  *                 item (borrowed).
  * @param item Already popped item to forward (copied by value).
- * @return @c ERR_LIBC if a pop or push fails, @c ERR_NO on success.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	context_heredoc(t_expander *expander, t_word_item item);
 
@@ -114,9 +115,9 @@ t_error	context_heredoc(t_expander *expander, t_word_item item);
  *
  * @param expander Expander state recording the error (borrowed).
  * @param args Scan rules (copied by value; its pointers stay borrowed).
- * @return @c ERR_EMPTY_STACK if the word ends before @c args.is_end
- *         matches or a backslash has nothing to escape, @c ERR_LIBC if
- *         a pop or push fails, @c ERR_NO on success.
+ * @note A word ending before @c args.is_end matches (or on a dangling
+ *       backslash) is a lexer-guarantee violation, caught by assertion.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	context_scan(t_expander *expander, t_context_args args);
 
@@ -127,8 +128,9 @@ t_error	context_scan(t_expander *expander, t_context_args args);
  *
  * @param expander Expander state whose @c word is scanned into
  *                 @c word_exp (borrowed).
- * @return @c ERR_EMPTY_STACK if the closing quote is missing,
- *         @c ERR_LIBC if a pop or push fails, @c ERR_NO on success.
+ * @note A missing closing quote is a lexer-guarantee violation, caught
+ *       by assertion.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	context_squote(t_expander *expander);
 

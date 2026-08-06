@@ -85,9 +85,7 @@ t_error	dollar_squote_escape(
 		return (expander->err);
 	if (expander->word.len == 0)
 		return (dollar_squote_emit(expander, '\\', opt));
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == 'c')
 		return (dollar_squote_control_escape(expander, opt));
 	if (dollar_squote_is_numeric(item.c))

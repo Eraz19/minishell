@@ -14,12 +14,12 @@
 
 bool	eval_range(const char *pattern, char c, size_t *i)
 {
-	char	end;
-	char	start;
+	unsigned char	end;
+	unsigned char	start;
 
-	start = pattern[*i];
-	end = pattern[*i + 2];
-	if (start <= c && c <= end)
+	start = (unsigned char)pattern[*i];
+	end = (unsigned char)pattern[*i + 2];
+	if (start <= (unsigned char)c && (unsigned char)c <= end)
 		return ((*i) += 3, true);
 	else
 		return ((*i) += 3, false);

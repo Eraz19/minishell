@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:47:04 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:47:05 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:23:53 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 #include "param_braced_.h"
+#include "param_expansion_.h"
 
 static t_word_item_opt	braced_result_opt(t_word_item_opt in)
 {
@@ -40,9 +41,7 @@ t_error	braced_expect_close(t_expander *expander)
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c != '}')
 		return (expander->err = error(ERR_PARAM_BAD_SUBSTITUTION));
 	return (expander->err);
@@ -53,6 +52,8 @@ t_error	braced_lookup(t_expander *expander, const t_string *name, t_string *out)
 	expander->err = env_get_from_const(name->data, out);
 	if (expander->err.type == ERR_VAR_NOT_FOUND)
 	{
+		if (param_nounset_error(expander, name->data).type)
+			return (expander->err);
 		if (!string_init(out, 0, "", -1))
 			return (expander->err = error_sys());
 		return (expander->err = error(ERR_NO));

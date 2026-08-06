@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:35 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:57:44 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:21:20 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ t_error	forward_word_item(t_word *word_exp, t_word *word)
 	t_error		err;
 	t_word_item	item;
 
-	err = word_fpop(&item, word);
-	if (err.type)
-		return (err);
+	word_fpop(&item, word);
 	err = word_push(word_exp, item);
 	if (err.type)
 		return (err);
@@ -45,21 +43,21 @@ t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs)
 	string_init(out, 0, NULL, 0);
 	if (in->len == 0)
 		return (error(ERR_NO));
+	err = error(ERR_NO);
 	i = 0;
 	while (in->len > 0)
 	{
-		err = expansion_fpop(&str, in);
-		if (err.type)
-			return (string_free(out), err);
-		if (i != 0 && !string_append_n(out, ifs->data, 1))
+		expansion_fpop(&str, in);
+		if (i != 0 && ifs->len > 0 && !string_append_n(out, ifs->data, 1))
 			err = error_sys();
 		if (!err.type && !string_append(out, &str))
 			err = error_sys();
+		string_free(&str);
 		if (err.type)
-			return (string_free(&str), string_free(out), err);
+			return (string_free(out), err);
 		++i;
 	}
-	return (string_free(&str), err);
+	return (err);
 }
 
 t_error	prepare_str_for_expansion(
@@ -75,6 +73,7 @@ t_error	prepare_str_for_expansion(
 	err = shell_get_new_scanner(&scanner, SCAN_MODE_STRING, src->data);
 	if (err.type)
 		return (err);
+	token_init(&token);
 	scan_args = none_context_rules(&scanner->lexer);
 	if (scanner_scan_word(scanner, &token, scan_args).type)
 	{

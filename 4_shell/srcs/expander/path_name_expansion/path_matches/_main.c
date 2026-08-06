@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:45:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:45:28 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:29:16 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h> // DEBUG
 #include "path_matches_.h"
 
 t_error	path_matches_push(t_path_matches *matches, t_string *match)
@@ -19,14 +20,10 @@ t_error	path_matches_push(t_path_matches *matches, t_string *match)
 	return (error(ERR_NO));
 }
 
-t_error	path_matches_get(t_string **out, t_path_matches *matches, size_t i)
+void	path_matches_get(t_string **out, t_path_matches *matches, size_t i)
 {
-	if (matches->len == 0)
-		return (error(ERR_EMPTY_STACK));
-	if (i >= matches->len)
-		return (error(ERR_INDEX_OUT_OF_BOUND));
+	assert(matches->len > 0 && i < matches->len);
 	*out = &((t_string *)matches->data)[i];
-	return (error(ERR_NO));
 }
 
 t_error	add_path_comp(t_path_matches *out, t_path_comp *src, bool first)
@@ -38,9 +35,7 @@ t_error	add_path_comp(t_path_matches *out, t_path_comp *src, bool first)
 	i = 0;
 	while (i < out->len)
 	{
-		err = path_matches_get(&match, out, i);
-		if (err.type)
-			return (err);
+		path_matches_get(&match, out, i);
 		if (!first && !string_append_n(match, "/", 1))
 			return (error_sys());
 		err = path_match_append(match, src->pattern.data);
@@ -62,9 +57,7 @@ t_error	add_path_comp_lookup(t_path_matches *out, t_path_comp *src, bool first)
 	path_matches_init(&new_matches);
 	while (i < out->len)
 	{
-		err = path_matches_get(&match, out, i);
-		if (err.type)
-			return (vector_free(&new_matches, string_free_void), err);
+		path_matches_get(&match, out, i);
 		err = add_lookup_dir_matching(&new_matches, match, src, first);
 		if (err.type)
 			return (vector_free(&new_matches, string_free_void), err);

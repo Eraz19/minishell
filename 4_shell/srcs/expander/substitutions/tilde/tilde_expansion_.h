@@ -32,11 +32,10 @@
  *        user is unknown, or when @c HOME is unset for a bare tilde.
  *
  * @param expander Expander state (borrowed).
- * @return @c ERR_LIBC on allocation failure; @c ERR_INTERRUPTED when a
- *         signal interrupts the password-file lookup;
- *         @c ERR_SHELL_NOT_FOUND if the shell parameters are
- *         unavailable; @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND
- *         on a word inconsistency; @c ERR_NO on success.
+ * @return @c ERR_LIBC on allocation or password-file read failure;
+ *         @c ERR_INTERNAL (printed by the env module) if the shell
+ *         parameters are unavailable; @c ERR_NO on success (word
+ *         inconsistencies are caught by assertion).
  */
 t_error	expand_user_path(t_expander *expander);
 

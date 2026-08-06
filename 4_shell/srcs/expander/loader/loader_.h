@@ -89,7 +89,7 @@ void	loader_init(t_loader *loader);
  *
  * @param loader Already initialized loader state (borrowed).
  * @param args Input of the run, left untouched (borrowed, read-only).
- * @return @c ERR_INDEX_OUT_OF_BOUND if an item lookup fails while
+ * @return asserts if an item lookup fails while
  *         duplicating the stack, @c ERR_LIBC on allocation failure,
  *         @c ERR_NO on success.
  */
@@ -146,9 +146,9 @@ t_error	loader_consume(t_loader *loader, bool escaped);
  * @note Resets @c quoting and @c local_quoting to @c CONTEXT_NONE first:
  *       the read offset is assumed to be at top level.
  * @param loader Loaded loader state (borrowed).
- * @return @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a context
- *         stack inconsistency, @c ERR_LIBC on allocation or push
- *         failure, @c ERR_NO on success.
+ * @return @c ERR_LIBC on allocation or push failure, @c ERR_NO on
+ *         success (context stack inconsistencies are caught by
+ *         assertion).
  */
 t_error	loader_prepare_word(t_loader *loader);
 
@@ -162,9 +162,9 @@ t_error	loader_prepare_word(t_loader *loader);
  * @warning Call only when @ref is_quoting_start is true: the bottom
  *          pending context is popped and freed unconditionally.
  * @param loader Loaded loader state (borrowed).
- * @return @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a context
- *         stack inconsistency, @c ERR_LIBC on allocation or push
- *         failure, @c ERR_NO on success.
+ * @return @c ERR_LIBC on allocation or push failure, @c ERR_NO on
+ *         success (context stack inconsistencies are caught by
+ *         assertion).
  */
 t_error	loader_quoted(t_loader *loader);
 

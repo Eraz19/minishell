@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   substitute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:47:32 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 18:52:04 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:15:39 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_error	braced_error(
 				error(ERR_PARAM_NULL_OR_UNSET),
 				name->data,
 				NULL, NULL);
+		expander->err.type = ERR_POSIX_EXPANSION;
 		return (expander->err);
 	}
 	expander->err = braced_operand_str(expander, operand, &msg);
@@ -44,6 +45,7 @@ t_error	braced_error(
 		return (expander->err);
 	expander->err = error_print(error(ERR_PARAM_NULL_OR_UNSET),
 			name->data, msg.data, NULL, NULL);
+	expander->err.type = ERR_POSIX_EXPANSION;
 	return (string_free(&msg), expander->err);
 }
 
@@ -80,8 +82,6 @@ t_error	braced_assign(
 	if (expander->err.type)
 		return (expander->err);
 	expander->err = env_set_variable(name, &operand_str, false, false);
-	if (expander->err.type == ERR_VAR_READ_ONLY)
-		expander->err = error_print(expander->err, name->data, NULL, NULL);
 	if (expander->err.type)
 		return (string_free(&operand_str), expander->err);
 	expander->err = braced_push_value(expander, &operand_str, opt);

@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:39 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 15:36:06 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 22:26:09 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ t_error	expand_str(
 
 	args = (t_expander_args){0};
 	if (src->data == NULL || src->len == 0)
-		return (expansion_init(out), error(ERR_NO));
+		return (expansion_init(out), requalify_expander_error(error(ERR_NO)));
 	if (!string_dup(&args.value, src))
-		return (error_sys());
+		return (requalify_expander_error(error_sys()));
 	err = prepare_src(&args, &contexts, &ast_vec, flags);
 	if (err.type)
 		return (string_free(&args.ifs), string_free(&args.value),
-			expander_error_qualify(err));
+			requalify_expander_error(err));
 	args.ast_vec = &ast_vec;
 	args.contexts = &contexts;
 	args.assignment_offset = -1;
 	args.exit_status = exit_status;
 	err = run_expansion(out, &args);
-	return (expander_args_free(&args), expander_error_qualify(err));
+	return (expander_args_free(&args), requalify_expander_error(err));
 }
 
 t_error	expand_str_merged(
@@ -56,19 +56,20 @@ t_error	expand_str_merged(
 
 	args = (t_expander_args){0};
 	if (src->data == NULL || src->len == 0)
-		return (string_init(out, 0, NULL, 0), error(ERR_NO));
+		return (string_init(out, 0, NULL, 0),
+			requalify_expander_error(error(ERR_NO)));
 	if (!string_dup(&args.value, src))
-		return (error_sys());
+		return (requalify_expander_error(error_sys()));
 	err = prepare_src(&args, &contexts, &ast_vec, flags);
 	if (err.type)
 		return (string_free(&args.ifs), string_free(&args.value),
-			expander_error_qualify(err));
+			requalify_expander_error(err));
 	args.ast_vec = &ast_vec;
 	args.contexts = &contexts;
 	args.assignment_offset = -1;
 	args.exit_status = exit_status;
 	err = run_and_merge_expansion(out, &args);
-	return (expander_args_free(&args), expander_error_qualify(err));
+	return (expander_args_free(&args), requalify_expander_error(err));
 }
 
 t_error	expand_token(
@@ -82,7 +83,7 @@ t_error	expand_token(
 
 	err = get_ifs(&args.ifs);
 	if (err.type)
-		return (expander_error_qualify(err));
+		return (requalify_expander_error(err));
 	args.flags = flags;
 	args.value = src->value;
 	args.contexts = &src->contexts;
@@ -90,7 +91,7 @@ t_error	expand_token(
 	args.assignment_offset = src->assignment_offset;
 	args.ast_vec = &src->ast_vector;
 	err = run_expansion(out, &args);
-	return (string_free(&args.ifs), expander_error_qualify(err));
+	return (string_free(&args.ifs), requalify_expander_error(err));
 }
 
 t_error	expand_token_merged(
@@ -104,7 +105,7 @@ t_error	expand_token_merged(
 
 	err = get_ifs(&args.ifs);
 	if (err.type)
-		return (expander_error_qualify(err));
+		return (requalify_expander_error(err));
 	args.flags = flags;
 	args.value = src->value;
 	args.contexts = &src->contexts;
@@ -112,5 +113,5 @@ t_error	expand_token_merged(
 	args.assignment_offset = src->assignment_offset;
 	args.ast_vec = &src->ast_vector;
 	err = run_and_merge_expansion(out, &args);
-	return (string_free(&args.ifs), expander_error_qualify(err));
+	return (string_free(&args.ifs), requalify_expander_error(err));
 }

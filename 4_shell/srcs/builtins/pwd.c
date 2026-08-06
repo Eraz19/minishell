@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:28:39 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/06 14:36:12 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include <sys/stat.h>
 #include <unistd.h>
@@ -6,6 +18,7 @@
 #include "env.h"
 #include "utils.h"
 #include "posix_helpers.h"
+#include "builtin_error.h"
 
 static t_error	pwd_process_options(int argc, char **argv, char *mode)
 {
@@ -103,12 +116,5 @@ t_error	builtin_pwd(int argc, char **argv, char **envp, int *exit_status)
 		}
 	}
 	*exit_status = (int)err.type;
-	if (err.type)
-		err = error_print(err, argv[0], NULL, NULL);
-	if (err.type == ERR_INVALID_USAGE || err.type == ERR_POSIX_WRITE
-		|| err.type == ERR_UB)
-		err.type = ERR_BUILTIN;
-	else if (err.type == ERR_SHELL_NOT_FOUND)
-		err.type = ERR_INTERNAL;
-	return (err);
+	return (builtin_print_and_qualify(argv[0], err, false, exit_status));
 }

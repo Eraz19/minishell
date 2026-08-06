@@ -35,9 +35,7 @@ t_error	path_comps_load(t_path_comps *comps, const t_word *src)
 	path_comp_init(&glob_comp);
 	while (i < src->len)
 	{
-		err = word_get(&item, src, i);
-		if (err.type)
-			return (path_comp_free(&glob_comp), path_comps_free(comps), err);
+		word_get(&item, src, i);
 		if (item.c == '/')
 			err = path_comp_emit(comps, &glob_comp);
 		else

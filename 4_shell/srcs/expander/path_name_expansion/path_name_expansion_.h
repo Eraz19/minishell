@@ -41,10 +41,10 @@
  * @warning On failure the fields produced so far are freed and
  *          @c expander->fields is left partially consumed.
  * @param expander Loaded expander state (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND if the shell parameters are
- *         unavailable; @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND
- *         on a field or word read inconsistency; @c ERR_LIBC on
- *         allocation failure; @c ERR_NO on success.
+ * @return @c ERR_INTERNAL (printed by the env module) if the shell
+ *         parameters are unavailable; @c ERR_LIBC on allocation
+ *         failure; @c ERR_NO on success (read inconsistencies are
+ *         caught by assertion).
  */
 t_error	path_name_expansion(t_expander *expander);
 

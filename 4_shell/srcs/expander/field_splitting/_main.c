@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:43:44 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:43:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:07:00 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ static t_error	field_splitting_char(t_expander *expander)
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (!is_delim(item, &expander->ifs))
 		return (consume_word_item(expander, item));
 	if (is_it_white_space_ifs(item.c))
@@ -28,9 +26,7 @@ static t_error	field_splitting_char(t_expander *expander)
 
 static t_error	field_splitting_word(t_expander *expander)
 {
-	expander->err = fields_fpop(&expander->word, &expander->fields);
-	if (expander->err.type)
-		return (expander->err);
+	fields_fpop(&expander->word, &expander->fields);
 	word_init(&expander->word_exp);
 	while (expander->word.len > 0)
 	{

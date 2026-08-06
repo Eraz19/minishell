@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word_.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:26 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:48:27 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:22:14 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,27 +125,24 @@ t_error		word_dup(t_word *out, t_word *src);
 
 /**
  * @ingroup expander_word
- * @brief Removes the first item of @p word and hands it to the caller.
+ * @brief Moves the first item of @p word into @p out.
  *
- * @param out Set to the removed item (borrowed).
- * @param word Already initialized word (borrowed).
- * @return @c ERR_EMPTY_STACK if @p word is empty, @c ERR_LIBC if the
- *         removal fails, @c ERR_NO on success.
+ * @warning @p word must not be empty (asserted).
+ * @param out Receives the item (borrowed).
+ * @param word Already initialized, non-empty word (borrowed).
  */
-t_error		word_fpop(t_word_item *out, t_word *word);
+void		word_fpop(t_word_item *out, t_word *word);
 
 /**
  * @ingroup expander_word
- * @brief Reads the item at @p index without removing it.
+ * @brief Copies item @p index of @p word into @p out.
  *
- * @param out Set to a copy of the item (borrowed).
- * @param word Already initialized word (borrowed, read-only).
- * @param index Position of the item to read.
- * @return @c ERR_EMPTY_STACK if @p word is empty,
- *         @c ERR_INDEX_OUT_OF_BOUND if @p index is past the last item,
- *         @c ERR_NO on success.
+ * @warning @p index must be below @c word->len (asserted).
+ * @param out Receives the item copy (borrowed).
+ * @param word Source word (borrowed, read-only).
+ * @param index Item index.
  */
-t_error		word_get(t_word_item *out, const t_word *word, size_t index);
+void		word_get(t_word_item *out, const t_word *word, size_t index);
 
 /**
  * @ingroup expander_word
@@ -203,12 +200,13 @@ t_error		from_str(t_word *out, const t_string *src, t_word_item_opt opt);
  * @brief Extracts @p len characters of @p src starting at @p start into a
  *        string.
  *
+ * @note A zero @p len always yields an empty string, whatever @p start.
  * @param out String initialized by the function and freed on failure
  *            (borrowed).
  * @param src Source word (borrowed, read-only).
  * @param start Position of the first character to extract.
  * @param len Number of characters to extract.
- * @return @c ERR_INDEX_OUT_OF_BOUND if the range is out of @p src,
+ * @return asserts if the range is out of @p src;
  *         @c ERR_LIBC on allocation failure, @c ERR_NO on success.
  */
 t_error		to_str(t_string *out, const t_word *src, size_t start, size_t len);

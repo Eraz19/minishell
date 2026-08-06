@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 18:58:04 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:26:00 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ t_error	extract_username(t_expander *expander, t_string *out)
 	i = 0;
 	while (i + 1 < expander->word.len)
 	{
-		expander->err = word_get(&item, &expander->word, i + 1);
-		if (expander->err.type)
-			return (expander->err);
+		word_get(&item, &expander->word, i + 1);
 		if (item.opt.quoted != CONTEXT_NONE)
 			return (expander->err = error(ERR_QUOTED_TILDE));
 		if (item.c == '/')
@@ -99,9 +97,7 @@ t_error	replace_with_path(
 	t_word_item		item;
 	t_word			path_word;
 
-	expander->err = word_fpop(&item, &expander->word);
-	if (expander->err.type)
-		return (expander->err);
+	word_fpop(&item, &expander->word);
 	opt = item.opt;
 	opt.quoted = CONTEXT_DQUOTE;
 	opt.is_expand_res = true;

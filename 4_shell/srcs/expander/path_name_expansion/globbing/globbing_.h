@@ -45,9 +45,9 @@
  * @param globbed Set to true only when at least one matched field was
  *                emitted: the caller must then drop the original word
  *                (borrowed).
- * @return @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a
- *         container read inconsistency, @c ERR_LIBC on allocation
- *         failure, @c ERR_NO on success (zero matches included).
+ * @return @c ERR_LIBC on allocation failure, @c ERR_NO on success
+ *         (zero matches included; container read inconsistencies are
+ *         caught by assertion).
  */
 t_error	path_globbing(t_expander *expander, t_path_comps *src, bool *globbed);
 

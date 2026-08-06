@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:46:05 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:46:06 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:20:11 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static t_error	quote_removal_quoted(t_expander *expander, t_word_item item)
 		context_heredoc(expander, item);
 	else if (item.opt.quoted == CONTEXT_DOLLAR_SQUOTE)
 	{
-		expander->err = word_get(&next, &expander->word, 0);
-		if (expander->err.type)
-			return (expander->err);
+		if (expander->word.len == 0)
+			return (expander->err = word_push(&expander->word_exp, item));
+		word_get(&next, &expander->word, 0);
 		if (next.c != '\'')
 			return (expander->err = word_push(&expander->word_exp, item));
 		expander->err = word_remove(&expander->word, 0, 1);
@@ -57,9 +57,7 @@ t_error	quote_remove_char(t_expander *expander)
 {
 	t_word_item	item;
 
-	expander->err = word_fpop(&item, &expander->word);
-	if (expander->err.type)
-		return (expander->err);
+	word_fpop(&item, &expander->word);
 	if (item.opt.is_expand_res)
 		expander->err = word_push(&expander->word_exp, item);
 	else if (item.opt.quoted == CONTEXT_NONE)
@@ -70,9 +68,7 @@ t_error	quote_remove_char(t_expander *expander)
 		{
 			if (expander->word.len == 0)
 				return (expander->err = error(ERR_NO));
-			expander->err = word_fpop(&item, &expander->word);
-			if (expander->err.type)
-				return (expander->err);
+			word_fpop(&item, &expander->word);
 			expander->err = word_push(&expander->word_exp, item);
 		}
 	}
@@ -83,9 +79,7 @@ t_error	quote_remove_char(t_expander *expander)
 
 static t_error	quote_removal_word(t_expander *expander)
 {
-	expander->err = fields_fpop(&expander->word, &expander->fields);
-	if (expander->err.type)
-		return (expander->err);
+	fields_fpop(&expander->word, &expander->fields);
 	word_init(&expander->word_exp);
 	while (expander->word.len > 0)
 	{

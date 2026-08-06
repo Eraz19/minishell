@@ -42,9 +42,9 @@
  *       remaining input stays in @c expander->fields for
  *       @ref expander_free.
  * @param expander Loaded expander state (borrowed).
- * @return @c ERR_EMPTY_STACK if a word ends inside a quoting context or
- *         on a dangling escape, @c ERR_LIBC if a pop or push fails,
- *         @c ERR_NO on success.
+ * @note A word ending inside a quoting context is a lexer-guarantee
+ *       violation, caught by assertion.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	quote_removal(t_expander *expander);
 
@@ -66,9 +66,9 @@ t_error	quote_removal(t_expander *expander);
  *       is handled individually by @ref context_heredoc.
  * @param expander Expander state whose @c word head is consumed
  *                 (borrowed).
- * @return @c ERR_EMPTY_STACK if @c expander->word is empty or ends
- *         inside a quoting context, @c ERR_LIBC if a pop or push fails,
- *         @c ERR_NO on success.
+ * @note An empty word or a word ending inside a quoting context is a
+ *       caller/lexer-guarantee violation, caught by assertion.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	quote_remove_char(t_expander *expander);
 

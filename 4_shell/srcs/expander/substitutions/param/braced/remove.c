@@ -24,16 +24,17 @@ bool	braced_op_is_doubled(const t_word *word, char op)
 
 	if (op != '#' && op != '%')
 		return (false);
-	if (word_get(&second, word, 1).type)
+	if (word->len < 2)
 		return (false);
+	word_get(&second, word, 1);
 	return (second.c == op);
 }
 
-static t_error	remove_prefix(
-					const t_string *value,
-					const char *pattern,
-					bool largest,
-					t_string *out)
+t_error	remove_prefix(
+			const t_string *value,
+			const char *pattern,
+			bool largest,
+			t_string *out)
 {
 	size_t	i;
 	size_t	cut;
@@ -55,11 +56,11 @@ static t_error	remove_prefix(
 	return (error(ERR_NO));
 }
 
-static t_error	remove_suffix(
-					const t_string *value,
-					const char *pattern,
-					bool largest,
-					t_string *out)
+t_error	remove_suffix(
+			const t_string *value,
+			const char *pattern,
+			bool largest,
+			t_string *out)
 {
 	size_t	i;
 	size_t	cut;

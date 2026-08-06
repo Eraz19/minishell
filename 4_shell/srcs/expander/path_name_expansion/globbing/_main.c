@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:45:02 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:45:03 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:13:17 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static t_error	emit_path_matches(t_expander *expander, t_path_matches *matches)
 {
 	size_t			i;
 	t_word_item_opt	opt;
-	t_error			err;
 	t_word			word;
 	t_string		*match;
 
@@ -28,9 +27,7 @@ static t_error	emit_path_matches(t_expander *expander, t_path_matches *matches)
 	opt.is_expand_res = true;
 	while (i < matches->len)
 	{
-		err = path_matches_get(&match, matches, i);
-		if (err.type)
-			return (err);
+		path_matches_get(&match, matches, i);
 		expander->err = from_str(&word, match, opt);
 		if (expander->err.type)
 			return (expander->err);
@@ -54,9 +51,7 @@ static t_error	filter_existing_file(t_path_matches *matches)
 	path_matches_init(&kept_paths);
 	while (i < matches->len)
 	{
-		err = path_matches_get(&match, matches, i);
-		if (err.type)
-			return (vector_free(&kept_paths, NULL), err);
+		path_matches_get(&match, matches, i);
 		if (lstat(match->data, &file_stat) == 0)
 		{
 			err = path_matches_push(&kept_paths, match);
@@ -78,9 +73,7 @@ static t_error	find_path_comp_matches(
 	t_error		err;
 	t_path_comp	comp;
 
-	err = path_comps_get(&comp, comps, i);
-	if (err.type)
-		return (err);
+	path_comps_get(&comp, comps, i);
 	if (comp.special)
 		err = add_path_comp_lookup(out, &comp, i == 0);
 	else
@@ -112,8 +105,8 @@ static t_error	find_path_comps_matches(
 			return (path_matches_free(out), err);
 		i++;
 	}
-	err = path_comps_get(&last_comp, comps, comps->len - 1);
-	if (!err.type && out->len > 0 && !last_comp.special)
+	path_comps_get(&last_comp, comps, comps->len - 1);
+	if (out->len > 0 && !last_comp.special)
 		err = filter_existing_file(out);
 	if (err.type)
 		return (path_matches_free(out), err);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_comps_.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:45:19 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:45:20 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/05 23:10:30 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,8 @@ void	path_comps_init(t_path_comps *comps);
  * @param comps Components container (@ref t_path_comps), initialized by
  *              the function (borrowed).
  * @param src Word to split (borrowed, read-only).
- * @return @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a word
- *         read inconsistency, @c ERR_LIBC on allocation failure,
- *         @c ERR_NO on success.
+ * @return @c ERR_LIBC on allocation failure, @c ERR_NO on success
+ *         (read inconsistencies are caught by assertion).
  */
 t_error	path_comps_load(t_path_comps *comps, const t_word *src);
 
@@ -156,18 +155,15 @@ t_error	path_comp_push(t_path_comp *comp, t_word_item item);
 
 /**
  * @ingroup expander_path_comps
- * @brief Reads the component at @p i without removing it.
+ * @brief Copies component @p i of @p src into @p out.
  *
- * @warning @p out is a shallow copy: its pattern aliases the stored
- *          string; do not free it.
- * @param out Set to a copy of the component (borrowed).
- * @param src Already initialized container (borrowed, read-only).
- * @param i Position of the component to read.
- * @return @c ERR_EMPTY_STACK if @p src is empty,
- *         @c ERR_INDEX_OUT_OF_BOUND if @p i is past the last component,
- *         @c ERR_NO on success.
+ * @warning @p i must be below @c src->len (asserted). @p out is a
+ *          shallow copy: its pattern stays owned by @p src.
+ * @param out Receives the component copy (borrowed).
+ * @param src Source components (borrowed, read-only).
+ * @param i Component index.
  */
-t_error	path_comps_get(t_path_comp *out, const t_path_comps *src, size_t i);
+void	path_comps_get(t_path_comp *out, const t_path_comps *src, size_t i);
 
 /**
  * @ingroup expander_path_comps
