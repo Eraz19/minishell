@@ -6,7 +6,10 @@
 - Norme:
 	- `4_shell/srcs/0_asm_stubs/*`
 	- `4_shell/srcs/0_posix_helpers/posix_open/guard.c`
-	- `4_shell/srcs/env/9_signals/*`
+- ⚠️ remove all `logs.h`
+- ⚠️ remove all `assert.h`
+- ⚠️ remove all `printf()` / `fprintf()` calls
+- ⚠️ remove all *wildcards* from all `Makefile` (don't forget `libft`)
 - Error qualifying
 - Funkcheck en -s +i only
 
