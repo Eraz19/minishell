@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:02 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:30:03 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 18:54:22 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ t_error	builtin_colon(int argc, char **argv, t_runner *runner, int *status);
 t_error	builtin_continue(int argc, char **argv, t_runner *runner, int *status);
 t_error	builtin_dot(int argc, char **argv, t_runner *runner, int *status);
 t_error	builtin_eval(int argc, char **argv, t_runner *runner, int *status);
-t_error	builtin_exec(int argc, char **argv, t_runner *runner, int *status);
 
 /**
  * @ingroup builtins
@@ -181,7 +180,6 @@ t_error	builtin_return(int argc, char **argv, t_runner *runner, int *status);
 t_error	builtin_set(int argc, char **argv, t_runner *runner, int *status);
 
 t_error	builtin_shift(int argc, char **argv, t_runner *runner, int *status);
-t_error	builtin_times(int argc, char **argv, t_runner *runner, int *status);
 t_error	builtin_trap(int argc, char **argv, t_runner *runner, int *status);
 
 /**
@@ -209,7 +207,6 @@ t_error	builtin_unset(int argc, char **argv, t_runner *runner, int *status);
 /* Found before PATH search; the shell does not exit on error. */
 
 t_error	builtin_alias(int argc, char **argv, char **envp, int *status);
-t_error	builtin_bg(int argc, char **argv, char **envp, int *status);
 
 /**
  * @ingroup builtins
@@ -243,17 +240,6 @@ t_error	builtin_bg(int argc, char **argv, char **envp, int *status);
  */
 t_error	builtin_cd(int argc, char **argv, char **envp, int *status);
 
-t_error	builtin_command(int argc, char **argv, char **envp, int *status);
-t_error	builtin_fc(int argc, char **argv, char **envp, int *status);
-t_error	builtin_fg(int argc, char **argv, char **envp, int *status);
-t_error	builtin_getopts(int argc, char **argv, char **envp, int *status);
-t_error	builtin_hash(int argc, char **argv, char **envp, int *status);
-t_error	builtin_jobs(int argc, char **argv, char **envp, int *status);
-t_error	builtin_kill(int argc, char **argv, char **envp, int *status);
-t_error	builtin_read(int argc, char **argv, char **envp, int *status);
-t_error	builtin_type(int argc, char **argv, char **envp, int *status);
-t_error	builtin_ulimit(int argc, char **argv, char **envp, int *status);
-t_error	builtin_umask(int argc, char **argv, char **envp, int *status);
 t_error	builtin_unalias(int argc, char **argv, char **envp, int *status);
 t_error	builtin_wait(int argc, char **argv, char **envp, int *status);
 
