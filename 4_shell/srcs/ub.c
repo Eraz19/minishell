@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 17:37:39 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 17:38:22 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 17:42:13 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #define COND_PREFIX	": warning: unspecified behaviour: "
 #define IMPL_PREFIX	": implemented as: "
-#define UB_SUFFIX	"\" 🤪\n ╰──▶ Byyye! 👋\n"
+#define UB_SUFFIX	"\" 🤪\n ╰──▶ UNDEFINED BEHAVIOUR 💣\n"
 
 #define ASCII_XAV	"                                                  =..==-==\
                        \n\
