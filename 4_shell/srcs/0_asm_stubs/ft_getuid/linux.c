@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:40:37 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:40:38 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:37:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static uid_t	ft_parse_uid(const char *string)
 			while (string[index] == ' ' || string[index] == '\t')
 				index++;
 			if (string[index] < '0' || string[index] > '9')
-				return ((uid_t)-1);
+				return ((uid_t) - 1);
 			uid = 0;
 			while (string[index] >= '0' && string[index] <= '9')
 			{
@@ -50,7 +50,7 @@ static uid_t	ft_parse_uid(const char *string)
 		}
 		index++;
 	}
-	return ((uid_t)-1);
+	return ((uid_t) - 1);
 }
 
 uid_t	ft_getuid(void)
@@ -61,11 +61,11 @@ uid_t	ft_getuid(void)
 
 	fd = open("/proc/self/status", O_RDONLY);
 	if (fd < 0)
-		return ((uid_t)-1);
+		return ((uid_t) - 1);
 	nread = read(fd, buf, sizeof(buf) - 1);
 	close(fd);
 	if (nread <= 0)
-		return ((uid_t)-1);
+		return ((uid_t) - 1);
 	buf[nread] = '\0';
 	return (ft_parse_uid(buf));
 }

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:39:31 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:39:32 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:33:20 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,18 @@ static gid_t	ft_parse_egid(const char *string)
 			while (string[index] == ' ' || string[index] == '\t')
 				index++;
 			if (string[index] < '0' || string[index] > '9')
-				return ((gid_t)-1);
+				return ((gid_t) - 1);
 			index = ft_skip_number(string, index);
 			if (string[index] < '0' || string[index] > '9')
-				return ((gid_t)-1);
+				return ((gid_t) - 1);
 			egid = 0;
 			while (string[index] >= '0' && string[index] <= '9')
-			{
-				egid = (egid * 10)
-					+ (unsigned long)(string[index] - '0');
-				index++;
-			}
+				egid = (egid * 10) + (unsigned long)(string[index++] - '0');
 			return ((gid_t)egid);
 		}
 		index++;
 	}
-	return ((gid_t)-1);
+	return ((gid_t) - 1);
 }
 
 gid_t	ft_getegid(void)
@@ -73,11 +69,11 @@ gid_t	ft_getegid(void)
 
 	fd = open("/proc/self/status", O_RDONLY);
 	if (fd < 0)
-		return ((gid_t)-1);
+		return ((gid_t) - 1);
 	nread = read(fd, buf, sizeof(buf) - 1);
 	close(fd);
 	if (nread <= 0)
-		return ((gid_t)-1);
+		return ((gid_t) - 1);
 	buf[nread] = '\0';
 	return (ft_parse_egid(buf));
 }

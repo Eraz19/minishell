@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:40:09 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:40:10 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:36:07 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static pid_t	ft_parse_pid(const char *string)
 		}
 		i++;
 	}
-	return ((pid_t)-1);
+	return ((pid_t) - 1);
 }
 
 pid_t	ft_getpid(void)
@@ -47,11 +47,11 @@ pid_t	ft_getpid(void)
 
 	fd = open("/proc/self/status", O_RDONLY);
 	if (fd < 0)
-		return ((pid_t)-1);
+		return ((pid_t) - 1);
 	nread = read(fd, buf, sizeof(buf) - 1);
 	close(fd);
 	if (nread <= 0)
-		return ((pid_t)-1);
+		return ((pid_t) - 1);
 	buf[nread] = '\0';
 	return (ft_parse_pid(buf));
 }

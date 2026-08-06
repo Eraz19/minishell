@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:39:44 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:39:45 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:34:55 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,13 @@ static uid_t	ft_parse_euid(const char *string)
 			while (string[index] == ' ' || string[index] == '\t')
 				index++;
 			if (string[index] < '0' || string[index] > '9')
-				return ((uid_t)-1);
+				return ((uid_t) - 1);
 			index = ft_skip_number(string, index);
 			if (string[index] < '0' || string[index] > '9')
-				return ((uid_t)-1);
+				return ((uid_t) - 1);
 			euid = 0;
 			while (string[index] >= '0' && string[index] <= '9')
-			{
-				euid = (euid * 10)
-					+ (unsigned long)(string[index] - '0');
-				index++;
-			}
+				euid = (euid * 10) + (unsigned long)(string[index++] - '0');
 			return ((uid_t)euid);
 		}
 		index++;
@@ -73,11 +69,11 @@ uid_t	ft_geteuid(void)
 
 	fd = open("/proc/self/status", O_RDONLY);
 	if (fd < 0)
-		return ((uid_t)-1);
+		return ((uid_t) - 1);
 	nread = read(fd, buf, sizeof(buf) - 1);
 	close(fd);
 	if (nread <= 0)
-		return ((uid_t)-1);
+		return ((uid_t) - 1);
 	buf[nread] = '\0';
 	return (ft_parse_euid(buf));
 }

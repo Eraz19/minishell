@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:39:56 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:39:57 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:35:24 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static gid_t	ft_parse_gid(const char *string)
 			while (string[index] == ' ' || string[index] == '\t')
 				index++;
 			if (string[index] < '0' || string[index] > '9')
-				return ((gid_t)-1);
+				return ((gid_t) - 1);
 			gid = 0;
 			while (string[index] >= '0' && string[index] <= '9')
 			{
@@ -50,7 +50,7 @@ static gid_t	ft_parse_gid(const char *string)
 		}
 		index++;
 	}
-	return ((gid_t)-1);
+	return ((gid_t) - 1);
 }
 
 gid_t	ft_getgid(void)
@@ -61,11 +61,11 @@ gid_t	ft_getgid(void)
 
 	fd = open("/proc/self/status", O_RDONLY);
 	if (fd < 0)
-		return ((gid_t)-1);
+		return ((gid_t) - 1);
 	nread = read(fd, buf, sizeof(buf) - 1);
 	close(fd);
 	if (nread <= 0)
-		return ((gid_t)-1);
+		return ((gid_t) - 1);
 	buf[nread] = '\0';
 	return (ft_parse_gid(buf));
 }
