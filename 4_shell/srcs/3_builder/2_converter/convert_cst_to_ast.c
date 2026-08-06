@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:52 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:21:25 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:59:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,11 @@
 #include "cst_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-#include <assert.h>	// DEBUG
-#include "debug.h"		// DEBUG
 
 static inline t_error	converter_unrecognized_symbol(t_cst_node *node)
 {
 	return (error_print(error(ERR_INTERNAL),
-			"converter", "unrecognized symbol", NULL,
-			"%s", symbol_to_string(node->symbol)));
+			"converter", "unrecognized symbol", NULL, "%i", (int)node->symbol));
 }
 
 static inline t_error	convert_complete_commands(
@@ -32,9 +29,6 @@ static inline t_error	convert_complete_commands(
 	t_cst_node	*first_node;
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(complete_commands != NULL);
-	assert(out != NULL);
 	first_node = complete_commands->children[0];
 	if (complete_commands->child_count == 1)
 		return (convert_list_add(parser, first_node, out));
@@ -52,9 +46,6 @@ t_error	convert_cst_to_ast(
 	t_cst_node	*node;
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(cst_root != NULL);
-	assert(ast_root != NULL);
 	ast_root_init(ast_root);
 	node = cst_root;
 	if (node->symbol == SYM_start)

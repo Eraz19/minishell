@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:50 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 17:17:15 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:00:16 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "error.h"
 #include "parser_type.h"
 #include "ast.h"
-#include <assert.h>	// DEBUG
 
 t_error	convert_compound_command(
 			t_parser *parser,
@@ -24,9 +23,6 @@ t_error	convert_compound_command(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(compound_command != NULL);
-	assert(out != NULL);
 	ast_command_init(out);
 	err = convert_compound_command_priv(parser, compound_command, out);
 	if (err.type)
@@ -50,9 +46,6 @@ t_error	convert_command(
 	t_cst_node	*child;
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(command != NULL);
-	assert(out != NULL);
 	ast_command_init(out);
 	err = error(ERR_NO);
 	i = 0;
