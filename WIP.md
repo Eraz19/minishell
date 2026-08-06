@@ -1,6 +1,10 @@
 # NOW
 
 - Norme:
+	- `4_shell/srcs/0_asm_stubs/*`
+	- `4_shell/srcs/0_posix_helpers/posix_open/guard.c`
+
+
 	- keep comments for `42_SH`:
 		- `error.h`
 		- `0_utils/ft_getopt.h`

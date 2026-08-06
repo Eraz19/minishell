@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:48:00 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:51:36 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 20:00:46 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ typedef struct s_option_with_arg
  */
 typedef struct s_getopt_in
 {
-	const char				*builtin_name;			// used to print error logs
-	const char				*valid_minus_flags;		// can be NULL
-	const char				*valid_plus_flags;		// can be NULL
-	t_getopt_flag_with_arg	*options_with_arg;		// multiple options_with_arg can have the same starting flag if they don't have the same sign
+	const char				*builtin_name;
+	const char				*valid_minus_flags;
+	const char				*valid_plus_flags;
+	t_getopt_flag_with_arg	*options_with_arg;
 	size_t					options_with_arg_count;
-	bool					single_delimiter;		// '-' will be treated as end of options
-	bool					ub_on_repeated_flags;	// call undefined_behaviour() when "an option that does not have option-arguments is repeated" cf 12.1:3.
+	bool					single_delimiter;
+	bool					ub_on_repeated_flags;
 }	t_getopt_in;
 
 /* ************************************************************************* */
