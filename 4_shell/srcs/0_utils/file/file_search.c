@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   file_search.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:48:06 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:50:38 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "utils.h"
 #include <errno.h>
 #include <unistd.h>
@@ -21,7 +33,7 @@ static inline t_error	file_build_path(
 			return (error_sys());
 		if (path_entry->data[path_entry->len - 1] != '/'
 			&& !string_append_n(out_file_path, "/", 1))
-				return (error_sys());
+			return (error_sys());
 	}
 	if (!string_append(out_file_path, filename))
 		return (error_sys());

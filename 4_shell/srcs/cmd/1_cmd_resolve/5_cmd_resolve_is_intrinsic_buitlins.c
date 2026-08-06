@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   5_cmd_resolve_is_intrinsic_buitlins.c              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:11 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:57:39 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
-#include "resolve_priv.h"
+#include "cmd_resolve_priv.h"
 #include "builtins.h"
 
 static inline void	cmd_set_intrinsic_builtin(t_cmd *cmd, t_builtin res)

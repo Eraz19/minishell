@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fd.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:13:00 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:10:29 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FD_H
 # define FD_H
 
@@ -10,7 +22,7 @@ typedef struct s_fd_manager
 {
 	/** @brief Maximum number of stack frames allocated so far. */
 	size_t			max_frame_count;
-	/** @brief Redirection backup stack managed by the redirect_stack submodule. */
+	/** @brief Redirection backup stack managed by redirect_stack submodule. */
 	t_redir_stack	stack;
 	/** @brief File-descriptor tracker managed by the fd_tracker submodule. */
 	t_fd_tracker	tracker;
@@ -56,6 +68,6 @@ t_error	fd_restore_last_frame(void);
 t_error	fd_restore_stack(void);
 
 // @ret ERR_NO / ERR_INTERNAL / ERR_LIBC
-t_error	fd_use_new_frame();
+t_error	fd_use_new_frame(void);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   alias_forbidden_life_cycle.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:35 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:14:36 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "alias_forbidden_internal.h"
 
 void	alias_forbidden_init(t_alias_forbidden *forbidden)

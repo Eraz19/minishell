@@ -1,5 +1,17 @@
-#ifndef ALIAS_INTERNAL_H
-# define ALIAS_INTERNAL_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   alias_table_internal.h                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:21 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:14:54 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef ALIAS_TABLE_INTERNAL_H
+# define ALIAS_TABLE_INTERNAL_H
 
 # include "libft.h"
 # include "error.h"

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_get_set.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:09:55 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:59:28 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "specials.h"
 #include <stdlib.h>
@@ -21,7 +33,7 @@ t_error	specials_get(const t_specials *specials, char name, t_string *dst)
 	if (name == '0')
 	{
 		if (!string_init(
-			dst, 0, specials->zero.data, (ssize_t)specials->zero.len))
+				dst, 0, specials->zero.data, (ssize_t)specials->zero.len))
 			return (error_sys());
 	}
 	else if (name == '$')

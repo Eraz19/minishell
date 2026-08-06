@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_deserialize_all.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:47:39 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:49:55 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "error.h"
 #include "utils.h"
@@ -51,8 +63,8 @@ static inline bool	find_next_entry(const char *src, size_t *start, size_t *end)
 
 static inline t_error	parse_entry(const char *src, size_t len, t_vector *dst)
 {
-	t_error	err;
-	char	*entry;
+	t_error		err;
+	char		*entry;
 	t_string	out;
 
 	entry = str_ndup(src, len);

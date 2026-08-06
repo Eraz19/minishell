@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_getopt.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:48:00 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:51:36 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_GETOPT_H
 # define FT_GETOPT_H
 
@@ -6,7 +18,9 @@
 # include <stddef.h>
 
 /*
-⚠️ TODO: in each builtin (if doc doesn't specifiy anything else): call undefined_behaviour() when "use of conflicting mutually-exclusive arguments" cf 12.1:8.
+⚠️ TODO: in each builtin (if doc doesn't specifiy anything else):
+	call undefined_behaviour() when
+	"use of conflicting mutually-exclusive arguments" (cf 12.1:8).
 ---
 ⚠️ TODO: XBD 12.2:
 	- Guideline 7

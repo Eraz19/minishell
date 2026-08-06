@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_process_reduce_hooks.c                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:06:40 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:16:49 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser_priv.h"
 #include "parser.h"
 #include "utils.h"
@@ -15,7 +27,8 @@ static inline t_error	parser_check_fname(
 	token = parser_get_token(parser, rhs[0].tokens_start_id);
 	if (!name_is_valid_str(&token->value))
 		return (error_print(error(ERR_POSIX_SYNTAX),
-			"parser", "invalid function name", NULL, "%s", token->value.data));
+				"parser", "invalid function name", NULL,
+				"%s", token->value.data));
 #ifdef DEBUG_PARSING
 	else
 		fprintf(stderr, "[PARSER] %sfunction name is valid%s\n", YELLOW, NC);

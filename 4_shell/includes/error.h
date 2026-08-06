@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:16 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:33:17 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 # define ERROR_H
 
-#include <stdbool.h>
+# include <stdbool.h>
 
 # define ERR_POSIX_SIGNAL_BASE_CODE	128
 
@@ -95,8 +107,8 @@ Legend:
 
 // TODO: ⚠️ In all of the cases shown in the table where an interactive shell is required not to exit and a non-interactive shell is required to exit, an interactive shell shall not perform any further processing of the command in which the error occurred.
 
-#define error(type) error_priv(type, __FILE__, __LINE__, __func__)	//DEBUG
-#define error_sys() error_sys_priv(__FILE__, __LINE__, __func__)	//DEBUG
+# define error(type) error_priv(type, __FILE__, __LINE__, __func__)	//DEBUG
+# define error_sys() error_sys_priv(__FILE__, __LINE__, __func__)	//DEBUG
 
 typedef struct s_error
 {

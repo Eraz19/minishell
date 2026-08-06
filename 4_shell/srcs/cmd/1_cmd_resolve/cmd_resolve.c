@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_resolve.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:12 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:58:21 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
-#include "resolve_priv.h"
+#include "cmd_resolve_priv.h"
 #include "token.h"
 #include "expander.h"
 
 static inline void	cmd_resolve_name(t_cmd *cmd, bool *is_declaration_utility)
 {
-	*is_declaration_utility = cmd_resolve_is_declaration_utility(cmd->name.data);
+	*is_declaration_utility = cmd_resolve_is_declaration_utility(
+			cmd->name.data);
 	if (string_get_index_c(&cmd->name, '/') >= 0)
 		cmd->entry.type = CMD_EXTERNAL;
 	else if (cmd_resolve_is_special_builtin(cmd))

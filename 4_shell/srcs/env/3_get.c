@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_get.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:54 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:17:33 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "shell.h"
 #include <assert.h>	// DEBUG
@@ -91,7 +103,7 @@ t_error	env_build_envp(t_vector *dst_envp)
 	return (var_build_envp(&params->variables, dst_envp));
 }
 
-int		env_get_last_status_from(t_params *params)
+int	env_get_last_status_from(t_params *params)
 {
 	return (params->specials.last_status);
 }

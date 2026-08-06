@@ -1,8 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_walk_pipe_life_cycle.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:07 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:27:12 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "walk_pipeline_priv.h"
 #include "options.h"
 #include <stdlib.h>
 
-void	walk_pipe_init(t_pipe_run *run, t_runner *runner, t_ast_pipeline *pipeline)
+void	walk_pipe_init(
+			t_pipe_run *run,
+			t_runner *runner,
+			t_ast_pipeline *pipeline)
 {
 	run->runner = runner;
 	run->pipeline = pipeline;
@@ -17,7 +32,10 @@ void	walk_pipe_init(t_pipe_run *run, t_runner *runner, t_ast_pipeline *pipeline)
 	run->exit_status = -1;
 }
 
-t_error	walk_pipe_spawn(t_runner *runner, t_ast_pipeline *pipeline, t_pipe_run *run)
+t_error	walk_pipe_spawn(
+			t_runner *runner,
+			t_ast_pipeline *pipeline,
+			t_pipe_run *run)
 {
 	t_error	err;
 

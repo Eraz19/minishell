@@ -1,6 +1,6 @@
 ```bash
 vim
-# ouvrir un autre terminal
+# Dans un autre terminal
 pkill vim
 ```
 
@@ -8,6 +8,8 @@ pkill vim
 ./minishell | ./minishell
 ```
 
+```bash
 cat << EOF &&&
 body
 EOF
+```

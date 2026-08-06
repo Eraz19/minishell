@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_expand.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 15:20:20 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:21:25 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "redirector_priv.h"
 #include "expander.h"
 
-#define CITATION_1		"POSIX 2.10.2: The expansions specified in 2.7 "
-#define CITATION_2		"Redirection shall occur. As specified there, exactly "
-#define CITATION_3		"one field can result (or the result is unspecified)"
-#define CITATION		CITATION_1 CITATION_2 CITATION_3
+#define CITATION		"POSIX 2.10.2: The expansions specified in 2.7 \
+Redirection shall occur. As specified there, exactly \
+one field can result (or the result is unspecified)"
 
 // @ret ERR_POSIX_EXPANSION / ERR_REDIRECTION / ERR_INTERNAL / ERR_LIBC
 static inline t_error	redirect_expand_word(
@@ -36,8 +47,8 @@ t_error	redirect_expand(t_redir *redir, int *exit_status)
 	{
 		flags = expansion_flags_heredoc_body();
 		if (redir->expand_heredoc_body)
-			return (expand_str_merged(&redir->expanded_word, redir->heredoc_body,
-						exit_status, flags));
+			return (expand_str_merged(&redir->expanded_word,
+					redir->heredoc_body, exit_status, flags));
 		else if (!string_dup(&redir->expanded_word, redir->heredoc_body))
 			return (error_sys());
 	}

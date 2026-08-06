@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   8_sig_snapshot.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:06 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:13:53 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sig_priv.h"
 #include "shell.h"
 
@@ -22,7 +34,7 @@ void	sig_snapshot(void)
 	}
 	snapshot->exit_action.type = state->exit_action.type;
 	string_free(&snapshot->exit_action.cmd);
-	string_take_string(&snapshot->exit_action.cmd,&state->exit_action.cmd);
+	string_take_string(&snapshot->exit_action.cmd, &state->exit_action.cmd);
 	snapshot->is_executing_exit_action = false;
 }
 

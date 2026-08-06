@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   4_parser_reduce.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:06 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:08:42 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser_priv.h"
 #include "grammar_gotos.h"
 #include "cst.h"
@@ -22,7 +34,7 @@ static inline t_error	parser_new_lr_state(
 		lr_state_from * GOTO_COL_COUNT + rule->lhs - SYM_NON_TERMINAL_MIN];
 	if (lr_state_to == GOTO_EMPTY)
 		return (error_print(
-			error(ERR_PARSER_EMPTY_GOTO), "parser", NULL, NULL));
+				error(ERR_PARSER_EMPTY_GOTO), "parser", NULL, NULL));
 	*dst = lr_state_to;
 	return (error(ERR_NO));
 }

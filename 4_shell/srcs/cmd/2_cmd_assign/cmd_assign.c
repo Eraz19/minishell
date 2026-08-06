@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_assign.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:24 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:00:01 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 #include "cmd_assign_priv.h"
 #include "expander.h"
@@ -53,7 +65,11 @@ t_error	cmd_assign(
 		if (err.type == ERR_NO)
 			err = cmd_assignment_expand(token, flags, &expanded, status);
 		if (err.type == ERR_NO)
-			err = cmd_assignment_process(cmd, token, &expanded, path_is_temporary);
+			err = cmd_assignment_process(
+					cmd,
+					token,
+					&expanded,
+					path_is_temporary);
 	}
 	if (err.type)
 		return (vector_free(&cmd->envp, free_char_ptr_void), err);

@@ -1,16 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_transition_build_table.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:14:27 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:14:53 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "generator_transitions.h"
 #include "generator_lr_state.h"
 #include "libft.h"
 #include <unistd.h>
 #include <stdio.h>
 
-#define LR_STATE_NOT_FOUND	"generator: internal error: lr state not found\n"
+#define STATE_NOT_FOUND	"generator: internal error: lr state not found\n"
 
 static inline bool	lr_state_not_found(void)
 {
 	ssize_t	osef;
 
-	osef = write(STDERR_FILENO, LR_STATE_NOT_FOUND, str_len(LR_STATE_NOT_FOUND));
+	osef = write(STDERR_FILENO, STATE_NOT_FOUND, str_len(STATE_NOT_FOUND));
 	(void)osef;
 	return (false);
 }

@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   8_walk_command.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:43 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:30:32 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "walker.h"
 #include "walker_priv.h"
 #include "env.h"
 #include "redirector.h"
-# include "debug.h"
+#include "debug.h"
 #include <assert.h>
 
 static inline t_error	walk_command_dispatch(

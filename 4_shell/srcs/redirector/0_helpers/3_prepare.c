@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_prepare.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 15:20:25 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:22:17 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "redirector_priv.h"
 #include "fd.h"
 #include <unistd.h>
 
-#define CITATION_1	"POSIX 2.7.5 / 2.7.6: If word evaluates to something else "
-#define CITATION_2	"[than a file descriptor or '-'], the behavior is unspecified"
-#define CITATION	CITATION_1 CITATION_2
+#define CITATION	"POSIX 2.7.5 / 2.7.6: If word evaluates to something else \
+[than a file descriptor or '-'], the behavior is unspecified"
 #define IMPLEMENT	"redirection error"
 
 // @ret ERR_REDIRECTION
@@ -18,8 +29,8 @@ static inline t_error	redirect_dup_invalid_word(t_redir *redir)
 	else
 		value = redir->expanded_word.data;
 	return (error_print(error(ERR_REDIRECTION),
-		"invalid file descriptor", NULL, "'%s' expanded from '%s'",
-		value, redir->word.value.data));
+			"invalid file descriptor", NULL, "'%s' expanded from '%s'",
+			value, redir->word.value.data));
 }
 
 // @ret ERR_REDIRECTION / ERR_LIBC
@@ -36,8 +47,8 @@ static inline t_error	redirect_validate_dup_rhs(t_redir *redir)
 	err = fd_check_dup_rhs(rhs_fd);
 	if (err.type == ERR_REDIRECTION)
 		return (error_print(err,
-			"file descriptor is not open", NULL,
-			"%i expanded from '%s'", rhs_fd, redir->word.value.data));
+				"file descriptor is not open", NULL,
+				"%i expanded from '%s'", rhs_fd, redir->word.value.data));
 	return (err);
 }
 

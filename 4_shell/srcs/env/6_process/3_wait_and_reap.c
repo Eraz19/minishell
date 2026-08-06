@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_wait_and_reap.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:11:50 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:09:27 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "process.h"
 #include "posix_helpers.h"
 #include "sig.h"
@@ -90,7 +102,7 @@ t_error	process_wait_all(t_process_table *table, int *status)
 		if (process->status < 0)
 		{
 			wait_err = process_wait_until_pending_trap(
-						process->pid, &process->status, status);
+					process->pid, &process->status, status);
 			if (wait_err.type == ERR_INTERRUPTED)
 				return (wait_err);
 			err = error_priorize(err, wait_err);
@@ -118,7 +130,7 @@ t_error	process_reap(t_process_table *table)
 		if (process->status < 0)
 		{
 			wait_err = posix_wait_with_opt(
-						process->pid, WNOHANG, &process->status);
+					process->pid, WNOHANG, &process->status);
 			if (wait_err.type == ERR_LIBC && wait_err.saved_errno == EINTR)
 				return (error(ERR_NO));
 			err = error_priorize(err, wait_err);

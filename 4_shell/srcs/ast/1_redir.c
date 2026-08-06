@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_redir.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:35:15 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:38:54 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ast.h"
-#include "utils.h"
 #include <assert.h>	// DEBUG
 
 void	ast_redirection_init(t_ast_redirection *redirection)
@@ -29,7 +40,7 @@ t_error	ast_redirection_dup(void *dst, const void *src)
 	dst_redirection->is_location = src_redirection->is_location;
 	err = token_dup(&dst_redirection->word, &src_redirection->word);
 	if (err.type == ERR_NO && !string_dup(&dst_redirection->heredoc_body,
-		&src_redirection->heredoc_body))
+			&src_redirection->heredoc_body))
 		err = error_sys();
 	if (err.type == ERR_NO)
 		err = token_dup(&dst_redirection->location, &src_redirection->location);
@@ -48,22 +59,4 @@ void	ast_redirection_free(void *redirection)
 	string_free(&redir->heredoc_body);
 	token_free(&redir->location);
 	ast_redirection_init(redir);
-}
-
-void	ast_redir_list_init(t_ast_redir_list *redir_list)
-{
-	assert(redir_list != NULL);
-	vector_init(redir_list, sizeof(t_ast_redirection), 0);
-}
-
-t_error	ast_redir_list_dup(void *dst, const void *src)
-{
-	return (vector_deep_dup(dst, src, ast_redirection_dup,
-				ast_redirection_free));
-}
-
-void	ast_redir_list_free(t_ast_redir_list *redir_list)
-{
-	assert(redir_list != NULL);
-	vector_free(redir_list, ast_redirection_free);
 }

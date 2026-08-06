@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   4_open_heredoc.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 15:20:27 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:22:38 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "redirector_priv.h"
 #include "fd.h"
 #include "posix_helpers.h"
@@ -33,11 +45,11 @@ t_error	redirect_prepare_heredoc_file(const t_string *body, char **out_path)
 	err = fd_open_heredoc(&path, &fd);
 	if (err.type)
 		return (redirect_print_and_qualify(err, false,
-					"unable to create heredoc file"));
+				"unable to create heredoc file"));
 	err = posix_write(fd, body->data, body->len);
 	if (err.type)
 		err = redirect_print_and_qualify(err, true,
-					"unable to write to heredoc file");
+				"unable to write to heredoc file");
 	close_err = posix_close_if_open(fd);
 	if (close_err.type)
 		err = error_priorize(err, redirect_print_and_qualify(close_err, false,

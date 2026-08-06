@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_load.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:52 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:16:26 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include <stdlib.h>
 #include <assert.h>	// DEBUG
@@ -48,7 +60,7 @@ t_error	env_load(t_params *params, int argc, char **argv, char **envp)
 {
 	t_error	err;
 	size_t	start_index;
-	
+
 	assert(argv != NULL);
 	assert(envp != NULL);
 	env_catch_undefined_1(argc, argv);
@@ -61,7 +73,8 @@ t_error	env_load(t_params *params, int argc, char **argv, char **envp)
 	err = specials_load(&params->specials, argc, argv, &start_index);
 	if (err.type != ERR_NO)
 		return (err);
-	err = positionals_load_stack(&params->positionals_stack, argc, argv, start_index);
+	err = positionals_load_stack(&params->positionals_stack, argc, argv,
+			start_index);
 	if (err.type != ERR_NO)
 		return (err);
 	err = var_load(&params->variables, envp);

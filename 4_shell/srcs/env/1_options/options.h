@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   options.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:09:46 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:54:53 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef OPTIONS_H
 # define OPTIONS_H
 
@@ -110,22 +122,5 @@ bool		option_is_active_in(t_option options, t_option option);
  * @return @c ERR_NO or @c ERR_LIBC.
  */
 t_error		options_get(t_option options, t_string *dst);
-
-/* ************************************************************************* */
-/*                                   DEBUG                                   */
-/* ************************************************************************* */
-
-/**
- * @brief Dump the current option state to stderr.
- */
-void		options_dump(void);
-
-/**
- * @brief Convert a single option bit to its canonical textual name.
- *
- * @param option Option bit to convert.
- * @return Static string representation, or @c "unknown" when unsupported.
- */
-const char	*option_to_string(t_option option);
 
 #endif

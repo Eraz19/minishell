@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_get_ast.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:13 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:15:22 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser.h"
 #include "parser_priv.h"
 #include "converter.h"
-# include "debug.h"		// DEBUG
+#include "debug.h"		// DEBUG
 #include <assert.h>	// DEBUG
 
 t_error	parser_get_ast(t_parser *parser, t_ast_root *dst_ast)

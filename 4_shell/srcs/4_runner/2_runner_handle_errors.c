@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_runner_handle_errors.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:58 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:32:13 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "runner_priv.h"
 #include "parser.h"
 #include "env.h"
-# include "logs.h"	// DEBUG
+#include "logs.h"	// DEBUG
 #include <stdio.h>	// DEBUG
 
 static inline void	runner_handle_eof(t_error *err, bool interactive)
@@ -34,7 +46,8 @@ static inline void	runner_handle_bad_errors(t_error *err, bool interactive)
 {
 	if (err->type == ERR_NO || err->type == ERR_POSIX_READ)
 		return ;
-	if (err->type >= ERR_VEOF && (err->type <= ERR_LIBC || interactive == false))
+	if (err->type >= ERR_VEOF
+		&& (err->type <= ERR_LIBC || interactive == false))
 		return ;
 	fprintf(stderr, "%s[RUNNER] error should have been requalified : %i (%s)%s\n",
 		RED, (int)err->type, error_to_string(*err), NC);

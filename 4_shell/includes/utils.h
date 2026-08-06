@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:46 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:38:30 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UTILS_H
 # define UTILS_H
 
@@ -10,8 +22,8 @@
 
 // TODO: doc (vector_deep_dup)
 
-typedef t_error (*t_dup_callback)(void *dst_item, const void *src_item);
-typedef void (*t_free_callback)(void *dst_item);
+typedef t_error	(*t_dup_callback)(void *dst_item, const void *src_item);
+typedef void	(*t_free_callback)(void *dst_item);
 
 t_error	vector_deep_dup(
 			t_vector *dst,
@@ -64,8 +76,10 @@ bool	assignment_is_same_name(const char *target, const char *entry);
  * release them with @ref string_free().
  *
  * @param src Assignment string (borrowed, read-only).
- * @param dst_name Destination name string initialized by the function (borrowed).
- * @param dst_value Destination value string initialized by the function (borrowed).
+ * @param dst_name Destination name string initialized by the function
+ *					(borrowed).
+ * @param dst_value Destination value string initialized by the function
+ *					(borrowed).
  * @return @c ERR_ASSIGNMENT_MISSING_NAME or @c ERR_LIBC on failure.
  */
 t_error	assignment_split(
@@ -97,7 +111,6 @@ t_error	deserialize(const char *src, t_string *dst);
  * @return @c ERR_LIBC on failure.
  */
 t_error	deserialize_all(const char *src, t_vector *dst);
-
 
 /**
  * @brief Free a @c char* item through a generic @c void* callback signature.

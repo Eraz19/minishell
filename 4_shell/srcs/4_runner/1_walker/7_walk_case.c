@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   7_walk_case.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:41 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:30:13 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "error.h"
 #include "walker_priv.h"
 #include "expander.h"
@@ -7,7 +19,6 @@
 #define CITATION_1	"POSIX 2.9.4.3: case shall execute "
 #define CITATION_2	"the compound-list corresponding to the first pattern [...]"
 #define CITATION_3	" that is matched by the string resulting from [expansions]"
-#define CITATION	CITATION_1 CITATION_2 CITATION_3
 
 static inline t_error	walk_case_expand(
 							t_token *token,
@@ -24,7 +35,11 @@ static inline t_error	walk_case_expand(
 	if (err.type)
 		return (err);
 	if (expansion.len != 1)
-		return (expansion_merge(token->value.data, CITATION, &expansion, dst));
+		return (expansion_merge(
+				token->value.data,
+				CITATION_1 CITATION_2 CITATION_3,
+				&expansion,
+				dst));
 	expanded = &((t_string *)expansion.data)[0];
 	string_take_string(dst, expanded);
 	expansion_free(&expansion);
@@ -67,7 +82,7 @@ static inline t_error	walk_case_match_pool(
 							int *exit_status)
 {
 	size_t	i;
-	t_token *token;
+	t_token	*token;
 	t_error	err;
 
 	i = 0;

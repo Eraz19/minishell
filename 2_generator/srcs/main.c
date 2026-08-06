@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:09:17 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:09:25 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "generator.h"
 #include "generator_serialize.h"
 #include <stdlib.h>
-# include "logs.h"	// DEBUG
+#include "logs.h"	// DEBUG
 
 static inline int	generator_exit(t_lr_generator *gen)
 {

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   0_getopt_err.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:47:47 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:55:10 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_getopt_priv.h"
 
 #define GETOPT_FMESSAGE_CAP	32
@@ -24,5 +36,10 @@ t_error	getopt_err(
 	}
 	else
 		fmessage[1] = '\0';
-	return (error_print(error(err_type), state->in->builtin_name, fmessage, NULL, NULL));
+	return (error_print(
+			error(err_type),
+			state->in->builtin_name,
+			fmessage,
+			NULL,
+			NULL));
 }

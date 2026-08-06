@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   readonly.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:36 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:49:34 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "env.h"
 #include "utils.h"
@@ -6,7 +18,7 @@
 #define READONLY_USAGE	"-p || name[=word] ..."
 
 // @ret ERR_UB
-static t_error readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
+static t_error	readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
 {
 	size_t	options_count;
 	size_t	operand_count;
@@ -21,15 +33,18 @@ static t_error readonly_catch_ub(int argc, char **argv, t_getopt_out *out)
 	if (options_count > 0 && operand_count > 0)
 	{
 		(void)error_print(error(ERR_INVALID_USAGE), argv[0], READONLY_USAGE,
-				NULL, NULL);
+			NULL, NULL);
 		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
-		"mutually-exclusive arguments produces undefined results.");
+				"mutually-exclusive arguments produces undefined results.");
 	}
 	return (err);
 }
 
 // @ret ERR_INVALID_USAGE / ERR_UB / ERR_LIBC
-static t_error	readonly_process_options(int argc, char **argv, t_getopt_out *out)
+static t_error	readonly_process_options(
+					int argc,
+					char **argv,
+					t_getopt_out *out)
 {
 	t_getopt_in	in;
 	t_error		err;
@@ -56,7 +71,7 @@ static t_error	readonly_add_one(const char *builtin_name, const char *string)
 {
 	t_string	name;
 	t_string	value;
-	t_error	err;
+	t_error		err;
 
 	err = assignment_split(string, &name, &value);
 	if (err.type == ERR_ASSIGNMENT_MISSING_NAME)
@@ -88,7 +103,11 @@ static t_error	readonly_add(size_t first_operand_index, int argc, char **argv)
 	return (err);
 }
 
-t_error	builtin_readonly(int argc, char **argv, t_runner *runner, int *exit_status)
+t_error	builtin_readonly(
+			int argc,
+			char **argv,
+			t_runner *runner,
+			int *exit_status)
 {
 	t_getopt_out	out;
 	t_error			err;

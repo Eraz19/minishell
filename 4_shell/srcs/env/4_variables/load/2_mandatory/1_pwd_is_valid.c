@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_pwd_is_valid.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:10:42 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:04:11 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "error.h"
 #include <errno.h>
 #include <unistd.h>
@@ -6,12 +18,12 @@
 #include <sys/stat.h>
 #include <assert.h>	// DEBUG
 
-static bool pwd_has_no_dot_components(const char *pwd)
+static bool	pwd_has_no_dot_components(const char *pwd)
 {
 	size_t	i;
 	size_t	start;
 	size_t	len;
-	
+
 	assert(pwd != NULL);
 	i = 1;
 	while (pwd[i] != '\0')

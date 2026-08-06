@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:10:38 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:03:44 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "variables.h"
 #include "utils.h"
 #include <stdlib.h>
-# include "logs.h"		// DEBUG
+#include "logs.h"		// DEBUG
 #include <assert.h>	// DEBUG
 
 // @ret ERR_LIBC.

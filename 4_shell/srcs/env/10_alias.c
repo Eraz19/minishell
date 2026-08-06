@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   10_alias.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:15:07 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:19:07 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include "shell.h"
 #include <assert.h>
@@ -5,7 +17,7 @@
 t_error	env_set_alias(const char *name, const char *value)
 {
 	t_params	*params;
-	
+
 	params = shell_get_params();
 	assert(params != NULL);
 	return (alias_set(&params->alias, name, value));
@@ -14,7 +26,7 @@ t_error	env_set_alias(const char *name, const char *value)
 t_error	env_get_alias(const t_string *name, const t_string **out_value)
 {
 	t_params	*params;
-	
+
 	params = shell_get_params();
 	assert(params != NULL);
 	return (alias_get(&params->alias, name, out_value));

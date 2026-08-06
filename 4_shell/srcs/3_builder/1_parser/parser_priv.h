@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_priv.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:15 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:12:36 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_PRIV_H
 # define PARSER_PRIV_H
 
 # include "parser_type.h"
-# include "token.h"
 
 /* ************************************************************************* */
 /*                                   ERROR                                   */
@@ -52,15 +63,5 @@ t_error	parser_process_reduce_hooks(
 			t_parser_item *lhs,
 			t_parser_item *rhs);
 t_error	parser_accept(t_parser *parser);
-
-/* ************************************************************************* */
-/*                                   DEBUG                                   */
-/* ************************************************************************* */
-
-#include "token.h"
-
-const char	*token_type_to_string(t_token_type token_type);
-const char	*symbol_to_string(t_symbol symbol);
-const char	*action_type_to_string(t_action_type action_type);
 
 #endif

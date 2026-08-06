@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_serialize.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:47:34 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:50:07 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "error.h"
 #include "serialize_priv.h"
 #include <stddef.h>
 #include <stdlib.h>
 
-static inline void copy_and_add_escape(
+static inline void	copy_and_add_escape(
 					const char *src,
 					char *buff,
 					size_t buff_cap,
@@ -33,7 +45,7 @@ static inline void copy_and_add_escape(
 	string_take(dst, buff, buff_cap, (ssize_t)j + 1);
 }
 
-t_error serialize(const char *src, t_string *dst)
+t_error	serialize(const char *src, t_string *dst)
 {
 	size_t	src_len;
 	size_t	buff_cap;

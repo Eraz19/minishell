@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   5_shell_run.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:56:56 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:00:13 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell_priv.h"
 #include "runner.h"
 #include <stdlib.h>
 #include "sig.h"
 
 /* -------------------- DEBUG (START) -------------------- */
-# include <locale.h>	// DEBUG
-# include "logs.h"		// DEBUG
+#include <locale.h>	// DEBUG
+#include "logs.h"		// DEBUG
 #include <assert.h>	// DEBUG
 
 static inline void	shell_start_logs(void)

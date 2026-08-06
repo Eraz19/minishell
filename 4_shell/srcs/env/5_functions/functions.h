@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   functions.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:11:41 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:08:43 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FUNCTIONS_H
 # define FUNCTIONS_H
 
@@ -27,7 +39,10 @@ void	functions_free(t_functions *functions);
 
 t_error	function_set(t_functions *functions, t_ast_function_def *function_def);
 
-t_error	function_get(t_functions *functions, const char *name, t_function **out);
+t_error	function_get(
+			t_functions *functions,
+			const char *name,
+			t_function **out);
 
 void	function_unset(t_functions *functions, const char *name);
 

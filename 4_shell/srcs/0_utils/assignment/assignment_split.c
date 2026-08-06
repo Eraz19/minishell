@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   assignment_split.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:48:12 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:50:52 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "error.h"
 #include <stdbool.h>
@@ -5,7 +17,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-t_error assignment_split(
+t_error	assignment_split(
 			const char *src,
 			t_string *dst_name,
 			t_string *dst_value)

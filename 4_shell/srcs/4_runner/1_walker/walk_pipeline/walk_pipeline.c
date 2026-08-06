@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   walk_pipeline.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:21 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:26:08 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "walker_priv.h"
 #include "walk_pipeline_priv.h"
 #include "env.h"
 #include <assert.h>	// DEBUG
 #ifdef DEBUG_CMD
-#include <stdio.h>		// DEBUG
+# include <stdio.h>		// DEBUG
 # include "logs.h"		// DEBUG
 #endif
 

@@ -1,3 +1,52 @@
+# NOW
+
+- Norme:
+	- ⚠️ **???**:
+		- `ub.c`
+		- `TODO.c`
+	- ⚠️ **ALEX**:
+		- `builtins/pwd.c`
+		- `0_utils/ft_getpwnam.c`
+	- ⚠️ **TODO**:
+		- 🚨 `ast.h` ???
+		- supprimer `alias_forbidden`
+		- `3_builder/1_parser/4_parser_reduce.c`
+		- `3_builder/2_convert/10_convert_command.c`
+		- `4_runner/2_runner_handle_errors.c`
+		- `env/3_get.c`
+		- `env/10_alias.c`
+		- `error/error.c`
+	- keep comments for `42_SH`:
+		- `error.h`
+		- `0_utils/ft_getopt.h`
+		- `1_shell/4_shell_exec_env.c`
+		- `4_runner/1_walker/walk_pipeline/5_walk_pipe_finalize.c`
+		- `4_runner/1_walker/walk_pipeline/walk_pipeline.c`
+		- `builtins/return.c`
+		- `env/1_options/options.h`
+	- keep macros for `42_SH`:
+		- `shell.h`
+		- `0_posix_helpers/posix_open/guard.c`
+	- keep logs for `42_SH`:
+		- `1_shell/5_shell_run.c`
+		- `1_shell/7_shell_get_new.c`
+		- `3_builder/1_parser/2_parser_read.c`
+		- `3_builder/1_parser/6_parser_store_cst.c`
+		- `3_builder/1_parser/0_helpers/parser_process_reduce_hooks.c`
+		- `3_builder/1_parser/0_helpers/parser_read_heredoc.c`
+		- `4_runner/1_walker/1_walk_simple_cmd.c`
+		- `4_runner/1_walker/9_walk_function.c`
+		- `cmd/4_cmd_execute/*`
+		- `cmd/cmd_finalize.c`
+		- `cmd_sub/*`
+		- `env/1_options/2_helpers.c`
+		- `env/1_options/5_load.c`
+		- `env/2_specials/2_load.c`
+	- `types.h` remove (move content to correct headers / `utils.h`)
+	- `asm_stubs`: macros can NOT contain `(...)` + must only be in *global scope* (=> AI)
+- Error qualifying
+- Funkcheck en -s +i only
+
 # WIP (ALIAS)
 
 > "With both the backquoted and $(commands) forms, the commands string shall be tokenized and parsed. It is unspecified whether the commands string is parsed and executed incrementally as a program (as for a shell script), or is parsed as a single compound_list that is executed after the string has been completely parsed.”

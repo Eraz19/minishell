@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_getopt_priv.h                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:47:55 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:51:07 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_GETOPT_PRIV_H
 # define FT_GETOPT_PRIV_H
 
@@ -56,9 +68,9 @@ t_error	getopt_add_option(t_getopt_state *state, t_getopt_option *src);
  * @return Printed error descriptor with type @p err_type.
  */
 t_error	getopt_err(
-	const t_getopt_state *state,
-	char flag,
-	const char *arg, t_error_type err_type);
+			const t_getopt_state *state,
+			char flag,
+			const char *arg, t_error_type err_type);
 
 /* ************************************************************************* */
 /*                                 OPTIONS                                   */

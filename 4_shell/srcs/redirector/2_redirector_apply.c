@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_redirector_apply.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 15:20:33 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:23:36 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "redirector_priv.h"
 #include "posix_helpers.h"
 #include "fd.h"
@@ -41,8 +53,8 @@ static inline t_error	redirect_dup(t_redir *redir, bool *applied)
 		err = posix_dup2(rhs_fd, redir->fd);
 		if (err.type == ERR_LIBC && err.saved_errno == EBADF)
 			err = error_print(error(ERR_REDIRECTION),
-				"file descriptor is not valid", NULL,
-				"%i expanded from '%s'", rhs_fd, redir->word.value.data);
+					"file descriptor is not valid", NULL,
+					"%i expanded from '%s'", rhs_fd, redir->word.value.data);
 	}
 	if (err.type == ERR_LIBC)
 		err.type = ERR_REDIRECTION;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_cmd_search_try_envp_path.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:38 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:02:03 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd_search_priv.h"
 #include "env.h"
 #include "utils.h"
@@ -46,22 +58,21 @@ t_error	cmd_search_try_envp_path(
 	err = cmd_search_find_path_in_envp(envp, &env_path);
 	if (err.type)
 		return (err);
-	err = file_search(&env_path, cmd_name, EXECUTABLE, &out_entry_point->data.cmd_path);
+	err = file_search(
+			&env_path, cmd_name, EXECUTABLE, &out_entry_point->data.cmd_path);
 	err = cmd_convert_file_error(err);
 	if (err.type)
 		return (err);
 	out_entry_point->type = CMD_EXTERNAL;
-	if (path_is_temporary == false)
-	{
-		err = env_get_cmd_cache(&cmd_cache);
-		if (err.type == ERR_NO)
-			err = cmd_cache_set(cmd_cache, cmd_name, &out_entry_point->data.cmd_path);
-		if (err.type)
-		{
-			out_entry_point->type = CMD_NONE;
-			return (string_free(&out_entry_point->data.cmd_path), err);
-		}
-	}
+	if (path_is_temporary == true)
+		return (cmd_search_try_regular_builtin(out_entry_point), err);
+	err = env_get_cmd_cache(&cmd_cache);
+	if (err.type == ERR_NO)
+		err = cmd_cache_set(
+				cmd_cache, cmd_name, &out_entry_point->data.cmd_path);
+	if (err.type)
+		return (out_entry_point->type = CMD_NONE,
+			string_free(&out_entry_point->data.cmd_path), err);
 	cmd_search_try_regular_builtin(out_entry_point);
 	return (err);
 }

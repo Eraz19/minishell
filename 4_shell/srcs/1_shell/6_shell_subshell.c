@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   6_shell_subshell.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:56:58 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:04:01 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "posix_helpers.h"
 #include <fcntl.h>
@@ -11,7 +23,7 @@ t_error	shell_is_subshell(bool *out)
 	shell = shell_get();
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL),
-					"shell not found", NULL, NULL));
+				"shell not found", NULL, NULL));
 	*out = shell->is_subshell;
 	return (error(ERR_NO));
 }
@@ -48,21 +60,20 @@ t_error	shell_init_subshell(t_subshell_mode mode)
 	shell = shell_get();
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL),
-					__func__, "shell not found", NULL, NULL));
+				__func__, "shell not found", NULL, NULL));
 	job_control = option_is_active_in(shell->params.options, OPT_MONITOR);
 	shell->is_subshell = true;
 	async_no_job_ctrl = mode == SUBSHELL_ASYNC_AND_OR && !job_control;
 	env_init_subshell(&shell->params, async_no_job_ctrl);
-	if (async_no_job_ctrl)
+	if (async_no_job_ctrl == false)
+		return (error(ERR_NO));
+	err = shell_set_stdin_to_dev_null();
+	if (err.type)
 	{
-		err = shell_set_stdin_to_dev_null();
-		if (err.type)
-		{
-			err = error_print(err, "subshell initialization failed", NULL, NULL);
-			if (err.type == ERR_INVALID_USAGE)
-				err.type = ERR_INTERNAL;
-			return (err);
-		}
+		err = error_print(err, "subshell initialization failed", NULL, NULL);
+		if (err.type == ERR_INVALID_USAGE)
+			err.type = ERR_INTERNAL;
+		return (err);
 	}
-	return (error(ERR_NO));
+	return (err);
 }

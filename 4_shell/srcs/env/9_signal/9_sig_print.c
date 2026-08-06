@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   9_sig_print.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:09 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:14:05 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sig.h"
 #include "sig_priv.h"
 #include "posix_helpers.h"
@@ -86,7 +98,7 @@ t_error	sig_print_all_except_default(void)
 	t_sig_id		sig_id;
 	t_sig_action	*action;
 	t_error			err;
-	
+
 	err = sig_get_printable_state(&sig_state);
 	if (err.type)
 		return (err);

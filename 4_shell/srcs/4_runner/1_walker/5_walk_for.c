@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   5_walk_for.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:36 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:29:05 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "error.h"
 #include "walker_priv.h"
 #include "expander.h"
@@ -112,7 +124,7 @@ static inline t_error	walk_for_loop(
 t_error	walk_for(t_runner *runner, t_ast_for *for_clause, int *exit_status)
 {
 	t_expansions	expansions;
-	t_error				err;
+	t_error			err;
 
 	runner->loop_depth++;
 	cmd_expansions_init(&expansions);

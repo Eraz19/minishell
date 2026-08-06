@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_cmd_resolve_is_unspecified.c                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:07 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:58:46 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
-#include "resolve_priv.h"
+#include "cmd_resolve_priv.h"
 #include "error.h"
 
-#define CITATION_1		"POSIX 2.9.1.4: If the command name matches the name of"
-#define CITATION_2		" a utility listed in [...] the results are unspecified"
-#define CITATION		CITATION_1 CITATION_2
+#define CITATION		"POSIX 2.9.1.4: If the command name matches the name of\
+ a utility listed in [...] the results are unspecified"
 #define IMPLEMENTATION	"continue regular command resolution"
 
 static inline bool	cmd_name_is_unspecified_3(const char *cmd_name)

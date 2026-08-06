@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   posix_close_if_open.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:43:29 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:44:01 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "error.h"
 #include "posix_helpers.h"
 #include <errno.h>
@@ -46,4 +58,3 @@ t_error	posix_close_if_open(int fd)
 		return (error_sys());
 	}
 }
-

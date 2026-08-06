@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   trap.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:41 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:48:34 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "utils.h"
 #include "sig.h"
@@ -53,14 +65,14 @@ static inline t_error	trap_process_err(
 							const char *name,
 							const char *arg,
 							t_error err,
-							int *exit_status)
+							int *status)
 {
 	if (err.type == ERR_SIG_WAS_IGNORED_ON_ENTRY)
 		return (error(ERR_NO));
 	err = error_print(err, name, arg, NULL, NULL);
 	if (err.type)
 	{
-		*exit_status = (int)err.type;
+		*status = (int)err.type;
 		if (err.type == ERR_VAR_INVALID_NAME)
 			err.type = ERR_NO;
 	}
@@ -72,7 +84,7 @@ static inline t_error	trap_process_operands(
 							int argc,
 							char **argv,
 							size_t first_op_id,
-							int *exit_status)
+							int *status)
 {
 	int		mode;
 	int		i;
@@ -90,7 +102,7 @@ static inline t_error	trap_process_operands(
 			err = sig_set_trap(argv[i], argv[first_op_id]);
 		if (err.type)
 		{
-			err = trap_process_err(argv[0], argv[i], err, exit_status);
+			err = trap_process_err(argv[0], argv[i], err, status);
 			if (err.type)
 				return (err);
 		}
@@ -99,13 +111,13 @@ static inline t_error	trap_process_operands(
 	return (error(ERR_NO));
 }
 
-t_error	builtin_trap(int argc, char **argv, t_runner *runner, int *exit_status)
+t_error	builtin_trap(int argc, char **argv, t_runner *runner, int *status)
 {
 	t_getopt_out	out;
 	t_error			err;
 
 	(void)runner;
-	*exit_status = 0;
+	*status = 0;
 	err = trap_process_options(argc, argv, &out);
 	if (err.type == ERR_NO && out.first_operand_index >= (size_t)argc)
 	{
@@ -115,11 +127,13 @@ t_error	builtin_trap(int argc, char **argv, t_runner *runner, int *exit_status)
 			err = sig_print_all();
 	}
 	else if (err.type == ERR_NO && out.options.len == 1)
-		err = sig_print_conditions(argv[0], argv + out.first_operand_index, exit_status);
+		err = sig_print_conditions(argv[0],
+				argv + out.first_operand_index, status);
 	else if (err.type == ERR_NO)
-		err = trap_process_operands(argc, argv, out.first_operand_index, exit_status);
-	if (err.type && *exit_status == 0)
-		*exit_status = (int)err.type;
+		err = trap_process_operands(argc, argv,
+				out.first_operand_index, status);
+	if (err.type && *status == 0)
+		*status = (int)err.type;
 	vector_free(&out.options, NULL);
 	return (err);
 }

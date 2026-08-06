@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   generator_build.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:09:42 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:09:51 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "generator.h"
 #include "generator_rules.h"
 #include "generator_symbols.h"
@@ -9,7 +21,7 @@
 #include "generator_qualifiers.h"
 #include "generator_expects.h"
 #include <stdio.h>
-# include "logs.h"
+#include "logs.h"
 
 #define TRANSITION_INITIAL_CAP		6000
 #define LR_STATE_INITIAL_CAP		2000

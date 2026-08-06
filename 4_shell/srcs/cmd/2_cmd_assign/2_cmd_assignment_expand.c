@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_cmd_assignment_expand.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:18 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:59:30 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd_assign_priv.h"
 #include <assert.h>	// DEBUG
 
-#define CITATION_1	"POSIX 2.9.1.1: Each variable assignment shall be expanded "
-#define CITATION_2	"for [...] but no field splitting -> POSIX 2.6: [...] shall"
-#define CITATION_3	" expand to a single field"
-#define CITATION	CITATION_1 CITATION_2 CITATION_3
+#define CITATION	"POSIX 2.9.1.1: Each variable assignment shall be expanded \
+for [...] but no field splitting -> POSIX 2.6: [...] shall\
+ expand to a single field"
 
 t_error	cmd_assignment_expand(
 			t_token *token,

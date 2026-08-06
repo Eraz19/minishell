@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   alias_stack_ops.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:30 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:15:22 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "alias_stack_internal.h"
 #include <assert.h>
 
@@ -32,6 +44,7 @@ bool	alias_stack_contains(const t_alias_stack *stack, const t_string *name)
 void	alias_stack_pop(t_alias_stack *stack)
 {
 	t_string	name;
+
 	assert(stack->len > 0);
 	(void)vector_pop(stack, &name);
 	string_free(&name);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:44 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:47:15 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "env.h"
 #include "utils.h"
@@ -40,13 +52,13 @@ static t_error	unset_process_options(int argc, char **argv, t_getopt_out *out)
 	if (out->options.len > 1)
 	{
 		(void)error_print(error(ERR_INVALID_USAGE), argv[0], UNSET_USAGE,
-				NULL, NULL);
+			NULL, NULL);
 		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
-			"mutually-exclusive arguments produces undefined results.");
+				"mutually-exclusive arguments produces undefined results.");
 	}
 	else if (out->first_operand_index >= (size_t)argc)
 		return (error_print(error(ERR_INVALID_USAGE), argv[0], UNSET_USAGE,
-					NULL, NULL));
+				NULL, NULL));
 	return (err);
 }
 
@@ -70,7 +82,7 @@ static t_error	unset_var(size_t first_operand_index, int argc, char **argv)
 		if (last_exit_status.type != ERR_NO)
 		{
 			exit_status = error_print(
-				last_exit_status, argv[0], argv[i], NULL, NULL);
+					last_exit_status, argv[0], argv[i], NULL, NULL);
 		}
 		i++;
 	}
@@ -91,7 +103,7 @@ static t_error	unset_fun(size_t first_operand_index, int argc, char **argv)
 		if (last_exit_status.type != ERR_NO)
 		{
 			exit_status = error_print(
-				last_exit_status, argv[0], argv[i], NULL, NULL);
+					last_exit_status, argv[0], argv[i], NULL, NULL);
 		}
 		i++;
 	}

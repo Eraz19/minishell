@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_function_set.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:11:33 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:07:01 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "functions_priv.h"
 #include <stdlib.h>
 
@@ -8,7 +20,9 @@ static inline void	function_take_body(t_function *dst, t_ast_function_def *src)
 	src->body = NULL;
 }
 
-static inline void	function_take_redirs(t_function *dst, t_ast_function_def *src)
+static inline void	function_take_redirs(
+						t_function *dst,
+						t_ast_function_def *src)
 {
 	dst->redirs = src->redirs;
 	ast_redir_list_init(&src->redirs);
@@ -18,7 +32,7 @@ t_error	function_set(t_functions *functions, t_ast_function_def *function_def)
 {
 	t_function	*function;
 	t_error		err;
-	
+
 	function_unset(functions, function_def->name.value.data);
 	function = malloc(sizeof(*function));
 	if (function == NULL)

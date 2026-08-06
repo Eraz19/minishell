@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   9_walk_function.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:46 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:30:47 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "walker.h"
 #include "redirector.h"
 #include "env.h"
-# include "logs.h"
+#include "logs.h"
 
 static inline t_error	walk_function_add_positional(
 							t_positionals *positionals,

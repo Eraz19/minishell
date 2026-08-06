@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   8_parser_build_cst.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:11 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:10:16 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser.h"
 #include "parser_priv.h"
 #include "parser_item_stack.h"
@@ -6,7 +18,7 @@
 #ifdef DEBUG_PARSING
 # include "debug.h"		// DEBUG
 # include "logs.h"		// DEBUG
-#include <stdio.h>		// DEBUG
+# include <stdio.h>		// DEBUG
 #endif
 #include <assert.h>	// DEBUG
 
@@ -50,9 +62,9 @@ static inline void	parser_build_cycle(t_parser *parser, size_t *lr_state_id)
 		return ;
 	token = parser_get_token(parser, parser->lookahead_id);
 	parser->tables->qualifiers[*lr_state_id](
-						token->value.data,
-						token->assignment_offset,
-						&parser->lookahead_symbol);
+		token->value.data,
+		token->assignment_offset,
+		&parser->lookahead_symbol);
 }
 
 static inline t_error	parser_try_continuation(

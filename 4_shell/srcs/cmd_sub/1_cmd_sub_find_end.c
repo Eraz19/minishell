@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_cmd_sub_find_end.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:06:59 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:07:41 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd_sub.h"
 #include "parser.h"
 #include "shell.h"
@@ -5,7 +17,9 @@
 # include "logs.h"
 #endif
 
-t_error	cmd_sub_find_end(ssize_t *out_closing_token_id, t_ast_vector *ast_vector)
+t_error	cmd_sub_find_end(
+			ssize_t *out_closing_token_id,
+			t_ast_vector *ast_vector)
 {
 	t_ast_root	ast_root;
 	t_parser	*parser;

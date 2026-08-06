@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_helpers.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:09:30 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:53:01 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include <stdlib.h>
-# include "logs.h"		// DEBUG
+#include "logs.h"		// DEBUG
 #include <assert.h>	// DEBUG
 
 t_error	option_is_active(t_option option, bool *out)

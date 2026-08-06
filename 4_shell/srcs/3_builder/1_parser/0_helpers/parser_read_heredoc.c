@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_read_heredoc.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:06:42 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:18:49 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "scanner.h"
 #include "parser.h"
 #include "parser_type.h"
 #include "parser_priv.h"
 #include "parser_here_stack.h"
 #ifdef DEBUG_PARSING
-#include <stdio.h>	// DEBUG
+# include <stdio.h>	// DEBUG
 # include "logs.h"	// DEBUG
 # include "debug.h"	// DEBUG
 #endif

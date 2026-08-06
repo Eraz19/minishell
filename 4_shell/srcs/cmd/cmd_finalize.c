@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_finalize.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:54 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:05:15 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 #include "sig.h"
 #include "options.h"
@@ -18,9 +30,11 @@ static inline t_error	cmd_qualify_error(t_cmd *cmd, t_error err, int *status)
 			*status = ERR_POSIX_SIGNAL_BASE_CODE + signo;
 		err.type = ERR_NO;
 	}
-	else if (err.type == ERR_REDIRECTION && cmd->entry.type != CMD_SPECIAL_BUILTIN)
+	else if (err.type == ERR_REDIRECTION
+		&& cmd->entry.type != CMD_SPECIAL_BUILTIN)
 		err.type = ERR_NO;
-	else if (err.type == ERR_POSIX_CMD_NOT_FOUND || err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
+	else if (err.type == ERR_POSIX_CMD_NOT_FOUND
+		|| err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
 		err.type = ERR_NO;
 	else if (err.type > ERR_POSIX_SYNTAX && err.type < ERR_POSIX_READ)
 	{

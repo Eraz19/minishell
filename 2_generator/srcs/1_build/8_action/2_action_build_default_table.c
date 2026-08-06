@@ -1,5 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_action_build_default_table.c                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:15:29 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:16:15 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "generator_actions_priv.h"
 #include "grammar_symbols.h"
+#include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>

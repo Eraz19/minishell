@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:38 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:36:14 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SHELL_H
 # define SHELL_H
 
@@ -43,14 +55,14 @@ typedef enum e_subshell_mode
 /* ************************************************************************* */
 
 // TODO: doc
-void	shell_clear(void);
+void				shell_clear(void);
 
 /**
  * @brief Frees the current global shell instance when one is registered.
  *
  * @note This is a no-op when @ref shell_get() returns @c NULL.
  */
-void	shell_free_void(void);
+void				shell_free_void(void);
 
 /* ************************************************************************* */
 /*                                    OPS                                    */
@@ -62,40 +74,40 @@ void	shell_free_void(void);
 #define shell_get_new_runner(out_runner_ptr, mode, input) shell_get_new_runner_priv(out_runner_ptr, mode, input, __func__)
 #define shell_destroy_last_instance() shell_destroy_last_instance_priv(__func__)
 
-t_error	shell_get_new_lexer_priv(
-			t_lexer **out_lexer_ptr,
-			t_scan_mode mode,
-			const char *input,
-			const char *caller);
-t_error	shell_get_new_scanner_priv(
-			t_scanner **out_scanner_ptr,
-			t_scan_mode mode,
-			const char *input,
-			const char *caller);
-t_error	shell_get_new_parser_priv(
-			t_parser **out_parser_ptr,
-			t_scan_mode mode,
-			const char *input,
-			const char *caller);
-t_error	shell_get_new_runner_priv(
-			t_runner **out_runner_ptr,
-			t_scan_mode mode,
-			const char *input,
-			const char *caller);
-t_error	shell_destroy_last_instance_priv(const char *caller);
+t_error				shell_get_new_lexer_priv(
+						t_lexer **out_lexer_ptr,
+						t_scan_mode mode,
+						const char *input,
+						const char *caller);
+t_error				shell_get_new_scanner_priv(
+						t_scanner **out_scanner_ptr,
+						t_scan_mode mode,
+						const char *input,
+						const char *caller);
+t_error				shell_get_new_parser_priv(
+						t_parser **out_parser_ptr,
+						t_scan_mode mode,
+						const char *input,
+						const char *caller);
+t_error				shell_get_new_runner_priv(
+						t_runner **out_runner_ptr,
+						t_scan_mode mode,
+						const char *input,
+						const char *caller);
+t_error				shell_destroy_last_instance_priv(const char *caller);
 
 // TODO: doc
-t_error	shell_init_subshell(t_subshell_mode mode);
+t_error				shell_init_subshell(t_subshell_mode mode);
 
 // TODO: doc
-t_error	shell_is_subshell(bool *out);
+t_error				shell_is_subshell(bool *out);
 
 /**
  * @brief Returns the current global shell instance.
  *
  * @return Shell state, or NULL when the shell is unavailable (borrowed).
  */
-t_shell		*shell_get(void);
+t_shell				*shell_get(void);
 
 /**
  * @brief Returns the history state stored in the global shell.
@@ -103,7 +115,7 @@ t_shell		*shell_get(void);
  * @return History state managed by the history submodule, or NULL
  *         when the shell is unavailable. (borrowed)
  */
-t_history	*shell_get_history(void);
+t_history			*shell_get_history(void);
 
 // TODO: doc
 const t_lr_tables	*shell_get_lr_tables(void);
@@ -114,7 +126,7 @@ const t_lr_tables	*shell_get_lr_tables(void);
  * @return Shell name, or the static default "minishell"
  *         when the shell is unavailable. (borrowed, read-only)
  */
-const char	*shell_get_name(void);
+const char			*shell_get_name(void);
 
 /**
  * @brief Returns the parameter state stored in the global shell.
@@ -122,8 +134,12 @@ const char	*shell_get_name(void);
  * @return Params state managed by the params submodule, or NULL when
  *         the shell is unavailable. (borrowed)
  */
-t_params	*shell_get_params(void);
+t_params			*shell_get_params(void);
 
-int	shell_run(int argc, char **argv, char **envp, bool must_init);
+int					shell_run(
+						int argc,
+						char **argv,
+						char **envp,
+						bool must_init);
 
 #endif

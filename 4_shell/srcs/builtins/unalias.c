@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unalias.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:43 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:42:35 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "env.h"
 #include "utils.h"
@@ -61,7 +73,7 @@ static t_error	unalias_remove_operands(
 		if (last_exit_status.type != ERR_NO)
 		{
 			exit_status = error_print(
-							last_exit_status, argv[0], argv[i], NULL, NULL);
+					last_exit_status, argv[0], argv[i], NULL, NULL);
 		}
 		i++;
 	}

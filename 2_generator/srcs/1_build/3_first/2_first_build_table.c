@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:43:08 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/04 16:43:09 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 12:13:24 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stddef.h>
 
 static inline void	first_set_default_and_terminals(
-						bool first[SYM_COUNT * (SYM_TERMINAL_MAX + 1)])
+						bool first[SYM_COUNT *(SYM_TERMINAL_MAX + 1)])
 {
 	t_symbol	symbol;
 	t_symbol	terminal;
@@ -39,7 +39,7 @@ static inline void	first_set_default_and_terminals(
 }
 
 static inline void	first_build_from_rule(
-						bool first[SYM_COUNT * (SYM_TERMINAL_MAX + 1)],
+						bool first[SYM_COUNT *(SYM_TERMINAL_MAX + 1)],
 						const bool nullable_symbols[SYM_COUNT],
 						const t_rule *rule,
 						bool *did_add)
@@ -70,7 +70,7 @@ static inline void	first_build_from_rule(
 void	first_build_table(
 			const t_rule rules[RULE_COUNT],
 			const bool nullable_symbols[SYM_COUNT],
-			bool first[SYM_COUNT * (SYM_TERMINAL_MAX + 1)])
+			bool first[SYM_COUNT *(SYM_TERMINAL_MAX + 1)])
 {
 	size_t		i;
 	bool		did_add;

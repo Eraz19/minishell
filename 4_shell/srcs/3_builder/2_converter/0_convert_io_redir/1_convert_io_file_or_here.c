@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_convert_io_file_or_here.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:24 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:22:16 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "converter_priv.h"
 #include "convert_io_priv.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <assert.h>	// DEBUG
-# include "debug.h"
+#include "debug.h"
 
 static inline t_error	convert_io_operator(
 							t_symbol symbol,
@@ -27,8 +39,8 @@ static inline t_error	convert_io_operator(
 		*out_op = AST_REDIR_READ_WRITE;
 	else
 		return (error_print(error(ERR_INTERNAL), "builder", "converter",
-					"unknown io operator", NULL, "%i (%s)",
-					(int)symbol, symbol_to_string(symbol)));
+				"unknown io operator", NULL, "%i (%s)",
+				(int)symbol, symbol_to_string(symbol)));
 	return (error(ERR_NO));
 }
 

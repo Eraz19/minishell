@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   positionals.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:10:33 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:02:06 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef POSITIONALS_H
 # define POSITIONALS_H
 
@@ -147,14 +159,5 @@ t_error	positionals_replace(
  * @return @c ERR_NO, @c ERR_VAR_NOT_FOUND or @c ERR_SHIFT_INVALID_VALUE.
  */
 t_error	positionals_shift(t_positionals_stack *stack, size_t n);
-
-/* ************************************************************************* */
-/*                                   DEBUG                                   */
-/* ************************************************************************* */
-
-/**
- * @brief Dump positional frames to stderr.
- */
-void	positionals_dump(void);
 
 #endif

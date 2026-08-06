@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_pwd_set.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:10:44 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:04:43 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "variables.h"
 #include "var_load_mandatory_priv.h"
 #include "posix_helpers.h"
@@ -6,7 +18,7 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-# include "logs.h"		// DEBUG
+#include "logs.h"		// DEBUG
 #include <assert.h>	// DEBUG
 
 #define PWD_NAME	"PWD"

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   alias.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:17 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:51:22 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "env.h"
 #include <stdlib.h>
@@ -11,13 +23,13 @@ static inline bool	alias_is_valid_name(const char *name)
 	i = 0;
 	while (name[i] != '\0')
 	{
-		if (!ft_isalnum(name[i]) &&
-			name[i] != '_' &&
-			name[i] != '!' &&
-			name[i] != '%' &&
-			name[i] != ',' &&
-			name[i] != '-' &&
-			name[i] != '@')
+		if (!ft_isalnum(name[i])
+			&& name[i] != '_'
+			&& name[i] != '!'
+			&& name[i] != '%'
+			&& name[i] != ','
+			&& name[i] != '-'
+			&& name[i] != '@')
 			return (false);
 		i++;
 	}

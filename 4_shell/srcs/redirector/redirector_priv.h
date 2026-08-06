@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirector_priv.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 15:20:37 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:24:10 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef REDIRECTOR_PRIV_H
 # define REDIRECTOR_PRIV_H
 
@@ -50,7 +62,8 @@ t_error	redirect_apply(
 bool	redirect_parse_fd(const char *s, int *out_fd);
 
 // TODO: doc
-// @return @c ERR_POSIX_EXPANSION, @c ERR_REDIRECTION, @c ERR_INTERNAL or @c ERR_LIBC.
+// @return @c ERR_POSIX_EXPANSION, @c ERR_REDIRECTION, @c ERR_INTERNAL 
+// or @c ERR_LIBC.
 t_error	redirect_expand(t_redir *redirection, int *exit_status);
 
 // @ret ERR_REDIRECTION

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:13 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:32:27 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ENV_H
 # define ENV_H
 
@@ -75,10 +87,10 @@ t_error	env_set_option(t_option option, bool on);
 t_error	env_set_last_status(int value);
 void	env_set_last_status_in(t_params *params, int value);
 t_error	env_set_variable(
-	const t_string *name,
-	const t_string *value,
-	bool export,
-	bool readonly);
+			const t_string *name,
+			const t_string *value,
+			bool export,
+			bool readonly);
 t_error	env_shift_positionals(size_t n);
 void	env_stop_function(t_function **function);
 t_error	env_unset_alias(const char *name);

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   convert_cst_to_ast.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:52 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:21:25 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "error.h"
 #include "cst_type.h"
 #include "ast.h"
 #include "converter_priv.h"
 #include <assert.h>	// DEBUG
-# include "debug.h"		// DEBUG
+#include "debug.h"		// DEBUG
 
 static inline t_error	converter_unrecognized_symbol(t_cst_node *node)
 {

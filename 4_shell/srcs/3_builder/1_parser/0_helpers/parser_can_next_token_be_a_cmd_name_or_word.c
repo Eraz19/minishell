@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_can_next_token_be_a_cmd_name_or_word        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:06:34 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:18:26 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser_type.h"
 #include "parser.h"
 #include "grammar_gotos.h"
@@ -9,7 +21,7 @@ static inline t_error	get_lr_state_ids_from_stack(
 							const t_parser *parser,
 							t_vector *dst)
 {
-	size_t						i;
+	size_t				i;
 	const t_parser_item	*item;
 
 	if (!vector_init(dst, sizeof(size_t), parser->item_stack.len))
@@ -38,14 +50,14 @@ static inline t_error	simulate_reduction(
 	rule = &tables->rules[rule_id];
 	if (rule->rhs_len >= lr_state_ids->len)
 		return (error_print(error(ERR_PARSER_INVALID_STATE), "parser",
-			"unable to simulate reduction", NULL, NULL));
+				"unable to simulate reduction", NULL, NULL));
 	lr_state_ids->len -= rule->rhs_len;
 	lr_state_from = ((size_t *)lr_state_ids->data)[lr_state_ids->len - 1];
 	lr_state_to = tables->gotos[
 		lr_state_from * GOTO_COL_COUNT + rule->lhs - SYM_NON_TERMINAL_MIN];
 	if (lr_state_to == GOTO_EMPTY)
 		return (error_print(error(ERR_PARSER_EMPTY_GOTO), "parser",
-			"unable to simulate reduction", NULL, NULL));
+				"unable to simulate reduction", NULL, NULL));
 	if (!vector_push(lr_state_ids, &lr_state_to))
 		return (error_sys());
 	return (error(ERR_NO));

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   7_sig_build_output.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:14:04 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:12:08 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sig_priv.h"
 #include "utils.h"
 
@@ -5,7 +17,6 @@ static inline t_error	sig_append_action(t_sig_action *action, t_string *out)
 {
 	t_string	serialized_cmd;
 	t_error		err;
-
 
 	if (action->type == SIG_DEFAULT)
 	{
@@ -33,7 +44,7 @@ static inline t_error	sig_append_condition(t_sig_id sig_id, t_string *out)
 {
 	t_string	name;
 	t_error		err;
-	
+
 	if (sig_id == SIG_EXIT_ID)
 	{
 		if (!string_append_n(out, "EXIT", -1))

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   guard.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:43:22 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:46:17 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "posix_open_priv.h"
 #include "error.h"
 #include <errno.h>
@@ -66,27 +78,27 @@ t_error	open_check_ub_args(int oflag, mode_t *optional_mode)
 {
 	if ((oflag & O_EXCL) && !(oflag & O_CREAT))
 		return (open_invalid_args("POSIX: open(): invalid flag combination: "
-			"O_EXCL without O_CREAT"));
+				"O_EXCL without O_CREAT"));
 	if ((oflag & O_TRUNC) && !open_access_mode_is_write_or_rdwr(oflag))
 		return (open_invalid_args("POSIX: open(): invalid flag combination: "
-			"O_TRUNC without O_WRONLY or O_RDWR"));
+				"O_TRUNC without O_WRONLY or O_RDWR"));
 	if ((oflag & O_CREAT) && optional_mode == NULL)
 		return (open_invalid_args("POSIX: open(): missing mode: "
-			"O_CREAT requires a mode argument"));
+				"O_CREAT requires a mode argument"));
 	if ((oflag & O_CREAT)
 		&& optional_mode != NULL
 		&& !open_mode_has_only_permission_bits(*optional_mode))
 		return (open_invalid_args("POSIX: open(): invalid mode: "
-			"O_CREAT mode contains bits other than file permission bits"));
+				"O_CREAT mode contains bits other than file permission bits"));
 #ifdef O_DIRECTORY
 	if ((oflag & O_CREAT)
 		&& (oflag & O_DIRECTORY)
 		&& !open_access_mode_is_write_or_rdwr(oflag))
 		return (open_invalid_args("POSIX: open(): invalid flag combination: "
-			"O_CREAT with O_DIRECTORY without O_WRONLY or O_RDWR"));
+				"O_CREAT with O_DIRECTORY without O_WRONLY or O_RDWR"));
 #endif
 	if ((oflag & O_CREAT) && open_access_mode_is_exec_or_search(oflag))
 		return (open_invalid_args("POSIX: open(): invalid flag combination: "
-			"O_CREAT with O_EXEC or O_SEARCH"));
+				"O_CREAT with O_EXEC or O_SEARCH"));
 	return (error(ERR_NO));
 }

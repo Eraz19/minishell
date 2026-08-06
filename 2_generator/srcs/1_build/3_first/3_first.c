@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:43:11 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/04 16:43:12 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 12:13:33 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static inline void	reset_result(bool *result)
 }
 
 void	first(
-			const bool first[SYM_COUNT * (SYM_TERMINAL_MAX + 1)],
+			const bool first[SYM_COUNT *(SYM_TERMINAL_MAX + 1)],
 			const bool nullable_symbols[SYM_COUNT],
 			t_first_param *param)
 {

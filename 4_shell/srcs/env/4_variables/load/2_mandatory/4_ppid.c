@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   4_ppid.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:10:48 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:05:00 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm_stubs.h"
 #include "variables.h"
 #include <stdlib.h>
-# include "logs.h"	// DEBUG
+#include "logs.h"	// DEBUG
 #include <assert.h>	// DEBUG
 
 #define PPID_NAME	"PPID"

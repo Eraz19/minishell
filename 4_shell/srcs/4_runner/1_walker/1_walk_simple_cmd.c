@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_walk_simple_cmd.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:23:28 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:28:05 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "walker_priv.h"
 #include "cmd.h"
 #include "redirector.h"
@@ -23,7 +35,11 @@ static inline t_error	walk_simple_cmd_exec(
 	else if (type == CMD_SPECIAL_BUILTIN)
 	{
 		fprintf(stderr, MAGENTA "############## SPECIAL BUILTIN %s (START) ##############\n" NC, cmd->name.data);
-		err = cmd->entry.data.special_builtin(cmd->argc, cmd->argv.data, runner, status);
+		err = cmd->entry.data.special_builtin(
+				cmd->argc,
+				cmd->argv.data,
+				runner,
+				status);
 	}
 	else
 		err = walk_function(cmd, runner, status);

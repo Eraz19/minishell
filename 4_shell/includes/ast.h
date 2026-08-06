@@ -1,5 +1,17 @@
-#ifndef AST_TYPE_H
-# define AST_TYPE_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ast.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:00 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:28:16 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef AST_H
+# define AST_H
 
 # include "libft.h"
 # include "token.h"
@@ -12,14 +24,14 @@
 
 typedef enum e_ast_redir_op
 {
-    AST_REDIR_HEREDOC,       // << / <<-	SYM_DLESS / SYM_DLESSDASH
-    AST_REDIR_READ,          // <			SYM_LESS
-    AST_REDIR_WRITE,         // >			SYM_GREAT
-    AST_REDIR_CLOBBER,       // >|			SYM_CLOBBER
-    AST_REDIR_APPEND,        // >>			SYM_DGREAT
-    AST_REDIR_DUP_WRITE,     // >&			SYM_GREATAND
-    AST_REDIR_DUP_READ,      // <&			SYM_LESSAND
-    AST_REDIR_READ_WRITE,    // <>			SYM_LESSGREAT
+	AST_REDIR_HEREDOC,		// << / <<-	SYM_DLESS / SYM_DLESSDASH
+	AST_REDIR_READ,			// <			SYM_LESS
+	AST_REDIR_WRITE,		// >			SYM_GREAT
+	AST_REDIR_CLOBBER,		// >|			SYM_CLOBBER
+	AST_REDIR_APPEND,		// >>			SYM_DGREAT
+	AST_REDIR_DUP_WRITE,	// >&			SYM_GREATAND
+	AST_REDIR_DUP_READ,		// <&			SYM_LESSAND
+	AST_REDIR_READ_WRITE,	// <>			SYM_LESSGREAT
 	AST_REDIR_COUNT
 }	t_ast_redir_op;
 
@@ -54,14 +66,14 @@ typedef struct s_ast_scmd
 
 typedef struct s_ast_pipeline
 {
-	t_vector	commands; 			// vector of t_ast_command
+	t_vector	commands;			// vector of t_ast_command
 	bool		negated;
 }	t_ast_pipeline;
 
 typedef struct s_ast_and_or
 {
 	t_vector	pipelines;			// vector of t_ast_pipeline
-	t_vector	next_on_success;	// vector of bool (&& (SYM_AND) = true, || (SYM_OR) = false)
+	t_vector	next_on_success;	// vector of bool (&& = true, || = false)
 }	t_ast_and_or;
 
 typedef struct s_ast_list

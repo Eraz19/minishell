@@ -6,12 +6,11 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:40:18 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/04 16:40:19 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 12:11:48 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "generator_rules_priv.h"
-
 
 /*
 brace_group      : Lbrace compound_list Rbrace

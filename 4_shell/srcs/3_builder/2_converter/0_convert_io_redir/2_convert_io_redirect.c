@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_convert_io_redirect.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:26 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:21:44 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "converter_priv.h"
 #include "convert_io_priv.h"
 #include <stdlib.h>
@@ -17,7 +29,7 @@ static inline t_error	convert_io_number(
 	{
 		err = error(ERR_FD_INVALID);
 		err = error_print(err, "builder", "converter", NULL,
-			"%s", token->value.data);
+				"%s", token->value.data);
 		// TODO: requalify as ERR_REDIRECTION ?
 		return (err);
 	}

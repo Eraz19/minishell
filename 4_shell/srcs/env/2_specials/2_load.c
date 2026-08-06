@@ -1,20 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_load.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:09:53 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:57:28 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm_stubs.h"
 #include "options.h"
 #include "specials.h"
 #include <stdlib.h>
-# include "logs.h"	// DEBUG
-# include <inttypes.h>	// DEBUG
+#include "logs.h"	// DEBUG
+#include <inttypes.h>	// DEBUG
 
 // @ret ERR_OPT_INVALID
 static t_error	specials_load_cmd_string(
-	t_specials *specials,
-	int argc,
-	char **argv,
-	size_t *operand_index)
+					t_specials *specials,
+					int argc,
+					char **argv,
+					size_t *operand_index)
 {
 	if ((size_t)argc < *operand_index + 1)
 		return (error_print(error(ERR_OPT_INVALID),
-			"-c needs an argument", NULL, NULL));
+				"-c needs an argument", NULL, NULL));
 	string_take(&specials->source, argv[(*operand_index)++], 0, -1);
 	if ((size_t)argc >= *operand_index + 1)
 		string_take(&specials->zero, argv[(*operand_index)++], 0, -1);
@@ -24,10 +36,10 @@ static t_error	specials_load_cmd_string(
 
 // @ret ERR_SHELL_NOT_FOUND / ERR_OPT_INVALID
 static t_error	specials_load_source_and_zero(
-	t_specials *specials,
-	int argc,
-	char **argv,
-	size_t *operand_index)
+					t_specials *specials,
+					int argc,
+					char **argv,
+					size_t *operand_index)
 {
 	bool	is_cmd_string;
 	bool	is_stdin;
@@ -58,10 +70,10 @@ static t_error	specials_load_source_and_zero(
 }
 
 t_error	specials_load(
-	t_specials *specials,
-	int argc,
-	char **argv,
-	size_t *start_index)
+			t_specials *specials,
+			int argc,
+			char **argv,
+			size_t *start_index)
 {
 	t_error	err;
 

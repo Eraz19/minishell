@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   0_fd_use_new_frame.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:12:46 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:10:38 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fd.h"
 #include "env.h"
 #include "redirect_stack.h"
 
 // @ret ERR_NO / ERR_INTERNAL / ERR_LIBC
-t_error	fd_use_new_frame()
+t_error	fd_use_new_frame(void)
 {
 	t_fd_manager	*fd_manager;
 	t_redir_frame	frame;

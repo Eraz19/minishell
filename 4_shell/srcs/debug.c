@@ -19,6 +19,212 @@
 #include <stdlib.h>
 #include <assert.h>	// DEBUG
 
+
+/* ************************************************************************* */
+/*                                     ENV                                   */
+/* ************************************************************************* */
+
+static inline void	positionals_dump_depth(t_positionals_stack *stack, size_t depth)
+{
+	t_positionals	*positionals;
+	size_t			count;
+	size_t			i;
+	t_string		*param;
+
+	positionals = &((t_positionals *)stack->data)[depth];
+	count = positionals->len;
+	i = 0;
+	while (i < count)
+	{
+		param = &((t_string *)positionals->data)[i];
+		fprintf(stderr, "POSITIONALS[%zu] %zu='%s'\n", depth, i, param->data);
+		i++;
+	}
+	fprintf(stderr, "POSITIONALS #=%zu\n", count);
+}
+
+void	positionals_dump(void)
+{
+	t_shell 			*shell;
+	t_positionals_stack	*stack;
+	size_t				count;
+	size_t				i;
+
+	fprintf(stderr, "\nDUMP POSITIONALS\n");
+	shell = shell_get();
+	if (!shell)
+		error_print(error(ERR_SHELL_NOT_FOUND), "positionals_dump()", NULL, NULL);
+	stack = &shell->params.positionals_stack;
+	count = stack->len;
+	i = 0;
+	while (i < count)
+	{
+		positionals_dump_depth(stack, i);
+		i++;
+		if (i < count)
+			fprintf(stderr, "---\n");
+	}
+}
+
+const char	*option_to_string(t_option option)
+{
+	if (option == OPT_EXPORT_ALL)
+		return ("a");
+	else if (option == OPT_NOTIFY)
+		return ("b");
+	else if (option == OPT_NOCLOBBER)
+		return ("C");
+	else if (option == OPT_ERREXIT)
+		return ("e");
+	else if (option == OPT_NOGLOB)
+		return ("f");
+	else if (option == OPT_CMD_HASH)
+		return ("h");
+	else if (option == OPT_INTERACTIVE)
+		return ("i");
+	else if (option == OPT_MONITOR)
+		return ("m");
+	else if (option == OPT_NOEXEC)
+		return ("n");
+	else if (option == OPT_NOUNSET)
+		return ("u");
+	else if (option == OPT_VERBOSE)
+		return ("v");
+	else if (option == OPT_XTRACE)
+		return ("x");
+	else if (option == OPT_CMD_STRING)
+		return ("c");
+	else if (option == OPT_STDIN_INPUT)
+		return ("s");
+	else if (option == OPT_IGNOREEOF)
+		return ("ignoreeof");
+	else if (option == OPT_NOLOG)
+		return ("nolog");
+	else if (option == OPT_PIPEFAIL)
+		return ("pipefail");
+	else if (option == OPT_VI)
+		return ("vi");
+	return ("unknown");
+}
+
+void	options_dump(void)
+{
+	bool			is_active;
+	unsigned int	option;
+	const char		*name;
+	const char		*value;
+	t_error			err;
+
+	fprintf(stderr, "\nDUMP OPTIONS\n");
+	option = 1u << 0;
+	while (option <= OPT_VI)
+	{
+		name = option_to_string(option);
+		err = option_is_active(option, &is_active);
+		if (err.type)
+			(void)error_print(err, __func__, "option_is_active() failed", NULL, NULL);
+		else
+		{
+			value = bool_to_string(is_active);
+			fprintf(stderr, "OPTION %s=%s\n", name, value);
+		}
+		option <<= 1;
+	}
+}
+
+void	specials_dump(void)
+{
+	t_shell 	*shell;
+	t_specials	*specials;
+
+	fprintf(stderr, "\nDUMP SPECIALS\n");
+	shell = shell_get();
+	if (!shell)
+		error_print(error(ERR_SHELL_NOT_FOUND), "specials_dump()", NULL, NULL);
+	specials = &shell->params.specials;
+	if (specials->source.len > 0)
+		fprintf(stderr, "SPECIAL source='%s'\n", specials->source.data);
+	else
+		fprintf(stderr, "SPECIAL source=NULL\n");
+	if (specials->zero.len > 0)
+		fprintf(stderr, "SPECIAL 0='%s'\n", specials->zero.data);
+	else
+		fprintf(stderr, "SPECIAL 0=NULL\n");
+	fprintf(stderr, "SPECIAL $=%jd\n", (intmax_t)specials->pid);
+	fprintf(stderr, "SPECIAL !=%jd\n", (intmax_t)specials->last_bg_pid);
+	fprintf(stderr, "SPECIAL ?=%i\n", specials->last_status);
+}
+
+/* ************************************************************************* */
+/*                                 FT_GETOPT                                 */
+/* ************************************************************************* */
+
+static void	ft_getopt_dump_flag_with_arg(t_getopt_flag_with_arg *flag)
+{
+	size_t	i;
+
+	fprintf(stderr, "[%c%c", flag->sign, flag->flag);
+	if (flag->arguments_are_optional)
+		fprintf(stderr, "[");
+	else
+		fprintf(stderr, " ");
+	i = 0;
+	while (flag->arguments_valids[i])
+	{
+		fprintf(stderr, "%s", flag->arguments_valids[i]);
+		if (flag->arguments_valids[i + 1])
+			fprintf(stderr, " ");
+		i++;
+	}
+	if (flag->arguments_are_optional)
+		fprintf(stderr, "]");
+	fprintf(stderr, "]\n");
+}
+
+void	dump_getopt_in(t_getopt_in *in)
+{
+	size_t	i;
+
+	fprintf(stderr, "\nGETOPT DUMP IN\n");
+	fprintf(stderr, "builtin_name=%s\n", in->builtin_name);
+	fprintf(stderr, "valid_minus_flags=%s\n", in->valid_minus_flags);
+	fprintf(stderr, "valid_plus_flags=%s\n", in->valid_plus_flags);
+	i = 0;
+	while (i < in->options_with_arg_count)
+	{
+		ft_getopt_dump_flag_with_arg(&in->options_with_arg[i]);
+		i++;
+	}
+	fprintf(stderr, "options_with_arg_count=%zu\n", in->options_with_arg_count);
+	fprintf(stderr, "single_delimiter=%s\n", bool_to_string(in->single_delimiter));
+	fprintf(stderr, "ub_on_repeated_flags=%s\n", bool_to_string(in->ub_on_repeated_flags));
+}
+
+void	dump_getopt_out(t_getopt_out *out)
+{
+	size_t			i;
+	t_getopt_option	*option;
+
+	fprintf(stderr, "\nGETOPT DUMP OUT\n");
+	i = 0;
+	while (i < out->options.len)
+	{
+		option = &((t_getopt_option *)out->options.data)[i];
+		if (option->argument)
+			fprintf(stderr, "%c%c %s\n", option->sign, option->flag, option->argument);
+		else
+			fprintf(stderr, "%c%c\n", option->sign, option->flag);
+		i++;
+	}
+	fprintf(stderr, "first_operand_index=%zu\n", out->first_operand_index);
+}
+
+void	dump_getopt_all(t_getopt_in *in, t_getopt_out *out)
+{
+	dump_getopt_in(in);
+	dump_getopt_out(out);
+}
+
 /* ************************************************************************* */
 /*                                    ENV                                    */
 /* ************************************************************************* */

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_here_stack.h                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:06:58 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:16:21 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_HERE_STACK_H
 # define PARSER_HERE_STACK_H
 
@@ -23,20 +35,7 @@
  *
  * @param stack Stack initialized by the function (borrowed).
  */
-void	parser_here_stack_init(t_parser_here_stack *stack);
-
-/**
- * @ingroup parser_here_stack
- * @brief Releases the storage of @p stack; the recorded nodes are left
- *        to the syntax tree.
- *
- * @param stack Already initialized stack (borrowed).
- */
-void	parser_here_stack_free(t_parser_here_stack *stack);
-
-/* ************************************************************************* */
-/*                                    OPS                                    */
-/* ************************************************************************* */
+void		parser_here_stack_init(t_parser_here_stack *stack);
 
 /**
  * @ingroup parser_here_stack
@@ -45,7 +44,20 @@ void	parser_here_stack_free(t_parser_here_stack *stack);
  *
  * @param stack Already initialized stack (borrowed).
  */
-void	parser_here_stack_clear(t_parser_here_stack *stack);
+void		parser_here_stack_clear(t_parser_here_stack *stack);
+
+/**
+ * @ingroup parser_here_stack
+ * @brief Releases the storage of @p stack; the recorded nodes are left
+ *        to the syntax tree.
+ *
+ * @param stack Already initialized stack (borrowed).
+ */
+void		parser_here_stack_free(t_parser_here_stack *stack);
+
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
 
 /**
  * @ingroup parser_here_stack

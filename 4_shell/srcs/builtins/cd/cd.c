@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:40:47 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:53:57 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include <unistd.h>
 #include "cd_.h"
@@ -52,7 +64,7 @@ t_error	cd_resolv_operand(int argc, char **argv, t_cd_args *args, t_string *dir)
 {
 	if ((size_t)argc - args->operand_index > 1)
 		return (error_print(error(ERR_INVALID_USAGE), argv[0],
-			"too many arguments", NULL, NULL));
+				"too many arguments", NULL, NULL));
 	if ((size_t)argc == args->operand_index)
 		return (cd_from_var(argv[0], "HOME", dir));
 	if (str_cmp(argv[args->operand_index], "-") == 0)

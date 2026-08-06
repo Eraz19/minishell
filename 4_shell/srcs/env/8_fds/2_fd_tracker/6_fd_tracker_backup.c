@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   6_fd_tracker_backup.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:12:36 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:10:56 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "posix_helpers.h"
 #include "fd_tracker.h"
 #include "fd_tracker_priv.h"
@@ -91,7 +103,7 @@ t_error	fd_tracker_backup(t_fd_tracker *tracker, int fd, int *out_backup_fd)
 	{
 		(void)posix_close_if_open(backup_fd);
 		return (error_print(err,
-			"unable to lock shell fd", NULL, NULL));
+				"unable to lock shell fd", NULL, NULL));
 	}
 	err = fd_tracker_grow(tracker, (size_t)backup_fd + 1);
 	if (err.type)

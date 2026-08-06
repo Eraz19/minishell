@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:30 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:52:01 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "env.h"
 #include "utils.h"
@@ -6,7 +18,7 @@
 #define EXPORT_USAGE	"-p || name[=word] ..."
 
 // @ret ERR_UB
-static t_error export_catch_ub(int argc, char **argv, t_getopt_out *out)
+static t_error	export_catch_ub(int argc, char **argv, t_getopt_out *out)
 {
 	size_t	options_count;
 	size_t	operand_count;
@@ -21,9 +33,9 @@ static t_error export_catch_ub(int argc, char **argv, t_getopt_out *out)
 	if (options_count > 0 && operand_count > 0)
 	{
 		(void)error_print(error(ERR_INVALID_USAGE), argv[0], EXPORT_USAGE,
-				NULL, NULL);
+			NULL, NULL);
 		err = undefined_behaviour("POSIX: 12.1:8: The use of conflicting "
-		"mutually-exclusive arguments produces undefined results.");
+				"mutually-exclusive arguments produces undefined results.");
 	}
 	return (err);
 }
@@ -88,7 +100,7 @@ static t_error	export_add(size_t first_operand_index, int argc, char **argv)
 	return (err);
 }
 
-t_error	builtin_export(int argc, char **argv, t_runner *runner, int *exit_status)
+t_error	builtin_export(int argc, char **argv, t_runner *runner, int *status)
 {
 	t_getopt_out	out;
 	t_error			err;
@@ -99,7 +111,7 @@ t_error	builtin_export(int argc, char **argv, t_runner *runner, int *exit_status
 		err = env_print(ENV_PRINT_EXPORT);
 	else if (err.type == ERR_NO)
 		err = export_add(out.first_operand_index, argc, argv);
-	*exit_status = (int)err.type;
+	*status = (int)err.type;
 	if (err.type)
 		err = error_print(err, argv[0], NULL, NULL);
 	if (err.type == ERR_INVALID_USAGE

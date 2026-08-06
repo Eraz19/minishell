@@ -6,12 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:38:51 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/04 16:38:52 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 12:08:55 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LR_STATE_H
-# define LR_STATE_H
+#ifndef GENERATOR_LR_STATE_H
+# define GENERATOR_LR_STATE_H
 
 # include "grammar_rule_state.h"
 # include "generator.h"

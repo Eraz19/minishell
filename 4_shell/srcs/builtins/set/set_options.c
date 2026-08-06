@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_options.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:11 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:55:07 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include "set_.h"
 #include "env.h"
@@ -50,12 +62,12 @@ t_error	handle_set_o_option(
 {
 	if (out->options.len > 1)
 		return (error_print(
-			error(ERR_OPT_MISSING_ARG), argv[0], "o", NULL, NULL));
+				error(ERR_OPT_MISSING_ARG), argv[0], "o", NULL, NULL));
 	if (out->first_operand_index < argc)
 		return (error_print(
-			error(ERR_INVALID_USAGE), argv[0], 
-			SET_USAGE_1, SET_USAGE_2, SET_USAGE_3, SET_USAGE_4, SET_USAGE_5,
-			NULL, NULL));
+				error(ERR_INVALID_USAGE), argv[0],
+				SET_USAGE_1, SET_USAGE_2, SET_USAGE_3, SET_USAGE_4, SET_USAGE_5,
+				NULL, NULL));
 	return (set_print_options(opt.sign));
 }
 

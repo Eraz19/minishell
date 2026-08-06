@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   0_cmd_search_try_regular_builtin.c                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:56:33 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:56:34 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd_search_priv.h"
 
 void	cmd_search_try_regular_builtin(t_cmd_entry_point *out_entry_point)

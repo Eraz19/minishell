@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_parser_read.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:02 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:13:27 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser_priv.h"
 #include "scanner.h"
 #ifdef DEBUG_PARSING
-#include <stdio.h>		// DEBUG
+# include <stdio.h>		// DEBUG
 # include "logs.h"		// DEBUG
 #endif
 #include <assert.h>	// DEBUG

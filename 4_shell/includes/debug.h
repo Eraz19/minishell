@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:10 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:02:12 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef DEBUG_H
 # define DEBUG_H
 
@@ -12,6 +24,7 @@
 # include "logs.h"
 # include "lexer.h"
 # include "scanner.h"
+# include "options.h"
 
 const char	*bool_to_string(bool value);
 const char	*action_type_to_string(t_action_type type);
@@ -36,5 +49,29 @@ void		dump_parser_instance(t_parser *parser);
 void		dump_runner_instance(t_runner *runner);
 void		dump_shell_instance(t_runner *runner, const char *caller);
 void		dump_var_one(const char *name);
+const char	*token_type_to_string(t_token_type token_type);
+
+/**
+ * @brief Dump the current option state to stderr.
+ */
+void		options_dump(void);
+
+/**
+ * @brief Convert a single option bit to its canonical textual name.
+ *
+ * @param option Option bit to convert.
+ * @return Static string representation, or @c "unknown" when unsupported.
+ */
+const char	*option_to_string(t_option option);
+
+/**
+ * @brief Dump special parameter state to stderr.
+ */
+void	specials_dump(void);
+
+/**
+ * @brief Dump positional frames to stderr.
+ */
+void	positionals_dump(void);
 
 #endif

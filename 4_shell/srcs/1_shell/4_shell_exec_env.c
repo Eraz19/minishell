@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   4_shell_exec_env.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:56:49 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:57:18 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell_priv.h"
 #include "env.h"
 #include "asm_stubs.h"
 #include "expander.h"
 #include "runner.h"
 #include <stdlib.h>
-# include "logs.h"		// DEBUG
+#include "logs.h"		// DEBUG
 #include <assert.h>	// DEBUG
 
 #define ENV_NAME	"ENV"

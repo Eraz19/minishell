@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:28 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:46:35 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "error.h"
 #include "libft.h"
@@ -5,21 +17,16 @@
 #include <signal.h>
 
 #define EXIT_CIT_START	"POSIX: exit: DESCRIPTION: If n is specified and "
-#define EXIT_CIT_END_1	" the wait status of the shell or subshell is "
-#define EXIT_CIT_END_2	"unspecified."
-#define EXIT_CIT_END	EXIT_CIT_END_1 EXIT_CIT_END_2
+#define EXIT_CIT_END	" the wait status of the shell or subshell is \
+unspecified."
 
 #define EXIT_NOT_UINT_	"is not an unsigned decimal integer [...]"
-#define EXIT_NOT_UINT	EXIT_CIT_START EXIT_NOT_UINT_ EXIT_CIT_END
 
 #define EXIT_256_		"[...] has a value of 256 [...]"
-#define EXIT_256		EXIT_CIT_START EXIT_256_ EXIT_CIT_END
 
-#define EXI_GREATER_1	"[...] has a value greater than 256 but not "
-#define EXI_GREATER_2	"corresponding to an exit status the shell assigns to "
-#define EXI_GREATER_3	"commands terminated by a valid signal,"
-#define EXIT_GREATER_	EXI_GREATER_1 EXI_GREATER_2 EXI_GREATER_3
-#define EXIT_GREATER	EXIT_CIT_START EXIT_GREATER_ EXIT_CIT_END
+#define EXIT_GREATER	"[...] has a value greater than 256 but not \
+corresponding to an exit status the shell assigns to \
+commands terminated by a valid signal,"
 
 #define EXIT_ERR_STATUS	"wait status representing special builtin error"
 
@@ -38,17 +45,20 @@ static inline t_error	exit_parse_status(char *arg, int *exit_status)
 		|| parse_int(arg, exit_status) == false
 		|| *exit_status < 0)
 	{
-		print_unspecified_behaviour(arg, EXIT_NOT_UINT, EXIT_ERR_STATUS);
+		print_unspecified_behaviour(arg,
+			EXIT_CIT_START EXIT_NOT_UINT_ EXIT_CIT_END, EXIT_ERR_STATUS);
 		*exit_status = (int)ERR_POSIX_BUILTIN_SPECIAL;
 	}
 	else if (*exit_status == 256)
 	{
-		print_unspecified_behaviour(arg, EXIT_256, EXIT_ERR_STATUS);
+		print_unspecified_behaviour(arg,
+			EXIT_CIT_START EXIT_256_ EXIT_CIT_END, EXIT_ERR_STATUS);
 		*exit_status = (int)ERR_POSIX_BUILTIN_SPECIAL;
 	}
 	else if (*exit_status > 256 && exit_status_is_signal(*exit_status) == false)
 	{
-		print_unspecified_behaviour(arg, EXIT_GREATER, EXIT_ERR_STATUS);
+		print_unspecified_behaviour(arg,
+			EXIT_CIT_START EXIT_GREATER EXIT_CIT_END, EXIT_ERR_STATUS);
 		*exit_status %= 256;
 	}
 	return (error(ERR_EXIT));

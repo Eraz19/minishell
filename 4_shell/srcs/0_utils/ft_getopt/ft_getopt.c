@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_getopt.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:47:58 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:53:31 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_getopt_priv.h"
 
 static bool	getopt_is_delimiter(t_getopt_state *state)
@@ -60,9 +72,9 @@ static t_error	getopt_catch_ub(t_getopt_out *out)
 				continue ;
 			if (a->sign == b->sign && a->flag == b->flag)
 				return (vector_free(&out->options, NULL),
-							undefined_behaviour("POSIX (XBD 12.1-3): "
-								"If an option that does not have option-argum"
-								"ents is repeated, the results are undefined"));
+					undefined_behaviour("POSIX (XBD 12.1-3): "
+						"If an option that does not have option-argum"
+						"ents is repeated, the results are undefined"));
 		}
 	}
 	return (error(ERR_NO));

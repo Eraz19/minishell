@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   5_load.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:09:37 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 14:54:08 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "options_priv.h"
 #include "utils.h"
 #include "logs.h"
@@ -40,10 +52,11 @@ static t_error	options_apply_getopt_out(
 		option = ((t_getopt_option *)out->options.data)[i];
 		if (!option.argument)
 			err = options_process_flag(
-				options, option.flag, option.sign == '-', explicit_plus_m);
+					options, option.flag, option.sign == '-', explicit_plus_m);
 		else
 			err = options_process_name(
-				options, option.argument, option.sign == '-', explicit_plus_m);
+					options, option.argument, option.sign == '-',
+					explicit_plus_m);
 		if (err.type != ERR_NO)
 			return (err);
 		i++;

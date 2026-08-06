@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:11:52 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:09:37 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PROCESS_H
 # define PROCESS_H
 
@@ -14,7 +26,7 @@ typedef struct s_process
 }	t_process;
 
 // t_vector of t_process
-typedef t_vector t_process_table;
+typedef t_vector	t_process_table;
 
 // life cycle
 

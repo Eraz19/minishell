@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   specials.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:10:14 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:00:07 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SPECIALS_H
 # define SPECIALS_H
 
@@ -10,7 +22,8 @@
  * @struct s_specials
  * @brief Storage for shell special parameters.
  *
- * @var s_specials::source Source string, used for @c $0 input context (borrowed).
+ * @var s_specials::source Source string, used for @c $0 input context
+ *							(borrowed).
  * @var s_specials::zero @c $0 value (borrowed).
  * @var s_specials::pid Current shell PID.
  * @var s_specials::last_bg_pid Last background PID, or @c -1 when unset.
@@ -52,7 +65,8 @@ void	specials_clear(t_specials *specials);
  * @param specials Destination structure (borrowed).
  * @param argc Argument count.
  * @param argv Argument array (borrowed, read-only).
- * @param start_index Input/output index of the first non-option operand (borrowed).
+ * @param start_index Input/output index of the first non-option operand
+ *						(borrowed).
  * @return @c ERR_NO, @c ERR_SHELL_NOT_FOUND or @c ERR_OPT_INVALID.
  */
 t_error	specials_load(
@@ -102,14 +116,5 @@ void	specials_set_last_bg_pid(t_specials *specials, pid_t value);
  * @param value New status value.
  */
 void	specials_set_last_status(t_specials *specials, int value);
-
-/* ************************************************************************* */
-/*                                   DEBUG                                   */
-/* ************************************************************************* */
-
-/**
- * @brief Dump special parameter state to stderr.
- */
-void	specials_dump(void);
 
 #endif

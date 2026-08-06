@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_qualifiers_build_table.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:16:28 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:18:28 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "generator_qualifiers.h"
 #include "generator_qualifiers_priv.h"
 #include <stdlib.h>
@@ -6,13 +18,13 @@
 #include <unistd.h>
 #include <assert.h>	// DEBUG
 
-#define QUALIFIERS_TOO_BIG	"generator: qualifiers table size overflow\n"
+#define QUALIF_TOO_BIG	"generator: qualifiers table size overflow\n"
 
 static inline bool	qualifiers_report_overflow(void)
 {
 	ssize_t	osef;
 
-	osef = write(STDERR_FILENO, QUALIFIERS_TOO_BIG, str_len(QUALIFIERS_TOO_BIG));
+	osef = write(STDERR_FILENO, QUALIF_TOO_BIG, str_len(QUALIF_TOO_BIG));
 	(void)osef;
 	return (false);
 }

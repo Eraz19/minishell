@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ub.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 15:25:06 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:25:15 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "posix_helpers.h"
 #include "shell.h"
@@ -14,7 +26,7 @@ void	print_unspecified_behaviour(
 			const char *implemented_as)
 {
 	const char	*shell_name;
-	
+
 	shell_name = shell_get_name();
 	(void)posix_write(STDERR_FILENO, shell_name, str_len(shell_name));
 	(void)posix_write(STDERR_FILENO, COND_PREFIX, str_len(COND_PREFIX));

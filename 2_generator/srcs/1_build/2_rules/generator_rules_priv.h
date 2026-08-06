@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:40:11 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/04 16:40:12 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 12:12:49 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 # include "grammar_rules.h"
 
-void	rules_build_accept(t_rule *rules); // ⚠️ Custom rule (bash-like cmd sub parsing hack)
-void	rules_build_cmd_sub(t_rule *rules);	// ⚠️ Custom rule (bash-like cmd sub parsing hack)
+void	rules_build_accept(t_rule *rules); // ⚠️ Custom
+void	rules_build_cmd_sub(t_rule *rules);	// ⚠️ Custom
 void	rules_build_and_or(t_rule *rules);
 void	rules_build_brace_group(t_rule *rules);
 void	rules_build_case_clause(t_rule *rules);

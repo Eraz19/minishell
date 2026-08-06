@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   5_open.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 15:20:29 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:23:15 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "redirector_priv.h"
 #include "ast.h"
 #include "options.h"
@@ -51,8 +63,8 @@ static inline t_error	redirect_handle_noclobber_eexist(
 	}
 	else if (S_ISREG(st.st_mode))
 		return (error_print(error(ERR_REDIRECTION),
-			"no clobber is active and file is regular", NULL,
-			"'%s' expanded from '%s'", path, redir->word.value.data));
+				"no clobber is active and file is regular", NULL,
+				"'%s' expanded from '%s'", path, redir->word.value.data));
 	oflag = O_WRONLY | O_CREAT | O_TRUNC;
 	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 	return (posix_open_with_mode(path, oflag, mode, out_fd));
@@ -86,13 +98,13 @@ static inline t_error	redirect_handle_open_error(
 	if (err.type && redir->operation == AST_REDIR_HEREDOC)
 	{
 		err = error_print(err, "redirection failed",
-			"unable to open heredoc file", NULL, NULL);
+				"unable to open heredoc file", NULL, NULL);
 	}
 	else if (err.type)
 	{
 		err = error_print(err, "redirection failed",
-			"unable to open file", NULL, "'%s' expanded from '%s'",
-			redir->expanded_word.data, redir->word.value.data);
+				"unable to open file", NULL, "'%s' expanded from '%s'",
+				redir->expanded_word.data, redir->word.value.data);
 	}
 	if (err.type && err.type != ERR_INVALID_USAGE && err.type != ERR_INTERNAL
 		&& err.type != ERR_INTERRUPTED)

@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_life_cycle.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:11:02 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 15:02:38 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "variables.h"
 #include "variables_priv.h"
 #include "var_load_envp.h"
 #include "var_load_mandatory.h"
 #include "var_load_up.h"
 #include <stdlib.h>
-# include "logs.h"		// DEBUG
+#include "logs.h"		// DEBUG
 #include <assert.h>	// DEBUG
 
 void	var_free_one(void *var)

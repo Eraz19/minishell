@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:41:06 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:53:32 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "builtin_error.h"
 #include "env_priv.h"
@@ -36,13 +48,17 @@ static inline t_error	env_parse_args(
 	if (err.type)
 		return (err);
 	*i_is_active = out.options.len > 0
-					&& ((t_getopt_option *)out.options.data)[0].flag == 'i';
+		&& ((t_getopt_option *)out.options.data)[0].flag == 'i';
 	*first_operand_index = (int)out.first_operand_index;
 	vector_free(&out.options, NULL);
 	return (err);
 }
 
-static inline t_error	env_exec(int argc, char **argv, t_vector *env, int *status)
+static inline t_error	env_exec(
+							int argc,
+							char **argv,
+							t_vector *env,
+							int *status)
 {
 	t_cmd		cmd;
 	t_error		err;

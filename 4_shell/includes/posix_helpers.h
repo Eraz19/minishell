@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   posix_helpers.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:26 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:34:19 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef POSIX_HELPERS_H
 # define POSIX_HELPERS_H
 
@@ -23,10 +35,10 @@ t_error	posix_open(const char *path, int oflag, int *out_fd);
 
 // @ret ERR_INVALID_USAGE / ERR_LIBC
 t_error	posix_open_with_mode(
-	const char *path,
-	int oflag,
-	mode_t mode,
-	int *out_fd);
+			const char *path,
+			int oflag,
+			mode_t mode,
+			int *out_fd);
 
 // @ret ERR_NO / ERR_LIBC
 t_error	posix_close_if_open(int fd);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   7_if.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:35:29 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:39:58 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ast.h"
 #include "utils.h"
 #include <assert.h>	// DEBUG
@@ -24,7 +36,7 @@ t_error	ast_if_dup(void *dst, const void *src)
 			ast_list_dup, ast_list_free);
 	if (err.type == ERR_NO)
 		err = vector_deep_dup(&dst_if->bodies, &src_if->bodies,
-			ast_list_dup, ast_list_free);
+				ast_list_dup, ast_list_free);
 	if (err.type == ERR_NO)
 		err = ast_list_dup(&dst_if->else_body, &src_if->else_body);
 	if (err.type)

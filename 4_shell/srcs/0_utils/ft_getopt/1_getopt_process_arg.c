@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_getopt_process_arg.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:47:50 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:53:00 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_getopt_priv.h"
-#include <stdio.h>
 
 // @ret ERR_OPT_INVALID / ERR_LIBC
 static t_error	getopt_process_flags_without_arg(t_getopt_state *state)
 {
-	t_getopt_option option;
+	t_getopt_option	option;
 	const char		*valid_flags;
 	size_t			i;
 
@@ -107,7 +118,6 @@ static t_error	getopt_process_flags_with_arg(t_getopt_state *state)
 	option.flag = state->argv[state->arg_i][state->char_i];
 	option.argument = NULL;
 	i = 0;
-	fprintf(stderr, "[%s()] options_with_arg_count=%zu\n", __func__, state->in->options_with_arg_count);
 	while (i < state->in->options_with_arg_count)
 	{
 		curr = &state->in->options_with_arg[i++];

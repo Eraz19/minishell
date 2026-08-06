@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   6_parser_store_cst.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:07:09 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:12:44 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser.h"
 #include "parser_priv.h"
 #ifdef DEBUG_PARSING
 # include "debug.h"		// DEBUG
 # include "logs.h"		// DEBUG
-#include <stdio.h>		// DEBUG
+# include <stdio.h>		// DEBUG
 #endif
 #include <assert.h>	// DEBUG
 
