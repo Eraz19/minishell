@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/07 00:57:51 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/07 01:55:50 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,27 @@
 
 t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2)
 {
-	if (update_input(scanner, out, ps2).type)
-		return (lexer_unbind_token(&scanner->lexer), scanner->err);
-	scanner->err = lexer_get_next_token(&scanner->lexer, out);
-	if (scanner->err.type)
-		return (scanner->err = requalify_scanner_error(scanner));
-	else if (out->type == TOKEN_TOKEN)
+	while (true)
 	{
-		scanner->err = expand_alias(scanner, out);
-		if (scanner->err.type)
-			return (requalify_scanner_error(scanner));
+		if (update_input(scanner, out, ps2).type)
+			return (lexer_unbind_token(&scanner->lexer), scanner->err);
+		if (out->type != TOKEN_EOF)
+		{
+			scanner->err = lexer_get_next_token(&scanner->lexer, out);
+			if (scanner->err.type)
+				return (scanner->err = requalify_scanner_error(scanner));
+		}
+		if (out->type == TOKEN_TOKEN)
+		{
+			scanner->err = expand_alias(scanner, out);
+			if (scanner->err.type)
+				return (requalify_scanner_error(scanner));
+		}
+		if (out->type != TOKEN_EOF || scanner->mode != SCAN_MODE_STDIN) 
+			return (lexer_unbind_token(&scanner->lexer),
+				requalify_scanner_error(scanner));
+		lexer_unbind_token(&scanner->lexer);		
 	}
-	lexer_unbind_token(&scanner->lexer);
 	return (requalify_scanner_error(scanner));
 }
 
