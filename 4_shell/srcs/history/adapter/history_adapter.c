@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:08:18 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/06 22:54:40 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:55:00 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,4 @@ void	add_to_readline_history(
 		add_history(entry->data);
 		history_adapter->count++;
 	}
-	success_history_adapter_add_log(history_adapter);
 }

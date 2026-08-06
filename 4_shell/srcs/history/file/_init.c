@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:08:26 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 19:02:29 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:55:10 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "debug.h"
 #include "utils.h"
 #include "history_list.h"
 #include "history_file.h"
@@ -41,7 +40,7 @@ t_error	history_file_load(
 	if (read_history_file(history_file).type)
 		return (history_file->err);
 	if (history_file->content.len == 0)
-		return (empty_history_file_load_log(), history_file->err);
+		return (history_file->err);
 	history_file->err = deserialize_all(
 			history_file->content.data,
 			&file_entries);
@@ -58,6 +57,5 @@ t_error	history_file_load(
 	history_file->loaded_count = history_list->len;
 	vector_free(&file_entries, string_free_void);
 	string_free(&history_file->content);
-	success_history_file_load_log(history_file);
 	return (history_file->err);
 }
