@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   scanner_expand_alias.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:15:18 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:24:33 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
 #include "token.h"
 #include "lexer.h"
@@ -41,7 +53,9 @@ t_error	find_alias_value(t_scanner *scanner, const t_string **out, t_token *src)
 	expandable = !is_word_containing_quoting(src->value.data);
 	if (expandable && !position_exempt)
 	{
-		scanner->err = parser_can_next_token_be_a_cmd_name_or_word(scanner->parser, &expandable);
+		scanner->err = parser_can_next_token_be_a_cmd_name_or_word(
+				scanner->parser,
+				&expandable);
 		if (scanner->err.type)
 			return (scanner->err);
 	}

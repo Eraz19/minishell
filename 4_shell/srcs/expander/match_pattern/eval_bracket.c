@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   eval_bracket.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:44:44 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:44:45 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "match_pattern_.h"
 
 bool	eval_range(const char *pattern, char c, size_t *i)
 {
-	char	end;
-	char	start;
+	unsigned char	end;
+	unsigned char	start;
 
-	start = pattern[*i];
-	end = pattern[*i + 2];
-	if (start <= c && c <= end)
+	start = (unsigned char)pattern[*i];
+	end = (unsigned char)pattern[*i + 2];
+	if (start <= (unsigned char)c && (unsigned char)c <= end)
 		return ((*i) += 3, true);
 	else
 		return ((*i) += 3, false);

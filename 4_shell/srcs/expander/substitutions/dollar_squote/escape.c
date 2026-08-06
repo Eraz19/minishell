@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   escape.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:46:50 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:44:49 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdint.h>
 #include "dollar_squote_expansion_.h"
 
@@ -22,7 +34,7 @@ bool	dollar_squote_build_map(t_hashmap *escapes)
 
 static bool	dollar_squote_simple_escape(char c, char *out, t_hashmap *escapes)
 {
-	char	key[2];
+	char		key[2];
 	const char	*value;
 
 	key[0] = c;
@@ -73,9 +85,7 @@ t_error	dollar_squote_escape(
 		return (expander->err);
 	if (expander->word.len == 0)
 		return (dollar_squote_emit(expander, '\\', opt));
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == 'c')
 		return (dollar_squote_control_escape(expander, opt));
 	if (dollar_squote_is_numeric(item.c))

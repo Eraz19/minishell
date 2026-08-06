@@ -1,26 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:41 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/06 14:12:08 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h" 
 #include "param_expansion_.h"
 
-t_error	expand_positional_single(t_expander *expander, t_word_item_opt opt)
+t_error	expand_positional_get_value(t_expander *expander, t_string *param_exp)
 {
-	t_word		word_exp;
-	t_string	param_exp;
 	t_string	param_name;
 
 	expander->err = get_param_name(expander, &param_name, false);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = env_get_from_const(param_name.data, &param_exp);
+	expander->err = env_get_from_const(param_name.data, param_exp);
 	if (expander->err.type != ERR_NO && expander->err.type != ERR_VAR_NOT_FOUND)
 		return (string_free(&param_name), expander->err);
+	if (expander->err.type == ERR_VAR_NOT_FOUND
+		&& param_nounset_error(expander, param_name.data).type)
+		return (string_free(&param_name), string_free(param_exp),
+			expander->err);
+	return (string_free(&param_name), expander->err);
+}
+
+t_error	expand_positional_single(t_expander *expander, t_word_item_opt opt)
+{
+	t_word		word_exp;
+	t_string	param_exp;
+
+	if (expand_positional_get_value(expander, &param_exp).type)
+		return (expander->err);
 	expander->err = error(ERR_NO);
 	if (param_exp.len == 0)
 	{
 		string_free(&param_exp);
 		if (!string_init(&param_exp, 0, "", -1))
-			return (string_free(&param_name), expander->err = error_sys());
+			return (expander->err = error_sys());
 	}
-	string_free(&param_name);
 	opt.is_expand_res = true;
 	expander->err = from_str(&word_exp, &param_exp, opt);
 	if (expander->err.type)
@@ -34,9 +57,7 @@ t_error	expand_positional_all(t_expander *expander, t_word_item_opt opt)
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type != ERR_NO)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	expander->err = emit_positionals(expander, item.c, opt);
 	if (expander->err.type)
 		return (expander->err);
@@ -48,15 +69,11 @@ t_error	expand_unbraced(t_expander *expander)
 	t_word_item	origin;
 	t_word_item	item;
 
-	expander->err = word_get(&origin, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&origin, &expander->word, 0);
 	expander->err = word_remove(&expander->word, 0, 1);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == '@' || item.c == '*')
 		return (expand_positional_all(expander, origin.opt));
 	else

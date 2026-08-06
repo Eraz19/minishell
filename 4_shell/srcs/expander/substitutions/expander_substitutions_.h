@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_substitutions_.h                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:12 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:48:13 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXPANDER_SUBSTITUTIONS__H
 # define EXPANDER_SUBSTITUTIONS__H
 
@@ -23,12 +35,10 @@
  * @note Characters tagged @c is_expand_res are never rescanned.
  * @param expander Expander state (borrowed).
  * @return The dispatched substitution's error, raw (@c ERR_LIBC,
- *         @c ERR_PARAM_BAD_SUBSTITUTION, @c ERR_PARAM_NULL_OR_UNSET,
- *         @c ERR_VAR_INVALID_NAME, @c ERR_VAR_READ_ONLY,
- *         @c ERR_NOT_IMPLEMENTED (printed) from the command, backquote
- *         and arithmetic stubs, @c ERR_INCOHERENT_STATE,
- *         @c ERR_EMPTY_STACK, @c ERR_INDEX_OUT_OF_BOUND,
- *         @c ERR_SHELL_NOT_FOUND); @c ERR_NO on success.
+ *         @c ERR_POSIX_EXPANSION and @c ERR_POSIX_ASSIGNMENT (printed
+ *         and requalified at production), @c ERR_INTERNAL (printed;
+ *         arithmetic stub and env instance lookups) and @c ERR_LIBC);
+ *         @c ERR_NO on success.
  */
 t_error	substitution_char(t_expander *expander);
 

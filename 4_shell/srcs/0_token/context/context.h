@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   context.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 15:25:33 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:15:59 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CONTEXT_H
 # define CONTEXT_H
 
@@ -35,7 +47,6 @@ bool	is_context_arith_start(char *str);
 bool	is_context_cmd_sub_start(char *str);
 bool	is_context_backtick_start(char *str);
 bool	is_expansion_context_start(char *str, t_context *context);
-
 
 bool	is_in_context_param_whitelist(char c);
 bool	is_in_context_backtick_whitelist(char c);

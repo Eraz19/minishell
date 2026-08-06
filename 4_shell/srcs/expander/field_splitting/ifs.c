@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ifs.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:43:55 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:20:41 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "field_splitting_.h"
 
 bool	is_it_white_space_ifs(char c)
@@ -11,15 +23,9 @@ static t_error	exhaust_ifs_white_space(t_expander *expander)
 
 	while (expander->word.len > 0)
 	{
-		expander->err = word_get(&item, &expander->word, 0);
-		if (expander->err.type)
-			return (expander->err);
+		word_get(&item, &expander->word, 0);
 		if (is_delim(item, &expander->ifs) && is_it_white_space_ifs(item.c))
-		{
-			expander->err = word_fpop(&item, &expander->word);
-			if (expander->err.type)
-				return (expander->err);
-		}
+			word_fpop(&item, &expander->word);
 		else
 			break ;
 	}
@@ -35,9 +41,7 @@ t_error	fields_splitting_on_ifs_white_space(t_expander *expander)
 		return (expander->err);
 	if (expander->word.len != 0 && expander->word_exp.len != 0)
 	{
-		expander->err = word_get(&item, &expander->word, 0);
-		if (expander->err.type)
-			return (expander->err);
+		word_get(&item, &expander->word, 0);
 		if (!is_delim(item, &expander->ifs))
 			return (delim_field(expander));
 	}
@@ -50,9 +54,7 @@ t_error	fields_splitting_on_ifs_non_white_space(t_expander *expander)
 
 	if (delim_field(expander).type)
 		return (expander->err);
-	expander->err = word_fpop(&item, &expander->word);
-	if (expander->err.type)
-		return (expander->err);
+	word_fpop(&item, &expander->word);
 	if (fields_splitting_on_ifs_white_space(expander).type)
 		return (expander->err);
 	return (expander->err);

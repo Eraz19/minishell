@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _init.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:45:09 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:45:10 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "word_.h"
 #include "path_comps_.h"
 
@@ -23,9 +35,7 @@ t_error	path_comps_load(t_path_comps *comps, const t_word *src)
 	path_comp_init(&glob_comp);
 	while (i < src->len)
 	{
-		err = word_get(&item, src, i);
-		if (err.type)
-			return (path_comp_free(&glob_comp), path_comps_free(comps), err);
+		word_get(&item, src, i);
 		if (item.c == '/')
 			err = path_comp_emit(comps, &glob_comp);
 		else

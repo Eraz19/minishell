@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:47 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:47:48 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "param_braced_.h"
 #include "param_unbraced_.h"
 
@@ -5,9 +17,7 @@ t_error	param_expansion(t_expander *expander)
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 1);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 1);
 	if (item.c == '{')
 		return (expand_braced(expander));
 	else
@@ -43,16 +53,15 @@ bool	context_prevent_param_expansion(t_word_item *item)
 
 bool	is_param_expansion(t_expander *expander, t_word_item *current_item)
 {
-	t_error		err;
 	t_word_item	item;
 
 	if (!flag_is_active((uint)expander->flags, EXP_PARAM))
 		return (false);
 	if (current_item->c != '$' || context_prevent_param_expansion(current_item))
 		return (false);
-	err = word_get(&item, &expander->word, 1);
-	if (err.type)
+	if (expander->word.len < 2)
 		return (false);
+	word_get(&item, &expander->word, 1);
 	if (item.c == '{')
 		return (true);
 	return (is_valid_param(&item));

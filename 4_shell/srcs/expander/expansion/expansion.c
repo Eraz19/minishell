@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:43:23 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:28:59 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <assert.h> // DEBUG
 #include "expansion_.h"
 
 t_error	expansion_push(t_expansion *expansion, t_string *str)
@@ -7,35 +20,26 @@ t_error	expansion_push(t_expansion *expansion, t_string *str)
 	return (error(ERR_NO));
 }
 
-t_error	expansion_bpop(t_string *out, t_expansion *expansion)
+void	expansion_bpop(t_string *out, t_expansion *expansion)
 {
-	if (expansion->len == 0)
-		return (error(ERR_EMPTY_STACK));
-	if (!vector_pop(expansion, out))
-		return (error_sys());
-	return (error(ERR_NO));
+	assert(expansion->len != 0);
+	vector_pop(expansion, out);
 }
 
-t_error	expansion_fpop(t_string *out, t_expansion *expansion)
+void	expansion_fpop(t_string *out, t_expansion *expansion)
 {
-	if (expansion->len == 0)
-		return (error(ERR_EMPTY_STACK));
-	if (!vector_remove(expansion, 0, out))
-		return (error_sys());
-	return (error(ERR_NO));
+	assert(expansion->len != 0);
+	vector_remove(expansion, 0, out);
 }
 
-t_error	expansion_get(t_string *out, const t_expansion *expansion, size_t i)
+void	expansion_get(t_string *out, const t_expansion *expansion, size_t i)
 {
-	if (i >= expansion->len)
-		return (error(ERR_INDEX_OUT_OF_BOUND));
+	assert(expansion->len > 0 && i < expansion->len);
 	*out = ((t_string *)expansion->data)[i];
-	return (error(ERR_NO));
 }
 
-t_error	expansion_take(t_expansion *exp, size_t i, t_string *out)
+void	expansion_take(t_expansion *exp, size_t i, t_string *out)
 {
-	if (!vector_remove(exp, i, out))
-		return (error(ERR_INDEX_OUT_OF_BOUND));
-	return (error(ERR_NO));
+	assert(i < exp->len);
+	vector_remove(exp, i, out);
 }

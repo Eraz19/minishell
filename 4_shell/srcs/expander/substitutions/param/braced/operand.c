@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   operand.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:13 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:24:37 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "param_braced_.h"
 #include "quote_removal_.h"
 #include "expander_substitutions_.h"
@@ -11,23 +23,21 @@ t_error	parse_braced_op(
 	t_word_item	first;
 	t_word_item	second;
 
-	expander->err = word_get(&first, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&first, &expander->word, 0);
 	*colon = (first.c == ':');
 	*op = first.c;
 	*op_items = 1;
 	if (*colon)
 	{
-		expander->err = word_get(&second, &expander->word, 1);
-		if (expander->err.type)
-			return (expander->err);
+		word_get(&second, &expander->word, 1);
 		*op = second.c;
 		*op_items = 2;
 	}
 	else if (braced_op_is_doubled(&expander->word, first.c))
 		*op_items = 2;
 	if (!is_valid_braced_op(*op))
+		return (expander->err = error(ERR_PARAM_BAD_SUBSTITUTION));
+	if (*colon && (*op == '#' || *op == '%'))
 		return (expander->err = error(ERR_PARAM_BAD_SUBSTITUTION));
 	return (expander->err = word_remove(&expander->word, 0, *op_items));
 }
@@ -44,9 +54,8 @@ t_error	braced_take_operand(
 	i = 0;
 	while (i < operand_len)
 	{
-		expander->err = word_get(&item, &expander->word, i);
-		if (expander->err.type)
-			return (word_free(operand), expander->err);
+		word_get(&item, &expander->word, i);
+		item.opt.i = i;
 		expander->err = word_push(operand, item);
 		if (expander->err.type)
 			return (word_free(operand), expander->err);

@@ -1616,3 +1616,66 @@ void	dump_ast(t_ast_root *root)
 	(void)root;
 #endif
 }
+
+/* ************************************************************************* */
+/*                                HISTORY                                    */
+/* ************************************************************************* */
+
+void	history_load_start_logs(const char *func_name)
+{
+	print_title("%s()", func_name);
+}
+
+void	history_load_end_logs(const char *func_name)
+{
+	print_result("%s()", func_name);
+}
+
+void	success_history_adapter_add_log(t_history_adapter *history_adapter)
+{
+	print_pass("entries uploaded to readline           %i\n", (int)history_adapter->count);
+}
+
+void	history_file_save_start_log(t_history_file *history_file)
+{
+	if (history_file->path.len == 0)
+		print_warn("[HISTORY] History disabled: %sskipping save%s\n", YELLOW, NC);
+	else if (history_file->content.len == 0)
+		print_warn("[HISTORY] History empty: %sskipping save%s\n", YELLOW, NC);
+}
+
+void	history_file_save_end_log(t_history_file *history_file)
+{
+	if (history_file->err.type == ERR_NO)
+		print_pass("[HISTORY] History saved to = %s%s%s\n", BLUE, history_file->path.data, NC);
+}
+
+void	empty_history_file_load_log(void)
+{
+	print_warn("entries loaded from history file       %s0%s\n", YELLOW, NC);
+}
+
+void	success_history_file_load_log(t_history_file *history_file)
+{
+	print_pass("entries loaded from history file       %i\n", (int)history_file->loaded_count);
+}
+
+void	history_load_file_path_from_logs(const char *path, const char *origin)
+{
+	print_pass("history file path from $%s           '%s%s%s'\n", origin, BLUE, path, GREY);
+}
+
+void	history_load_max_size_from_unset_logs(void)
+{
+	print_pass("history max size                       default (INFINITE)\n");
+}
+
+void	history_load_max_size_from_invalid_logs(void)
+{
+	print_pass("history max size                       $HISTSIZE invalid, default (INFINITE)\n");
+}
+
+void	history_load_max_size_from_logs(ssize_t max)
+{
+	print_pass("history max size from $HISTSIZE        %li\n", max);
+}

@@ -1,5 +1,17 @@
-#ifndef INPUT_STACK_H
-# define INPUT_STACK_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_input_stack.h                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:11:59 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:33:13 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef LEXER_INPUT_STACK_H
+# define LEXER_INPUT_STACK_H
 
 # include "libft.h"
 # include "error.h"
@@ -92,7 +104,8 @@ void	lexer_input_stack_pop(t_lexer_input_stack *stack);
  * @param item Item to push (ownership taken by the stack).
  * @return @c ERR_NO on success, @c ERR_LIBC on allocation failure.
  */
-t_error	lexer_input_stack_push(t_lexer_input_stack *stack,
+t_error	lexer_input_stack_push(
+			t_lexer_input_stack *stack,
 			t_lexer_input_stack_item *item);
 
 #endif

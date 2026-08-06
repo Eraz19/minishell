@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/06 12:47:29 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:47:30 by gastesan         ###   ########.fr       */
+/*   Created: 2026/08/06 15:57:06 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/06 18:34:04 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,29 @@ static t_error	ft_pw_slurp(char **out)
 	return (posix_close_if_open(fd));
 }
 
+static int	ft_pw_scan(char *line, struct passwd *pw, const char *name)
+{
+	char	*next;
+
+	while (*line)
+	{
+		next = line;
+		while (*next && *next != '\n')
+			next++;
+		if (*next == '\n')
+			*next++ = '\0';
+		if (ft_pw_split(line, pw, name))
+			return (1);
+		line = next;
+	}
+	return (0);
+}
+
 t_error	ft_getpwnam(const char *name, struct passwd **out_pw)
 {
 	static struct passwd	pw;
-	static char				*buf;
-	char					*line;
-	char					*next;
 	t_error					err;
+	static char				*buf;
 
 	*out_pw = NULL;
 	if (name == NULL)
@@ -83,17 +99,7 @@ t_error	ft_getpwnam(const char *name, struct passwd **out_pw)
 	err = ft_pw_slurp(&buf);
 	if (err.type)
 		return (err);
-	line = buf;
-	while (*line)
-	{
-		next = line;
-		while (*next && *next != '\n')
-			next++;
-		if (*next == '\n')
-			*next++ = '\0';
-		if (ft_pw_split(line, &pw, name))
-			return (*out_pw = &pw, error(ERR_NO));
-		line = next;
-	}
+	if (ft_pw_scan(buf, &pw, name))
+		*out_pw = &pw;
 	return (error(ERR_NO));
 }

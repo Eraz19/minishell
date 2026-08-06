@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:44:00 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:03:46 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "loader_context_.h"
 
@@ -34,7 +46,7 @@ void	loader_pop_context(t_loader *loader)
 {
 	t_context_stack_item	*item;
 	size_t					last_i;
-	
+
 	context_stack_bpop(&loader->loading_stack, &item);
 	free(item);
 	if (loader->loading_stack.len > 0)
@@ -46,4 +58,3 @@ void	loader_pop_context(t_loader *loader)
 	else
 		loader->context_item = NULL;
 }
-

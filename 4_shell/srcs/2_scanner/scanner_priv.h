@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   scanner_priv.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:15:21 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:59:45 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SCANNER_PRIV_H
 # define SCANNER_PRIV_H
 
@@ -52,12 +64,12 @@ t_error	expand_alias(t_scanner *scanner, t_token *out);
  *        construct — aligned across the chain.
  *
  * @note @c ERR_NO guarantees at least one character was appended to the
- *       current input (@ref reader_read_PS2 contract); callers rely on
+ *       current input (@ref reader_read_ps2 contract); callers rely on
  *       this to tell "input grew" from "no more input".
  * @note Forwarding targets each ancestor's CURRENT input and relies on
  *       the mirrored-stack invariant: a construct-scan continuation is
  *       only requested with the root input current
- *       (@ref on_context_scan_EOI pops stacked aliases first), and the
+ *       (@ref on_context_scan_eoi pops stacked aliases first), and the
  *       blocked ancestors hold the same stack shape as the child at
  *       fork. The parser-driven lane can target an alias input when the
  *       alias value embeds a newline — benign: the appended text is
@@ -80,7 +92,7 @@ t_error	expand_alias(t_scanner *scanner, t_token *out);
  *         and unprinted. Module-external errors (options, params,
  *         history, sig) bubble through unlisted.
  */
-t_error	read_and_propagate_PS2(t_scanner *scanner);
+t_error	read_and_propagate_ps2(t_scanner *scanner);
 
 /**
  * @ingroup scanner
@@ -100,7 +112,7 @@ t_error	scanner_load_cmd_sub(t_scanner *scanner);
  *       the stacking lane, at PS2 on the continuation lane); a
  *       continuation impossible in @c SCAN_MODE_FILE / @c SCAN_MODE_STRING
  *       is the @c ERR_POSIX_SYNTAX produced by
- *       @ref read_and_propagate_PS2, printed at the exit frontier.
+ *       @ref read_and_propagate_ps2, printed at the exit frontier.
  *
  * @param scanner Already loaded scanner (borrowed).
  * @param out Only written when no input can be stacked at all:

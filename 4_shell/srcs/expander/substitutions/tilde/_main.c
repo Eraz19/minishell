@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:00 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:25:49 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "error.h"
 #include "tilde_expansion_.h"
 
@@ -12,7 +24,6 @@ bool	is_tilde_flag_set(t_expander *expander, t_exp_flag *tilde_flag)
 
 bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item)
 {
-	t_error		err;
 	t_word_item	item;
 	bool		escaped;
 	t_exp_flag	tilde_flag;
@@ -25,9 +36,7 @@ bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item)
 		return (current_item->opt.quoted == CONTEXT_NONE && !escaped);
 	if (tilde_flag == EXP_TILDE_NORMAL || expander->word.len < 2)
 		return (false);
-	err = word_get(&item, &expander->word, 1);
-	if (err.type)
-		return (false);
+	word_get(&item, &expander->word, 1);
 	if (item.c != '~' || item.opt.escaped || item.opt.quoted != CONTEXT_NONE)
 		return (false);
 	else if (escaped || current_item->opt.quoted != CONTEXT_NONE)
@@ -42,9 +51,7 @@ t_error	tilde_consume_assign_char(t_expander *expander)
 {
 	t_word_item		item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == '=' || item.c == ':')
 	{
 		expander->err = forward_word_item(&expander->word_exp, &expander->word);

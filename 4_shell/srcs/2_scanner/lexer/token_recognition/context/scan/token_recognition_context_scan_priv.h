@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_recognition_context_scan_priv.h              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:31 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:51:46 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TOKEN_RECOGNITION_CONTEXT_SCAN_PRIV_H
 # define TOKEN_RECOGNITION_CONTEXT_SCAN_PRIV_H
 
@@ -32,7 +44,7 @@
  *         continuation. Module-external errors (params, sig, embedded
  *         command-substitution parse) bubble through unlisted.
  */
-t_error	on_context_scan_EOI(t_lexer *lexer);
+t_error	on_context_scan_eoi(t_lexer *lexer);
 
 /* ************************************************************************* */
 /*                                 ERROR                                     */

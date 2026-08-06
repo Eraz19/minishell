@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:33 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:01:58 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "expander_.h"
 #include "expansion_.h"
 #include "quote_removal_.h"
@@ -38,7 +50,7 @@ static t_error	run_pipeline(t_expander *expander, t_expander_args *args)
 		if (substitutions(expander).type)
 			return (expander->err);
 	}
-	expander->flags = args->flags & (uint)~EXP_DOLLAR_SQUOTE;
+	expander->flags = args->flags & (uint) ~ EXP_DOLLAR_SQUOTE;
 	return (expand_word(expander));
 }
 
@@ -51,7 +63,7 @@ t_error	run_expansion(t_expansion *expansion, t_expander_args *args)
 	if (run_pipeline(&expander, args).type)
 		return (err = expander.err, expander_free(&expander), err);
 	expander.err = expansion_load(expansion, &expander.fields);
-	return (expander_free(&expander), expander.err);
+	return (err = expander.err, expander_free(&expander), err);
 }
 
 t_error	run_expansion_word(t_fields *out, t_expander_args *args)
@@ -69,7 +81,7 @@ t_error	run_expansion_word(t_fields *out, t_expander_args *args)
 	expander.fields.cap = 0;
 	expander.fields.data = NULL;
 	expander.fields.len = 0;
-	return (expander_free(&expander), expander.err);
+	return (err = expander.err, expander_free(&expander), err);
 }
 
 t_error	expand_token_word(
@@ -83,7 +95,7 @@ t_error	expand_token_word(
 
 	err = get_ifs(&args.ifs);
 	if (err.type)
-		return (expander_error_qualify(err));
+		return (requalify_expander_error(err));
 	args.flags = flags;
 	args.value = src->value;
 	args.contexts = &src->contexts;
@@ -91,5 +103,5 @@ t_error	expand_token_word(
 	args.assignment_offset = src->assignment_offset;
 	args.ast_vec = &src->ast_vector;
 	err = run_expansion_word(out, &args);
-	return (string_free(&args.ifs), expander_error_qualify(err));
+	return (string_free(&args.ifs), requalify_expander_error(err));
 }

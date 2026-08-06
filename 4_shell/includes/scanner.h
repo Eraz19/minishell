@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:36 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:23:37 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 18:33:26 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_parser	t_parser;
  *
  * @warning Only @c SCAN_MODE_CMD_SUB and @c SCAN_MODE_STDIN may request
  *          PS2 continuations; every other mode makes
- *          @ref read_and_propagate_PS2 report @c ERR_VEOF.
+ *          @ref read_and_propagate_ps2 report @c ERR_VEOF.
  *
  * @var e_scan_mode::SCAN_MODE_NONE Unset; state of a freed scanner.
  * @var e_scan_mode::SCAN_MODE_AUTO Requested by the top-level shell run.
@@ -91,7 +91,7 @@ typedef struct s_scanner
 	t_lexer		lexer;
 	const char	*source;
 	t_parser	*parser;			// borrowed
-	t_scanner	*parent_scanner; 	// borrowed
+	t_scanner	*parent_scanner;	// borrowed
 }	t_scanner;
 
 /* ************************************************************************* */
@@ -106,7 +106,11 @@ typedef struct s_scanner
  */
 void	scanner_init(t_scanner *scanner);
 
-void	scanner_load(t_scanner *scanner, t_scanner *parent_scanner, t_parser *parser, t_scan_mode mode);
+void	scanner_load(
+			t_scanner *scanner,
+			t_scanner *parent_scanner,
+			t_parser *parser,
+			t_scan_mode mode);
 
 /**
  * @ingroup scanner
@@ -146,7 +150,7 @@ void	scanner_clear(t_scanner *scanner);
  *          reported as @c ERR_POSIX_SYNTAX at production, and any
  *          end-of-continuation while a construct is open — @c CTRL+D at
  *          PS2 included — is converted into the printed unterminated
- *          diagnostic (@ref on_context_scan_EOI).
+ *          diagnostic (@ref on_context_scan_eoi).
  * @warning The alias lane depends on @c env_get_alias, currently an
  *          unresolved symbol (env branch, resolves at merge): its error
  *          set is incomplete until then. Ineligible words and lookup
@@ -171,7 +175,10 @@ void	scanner_clear(t_scanner *scanner);
  */
 t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2);
 
-t_error	scanner_scan_word(t_scanner *scanner, t_token *out, t_token_recognition_context args);
+t_error	scanner_scan_word(
+			t_scanner *scanner,
+			t_token *out,
+			t_token_recognition_context args);
 
 /**
  * @ingroup scanner
@@ -196,6 +203,10 @@ t_error	scanner_scan_word(t_scanner *scanner, t_token *out, t_token_recognition_
  *         expansion by the expander, params) bubble through unlisted,
  *         printed at the frontier when still unprinted.
  */
-t_error	scanner_read_heredoc(t_scanner *scanner, t_string *out, t_token *delim, bool strip);
+t_error	scanner_read_heredoc(	
+			t_scanner *scanner,
+			t_string *out,
+			t_token *delim,
+			bool strip);
 
 #endif

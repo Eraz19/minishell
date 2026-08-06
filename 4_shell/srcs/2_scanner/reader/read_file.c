@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_file.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:14:53 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:54:57 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <errno.h> // IWYU pragma: keep
 #include <sys/stat.h>
@@ -52,7 +64,10 @@ t_error	read_file(t_string *out, const char *path)
 		return (err);
 	err = posix_read_all(fd, out);
 	if (err.type)
-		return (error_priorize(on_read_error(err, path), posix_close_if_open(fd)));
+	{
+		err = error_priorize(on_read_error(err, path), posix_close_if_open(fd));
+		return (err);
+	}
 	(void)posix_close_if_open(fd);
 	return (err);
 }

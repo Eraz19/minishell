@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   field_splitting_.h                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:43:51 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:43:52 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FIELD_SPLITTING__H
 # define FIELD_SPLITTING__H
 
@@ -31,8 +43,8 @@
  *          comparing it to @p item.
  * @param expander Expander state (borrowed).
  * @param item Item to keep (copied by value).
- * @return @c ERR_EMPTY_STACK if @c expander->word is empty, @c ERR_LIBC
- *         if the pop or push fails, @c ERR_NO on success.
+ * @return @c ERR_LIBC if the push fails, @c ERR_NO on success (an
+ *         empty word is caught by assertion).
  */
 t_error	consume_word_item(t_expander *expander, t_word_item item);
 
@@ -59,7 +71,7 @@ t_error	delim_field(t_expander *expander);
  *       remaining input stays in @c state->fields for
  *       @ref expander_free.
  * @param state Loaded expander state (borrowed).
- * @return @c ERR_LIBC if a pop or push fails, @c ERR_NO on success.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	field_splitting(t_expander *state);
 
@@ -70,8 +82,8 @@ t_error	field_splitting(t_expander *state);
  *        the delimiter, then consumes any adjacent IFS whitespace.
  *
  * @param expander Expander state (borrowed).
- * @return @c ERR_EMPTY_STACK if @c expander->word is empty, @c ERR_LIBC
- *         if a pop or push fails, @c ERR_NO on success.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success (an empty
+ *         word is caught by assertion).
  */
 t_error	fields_splitting_on_ifs_non_white_space(t_expander *expander);
 
@@ -87,7 +99,7 @@ t_error	fields_splitting_on_ifs_non_white_space(t_expander *expander);
  *       followed by a non-whitespace delimiter, so the pair counts as
  *       one delimiter.
  * @param expander Expander state (borrowed).
- * @return @c ERR_LIBC if a pop or push fails, @c ERR_NO on success.
+ * @return @c ERR_LIBC if a push fails, @c ERR_NO on success.
  */
 t_error	fields_splitting_on_ifs_white_space(t_expander *expander);
 

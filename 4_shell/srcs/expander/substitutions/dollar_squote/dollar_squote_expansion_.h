@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollar_squote_expansion_.h                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:46:47 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:46:48 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef DOLLAR_SQUOTE_EXPANSION__H
 # define DOLLAR_SQUOTE_EXPANSION__H
 
@@ -24,6 +36,28 @@
  * @return @c true on success, @c false on allocation failure.
  */
 bool			dollar_squote_build_map(t_hashmap *escapes);
+
+/**
+ * @ingroup expander_dollar_squote
+ * @brief Converts @p c to its digit value in base @p base.
+ *
+ * @param c Candidate digit character.
+ * @param base Numeric base, up to 16.
+ * @return The digit value, or @c -1 when @p c is not a digit of
+ *         @p base.
+ */
+int				dollar_squote_digit(char c, int base);
+
+/**
+ * @ingroup expander_dollar_squote
+ * @brief Discards the remaining body items of the construct, up to (and
+ *        excluding) the closing quote: the POSIX 2.2.4 behavior applied
+ *        when an escape decodes to a NUL byte.
+ *
+ * @param expander Expander state whose word is consumed (borrowed).
+ * @return @c ERR_NO.
+ */
+t_error			dollar_squote_discard_rest(t_expander *expander);
 
 /**
  * @ingroup expander_dollar_squote
@@ -91,9 +125,8 @@ t_error			dollar_squote_escape(
  *       @ref dollar_squote_result_opt.
  *
  * @param expander Expander state positioned on the '$' item (borrowed).
- * @return @c ERR_EMPTY_STACK if the word is empty or ends right after the
- *         '$'; @c ERR_LIBC on allocation or push failure; @c ERR_NO on
- *         success.
+ * @return @c ERR_LIBC on allocation or push failure; @c ERR_NO on
+ *         success (an empty word is caught by assertion).
  */
 t_error			dollar_squote_expansion(t_expander *expander);
 
@@ -109,7 +142,7 @@ t_error			dollar_squote_expansion(t_expander *expander);
  * @param expander Expander state positioned on the first octal digit or
  *                 on the 'x' item (borrowed).
  * @param opt Metadata stamped onto the produced item.
- * @return @c ERR_EMPTY_STACK if the word is empty, @c ERR_LIBC if the
+ * @return @c ERR_LIBC if the
  *         push fails, @c ERR_NO on success.
  */
 t_error			dollar_squote_numeric_escape(
@@ -122,15 +155,11 @@ t_error			dollar_squote_numeric_escape(
  *        base-@p base digits and accumulates them into @p value, stopping
  *        at the first non-digit or at the end of the word.
  *
- * @warning When no item is inspected (empty word or @p max of 0) the
- *          entry value of @c expander->err is returned unchanged: callers
- *          must enter with @c ERR_NO.
- *
  * @param expander Expander state whose word is consumed (borrowed).
  * @param base Numeric base of the digits, up to 16.
  * @param max Maximum number of digits to read.
  * @param value Set to the decoded value, zeroed first (borrowed).
- * @return @c ERR_NO.
+ * @return @c ERR_NO, including when no digit was read.
  */
 t_error			dollar_squote_read_number(
 					t_expander *expander,

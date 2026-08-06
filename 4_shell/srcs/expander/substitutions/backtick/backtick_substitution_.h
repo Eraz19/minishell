@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   backtick_substitution_.h                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:46:27 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:46:28 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef BACKTICK_SUBSTITUTION__H
 # define BACKTICK_SUBSTITUTION__H
 
@@ -6,9 +18,10 @@
 /** @defgroup expander_backtick Backquote substitution
  *  @brief POSIX 2.6.3: backquote-style command substitution.
  *
- *  Unimplemented: needs the subshell execution machinery. The stub
- *  reports @c ERR_NOT_IMPLEMENTED (printed) instead of looping on the
- *  unconsumed construct.
+ *  Extracts the command between the backquotes (removing the backslash
+ *  of the @c \$ @c \` @c \\ pairs per 2.6.3), runs it in a subshell and
+ *  splices the output (trailing newlines trimmed) as expansion-result
+ *  items.
  */
 
 /* ************************************************************************* */
@@ -17,11 +30,13 @@
 
 /**
  * @ingroup expander_backtick
- * @brief Stub: reports the unimplemented backquote substitution.
+ * @brief Substitutes the leading backquote construct of the word with
+ *        the output of its command, run in a subshell.
  *
  * @param expander Expander state (borrowed).
- * @return @c ERR_NOT_IMPLEMENTED (printed with the function name); the
- *         expander qualifier turns it into @c ERR_INTERNAL.
+ * @return @c ERR_LIBC on allocation, pipe, fork or read failure;
+ *         @c ERR_NO on success (span inconsistencies are caught by
+ *         assertion).
  */
 t_error	backtick_substitution(t_expander *expander);
 

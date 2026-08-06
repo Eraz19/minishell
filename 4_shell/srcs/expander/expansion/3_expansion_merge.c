@@ -1,16 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_expansion_merge.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:43:05 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 22:40:57 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "expander.h"
+#include "expander_.h"
 #include "env.h"
 
 #define NO_FIELD		"converts 0 field into empty field"
 #define MULTIPLE_FIELDS	"merging fields with first IFS character"
 
-/*
-- If IFS contains at least one character => use first IFS character
-- If IFS is unset => use ' '
-- If IFS is set but null => don't use separator
-*/
-
-// @ret ERR_INTERNAL / ERR_LIBC
 static inline t_error	expansion_get_ifs_first_char(char *out, bool *sep)
 {
 	t_string	ifs;
@@ -39,7 +45,6 @@ static inline t_error	expansion_get_ifs_first_char(char *out, bool *sep)
 	return (err);
 }
 
-// @ret ERR_LIBC
 static inline t_error	expansion_merge_fields(
 							t_expansion *src,
 							char c,
@@ -85,18 +90,18 @@ t_error	expansion_merge(
 		print_unspecified_behaviour(raw_value, posix_citation, MULTIPLE_FIELDS);
 	err = expansion_get_ifs_first_char(&c, &sep);
 	if (err.type)
-		return (expansion_free(src), err);
+		return (expansion_free(src), requalify_expander_error(err));
 	if (src->len == 0)
 	{
 		if (!string_init(out, 1, "", 0))
 		{
 			err = error_print(error_sys(), NULL, NULL);
-			return (expansion_free(src), err);
+			return (expansion_free(src), requalify_expander_error(err));
 		}
 		expansion_free(src);
-		return (err);
+		return (requalify_expander_error(err));
 	}
 	err = expansion_merge_fields(src, c, sep, out);
 	expansion_free(src);
-	return (err);
+	return (requalify_expander_error(err));
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _API.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:15:09 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/06 18:34:16 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "heredoc.h"
 #include "scanner.h"
 #include "scanner_priv.h"
@@ -13,17 +25,23 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2)
 	else if (out->type == TOKEN_TOKEN)
 		scanner->err = expand_alias(scanner, out);
 	lexer_unbind_token(&scanner->lexer);
-	return (scanner->err);
+	return (requalify_scanner_error(scanner));
 }
 
-#include <stdio.h>
-t_error	scanner_read_heredoc(t_scanner *scanner, t_string *out, t_token *delim, bool strip)
+t_error	scanner_read_heredoc(
+			t_scanner *scanner,
+			t_string *out,
+			t_token *delim,
+			bool strip)
 {
 	scanner->err = heredoc_read_body(&scanner->lexer, out, delim, strip);
 	return (requalify_scanner_error(scanner));
 }
 
-t_error	scanner_scan_word(t_scanner *scanner, t_token *out, t_token_recognition_context args)
+t_error	scanner_scan_word(
+			t_scanner *scanner,
+			t_token *out,
+			t_token_recognition_context args)
 {
 	if (update_input(scanner, out, false).type)
 		return (lexer_unbind_token(&scanner->lexer), scanner->err);
@@ -47,5 +65,5 @@ t_error	scanner_bind_input(t_scanner *scanner, const char *cmd_string)
 		parent_input_stack = &scanner->parent_scanner->lexer.input_stack;
 		scanner->err = lexer_input_stack_dup(input_stack, parent_input_stack);
 	}
-	return (scanner->err);
+	return (requalify_scanner_error(scanner));
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   scan_input.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:11:35 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:59:45 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "reader.h"
 #include "heredoc_body.h"
 #include "heredoc_body_priv.h"
@@ -27,7 +39,7 @@ t_error	extract_body_line(t_body *body, char *EOL, size_t *i)
 
 t_error	read_body_ps2(t_body *body)
 {
-	body->err = reader_read_PS2(&body->input);
+	body->err = reader_read_ps2(&body->input);
 	if (body->err.type == ERR_VEOF || body->err.type == ERR_POSIX_SYNTAX)
 		error_missing_delimiter(body);
 	return (body->err);
@@ -35,14 +47,14 @@ t_error	read_body_ps2(t_body *body)
 
 t_error	scan_input_for_heredoc_body(t_body *body)
 {
-	char	*match_EOL;
+	char	*match_eol;
 
 	while (true)
 	{
 		if (body->input.data[body->i] == '\0' && read_body_ps2(body).type)
 			return (body->err);
-		match_EOL = str_chr(body->input.data + body->i, '\n');
-		if (extract_body_line(body, match_EOL, &body->i).type)
+		match_eol = str_chr(body->input.data + body->i, '\n');
+		if (extract_body_line(body, match_eol, &body->i).type)
 			return (body->err);
 		if (is_line_delimiter(body))
 			return (body->err);

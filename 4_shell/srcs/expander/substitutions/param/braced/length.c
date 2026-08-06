@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   length.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:10 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:24:03 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "env.h"
 #include "param_braced_.h"
@@ -69,9 +81,7 @@ t_error	expand_braced_length(
 	expander->err = word_remove(&expander->word, 0, 1);
 	if (expander->err.type)
 		return (expander->err);
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == '}')
 		return (braced_count(expander, opt));
 	if ((item.c == '@' || item.c == '*') && body_len == 2)

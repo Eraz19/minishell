@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   convertion.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:23 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:28:38 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
+#include <assert.h> // DEBUG
 #include "word_.h"
 
 t_error	to_str(t_string *out, const t_word *src, size_t start, size_t len)
@@ -14,11 +27,8 @@ t_error	to_str(t_string *out, const t_word *src, size_t start, size_t len)
 			return (err = error_sys(), string_free(out), err);
 	while (i < len)
 	{
-		if (src->len <= start + i)
-			return (string_free(out), error(ERR_INDEX_OUT_OF_BOUND));
-		err = word_get(&item, src, start + i);
-		if (err.type)
-			return (string_free(out), err);
+		assert(src->len > start + i);
+		word_get(&item, src, start + i);
 		if (!string_append_n(out, &item.c, 1))
 			return (err = error_sys(), string_free(out), err);
 		i++;
@@ -36,7 +46,7 @@ t_error	from_str(t_word *out, const t_string *src, t_word_item_opt opt)
 	word_init(out);
 	if (!src || src->len == 0)
 		return (error(ERR_NO));
-	while (src->data[i] != '\0')
+	while (i < src->len)
 	{
 		item = word_item_init(src->data[i], opt);
 		err = word_push(out, item);

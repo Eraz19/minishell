@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path_matches_.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:45:33 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:12:24 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PATH_MATCHES__H
 # define PATH_MATCHES__H
 
@@ -79,9 +91,8 @@ t_error	add_lookup_dir_matching(
  * @param out Already initialized container (borrowed).
  * @param src Literal component to append (borrowed, read-only).
  * @param first Whether @p src is the first component of the word.
- * @return @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a
- *         candidate read inconsistency, @c ERR_LIBC if an append fails,
- *         @c ERR_NO on success.
+ * @return @c ERR_LIBC if an append fails, @c ERR_NO on success (read
+ *         inconsistencies are caught by assertion).
  */
 t_error	add_path_comp(t_path_matches *out, t_path_comp *src, bool first);
 
@@ -96,9 +107,8 @@ t_error	add_path_comp(t_path_matches *out, t_path_comp *src, bool first);
  * @param out Already initialized container (borrowed).
  * @param src Special component to match (borrowed, read-only).
  * @param first Whether @p src is the first component of the word.
- * @return @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a
- *         candidate read inconsistency, @c ERR_LIBC if building a
- *         candidate fails, @c ERR_NO on success.
+ * @return @c ERR_LIBC if building a candidate fails, @c ERR_NO on
+ *         success (read inconsistencies are caught by assertion).
  */
 t_error	add_path_comp_lookup(t_path_matches *out, t_path_comp *src, bool first);
 
@@ -119,18 +129,16 @@ t_error	path_match_append(t_string *cand, const char *pattern);
 
 /**
  * @ingroup expander_path_matches
- * @brief Reads the candidate at @p i without removing it.
+ * @brief Points @p out at candidate @p i of @p matches.
  *
- * @warning @p out is set to a pointer into the storage of @p matches:
- *          it is invalidated by any later push, sort or free.
- * @param out Set to the stored string (borrowed).
- * @param matches Already initialized container (borrowed).
- * @param i Position of the candidate to read.
- * @return @c ERR_EMPTY_STACK if @p matches is empty,
- *         @c ERR_INDEX_OUT_OF_BOUND if @p i is past the last candidate,
- *         @c ERR_NO on success.
+ * @warning @p i must be below @c matches->len (asserted); the pointer
+ *          aims into the container storage — any push may move it, and
+ *          it must never be freed through @p out.
+ * @param out Receives the address of the stored candidate (borrowed).
+ * @param matches Already initialized, non-empty candidates (borrowed).
+ * @param i Candidate index.
  */
-t_error	path_matches_get(t_string **out, t_path_matches *matches, size_t i);
+void	path_matches_get(t_string **out, t_path_matches *matches, size_t i);
 
 /**
  * @ingroup expander_path_matches

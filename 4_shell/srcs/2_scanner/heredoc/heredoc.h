@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:11:40 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:27:11 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef HEREDOC_H
 # define HEREDOC_H
 
@@ -74,7 +86,11 @@ typedef enum e_here_mode
  *         (delimiter expansion by the expander, params, sig on the PS2
  *         read) bubble through unlisted.
  */
-t_error	heredoc_read_body(t_lexer *lexer, t_string *out, t_token *delim, bool strip);
+t_error	heredoc_read_body(
+			t_lexer *lexer,
+			t_string *out,
+			t_token *delim,
+			bool strip);
 
 /**
  * @ingroup heredoc

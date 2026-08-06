@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:20 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:18:15 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <assert.h> // DEBUG
 #include "word_.h"
 
 t_error	word_push(t_word *word, t_word_item item)
@@ -7,13 +20,10 @@ t_error	word_push(t_word *word, t_word_item item)
 	return (error(ERR_NO));
 }
 
-t_error	word_fpop(t_word_item *out, t_word *word)
+void	word_fpop(t_word_item *out, t_word *word)
 {
-	if (word->len == 0)
-		return (error(ERR_EMPTY_STACK));
-	if (!vector_remove(word, 0, out))
-		return (error_sys());
-	return (error(ERR_NO));
+	assert(word->len != 0);
+	vector_remove(word, 0, out);
 }
 
 t_error	word_remove(t_word *word, size_t start, size_t len)
@@ -40,11 +50,8 @@ t_error	word_dup(t_word *out, t_word *src)
 	return (error(ERR_NO));
 }
 
-t_error	word_get(t_word_item *out, const t_word *word, size_t index)
+void	word_get(t_word_item *out, const t_word *word, size_t index)
 {
-	if (word->len == 0)
-		return (error(ERR_EMPTY_STACK));
-	else if (index >= word->len)
-		return (error(ERR_INDEX_OUT_OF_BOUND));
-	return (*out = ((t_word_item *)word->data)[index], error(ERR_NO));
+	assert(word->len > 0 && index < word->len);
+	*out = ((t_word_item *)word->data)[index];
 }

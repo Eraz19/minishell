@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:14:24 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:30:37 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "lexer.h"
 #include "lexer_priv.h"
@@ -15,7 +27,10 @@ t_error	lexer_get_next_token(t_lexer *lexer, t_token *out)
 	return (lexer->err);
 }
 
-t_error	lexer_scan_word(t_lexer *lexer, t_token *out, t_token_recognition_context *args)
+t_error	lexer_scan_word(
+			t_lexer *lexer,
+			t_token *out,
+			t_token_recognition_context *args)
 {
 	bind_lexer_input(lexer);
 	bind_lexer_token(lexer, out);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:14:37 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:01:42 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "env.h"
 #include "expander.h"
@@ -12,7 +24,11 @@ static t_error	ps1_append_history_index(t_string *out)
 	history = shell_get_history();
 	if (history == NULL)
 	{
-		(void)error_print(error(ERR_SHELL_NOT_FOUND), "reader", "PS1", NULL, NULL);
+		(void)error_print(
+			error(ERR_SHELL_NOT_FOUND),
+			"reader",
+			"PS1",
+			NULL, NULL);
 		if (!string_append_n(out, "!", 1))
 			err = error_sys();
 		return (err);
@@ -22,7 +38,10 @@ static t_error	ps1_append_history_index(t_string *out)
 	return (err);
 }
 
-static t_error	ps1_append_exclamation(t_string *out, const t_string *src, size_t *i)
+static t_error	ps1_append_exclamation(
+					t_string *out,
+					const t_string *src,
+					size_t *i)
 {
 	t_error	err;
 
@@ -33,7 +52,7 @@ static t_error	ps1_append_exclamation(t_string *out, const t_string *src, size_t
 		if (!string_append_n(out, "!", 1))
 			err = error_sys();
 	}
-	else 
+	else
 	{
 		if (src->data[*i] == '!')
 			err = ps1_append_history_index(out);

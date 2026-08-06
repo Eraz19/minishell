@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:01 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/06 18:34:40 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <assert.h> // DEBUG
 #include "param_braced_.h"
-#include <assert.h>
 
 static t_error	braced_origin(
 					t_expander *expander,
@@ -8,9 +20,7 @@ static t_error	braced_origin(
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	assert(item.opt.context_len >= 3);
 	*body_len = item.opt.context_len - 3;
 	*origin = item.opt;
@@ -24,9 +34,7 @@ t_error	expand_braced_dispatch(
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (item.c == '#')
 		return (expand_braced_length(expander, body_len, origin));
 	if (item.c == '@' || item.c == '*')
@@ -34,11 +42,19 @@ t_error	expand_braced_dispatch(
 	return (expand_braced_param(expander, body_len, origin));
 }
 
+t_error	requalify_error(t_expander *expander, t_string body)
+{
+	expander->err = error_print(expander->err,
+			"expander", body.data, NULL, NULL);
+	expander->err.type = ERR_POSIX_EXPANSION;
+	return (expander->err);
+}
+
 t_error	expand_braced(t_expander *expander)
 {
 	t_string		body;
-	size_t			body_len;
 	t_word_item_opt	origin;
+	size_t			body_len;
 
 	expander->err = braced_origin(expander, &body_len, &origin);
 	if (expander->err.type)
@@ -51,14 +67,13 @@ t_error	expand_braced(t_expander *expander)
 		return (string_free(&body), expander->err);
 	if (body_len == 0)
 	{
-		expander->err = error_print(error(ERR_PARAM_BAD_SUBSTITUTION),
-				"expander", body.data, NULL, NULL);
-		return (string_free(&body), expander->err);
+		expander->err = error(ERR_PARAM_BAD_SUBSTITUTION);
+		return (requalify_error(expander, body), string_free(&body),
+			expander->err);
 	}
 	expander->err = expand_braced_dispatch(expander, body_len, origin);
 	if (expander->err.type == ERR_PARAM_BAD_SUBSTITUTION
 		|| expander->err.type == ERR_VAR_INVALID_NAME)
-		expander->err = error_print(expander->err,
-				"expander", body.data, NULL, NULL);
+		requalify_error(expander, body);
 	return (string_free(&body), expander->err);
 }

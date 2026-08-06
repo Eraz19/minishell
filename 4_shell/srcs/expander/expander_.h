@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:45 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/06 00:21:02 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXPANDER__H
 # define EXPANDER__H
 
@@ -27,14 +39,13 @@
  * @var s_expander_args::contexts Quoting and construct spans of
  *                                @c value (borrowed, read-only).
  * @var s_expander_args::exit_status Destination for the exit status of
- *                                   the last command substitution;
- *                                   unused until command substitution is
- *                                   implemented (borrowed).
+ *                                   the last command substitution
+ *                                   (borrowed).
  * @var s_expander_args::assignment_offset Index of the @c '=' of an
  *                                         assignment word, @c -1
  *                                         otherwise.
  */
-typedef	struct s_expander_args
+typedef struct s_expander_args
 {
 	t_string		ifs;
 	t_string		value;
@@ -83,10 +94,10 @@ void	expander_init(t_expander *expander);
  *       the run.
  * @param expander Already initialized expander state (borrowed).
  * @param args Input of the run (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND if the shell parameters are unavailable;
- *         @c ERR_LIBC on allocation failure; @c ERR_INCOHERENT_STATE,
- *         @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND on a context
- *         stack inconsistency; @c ERR_NO on success.
+ * @return @c ERR_INTERNAL (printed by the env module) if the shell
+ *         parameters are unavailable; @c ERR_LIBC on allocation
+ *         failure; @c ERR_NO on success (context stack inconsistencies
+ *         are caught by assertion).
  */
 t_error	expander_load(t_expander *expander, t_expander_args *args);
 
@@ -99,6 +110,18 @@ t_error	expander_load(t_expander *expander, t_expander_args *args);
  */
 void	expander_free(t_expander *expander);
 
+/**
+ * @ingroup expander_priv
+ * @brief Releases the resources of a raw-string run: the IFS, the value,
+ *        the AST vector and the context stack of @p args, then zeroes
+ *        it.
+ *
+ * @warning Only for @ref expand_str / @ref expand_str_merged, which own
+ *          all four; the token endpoints borrow everything but the IFS
+ *          from the token and must not use this.
+ *
+ * @param args Input of the run to release (borrowed).
+ */
 void	expander_args_free(t_expander_args *args);
 
 /* ************************************************************************* */
@@ -107,12 +130,49 @@ void	expander_args_free(t_expander_args *args);
 
 /**
  * @ingroup expander_priv
+ * @brief Prepares a raw-string run: resolves the IFS and re-lexes
+ *        @c args->value to recover its quoting and construct spans —
+ *        with the here-document rules when @c EXP_HEREDOC is set in
+ *        @p flags; the value is freed on failure.
+ *
+ * @param args Input of the run; its @c value must already be loaded
+ *             (borrowed).
+ * @param context_out Context stack initialized by the function
+ *                    (borrowed).
+ * @param ast_vec AST vector initialized by the function (borrowed).
+ * @param flags Expansions the run will apply, stored into @p args.
+ * @return @c ERR_INTERNAL (printed) if the shell is unavailable;
+ *         @c ERR_LIBC on allocation failure; @c ERR_POSIX_SYNTAX
+ *         (printed by the scanner) on malformed input; @c ERR_NO on
+ *         success.
+ */
+t_error	prepare_src(
+			t_expander_args	*args,
+			t_context_stack *context_out,
+			t_ast_vector *ast_vec,
+			t_exp_flag flags);
+
+/**
+ * @ingroup expander_priv
+ * @brief Runs one full expansion and joins the resulting fields with the
+ *        first IFS character of the run (no separator when IFS is null).
+ *
+ * @param out String receiving the joined fields, initialized by the
+ *            function (borrowed).
+ * @param args Input of the run (borrowed).
+ * @return Same surface as @ref run_expansion, plus @c ERR_LIBC from
+ *         the join; @c ERR_NO on success.
+ */
+t_error	run_and_merge_expansion(t_string *out, t_expander_args *args);
+
+/**
+ * @ingroup expander_priv
  * @brief Runs the expansion pipeline on the loaded fields:
  *        substitutions, then field splitting, pathname expansion and
  *        quote removal when their flag is set.
  *
  * @param expander Loaded expander state (borrowed).
- * @return The first stage error, raw (see @ref expander_error_qualify
+ * @return The first stage error, raw (see @ref requalify_expander_error
  *         for the qualified surface); @c ERR_NO on success.
  */
 t_error	expand_word(t_expander *expander);
@@ -147,10 +207,15 @@ bool	match_pattern(const char *pattern, const char *str, size_t len);
  * @param out String receiving the rendered pattern, initialized by the
  *            function and freed on failure (borrowed).
  * @param pattern Annotated pattern word (borrowed, read-only).
- * @return @c ERR_LIBC on allocation failure; @c ERR_INDEX_OUT_OF_BOUND
- *         on an internal inconsistency; @c ERR_NO on success.
+ * @param res_quoted Whether a quoted expansion result renders literally
+ *                   (case words) instead of following the local quoting
+ *                   (${x#pat} operands, POSIX 2.6.2).
+ * @return @c ERR_LIBC on allocation failure; @c ERR_NO on success.
  */
-t_error	pattern_from_word(t_string *out, const t_word *pattern);
+t_error	pattern_from_word(
+			t_string *out,
+			const t_word *pattern,
+			bool res_quoted);
 
 /**
  * @ingroup expander_priv
@@ -165,48 +230,51 @@ t_error	pattern_from_word(t_string *out, const t_word *pattern);
  *                  (borrowed).
  * @param args Input of the run; its IFS stays owned by the caller
  *             (borrowed).
- * @return Raw errors, requalified by the API endpoints: @c ERR_LIBC;
- *         @c ERR_SHELL_NOT_FOUND; @c ERR_EMPTY_STACK,
- *         @c ERR_INDEX_OUT_OF_BOUND or @c ERR_INCOHERENT_STATE on an
- *         internal inconsistency; @c ERR_NOT_IMPLEMENTED (printed) from
- *         the command, backquote and arithmetic evaluation stubs;
- *         @c ERR_PARAM_BAD_SUBSTITUTION (printed),
- *         @c ERR_PARAM_NULL_OR_UNSET (printed),
- *         @c ERR_VAR_INVALID_NAME (printed) or @c ERR_VAR_READ_ONLY
- *         (printed) on a user-facing expansion failure; @c ERR_NO on
- *         success.
+ * @return Errors requalified in place at their production sites (see
+ *         the audit above @ref requalify_expander_error,
+ *         expander_error.c): @c ERR_POSIX_EXPANSION (printed) on a
+ *         user-facing expansion failure; @c ERR_POSIX_ASSIGNMENT
+ *         (printed by the env module) on a readonly ${var=w}
+ *         assignment; @c ERR_INTERNAL (printed) from the arithmetic
+ *         evaluation stub; @c ERR_LIBC raw and unprinted; @c ERR_NO
+ *         on success (internal inconsistencies are caught by
+ *         assertion).
  */
 t_error	run_expansion(t_expansion *expansion, t_expander_args *args);
 
-// TODO: doc
+/**
+ * @ingroup expander_priv
+ * @brief Runs one full expansion like @ref run_expansion but hands the
+ *        resulting fields over as annotated words (quoting metadata
+ *        preserved), moving the storage out of the engine.
+ *
+ * @param word Fields initialized by the function; the caller owns them
+ *             and must release them with @ref fields_free (borrowed).
+ * @param args Input of the run (borrowed).
+ * @return Same raw surface as @ref run_expansion.
+ */
 t_error	run_expansion_word(t_fields *word, t_expander_args *args);
 
 /**
  * @ingroup expander_priv
- * @brief Requalifies an error escaping the expander API (@c expand_token,
- *        @c expand_token_merged, @c expand_str): no caller needs the
- *        specific expansion error types.
+ * @brief Boundary mapping of the errors leaving the module — the
+ *        identity, final: every failure is printed and requalified in
+ *        place at its production site, so only the allowed surface
+ *        (@c ERR_NO, @c ERR_POSIX_EXPANSION, @c ERR_POSIX_ASSIGNMENT,
+ *        @c ERR_POSIX_SYNTAX, @c ERR_INTERNAL, @c ERR_LIBC) can arrive
+ *        here; the full bubble-up audit lives above the implementation
+ *        (expander_error.c).
  *
- * Prints the specific diagnostic at the moment precision is lost, then
- * requalifies (POSIX 2.8.1): user-facing expansion failures
- * (@c ERR_PARAM_BAD_SUBSTITUTION, @c ERR_BAD_SUBSTITUTION,
- * @c ERR_PARAM_NULL_OR_UNSET, @c ERR_VAR_INVALID_NAME, and an unexpected
- * end of input inside a construct discovered at expansion time) become
- * @c ERR_POSIX_EXPANSION; a readonly-variable assignment
- * (@c ERR_VAR_READ_ONLY, e.g. @c ${RO:=v}) becomes
- * @c ERR_POSIX_ASSIGNMENT; any other unqualified error becomes
- * @c ERR_INTERNAL. @c ERR_LIBC is printed with the expander context and
- * kept, fully qualified errors (>= @c ERR_INTERRUPTED) pass through
- * untouched.
+ * @note Every module function returning a @c t_error to an external
+ *       caller (@ref expand_str, @ref expand_str_merged,
+ *       @ref expand_token, @ref expand_token_merged,
+ *       @ref expand_token_word, @ref word_match_pattern and
+ *       @ref expansion_merge) routes its result through this function.
  *
- * @note @c ERR_QUOTED_TILDE never reaches the qualifier: it is internal
- *       control flow, consumed by the tilde submodule (a quoted tilde
- *       stays literal).
- *
- * @param err Error to requalify.
- * @return The requalified (and printed) error.
+ * @param err Raw error to requalify.
+ * @return @p err unchanged.
  */
-t_error	expander_error_qualify(t_error err);
+t_error	requalify_expander_error(t_error err);
 
 /**
  * @ingroup expander_priv
@@ -215,7 +283,7 @@ t_error	expander_error_qualify(t_error err);
  * @param bitset Flag bitset to test.
  * @param flag Flag to look for.
  */
-bool    flag_is_active(uint bitset, uint flag);
+bool	flag_is_active(uint bitset, uint flag);
 
 /**
  * @ingroup expander_priv
@@ -223,8 +291,8 @@ bool    flag_is_active(uint bitset, uint flag);
  *
  * @param word_exp Destination word (borrowed).
  * @param word Source word (borrowed).
- * @return @c ERR_EMPTY_STACK if @p word is empty, @c ERR_LIBC if the
- *         push fails, @c ERR_NO on success.
+ * @return @c ERR_LIBC if the push fails, @c ERR_NO on success (an
+ *         empty @p word is caught by assertion).
  */
 t_error	forward_word_item(t_word *word_exp, t_word *word);
 
@@ -236,9 +304,9 @@ t_error	forward_word_item(t_word *word_exp, t_word *word);
  *
  * @param ifs String receiving the separators, initialized by the
  *            function and freed on failure (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND if the shell parameters are
- *         unavailable; @c ERR_LIBC on allocation failure; @c ERR_NO on
- *         success.
+ * @return @c ERR_INTERNAL (printed by the env module) if the shell
+ *         parameters are unavailable; @c ERR_LIBC on allocation
+ *         failure; @c ERR_NO on success.
  */
 t_error	get_ifs(t_string *ifs);
 
@@ -252,13 +320,26 @@ t_error	get_ifs(t_string *ifs);
  * @param in Expansion to consume; its fields are popped (borrowed).
  * @param ifs Separators of the run; only the first character is used
  *            (borrowed, read-only).
- * @return @c ERR_LIBC on allocation failure; @c ERR_EMPTY_STACK or
- *         @c ERR_INDEX_OUT_OF_BOUND on an internal inconsistency;
- *         @c ERR_NO on success.
+ * @return @c ERR_LIBC on allocation failure; @c ERR_NO on success.
  */
 t_error	join_expansion(t_string *out, t_expansion *in, t_string *ifs);
 
-// TODO: doc
+/**
+ * @ingroup expander_priv
+ * @brief Re-lexes the raw text @p src through a throwaway string-mode
+ *        scanner to recover its quoting and construct spans, replacing
+ *        @p src with the scanned value.
+ *
+ * @param out Context stack of the scanned word, initialized by the
+ *            function (borrowed).
+ * @param ats_vec_out AST vector of the embedded command substitutions,
+ *                    initialized by the function (borrowed).
+ * @param src Text to scan; replaced by the scanned value on success,
+ *            left untouched on failure (borrowed).
+ * @return @c ERR_LIBC on allocation failure; the scanner's raw lexing
+ *         errors on malformed input (unterminated construct in string
+ *         mode); @c ERR_NO on success.
+ */
 t_error	prepare_str_for_expansion(
 			t_context_stack *out,
 			t_ast_vector *ats_vec_out,

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:10 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:02:12 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 18:32:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "lexer.h"
 # include "scanner.h"
 # include "options.h"
+# include "history.h"
 
 const char	*bool_to_string(bool value);
 const char	*action_type_to_string(t_action_type type);
@@ -67,11 +68,22 @@ const char	*option_to_string(t_option option);
 /**
  * @brief Dump special parameter state to stderr.
  */
-void	specials_dump(void);
+void		specials_dump(void);
 
 /**
  * @brief Dump positional frames to stderr.
  */
-void	positionals_dump(void);
+void		positionals_dump(void);
+void		history_load_start_logs(const char *func_name);
+void		history_load_end_logs(const char *func_name);
+void		success_history_adapter_add_log(t_history_adapter *history_adapter);
+void		history_file_save_start_log(t_history_file *history_file);
+void		history_file_save_end_log(t_history_file *history_file);
+void		empty_history_file_load_log(void);
+void		success_history_file_load_log(t_history_file *history_file);
+void		history_load_file_path_from_logs(const char *path, const char *origin);
+void		history_load_max_size_from_unset_logs(void);
+void		history_load_max_size_from_invalid_logs(void);
+void		history_load_max_size_from_logs(ssize_t max);
 
 #endif

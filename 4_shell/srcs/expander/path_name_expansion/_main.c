@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:45:37 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:07:16 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "options.h"
 #include "globbing_.h"
 #include "path_comps_.h"
@@ -35,9 +47,7 @@ static t_error	path_name_expansion_word(t_expander *expander)
 	t_path_comps	path_comps;
 
 	globbed = false;
-	expander->err = fields_fpop(&expander->word, &expander->fields);
-	if (expander->err.type)
-		return (expander->err);
+	fields_fpop(&expander->word, &expander->fields);
 	if (prepare_path_name_word(expander, &original).type)
 		return (word_free(&original), expander->err);
 	expander->err = path_comps_load(&path_comps, &expander->word_exp);

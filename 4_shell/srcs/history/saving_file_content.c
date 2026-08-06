@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   saving_file_content.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:09:32 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 15:45:57 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "utils.h"
 #include "history.h"
 
-t_error	history_prepare_entry(t_history *history, const t_string *entry)
+static t_error	history_prepare_entry(t_history *history, const t_string *entry)
 {
 	t_string	*file_content;
 	t_string	serialized_entry;
@@ -22,11 +34,14 @@ t_error	history_prepare_entry(t_history *history, const t_string *entry)
 	return (history->err);
 }
 
-t_error	history_build_from_current(t_history *history)
+static t_error	history_build_from_current(t_history *history)
 {
-	if (history->current_input.len == 0)
+	size_t	current_input_len;
+
+	current_input_len = history->current_input.len;
+	if (current_input_len == 0)
 		return (history->err);
-	else if (history->current_input.data[history->current_input.len - 1] == '\n')
+	else if (history->current_input.data[current_input_len - 1] == '\n')
 	{
 		history->current_input.data[history->current_input.len - 1] = '\0';
 		history->current_input.len--;
@@ -36,7 +51,7 @@ t_error	history_build_from_current(t_history *history)
 	return (history_prepare_entry(history, &history->current_input));
 }
 
-t_error	history_build_from_list(t_history *history, size_t start)
+static t_error	history_build_from_list(t_history *history, size_t start)
 {
 	size_t			i;
 	const t_string	*entry;

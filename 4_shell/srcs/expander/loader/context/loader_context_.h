@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   loader_context_.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:44:07 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:44:08 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LOADER_CONTEXT__H
 # define LOADER_CONTEXT__H
 
@@ -70,9 +82,8 @@ bool	is_substitution_start(t_loader *loader);
  *        the new top, or @c NULL when none is left.
  *
  * @param loader Loader state (borrowed).
- * @return @c ERR_EMPTY_STACK if the loading stack is empty, @c ERR_LIBC
- *         if the removal fails, @c ERR_INDEX_OUT_OF_BOUND if the new
- *         top lookup fails, @c ERR_NO on success.
+ * @note An empty loading stack or a failed top lookup is caught by
+ *       assertion.
  */
 void	loader_pop_context(t_loader *loader);
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   context_stack.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 15:25:22 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:17:10 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CONTEXT_STACK_H
 # define CONTEXT_STACK_H
 
@@ -36,6 +48,9 @@ void	context_stack_bpop(t_context_stack *stack, t_context_stack_item **item);
 
 void	context_stack_fpop(t_context_stack *stack, t_context_stack_item **item);
 
-void	context_stack_get(const t_context_stack *stack, t_context_stack_item **item, size_t index);
+void	context_stack_get(
+			const t_context_stack *stack,
+			t_context_stack_item **item,
+			size_t index);
 
 #endif

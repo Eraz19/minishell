@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _main.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:09 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:07:41 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "param_expansion_.h"
 #include "tilde_expansion_.h"
 #include "cmd_substitution_.h"
@@ -10,9 +22,7 @@ t_error	substitution_char(t_expander *expander)
 {
 	t_word_item	item;
 
-	expander->err = word_get(&item, &expander->word, 0);
-	if (expander->err.type)
-		return (expander->err);
+	word_get(&item, &expander->word, 0);
 	if (!item.opt.is_expand_res)
 	{
 		if (is_tilde_expansion(expander, &item))
@@ -36,9 +46,7 @@ t_error	substitution_char(t_expander *expander)
 
 t_error	substitution_word(t_expander *expander)
 {
-	expander->err = fields_fpop(&expander->word, &expander->fields);
-	if (expander->err.type)
-		return (expander->err);
+	fields_fpop(&expander->word, &expander->fields);
 	word_init(&expander->word_exp);
 	while (expander->word.len > 0)
 	{

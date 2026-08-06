@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   max_size.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:09:15 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 19:05:14 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "env.h"
+#include "debug.h"
 #include "history_load_env.h"
 #include "history_load_env_priv.h"
 
@@ -12,12 +25,6 @@ void	load_max_size_invalid_value(t_history *history)
 {
 	history->adapter.max = -1;
 	history_load_max_size_from_invalid_logs();
-}
-
-void	load_max_size_out_of_range_value(t_history *history)
-{
-	history_load_max_size_from_out_of_range_logs(history->adapter.max);
-	history->adapter.max = 128;
 }
 
 t_error	load_history_max_size_env(t_history *history)
@@ -35,10 +42,7 @@ t_error	load_history_max_size_env(t_history *history)
 	else
 	{
 		history->adapter.max = (ssize_t)max;
-		if (max >= 0 && max < 128)
-			load_max_size_out_of_range_value(history);
-		else
-			history_load_max_size_from_logs(max);
+		history_load_max_size_from_logs(max);
 	}
 	string_free(&max_str);
 	return (history->err = error(ERR_NO));

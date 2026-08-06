@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_recognition_actions.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:13:57 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:34:57 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token_recognition_priv.h"
 
 void	token_recognition_delimit(t_lexer *lexer)
@@ -12,7 +24,10 @@ void	token_recognition_advance(t_lexer *lexer, size_t offset)
 	lexer->input->i += offset;
 }
 
-t_error	token_recognition_consume(t_lexer *lexer, t_token_type type, size_t iter)
+t_error	token_recognition_consume(
+			t_lexer *lexer,
+			t_token_type type,
+			size_t iter)
 {
 	size_t	i;
 	char	current_char;

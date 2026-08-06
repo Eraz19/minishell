@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_substitution_.h                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:46:35 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:46:36 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CMD_SUBSTITUTION__H
 # define CMD_SUBSTITUTION__H
 
@@ -6,10 +18,9 @@
 /** @defgroup expander_cmd_sub Command substitution
  *  @brief POSIX 2.6.3: @c $(...) command substitution.
  *
- *  Unimplemented: needs the subshell execution machinery (and, on the
- *  tokenization side, the @c runner_find_cmd_sub_closing stub). The stub
- *  reports @c ERR_NOT_IMPLEMENTED (printed) instead of looping on the
- *  unconsumed construct.
+ *  Runs the construct's pre-parsed AST (recorded at tokenization) in a
+ *  subshell and splices the output — trailing newlines trimmed — as
+ *  expansion-result items.
  */
 
 /* ************************************************************************* */
@@ -18,11 +29,14 @@
 
 /**
  * @ingroup expander_cmd_sub
- * @brief Stub: reports the unimplemented command substitution.
+ * @brief Substitutes the leading @c $(...) construct of the word with
+ *        the output of its pre-parsed AST, run in a subshell; an empty
+ *        @c $() is consumed without running anything.
  *
  * @param expander Expander state (borrowed).
- * @return @c ERR_NOT_IMPLEMENTED (printed with the function name); the
- *         expander qualifier turns it into @c ERR_INTERNAL.
+ * @return @c ERR_LIBC on allocation, pipe, fork or read failure;
+ *         @c ERR_INTERNAL (printed) on an AST index inconsistency;
+ *         @c ERR_NO on success.
  */
 t_error	cmd_substitution(t_expander *expander);
 

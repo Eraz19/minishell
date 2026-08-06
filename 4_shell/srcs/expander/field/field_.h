@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   field_.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:43:34 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:06:20 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FIELD__H
 # define FIELD__H
 
@@ -33,17 +45,7 @@ void	fields_init(t_fields *fields);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-/**
- * @ingroup expander_field
- * @brief Removes the first field of @p fields and hands it to the caller.
- *
- * @param out Set to the removed word; the caller becomes its owner and
- *            must release it with @c word_free (borrowed).
- * @param fields Already initialized container (borrowed).
- * @return @c ERR_EMPTY_STACK if @p fields is empty, @c ERR_LIBC if the
- *         removal fails, @c ERR_NO on success.
- */
-t_error	fields_fpop(t_word *out, t_fields *fields);
+void	fields_fpop(t_word *out, t_fields *fields);
 
 /**
  * @ingroup expander_field
@@ -64,7 +66,5 @@ t_error	fields_fpop(t_word *out, t_fields *fields);
  */
 // TODO: fix ownership
 t_error	fields_push(t_fields *fields, t_word item);
-
-t_error	fields_get(t_word *out, t_fields *fields, size_t index);
 
 #endif

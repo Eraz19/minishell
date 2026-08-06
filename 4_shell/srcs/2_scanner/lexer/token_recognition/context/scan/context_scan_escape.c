@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   context_scan_escape.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:12:20 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:52:07 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <assert.h> // DEBUG
 #include "token_recognition_priv.h"
 #include "token_recognition_context_scan.h"
@@ -40,7 +52,6 @@ t_error	scan_context_escape_next_char(t_token_recognition_escape args)
 		return (scan_escape_special_context(args));
 	else if (!in_special_context && args.is_in_whitelist != NULL)
 		return (scan_escape_default_context(args));
-	// Check if the rules as been correctly set
 	assert(false);
 	return (args.lexer->err);
 }
@@ -52,7 +63,7 @@ t_error	scan_context_line_continuation(t_token_recognition_escape args)
 	token_recognition_advance(args.lexer, 2);
 	current_char = args.lexer->input->str.data[args.lexer->input->i];
 	if (current_char == '\0')
-		return (on_context_scan_EOI(args.lexer));
+		return (on_context_scan_eoi(args.lexer));
 	return (args.lexer->err);
 }
 
@@ -65,7 +76,7 @@ t_error	scan_context_escape(t_token_recognition_escape args)
 	if (args.line_continuation && *(current_char + 1) == '\n')
 		return (scan_context_line_continuation(args));
 	else if (*current_char == '\0')
-		return (on_context_scan_EOI(args.lexer));
+		return (on_context_scan_eoi(args.lexer));
 	else
 	{
 		type = TOKEN_TOKEN;

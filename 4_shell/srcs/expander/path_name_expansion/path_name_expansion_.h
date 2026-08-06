@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path_name_expansion_.h                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:45:41 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:45:42 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PATH_NAME_EXPANSION__H
 # define PATH_NAME_EXPANSION__H
 
@@ -29,10 +41,10 @@
  * @warning On failure the fields produced so far are freed and
  *          @c expander->fields is left partially consumed.
  * @param expander Loaded expander state (borrowed).
- * @return @c ERR_SHELL_NOT_FOUND if the shell parameters are
- *         unavailable; @c ERR_EMPTY_STACK or @c ERR_INDEX_OUT_OF_BOUND
- *         on a field or word read inconsistency; @c ERR_LIBC on
- *         allocation failure; @c ERR_NO on success.
+ * @return @c ERR_INTERNAL (printed by the env module) if the shell
+ *         parameters are unavailable; @c ERR_LIBC on allocation
+ *         failure; @c ERR_NO on success (read inconsistencies are
+ *         caught by assertion).
  */
 t_error	path_name_expansion(t_expander *expander);
 

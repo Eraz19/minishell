@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   blank_delimiter_rule.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:13:30 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 16:13:31 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token_recognition_priv.h"
 
 t_error	recognize_token_blank_delimiter(t_lexer *lexer)
