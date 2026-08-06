@@ -6,7 +6,7 @@
 /*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:09 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 18:18:59 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/07 00:57:51 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,13 @@ t_error	scanner_get_next_token(t_scanner *scanner, t_token *out, bool ps2)
 		return (lexer_unbind_token(&scanner->lexer), scanner->err);
 	scanner->err = lexer_get_next_token(&scanner->lexer, out);
 	if (scanner->err.type)
-		scanner->err = requalify_scanner_error(scanner);
+		return (scanner->err = requalify_scanner_error(scanner));
 	else if (out->type == TOKEN_TOKEN)
+	{
 		scanner->err = expand_alias(scanner, out);
+		if (scanner->err.type)
+			return (requalify_scanner_error(scanner));
+	}
 	lexer_unbind_token(&scanner->lexer);
 	return (requalify_scanner_error(scanner));
 }
