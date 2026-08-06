@@ -12,7 +12,8 @@
 #                     blocks fail.
 #   --td              also run the TD cases (-e/-u/-v, not implemented yet)
 #   --filter PREFIX   only run cases whose ID starts with PREFIX
-#   --suite LIST      comma-separated: options,builtins,ast,complex,custom
+#   --suite LIST      comma-separated: options,builtins,ast,complex,words,
+#                     semantics,custom
 #   --timeout N       per-case timeout in seconds (default 20; 60 with --leak)
 #                     NOTE: the shell currently burns ~2.6s of CPU at startup
 #                     (before reading any input), so keep timeouts generous.
@@ -35,6 +36,11 @@
 #                     pipeline, and-or, list/&, subshell, brace group,
 #                     if, while/until, for, case, function, redirections
 #   40_complex.zsh    nested combinations of everything above
+#   50_words.zsh      tokenization, quoting and word expansions
+#                     (2.2 2.3 2.5 2.6 2.14 — clause-cited edge cases)
+#   60_semantics.zsh  redirection/heredoc edges, 2.8.1 error consequences,
+#                     2.9.1 simple-command semantics, grammar edges,
+#                     break/continue n, shift, eval, dot, return
 #   90_custom.zsh     your own scratchpad cases
 #
 # Per-case logs: tests/logs/posix_suite.N/<ID>/
@@ -62,7 +68,7 @@ RUN_TD=0
 # VG_TIMEOUT. Prefer --leak together with --filter/--suite until fixed.
 RUN_TIMEOUT=20
 VG_TIMEOUT=300
-SUITE_SEL="options,builtins,ast,complex,custom"
+SUITE_SEL="options,builtins,ast,complex,words,semantics,custom"
 
 while (( $# )); do
 	case "$1" in
@@ -72,7 +78,7 @@ while (( $# )); do
 		--suite)    shift; SUITE_SEL="$1" ;;
 		--timeout)  shift; RUN_TIMEOUT="$1"; VG_TIMEOUT="$1" ;;
 		--list)
-			echo "suites: options builtins ast complex custom"
+			echo "suites: options builtins ast complex words semantics custom"
 			exit 0 ;;
 		-*)
 			echo "unknown option: $1" >&2
@@ -130,6 +136,8 @@ for s in ${(s:,:)SUITE_SEL}; do
 		builtins) SUITE_NAME="builtins"; source "${SUITES_DIR}/20_builtins.zsh" ;;
 		ast)      SUITE_NAME="ast";      source "${SUITES_DIR}/30_ast.zsh" ;;
 		complex)  SUITE_NAME="complex";  source "${SUITES_DIR}/40_complex.zsh" ;;
+		words)    SUITE_NAME="words";    source "${SUITES_DIR}/50_words.zsh" ;;
+		semantics) SUITE_NAME="semantics"; source "${SUITES_DIR}/60_semantics.zsh" ;;
 		custom)   SUITE_NAME="custom";   source "${SUITES_DIR}/90_custom.zsh" ;;
 		*)        echo "unknown suite: $s" >&2; exit 2 ;;
 	esac

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:14:24 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:30:37 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:38:00 by adouieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_error	lexer_get_next_token(t_lexer *lexer, t_token *out)
 	bind_lexer_input(lexer);
 	if (recognize_token(lexer, out).type)
 		return (lexer->err);
-	if (out->type == TOKEN_EOF && lexer->input_stack.len > 1)
+	if (lexer->input->i == lexer->input->str.len && lexer->input_stack.len > 1)
 		return (lexer_pop_alias(lexer));
 	return (lexer->err);
 }
