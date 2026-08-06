@@ -1,10 +1,6 @@
 # NOW
 
 - Norme:
-	- ⚠️ **ALEX**:
-		- `builtins/pwd.c`
-		- `0_utils/ft_getpwnam.c`
-		- `types.h` remove (move content to correct headers / `utils.h`)
 	- keep comments for `42_SH`:
 		- `error.h`
 		- `0_utils/ft_getopt.h`
