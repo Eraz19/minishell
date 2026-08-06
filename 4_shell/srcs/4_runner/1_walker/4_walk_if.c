@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:34 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:23:35 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:47:49 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "walker_priv.h"
-#include <assert.h>
 
 static inline t_error	walk_if_condition(
 							t_runner *runner,
@@ -36,8 +35,6 @@ t_error	walk_if(t_runner *runner, t_ast_if *if_node, int *exit_status)
 	t_ast_list	*body;
 	t_error		err;
 
-	assert(if_node->conditions.len > 0);
-	assert(if_node->conditions.len == if_node->bodies.len);
 	i = 0;
 	while (i < if_node->conditions.len)
 	{

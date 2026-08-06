@@ -6,17 +6,15 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:29 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:39:58 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:48:42 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "utils.h"
-#include <assert.h>	// DEBUG
 
 void	ast_if_init(t_ast_if *if_node)
 {
-	assert(if_node != NULL);
 	vector_init(&if_node->conditions, sizeof(t_ast_list), 0);
 	vector_init(&if_node->bodies, sizeof(t_ast_list), 0);
 	ast_list_init(&if_node->else_body);
@@ -47,7 +45,6 @@ t_error	ast_if_dup(void *dst, const void *src)
 
 void	ast_if_free(t_ast_if *if_node)
 {
-	assert(if_node != NULL);
 	vector_free(&if_node->conditions, ast_list_free);
 	vector_free(&if_node->bodies, ast_list_free);
 	ast_list_free(&if_node->else_body);

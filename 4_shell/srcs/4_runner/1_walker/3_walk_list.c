@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:32 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:23:33 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:47:42 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "posix_helpers.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <assert.h>
 
 /*
 après chaque and_or exécuté :
@@ -63,8 +62,6 @@ static inline t_error	walk_list_priv(
 	bool			async;
 	t_error			err;
 
-	assert(list->and_ors.len > 0);
-	assert(list->asyncs.len == list->and_ors.len);
 	i = 0;
 	while (i < list->and_ors.len)
 	{

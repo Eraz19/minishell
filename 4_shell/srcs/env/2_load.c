@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:52 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 21:45:58 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:50:00 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 static void	env_catch_undefined_1(int argc, char **argv)
 {
@@ -20,7 +19,6 @@ static void	env_catch_undefined_1(int argc, char **argv)
 	bool	single_found;
 	bool	double_found;
 
-	assert(argv != NULL);
 	single_found = false;
 	double_found = false;
 	i = 0;
@@ -40,7 +38,6 @@ static void	env_catch_undefined_1(int argc, char **argv)
 
 static void	env_catch_undefined_2(int argc, char **argv, int start)
 {
-	assert(argv != NULL);
 	if (argv[start - 1][0] != '-'
 		|| argv[start - 1][1] != '-'
 		|| argv[start - 1][2] != '\0')
@@ -60,8 +57,6 @@ t_error	env_load(t_params *params, int argc, char **argv, char **envp)
 	t_error	err;
 	size_t	start_index;
 
-	assert(argv != NULL);
-	assert(envp != NULL);
 	env_catch_undefined_1(argc, argv);
 	params->name = argv[0];
 	start_index = 1;

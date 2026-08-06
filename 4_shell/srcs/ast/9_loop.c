@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   8_loop.c                                           :+:      :+:    :+:   */
+/*   9_loop.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:33 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:35:34 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:48:56 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-#include <assert.h>	// DEBUG
 
 void	ast_loop_init(t_ast_loop *loop)
 {
-	assert(loop != NULL);
 	ast_list_init(&loop->condition);
 	ast_list_init(&loop->body);
 	loop->condition_must_be_true = false;
@@ -41,7 +39,6 @@ t_error	ast_loop_dup(void *dst, const void *src)
 
 void	ast_loop_free(t_ast_loop *loop)
 {
-	assert(loop != NULL);
 	ast_list_free(&loop->condition);
 	ast_list_free(&loop->body);
 	loop->condition_must_be_true = false;

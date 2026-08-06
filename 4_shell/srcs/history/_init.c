@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   _init.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:09:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 19:00:38 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:54:36 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "debug.h"
 #include "history.h"
 #include "history_load_env.h"
 
@@ -35,7 +34,6 @@ t_error	history_load(t_history *history)
 {
 	ssize_t	max;
 
-	history_load_start_logs(__func__);
 	if (load_history_path_from_env(history).type)
 		return (history->err);
 	if (load_history_max_size_env(history).type)
@@ -45,6 +43,5 @@ t_error	history_load(t_history *history)
 	if (history->err.type)
 		return (history->err);
 	history_adapter_load(&history->adapter, &history->list);
-	history_load_end_logs(__func__);
 	return (history->err);
 }

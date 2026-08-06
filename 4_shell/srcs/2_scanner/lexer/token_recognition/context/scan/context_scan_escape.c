@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   context_scan_escape.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:12:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:52:07 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:52 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "token_recognition_priv.h"
 #include "token_recognition_context_scan.h"
 #include "token_recognition_context_scan_priv.h"
@@ -52,7 +51,6 @@ t_error	scan_context_escape_next_char(t_token_recognition_escape args)
 		return (scan_escape_special_context(args));
 	else if (!in_special_context && args.is_in_whitelist != NULL)
 		return (scan_escape_default_context(args));
-	assert(false);
 	return (args.lexer->err);
 }
 

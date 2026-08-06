@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:11:11 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:11:12 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:42:51 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
 #include "ast.h"
-#include <assert.h>
 
 t_error	token_dup(t_token *dst, const t_token *src)
 {
@@ -37,8 +36,6 @@ t_error	token_dup_void(void *dst, const void *src)
 
 void	token_transfer(t_token *dst, t_token *src)
 {
-	assert(dst != NULL);
-	assert(src != NULL);
 	*dst = *src;
 	token_init(src);
 }

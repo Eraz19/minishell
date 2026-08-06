@@ -6,17 +6,15 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:15 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:39:00 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:48:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "utils.h"
-#include <assert.h>	// DEBUG
 
 void	ast_redir_list_init(t_ast_redir_list *redir_list)
 {
-	assert(redir_list != NULL);
 	vector_init(redir_list, sizeof(t_ast_redirection), 0);
 }
 
@@ -28,6 +26,5 @@ t_error	ast_redir_list_dup(void *dst, const void *src)
 
 void	ast_redir_list_free(t_ast_redir_list *redir_list)
 {
-	assert(redir_list != NULL);
 	vector_free(redir_list, ast_redirection_free);
 }

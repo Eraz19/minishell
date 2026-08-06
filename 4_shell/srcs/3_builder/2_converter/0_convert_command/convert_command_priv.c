@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 17:16:07 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 17:16:10 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:46:37 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "converter_priv.h"
 #include "convert_command_priv.h"
-#include <assert.h>	// DEBUG
 
 /*
 brace_group      : Lbrace compound_list Rbrace
@@ -25,7 +24,6 @@ t_error	convert_to_list(
 			const t_cst_node *node,
 			t_ast_command *out)
 {
-	assert(node->symbol == SYM_brace_group || node->symbol == SYM_subshell);
 	out->type = AST_CMD_LIST;
 	if (node->symbol == SYM_brace_group)
 		return (convert_list(parser, node->children[1], &out->data.list));

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:11:04 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:11:05 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:51:41 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "options.h"
 #include "utils.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 // value can be NULL
 // @ret ERR_VAR_READ_ONLY / ERR_LIBC
@@ -30,7 +29,6 @@ static inline t_error	var_update_value(
 	bool	export_all_is_active;
 	t_error	err;
 
-	assert(var != NULL);
 	if (var->readonly && value)
 		return (error(ERR_VAR_READ_ONLY));
 	err = option_is_active(OPT_EXPORT_ALL, &export_all_is_active);
@@ -61,9 +59,7 @@ static inline t_error	var_create(
 	t_var		*new_var;
 	t_error		err;
 
-	assert(name != NULL);
 	params = shell_get_params();
-	assert(params != NULL);
 	list = &params->variables;
 	new_var = malloc(sizeof(*new_var));
 	if (new_var == NULL)
@@ -90,11 +86,9 @@ t_error	var_set(
 	t_var		*current_var;
 	t_error		err;
 
-	assert(name != NULL);
 	if (!name_is_valid_str(name))
 		return (error(ERR_VAR_INVALID_NAME));
 	params = shell_get_params();
-	assert(params != NULL);
 	list = &params->variables;
 	current_var = hashmap_get(list, name->data);
 	if (current_var != NULL)

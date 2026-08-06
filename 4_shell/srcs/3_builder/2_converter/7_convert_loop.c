@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:45 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:46 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:46:18 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-#include <assert.h>	// DEBUG
 
 /*
 while_clause     : While compound_list do_group
@@ -31,9 +30,6 @@ t_error	convert_loop(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(loop != NULL);
-	assert(out != NULL);
 	ast_loop_init(out);
 	if (loop->children[0]->symbol == SYM_While)
 		out->condition_must_be_true = true;

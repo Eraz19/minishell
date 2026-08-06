@@ -6,14 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:06 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 17:07:20 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:44:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser_priv.h"
 #include "grammar_gotos.h"
 #include "cst.h"
-#include <assert.h>	// DEBUG
 
 static inline t_error	parser_new_lr_state(
 							const t_parser *parser,
@@ -99,7 +98,6 @@ t_error	parser_reduce(t_parser *parser, size_t rule_id)
 	t_parser_item	item;
 	t_error			err;
 
-	assert(parser != NULL);
 	rule = &parser->tables->rules[rule_id];
 	rhs_start = parser->item_stack.len - rule->rhs_len;
 	rhs = &((t_parser_item *)parser->item_stack.data)[rhs_start];

@@ -6,16 +6,14 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:15 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:38:54 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:48:04 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-#include <assert.h>	// DEBUG
 
 void	ast_redirection_init(t_ast_redirection *redirection)
 {
-	assert(redirection != NULL);
 	redirection->operation = AST_REDIR_COUNT;
 	redirection->expand_heredoc_body = false;
 	redirection->fd = -1;
@@ -53,7 +51,6 @@ void	ast_redirection_free(void *redirection)
 {
 	t_ast_redirection	*redir;
 
-	assert(redirection != NULL);
 	redir = (t_ast_redirection *)redirection;
 	token_free(&redir->word);
 	string_free(&redir->heredoc_body);

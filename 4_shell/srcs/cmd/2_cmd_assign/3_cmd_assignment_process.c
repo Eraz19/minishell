@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:56:20 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:56:21 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:49:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "utils.h"
 #include "xtrace.h"
 #include <stdlib.h>
-#include <assert.h>
 
 #define PATH_TARGET		"PATH="
 #define PATH_TARGET_LEN	5
@@ -94,7 +93,6 @@ t_error	cmd_assignment_process(
 		|| cmd->entry.type == CMD_SPECIAL_BUILTIN
 		|| cmd->entry.type == CMD_FUNCTION)
 	{
-		assert(token->assignment_offset >= 0);
 		offset = (size_t)token->assignment_offset;
 		err = cmd_assignment_split(expanded, offset, &name, &value);
 		if (err.type)

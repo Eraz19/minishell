@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:26 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 21:00:51 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:47:13 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "convert_io_priv.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include <assert.h>	// DEBUG
 
 static inline t_error	convert_io_number(
 							t_parser *parser,
@@ -76,9 +75,6 @@ t_error	convert_redirection(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(io_redirect != NULL);
-	assert(out != NULL);
 	ast_redirection_init(out);
 	if (io_redirect->child_count == 1)
 	{
@@ -104,9 +100,6 @@ t_error	convert_redirection_add(
 	t_ast_redirection	redir;
 	t_error				err;
 
-	assert(parser != NULL);
-	assert(io_redirect != NULL);
-	assert(out != NULL);
 	err = convert_redirection(parser, io_redirect, &redir);
 	if (err.type)
 		return (err);

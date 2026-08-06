@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   context_stack.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 15:25:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 15:25:21 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:02 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "context_stack.h"
 #include "context_stack_item.h"
 
@@ -23,13 +22,11 @@ t_error	context_stack_push(t_context_stack *stack, t_context_stack_item *item)
 
 void	context_stack_bpop(t_context_stack *stack, t_context_stack_item **item)
 {
-	assert(stack->len > 0);
 	(void)vector_pop(stack, item);
 }
 
 void	context_stack_fpop(t_context_stack *stack, t_context_stack_item **item)
 {
-	assert(stack->len > 0);
 	(void)vector_remove(stack, 0, item);
 }
 
@@ -38,7 +35,6 @@ void	context_stack_get(
 			t_context_stack_item **item,
 			size_t index)
 {
-	assert(index < stack->len);
 	*item = ((t_context_stack_item **)stack->data)[index];
 }
 

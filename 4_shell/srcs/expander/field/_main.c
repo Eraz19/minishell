@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:43:30 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 23:06:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:52:23 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "field_.h"
 
 t_error	fields_push(t_fields *fields, t_word item)
@@ -22,6 +21,5 @@ t_error	fields_push(t_fields *fields, t_word item)
 
 void	fields_fpop(t_word *out, t_fields *fields)
 {
-	assert(fields->len != 0);
 	vector_remove(fields, 0, out);
 }

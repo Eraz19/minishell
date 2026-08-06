@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:50 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:14:51 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:49:52 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 #include "sig.h"
 #include "alias.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 void	env_init(t_params *params)
 {
-	assert(params != NULL);
 	params->name = NULL;
 	var_init(&params->variables);
 	options_init(&params->options);
@@ -55,7 +53,6 @@ void	env_clear(t_params *params)
 
 void	env_free(t_params *params)
 {
-	assert(params != NULL);
 	params->name = NULL;
 	var_free(&params->variables);
 	options_free(&params->options);

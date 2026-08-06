@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:54 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 17:24:14 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:50:33 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "shell.h"
-#include <assert.h>	// DEBUG
 
 #define SPECIALS	"0$!?"
 
@@ -20,11 +19,6 @@ t_error	env_get(const t_string *name, t_string *dst)
 {
 	t_params	*params;
 
-	assert(name != NULL);
-	assert(name->data != NULL);
-	assert(name->data[0] != '\0');
-	assert(name->len > 0);
-	assert(dst != NULL);
 	(void)string_init(dst, 0, NULL, 0);
 	params = shell_get_params();
 	if (!params)
@@ -46,12 +40,8 @@ t_error	env_get_from_const(const char *name, t_string *dst)
 {
 	t_params	*params;
 
-	assert(name != NULL);
-	assert(name[0] != '\0');
-	assert(dst != NULL);
 	(void)string_init(dst, 0, NULL, 0);
 	params = shell_get_params();
-	assert(params != NULL);
 	if (name[0] == '\0')
 		return (error(ERR_NO));
 	if (name[0] == '-' && name[1] == '\0')

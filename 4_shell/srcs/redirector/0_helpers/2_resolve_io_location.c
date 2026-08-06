@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 15:20:24 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:21:39 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:53:10 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirector_priv.h"
 #include <unistd.h>
-#include <assert.h>
 
 t_error	redirect_resolve_location(t_redir *redir)
 {
@@ -21,7 +20,6 @@ t_error	redirect_resolve_location(t_redir *redir)
 	char		last_char;
 	t_error		err;
 
-	assert(redir->is_location == true);
 	if (redir->expanded_location.len < 2)
 		return (error_print(error(ERR_INTERNAL),
 				"invalid expanded location format", NULL, NULL));

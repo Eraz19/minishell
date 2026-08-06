@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:39 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:40 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:45:59 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-#include <assert.h>	// DEBUG
 
 static inline t_error	add_and_or(
 							t_parser *parser,
@@ -81,9 +80,6 @@ t_error	convert_list_add(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(node != NULL);
-	assert(out != NULL);
 	if (node->symbol == SYM_subshell)
 	{
 		out->subshell = true;
@@ -124,9 +120,6 @@ t_error	convert_list(
 			const t_cst_node *node,
 			t_ast_list *out)
 {
-	assert(parser != NULL);
-	assert(node != NULL);
-	assert(out != NULL);
 	ast_list_init(out);
 	return (convert_list_add(parser, node, out));
 }

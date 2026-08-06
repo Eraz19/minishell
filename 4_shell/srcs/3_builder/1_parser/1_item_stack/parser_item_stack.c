@@ -6,14 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:06:49 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:06:50 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:45:14 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser_item_stack_type.h"
 #include "parser_item_stack.h"
 #include "cst.h"
-#include <assert.h>	// DEBUG
 
 static void	parser_item_free(void *raw_item)
 {
@@ -40,8 +39,6 @@ void	parser_item_stack_free(t_parser_item_stack *stack)
 
 t_parser_item	*parser_item_stack_top(const t_parser_item_stack *stack)
 {
-	assert(stack != NULL);
-	assert(stack->len > 0);
 	if (stack->len == 0)
 		return (NULL);
 	return (&((t_parser_item *)stack->data)[stack->len - 1]);

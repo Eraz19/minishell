@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:20 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 23:18:15 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:52:55 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "word_.h"
 
 t_error	word_push(t_word *word, t_word_item item)
@@ -22,7 +21,6 @@ t_error	word_push(t_word *word, t_word_item item)
 
 void	word_fpop(t_word_item *out, t_word *word)
 {
-	assert(word->len != 0);
 	vector_remove(word, 0, out);
 }
 
@@ -52,6 +50,5 @@ t_error	word_dup(t_word *out, t_word *src)
 
 void	word_get(t_word_item *out, const t_word *word, size_t index)
 {
-	assert(word->len > 0 && index < word->len);
 	*out = ((t_word_item *)word->data)[index];
 }

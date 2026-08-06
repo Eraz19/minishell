@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:16:28 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:18:28 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:42:46 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-#include <assert.h>	// DEBUG
 
 #define QUALIF_TOO_BIG	"generator: qualifiers table size overflow\n"
 
@@ -121,10 +120,6 @@ bool	qualifiers_build_table(
 	const t_lr_state	*lr_state;
 	t_qualifier_id		qualifier_id;
 
-	assert(qualifiers != NULL);
-	assert(rules != NULL);
-	assert(lr_states != NULL);
-	assert(actions != NULL);
 	state_count = lr_states->len;
 	if (state_count > SIZE_MAX / sizeof(**qualifiers))
 		return (qualifiers_report_overflow());

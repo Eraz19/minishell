@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3_pipeline.c                                       :+:      :+:    :+:   */
+/*   4_pipeline.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:24 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:35:25 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:48:21 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "utils.h"
-#include <assert.h>	// DEBUG
 
 void	ast_pipeline_init(t_ast_pipeline *pipeline)
 {
-	assert(pipeline != NULL);
 	(void)vector_init(&pipeline->commands, sizeof(t_ast_command), 0);
 	pipeline->negated = false;
 }
@@ -42,7 +40,6 @@ void	ast_pipeline_free(void *pipeline)
 {
 	t_ast_pipeline	*pipe;
 
-	assert(pipeline != NULL);
 	pipe = (t_ast_pipeline *)pipeline;
 	vector_free(&pipe->commands, ast_command_free);
 	pipe->negated = false;

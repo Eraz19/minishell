@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   10_function_def.c                                  :+:      :+:    :+:   */
+/*   11_function_def.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:37 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:35:38 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:49:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 void	ast_function_def_init(t_ast_function_def *function_def)
 {
-	assert(function_def != NULL);
 	token_init(&function_def->name);
 	function_def->body = NULL;
 	ast_redir_list_init(&function_def->redirs);
@@ -49,7 +47,6 @@ t_error	ast_function_def_dup(void *dst, const void *src)
 
 void	ast_function_def_free(t_ast_function_def *function_def)
 {
-	assert(function_def != NULL);
 	token_free(&function_def->name);
 	if (function_def->body)
 	{

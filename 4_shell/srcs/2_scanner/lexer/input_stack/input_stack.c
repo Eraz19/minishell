@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   input_stack.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:11:57 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:32:40 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:37 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "lexer_input_stack.h"
 
 void	lexer_input_stack_pop(t_lexer_input_stack *stack)
 {
 	t_lexer_input_stack_item	last_item;
 
-	assert(stack->len > 0);
 	(void)vector_pop(stack, &last_item);
 	lexer_input_stack_item_free(&last_item);
 }
@@ -63,6 +61,5 @@ void	lexer_input_stack_get_last(
 			t_lexer_input_stack *stack,
 			t_lexer_input_stack_item **item)
 {
-	assert(stack->len > 0);
 	*item = &((t_lexer_input_stack_item *)stack->data)[stack->len - 1];
 }

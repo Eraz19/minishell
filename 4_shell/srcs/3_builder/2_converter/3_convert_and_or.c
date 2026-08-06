@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:37 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:38 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:45:48 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-#include <assert.h>	// DEBUG
 
 static inline t_error	add_pipeline(
 							t_parser *parser,
@@ -79,9 +78,6 @@ t_error	convert_and_or(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(and_or != NULL);
-	assert(out != NULL);
 	ast_and_or_init(out);
 	err = parse_rec(parser, and_or, out);
 	if (err.type)

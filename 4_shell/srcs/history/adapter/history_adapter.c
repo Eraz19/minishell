@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   history_adapter.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:08:18 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 19:01:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:54:40 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <readline/history.h>
-#include "debug.h"
 #include "history_adapter.h"
 
 void	add_to_readline_history(

@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:45:27 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 23:29:16 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:52:34 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "path_matches_.h"
 
 t_error	path_matches_push(t_path_matches *matches, t_string *match)
@@ -22,7 +21,6 @@ t_error	path_matches_push(t_path_matches *matches, t_string *match)
 
 void	path_matches_get(t_string **out, t_path_matches *matches, size_t i)
 {
-	assert(matches->len > 0 && i < matches->len);
 	*out = &((t_string *)matches->data)[i];
 }
 

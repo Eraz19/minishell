@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:35 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:36 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:45:41 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-#include <assert.h>	// DEBUG
 
 static inline t_error	add_command(
 							t_parser *parser,
@@ -72,9 +71,6 @@ t_error	convert_pipeline(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(pipeline != NULL);
-	assert(out != NULL);
 	ast_pipeline_init(out);
 	err = parse_rec(parser, pipeline, out);
 	if (err.type)

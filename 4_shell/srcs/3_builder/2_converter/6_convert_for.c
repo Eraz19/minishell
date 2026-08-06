@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:43 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:44 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:46:13 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "ast.h"
 #include "converter_priv.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 static inline t_error	convert_for_transfer(
 							t_parser *parser,
@@ -91,9 +90,6 @@ t_error	convert_for(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(for_clause != NULL);
-	assert(out != NULL);
 	ast_for_init(out);
 	err = convert_for_clause(parser, for_clause, out);
 	if (err.type)

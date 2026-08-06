@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:48:12 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:50:52 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:18 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <assert.h>
 
 t_error	assignment_split(
 			const char *src,
@@ -26,9 +25,6 @@ t_error	assignment_split(
 	bool	has_equal;
 	t_error	err;
 
-	assert(src != NULL);
-	assert(dst_name != NULL);
-	assert(dst_value != NULL);
 	(void)string_init(dst_name, 0, NULL, 0);
 	(void)string_init(dst_value, 0, NULL, 0);
 	len = 0;

@@ -6,12 +6,11 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:56:18 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:59:30 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:49:38 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd_assign_priv.h"
-#include <assert.h>	// DEBUG
 
 #define CITATION	"POSIX 2.9.1.1: Each variable assignment shall be expanded \
 for [...] but no field splitting -> POSIX 2.6: [...] shall\
@@ -33,8 +32,5 @@ t_error	cmd_assignment_expand(
 		return (expansion_merge(token->value.data, CITATION, &expansion, out));
 	expansion_take(&expansion, 0, out);
 	expansion_free(&expansion);
-	assert(token->assignment_offset >= 0);
-	assert((size_t)token->assignment_offset < out->len);
-	assert(out->data[token->assignment_offset] == '=');
 	return (err);
 }

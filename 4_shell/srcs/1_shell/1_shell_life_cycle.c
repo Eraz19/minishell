@@ -6,14 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:56:42 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 20:51:00 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:23 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_priv.h"
 #include "lr_tables.h"
 #include <stdlib.h>
-#include <assert.h>
 
 void	shell_init(t_shell *shell)
 {

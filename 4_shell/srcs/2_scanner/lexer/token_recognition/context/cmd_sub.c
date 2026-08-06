@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_sub.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:12:46 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:49:52 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:42 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include <stdlib.h>
 #include "cmd_sub.h"
 #include "token_recognition_priv.h"
@@ -34,7 +33,6 @@ t_error	scan_cmd_sub_context(t_lexer *lexer)
 	lexer->err = cmd_sub_find_end(&closing_index, token_ast);
 	if (lexer->err.type)
 		return (lexer->err);
-	assert(closing_index >= (ssize_t)lexer->input->i);
 	cmd_sub_len = (size_t)closing_index - lexer->input->i + 1;
 	item->end = lexer->token->value.len + cmd_sub_len - 1;
 	return (token_recognition_consume(lexer, lexer->token->type, cmd_sub_len));

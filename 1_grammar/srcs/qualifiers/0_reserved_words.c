@@ -6,14 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 14:51:11 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/04 15:22:53 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:41:46 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "grammar_qualifiers_priv.h"
 #include "libft.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 static inline t_symbol	str_to_reserved_word_2(const char *token_value)
 {
@@ -64,8 +63,6 @@ bool	qualify_try_reserved_word(
 {
 	t_symbol	symbol;
 
-	assert(token_value != NULL);
-	assert(out_symbol != NULL);
 	(void)assignment_offset;
 	symbol = str_to_reserved_word(token_value);
 	if (symbol == SYM_error)

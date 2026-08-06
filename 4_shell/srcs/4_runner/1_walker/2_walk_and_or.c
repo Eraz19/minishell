@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:23:30 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:23:31 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:47:36 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "walker_priv.h"
 #include "options.h"
-#include <assert.h>
 
 static inline t_error	walk_and_or_pipeline(
 							t_runner *runner,
@@ -78,8 +77,6 @@ t_error	walk_and_or(t_runner *runner, t_ast_and_or *and_or, int *exit_status)
 	size_t	i;
 	t_error	err;
 
-	assert(and_or->pipelines.len > 0);
-	assert(and_or->next_on_success.len == and_or->pipelines.len - 1);
 	i = 0;
 	err = error(ERR_NO);
 	while (i < and_or->pipelines.len)

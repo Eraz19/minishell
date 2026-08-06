@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:48 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:49 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:46:33 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "ast.h"
 #include "converter_priv.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 /*
 function_body    : compound_command
@@ -57,9 +56,6 @@ t_error	convert_function(
 	t_cst_node	*body;
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(function_definition != NULL);
-	assert(out != NULL);
 	ast_function_def_init(out);
 	fname = function_definition->children[0];
 	converter_take_token(parser, fname, 0, &out->name);

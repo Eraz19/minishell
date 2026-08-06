@@ -3,8 +3,7 @@
 - `tcgetattr()` avant de run une `utility`
 - Si la utility exit sur un signal => reset avec ` tcsetatt()`
 
-- ⚠️ remove all `logs.h`
-- ⚠️ remove all `assert.h`
+- ⚠️ remove all `debug.h`
 - ⚠️ remove all `printf()` / `fprintf()` calls
 - ⚠️ remove all *wildcards* from all `Makefile` (don't forget `libft`)
 - Error qualifying

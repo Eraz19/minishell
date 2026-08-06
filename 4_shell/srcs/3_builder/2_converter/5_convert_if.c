@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:41 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:42 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:46:06 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-#include <assert.h>	// DEBUG
 
 static inline t_error	add_to_list(
 							t_parser *parser,
@@ -70,9 +69,6 @@ t_error	convert_if(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(if_clause != NULL);
-	assert(out != NULL);
 	ast_if_init(out);
 	err = parse_rec(parser, if_clause, out);
 	if (err.type)

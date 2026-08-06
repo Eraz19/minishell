@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:11:11 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:11:12 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:52:05 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "variables_priv.h"
 #include "utils.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 // @ret ERR_LIBC
 static inline t_error	var_envp_add_entry(
@@ -26,9 +25,6 @@ static inline t_error	var_envp_add_entry(
 	t_string	entry;
 	t_error		err;
 
-	assert(name != NULL);
-	assert(value != NULL);
-	assert(dst_envp != NULL);
 	name_len = str_len(name);
 	if (!string_init(&entry, name_len + value->len + 2, name, (long)name_len))
 		return (error_sys());
@@ -62,8 +58,6 @@ t_error	var_build_envp(const t_var_list *variables, t_vector *dst_envp)
 	size_t				i;
 	t_error				err;
 
-	assert(variables != NULL);
-	assert(dst_envp != NULL);
 	var_list = hashmap_get_all(variables);
 	if (var_list == NULL)
 		return (err = error_sys(), err);

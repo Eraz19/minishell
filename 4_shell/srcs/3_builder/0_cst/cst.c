@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:06:23 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:06:24 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:44:20 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser_item_stack_type.h"
 #include "cst_type.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 static inline t_error	cst_node_set_children(
 							t_cst_node *node,
@@ -51,7 +50,6 @@ t_error	cst_node_new(
 	t_cst_node	*node;
 	t_error		err;
 
-	assert(lhs != NULL);
 	node = malloc(sizeof(*node));
 	if (!node)
 		return (error_sys());

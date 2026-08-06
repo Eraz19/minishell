@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:18:43 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:18:44 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:42:37 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <assert.h>	// DEBUG
 
 #define EXPECTS_TOO_BIG	"generator: expects table size overflow\n"
 
@@ -60,7 +59,6 @@ bool	expects_build_table(
 	const t_lr_state	*lr_state;
 	bool				*entry;
 
-	assert(expects_table != NULL);
 	if (lr_states->len > SIZE_MAX / sizeof(**expects_table))
 		return (expects_report_overflow());
 	*expects_table = malloc(lr_states->len * sizeof(**expects_table));

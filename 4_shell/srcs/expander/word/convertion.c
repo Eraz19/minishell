@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   convertion.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:48:23 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 23:28:38 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:53:00 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <assert.h> // DEBUG
 #include "word_.h"
 
 t_error	to_str(t_string *out, const t_word *src, size_t start, size_t len)
@@ -27,7 +26,6 @@ t_error	to_str(t_string *out, const t_word *src, size_t start, size_t len)
 			return (err = error_sys(), string_free(out), err);
 	while (i < len)
 	{
-		assert(src->len > start + i);
 		word_get(&item, src, start + i);
 		if (!string_append_n(out, &item.c, 1))
 			return (err = error_sys(), string_free(out), err);

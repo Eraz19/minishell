@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   7_for.c                                            :+:      :+:    :+:   */
+/*   8_for.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:31 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:35:32 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:48:49 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "utils.h"
-#include <assert.h>	// DEBUG
 
 void	ast_for_init(t_ast_for *for_node)
 {
-	assert(for_node != NULL);
 	token_init(&for_node->var_name);
 	token_pool_init(&for_node->words);
 	ast_list_init(&for_node->body);
@@ -46,7 +44,6 @@ t_error	ast_for_dup(void *dst, const void *src)
 
 void	ast_for_free(t_ast_for *for_node)
 {
-	assert(for_node != NULL);
 	token_free(&for_node->var_name);
 	token_pool_free(&for_node->words);
 	ast_list_free(&for_node->body);

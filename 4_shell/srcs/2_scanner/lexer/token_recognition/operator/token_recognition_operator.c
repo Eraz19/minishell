@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   token_recognition_operator.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:13:25 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:53:50 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:44:11 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "token_recognition_priv.h"
 #include "token_recognition_operator.h"
 

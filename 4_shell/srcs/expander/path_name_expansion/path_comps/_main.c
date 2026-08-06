@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   _main.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:45:12 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/05 23:09:30 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:52:29 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "path_comps_.h"
 
 bool	path_comps_have_special(const t_path_comps *comps)
@@ -30,6 +29,5 @@ bool	path_comps_have_special(const t_path_comps *comps)
 
 void	path_comps_get(t_path_comp *out, const t_path_comps *src, size_t i)
 {
-	assert(src->len > 0 && i < src->len);
 	*out = ((t_path_comp *)src->data)[i];
 }

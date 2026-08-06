@@ -6,17 +6,14 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:38 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:39:42 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:49:32 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-#include "debug.h"
-#include <assert.h>	// DEBUG
 
 void	ast_command_init(t_ast_command *command)
 {
-	assert(command != NULL);
 	command->type = AST_CMD_TYPE_COUNT;
 	ast_redir_list_init(&command->redirs);
 	command->data = (t_ast_command_data){0};
@@ -42,7 +39,7 @@ static inline t_error	ast_command_dup_data(
 		return (ast_function_def_dup(&dst->data.function_def,
 				&src->data.function_def));
 	return (error_print(error(ERR_INTERNAL), "unknown command type",
-			NULL, "%s", ast_command_type_to_string(src->type)));
+			NULL, "%i", (int)src->type));
 }
 
 t_error	ast_command_dup(void *dst, const void *src)
@@ -65,7 +62,6 @@ t_error	ast_command_dup(void *dst, const void *src)
 
 static inline void	ast_command_free_data(t_ast_command *command)
 {
-	assert(command != NULL);
 	if (command->type == AST_CMD_SIMPLE)
 		ast_simple_command_free(&command->data.simple);
 	else if (command->type == AST_CMD_LIST)
@@ -86,7 +82,6 @@ void	ast_command_free(void *command)
 {
 	t_ast_command	*cmd;
 
-	assert(command != NULL);
 	cmd = (t_ast_command *)command;
 	ast_redir_list_free(&cmd->redirs);
 	if (cmd->type < AST_CMD_TYPE_COUNT)

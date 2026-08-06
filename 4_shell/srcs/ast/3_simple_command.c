@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   2_simple_command.c                                 :+:      :+:    :+:   */
+/*   3_simple_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:35:21 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:35:22 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:48:15 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-#include <assert.h>	// DEBUG
 
 void	ast_simple_command_init(t_ast_scmd *simple_command)
 {
-	assert(simple_command != NULL);
 	token_pool_init(&simple_command->assignments);
 	token_pool_init(&simple_command->words);
 	ast_redir_list_init(&simple_command->redirs);
@@ -44,7 +42,6 @@ void	ast_simple_command_free(void *simple_command)
 {
 	t_ast_scmd	*cmd;
 
-	assert(simple_command != NULL);
 	cmd = (t_ast_scmd *)simple_command;
 	token_pool_free(&cmd->assignments);
 	token_pool_free(&cmd->words);

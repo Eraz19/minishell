@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:00 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:01 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:44:31 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 #include "cst.h"
 #include "shell.h"
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
 
 void	parser_init(t_parser *parser)
 {
-	assert(parser != NULL);
 	parser_item_stack_init(&parser->item_stack);
 	parser_here_stack_init(&parser->here_stack);
 	token_pool_init(&parser->token_pool);
@@ -40,7 +38,6 @@ t_error	parser_load(
 			t_scan_mode mode,
 			const char *input)
 {
-	assert(parser != NULL);
 	parser->tables = shell_get_lr_tables();
 	parser->search_cmd_sub_end = (mode == SCAN_MODE_CMD_SUB);
 	scanner_load(&parser->scanner, parent_scanner, parser, mode);
@@ -49,7 +46,6 @@ t_error	parser_load(
 
 void	parser_clear(t_parser *parser)
 {
-	assert(parser != NULL);
 	scanner_clear(&parser->scanner);
 	parser_item_stack_clear(&parser->item_stack);
 	parser_here_stack_clear(&parser->here_stack);
@@ -65,7 +61,6 @@ void	parser_clear(t_parser *parser)
 
 void	parser_free(t_parser *parser)
 {
-	assert(parser != NULL);
 	scanner_free(&parser->scanner);
 	parser_item_stack_free(&parser->item_stack);
 	parser_here_stack_free(&parser->here_stack);

@@ -6,14 +6,13 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:04 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:05 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:44:38 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "parser_priv.h"
 #include "cst.h"
-#include <assert.h>	// DEBUG
 
 static inline bool	parser_is_reducing_cmd_sub(
 						const t_parser *parser,
@@ -70,7 +69,6 @@ t_error	parser_shift(t_parser *parser, size_t lr_state_id)
 {
 	t_error			err;
 
-	assert(parser != NULL);
 	err = parser_read_heredoc(parser);
 	if (err.type)
 		return (err);

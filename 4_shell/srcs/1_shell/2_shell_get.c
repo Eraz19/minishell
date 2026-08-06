@@ -6,12 +6,11 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:56:44 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 20:51:16 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:28 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <assert.h>	// DEBUG
 
 t_history	*shell_get_history(void)
 {

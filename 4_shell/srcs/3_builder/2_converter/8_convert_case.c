@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:46 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:07:47 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:46:26 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser_type.h"
 #include "ast.h"
 #include "converter_priv.h"
-#include <assert.h>	// DEBUG
 
 /*
 pattern_list     :                  WORD
@@ -119,9 +118,6 @@ t_error	convert_case(
 {
 	t_error		err;
 
-	assert(parser != NULL);
-	assert(case_clause != NULL);
-	assert(out != NULL);
 	ast_case_init(out);
 	converter_take_token(parser, case_clause->children[1], 0, &out->word);
 	if (case_clause->child_count == 7)

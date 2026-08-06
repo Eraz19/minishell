@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   token_pool.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:11:03 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:11:04 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 22:43:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
 #include "utils.h"
-#include <assert.h>
 
 t_error	token_pool_push(t_token_pool *pool, t_token *token)
 {
@@ -24,7 +23,6 @@ t_error	token_pool_push(t_token_pool *pool, t_token *token)
 
 t_token	*token_pool_get(const t_token_pool *pool, size_t index)
 {
-	assert(index < pool->len);
 	return (&((t_token *)pool->data)[index]);
 }
 

@@ -6,11 +6,10 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 17:47:01 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/06 18:34:40 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:52:46 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h> // DEBUG
 #include "param_braced_.h"
 
 static t_error	braced_origin(
@@ -21,7 +20,6 @@ static t_error	braced_origin(
 	t_word_item	item;
 
 	word_get(&item, &expander->word, 0);
-	assert(item.opt.context_len >= 3);
 	*body_len = item.opt.context_len - 3;
 	*origin = item.opt;
 	return (expander->err);
