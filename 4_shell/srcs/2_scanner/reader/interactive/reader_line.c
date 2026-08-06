@@ -63,6 +63,7 @@ static t_error	read_line_secured(const char *prompt, char **out, bool *retry)
 	err = ensure_reader_stdin_is_blocking();
 	if (err.type)
 		return (err);
+	rl_outstream = stderr;
 	*out = readline(prompt);
 	err = handle_reader_signals(retry);
 	if (err.type)
