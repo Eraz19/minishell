@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader_line.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:14:47 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 17:06:10 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 19:54:21 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static t_error	read_line_until(
 		else if (err.type == ERR_NO && isatty(STDIN_FILENO) == 1)
 			continue ;
 		else if (err.type == ERR_NO && counter > max_retry)
-			err = err_infinite_loop();
+			err = error_infinite_loop();
 		else if (err.type == ERR_NO)
 			err = posix_write(STDOUT_FILENO, "\n", 1);
 	}

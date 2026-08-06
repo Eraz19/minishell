@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:02:26 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:02:28 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 19:09:51 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,11 @@
 #include "runner_type.h"
 #include "runner.h"
 #include <stdlib.h>
-#ifdef DEBUG_INSTANCES
-# include "logs.h"
-# include "debug.h"
-#endif
 
-t_error	shell_get_new_runner_priv(
+t_error	shell_get_new_runner(
 			t_runner **out_runner_ptr,
 			t_scan_mode mode,
-			const char *input,
-			const char *caller)
+			const char *input)
 {
 	t_shell		*shell;
 	t_runner	*new_runner;
@@ -47,24 +42,18 @@ t_error	shell_get_new_runner_priv(
 	if (shell->last_runner != NULL)
 		shell->last_runner->child = new_runner;
 	shell->last_runner = new_runner;
-#ifdef DEBUG_INSTANCES
-	dump_shell_instance(shell->last_runner, caller);
-#else
-	(void)caller;
-#endif
 	return (*out_runner_ptr = shell->last_runner, err);
 }
 
-t_error	shell_get_new_lexer_priv(
+t_error	shell_get_new_lexer(
 			t_lexer **out_lexer_ptr,
 			t_scan_mode mode,
-			const char *input,
-			const char *caller)
+			const char *input)
 {
 	t_runner	*runner;
 	t_error		err;
 
-	err = shell_get_new_runner_priv(&runner, mode, input, caller);
+	err = shell_get_new_runner(&runner, mode, input);
 	if (err.type)
 		return (err);
 	*out_lexer_ptr = &runner->parser.scanner.lexer;
@@ -74,13 +63,12 @@ t_error	shell_get_new_lexer_priv(
 t_error	shell_get_new_scanner_priv(
 			t_scanner **out_scanner_ptr,
 			t_scan_mode mode,
-			const char *input,
-			const char *caller)
+			const char *input)
 {
 	t_runner	*runner;
 	t_error		err;
 
-	err = shell_get_new_runner_priv(&runner, mode, input, caller);
+	err = shell_get_new_runner(&runner, mode, input);
 	if (err.type)
 		return (err);
 	*out_scanner_ptr = &runner->parser.scanner;
@@ -90,30 +78,24 @@ t_error	shell_get_new_scanner_priv(
 t_error	shell_get_new_parser_priv(
 			t_parser **out_parser_ptr,
 			t_scan_mode mode,
-			const char *input,
-			const char *caller)
+			const char *input)
 {
 	t_runner	*runner;
 	t_error		err;
 
-	err = shell_get_new_runner_priv(&runner, mode, input, caller);
+	err = shell_get_new_runner(&runner, mode, input);
 	if (err.type)
 		return (err);
 	*out_parser_ptr = &runner->parser;
 	return (err);
 }
 
-t_error	shell_destroy_last_instance_priv(const char *caller)
+t_error	shell_destroy_last_instance_priv(void)
 {
 	t_shell		*shell;
 	t_runner	*victim;
 	t_runner	*prev_runner;
 
-#ifdef DEBUG_INSTANCES
-	fprintf(stderr, YELLOW "[SHELL ] instance destroyed by %s()\n", caller);
-#else
-	(void)caller;
-#endif
 	shell = shell_get();
 	if (shell == NULL)
 		return (error_print(error(ERR_INTERNAL), "shell not found", NULL, NULL));

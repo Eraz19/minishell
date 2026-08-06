@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:38 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:36:14 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 19:11:53 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,16 @@ typedef struct s_shell
 	bool		is_subshell;
 	t_lr_tables	lr_tables;
 	t_params	params;
-	t_runner	*runner;		// owned (linked)
-	t_runner	*last_runner;	// borrowed
+	t_runner	*runner;
+	t_runner	*last_runner;
 	t_history	history;
 }	t_shell;
 
+// TODO: replace by bool
 typedef enum e_subshell_mode
 {
 	SUBSHELL_NORMAL,
-	SUBSHELL_CMD_SUB_TRAP_ONLY,	// Not used (not mandatory)
-	SUBSHELL_ASYNC_AND_OR		// async AND-OR list
+	SUBSHELL_ASYNC_AND_OR
 }	t_subshell_mode;
 
 /* ************************************************************************* */
@@ -68,33 +68,23 @@ void				shell_free_void(void);
 /*                                    OPS                                    */
 /* ************************************************************************* */
 
-#define shell_get_new_lexer(out_lexer_ptr, mode, input) shell_get_new_lexer_priv(out_lexer_ptr, mode, input, __func__)
-#define shell_get_new_scanner(out_scanner_ptr, mode, input) shell_get_new_scanner_priv(out_scanner_ptr, mode, input, __func__)
-#define shell_get_new_parser(out_parser_ptr, mode, input) shell_get_new_parser_priv(out_parser_ptr, mode, input, __func__)
-#define shell_get_new_runner(out_runner_ptr, mode, input) shell_get_new_runner_priv(out_runner_ptr, mode, input, __func__)
-#define shell_destroy_last_instance() shell_destroy_last_instance_priv(__func__)
-
-t_error				shell_get_new_lexer_priv(
+t_error				shell_get_new_lexer(
 						t_lexer **out_lexer_ptr,
 						t_scan_mode mode,
-						const char *input,
-						const char *caller);
-t_error				shell_get_new_scanner_priv(
+						const char *input);
+t_error				shell_get_new_scanner(
 						t_scanner **out_scanner_ptr,
 						t_scan_mode mode,
-						const char *input,
-						const char *caller);
-t_error				shell_get_new_parser_priv(
+						const char *input);
+t_error				shell_get_new_parser(
 						t_parser **out_parser_ptr,
 						t_scan_mode mode,
-						const char *input,
-						const char *caller);
-t_error				shell_get_new_runner_priv(
+						const char *input);
+t_error				shell_get_new_runner(
 						t_runner **out_runner_ptr,
 						t_scan_mode mode,
-						const char *input,
-						const char *caller);
-t_error				shell_destroy_last_instance_priv(const char *caller);
+						const char *input);
+t_error				shell_destroy_last_instance(void);
 
 // TODO: doc
 t_error				shell_init_subshell(t_subshell_mode mode);
