@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   reader.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:05 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:59:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 20:53:15 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef READER_H
 # define READER_H
 
-#include <stdio.h>
+# include <stdio.h>
 # include "error.h"
 # include "libft.h"
 
