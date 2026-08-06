@@ -6,15 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:07:04 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:07:05 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:29:22 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd_sub_priv.h"
 #include "posix_helpers.h"
-#ifdef DEBUG_CMD_SUB
-# include "logs.h"	// DEBUG
-#endif
 
 static inline t_error	cmd_sub_parent_read_and_close(
 							int pipe_fds[2],
@@ -51,8 +48,5 @@ t_error	cmd_sub_parent(
 	if (err.type)
 		return (err);
 	cmd_sub_parent_trim(out_string);
-#ifdef DEBUG_CMD_SUB
-	fprintf(stderr, YELLOW "##################################################\n" NC);
-#endif
 	return (err);
 }
