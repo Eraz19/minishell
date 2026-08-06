@@ -1,20 +1,10 @@
 # NOW
 
 - Norme:
-	- ⚠️ **???**:
-		- `ub.c`
-		- `TODO.c`
 	- ⚠️ **ALEX**:
 		- `builtins/pwd.c`
 		- `0_utils/ft_getpwnam.c`
-	- ⚠️ **TODO**:
-		- 🚨 `ast.h` ???
-		- `3_builder/1_parser/4_parser_reduce.c`
-		- `3_builder/2_convert/10_convert_command.c`
-		- `4_runner/2_runner_handle_errors.c`
-		- `env/3_get.c`
-		- `env/10_alias.c`
-		- `error/error.c`
+		- `types.h` remove (move content to correct headers / `utils.h`)
 	- keep comments for `42_SH`:
 		- `error.h`
 		- `0_utils/ft_getopt.h`
@@ -26,6 +16,7 @@
 	- keep macros for `42_SH`:
 		- `shell.h`
 		- `0_posix_helpers/posix_open/guard.c`
+		- `asm_stubs`: macros can NOT contain `(...)` + must only be in *global scope* (=> AI)
 	- keep logs for `42_SH`:
 		- `1_shell/5_shell_run.c`
 		- `1_shell/7_shell_get_new.c`
@@ -41,8 +32,10 @@
 		- `env/1_options/2_helpers.c`
 		- `env/1_options/5_load.c`
 		- `env/2_specials/2_load.c`
-	- `types.h` remove (move content to correct headers / `utils.h`)
-	- `asm_stubs`: macros can NOT contain `(...)` + must only be in *global scope* (=> AI)
+		- `4_runner/2_runner_handle_errors.c`
+		- `error/error.c`
+	- keep placeholders for `42_sh`:
+		- `TODO.c`
 - Error qualifying
 - Funkcheck en -s +i only
 
@@ -75,6 +68,7 @@ peut **ou pas** expandre `x` en `echo ok`
 		- `GOTO_COL_COUNT`
 		- `GOTO_COUNT`
 	- only store `t_qualifier_id` in `lr_generator`
+	- Compress tables (`SLR(1)` / `LALR(1)` / `SLALR(1)` ??)
 
 # WIP
 

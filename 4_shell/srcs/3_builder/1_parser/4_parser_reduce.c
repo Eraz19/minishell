@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:07:06 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:08:42 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 17:07:20 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,20 @@ static inline t_error	parser_replace_items(
 	return (error(ERR_NO));
 }
 
+static inline void	parser_init_item(
+							t_parser *parser,
+							t_parser_item *item,
+							const t_lr_rule *rule,
+							t_parser_item *rhs)
+{
+	if (rule->rhs_len > 0)
+		item->tokens_start_id = rhs[0].tokens_start_id;
+	else
+		item->tokens_start_id = parser->lookahead_id;
+	item->tokens_count = parser_tokens_count_sum(rhs, rule->rhs_len);
+	item->cst_node = NULL;
+}
+
 t_error	parser_reduce(t_parser *parser, size_t rule_id)
 {
 	const t_lr_rule	*rule;
@@ -93,11 +107,7 @@ t_error	parser_reduce(t_parser *parser, size_t rule_id)
 	err = parser_new_lr_state(parser, rule, &item.lr_state_id);
 	if (err.type)
 		return (err);
-	item.tokens_start_id = parser->lookahead_id;
-	if (rule->rhs_len > 0)
-		item.tokens_start_id = rhs[0].tokens_start_id;
-	item.tokens_count = parser_tokens_count_sum(rhs, rule->rhs_len);
-	item.cst_node = NULL;
+	parser_init_item(parser, &item, rule, rhs);
 	err = cst_node_new(&item, rhs, rule->rhs_len, (t_rule_id)rule_id);
 	if (err.type == ERR_NO)
 		err = parser_process_reduce_hooks(parser, rule_id, &item, rhs);

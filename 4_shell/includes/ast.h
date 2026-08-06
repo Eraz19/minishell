@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:00 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 12:28:16 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 17:32:59 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ typedef struct s_ast_case
 	t_vector	fallthrough;		// vector of bool
 }	t_ast_case;
 
-typedef struct s_ast_command	t_ast_command;
+typedef struct s_ast_command	\
+					t_ast_command;
 
 typedef struct s_ast_function_def
 {
