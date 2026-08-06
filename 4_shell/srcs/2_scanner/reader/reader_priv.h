@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader_priv.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:14:59 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:15:00 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@
  *            fails (borrowed). A close failure after a successful read is
  *            absorbed (the content is already whole in memory).
  * @param path Path of the file to read (borrowed, read-only).
- * @return @c ERR_NO on success; @c ERR_POSIX_CMD_NOT_FOUND (printed, file
- *         missing: ENOENT / ENOTDIR), @c ERR_POSIX_CMD_NOT_EXECUTABLE
+ * @return @c ERR_NO on success; @c ERR_POSIX_CMD_NFOUND (printed, file
+ *         missing: ENOENT / ENOTDIR), @c ERR_POSIX_CMD_NEXC
  *         (printed, any other opening failure, including a directory
  *         operand) or @c ERR_POSIX_READ (printed) on failure; the
  *         @ref file_check errors pass through unqualified.

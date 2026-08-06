@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:56:46 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 20:51:49 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:27:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <assert.h>	// DEBUG
-#ifdef DEBUG_CMD
-# include "logs.h"	// DEBUG
-#endif
 
 #define FALLBACK_ERR	"unable to edit argv in execve fallback"
 
@@ -77,9 +73,9 @@ static inline void	cmd_exec_child(t_cmd *cmd)
 	else
 	{
 		if (errno == ENOENT || errno == ENOTDIR)
-			err = error(ERR_POSIX_CMD_NOT_FOUND);
+			err = error(ERR_POSIX_CMD_NFOUND);
 		else
-			err = error(ERR_POSIX_CMD_NOT_EXECUTABLE);
+			err = error(ERR_POSIX_CMD_NEXC);
 		(void)error_print(err, cmd->name.data, NULL, NULL);
 		exit_status = (int)err.type;
 	}
@@ -92,9 +88,6 @@ t_error	exec_external(t_cmd *cmd, int *exit_status)
 {
 	pid_t	pid;
 
-#ifdef DEBUG_CMD
-	fprintf(stderr, MAGENTA "############## EXTERNAL %s (START) ##############\n" NC, cmd->name.data);
-#endif
 	pid = fork();
 	if (pid < 0)
 		return (error_sys());

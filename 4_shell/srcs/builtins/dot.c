@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:41:24 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:41:25 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:02 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static inline t_error	dot_search_readable_file(
 	}
 	err = env_get_from_const("PATH", &path);
 	if (err.type == ERR_VAR_NOT_FOUND)
-		err.type = ERR_POSIX_CMD_NOT_FOUND;
+		err.type = ERR_POSIX_CMD_NFOUND;
 	if (err.type)
 		return (err);
 	return (file_search(&path, filename, READABLE, out_file_path));

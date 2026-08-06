@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scanner_priv.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:21 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/04 16:59:45 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ t_error	scanner_load_cmd_sub(t_scanner *scanner);
  * @return @c ERR_NO on success or when the input stack is already
  *         non-empty. Both lanes through @ref requalify_scanner_error:
  *         @c ERR_VEOF (end of input), @c ERR_POSIX_READ,
- *         @c ERR_POSIX_CMD_NOT_FOUND and @c ERR_POSIX_CMD_NOT_EXECUTABLE
+ *         @c ERR_POSIX_CMD_NFOUND and @c ERR_POSIX_CMD_NEXC
  *         (printed, @c SCAN_MODE_FILE acquisition) or @c ERR_LIBC
  *         (printed; module allocation failure) on module-produced
  *         failure. Module-external errors (options, params, history,

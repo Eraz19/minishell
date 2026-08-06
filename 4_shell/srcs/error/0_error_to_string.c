@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 15:28:35 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 19:55:00 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static inline const char	*error_to_string_5(t_error err)
 		return ("variable assignment error");
 	else if (err.type == ERR_POSIX_EXPANSION)
 		return ("expansion error");
-	else if (err.type == ERR_POSIX_CMD_NOT_EXECUTABLE)
+	else if (err.type == ERR_POSIX_CMD_NEXC)
 		return ("command not executable");
-	else if (err.type == ERR_POSIX_CMD_NOT_FOUND)
+	else if (err.type == ERR_POSIX_CMD_NFOUND)
 		return ("command not found");
 	else if (err.type == ERR_POSIX_READ)
 		return ("Unrecoverable read error");

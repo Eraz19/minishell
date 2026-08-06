@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:56:41 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:02:13 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:02 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ t_error	cmd_search(t_cmd *cmd, bool path_is_temporary)
 	t_error	err;
 
 	if (cmd->name.len == 0)
-		return (error(ERR_POSIX_CMD_NOT_FOUND));
+		return (error(ERR_POSIX_CMD_NFOUND));
 	err = cmd_search_try_absolute_path(&cmd->name, &cmd->entry);
-	if (err.type == ERR_POSIX_CMD_NOT_FOUND && path_is_temporary == false)
+	if (err.type == ERR_POSIX_CMD_NFOUND && path_is_temporary == false)
 		err = cmd_search_try_cache(&cmd->name, &cmd->entry);
 	if (err.type != ERR_NO && err.type != ERR_LIBC)
 		err = cmd_search_try_envp_path(

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:56:31 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:56:32 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 t_error	cmd_convert_file_error(t_error err)
 {
 	if (err.type == ERR_FILE_NOT_FOUND)
-		err.type = ERR_POSIX_CMD_NOT_FOUND;
+		err.type = ERR_POSIX_CMD_NFOUND;
 	else if (err.type == ERR_FILE_NOT_EXECUTABLE)
-		err.type = ERR_POSIX_CMD_NOT_EXECUTABLE;
+		err.type = ERR_POSIX_CMD_NEXC;
 	return (err);
 }

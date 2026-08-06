@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:36 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 18:33:26 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,8 @@ void	scanner_clear(t_scanner *scanner);
  *         @ref requalify_scanner_error:
  *         @c ERR_VEOF (end of input, verbatim on every lane),
  *         @c ERR_POSIX_SYNTAX (printed, unterminated
- *         construct), @c ERR_POSIX_READ, @c ERR_POSIX_CMD_NOT_FOUND and
- *         @c ERR_POSIX_CMD_NOT_EXECUTABLE (printed, @c SCAN_MODE_FILE
+ *         construct), @c ERR_POSIX_READ, @c ERR_POSIX_CMD_NFOUND and
+ *         @c ERR_POSIX_CMD_NEXC (printed, @c SCAN_MODE_FILE
  *         acquisition) or @c ERR_LIBC (module allocation / libc failure).
  *         Module-external errors (params, sig, embedded
  *         command-substitution parse, alias position check) bubble

@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:00 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:14:01 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static inline t_error	sig_build_argv(char ***out_argv, const char *cmd)
 // TODO: depending on future eval implementation, may return:
 // @ret ERR_POSIX_READ / ERR_POSIX_SYNTAX
 // 		/ ERR_POSIX_EXPANSION / ERR_POSIX_REDIR_SPECIAL / ERR_POSIX_ASSIGNMENT
-// 		/ ERR_POSIX_CMD_NOT_FOUND / ERR_POSIX_CMD_NOT_EXECUTABLE
+// 		/ ERR_POSIX_CMD_NFOUND / ERR_POSIX_CMD_NEXC
 // 		/ ERR_BUILTIN / ERR_POSIX_BUILTIN_SPECIAL
 // 		/ ERR_EXIT / ERR_EXIT_WITH_CURRENT_STATUS
 // 		/ ERR_UB / ERR_INTERNAL / ERR_LIBC

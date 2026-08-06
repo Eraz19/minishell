@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:05 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/06 20:53:15 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  *  The reader tolerates an unset @c PS1 / @c PS2 (empty prompt) and
  *  requalifies its POSIX-mandated failures itself, at the most specific
  *  point: a script file that cannot be opened becomes
- *  @c ERR_POSIX_CMD_NOT_FOUND / @c ERR_POSIX_CMD_NOT_EXECUTABLE and an
+ *  @c ERR_POSIX_CMD_NFOUND / @c ERR_POSIX_CMD_NEXC and an
  *  unrecoverable read error becomes @c ERR_POSIX_READ, both printed with
  *  the failing source and the errno message.
  */
@@ -43,8 +43,8 @@
  *            freed by the function on read failure, untouched when opening
  *            fails (borrowed).
  * @param path Path of the script file (borrowed, read-only).
- * @return @c ERR_NO on success; @c ERR_POSIX_CMD_NOT_FOUND (printed, file
- *         missing), @c ERR_POSIX_CMD_NOT_EXECUTABLE (printed, any other
+ * @return @c ERR_NO on success; @c ERR_POSIX_CMD_NFOUND (printed, file
+ *         missing), @c ERR_POSIX_CMD_NEXC (printed, any other
  *         opening failure, including a directory operand) or
  *         @c ERR_POSIX_READ (printed) on failure; the @ref file_check
  *         errors (external) pass through unqualified.

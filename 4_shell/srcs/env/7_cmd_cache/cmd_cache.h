@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:12:05 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:12:06 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:02 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	cmd_cache_free(t_cmd_cache *cache);
  * @param cmd_name Command name to look up (borrowed, read-only).
  * @param out_cmd_path Destination receiving the borrowed cached path or
  *                     @c NULL (borrowed).
- * @return @c ERR_NO when a cached path is found, @c ERR_POSIX_CMD_NOT_FOUND when
+ * @return @c ERR_NO when a cached path is found, @c ERR_POSIX_CMD_NFOUND when
  *         command hashing is disabled or when @p cmd_name is not cached, or
  *         @c ERR_SHELL_NOT_FOUND / @c ERR_LIBC on option lookup failure.
  */

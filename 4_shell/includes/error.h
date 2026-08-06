@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 12:23:16 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 19:54:21 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ typedef enum e_error_type
 	ERR_POSIX_REDIR_SPECIAL = 123,
 	ERR_POSIX_ASSIGNMENT = 124,
 	ERR_POSIX_EXPANSION = 125,
-	ERR_POSIX_CMD_NOT_EXECUTABLE = 126,
-	ERR_POSIX_CMD_NOT_FOUND = 127,
+	ERR_POSIX_CMD_NEXC = 126,
+	ERR_POSIX_CMD_NFOUND = 127,
 	ERR_POSIX_READ = 128
 }	t_error_type;
 

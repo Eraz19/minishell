@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:56:38 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:02:03 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:26:02 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define PATH_TARGET				"PATH="
 #define PATH_VALUE_START_INDEX	5
 
-// @ret ERR_POSIX_CMD_NOT_FOUND
+// @ret ERR_POSIX_CMD_NFOUND
 static inline t_error	cmd_search_find_path_in_envp(
 							const t_vector *envp,
 							t_string *out_path)
@@ -34,7 +34,7 @@ static inline t_error	cmd_search_find_path_in_envp(
 		if (assignment_is_same_name(PATH_TARGET, entry))
 		{
 			if (entry[PATH_VALUE_START_INDEX] == '\0')
-				return (error(ERR_POSIX_CMD_NOT_FOUND));
+				return (error(ERR_POSIX_CMD_NFOUND));
 			out_path->data = entry + PATH_VALUE_START_INDEX;
 			out_path->cap = 0;
 			out_path->len = str_len(out_path->data);
@@ -42,7 +42,7 @@ static inline t_error	cmd_search_find_path_in_envp(
 		}
 		i++;
 	}
-	return (error(ERR_POSIX_CMD_NOT_FOUND));
+	return (error(ERR_POSIX_CMD_NFOUND));
 }
 
 t_error	cmd_search_try_envp_path(
