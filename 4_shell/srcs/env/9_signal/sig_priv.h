@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:14:11 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:14:12 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:19:43 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,138 +44,33 @@
  */
 typedef enum e_sig_id
 {
-#ifdef SIGHUP
 	SIGHUP_ID,
-#endif
-#ifdef SIGINT
 	SIGINT_ID,
-#endif
-#ifdef SIGQUIT
 	SIGQUIT_ID,
-#endif
-#ifdef SIGILL
 	SIGILL_ID,
-#endif
-#ifdef SIGTRAP
 	SIGTRAP_ID,
-#endif
-#ifdef SIGABRT
 	SIGABRT_ID,
-#endif
-#ifdef SIGIOT
-	SIGIOT_ID,
-#endif
-#ifdef SIGEMT
-	SIGEMT_ID,
-#endif
-#ifdef SIGFPE
 	SIGFPE_ID,
-#endif
-#ifdef SIGBUS
 	SIGBUS_ID,
-#endif
-#ifdef SIGSEGV
 	SIGSEGV_ID,
-#endif
-#ifdef SIGSYS
 	SIGSYS_ID,
-#endif
-#ifdef SIGPIPE
 	SIGPIPE_ID,
-#endif
-#ifdef SIGALRM
 	SIGALRM_ID,
-#endif
-#ifdef SIGTERM
 	SIGTERM_ID,
-#endif
-#ifdef SIGURG
 	SIGURG_ID,
-#endif
-#ifdef SIGTSTP
 	SIGTSTP_ID,
-#endif
-#ifdef SIGCONT
 	SIGCONT_ID,
-#endif
-#ifdef SIGCHLD
 	SIGCHLD_ID,
-#endif
-#ifdef SIGTTIN
 	SIGTTIN_ID,
-#endif
-#ifdef SIGTTOU
 	SIGTTOU_ID,
-#endif
-#ifdef SIGIO
-	SIGIO_ID,
-#endif
-#ifdef SIGXCPU
 	SIGXCPU_ID,
-#endif
-#ifdef SIGXFSZ
 	SIGXFSZ_ID,
-#endif
-#ifdef SIGVTALRM
 	SIGVTALRM_ID,
-#endif
-#ifdef SIGPROF
-	SIGPROF_ID,
-#endif
-#ifdef SIGWINCH
 	SIGWINCH_ID,
-#endif
-#ifdef SIGINFO
-	SIGINFO_ID,
-#endif
-#ifdef SIGUSR1
 	SIGUSR1_ID,
-#endif
-#ifdef SIGUSR2
 	SIGUSR2_ID,
-#endif
-// Linux implementation-defined signals
-#ifdef SIGPOLL
-	SIGPOLL_ID,
-#endif
-#ifdef SIGCLD
-	SIGCLD_ID,
-#endif
-#ifdef SIGPWR
-	SIGPWR_ID,
-#endif
-#ifdef SIGLOST
-	SIGLOST_ID,
-#endif
-#ifdef SIGSTKFLT
-	SIGSTKFLT_ID,
-#endif
-#ifdef SIGUNUSED
-	SIGUNUSED_ID,
-#endif
-// Free BSD implementation-defined signals
-#ifdef SIGTHR
-	SIGTHR_ID,
-#endif
-#ifdef SIGLIBRT
-	SIGLIBRT_ID,
-#endif
-// Solaris implementation-defined signals
-#ifdef SIGWAITING
-	SIGWAITING_ID,
-#endif
-#ifdef SIGLWP
-	SIGLWP_ID,
-#endif
-#ifdef SIGFREEZE
-	SIGFREEZE_ID,
-#endif
-#ifdef SIGTHAW
-	SIGTHAW_ID,
-#endif
-#ifdef SIGCANCEL
-	SIGCANCEL_ID,
-#endif
+	SIGKILL_ID,
+	SIGSTOP_ID,
 	SIG_ID_COUNT,
 	SIG_EXIT_ID
 }	t_sig_id;

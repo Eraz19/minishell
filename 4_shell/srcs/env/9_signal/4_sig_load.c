@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:13:58 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:13:59 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 22:18:57 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,41 +48,24 @@ static inline t_error	sig_load_ignored_on_entry(t_sig_state *sig_state)
 	return (error(ERR_NO));
 }
 
-static inline t_error	sig_load_exceptions_2(t_error err)
-{
-#ifdef SIGTTIN
-	if (err.type == ERR_NO)
-		err = sig_set_default("TTIN");
-#endif
-#ifdef SIGTTOU
-	if (err.type == ERR_NO)
-		err = sig_set_default("TTOU");
-#endif
-#ifdef SIGTSTP
-	if (err.type == ERR_NO)
-		err = sig_set_default("TSTP");
-#endif
-	return (err);
-}
-
 static inline t_error	sig_load_exceptions(void)
 {
 	t_error	err;
 
 	err.type = ERR_NO;
-#ifdef SIGINT
 	if (err.type == ERR_NO)
 		err = sig_set_default("INT");
-#endif
-#ifdef SIGQUIT
 	if (err.type == ERR_NO)
 		err = sig_set_default("QUIT");
-#endif
-#ifdef SIGTERM
 	if (err.type == ERR_NO)
 		err = sig_set_default("TERM");
-#endif
-	return (sig_load_exceptions_2(err));
+	if (err.type == ERR_NO)
+		err = sig_set_default("TTIN");
+	if (err.type == ERR_NO)
+		err = sig_set_default("TTOU");
+	if (err.type == ERR_NO)
+		err = sig_set_default("TSTP");
+	return (err);
 }
 
 t_error	sig_load(void)
@@ -91,7 +74,7 @@ t_error	sig_load(void)
 	bool		interactive;
 	t_error		err;
 
-	sig_state =&g_signals.state;
+	sig_state = &g_signals.state;
 	err = sig_load_ignored_on_entry(sig_state);
 	if (err.type)
 		return (err);
