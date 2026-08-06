@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 13:41:35 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 13:52:29 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:23:07 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,6 @@
 #define US_TOO_BIG		"unspecified if n [...] is greater than 255"
 #define ERR				"error"
 #define MOD				"n % 256"
-
-/*
-TODO
-If n is not specified:
-	- the result shall be as if n were specified with the current value of the special parameter '?'
-	- ⚠️ except that if the return command would cause the end of execution of a trap action:
-		- the value for the special parameter '?' that is considered "current" shall be the value it had immediately preceding the trap action.
-	- ===> if (signal_is_processing_trap && [??? current_trap_only_contains_one_function_call ???] && runner->function_depth <= 1):
-		- *status = signal_get_saved_status()
-*/
 
 static inline t_error	return_too_many_args(
 							const char *builtin_name,
