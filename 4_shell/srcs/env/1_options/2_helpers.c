@@ -6,14 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:09:30 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:53:01 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:34:42 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include <stdlib.h>
-#include "logs.h"		// DEBUG
-#include <assert.h>	// DEBUG
 
 t_error	option_is_active(t_option option, bool *out)
 {
@@ -39,15 +37,9 @@ bool	option_is_active_in(t_option options, t_option option)
 void	option_set(t_option *options, t_option option, bool on)
 {
 	if (on)
-	{
-		print_pass("option activated                       %s\n", option_to_string(option));
 		*options |= option;
-	}
 	else
-	{
-		print_pass("option disabled                        %s\n", option_to_string(option));
 		*options &= ~option;
-	}
 }
 
 static void	options_add_to_string(t_option options, char *buff, size_t *len)
@@ -84,7 +76,6 @@ t_error	options_get(t_option options, t_string *dst)
 	size_t	cap;
 	size_t	len;
 
-	assert(dst != NULL);
 	cap = OPT_SINGLE_COUNT + 1;
 	buff = malloc (cap);
 	if (!buff)
@@ -95,7 +86,6 @@ t_error	options_get(t_option options, t_string *dst)
 	if (option_is_active_in(options, OPT_NOTIFY))
 		buff[len++] = 'b';
 	options_add_to_string(options, buff, &len);
-	assert(len <= cap);
 	buff[len] = '\0';
 	string_take(dst, buff, cap, (ssize_t)len);
 	return (error(ERR_NO));

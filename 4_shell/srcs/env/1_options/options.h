@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:09:46 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:54:53 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:33:54 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,28 @@
 # include <stddef.h>
 # include <stdint.h>
 
-# define OPT_EXPORT_ALL		(1u << 0)	// [OK] -a: all variables are exported by default
-# define OPT_NOTIFY			(1u << 1)	// [--] -b: immediate notification of terminated jobs
-# define OPT_NOCLOBBER		(1u << 2)	// [OK] -C: prevent file overwrite with '>'
-# define OPT_ERREXIT		(1u << 3)	// [OK] -e: exit on command error
-# define OPT_NOGLOB			(1u << 4)	// [OK] -f: disable pathname expansion (globbing)
-# define OPT_CMD_HASH		(1u << 5)	// [OK] -h: remember command locations (hashing)
-# define OPT_INTERACTIVE	(1u << 6)	// [OK] -i: shell is interactive (not settable via 'set')
-# define OPT_MONITOR		(1u << 7)	// [~~] -m: enable job control
-# define OPT_NOEXEC			(1u << 8)	// [OK] -n: read commands but do not execute
-# define OPT_NOUNSET		(1u << 9)	// [--] -u: error on unset variables
-# define OPT_VERBOSE		(1u << 10)	// [--] -v: print input lines as read
-# define OPT_XTRACE			(1u << 11)	// [OK] -x: print commands and arguments after expansion
-# define OPT_CMD_STRING		(1u << 12)	// [OK] -c: read commands from command_string instead of stdin/file
-# define OPT_STDIN_INPUT	(1u << 13)	// [OK] -s: read commands from standard input
-# define OPT_IGNOREEOF		(1u << 14)	// [OK] -o ignoreeof: prevent an interactive shell from exiting on end-of-file
-# define OPT_NOLOG			(1u << 15)	// [--] -o nolog: prevent function definitions from being entered in command history (may have no effect)
-# define OPT_PIPEFAIL		(1u << 16)	// [OK] -o pipefail: derive pipeline exit status from all commands, not just the last one
-# define OPT_VI				(1u << 17)	// [--] -o vi: enable shell command line editing using the built-in vi editor
-# define OPT_SINGLE_COUNT	14
-
-typedef uint32_t	t_option;
+typedef enum e_option
+{
+	OPT_EXPORT_ALL = 1u << 0,
+	OPT_NOTIFY = 1u << 1,
+	OPT_NOCLOBBER = 1u << 2,
+	OPT_ERREXIT = 1u << 3,
+	OPT_NOGLOB = 1u << 4,
+	OPT_CMD_HASH = 1u << 5,
+	OPT_INTERACTIVE = 1u << 6,
+	OPT_MONITOR = 1u << 7,
+	OPT_NOEXEC = 1u << 8,
+	OPT_NOUNSET = 1u << 9,
+	OPT_VERBOSE = 1u << 10,
+	OPT_XTRACE = 1u << 11,
+	OPT_CMD_STRING = 1u << 12,
+	OPT_STDIN_INPUT = 1u << 13,
+	OPT_IGNOREEOF = 1u << 14,
+	OPT_NOLOG = 1u << 15,
+	OPT_PIPEFAIL = 1u << 16,
+	OPT_VI = 1u << 17,
+	OPT_SINGLE_COUNT = 14
+}	t_option;
 
 /* ************************************************************************* */
 /*                                LIFE CYCLE                                 */
@@ -55,7 +56,7 @@ typedef uint32_t	t_option;
 void		options_free(t_option *options);
 
 // TODO: doc
-void	options_clear(t_option *options);
+void		options_clear(t_option *options);
 
 /**
  * @brief Reset an option bitset to its empty state.

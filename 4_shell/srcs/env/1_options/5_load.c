@@ -6,13 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:09:37 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 14:54:08 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:34:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "options_priv.h"
 #include "utils.h"
-#include "logs.h"
 #include <unistd.h>
 
 static void	options_build_getopt_in(t_getopt_in *in)
@@ -90,7 +89,6 @@ t_error	options_load(
 	size_t			remaining_args;
 	t_error			err;
 
-	print_title("options_load()");
 	*options = 0u;
 	explicit_plus_m = false;
 	options_build_getopt_in(&in);
@@ -102,12 +100,10 @@ t_error	options_load(
 	if (err.type != ERR_NO)
 		return (err);
 	*start_index = out.first_operand_index;
-	print_info("finalizing options...\n");
 	if (*start_index >= (size_t)argc)
 		remaining_args = 0;
 	else
 		remaining_args = (size_t)argc - *start_index;
 	options_finalize(options, remaining_args, explicit_plus_m);
-	print_result("options_load()");
 	return (error(ERR_NO));
 }
