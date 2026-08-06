@@ -1,10 +1,6 @@
 # NOW
 
-- `tcgetattr()` avant de run une `utility`
-- Si la utility exit sur un signal => reset avec ` tcsetatt()`
-
-- ⚠️ remove all `debug.h`
-- ⚠️ remove all `printf()` / `fprintf()` calls
+- `tcgetattr()` avant de run une `utility` => Si la utility exit sur un signal => reset avec ` tcsetatt()`
 - ⚠️ remove all *wildcards* from all `Makefile` (don't forget `libft`)
 - Error qualifying
 - Funkcheck en -s +i only
