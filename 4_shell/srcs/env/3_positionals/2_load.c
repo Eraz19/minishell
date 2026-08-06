@@ -6,14 +6,12 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 14:10:18 by gastesan          #+#    #+#             */
-/*   Updated: 2026/08/06 15:00:45 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/08/06 21:37:45 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "positionals.h"
 #include <stdlib.h>
-#include "logs.h"	// DEBUG
-#include <assert.h>	// DEBUG
 
 static inline t_error	positionals_load_string(
 							t_positionals *positionals,
@@ -22,8 +20,6 @@ static inline t_error	positionals_load_string(
 	t_string	string;
 	t_error		err;
 
-	assert(positionals != NULL);
-	assert(arg != NULL);
 	if (!string_init(&string, 0, arg, -1))
 		return (error_sys());
 	if (!vector_push(positionals, &string))
@@ -32,7 +28,6 @@ static inline t_error	positionals_load_string(
 		string_free(&string);
 		return (err);
 	}
-	print_pass("$%-3zu                                   '%s'\n", positionals->len, string.data);
 	return (error(ERR_NO));
 }
 
@@ -45,10 +40,6 @@ t_error	positionals_load_stack(
 	t_positionals	positionals;
 	t_error			err;
 
-	assert(stack != NULL);
-	assert(argv != NULL);
-	assert((size_t)argc >= start_i);
-	print_title("positionals_load()");
 	if (!vector_init(&positionals, sizeof(t_string), (size_t)argc - start_i))
 		return (error_sys());
 	while (start_i < (size_t)argc)
@@ -64,7 +55,5 @@ t_error	positionals_load_stack(
 		vector_free(&positionals, string_free_void);
 		return (err);
 	}
-	print_pass("$#                                     %zu\n", positionals.len);
-	print_result("positionals_load()");
 	return (error(ERR_NO));
 }
