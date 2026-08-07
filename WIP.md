@@ -1,10 +1,10 @@
 # SUBMISSION
 
-- Norminette
+- ✅ Norminette
 - ✅ check fonctions interdites
-- supprimer les non `.c`/`.h`
+- ✅ faire le `README`
 - `wildcards` du Makefile
-- faire le README
+- supprimer les non `.c`/`.h`
 
 # NOW
 
