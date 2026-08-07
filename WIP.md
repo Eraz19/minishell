@@ -1,7 +1,7 @@
 # SUBMISSION
 
 - Norminette
-- check fonctions interdites
+- ✅ check fonctions interdites
 - supprimer les non `.c`/`.h`
 - `wildcards` du Makefile
 - faire le README

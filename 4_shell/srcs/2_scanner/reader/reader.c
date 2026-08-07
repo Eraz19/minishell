@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 16:15:02 by adouieb           #+#    #+#             */
-/*   Updated: 2026/08/06 22:33:22 by adouieb          ###   ########.fr       */
+/*   Updated: 2026/08/07 19:30:00 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,6 @@ t_error	reader_read_ps2(t_string *out)
 
 t_error	reader_read_file(t_string *out, const char *path)
 {
-	// change for read only one line
-	// need to check, if the function doesn't read anything because it's end of stdin,
-	//	need to set *out = NULL
 	return (read_file(out, path));
 }
 
@@ -99,9 +96,6 @@ t_error	reader_read_stdin(t_string *out)
 {
 	t_error	err;
 
-	// change for read only one line
-	// need to check, if the function doesn't read anything because it's end of stdin,
-	//	need to set *out = NULL
 	err = posix_read_all(STDIN_FILENO, out);
 	if (err.type == ERR_LIBC)
 		return (on_read_error(err, "stdin"));
