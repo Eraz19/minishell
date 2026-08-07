@@ -31,7 +31,7 @@ void	runner_free_void(void *runner);
 // Ops
 
 // TODO: doc
-t_error	runner_run(t_runner *runner);
+t_error	runner_run(t_runner *runner, bool is_dot_script);
 t_error	runner_run_ast(t_runner *runner, t_ast_root *ast_root);
 
 #endif

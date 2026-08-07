@@ -39,7 +39,7 @@ static inline int	shell_exec(t_shell *shell)
 		(void)error_print(err, NULL, NULL);
 		return ((int)err.type);
 	}
-	(void)runner_run(runner);
+	(void)runner_run(runner, false);
 	sig_process_exit();
 	shell_destroy_last_instance();
 	err = history_save();

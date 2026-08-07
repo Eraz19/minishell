@@ -65,7 +65,7 @@ t_error	builtin_eval(int argc, char **argv, t_runner *runner, int *exit_status)
 	err = shell_get_new_runner(&eval_runner, SCAN_MODE_STRING, cmd.data);
 	if (err.type)
 		return (string_free(&cmd), error_print(err, argv[0], NULL, NULL));
-	err = runner_run(eval_runner);
+	err = runner_run(eval_runner, false);
 	shell_destroy_last_instance();
 	string_free(&cmd);
 	if (err.type)

@@ -66,7 +66,7 @@ static inline const char	*error_to_string_4(t_error err)
 	else if (err.type == ERR_BREAK)
 		return ("break is only available in loops");
 	else if (err.type == ERR_RETURN)
-		return ("return is only available in functions");
+		return ("return is only available in functions and dot scripts");
 	else if (err.type == ERR_EXIT)
 		return ("exit");
 	else if (err.type == ERR_EXIT_WITH_CURRENT_STATUS)

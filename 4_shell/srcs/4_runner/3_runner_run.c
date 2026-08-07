@@ -42,7 +42,7 @@ static inline t_error	runner_loop_cycle(t_runner *runner)
 Non-fatal errors must be handled in walkers.
 Therefore, only fatal errors should bubble up to the main loop.
 */
-t_error	runner_run(t_runner *runner)
+t_error	runner_run(t_runner *runner, bool is_dot_script)
 {
 	t_error		err;
 
@@ -56,6 +56,8 @@ t_error	runner_run(t_runner *runner)
 		ast_root_free(&runner->ast_root);
 	}
 	if (err.type == ERR_EOF || err.type == ERR_VEOF)
+		err.type = ERR_NO;
+	else if (is_dot_script == true && err.type == ERR_RETURN)
 		err.type = ERR_NO;
 	return (err);
 }

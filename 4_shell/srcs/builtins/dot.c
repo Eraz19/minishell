@@ -71,7 +71,7 @@ static inline t_error	dot_execute(t_string *file_path, int *status)
 	err = shell_get_new_runner(&runner, SCAN_MODE_FILE, file_path->data);
 	if (err.type)
 		return (string_free(file_path), err);
-	err = runner_run(runner);
+	err = runner_run(runner, true);
 	shell_destroy_last_instance();
 	string_free(file_path);
 	if (err.type)

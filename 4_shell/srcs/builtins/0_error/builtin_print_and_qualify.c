@@ -19,7 +19,7 @@ t_error	builtin_print_and_qualify(
 			bool is_special_builtin,
 			int *status)
 {
-	if (status < 0)
+	if (*status < 0)
 		*status = (int)err.type;
 	if (err.type == ERR_NO)
 		return (err);

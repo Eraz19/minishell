@@ -42,6 +42,7 @@ t_error	redirect_stack_get_current_backup(
 	t_redir_frame	*frame;
 	t_error			err;
 
+	frame = NULL;
 	err = redirect_stack_get_current_frame(stack, &frame);
 	if (err.type)
 		return (err);

@@ -93,7 +93,7 @@ static inline t_error	shell_process_env(t_string *env_path)
 	err = shell_get_new_runner(&runner, SCAN_MODE_FILE, env_path->data);
 	if (err.type)
 		return (string_free(env_path), err);
-	err = runner_run(runner);
+	err = runner_run(runner, false);
 	string_free(env_path);
 	shell_destroy_last_instance();
 	return (err);

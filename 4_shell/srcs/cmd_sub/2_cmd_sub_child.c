@@ -66,7 +66,7 @@ void	cmd_sub_child_string(t_string *cmd_string, int pipe_fds[2])
 	err = shell_get_new_runner(&runner, SCAN_MODE_STRING, cmd_string->data);
 	if (err.type)
 		cmd_sub_child_exit(err, (int)err.type, NULL, cmd_string);
-	err = runner_run(runner);
+	err = runner_run(runner, false);
 	err = error_priorize(err, shell_destroy_last_instance());
 	if (err.type == ERR_EOF || err.type == ERR_VEOF)
 		err.type = ERR_NO;
