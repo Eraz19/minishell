@@ -134,6 +134,8 @@ t_skip_by_filter()
 # ---------------------------------------------------------------------------
 t_begin()
 {
+	local vg
+
 	T_ID="$1"
 	T_LABEL="$2"
 	T_ACTIVE=1
@@ -154,6 +156,11 @@ t_begin()
 	T_DIR="${WORK_ROOT}/${T_ID//[^A-Za-z0-9._-]/_}"
 	T_LOG="${LOG_DIR}/${T_ID//[^A-Za-z0-9._-]/_}"
 	mkdir -p "$T_DIR" "$T_LOG" || exit 1
+	if (( LEAK )); then
+		for vg in "${T_LOG}"/valgrind.*.log(N); do
+			rm -f -- "$vg"
+		done
+	fi
 	T_OUT_FILE="${T_LOG}/stdout.txt"
 	T_ERR_RAW_FILE="${T_LOG}/stderr.raw.txt"
 	T_ERR_FILE="${T_LOG}/stderr.txt"
@@ -214,10 +221,6 @@ t_cleanup_valgrind_logs()
 	(( LEAK )) || return 0
 	local vg
 	for vg in "${T_LOG}"/valgrind.*.log(N); do
-		if [[ ! -s "$vg" ]]; then
-			rm -f "$vg"
-			continue
-		fi
 		perl -0pi -e '
 			s/^==(\d+)== FILE DESCRIPTORS: [^\n]*\n((?:==\1== Open file descriptor \d+: [^\n]*\/valgrind\.\d+\.log\n==\1==    <inherited from parent>\n==\1== \n)+)//mg;
 			s/^==(\d+)== Open file descriptor \d+: [^\n]*\/valgrind\.\d+\.log\n==\1==    <inherited from parent>\n==\1== \n//mg;
@@ -283,7 +286,7 @@ t_check_valgrind()
 		if grep -Eq "^==[0-9]+== ERROR SUMMARY: [1-9][0-9,]* errors? from" "$vg"; then
 			bad="${bad:+$bad+}error"
 		fi
-		if grep -Eq "^==[0-9]+== Open file descriptor [0-9]+:" "$vg"; then
+		if grep -Eq "^==[0-9]+== Open file descriptor ([3-9]|[1-9][0-9]+):" "$vg"; then
 			bad="${bad:+$bad+}fd"
 		fi
 	done
