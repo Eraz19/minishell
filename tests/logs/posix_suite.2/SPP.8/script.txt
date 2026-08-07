@@ -1,0 +1,2 @@
+set --
+/home/adouieb/Documents/minishell/tests/test_exec "$@"

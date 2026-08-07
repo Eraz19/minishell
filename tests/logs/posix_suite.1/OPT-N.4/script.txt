@@ -1,0 +1,1 @@
+minishell -n -c echo x > side_effect.txt

@@ -1,0 +1,2 @@
+trap 'echo n6' 2
+trap

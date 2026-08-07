@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[RED2.6] <> does not truncate an existing file
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+: <> keep.txt
+cat keep.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+keep
+
+### OBTAINED STDOUT ###
+keep
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

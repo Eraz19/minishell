@@ -1,0 +1,3 @@
+no_such_cmd_xyz
+echo rc=$?
+echo survived

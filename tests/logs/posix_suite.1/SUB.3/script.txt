@@ -1,0 +1,2 @@
+(SV_3=inner)
+echo [${SV_3:-unset}]

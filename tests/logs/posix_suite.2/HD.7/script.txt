@@ -1,0 +1,5 @@
+cat <<A; cat <<B
+first
+A
+second
+B

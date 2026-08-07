@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[FSP.10] literal prefix joins the first expansion field
+### SECTION ###
+[words] field splitting (2.6.5): the delimiter algorithm
+
+### COMMAND (pipe mode) ###
+x=" b"
+set -- a$x
+echo "$#" "[$1]"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+2 [a]
+
+### OBTAINED STDOUT ###
+2 [a]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

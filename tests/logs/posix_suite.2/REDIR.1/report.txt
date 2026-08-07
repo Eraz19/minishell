@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[REDIR.1] > creates a file with the command's stdout
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+echo content > out_r1.txt
+cat out_r1.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+content
+
+### OBTAINED STDOUT ###
+content
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.1/valgrind.*.log

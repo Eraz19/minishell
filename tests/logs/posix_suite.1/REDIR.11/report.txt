@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[REDIR.11] redirection applies to builtins too
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+pwd > pwd_r11.txt
+test -s pwd_r11.txt
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

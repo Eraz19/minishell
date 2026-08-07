@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[OPT-C.1] set -C: > refuses to overwrite an existing regular file
+### SECTION ###
+[options] option -C / noclobber (POSIX set -C, >| bypass)
+
+### COMMAND (pipe mode) ###
+set -C
+echo new > exists.txt
+
+### EXIT STATUS (obtained) ###
+92
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: no clobber is active and file is regular: 'exists.txt' expanded from 'exists.txt': redirection failed
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.1/valgrind.*.log

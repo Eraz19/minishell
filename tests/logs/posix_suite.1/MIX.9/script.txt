@@ -1,0 +1,3 @@
+(echo async_done > bg.txt) &
+wait
+cat bg.txt

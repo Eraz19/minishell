@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[GRM.7] function definition with spaced parentheses
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+f () { echo spaced; }
+f
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+spaced
+
+### OBTAINED STDOUT ###
+spaced
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

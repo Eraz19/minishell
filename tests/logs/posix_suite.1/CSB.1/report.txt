@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[CSB.1] only trailing newlines are stripped
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+x=$(printf "a\nb\n\n\n")
+echo "[$x]"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[a
+b]
+
+### OBTAINED STDOUT ###
+[a
+b]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

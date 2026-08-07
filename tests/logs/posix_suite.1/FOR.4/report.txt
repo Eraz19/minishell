@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[FOR.4] for without in iterates the positional parameters
+### SECTION ###
+[ast] for node (2.9.4.2): word list iteration
+
+### COMMAND (pipe mode) ###
+set -- m n
+for x; do echo $x; done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+m
+n
+
+### OBTAINED STDOUT ###
+m
+n
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

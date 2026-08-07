@@ -1,0 +1,4 @@
+x=v
+cat <<EOF
+\$x and $x
+EOF

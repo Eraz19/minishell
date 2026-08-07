@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[FOR.5] loop variable keeps its last value after the loop (POSIX)
+### SECTION ###
+[ast] for node (2.9.4.2): word list iteration
+
+### COMMAND (pipe mode) ###
+for x in a b last; do :; done
+echo $x
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+last
+
+### OBTAINED STDOUT ###
+last
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

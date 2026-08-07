@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EXPORT.8] export invalid identifier -> assignment error 124, shell aborts
+### SECTION ###
+[builtins] export — special built-in, POSIX 2.14 export
+
+### COMMAND (pipe mode) ###
+export 1BAD=x
+echo not_reached
+
+### EXIT STATUS (obtained) ###
+124
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: 1BAD: invalid name
+
+### VERDICT ###
+PASS

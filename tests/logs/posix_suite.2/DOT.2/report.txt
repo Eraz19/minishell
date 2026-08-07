@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[DOT.2] return stops the dot script with its status
+### SECTION ###
+[semantics] dot (2.15, page @2091)
+
+### COMMAND (pipe mode) ###
+. ./r.sh
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one
+rc=9
+
+### OBTAINED STDOUT ###
+one
+rc=9
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: return is only available in functions and dot scripts
+
+### VERDICT ###
+PASS

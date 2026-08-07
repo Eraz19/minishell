@@ -1,0 +1,2 @@
+IFS=:
+for part in $(echo a:b:c); do echo p=$part; done

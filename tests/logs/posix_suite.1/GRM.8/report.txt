@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[GRM.8] reserved words as arguments stay literal
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+echo if then else fi do done case esac while
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+if then else fi do done case esac while
+
+### OBTAINED STDOUT ###
+if then else fi do done case esac while
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

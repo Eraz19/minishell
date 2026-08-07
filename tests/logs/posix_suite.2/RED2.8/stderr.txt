@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: redirection failed: unable to open file: '/nonexistent_red8/f' expanded from '/nonexistent_red8/f': No such file or directory

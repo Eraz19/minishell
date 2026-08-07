@@ -1,0 +1,2 @@
+export XP_7
+export -p

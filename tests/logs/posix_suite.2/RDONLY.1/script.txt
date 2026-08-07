@@ -1,0 +1,2 @@
+readonly RO_1=locked
+RO_1=changed

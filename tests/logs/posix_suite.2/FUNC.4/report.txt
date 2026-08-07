@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[FUNC.4] outer positional parameters are restored after the call
+### SECTION ###
+[ast] function definition node (2.9.5)
+
+### COMMAND (pipe mode) ###
+set -- outer1 outer2
+f4() { :; }
+f4 inner
+echo $1:$#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+outer1:2
+
+### OBTAINED STDOUT ###
+outer1:2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

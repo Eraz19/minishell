@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[CD.2] cd with no operand goes to $HOME
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+HOME=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.2
+cd
+pwd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.2
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

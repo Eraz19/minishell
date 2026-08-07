@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[STRESS.5] function redefining itself on first call
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+once() { once() { echo second; }; echo first; }
+once
+once
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+first
+second
+
+### OBTAINED STDOUT ###
+first
+second
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ENV.6] POSIX: env with a utility operand runs the utility
+### SECTION ###
+[builtins] env — POSIX env utility (regular built-in here)
+
+### COMMAND (pipe mode) ###
+env echo via_env
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+via_env
+
+### OBTAINED STDOUT ###
+via_env
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,1 @@
+minishell -c no_such_command_xyz_42

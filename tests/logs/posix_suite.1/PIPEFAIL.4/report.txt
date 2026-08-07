@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[PIPEFAIL.4] pipefail: all-success pipeline still returns 0
+### SECTION ###
+[options] option -o pipefail (POSIX.1-2024 set -o pipefail)
+
+### COMMAND (pipe mode) ###
+set -o pipefail
+echo data | cat > /dev/null
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

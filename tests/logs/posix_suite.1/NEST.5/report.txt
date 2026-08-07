@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[NEST.5] cmd-sub inside a case word and a pattern arm
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+case $(echo key) in key) echo hit;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+hit
+
+### OBTAINED STDOUT ###
+hit
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

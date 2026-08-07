@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PEX.16] pattern characters stay special inside outer dquotes
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+x="a b.c"
+echo "${x%.c}"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a b
+
+### OBTAINED STDOUT ###
+a b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-F.4] script not readable -> 126
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell ./locked.sh
+
+### EXIT STATUS (obtained) ###
+126
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: scanner: ./locked.sh: file is not readable
+
+### VERDICT ###
+PASS

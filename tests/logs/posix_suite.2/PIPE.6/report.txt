@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PIPE.6] ! negates a pipeline: false -> 0
+### SECTION ###
+[ast] pipeline node (2.9.2): |, status, ! negation
+
+### COMMAND (pipe mode) ###
+! false
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

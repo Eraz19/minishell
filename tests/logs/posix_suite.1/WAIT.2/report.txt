@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[WAIT.2] wait for a background job
+### SECTION ###
+[builtins] wait — POSIX wait utility (async pids, $!)
+
+### COMMAND (pipe mode) ###
+sleep 0.1 &
+wait
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

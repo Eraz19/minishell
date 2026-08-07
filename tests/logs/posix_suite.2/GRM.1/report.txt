@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[GRM.1] if / then / fi on separate lines
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+if true
+then
+echo branch
+fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+branch
+
+### OBTAINED STDOUT ###
+branch
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

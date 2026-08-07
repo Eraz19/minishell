@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QRM.1] quoted quote characters survive quote removal
+### SECTION ###
+[words] quote removal (2.6.7)
+
+### COMMAND (pipe mode) ###
+echo "'a'" '"b"' \"c\"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+'a' "b" "c"
+
+### OBTAINED STDOUT ###
+'a' "b" "c"
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

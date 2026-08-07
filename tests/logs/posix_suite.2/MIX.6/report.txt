@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[MIX.6] assignment prefix + redirection + external in one command
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+MIXV=6 /home/adouieb/Documents/minishell/tests/test_exec > /dev/null 2> caught.txt
+grep -c "MIXV=6" caught.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+1
+
+### OBTAINED STDOUT ###
+1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.6/valgrind.*.log

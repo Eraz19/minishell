@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[LIST.3] trailing semicolon is fine
+### SECTION ###
+[ast] list node (2.9.3): sequential ; and async &
+
+### COMMAND (pipe mode) ###
+echo tail;
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+tail
+
+### OBTAINED STDOUT ###
+tail
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

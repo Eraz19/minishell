@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[UNSET.4] unset of a variable that does not exist is NOT an error
+### SECTION ###
+[builtins] unset — special built-in, POSIX 2.14 unset
+
+### COMMAND (pipe mode) ###
+unset NEVER_SET_4
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

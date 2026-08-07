@@ -1,0 +1,1 @@
+case d in [!a-c]) echo yes ;; *) echo no ;; esac

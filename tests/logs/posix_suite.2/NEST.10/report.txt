@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[NEST.10] pipeline inside a subshell inside &&
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+true && (echo x | tr x y)
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+y
+
+### OBTAINED STDOUT ###
+y
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.10/valgrind.*.log

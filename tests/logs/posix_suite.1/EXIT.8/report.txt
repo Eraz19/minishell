@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXIT.8] exit 256 -> unspecified; project contract 122
+### SECTION ###
+[builtins] exit — special built-in, POSIX 2.14 exit
+
+### COMMAND (pipe mode) ###
+exit 256
+
+### EXIT STATUS (obtained) ###
+122
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: warning: unspecified behaviour: 256: POSIX: exit: DESCRIPTION: If n is specified and [...] has a value of 256 [...] the wait status of the shell or subshell is unspecified.: implemented as: wait status representing special builtin error
+
+### VERDICT ###
+PASS

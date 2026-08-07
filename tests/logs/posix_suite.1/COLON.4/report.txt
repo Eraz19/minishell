@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[COLON.4] colon resets $? to 0
+### SECTION ###
+[builtins] colon (:) — special built-in, POSIX 2.14
+
+### COMMAND (pipe mode) ###
+false
+:
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

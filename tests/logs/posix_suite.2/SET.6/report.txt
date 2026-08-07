@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SET.6] $* joins with the first IFS character
+### SECTION ###
+[builtins] set — special built-in (positional parameters; options in suite 10)
+
+### COMMAND (pipe mode) ###
+IFS=-
+set a b c
+echo "$*"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a-b-c
+
+### OBTAINED STDOUT ###
+a-b-c
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

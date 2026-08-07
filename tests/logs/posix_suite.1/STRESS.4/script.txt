@@ -1,0 +1,2 @@
+true && true && false || echo lvl1
+true && { false || echo lvl2; }

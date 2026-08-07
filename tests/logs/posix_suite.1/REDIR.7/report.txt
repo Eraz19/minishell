@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[REDIR.7] 2>&1 duplicates stderr onto stdout's target
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+sh -c "echo to_err >&2" 2>&1 | cat
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+to_err
+
+### OBTAINED STDOUT ###
+to_err
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

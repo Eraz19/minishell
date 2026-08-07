@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[EXPORT.9] export with no arguments: project UB choice, exit 0
+### SECTION ###
+[builtins] export — special built-in, POSIX 2.14 export
+
+### COMMAND (pipe mode) ###
+export
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: warning: unspecified behaviour: POSIX: export: DESCRIPTION: When no arguments are given, the results are unspecified: implemented as: no-op
+
+### VERDICT ###
+PASS

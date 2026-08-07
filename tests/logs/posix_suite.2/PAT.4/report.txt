@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PAT.4] * does not match across /
+### SECTION ###
+[words] pathname expansion & pattern matching (2.6.6, 2.14)
+
+### COMMAND (pipe mode) ###
+echo *inner*
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+*inner*
+
+### OBTAINED STDOUT ###
+*inner*
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

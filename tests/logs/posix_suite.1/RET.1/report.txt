@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[RET.1] return without operand keeps the last status
+### SECTION ###
+[semantics] return (2.15, page @2744)
+
+### COMMAND (pipe mode) ###
+f() { sh -c "exit 4"; return; }
+f
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=4
+
+### OBTAINED STDOUT ###
+rc=4
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

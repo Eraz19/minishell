@@ -1,0 +1,1 @@
+minishell -s p1 p2

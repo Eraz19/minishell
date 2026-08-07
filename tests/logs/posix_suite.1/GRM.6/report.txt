@@ -1,0 +1,20 @@
+### ID / LABEL ###
+[GRM.6] empty command between then and ; is a syntax error
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+if true; then; echo x; fi
+
+### EXIT STATUS (obtained) ###
+121
+
+### EXPECTED STDOUT ###
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: parser: invalid syntax
+
+### VERDICT ###
+PASS

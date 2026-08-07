@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CD.1] cd <dir> changes the working directory
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd sub
+pwd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.1/sub
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.1/sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

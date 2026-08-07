@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SHIFT.2] shift 2 renumbers the positionals
+### SECTION ###
+[semantics] shift (2.15, page @3118)
+
+### COMMAND (pipe mode) ###
+set a b c d e
+shift 2
+echo $# $1 $2
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+3 c d
+
+### OBTAINED STDOUT ###
+3 c d
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

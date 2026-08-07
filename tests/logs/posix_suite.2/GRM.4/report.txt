@@ -1,0 +1,20 @@
+### ID / LABEL ###
+[GRM.4] unterminated brace group is a syntax error
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+{ echo hi }
+
+### EXIT STATUS (obtained) ###
+121
+
+### EXPECTED STDOUT ###
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+> > > > > > > > > > > > > > > > > > > > > > > /home/adouieb/Documents/minishell/minishell: parser: invalid syntax
+
+### VERDICT ###
+PASS

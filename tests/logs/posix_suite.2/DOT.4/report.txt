@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[DOT.4] dot searches PATH for slash-free operands
+### SECTION ###
+[semantics] dot (2.15, page @2091)
+
+### COMMAND (pipe mode) ###
+PATH="$PWD:$PATH"
+. dotlib
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+found
+
+### OBTAINED STDOUT ###
+found
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[UNALIAS.1] unalias removes the definition
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias tmp_u1='echo x'
+unalias tmp_u1
+tmp_u1
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=127
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: tmp_u1: command not found
+
+### VERDICT ###
+PASS

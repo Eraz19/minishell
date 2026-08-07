@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/SUB.4

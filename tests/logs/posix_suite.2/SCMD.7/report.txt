@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SCMD.7] empty command line does nothing, $? untouched
+### SECTION ###
+[ast] simple command (2.9.1): words, assignments, search order
+
+### COMMAND (pipe mode) ###
+false
+
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=1
+
+### OBTAINED STDOUT ###
+rc=1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

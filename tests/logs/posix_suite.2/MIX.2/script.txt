@@ -1,0 +1,4 @@
+cat <<EOF | sort
+b
+a
+EOF

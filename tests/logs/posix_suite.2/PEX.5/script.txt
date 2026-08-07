@@ -1,0 +1,3 @@
+x=
+echo "[${x?msg}]"
+echo rc=$?

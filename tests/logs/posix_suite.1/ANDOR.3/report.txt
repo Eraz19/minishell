@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ANDOR.3] || runs the right side on failure
+### SECTION ###
+[ast] and-or node (2.9.3): && ||
+
+### COMMAND (pipe mode) ###
+false || echo rescued
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rescued
+
+### OBTAINED STDOUT ###
+rescued
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[FUNC.10] function takes precedence over PATH lookup
+### SECTION ###
+[ast] function definition node (2.9.5)
+
+### COMMAND (pipe mode) ###
+true() { echo shadowed; }
+true
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+shadowed
+
+### OBTAINED STDOUT ###
+shadowed
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,1 @@
+for f in *.fw; do echo $f; done

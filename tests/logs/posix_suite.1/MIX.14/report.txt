@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[MIX.14] ${RO:=word} on a readonly NULL var -> assignment error 124, shell exits
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+readonly LOCK_14=
+echo ${LOCK_14:=other}
+echo not_reached
+
+### EXIT STATUS (obtained) ###
+124
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: LOCK_14: readonly variable
+
+### VERDICT ###
+PASS

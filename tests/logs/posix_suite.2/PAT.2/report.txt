@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[PAT.2] case character class [[:digit:]]
+### SECTION ###
+[words] pathname expansion & pattern matching (2.6.6, 2.14)
+
+### COMMAND (pipe mode) ###
+case 5 in [[:digit:]]) echo yes ;; *) echo no ;; esac
+case x in [[:digit:]]) echo yes ;; *) echo no ;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+yes
+no
+
+### OBTAINED STDOUT ###
+yes
+no
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

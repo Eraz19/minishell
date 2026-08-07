@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[OPT-I.5] non-interactive: command-not-found does not abort
+### SECTION ###
+[options] option -i / interactive (forced with -s -i on a pipe)
+
+### COMMAND (pipe mode) ###
+no_such_cmd_xyz
+echo rc=$?
+echo survived
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=127
+survived
+
+### OBTAINED STDOUT ###
+rc=127
+survived
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: no_such_cmd_xyz: command not found
+
+### VERDICT ###
+PASS

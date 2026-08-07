@@ -1,0 +1,2 @@
+eval 'sh -c "exit 5"'
+echo rc=$?

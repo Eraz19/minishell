@@ -1,0 +1,3 @@
+cat <<EOF
+sub=$(echo yes)
+EOF

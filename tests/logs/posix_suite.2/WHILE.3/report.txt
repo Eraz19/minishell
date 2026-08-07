@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[WHILE.3] while drives multiple iterations
+### SECTION ###
+[ast] while / until node (2.9.4.5-6)
+
+### COMMAND (pipe mode) ###
+set -- a b
+while test $# != 0; do
+	echo tick
+	shift
+done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+tick
+tick
+
+### OBTAINED STDOUT ###
+tick
+tick
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[SPP.5] $- reflects set -f
+### SECTION ###
+[words] special and positional parameters (2.5)
+
+### COMMAND (pipe mode) ###
+set -f
+case $- in *f*) echo has_f ;; *) echo no_f ;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+has_f
+
+### OBTAINED STDOUT ###
+has_f
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,1 @@
+(echo from_subshell; exit 0) | cat

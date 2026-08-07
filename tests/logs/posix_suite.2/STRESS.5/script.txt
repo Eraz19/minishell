@@ -1,0 +1,3 @@
+once() { once() { echo second; }; echo first; }
+once
+once

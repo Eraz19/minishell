@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[MIX.1] if with redirected output inside a pipe
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+if true; then echo branch_out; fi > mid.txt
+cat mid.txt | tr a-z A-Z
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+BRANCH_OUT
+
+### OBTAINED STDOUT ###
+BRANCH_OUT
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.1/valgrind.*.log

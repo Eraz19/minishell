@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[SCMD.2] external command found through PATH
+### SECTION ###
+[ast] simple command (2.9.1): words, assignments, search order
+
+### COMMAND (pipe mode) ###
+echo via_path
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+via_path
+
+### OBTAINED STDOUT ###
+via_path
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

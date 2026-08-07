@@ -1,0 +1,1 @@
+sh -c "echo to_err >&2" 2>&1 | cat

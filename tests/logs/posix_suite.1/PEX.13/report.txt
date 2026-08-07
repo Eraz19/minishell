@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PEX.13] ${x#*/} smallest vs ${x##*/} largest prefix
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+x=/one/two/three
+echo [${x#*/}] [${x##*/}]
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[one/two/three] [three]
+
+### OBTAINED STDOUT ###
+[one/two/three] [three]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

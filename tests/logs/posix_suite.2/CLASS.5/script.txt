@@ -1,0 +1,2 @@
+CL_5=childonly /home/adouieb/Documents/minishell/tests/test_exec
+env

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[COLON.2] colon ignores its arguments
+### SECTION ###
+[builtins] colon (:) — special built-in, POSIX 2.14
+
+### COMMAND (pipe mode) ###
+: arg1 arg2 arg3
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

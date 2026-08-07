@@ -1,0 +1,3 @@
+x=out
+y=$(x=in; echo $x)
+echo $x $y

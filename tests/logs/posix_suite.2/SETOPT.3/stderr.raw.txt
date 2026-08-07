@@ -1,0 +1,6 @@
+/home/adouieb/Documents/minishell/minishell: set: set [-abCefhmnuvx] [-o option] [argument...]
+: set [+abCefhmnuvx] [+o option] [argument...]
+: set -- [argument...]
+: set -o
+: set +o
+: invalid usage

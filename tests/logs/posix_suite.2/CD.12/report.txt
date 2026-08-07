@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CD.12] cd -P enters the physical directory
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd -P link
+pwd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.12/real
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.12/real
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[GRM.2] for with newline before in
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+for i
+in a b
+do
+echo $i
+done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+b
+
+### OBTAINED STDOUT ###
+a
+b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

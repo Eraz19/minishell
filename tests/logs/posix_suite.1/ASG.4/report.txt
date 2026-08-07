@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ASG.4] NAME=value after the command word is an argument
+### SECTION ###
+[semantics] simple-command semantics (2.9.1)
+
+### COMMAND (pipe mode) ###
+echo A=1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+A=1
+
+### OBTAINED STDOUT ###
+A=1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

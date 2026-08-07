@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ANDOR.6] chain status is the last executed command
+### SECTION ###
+[ast] and-or node (2.9.3): && ||
+
+### COMMAND (pipe mode) ###
+false || sh -c "exit 4"
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=4
+
+### OBTAINED STDOUT ###
+rc=4
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

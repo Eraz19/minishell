@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[HD.7] two heredocs on one line (2.7.4: order of here-docs)
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+cat <<A; cat <<B
+first
+A
+second
+B
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+first
+second
+
+### OBTAINED STDOUT ###
+first
+second
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

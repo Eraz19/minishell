@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[REDIR.12] redirection on a compound command (if...fi > file)
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+if true; then echo branch; fi > if_r12.txt
+cat if_r12.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+branch
+
+### OBTAINED STDOUT ###
+branch
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,29 @@
+### ID / LABEL ###
+[STRESS.6] heredoc + quoted delim + expansion mix in one script
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+V=live
+cat <<E1
+exp=$V
+E1
+cat <<'E2'
+raw=$V
+E2
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+exp=live
+raw=$V
+
+### OBTAINED STDOUT ###
+exp=live
+raw=$V
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,2 @@
+false || sh -c "exit 4"
+echo rc=$?

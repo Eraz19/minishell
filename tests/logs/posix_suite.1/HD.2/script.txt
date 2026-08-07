@@ -1,0 +1,4 @@
+V=inside
+cat <<EOF
+value=$V
+EOF

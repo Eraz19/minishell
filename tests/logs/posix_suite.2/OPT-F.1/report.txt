@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[OPT-F.1] set -f: pathname expansion is disabled
+### SECTION ###
+[options] option -f / noglob (POSIX set -f)
+
+### COMMAND (pipe mode) ###
+set -f
+echo *.glob
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+*.glob
+
+### OBTAINED STDOUT ###
+*.glob
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

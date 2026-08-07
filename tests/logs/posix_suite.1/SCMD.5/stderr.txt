@@ -1,0 +1,4 @@
+$ definitely_not_a_command_xyz
+/home/adouieb/Documents/minishell/minishell: definitely_not_a_command_xyz: command not found
+$ echo rc=$?
+$ 

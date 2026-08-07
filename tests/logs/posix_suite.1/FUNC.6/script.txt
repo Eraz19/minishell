@@ -1,0 +1,3 @@
+ret_f6() { return 4; echo not_reached; }
+ret_f6
+echo rc=$?

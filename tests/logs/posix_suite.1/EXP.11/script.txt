@@ -1,0 +1,1 @@
+echo [$(printf "x\n\n\n")]

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ALIAS.7] recursive alias does not loop forever
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias echo='echo wrapped'
+echo done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+wrapped done
+
+### OBTAINED STDOUT ###
+wrapped done
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

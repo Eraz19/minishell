@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-S.1] no operands: reads commands from stdin
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell 
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+from_stdin
+
+### OBTAINED STDOUT ###
+from_stdin
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

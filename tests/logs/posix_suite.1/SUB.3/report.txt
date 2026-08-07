@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[SUB.3] variable assignment does not escape the subshell
+### SECTION ###
+[ast] subshell node (2.9.4.3): ( ) isolation
+
+### COMMAND (pipe mode) ###
+(SV_3=inner)
+echo [${SV_3:-unset}]
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[unset]
+
+### OBTAINED STDOUT ###
+[unset]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

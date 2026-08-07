@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[STRESS.8] cmd-sub inside function inside cmd-sub
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+f() { echo $(echo nested_f); }
+echo top:$(f)
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+top:nested_f
+
+### OBTAINED STDOUT ###
+top:nested_f
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

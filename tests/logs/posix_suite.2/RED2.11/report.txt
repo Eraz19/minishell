@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[RED2.11] >> creates a missing file
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+echo first >> new.txt
+cat new.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+first
+
+### OBTAINED STDOUT ###
+first
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.11/valgrind.*.log

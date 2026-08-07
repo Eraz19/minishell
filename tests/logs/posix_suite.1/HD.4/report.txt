@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[HD.4] <<- strips leading tabs
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+cat <<-EOF
+	tabbed
+	EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+tabbed
+
+### OBTAINED STDOUT ###
+tabbed
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

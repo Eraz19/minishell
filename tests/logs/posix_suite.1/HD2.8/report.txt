@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[HD2.8] quotes in the body are literal data
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+cat <<EOF
+"dq" and 'sq'
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+"dq" and 'sq'
+
+### OBTAINED STDOUT ###
+"dq" and 'sq'
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

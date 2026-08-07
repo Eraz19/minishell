@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[REDIR.10] <> opens read-write and creates the file
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+true <> rw_r10.txt
+test -e rw_r10.txt
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

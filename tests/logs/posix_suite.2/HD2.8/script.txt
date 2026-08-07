@@ -1,0 +1,3 @@
+cat <<EOF
+"dq" and 'sq'
+EOF

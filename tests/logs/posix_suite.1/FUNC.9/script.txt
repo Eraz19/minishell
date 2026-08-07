@@ -1,0 +1,2 @@
+sub_f9() (echo in_subshell)
+sub_f9

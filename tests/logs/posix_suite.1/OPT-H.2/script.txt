@@ -1,0 +1,4 @@
+PATH=$PWD/bin:$PATH
+set -h
+mytool_h2
+mytool_h2

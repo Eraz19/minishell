@@ -1,0 +1,1 @@
+minishell -c exit 255

@@ -1,0 +1,4 @@
+f() { set -f; }
+touch g.m15
+f
+echo *.m15

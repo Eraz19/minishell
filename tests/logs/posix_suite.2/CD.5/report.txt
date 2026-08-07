@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[CD.5] cd updates PWD and OLDPWD (exported)
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd sub
+echo "PWD=$PWD"
+echo "OLDPWD=$OLDPWD"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+PWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.5/sub
+OLDPWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.5
+
+### OBTAINED STDOUT ###
+PWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.5/sub
+OLDPWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.5
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

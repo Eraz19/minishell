@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PEX.15] quoted vs unquoted * in an affix pattern
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+x="a*b"
+echo "[${x#"a*"}][${x#a*}]"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[b][*b]
+
+### OBTAINED STDOUT ###
+[b][*b]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

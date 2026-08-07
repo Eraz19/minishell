@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PEX.1] ${x-word} vs ${x:-word} on a null parameter
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+x=
+echo "[${x-w}]" "[${x:-w}]"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[] [w]
+
+### OBTAINED STDOUT ###
+[] [w]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[FUNC.3] arguments become positional parameters inside
+### SECTION ###
+[ast] function definition node (2.9.5)
+
+### COMMAND (pipe mode) ###
+show() { echo $#:$1:$2; }
+show a b
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+2:a:b
+
+### OBTAINED STDOUT ###
+2:a:b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

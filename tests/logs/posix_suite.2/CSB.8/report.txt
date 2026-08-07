@@ -1,0 +1,30 @@
+### ID / LABEL ###
+[CSB.8] multi-line program inside $( )
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+x=$(for i in 1 2 3
+do
+echo $i
+done)
+echo "$x"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+1
+2
+3
+
+### OBTAINED STDOUT ###
+1
+2
+3
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.8/valgrind.*.log

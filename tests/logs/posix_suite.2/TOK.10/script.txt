@@ -1,0 +1,3 @@
+alias q='echo aliased'
+\q
+echo rc=$?

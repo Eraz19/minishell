@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[OPT-H.3] set +h: disabling hashing keeps commands runnable
+### SECTION ###
+[options] option -h / command hashing (POSIX set -h)
+
+### COMMAND (pipe mode) ###
+set +h
+echo still_ok
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+still_ok
+
+### OBTAINED STDOUT ###
+still_ok
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

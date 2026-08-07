@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EXP.7] ${#var} string length
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+V=hello
+echo ${#V}
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+5
+
+### OBTAINED STDOUT ###
+5
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

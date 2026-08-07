@@ -1,0 +1,2 @@
+set -C
+echo new > exists.txt

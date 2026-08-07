@@ -1,0 +1,4 @@
+echo dest > a_r14.txt > b_r14.txt
+cat b_r14.txt
+test -e a_r14.txt -a ! -s a_r14.txt
+echo rc=$?

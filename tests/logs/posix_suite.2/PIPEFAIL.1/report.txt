@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[PIPEFAIL.1] default: pipeline status = last command
+### SECTION ###
+[options] option -o pipefail (POSIX.1-2024 set -o pipefail)
+
+### COMMAND (pipe mode) ###
+false | true
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.1/valgrind.*.log

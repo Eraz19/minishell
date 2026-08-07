@@ -1,0 +1,2 @@
+export XP_A=1 XP_B=2
+env

@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: u_errc3: custom_msg: parameter null or not set

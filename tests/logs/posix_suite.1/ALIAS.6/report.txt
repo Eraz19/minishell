@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[ALIAS.6] alias redefinition: last definition wins
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias re_6='echo first'
+alias re_6='echo second'
+re_6
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+second
+
+### OBTAINED STDOUT ###
+second
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

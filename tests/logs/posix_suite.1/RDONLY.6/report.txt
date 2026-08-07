@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[RDONLY.6] readonly assignment failure aborts a non-interactive shell
+### SECTION ###
+[builtins] readonly — special built-in, POSIX 2.14 readonly
+
+### COMMAND (pipe mode) ###
+readonly RO_6=v
+RO_6=other
+echo not_reached
+
+### EXIT STATUS (obtained) ###
+17
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: RO_6: readonly variable
+
+### VERDICT ###
+PASS

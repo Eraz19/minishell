@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[HD2.4] delimiter with leading space is body, not terminator
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+cat <<EOF
+a
+ EOF
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+ EOF
+
+### OBTAINED STDOUT ###
+a
+ EOF
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.4/valgrind.*.log

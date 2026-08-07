@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CUSTOM.3] example: full API with a fixture file
+### SECTION ###
+[custom] custom cases
+
+### COMMAND (pipe mode) ###
+cat seed.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+line_a
+
+### OBTAINED STDOUT ###
+line_a
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PWD.2] pwd -L equals pwd (logical is the default)
+### SECTION ###
+[builtins] pwd — POSIX pwd utility (-L default, -P physical)
+
+### COMMAND (pipe mode) ###
+pwd -L
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/PWD.2
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/PWD.2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

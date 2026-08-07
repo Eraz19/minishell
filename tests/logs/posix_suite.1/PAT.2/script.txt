@@ -1,0 +1,2 @@
+case 5 in [[:digit:]]) echo yes ;; *) echo no ;; esac
+case x in [[:digit:]]) echo yes ;; *) echo no ;; esac

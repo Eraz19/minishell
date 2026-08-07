@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[OPT-F.2] without -f: the same pattern expands
+### SECTION ###
+[options] option -f / noglob (POSIX set -f)
+
+### COMMAND (pipe mode) ###
+echo *.glob
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a.glob b.glob
+
+### OBTAINED STDOUT ###
+a.glob b.glob
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

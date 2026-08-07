@@ -1,0 +1,2 @@
+show() { echo $#:$1:$2; }
+show a b

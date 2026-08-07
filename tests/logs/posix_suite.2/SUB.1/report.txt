@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[SUB.1] subshell runs its list
+### SECTION ###
+[ast] subshell node (2.9.4.3): ( ) isolation
+
+### COMMAND (pipe mode) ###
+(echo inside)
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+inside
+
+### OBTAINED STDOUT ###
+inside
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SHIFT.5] shift beyond $# fails either lane
+### SECTION ###
+[semantics] shift (2.15, page @3118)
+
+### COMMAND (pipe mode) ###
+set a b
+shift 3 && echo BAD
+
+### EXIT STATUS (obtained) ###
+12
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: warning: unspecified behaviour: shift: If the n operand is [...] greater than $# this may be treated as an error: implemented as: special builtin error
+/home/adouieb/Documents/minishell/minishell: shift: 3: is greater than $#
+
+### VERDICT ###
+PASS

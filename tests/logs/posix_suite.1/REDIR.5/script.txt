@@ -1,0 +1,2 @@
+cat < no_such_input.txt
+echo rc=$?

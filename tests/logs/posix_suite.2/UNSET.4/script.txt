@@ -1,0 +1,2 @@
+unset NEVER_SET_4
+echo rc=$?

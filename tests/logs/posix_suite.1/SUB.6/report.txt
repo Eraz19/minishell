@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[SUB.6] subshell in a && chain
+### SECTION ###
+[ast] subshell node (2.9.4.3): ( ) isolation
+
+### COMMAND (pipe mode) ###
+(exit 1) || echo caught
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+caught
+
+### OBTAINED STDOUT ###
+caught
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

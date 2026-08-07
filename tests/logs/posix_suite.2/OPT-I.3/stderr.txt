@@ -1,0 +1,4 @@
+$ echo hi )
+/home/adouieb/Documents/minishell/minishell: parser: invalid syntax
+$ echo survived
+$ 

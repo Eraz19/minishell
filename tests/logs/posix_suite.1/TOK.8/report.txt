@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[TOK.8] newline after && continues the and-or list
+### SECTION ###
+[words] token recognition (2.3) + alias substitution (2.3.1)
+
+### COMMAND (pipe mode) ###
+true &&
+echo continued
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+continued
+
+### OBTAINED STDOUT ###
+continued
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

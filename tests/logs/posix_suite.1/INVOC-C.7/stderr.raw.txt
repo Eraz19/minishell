@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: -c needs an argument: invalid option

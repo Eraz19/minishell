@@ -1,0 +1,2 @@
+MIXV=6 /home/adouieb/Documents/minishell/tests/test_exec > /dev/null 2> caught.txt
+grep -c "MIXV=6" caught.txt

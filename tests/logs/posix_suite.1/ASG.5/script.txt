@@ -1,0 +1,2 @@
+PATH=/nonexistent_asg5 ls
+echo rc=$?

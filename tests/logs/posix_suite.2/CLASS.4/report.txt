@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CLASS.4] assignment prefix on an external command does NOT persist
+### SECTION ###
+[builtins] built-in classification (POSIX 2.8.1 / 2.9.1)
+
+### COMMAND (pipe mode) ###
+CL_4=temp true
+echo [${CL_4:-empty}]
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[empty]
+
+### OBTAINED STDOUT ###
+[empty]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

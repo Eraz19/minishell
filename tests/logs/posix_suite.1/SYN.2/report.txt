@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[SYN.2] unterminated double quote -> 121
+### SECTION ###
+[ast] syntax errors (2.10): report + non-interactive abort
+
+### COMMAND (pipe mode) ###
+echo "unclosed
+
+### EXIT STATUS (obtained) ###
+121
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+> /home/adouieb/Documents/minishell/minishell: scanner: unterminated double quotes: invalid syntax
+
+### VERDICT ###
+PASS

@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[NEST.18] nested functions calling each other
+### SECTION ###
+[complex] nesting: control structures inside each other
+
+### COMMAND (pipe mode) ###
+inner() { echo core; }
+outer() { inner; }
+outer
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+core
+
+### OBTAINED STDOUT ###
+core
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

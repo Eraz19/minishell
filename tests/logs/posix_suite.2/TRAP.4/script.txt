@@ -1,0 +1,3 @@
+trap 'echo x' INT
+trap - INT
+trap

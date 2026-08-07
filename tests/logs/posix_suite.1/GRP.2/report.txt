@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[GRP.2] assignments inside { } persist after it
+### SECTION ###
+[ast] brace group node (2.9.4.1): { } shares the environment
+
+### COMMAND (pipe mode) ###
+{ GV_2=kept; }
+echo $GV_2
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+kept
+
+### OBTAINED STDOUT ###
+kept
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

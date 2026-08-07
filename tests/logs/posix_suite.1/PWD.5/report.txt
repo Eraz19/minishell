@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PWD.5] pwd tracks cd
+### SECTION ###
+[builtins] pwd — POSIX pwd utility (-L default, -P physical)
+
+### COMMAND (pipe mode) ###
+cd sub
+pwd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.5/sub
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.5/sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

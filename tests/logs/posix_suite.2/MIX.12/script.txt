@@ -1,0 +1,2 @@
+f() { /home/adouieb/Documents/minishell/tests/test_exec "$@"; }
+f "one word" two

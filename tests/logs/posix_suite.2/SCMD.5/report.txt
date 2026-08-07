@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[SCMD.5] interactive command not found -> 127 and shell continues
+### SECTION ###
+[ast] simple command (2.9.1): words, assignments, search order
+
+### COMMAND (argv mode) ###
+minishell -s -i
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=127
+
+### OBTAINED STDERR (filtered) ###
+$ definitely_not_a_command_xyz
+/home/adouieb/Documents/minishell/minishell: definitely_not_a_command_xyz: command not found
+$ echo rc=$?
+$ 
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[HD.8] unterminated heredoc -> syntax-class error (project: 121)
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+cat <<EOF
+never closed
+
+### EXIT STATUS (obtained) ###
+121
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+> /home/adouieb/Documents/minishell/minishell: heredoc: 'EOF': missing delimiter
+
+### VERDICT ###
+PASS

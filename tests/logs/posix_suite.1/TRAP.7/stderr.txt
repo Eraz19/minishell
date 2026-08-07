@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: trap: NOT_A_SIG: invalid name

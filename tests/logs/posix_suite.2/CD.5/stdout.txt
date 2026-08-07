@@ -1,0 +1,2 @@
+PWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.5/sub
+OLDPWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.5

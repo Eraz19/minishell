@@ -1,0 +1,1 @@
+> /home/adouieb/Documents/minishell/minishell: scanner: unterminated single quotes: invalid syntax

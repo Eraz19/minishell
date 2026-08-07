@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ALIAS.5] alias of an unknown name -> non-zero + diagnostic
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias no_such_alias_5
+
+### EXIT STATUS (obtained) ###
+1
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: alias: no_such_alias_5: not found
+
+### VERDICT ###
+PASS

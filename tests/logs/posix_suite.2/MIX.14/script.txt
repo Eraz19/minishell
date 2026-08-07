@@ -1,0 +1,3 @@
+readonly LOCK_14=
+echo ${LOCK_14:=other}
+echo not_reached

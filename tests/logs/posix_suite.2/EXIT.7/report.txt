@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXIT.7] exit non-numeric -> project contract 122 + UB notice
+### SECTION ###
+[builtins] exit — special built-in, POSIX 2.14 exit
+
+### COMMAND (pipe mode) ###
+exit notanumber
+
+### EXIT STATUS (obtained) ###
+122
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: warning: unspecified behaviour: notanumber: POSIX: exit: DESCRIPTION: If n is specified and is not an unsigned decimal integer [...] the wait status of the shell or subshell is unspecified.: implemented as: wait status representing special builtin error
+
+### VERDICT ###
+PASS

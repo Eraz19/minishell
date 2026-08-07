@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QRM.2] empty quotes vanish inside a word
+### SECTION ###
+[words] quote removal (2.6.7)
+
+### COMMAND (pipe mode) ###
+echo a""b''c
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+abc
+
+### OBTAINED STDOUT ###
+abc
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

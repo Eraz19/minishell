@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[CSB.2] cmd-sub output is not expanded again
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+HOME=/tmp
+x=$(echo '$HOME ~ `echo no`')
+echo "$x"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$HOME ~ `echo no`
+
+### OBTAINED STDOUT ###
+$HOME ~ `echo no`
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.2/valgrind.*.log

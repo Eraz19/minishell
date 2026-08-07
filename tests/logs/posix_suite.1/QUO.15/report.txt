@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QUO.15] no dollar-single-quote processing inside double quotes
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo "$'x'"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$'x'
+
+### OBTAINED STDOUT ###
+$'x'
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[RED2.5] dup from unopened fd 7 fails, shell continues
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+echo hi >&7
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=92
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: file descriptor is not open: 7 expanded from '7': redirection failed
+
+### VERDICT ###
+PASS

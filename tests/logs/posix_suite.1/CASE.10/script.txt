@@ -1,0 +1,2 @@
+case go in go) sh -c "exit 6";; esac
+echo rc=$?

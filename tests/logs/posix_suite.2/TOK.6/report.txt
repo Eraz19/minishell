@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[TOK.6] ;; outside a case statement is a syntax error
+### SECTION ###
+[words] token recognition (2.3) + alias substitution (2.3.1)
+
+### COMMAND (pipe mode) ###
+echo a ;; echo b
+
+### EXIT STATUS (obtained) ###
+121
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: parser: invalid syntax
+
+### VERDICT ###
+PASS

@@ -1,0 +1,81 @@
+### ID / LABEL ###
+[EXPORT.1] export NAME=value is visible to children
+### SECTION ###
+[builtins] export — special built-in, POSIX 2.14 export
+
+### COMMAND (pipe mode) ###
+export XP_1=val1
+env
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+EDITOR=/usr/bin/nano
+LOGNAME=adouieb
+MANAGERPIDFDID=5398
+PTYXIS_VERSION=50.1
+HOME=/home/adouieb
+OLDPWD=/home/adouieb/Documents/minishell
+XDG_SESSION_CLASS=user
+USERNAME=adouieb
+MOZ_GMP_PATH=/usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed
+XDG_DATA_DIRS=/home/adouieb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/
+HISTCONTROL=ignoredups
+SHLVL=2
+DISPLAY=:2
+JOURNAL_STREAM=10:652997
+XDG_SESSION_TYPE=wayland
+MAIL=/var/spool/mail/adouieb
+XDG_SESSION_EXTRA_DEVICE_ACCESS=render:accel
+XDG_SESSION_DESKTOP=gnome
+XDG_MENU_PREFIX=gnome-
+DEBUGINFOD_URLS=ima:enforcing https://debuginfod.fedoraproject.org/ ima:ignore 
+TERM=xterm-256color
+XDG_CURRENT_DESKTOP=GNOME
+LANG=en_US.UTF-8
+FLATPAK_TTY_PROGRESS=1
+PTYXIS_PROFILE=8c28747adc42fb12f3ea6c5e69e4e189
+SYSTEMD_EXEC_PID=201495
+XDG_CACHE_HOME=/goinfre/adouieb/.cache
+QT_IM_MODULE=ibus
+LC_ALL=C
+LD_PRELOAD=/usr/libexec/valgrind/vgpreload_core-amd64-linux.so:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+GNOME_SETUP_DISPLAY=unix:/tmp/.X11-unix/X3
+XDG_RUNTIME_DIR=/run/user/44523220
+XMODIFIERS=@im=ibus
+INVOCATION_ID=8a0eddc1376d4966a099e1e96d3266b1
+PWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/EXPORT.1
+XP_1=val1
+KRB5CCNAME=KCM:
+SHELL=/bin/bash
+WAYLAND_DISPLAY=wayland-0
+QT_IM_MODULES=wayland;ibus
+SSH_AUTH_SOCK=/run/user/44523220/gcr/ssh
+COLORTERM=truecolor
+MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-44523220.slice/user@44523220.service/app.slice/dbus-:1.2-org.gnome.Ptyxis@0.service/memory.pressure
+_=/usr/bin/timeout
+MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
+DESKTOP_SESSION=gnome
+GDM_LANG=en_US.UTF-8
+HOSTNAME=f6r13s12.paris.42.school
+XAUTHORITY=/run/user/44523220/.mutter-Xwaylandauth.Y8IZT3
+VTE_VERSION=8401
+MANAGERPID=197752
+GDMSESSION=gnome
+PATH=/home/adouieb/.local/funcheck/host:/usr/lib64/ccache:/usr/local/bin:/usr/bin
+HISTSIZE=1000
+USER=adouieb
+FT_MAIL=adouieb@learner.42.tech
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+DOCKER_HOST=unix:///run/user/44523220/podman/podman.sock
+DEBUGINFOD_IMA_CERT_PATH=/etc/keys/ima:
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/44523220/bus
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[STRESS.3] 10-stage pipeline
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+echo start | cat | cat | cat | cat | cat | cat | cat | cat | cat
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+start
+
+### OBTAINED STDOUT ###
+start
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

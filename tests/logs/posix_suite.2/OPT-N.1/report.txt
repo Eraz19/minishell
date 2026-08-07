@@ -1,0 +1,20 @@
+### ID / LABEL ###
+[OPT-N.1] -n: commands are parsed but not executed
+### SECTION ###
+[options] option -n / noexec (POSIX set -n)
+
+### COMMAND (argv mode) ###
+minishell -n -c echo should_not_print
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

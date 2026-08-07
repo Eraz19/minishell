@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[STRESS.4] long && chain with a || fallback at each level
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+true && true && false || echo lvl1
+true && { false || echo lvl2; }
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+lvl1
+lvl2
+
+### OBTAINED STDOUT ###
+lvl1
+lvl2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,6 @@
+foo=asdf
+echo ${foo-bar}xyz}
+foo=
+echo ${foo-bar}xyz}
+unset foo
+echo ${foo-bar}xyz}

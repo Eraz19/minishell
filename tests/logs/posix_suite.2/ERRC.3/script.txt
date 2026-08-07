@@ -1,0 +1,2 @@
+echo ${u_errc3?custom_msg}
+echo after

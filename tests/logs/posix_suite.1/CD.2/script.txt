@@ -1,0 +1,3 @@
+HOME=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.2
+cd
+pwd

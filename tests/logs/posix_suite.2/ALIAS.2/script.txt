@@ -1,0 +1,2 @@
+alias say_2='echo prefix'
+say_2 suffix

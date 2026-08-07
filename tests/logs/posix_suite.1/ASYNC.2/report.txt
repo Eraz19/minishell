@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[ASYNC.2] $! holds the pid of the last async command
+### SECTION ###
+[ast] list node (2.9.3): sequential ; and async &
+
+### COMMAND (pipe mode) ###
+sleep 0.05 &
+echo $!
+wait
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+230971
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

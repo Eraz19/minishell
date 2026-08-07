@@ -1,0 +1,19 @@
+### ID / LABEL ###
+[INVOC-F.5] empty script -> exit 0
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell ./empty.sh
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

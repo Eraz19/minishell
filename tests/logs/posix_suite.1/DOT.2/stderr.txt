@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: return is only available in functions and dot scripts

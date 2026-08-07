@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[REDIR.16] redirection target word is expanded
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+NAME=exp_r16
+echo data > ${NAME}.txt
+cat exp_r16.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+data
+
+### OBTAINED STDOUT ###
+data
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

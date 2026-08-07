@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ECHO.11] echo prints expanded variables
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+V=world
+echo hello $V
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+hello world
+
+### OBTAINED STDOUT ###
+hello world
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EXP.8] ${var%pat} / ${var#pat} affix removal
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+F=dir/file.txt
+echo ${F%.txt} ${F#dir/}
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+dir/file file.txt
+
+### OBTAINED STDOUT ###
+dir/file file.txt
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

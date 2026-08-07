@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CASE.1] literal pattern match
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case apple in apple) echo matched;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+matched
+
+### OBTAINED STDOUT ###
+matched
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,2 @@
+V=star
+echo "$V *"

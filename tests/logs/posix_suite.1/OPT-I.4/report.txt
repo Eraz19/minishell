@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[OPT-I.4] non-interactive: syntax error aborts with 121 (project code)
+### SECTION ###
+[options] option -i / interactive (forced with -s -i on a pipe)
+
+### COMMAND (pipe mode) ###
+if then
+echo not_reached
+
+### EXIT STATUS (obtained) ###
+121
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: parser: invalid syntax
+
+### VERDICT ###
+PASS

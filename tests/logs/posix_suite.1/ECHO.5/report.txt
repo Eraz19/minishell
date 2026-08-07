@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ECHO.5] -n only counts in the leading flag run
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo hi -n
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+hi -n
+
+### OBTAINED STDOUT ###
+hi -n
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

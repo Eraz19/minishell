@@ -1,0 +1,1 @@
+case zebra in apple) echo a;; *) echo default;; esac

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CASE.7] no matching arm: status 0, nothing runs
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case none in a) echo a;; b) echo b;; esac
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

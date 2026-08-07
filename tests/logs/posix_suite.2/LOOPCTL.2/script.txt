@@ -1,0 +1,5 @@
+for i in a b; do
+	continue
+	echo $i
+done
+echo after

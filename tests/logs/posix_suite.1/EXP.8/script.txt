@@ -1,0 +1,2 @@
+F=dir/file.txt
+echo ${F%.txt} ${F#dir/}

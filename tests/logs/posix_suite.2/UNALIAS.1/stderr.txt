@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: tmp_u1: command not found

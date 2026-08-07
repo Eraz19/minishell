@@ -1,0 +1,3 @@
+set -e
+if false; then echo yes; fi
+echo alive

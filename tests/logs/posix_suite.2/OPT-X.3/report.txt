@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[OPT-X.3] PS4 value replaces the default '+ ' prefix
+### SECTION ###
+[options] option -x / xtrace (POSIX set -x, PS4 prefix)
+
+### COMMAND (pipe mode) ###
+PS4=">>> "
+set -x
+echo custom
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+custom
+
+### OBTAINED STDERR (filtered) ###
+>>> echo custom
+
+### VERDICT ###
+PASS

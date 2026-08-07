@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ENV.5] env -i starts from an empty environment
+### SECTION ###
+[builtins] env — POSIX env utility (regular built-in here)
+
+### COMMAND (pipe mode) ###
+env -i ONLY_5=alone
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+ONLY_5=alone
+
+### OBTAINED STDOUT ###
+ONLY_5=alone
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

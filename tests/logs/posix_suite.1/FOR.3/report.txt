@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[FOR.3] words are expanded before iteration
+### SECTION ###
+[ast] for node (2.9.4.2): word list iteration
+
+### COMMAND (pipe mode) ###
+L="p q"
+for x in $L r; do echo $x; done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+p
+q
+r
+
+### OBTAINED STDOUT ###
+p
+q
+r
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

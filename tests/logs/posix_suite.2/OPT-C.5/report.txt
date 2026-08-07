@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[OPT-C.5] set -C: > to a non-regular file (/dev/null) is allowed
+### SECTION ###
+[options] option -C / noclobber (POSIX set -C, >| bypass)
+
+### COMMAND (pipe mode) ###
+set -C
+echo sink > /dev/null
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.5/valgrind.*.log

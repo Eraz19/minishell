@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[EXP.19] pathname expansion: ? and [...] classes
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo f?.q
+echo [fg]1.q
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+f1.q f2.q
+f1.q g1.q
+
+### OBTAINED STDOUT ###
+f1.q f2.q
+f1.q g1.q
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

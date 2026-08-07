@@ -1,0 +1,3 @@
+set a b c
+shift $#
+echo n=$#

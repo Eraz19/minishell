@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CSB.6] spec form: $( (commands) ) subshell inside cmd-sub
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+echo $( (echo sub) )
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+sub
+
+### OBTAINED STDOUT ###
+sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

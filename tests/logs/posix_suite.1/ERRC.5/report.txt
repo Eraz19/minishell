@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[ERRC.5] not-found in a pipeline stage: parent unaffected
+### SECTION ###
+[semantics] consequences of shell errors (2.8.1 table)
+
+### COMMAND (pipe mode) ###
+nosuchcmd_errc5 | cat
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: nosuchcmd_errc5: command not found
+
+### VERDICT ###
+PASS

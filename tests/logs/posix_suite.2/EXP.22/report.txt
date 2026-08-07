@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXP.22] $0 in -c mode defaults to the shell name
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+0
+
+### OBTAINED STDOUT ###
+0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

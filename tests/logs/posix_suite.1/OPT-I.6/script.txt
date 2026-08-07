@@ -1,0 +1,3 @@
+./noexec_i6.sh
+echo rc=$?
+echo survived

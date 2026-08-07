@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[GRM.5] { and } as arguments are literal
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+echo } {
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+} {
+
+### OBTAINED STDOUT ###
+} {
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

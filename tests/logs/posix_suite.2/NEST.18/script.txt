@@ -1,0 +1,3 @@
+inner() { echo core; }
+outer() { inner; }
+outer

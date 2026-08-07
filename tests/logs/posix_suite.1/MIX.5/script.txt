@@ -1,0 +1,2 @@
+alias upper='tr a-z A-Z'
+echo mixed | upper

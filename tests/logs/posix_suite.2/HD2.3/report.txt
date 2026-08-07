@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[HD2.3] <<- strips tabs but not spaces
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+cat <<-EOF
+	tabbed
+  spaced
+	EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+tabbed
+  spaced
+
+### OBTAINED STDOUT ###
+tabbed
+  spaced
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.3/valgrind.*.log

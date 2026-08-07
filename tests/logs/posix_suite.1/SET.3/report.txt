@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SET.3] set -- clears the positional parameters
+### SECTION ###
+[builtins] set — special built-in (positional parameters; options in suite 10)
+
+### COMMAND (pipe mode) ###
+set a b
+set --
+echo count=$#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+count=0
+
+### OBTAINED STDOUT ###
+count=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

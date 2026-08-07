@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[TRAP.5] trap '' COND sets ignore (empty action listed)
+### SECTION ###
+[builtins] trap — special built-in, POSIX 2.14 trap
+
+### COMMAND (pipe mode) ###
+trap '' INT
+trap
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+trap -- '' INT
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

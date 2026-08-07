@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PWD.3] pwd -P resolves symlinks
+### SECTION ###
+[builtins] pwd — POSIX pwd utility (-L default, -P physical)
+
+### COMMAND (pipe mode) ###
+cd link
+pwd -P
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.3/real
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.3/real
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

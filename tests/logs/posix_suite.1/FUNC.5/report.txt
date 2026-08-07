@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[FUNC.5] function status = last command of the body
+### SECTION ###
+[ast] function definition node (2.9.5)
+
+### COMMAND (pipe mode) ###
+fail_f5() { sh -c "exit 3"; }
+fail_f5
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=3
+
+### OBTAINED STDOUT ###
+rc=3
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

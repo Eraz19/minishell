@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QUO.14] dollar-single-quotes: hex and octal escapes
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo $'\x41\102'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+AB
+
+### OBTAINED STDOUT ###
+AB
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

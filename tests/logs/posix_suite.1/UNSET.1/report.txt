@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[UNSET.1] unset removes a variable
+### SECTION ###
+[builtins] unset — special built-in, POSIX 2.14 unset
+
+### COMMAND (pipe mode) ###
+U_1=val
+unset U_1
+echo [${U_1:-gone}]
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[gone]
+
+### OBTAINED STDOUT ###
+[gone]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

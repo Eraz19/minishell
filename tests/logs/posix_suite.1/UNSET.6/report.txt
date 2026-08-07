@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[UNSET.6] unset with an invalid name -> error
+### SECTION ###
+[builtins] unset — special built-in, POSIX 2.14 unset
+
+### COMMAND (pipe mode) ###
+unset 1bad
+
+### EXIT STATUS (obtained) ###
+14
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: unset: 1bad: invalid name
+
+### VERDICT ###
+PASS

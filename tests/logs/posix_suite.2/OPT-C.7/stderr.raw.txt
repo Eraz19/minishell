@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: no clobber is active and file is regular: 'exists.txt' expanded from 'exists.txt': redirection failed

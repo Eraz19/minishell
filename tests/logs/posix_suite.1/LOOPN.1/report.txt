@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[LOOPN.1] break 2 exits both loops
+### SECTION ###
+[semantics] break / continue with n (2.15, pages @1791/@2006)
+
+### COMMAND (pipe mode) ###
+for i in 1 2; do for j in 1 2; do echo $i$j; break 2; done; done
+echo after
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+11
+after
+
+### OBTAINED STDOUT ###
+11
+after
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

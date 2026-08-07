@@ -1,0 +1,7 @@
+while true; do
+	cat
+	break
+done <<EOF
+a
+b
+EOF

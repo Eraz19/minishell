@@ -1,0 +1,8 @@
+while true; do
+	for i in hit miss; do
+		if true; then
+			case $i in hit) echo case_$i;; esac
+		fi
+	done
+	break
+done

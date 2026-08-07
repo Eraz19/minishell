@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[CSB.3] cmd-sub result splits unquoted, not quoted
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+set -- $(echo a b c)
+echo $#
+set -- "$(echo a b c)"
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+3
+1
+
+### OBTAINED STDOUT ###
+3
+1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

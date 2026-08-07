@@ -1,0 +1,2 @@
+export XP_6="a b'c"
+export -p

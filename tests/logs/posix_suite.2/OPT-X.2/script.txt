@@ -1,0 +1,3 @@
+X=expanded_val
+set -x
+echo $X

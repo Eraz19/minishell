@@ -1,0 +1,4 @@
+f_u5() { echo defined; }
+unset -f f_u5
+f_u5
+echo rc=$?

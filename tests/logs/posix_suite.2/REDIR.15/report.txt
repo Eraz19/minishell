@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[REDIR.15] fds are restored after the command
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+echo first > f_r15.txt
+echo visible
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+visible
+
+### OBTAINED STDOUT ###
+visible
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.15/valgrind.*.log

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[WAIT.6] wait on an unknown pid -> 127 (POSIX)
+### SECTION ###
+[builtins] wait — POSIX wait utility (async pids, $!)
+
+### COMMAND (pipe mode) ###
+wait 99999999
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=127
+
+### OBTAINED STDOUT ###
+rc=127
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

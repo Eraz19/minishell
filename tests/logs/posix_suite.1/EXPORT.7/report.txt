@@ -1,0 +1,85 @@
+### ID / LABEL ###
+[EXPORT.7] export name with no value flags without assigning
+### SECTION ###
+[builtins] export — special built-in, POSIX 2.14 export
+
+### COMMAND (pipe mode) ###
+export XP_7
+export -p
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+export LOGNAME='adouieb'
+export EDITOR='/usr/bin/nano'
+export MANAGERPIDFDID='5398'
+export MAKELEVEL='1'
+export PTYXIS_VERSION='50.1'
+export HOME='/home/adouieb'
+export OLDPWD='/home/adouieb/Documents/minishell'
+export XDG_SESSION_CLASS='user'
+export USERNAME='adouieb'
+export XDG_DATA_DIRS='/home/adouieb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/'
+export MOZ_GMP_PATH='/usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed'
+export SHLVL='2'
+export HISTCONTROL='ignoredups'
+export DISPLAY=':2'
+export JOURNAL_STREAM='10:652997'
+export MAIL='/var/spool/mail/adouieb'
+export XDG_SESSION_TYPE='wayland'
+export XDG_SESSION_EXTRA_DEVICE_ACCESS='render:accel'
+export XDG_SESSION_DESKTOP='gnome'
+export DEBUGINFOD_URLS='ima:enforcing https://debuginfod.fedoraproject.org/ ima:ignore '
+export XDG_MENU_PREFIX='gnome-'
+export TERM='xterm-256color'
+export XDG_CURRENT_DESKTOP='GNOME'
+export MAKEFLAGS=' --no-print-directory'
+export LANG='en_US.UTF-8'
+export MFLAGS='--no-print-directory'
+export FLATPAK_TTY_PROGRESS='1'
+export SYSTEMD_EXEC_PID='201495'
+export PTYXIS_PROFILE='8c28747adc42fb12f3ea6c5e69e4e189'
+export XDG_CACHE_HOME='/goinfre/adouieb/.cache'
+export QT_IM_MODULE='ibus'
+export LC_ALL='C'
+export GNOME_SETUP_DISPLAY='unix:/tmp/.X11-unix/X3'
+export XDG_RUNTIME_DIR='/run/user/44523220'
+export XMODIFIERS='@im=ibus'
+export INVOCATION_ID='8a0eddc1376d4966a099e1e96d3266b1'
+export PWD='/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/EXPORT.7'
+export KRB5CCNAME='KCM:'
+export SHELL='/bin/bash'
+export WAYLAND_DISPLAY='wayland-0'
+export SSH_AUTH_SOCK='/run/user/44523220/gcr/ssh'
+export QT_IM_MODULES='wayland;ibus'
+export XP_7=''
+export MEMORY_PRESSURE_WATCH='/sys/fs/cgroup/user.slice/user-44523220.slice/user@44523220.service/app.slice/dbus-:1.2-org.gnome.Ptyxis@0.service/memory.pressure'
+export _='/usr/bin/timeout'
+export COLORTERM='truecolor'
+export MEMORY_PRESSURE_WRITE='c29tZSAyMDAwMDAgMjAwMDAwMAA='
+export GDM_LANG='en_US.UTF-8'
+export DESKTOP_SESSION='gnome'
+export HOSTNAME='f6r13s12.paris.42.school'
+export MAKE_TERMOUT='/dev/pts/1'
+export XAUTHORITY='/run/user/44523220/.mutter-Xwaylandauth.Y8IZT3'
+export MANAGERPID='197752'
+export VTE_VERSION='8401'
+export GDMSESSION='gnome'
+export PATH='/home/adouieb/.local/funcheck/host:/usr/lib64/ccache:/usr/local/bin:/usr/bin'
+export MAKE_TERMERR='/dev/pts/1'
+export HISTSIZE='1000'
+export USER='adouieb'
+export FT_MAIL='adouieb@learner.42.tech'
+export LESSOPEN='||/usr/bin/lesspipe.sh %s'
+export DOCKER_HOST='unix:///run/user/44523220/podman/podman.sock'
+export DEBUGINFOD_IMA_CERT_PATH='/etc/keys/ima:'
+export DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/44523220/bus'
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

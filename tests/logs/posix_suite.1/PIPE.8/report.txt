@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[PIPE.8] pipeline commands run in subshells (var does not leak)
+### SECTION ###
+[ast] pipeline node (2.9.2): |, status, ! negation
+
+### COMMAND (pipe mode) ###
+PV_8=outer
+echo x | PV_8=inner cat > /dev/null
+echo $PV_8
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+outer
+
+### OBTAINED STDOUT ###
+outer
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[FSP.2] default IFS: runs of blanks collapse, edges stripped
+### SECTION ###
+[words] field splitting (2.6.5): the delimiter algorithm
+
+### COMMAND (pipe mode) ###
+x="  a   b  "
+set -- $x
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+2
+
+### OBTAINED STDOUT ###
+2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

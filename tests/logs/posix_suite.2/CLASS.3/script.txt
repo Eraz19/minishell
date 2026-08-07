@@ -1,0 +1,2 @@
+CL_3=persists :
+echo [$CL_3]

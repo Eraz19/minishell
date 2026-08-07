@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[NEST.8] cmd-sub + redirection + function, all inside a loop
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+f() { echo one_$(echo shot) > gen.txt; }
+for i in 1 2; do
+	f
+	cat gen.txt
+done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one_shot
+one_shot
+
+### OBTAINED STDOUT ###
+one_shot
+one_shot
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

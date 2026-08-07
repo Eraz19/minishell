@@ -1,0 +1,3 @@
+RO_5=first
+readonly RO_5
+RO_5=second

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[IF.1] true condition runs then
+### SECTION ###
+[ast] if node (2.9.4.4): then / elif / else, status
+
+### COMMAND (pipe mode) ###
+if true; then echo yes; fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+yes
+
+### OBTAINED STDOUT ###
+yes
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[FOR.1] for iterates the word list in order
+### SECTION ###
+[ast] for node (2.9.4.2): word list iteration
+
+### COMMAND (pipe mode) ###
+for x in one two three; do echo $x; done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one
+two
+three
+
+### OBTAINED STDOUT ###
+one
+two
+three
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

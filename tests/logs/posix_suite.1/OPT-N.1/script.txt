@@ -1,0 +1,1 @@
+minishell -n -c echo should_not_print

@@ -1,0 +1,3 @@
+readonly CL_1=v
+unset CL_1
+echo not_reached

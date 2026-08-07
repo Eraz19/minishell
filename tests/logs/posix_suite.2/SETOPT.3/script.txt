@@ -1,0 +1,1 @@
+set -o no_such_option_xyz

@@ -1,0 +1,5 @@
+alias a_u2='echo a'
+alias b_u2='echo b'
+unalias -a
+a_u2
+echo rc=$?

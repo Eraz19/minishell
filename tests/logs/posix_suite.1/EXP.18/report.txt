@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXP.18] pathname expansion: * matches files in cwd
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo *.gl
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+aa.gl bb.gl
+
+### OBTAINED STDOUT ###
+aa.gl bb.gl
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

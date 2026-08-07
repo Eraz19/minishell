@@ -1,0 +1,4 @@
+set -- outer1 outer2
+f4() { :; }
+f4 inner
+echo $1:$#

@@ -1,0 +1,2 @@
+echo first > f_r15.txt
+echo visible

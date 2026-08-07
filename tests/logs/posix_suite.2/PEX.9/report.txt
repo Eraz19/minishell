@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[PEX.9] default word is itself expanded
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+d=def
+echo ${u_pex9:-$d} ${u_pex9b:-$(echo sub)}
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+def sub
+
+### OBTAINED STDOUT ###
+def sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PEX.9/valgrind.*.log

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[RED2.10] redirection inside a pipeline stage wins over the pipe
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+echo a > redirf | cat
+cat redirf
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+
+### OBTAINED STDOUT ###
+a
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

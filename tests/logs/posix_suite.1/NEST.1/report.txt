@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[NEST.1] cmd-sub inside a function body
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+f() { echo got:$(echo inner); }
+f
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+got:inner
+
+### OBTAINED STDOUT ###
+got:inner
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

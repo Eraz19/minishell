@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: no_such_command_xyz_42: command not found

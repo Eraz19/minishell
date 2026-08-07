@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[MIX.11] IFS-driven field splitting of a cmd-sub inside a for
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+IFS=:
+for part in $(echo a:b:c); do echo p=$part; done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+p=a
+p=b
+p=c
+
+### OBTAINED STDOUT ###
+p=a
+p=b
+p=c
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.11/valgrind.*.log

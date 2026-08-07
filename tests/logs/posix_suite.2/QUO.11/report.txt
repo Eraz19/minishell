@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QUO.11] dollar-single-quotes: 	 yields a tab
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo $'a\tb'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a	b
+
+### OBTAINED STDOUT ###
+a	b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

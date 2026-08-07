@@ -1,0 +1,2 @@
+cd ./no_such_dir_xyz
+echo rc=$?

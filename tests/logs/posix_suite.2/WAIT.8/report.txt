@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[WAIT.8] wait for several pids
+### SECTION ###
+[builtins] wait — POSIX wait utility (async pids, $!)
+
+### COMMAND (pipe mode) ###
+true &
+P1=$!
+sleep 0.05 &
+P2=$!
+wait $P1 $P2
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.8/valgrind.*.log

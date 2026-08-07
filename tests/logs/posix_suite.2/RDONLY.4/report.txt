@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[RDONLY.4] readonly -p output format: readonly NAME='value'
+### SECTION ###
+[builtins] readonly — special built-in, POSIX 2.14 readonly
+
+### COMMAND (pipe mode) ###
+readonly RO_4=v4
+readonly -p
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+readonly RO_4='v4'
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

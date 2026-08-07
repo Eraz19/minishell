@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ALIAS.8] alias is only substituted in command position
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias notcmd_8='SHOULD_NOT_EXPAND'
+echo notcmd_8
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+notcmd_8
+
+### OBTAINED STDOUT ###
+notcmd_8
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

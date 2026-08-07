@@ -1,0 +1,30 @@
+### ID / LABEL ###
+[HD.9] heredoc redirected onto a whole loop
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+while true; do
+	cat
+	break
+done <<EOF
+a
+b
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+b
+
+### OBTAINED STDOUT ###
+a
+b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.9/valgrind.*.log

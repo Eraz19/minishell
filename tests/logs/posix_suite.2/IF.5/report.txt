@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[IF.5] condition may be a pipeline / list
+### SECTION ###
+[ast] if node (2.9.4.4): then / elif / else, status
+
+### COMMAND (pipe mode) ###
+if echo probe | grep -q probe; then echo piped; fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+piped
+
+### OBTAINED STDOUT ###
+piped
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/IF.5/valgrind.*.log

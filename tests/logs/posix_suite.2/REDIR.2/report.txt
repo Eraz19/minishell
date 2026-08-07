@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[REDIR.2] > truncates an existing file
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+echo first > f_r2.txt
+echo second > f_r2.txt
+cat f_r2.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+second
+
+### OBTAINED STDOUT ###
+second
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.2/valgrind.*.log

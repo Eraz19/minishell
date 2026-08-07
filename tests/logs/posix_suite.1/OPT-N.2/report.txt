@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[OPT-N.2] -n: syntax errors are still reported
+### SECTION ###
+[options] option -n / noexec (POSIX set -n)
+
+### COMMAND (argv mode) ###
+minishell -n -c if then
+
+### EXIT STATUS (obtained) ###
+121
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: parser: invalid syntax
+
+### VERDICT ###
+PASS

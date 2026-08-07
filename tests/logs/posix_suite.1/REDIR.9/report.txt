@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[REDIR.9] >| clobbers regardless of noclobber
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+set -C
+echo old > f_r9.txt 2>/dev/null || :
+echo forced >| f_r9.txt
+cat f_r9.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+forced
+
+### OBTAINED STDOUT ###
+forced
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CLASS.6] standalone assignment sets a shell variable, exit 0
+### SECTION ###
+[builtins] built-in classification (POSIX 2.8.1 / 2.9.1)
+
+### COMMAND (pipe mode) ###
+CL_6=plain
+echo $CL_6 rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+plain rc=0
+
+### OBTAINED STDOUT ###
+plain rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,2 @@
+d=def
+echo ${u_pex9:-$d} ${u_pex9b:-$(echo sub)}

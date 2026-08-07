@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[UNSET.3] unset removes several names at once
+### SECTION ###
+[builtins] unset — special built-in, POSIX 2.14 unset
+
+### COMMAND (pipe mode) ###
+A_3=1 B_3=2
+unset A_3 B_3
+echo [${A_3:-x}][${B_3:-y}]
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[x][y]
+
+### OBTAINED STDOUT ###
+[x][y]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

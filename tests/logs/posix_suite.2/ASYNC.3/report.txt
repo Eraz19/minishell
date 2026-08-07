@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[ASYNC.3] async command really runs (observable side effect)
+### SECTION ###
+[ast] list node (2.9.3): sequential ; and async &
+
+### COMMAND (pipe mode) ###
+echo bg_output > bg.txt &
+wait
+cat bg.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+bg_output
+
+### OBTAINED STDOUT ###
+bg_output
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASYNC.3/valgrind.*.log

@@ -1,0 +1,2 @@
+for i in x y; do echo $i; done > loop_r13.txt
+cat loop_r13.txt

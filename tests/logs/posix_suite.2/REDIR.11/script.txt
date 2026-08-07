@@ -1,0 +1,3 @@
+pwd > pwd_r11.txt
+test -s pwd_r11.txt
+echo rc=$?

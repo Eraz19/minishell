@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ANDOR.5] left-to-right chain of mixed operators
+### SECTION ###
+[ast] and-or node (2.9.3): && ||
+
+### COMMAND (pipe mode) ###
+true && false || echo fallback
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+fallback
+
+### OBTAINED STDOUT ###
+fallback
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

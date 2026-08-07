@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[CD.7] cd failure does not abort the shell (cd is not special)
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd ./no_such_dir_xyz
+echo survived
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+survived
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: cd: /home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.7/no_such_dir_xyz: No such file or directory
+/home/adouieb/Documents/minishell/minishell: cd: builtin error
+
+### VERDICT ###
+PASS

@@ -1,0 +1,2 @@
+set -- m n
+for x; do echo $x; done

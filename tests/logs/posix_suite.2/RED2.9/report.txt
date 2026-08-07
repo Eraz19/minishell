@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[RED2.9] heredoc input combined with > output
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+cat <<EOF >hd.out
+body line
+EOF
+cat hd.out
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+body line
+
+### OBTAINED STDOUT ###
+body line
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.9/valgrind.*.log

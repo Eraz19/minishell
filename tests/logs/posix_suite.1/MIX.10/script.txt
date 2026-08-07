@@ -1,0 +1,6 @@
+produce() { cat <<EOF
+raw
+EOF
+}
+consume() { tr a-z A-Z; }
+produce | consume

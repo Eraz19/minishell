@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[QUO.8] quoted reserved word is not a reserved word
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+"if" true
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=127
+
+### OBTAINED STDOUT ###
+rc=127
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: if: command not found
+
+### VERDICT ###
+PASS

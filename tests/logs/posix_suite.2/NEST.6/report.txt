@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[NEST.6] cmd-sub inside a heredoc body inside a function
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+f() { cat <<EOF
+val=$(echo generated)
+EOF
+}
+f
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+val=generated
+
+### OBTAINED STDOUT ###
+val=generated
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.6/valgrind.*.log

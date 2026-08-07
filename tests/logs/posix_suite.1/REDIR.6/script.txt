@@ -1,0 +1,2 @@
+ls no_such_entry_r6 2> err_r6.txt
+grep -c no_such_entry_r6 err_r6.txt

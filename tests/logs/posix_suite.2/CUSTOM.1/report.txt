@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CUSTOM.1] example: exact stdout
+### SECTION ###
+[custom] custom cases
+
+### COMMAND (pipe mode) ###
+echo hello
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+hello
+
+### OBTAINED STDOUT ###
+hello
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

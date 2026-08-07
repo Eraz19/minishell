@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[IGNEOF.1] non-interactive: ignoreeof does not block end-of-input
+### SECTION ###
+[options] option -o ignoreeof (POSIX set -o ignoreeof)
+
+### COMMAND (pipe mode) ###
+set -o ignoreeof
+echo done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+done
+
+### OBTAINED STDOUT ###
+done
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

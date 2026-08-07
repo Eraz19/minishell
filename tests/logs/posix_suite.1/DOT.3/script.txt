@@ -1,0 +1,2 @@
+. ./nope_dot3.sh
+echo after

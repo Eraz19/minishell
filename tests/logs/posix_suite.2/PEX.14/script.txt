@@ -1,0 +1,3 @@
+x=file.c
+s=.c
+echo ${x%$s}.o

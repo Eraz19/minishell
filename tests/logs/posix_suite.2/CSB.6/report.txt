@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CSB.6] spec form: $( (commands) ) subshell inside cmd-sub
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+echo $( (echo sub) )
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+sub
+
+### OBTAINED STDOUT ###
+sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.6/valgrind.*.log

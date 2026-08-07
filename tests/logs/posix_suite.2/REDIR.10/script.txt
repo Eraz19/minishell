@@ -1,0 +1,3 @@
+true <> rw_r10.txt
+test -e rw_r10.txt
+echo rc=$?

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PIPE.9] early SIGPIPE termination is not an error for the reader
+### SECTION ###
+[ast] pipeline node (2.9.2): |, status, ! negation
+
+### COMMAND (pipe mode) ###
+yes | head -1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+y
+
+### OBTAINED STDOUT ###
+y
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

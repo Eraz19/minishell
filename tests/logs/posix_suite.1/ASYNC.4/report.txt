@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[ASYNC.4] foreground work continues while & job runs
+### SECTION ###
+[ast] list node (2.9.3): sequential ; and async &
+
+### COMMAND (pipe mode) ###
+sleep 0.3 &
+echo immediate
+wait
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+immediate
+
+### OBTAINED STDOUT ###
+immediate
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

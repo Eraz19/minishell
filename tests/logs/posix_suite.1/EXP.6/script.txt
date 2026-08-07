@@ -1,0 +1,2 @@
+SET_E6=yes
+echo [${SET_E6:+alt}] [${UNSET_E6:+alt}]

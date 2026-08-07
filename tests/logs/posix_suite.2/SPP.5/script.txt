@@ -1,0 +1,2 @@
+set -f
+case $- in *f*) echo has_f ;; *) echo no_f ;; esac

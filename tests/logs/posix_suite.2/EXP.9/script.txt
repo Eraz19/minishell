@@ -1,0 +1,1 @@
+echo got:$(echo inner)

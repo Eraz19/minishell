@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[SUB.2] subshell exit status propagates
+### SECTION ###
+[ast] subshell node (2.9.4.3): ( ) isolation
+
+### COMMAND (pipe mode) ###
+(exit 3)
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=3
+
+### OBTAINED STDOUT ###
+rc=3
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

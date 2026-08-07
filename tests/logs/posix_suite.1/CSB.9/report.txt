@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CSB.9] quoted close-paren inside $( ) does not terminate it
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+echo $(echo ")")
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+)
+
+### OBTAINED STDOUT ###
+)
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

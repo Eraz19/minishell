@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[FOR.6] glob expansion feeds the word list
+### SECTION ###
+[ast] for node (2.9.4.2): word list iteration
+
+### COMMAND (pipe mode) ###
+for f in *.fw; do echo $f; done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+it1.fw
+it2.fw
+
+### OBTAINED STDOUT ###
+it1.fw
+it2.fw
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

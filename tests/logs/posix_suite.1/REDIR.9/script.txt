@@ -1,0 +1,4 @@
+set -C
+echo old > f_r9.txt 2>/dev/null || :
+echo forced >| f_r9.txt
+cat f_r9.txt

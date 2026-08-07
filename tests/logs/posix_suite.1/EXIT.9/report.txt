@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXIT.9] exit 300 -> unspecified; project contract n % 256
+### SECTION ###
+[builtins] exit — special built-in, POSIX 2.14 exit
+
+### COMMAND (pipe mode) ###
+exit 300
+
+### EXIT STATUS (obtained) ###
+44
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: warning: unspecified behaviour: 300: POSIX: exit: DESCRIPTION: If n is specified and [...] has a value greater than 256 but not corresponding to an exit status the shell assigns to commands terminated by a valid signal, the wait status of the shell or subshell is unspecified.: implemented as: wait status representing special builtin error
+
+### VERDICT ###
+PASS

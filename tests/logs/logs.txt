@@ -1,0 +1,1296 @@
+minishell POSIX suite
+binary : /home/adouieb/Documents/minishell/minishell
+logs   : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2
+mode   : valgrind (--leak), timeout 300s
+
+--- [options] invocation: -c command string (POSIX sh: -c) ---
+✔ [INVOC-C.1] -c runs the command string
+✔ [INVOC-C.2] -c empty string does nothing, exit 0
+✔ [INVOC-C.3] -c exit status is last command's
+✔ [INVOC-C.4] -c command-not-found -> 127
+✔ [INVOC-C.5] -c: next operand becomes $0
+✔ [INVOC-C.6] -c: operands after $0 become $1 $2
+✔ [INVOC-C.7] -c with no command string -> usage error
+
+--- [options] invocation: -s / stdin / script operand ---
+✔ [INVOC-S.1] no operands: reads commands from stdin
+✔ [INVOC-S.2] -s explicitly reads from stdin
+✔ [INVOC-S.3] -s: operands become positional parameters
+✔ [INVOC-F.1] script file operand is executed
+✔ [INVOC-F.2] script operand: $0 = script path, $1.. = args
+✔ [INVOC-F.3] script not found -> 127 (POSIX sh exit status)
+✔ [INVOC-F.4] script not readable -> 126
+✔ [INVOC-F.5] empty script -> exit 0
+✔ [INVOC-O.1] invalid command-line option -> error
+✔ [INVOC-O.2] -- ends option parsing (script named like an option dir)
+
+--- [options] option -a / allexport (POSIX set -a) ---
+✔ [OPT-A.1] set -a: new variable is exported to children
+✔ [OPT-A.2] without -a: plain assignment is NOT exported
+✔ [OPT-A.3] set -a also exports assignment to a pre-existing variable
+✔ [OPT-A.4] set +a turns allexport back off
+✔ [OPT-A.5] set -o allexport is the same option
+✔ [OPT-A.6] command line -a
+✔ [OPT-A.7] set -o reports allexport on
+
+--- [options] option -C / noclobber (POSIX set -C, >| bypass) ---
+✖ [OPT-C.1] set -C: > refuses to overwrite an existing regular file
+      command  : set -C
+               echo new > exists.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.1/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: no clobber is active and file is regular: 'exists.txt' expanded from 'exists.txt': redirection failed
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.1/report.txt
+✖ [OPT-C.2] set -C: > still creates a new file
+      command  : set -C
+               echo fresh > new.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.2/report.txt
+✖ [OPT-C.3] set -C: >| forces the overwrite (clobber operator)
+      command  : set -C
+               echo forced >| f.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.3/report.txt
+✖ [OPT-C.4] set -C: >> append to existing file is allowed
+      command  : set -C
+               echo two >> f.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.4/report.txt
+✖ [OPT-C.5] set -C: > to a non-regular file (/dev/null) is allowed
+      command  : set -C
+               echo sink > /dev/null
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.5/report.txt
+✖ [OPT-C.6] set +C restores clobbering
+      command  : set -C
+               set +C
+               echo clobbered > f.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.6/report.txt
+✖ [OPT-C.7] shell survives a noclobber refusal (non-special command)
+      command  : set -C
+               echo new > exists.txt
+               echo survived
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.7/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: no clobber is active and file is regular: 'exists.txt' expanded from 'exists.txt': redirection failed
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/OPT-C.7/report.txt
+
+--- [options] option -e / errexit ---
+✔ [OPT-E.1] set -e: shell exits on a failing command
+✔ [OPT-E.2] set -e: failure in && / || does not exit
+✔ [OPT-E.3] set -e: failing if-condition does not exit
+✔ [OPT-E.4] set -e: ! negated failure does not exit
+✔ [OPT-E.5] command line -e
+
+--- [options] option -f / noglob (POSIX set -f) ---
+✔ [OPT-F.1] set -f: pathname expansion is disabled
+✔ [OPT-F.2] without -f: the same pattern expands
+✔ [OPT-F.3] set +f re-enables globbing
+✔ [OPT-F.4] command line -f
+✔ [OPT-F.5] set -o noglob is the same option
+
+--- [options] option -h / command hashing (POSIX set -h) ---
+✔ [OPT-H.1] set -h: commands still resolve and run
+✔ [OPT-H.2] set -h: repeated PATH lookups keep working
+✔ [OPT-H.3] set +h: disabling hashing keeps commands runnable
+
+--- [options] option -i / interactive (forced with -s -i on a pipe) ---
+✔ [OPT-I.1] interactive: EOF exits cleanly with last status
+✔ [OPT-I.2] interactive: shell survives command-not-found
+✔ [OPT-I.3] interactive: shell survives a complete syntax error
+✔ [OPT-I.4] non-interactive: syntax error aborts with 121 (project code)
+✔ [OPT-I.5] non-interactive: command-not-found does not abort
+✔ [OPT-I.6] non-interactive: command-not-executable does not abort
+
+--- [options] option -n / noexec (POSIX set -n) ---
+✔ [OPT-N.1] -n: commands are parsed but not executed
+✔ [OPT-N.2] -n: syntax errors are still reported
+✔ [OPT-N.3] set -n mid-script stops executing the rest
+✔ [OPT-N.4] -n: no side effects happen (no file created)
+
+--- [options] option -u / nounset — TD, not implemented (--td to run) ---
+◌ [OPT-U.1] set -u: expanding an unset variable is an error TD: option not implemented — enable with --td
+◌ [OPT-U.2] set -u: ${var:-default} is still fine TD: option not implemented — enable with --td
+◌ [OPT-U.3] set -u: set variables expand normally TD: option not implemented — enable with --td
+
+--- [options] option -v / verbose — TD, not implemented (--td to run) ---
+◌ [OPT-V.1] set -v: input lines are echoed to stderr TD: option not implemented — enable with --td
+◌ [OPT-V.2] command line -v echoes the -c string TD: option not implemented — enable with --td
+
+--- [options] option -x / xtrace (POSIX set -x, PS4 prefix) ---
+✔ [OPT-X.1] set -x: traces the expanded command on stderr
+✔ [OPT-X.2] xtrace shows EXPANDED words, not the source text
+✔ [OPT-X.3] PS4 value replaces the default '+ ' prefix
+✔ [OPT-X.4] set +x stops tracing
+✔ [OPT-X.5] xtrace goes to stderr, never stdout
+✔ [OPT-X.6] set -o xtrace is the same option
+
+--- [options] option -o pipefail (POSIX.1-2024 set -o pipefail) ---
+✖ [PIPEFAIL.1] default: pipeline status = last command
+      command  : false | true
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.1/report.txt
+✖ [PIPEFAIL.2] pipefail: any failing element fails the pipeline
+      command  : set -o pipefail
+               false | true
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.2/report.txt
+✖ [PIPEFAIL.3] pipefail: status of the failing element is kept
+      command  : set -o pipefail
+               sh -c "exit 3" | true | true
+               echo rc=$?
+      VALGRIND (fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.3/report.txt
+✖ [PIPEFAIL.4] pipefail: all-success pipeline still returns 0
+      command  : set -o pipefail
+               echo data | cat > /dev/null
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.4/report.txt
+✖ [PIPEFAIL.5] pipefail + ! negation
+      command  : set -o pipefail
+               ! false | true
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.5/report.txt
+✖ [PIPEFAIL.6] set +o pipefail restores last-command semantics
+      command  : set -o pipefail
+               set +o pipefail
+               false | true
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPEFAIL.6/report.txt
+✔ [PIPEFAIL.7] set -o reports pipefail on
+
+--- [options] option -o ignoreeof (POSIX set -o ignoreeof) ---
+✔ [IGNEOF.1] non-interactive: ignoreeof does not block end-of-input
+✔ [IGNEOF.2] set -o reports ignoreeof on
+○ [IGNEOF.3] interactive Ctrl-D is ignored, shell re-prompts manual: needs a real tty (a closed-stdin -s -i run would loop forever)
+
+--- [options] set: option management (set -o / +o listings) ---
+✔ [SETOPT.1] set -o lists every option with its state
+✔ [SETOPT.2] set +o prints re-inputtable option commands
+✔ [SETOPT.3] set -o with an unknown option name -> error
+✔ [SETOPT.4] toggling by flag is visible in set -o listing
+✔ [SETOPT.5] set with an invalid flag -> error, shell reports it
+
+--- [builtins] colon (:) — special built-in, POSIX 2.14 ---
+✔ [COLON.1] colon alone: no output, exit 0
+✔ [COLON.2] colon ignores its arguments
+✔ [COLON.3] colon arguments are still expanded (side effects happen)
+✔ [COLON.4] colon resets $? to 0
+
+--- [builtins] echo — XBD/XCU echo utility ---
+✔ [ECHO.1] echo with no operand prints a single newline
+✔ [ECHO.2] echo joins operands with single spaces
+✔ [ECHO.3] echo -n suppresses the trailing newline
+✔ [ECHO.4] clustered/repeated -n flags (-nnn, -n -n)
+✔ [ECHO.5] -n only counts in the leading flag run
+✔ [ECHO.6] unknown dash-word is an operand, not a flag
+✔ [ECHO.7] echo -e enables backslash escapes
+✔ [ECHO.8] echo -e '\n' makes a real newline
+✔ [ECHO.9] without -e escapes stay literal
+✔ [ECHO.10] echo -e '\c' stops all output (no newline)
+✔ [ECHO.11] echo prints expanded variables
+
+--- [builtins] pwd — POSIX pwd utility (-L default, -P physical) ---
+✔ [PWD.1] pwd prints the current directory
+✔ [PWD.2] pwd -L equals pwd (logical is the default)
+✔ [PWD.3] pwd -P resolves symlinks
+✔ [PWD.4] pwd -L keeps the logical (symlinked) path
+✔ [PWD.5] pwd tracks cd
+
+--- [builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P) ---
+✔ [CD.1] cd <dir> changes the working directory
+✔ [CD.2] cd with no operand goes to $HOME
+✔ [CD.3] cd with unset HOME -> error
+✔ [CD.4] cd - goes to OLDPWD and prints the new directory
+✔ [CD.5] cd updates PWD and OLDPWD (exported)
+✔ [CD.6] cd to a nonexistent directory -> error, message, non-zero
+✔ [CD.7] cd failure does not abort the shell (cd is not special)
+✔ [CD.8] cd with too many operands -> error
+✔ [CD.9] cd to a plain file -> error (ENOTDIR)
+✔ [CD.10] cd .. resolves logically against PWD
+✔ [CD.11] CDPATH: matching entry is used and the path is printed
+✔ [CD.12] cd -P enters the physical directory
+
+--- [builtins] env — POSIX env utility (regular built-in here) ---
+✔ [ENV.1] env prints NAME=value lines of the environment
+✔ [ENV.2] env reflects exported variables
+✔ [ENV.3] env does NOT show unexported shell variables
+✔ [ENV.4] env NAME=value adds to the printed environment
+✔ [ENV.5] env -i starts from an empty environment
+✔ [ENV.6] POSIX: env with a utility operand runs the utility
+
+--- [builtins] exit — special built-in, POSIX 2.14 exit ---
+✔ [EXIT.1] exit with no operand uses $? of the last command
+✔ [EXIT.2] exit 0
+✔ [EXIT.3] exit 5
+✔ [EXIT.4] exit 255 (top of the POSIX range)
+✔ [EXIT.5] exit -- 42 (leading -- is skipped)
+✔ [EXIT.6] exit stops the script immediately
+✔ [EXIT.7] exit non-numeric -> project contract 122 + UB notice
+✔ [EXIT.8] exit 256 -> unspecified; project contract 122
+✔ [EXIT.9] exit 300 -> unspecified; project contract n % 256
+✔ [EXIT.10] exit with too many operands -> error (still exits, 91)
+
+--- [builtins] export — special built-in, POSIX 2.14 export ---
+✔ [EXPORT.1] export NAME=value is visible to children
+✔ [EXPORT.2] export an already-set variable by name
+✔ [EXPORT.3] export multiple assignments at once
+✔ [EXPORT.4] exported value reaches an external command's envp
+✔ [EXPORT.5] export -p output format: export NAME='value'
+✔ [EXPORT.6] export -p single-quotes embedded quotes
+✔ [EXPORT.7] export name with no value flags without assigning
+✔ [EXPORT.8] export invalid identifier -> assignment error 124, shell aborts
+✔ [EXPORT.9] export with no arguments: project UB choice, exit 0
+
+--- [builtins] readonly — special built-in, POSIX 2.14 readonly ---
+✔ [RDONLY.1] assignment to a readonly variable fails
+✔ [RDONLY.2] readonly variable keeps its value
+✔ [RDONLY.3] unset of a readonly variable fails and aborts (special)
+✔ [RDONLY.4] readonly -p output format: readonly NAME='value'
+✔ [RDONLY.5] readonly on an existing variable locks it
+✔ [RDONLY.6] readonly assignment failure aborts a non-interactive shell
+
+--- [builtins] set — special built-in (positional parameters; options in suite 10) ---
+✔ [SET.1] set with no args lists shell variables as NAME='value'
+✔ [SET.2] set a b c replaces the positional parameters
+✔ [SET.3] set -- clears the positional parameters
+✔ [SET.4] set -- protects operands that look like options
+✔ [SET.5] positional parameters feed $@ expansion
+✔ [SET.6] $* joins with the first IFS character
+
+--- [builtins] unset — special built-in, POSIX 2.14 unset ---
+✔ [UNSET.1] unset removes a variable
+✔ [UNSET.2] unset -v is the explicit variable form
+✔ [UNSET.3] unset removes several names at once
+✔ [UNSET.4] unset of a variable that does not exist is NOT an error
+✔ [UNSET.5] unset -f removes a function definition
+✔ [UNSET.6] unset with an invalid name -> error
+✔ [UNSET.7] unset with no operand -> usage error
+✔ [UNSET.8] unset variable no longer reaches children
+
+--- [builtins] alias / unalias — POSIX alias substitution ---
+✔ [ALIAS.1] define and use an alias
+✔ [ALIAS.2] alias with arguments appended after substitution
+✔ [ALIAS.3] alias (no operand) lists definitions as name='value'
+✔ [ALIAS.4] alias NAME prints that single definition
+✔ [ALIAS.5] alias of an unknown name -> non-zero + diagnostic
+✔ [ALIAS.6] alias redefinition: last definition wins
+✔ [ALIAS.7] recursive alias does not loop forever
+✔ [ALIAS.8] alias is only substituted in command position
+✔ [UNALIAS.1] unalias removes the definition
+✔ [UNALIAS.2] unalias -a removes everything
+✔ [UNALIAS.3] unalias of an unknown name -> non-zero + diagnostic
+✔ [UNALIAS.4] unalias with no operand -> usage error
+
+--- [builtins] wait — POSIX wait utility (async pids, $!) ---
+✔ [WAIT.1] wait with no children returns 0
+✖ [WAIT.2] wait for a background job
+      command  : sleep 0.1 &
+               wait
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.2/report.txt
+✖ [WAIT.3] wait $! returns that child's exit status (success)
+      command  : true &
+               wait $!
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.3/report.txt
+✖ [WAIT.4] wait $! returns that child's exit status (failure)
+      command  : false &
+               wait $!
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.4/report.txt
+✖ [WAIT.5] wait $! propagates a custom exit status
+      command  : /home/adouieb/Documents/minishell/tests/test_exec 7 &
+               wait $!
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.5/valgrind.*.log
+      obtained stderr (filtered):
+        | [TEST] ----------------------------------
+        | [TEST] argc => 2
+        | [TEST] ----------------------------------
+        | [TEST] argv[0] => [/home/adouieb/Documents/minishell/tests/test_exec]
+        | [TEST] argv[1] => [7]
+        | [TEST] ----------------------------------
+        | [TEST] envp[0] => [EDITOR=/usr/bin/nano]
+        | [TEST] envp[1] => [LOGNAME=adouieb]
+        | [TEST] envp[2] => [MANAGERPIDFDID=5398]
+        | [TEST] envp[3] => [PTYXIS_VERSION=50.1]
+        | [TEST] envp[4] => [HOME=/home/adouieb]
+        | [TEST] envp[5] => [OLDPWD=/home/adouieb/Documents/minishell]
+        | (... truncated, see log)
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.5/report.txt
+✔ [WAIT.6] wait on an unknown pid -> 127 (POSIX)
+✔ [WAIT.7] wait with a non-numeric operand -> error
+✖ [WAIT.8] wait for several pids
+      command  : true &
+               P1=$!
+               sleep 0.05 &
+               P2=$!
+               wait $P1 $P2
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/WAIT.8/report.txt
+
+--- [builtins] trap — special built-in, POSIX 2.14 trap ---
+✔ [TRAP.1] trap with no operands and no traps set prints nothing
+✔ [TRAP.2] trap lists as: trap -- 'action' COND
+✔ [TRAP.3] trap -p prints requested conditions
+✔ [TRAP.4] trap - COND resets to default (listing empties)
+✔ [TRAP.5] trap '' COND sets ignore (empty action listed)
+✔ [TRAP.6] numeric condition: 2 means INT
+✔ [TRAP.7] invalid condition name -> error, shell continues
+✔ [TRAP.8] EXIT trap action runs when the shell exits (POSIX)
+✔ [TRAP.9] trap EXIT can be set via condition 0
+
+--- [builtins] built-in classification (POSIX 2.8.1 / 2.9.1) ---
+✔ [CLASS.1] special built-in error aborts a non-interactive shell
+✔ [CLASS.2] intrinsic built-in error does NOT abort (cd)
+✔ [CLASS.3] assignment prefix on a special built-in persists (POSIX)
+✔ [CLASS.4] assignment prefix on an external command does NOT persist
+✔ [CLASS.5] assignment prefix reaches the child environment only
+✔ [CLASS.6] standalone assignment sets a shell variable, exit 0
+
+--- [ast] simple command (2.9.1): words, assignments, search order ---
+✔ [SCMD.1] external command found through PATH
+✔ [SCMD.2] external command found through PATH
+✔ [SCMD.3] argv words reach the child in order
+✔ [SCMD.4] quoting keeps a word whole through exec
+✔ [SCMD.5] interactive command not found -> 127 and shell continues
+✔ [SCMD.6] non-interactive file without +x -> 126 and shell continues
+✔ [SCMD.7] empty command line does nothing, $? untouched
+✔ [SCMD.8] $? special parameter tracks the last command
+✔ [SCMD.9] comment lines are ignored
+✔ [SCMD.10] line continuation joins the two lines
+✔ [SCMD.11] ENOEXEC binary: diagnosed, no crash, shell continues
+
+--- [ast] expansions inside a simple command (2.6) ---
+✔ [EXP.1] parameter expansion $var and ${var}
+✔ [EXP.2] unset variable expands to nothing (not an error)
+✔ [EXP.3] ${var:-default} on unset
+✔ [EXP.4] ${var:=assign} assigns and expands
+✔ [EXP.5] ${var:?message} on unset -> expansion error 125
+✔ [EXP.6] ${var:+alternate} only when set
+✔ [EXP.7] ${#var} string length
+✔ [EXP.8] ${var%pat} / ${var#pat} affix removal
+✖ [EXP.9] command substitution $( )
+      command  : echo got:$(echo inner)
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.9/report.txt
+✖ [EXP.10] backquoted command substitution
+      command  : echo got:`echo inner`
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.10/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.10/report.txt
+✖ [EXP.11] command substitution strips trailing newlines
+      command  : echo [$(printf "x\n\n\n")]
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.11/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.11/report.txt
+✔ [EXP.12] field splitting on the expansion of an unquoted variable
+✔ [EXP.13] double quotes suppress field splitting
+✔ [EXP.14] single quotes suppress all expansion
+✔ [EXP.15] double quotes keep $ expansion but not globbing
+✔ [EXP.16] tilde expansion to $HOME
+✔ [EXP.17] tilde with a suffix path
+✔ [EXP.18] pathname expansion: * matches files in cwd
+✔ [EXP.19] pathname expansion: ? and [...] classes
+✔ [EXP.20] pattern with no match stays literal (POSIX default)
+✔ [EXP.21] $$ expands to the shell pid (a number)
+✔ [EXP.22] $0 in -c mode defaults to the shell name
+
+--- [ast] pipeline node (2.9.2): |, status, ! negation ---
+✖ [PIPE.1] two-stage pipeline passes data
+      command  : echo through | cat
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.1/report.txt
+✖ [PIPE.2] three-stage pipeline
+      command  : printf "b\na\n" | sort | head -1
+      VALGRIND (fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.2/report.txt
+✖ [PIPE.3] pipeline status = last command (no pipefail)
+      command  : false | true
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.3/report.txt
+✖ [PIPE.4] pipeline status = last command (failure)
+      command  : true | false
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.4/report.txt
+✔ [PIPE.5] ! negates a pipeline: true -> 1
+✔ [PIPE.6] ! negates a pipeline: false -> 0
+✖ [PIPE.7] builtin inside a pipeline
+      command  : echo builtin_data | cat
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.7/report.txt
+✖ [PIPE.8] pipeline commands run in subshells (var does not leak)
+      command  : PV_8=outer
+               echo x | PV_8=inner cat > /dev/null
+               echo $PV_8
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.8/report.txt
+✖ [PIPE.9] early SIGPIPE termination is not an error for the reader
+      command  : yes | head -1
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PIPE.9/report.txt
+
+--- [ast] and-or node (2.9.3): && || ---
+✔ [ANDOR.1] && runs the right side on success
+✔ [ANDOR.2] && skips the right side on failure
+✔ [ANDOR.3] || runs the right side on failure
+✔ [ANDOR.4] || skips the right side on success
+✔ [ANDOR.5] left-to-right chain of mixed operators
+✔ [ANDOR.6] chain status is the last executed command
+✖ [ANDOR.7] && || with pipelines as operands
+      command  : echo a | grep -q a && echo found
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ANDOR.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ANDOR.7/report.txt
+
+--- [ast] list node (2.9.3): sequential ; and async & ---
+✔ [LIST.1] semicolon runs both commands in order
+✔ [LIST.2] list status is the last command's
+✔ [LIST.3] trailing semicolon is fine
+✔ [LIST.4] newline separates commands like ;
+✔ [ASYNC.1] & returns immediately with status 0
+✖ [ASYNC.2] $! holds the pid of the last async command
+      command  : sleep 0.05 &
+               echo $!
+               wait
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASYNC.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASYNC.2/report.txt
+✖ [ASYNC.3] async command really runs (observable side effect)
+      command  : echo bg_output > bg.txt &
+               wait
+               cat bg.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASYNC.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASYNC.3/report.txt
+✖ [ASYNC.4] foreground work continues while & job runs
+      command  : sleep 0.3 &
+               echo immediate
+               wait
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASYNC.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASYNC.4/report.txt
+
+--- [ast] subshell node (2.9.4.3): ( ) isolation ---
+✔ [SUB.1] subshell runs its list
+✔ [SUB.2] subshell exit status propagates
+✔ [SUB.3] variable assignment does not escape the subshell
+✔ [SUB.4] cd inside a subshell does not move the parent
+✔ [SUB.5] nested subshells
+✔ [SUB.6] subshell in a && chain
+
+--- [ast] brace group node (2.9.4.1): { } shares the environment ---
+✔ [GRP.1] brace group runs its list
+✔ [GRP.2] assignments inside { } persist after it
+✔ [GRP.3] group status is the last command's
+✔ [GRP.4] group as an operand of &&
+
+--- [ast] if node (2.9.4.4): then / elif / else, status ---
+✔ [IF.1] true condition runs then
+✔ [IF.2] false condition skips then; status 0 without else
+✔ [IF.3] else branch on false condition
+✔ [IF.4] elif chain picks the first true condition
+✖ [IF.5] condition may be a pipeline / list
+      command  : if echo probe | grep -q probe; then echo piped; fi
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/IF.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/IF.5/report.txt
+✔ [IF.6] if status = executed branch's last command
+✔ [IF.7] multiline body with several commands
+
+--- [ast] while / until node (2.9.4.5-6) ---
+✔ [WHILE.1] while body runs while the condition is true
+✔ [WHILE.2] false condition: body never runs, status 0
+✔ [WHILE.3] while drives multiple iterations
+✔ [UNTIL.1] until runs while the condition is false
+✔ [UNTIL.2] until with an initially-true condition never runs, status 0
+✔ [LOOPCTL.1] break leaves the loop (POSIX special built-in)
+✔ [LOOPCTL.2] continue skips to the next iteration
+
+--- [ast] for node (2.9.4.2): word list iteration ---
+✔ [FOR.1] for iterates the word list in order
+✔ [FOR.2] empty word list: no iterations, status 0
+✔ [FOR.3] words are expanded before iteration
+✔ [FOR.4] for without in iterates the positional parameters
+✔ [FOR.5] loop variable keeps its last value after the loop (POSIX)
+✔ [FOR.6] glob expansion feeds the word list
+✔ [FOR.7] for status = last iteration's last command
+
+--- [ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8) ---
+✔ [CASE.1] literal pattern match
+✔ [CASE.2] * default arm
+✔ [CASE.3] first matching arm wins
+✔ [CASE.4] | pattern alternatives
+✔ [CASE.5] glob patterns ? and *
+✔ [CASE.6] quoted pattern is literal (no glob)
+✔ [CASE.7] no matching arm: status 0, nothing runs
+✔ [CASE.8] case word is expanded
+✔ [CASE.9] ;& falls through to the next arm (Issue 8)
+✔ [CASE.10] case status = executed arm's last command
+
+--- [ast] function definition node (2.9.5) ---
+✔ [FUNC.1] define then call a function
+✔ [FUNC.2] defining a function produces no output and status 0
+✔ [FUNC.3] arguments become positional parameters inside
+✔ [FUNC.4] outer positional parameters are restored after the call
+✔ [FUNC.5] function status = last command of the body
+✔ [FUNC.6] return N sets the function's status (POSIX special built-in)
+✔ [FUNC.7] function sees and mutates shell variables
+✔ [FUNC.8] redefinition replaces the body
+✖ [FUNC.9] function body can be any compound command (subshell)
+      command  : sub_f9() (echo in_subshell)
+               sub_f9
+      VALGRIND (leak): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/FUNC.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/FUNC.9/report.txt
+✔ [FUNC.10] function takes precedence over PATH lookup
+
+--- [ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes ---
+✖ [REDIR.1] > creates a file with the command's stdout
+      command  : echo content > out_r1.txt
+               cat out_r1.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.1/report.txt
+✖ [REDIR.2] > truncates an existing file
+      command  : echo first > f_r2.txt
+               echo second > f_r2.txt
+               cat f_r2.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.2/report.txt
+✖ [REDIR.3] >> appends
+      command  : echo one >> f_r3.txt
+               echo two >> f_r3.txt
+               cat f_r3.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.3/report.txt
+✖ [REDIR.4] < feeds a file to stdin
+      command  : cat < in.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.4/report.txt
+✖ [REDIR.5] < on a missing file: error, command not run, shell continues
+      command  : cat < no_such_input.txt
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.5/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: redirection failed: unable to open file: 'no_such_input.txt' expanded from 'no_such_input.txt': No such file or directory
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.5/report.txt
+✖ [REDIR.6] 2> redirects stderr by fd number
+      command  : ls no_such_entry_r6 2> err_r6.txt
+               grep -c no_such_entry_r6 err_r6.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.6/report.txt
+✖ [REDIR.7] 2>&1 duplicates stderr onto stdout's target
+      command  : sh -c "echo to_err >&2" 2>&1 | cat
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.7/report.txt
+✖ [REDIR.8] order matters: > file 2>&1 captures both
+      command  : sh -c "echo o; echo e >&2" > both_r8.txt 2>&1
+               sort both_r8.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.8/report.txt
+✖ [REDIR.9] >| clobbers regardless of noclobber
+      command  : set -C
+               echo old > f_r9.txt 2>/dev/null || :
+               echo forced >| f_r9.txt
+               cat f_r9.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.9/report.txt
+✖ [REDIR.10] <> opens read-write and creates the file
+      command  : true <> rw_r10.txt
+               test -e rw_r10.txt
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.10/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.10/report.txt
+✖ [REDIR.11] redirection applies to builtins too
+      command  : pwd > pwd_r11.txt
+               test -s pwd_r11.txt
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.11/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.11/report.txt
+✖ [REDIR.12] redirection on a compound command (if...fi > file)
+      command  : if true; then echo branch; fi > if_r12.txt
+               cat if_r12.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.12/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.12/report.txt
+✖ [REDIR.13] redirection on a loop collects all iterations
+      command  : for i in x y; do echo $i; done > loop_r13.txt
+               cat loop_r13.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.13/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.13/report.txt
+✖ [REDIR.14] multiple redirections: every file is created, last wins
+      command  : echo dest > a_r14.txt > b_r14.txt
+               cat b_r14.txt
+               test -e a_r14.txt -a ! -s a_r14.txt
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.14/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.14/report.txt
+✖ [REDIR.15] fds are restored after the command
+      command  : echo first > f_r15.txt
+               echo visible
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.15/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.15/report.txt
+✖ [REDIR.16] redirection target word is expanded
+      command  : NAME=exp_r16
+               echo data > ${NAME}.txt
+               cat exp_r16.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.16/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.16/report.txt
+
+--- [ast] heredoc nodes (2.7.4): << and <<- ---
+✖ [HD.1] basic heredoc body reaches the command
+      command  : cat <<EOF
+               line1
+               line2
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.1/report.txt
+✖ [HD.2] unquoted delimiter: parameters expand in the body
+      command  : V=inside
+               cat <<EOF
+               value=$V
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.2/report.txt
+✖ [HD.3] quoted delimiter: body is literal
+      command  : cat <<'EOF'
+               $HOME stays
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.3/report.txt
+✖ [HD.4] <<- strips leading tabs
+      command  : cat <<-EOF
+               	tabbed
+               	EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.4/report.txt
+✖ [HD.5] command substitution runs inside an unquoted heredoc
+      command  : cat <<EOF
+               sub=$(echo yes)
+               EOF
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.5/report.txt
+✖ [HD.6] empty heredoc body
+      command  : cat <<EOF
+               EOF
+               echo after_hd
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.6/report.txt
+✖ [HD.7] two heredocs on one line (2.7.4: order of here-docs)
+      command  : cat <<A; cat <<B
+               first
+               A
+               second
+               B
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.7/report.txt
+✔ [HD.8] unterminated heredoc -> syntax-class error (project: 121)
+✖ [HD.9] heredoc redirected onto a whole loop
+      command  : while true; do
+               	cat
+               	break
+               done <<EOF
+               a
+               b
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.9/report.txt
+
+--- [ast] syntax errors (2.10): report + non-interactive abort ---
+✔ [SYN.1] lone 'if then' -> syntax error 121 (project code)
+✔ [SYN.2] unterminated double quote -> 121
+✔ [SYN.3] unterminated single quote -> 121
+✔ [SYN.4] orphan closing paren -> 121
+✔ [SYN.5] pipe with no right-hand side -> 121
+
+--- [complex] nesting: command substitution deep inside structures ---
+✖ [NEST.1] cmd-sub inside a function body
+      command  : f() { echo got:$(echo inner); }
+               f
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.1/report.txt
+✖ [NEST.2] nested command substitutions
+      command  : echo $(echo $(echo deepest))
+      VALGRIND (leak+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.2/report.txt
+✖ [NEST.3] cmd-sub inside an if condition
+      command  : if test "$(echo yes)" = yes; then echo matched; fi
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.3/report.txt
+✖ [NEST.4] cmd-sub feeds a for word list
+      command  : for w in $(printf "a\nb\n"); do echo w=$w; done
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.4/report.txt
+✖ [NEST.5] cmd-sub inside a case word and a pattern arm
+      command  : case $(echo key) in key) echo hit;; esac
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.5/report.txt
+✖ [NEST.6] cmd-sub inside a heredoc body inside a function
+      command  : f() { cat <<EOF
+               val=$(echo generated)
+               EOF
+               }
+               f
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.6/report.txt
+✖ [NEST.7] function with redirection, called inside a pipeline (rules example)
+      command  : f() { echo piped_out > inner.txt; cat inner.txt; }
+               f | cat
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.7/report.txt
+✖ [NEST.8] cmd-sub + redirection + function, all inside a loop
+      command  : f() { echo one_$(echo shot) > gen.txt; }
+               for i in 1 2; do
+               	f
+               	cat gen.txt
+               done
+      VALGRIND (fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.8/report.txt
+✖ [NEST.9] subshell inside a pipeline
+      command  : (echo from_subshell; exit 0) | cat
+      VALGRIND (fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.9/report.txt
+✖ [NEST.10] pipeline inside a subshell inside &&
+      command  : true && (echo x | tr x y)
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.10/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.10/report.txt
+
+--- [complex] nesting: control structures inside each other ---
+✔ [NEST.11] if inside a for inside a while
+✔ [NEST.12] case inside a for
+✖ [NEST.13] for inside a function inside a pipeline
+      command  : f() { for i in p q; do echo $i; done; }
+               f | sort -r
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.13/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.13/report.txt
+✖ [NEST.14] heredoc on a loop inside a function
+      command  : f() {
+               	while true; do
+               		cat
+               		break
+               	done <<EOF
+               u
+               v
+               EOF
+               }
+               f
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.14/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.14/report.txt
+✔ [NEST.15] brace group inside if inside subshell
+✔ [NEST.16] function defined inside an if, then called
+✖ [NEST.17] loop over a pipeline of and-ors
+      command  : for i in 1 2; do
+               	false || echo rescued_$i
+               done | cat
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.17/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.17/report.txt
+✔ [NEST.18] nested functions calling each other
+✔ [NEST.19] recursion terminated by a test
+
+--- [complex] mixing: redirections + heredocs + expansions + pipes ---
+✖ [MIX.1] if with redirected output inside a pipe
+      command  : if true; then echo branch_out; fi > mid.txt
+               cat mid.txt | tr a-z A-Z
+      VALGRIND (fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.1/report.txt
+✖ [MIX.2] heredoc into a pipeline stage
+      command  : cat <<EOF | sort
+               b
+               a
+               EOF
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.2/report.txt
+✖ [MIX.3] expansion result used as a redirection target inside a loop
+      command  : for name in t1 t2; do
+               	echo data_$name > out_$name.txt
+               done
+               cat out_t1.txt out_t2.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.3/report.txt
+✖ [MIX.4] glob feeding a for, writing per-file, checked by cat
+      command  : touch s1.src s2.src
+               for f in *.src; do echo seen:$f >> report.txt; done
+               cat report.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.4/report.txt
+✖ [MIX.5] alias expanding to a pipeline head
+      command  : alias upper='tr a-z A-Z'
+               echo mixed | upper
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.5/report.txt
+✖ [MIX.6] assignment prefix + redirection + external in one command
+      command  : MIXV=6 /home/adouieb/Documents/minishell/tests/test_exec > /dev/null 2> caught.txt
+               grep -c "MIXV=6" caught.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.6/report.txt
+✖ [MIX.7] cmd-sub of a pipeline of a heredoc
+      command  : R=$(cat <<EOF | wc -l
+               1
+               2
+               3
+               EOF
+               )
+               echo lines=$R
+      VALGRIND (leak+fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.7/valgrind.*.log
+      expected stdout:
+        | lines= 3
+      obtained stdout:
+        | lines=3
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.7/report.txt
+✖ [MIX.8] case on a cmd-sub over a glob, with redirected arm
+      command  : touch only_one.m8
+               case $(echo *.m8) in
+               	only_one.m8) echo matched > arm.txt;;
+               esac
+               cat arm.txt
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.8/report.txt
+✖ [MIX.9] background subshell writing a file, reaped by wait
+      command  : (echo async_done > bg.txt) &
+               wait
+               cat bg.txt
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.9/report.txt
+✖ [MIX.10] pipeline of two functions with heredoc input
+      command  : produce() { cat <<EOF
+               raw
+               EOF
+               }
+               consume() { tr a-z A-Z; }
+               produce | consume
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.10/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.10/report.txt
+✖ [MIX.11] IFS-driven field splitting of a cmd-sub inside a for
+      command  : IFS=:
+               for part in $(echo a:b:c); do echo p=$part; done
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.11/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.11/report.txt
+✔ [MIX.12] quoted "$@" forwarding through a function into exec
+✔ [MIX.13] exit status flows through nesting: function > if > pipeline
+✔ [MIX.14] ${RO:=word} on a readonly NULL var -> assignment error 124, shell exits
+✔ [MIX.15] set -f inside a function affects the caller (shared options)
+
+--- [complex] stress: deeper combinations ---
+✔ [STRESS.1] 4-deep structure: while(for(if(case)))
+✖ [STRESS.2] pipeline where every stage is a compound command
+      command  : { echo b; echo a; } | (sort) | if true; then cat; fi
+      VALGRIND (fd+fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.2/report.txt
+✖ [STRESS.3] 10-stage pipeline
+      command  : echo start | cat | cat | cat | cat | cat | cat | cat | cat | cat
+      VALGRIND (fd+fd+fd+fd+fd+fd+fd+fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.3/report.txt
+✔ [STRESS.4] long && chain with a || fallback at each level
+✔ [STRESS.5] function redefining itself on first call
+✖ [STRESS.6] heredoc + quoted delim + expansion mix in one script
+      command  : V=live
+               cat <<E1
+               exp=$V
+               E1
+               cat <<'E2'
+               raw=$V
+               E2
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.6/report.txt
+✖ [STRESS.7] async loop + foreground loop interleaved via wait
+      command  : for i in 1 2; do echo bg_$i >> bg.txt; done &
+               for i in 1 2; do echo fg_$i >> fg.txt; done
+               wait
+               sort bg.txt fg.txt
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.7/report.txt
+✖ [STRESS.8] cmd-sub inside function inside cmd-sub
+      command  : f() { echo $(echo nested_f); }
+               echo top:$(f)
+      VALGRIND (leak+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.8/report.txt
+
+--- [words] quoting (2.2): backslash, single-, double-, dollar-single-quotes ---
+✔ [QUO.1] backslash escapes $, backslash and dquote
+✔ [QUO.2] line continuation splices a command name
+✔ [QUO.3] single quotes make operators and $ literal
+✔ [QUO.4] double quotes keep inner spacing around an expansion
+✔ [QUO.5] backslash in dquotes: special before $ and \, literal before a
+✔ [QUO.6] line continuation inside double quotes
+✔ [QUO.7] literal newline inside double quotes is kept
+✔ [QUO.8] quoted reserved word is not a reserved word
+✔ [QUO.9] quoted control operators are literal arguments
+✔ [QUO.10] adjacent quoted strings concatenate into one field
+✔ [QUO.11] dollar-single-quotes: \t yields a tab
+✔ [QUO.12] dollar-single-quotes: escaped quote stays inside
+✔ [QUO.13] dollar-single-quotes: \n yields a newline
+✔ [QUO.14] dollar-single-quotes: hex and octal escapes
+✔ [QUO.15] no dollar-single-quote processing inside double quotes
+
+--- [words] token recognition (2.3) + alias substitution (2.3.1) ---
+✖ [TOK.1] operator delimits a word without blanks (echo a>b)
+      command  : echo a>b
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.1/report.txt
+✖ [TOK.2] quoted digit before > is an argument, not an fd prefix
+      command  : echo a "2">f
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.2/report.txt
+✖ [TOK.3] spec examples: escaped fd digit vs escaped operator
+      command  : echo \2>a
+               echo 2\>a
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.3/report.txt
+✔ [TOK.4] # inside a word is not a comment
+✔ [TOK.5] &&& is a syntax error
+✔ [TOK.6] ;; outside a case statement is a syntax error
+✖ [TOK.7] newline after | continues the pipeline
+      command  : echo piped |
+               cat
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/TOK.7/report.txt
+✔ [TOK.8] newline after && continues the and-or list
+✔ [TOK.9] alias value ending in blank triggers alias check on next word
+✔ [TOK.10] escaped word is not alias-substituted
+
+--- [words] special and positional parameters (2.5) ---
+✔ [SPP.1] $# counts positionals only
+✔ [SPP.2] $? is 0 at shell startup
+✔ [SPP.3] subshell preserves $? from the invoking environment
+✖ [SPP.4] assignment-only command adopts the cmd-sub status
+      command  : x=$(sh -c "exit 7")
+               echo rc=$?
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/SPP.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/SPP.4/report.txt
+✔ [SPP.5] $- reflects set -f
+✔ [SPP.6] $$ is unchanged inside a subshell
+✔ [SPP.7] embedded "$@": x"$@"y joins prefix and suffix
+✔ [SPP.8] "$@" with no positionals produces zero fields
+✔ [SPP.9] "$*" joins with the first IFS character
+✔ [SPP.10] "$*" with empty IFS concatenates
+✔ [SPP.11] "$*" with unset IFS uses a space
+✔ [SPP.12] spec example: ${a}b-$ab-${1}0-${10}-$10
+
+--- [words] parameter expansion (2.6.2): unset-vs-null table, patterns ---
+✔ [PEX.1] ${x-word} vs ${x:-word} on a null parameter
+✔ [PEX.2] ${x+word} vs ${x:+word} on a null parameter
+✔ [PEX.3] ${x=word} on null: no assignment happens
+✔ [PEX.4] ${x=word} on unset assigns and substitutes
+✔ [PEX.5] ${x?msg} on a null parameter is not an error
+✔ [PEX.6] ${x:?} bare form errors and names the parameter
+✔ [PEX.7] spec example: ${foo-bar}xyz} brace matching
+✔ [PEX.8] unused default word is not evaluated
+✖ [PEX.9] default word is itself expanded
+      command  : d=def
+               echo ${u_pex9:-$d} ${u_pex9b:-$(echo sub)}
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PEX.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/PEX.9/report.txt
+✔ [PEX.10] field count of quoted vs unquoted default word
+✔ [PEX.11] ${#x} of null and of a value
+✔ [PEX.12] ${x%.*} smallest vs ${x%%.*} largest suffix
+✔ [PEX.13] ${x#*/} smallest vs ${x##*/} largest prefix
+✔ [PEX.14] affix pattern comes from a variable expansion
+✔ [PEX.15] quoted vs unquoted * in an affix pattern
+✔ [PEX.16] pattern characters stay special inside outer dquotes
+
+--- [words] command substitution (2.6.3) ---
+✖ [CSB.1] only trailing newlines are stripped
+      command  : x=$(printf "a\nb\n\n\n")
+               echo "[$x]"
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.1/report.txt
+✖ [CSB.2] cmd-sub output is not expanded again
+      command  : HOME=/tmp
+               x=$(echo '$HOME ~ `echo no`')
+               echo "$x"
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.2/report.txt
+✖ [CSB.3] cmd-sub result splits unquoted, not quoted
+      command  : set -- $(echo a b c)
+               echo $#
+               set -- "$(echo a b c)"
+               echo $#
+      VALGRIND (leak+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.3/report.txt
+✖ [CSB.4] nested backquotes with backslash escapes
+      command  : echo `echo \`echo deep\``
+      VALGRIND (leak+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.4/report.txt
+✖ [CSB.5] assignments inside cmd-sub stay in the subshell
+      command  : x=out
+               y=$(x=in; echo $x)
+               echo $x $y
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.5/report.txt
+✖ [CSB.6] spec form: $( (commands) ) subshell inside cmd-sub
+      command  : echo $( (echo sub) )
+      VALGRIND (leak+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.6/report.txt
+✖ [CSB.7] no field splitting in an assignment value
+      command  : x=$(printf "a  b")
+               echo "[$x]"
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.7/report.txt
+✖ [CSB.8] multi-line program inside $( )
+      command  : x=$(for i in 1 2 3
+               do
+               echo $i
+               done)
+               echo "$x"
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.8/report.txt
+✖ [CSB.9] quoted close-paren inside $( ) does not terminate it
+      command  : echo $(echo ")")
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.9/report.txt
+✖ [CSB.10] double quotes nest independently inside "$( )"
+      command  : echo "$(echo "a  b")"
+      VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.10/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.10/report.txt
+✖ [CSB.11] four-level nested $( )
+      command  : echo $(echo $(echo $(echo $(echo deep4))))
+      VALGRIND (leak+fd+fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.11/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/CSB.11/report.txt
+
+--- [words] field splitting (2.6.5): the delimiter algorithm ---
+✔ [FSP.1] a::b with IFS=: gives three fields, middle empty
+✔ [FSP.2] default IFS: runs of blanks collapse, edges stripped
+✔ [FSP.3] mixed IFS=' :' — ws-padded colons and an empty field
+✔ [FSP.4] IFS= disables field splitting
+✔ [FSP.5] IFS= still removes a fully empty expansion field
+✔ [FSP.6] unset IFS falls back to default splitting
+✔ [FSP.7] literal words are not subject to IFS
+✔ [FSP.8] trailing delimiter creates no empty field
+✔ [FSP.9] leading delimiter creates a leading empty field
+✔ [FSP.10] literal prefix joins the first expansion field
+✔ [FSP.11] whitespace-only expansion vanishes
+
+--- [words] pathname expansion & pattern matching (2.6.6, 2.14) ---
+✔ [PAT.1] case bracket negation [!a-c]
+✔ [PAT.2] case character class [[:digit:]]
+✔ [PAT.3] * does not match a leading dot
+✔ [PAT.4] * does not match across /
+✔ [PAT.5] quoted * is literal, unquoted * globs
+✔ [PAT.6] bracket range [a-c] in pathname expansion
+✔ [PAT.7] escaped \* stays literal despite matching files
+
+--- [words] tilde expansion edges (2.6.1) ---
+✔ [TIL.1] quoted tilde forms do not expand
+✔ [TIL.2] tilde not at word start is literal
+✔ [TIL.3] tilde expands in an assignment value
+
+--- [words] quote removal (2.6.7) ---
+✔ [QRM.1] quoted quote characters survive quote removal
+✔ [QRM.2] empty quotes vanish inside a word
+✔ [QRM.3] quoted empty strings survive as empty fields
+
+--- [semantics] redirection edges (2.7): word expansion, fd ops, ordering ---
+✖ [RED2.1] redirection target is not field split
+      command  : f="a b"
+               echo hi > $f
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.1/report.txt
+✖ [RED2.2] 2>&1 >file: stderr keeps the old stdout
+      command  : { echo out; echo err >&2; } 2>&1 >ordered.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.2/report.txt
+✖ [RED2.3] <&- closes stdin, command fails, shell continues
+      command  : cat <&-
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.3/valgrind.*.log
+      obtained stderr (filtered):
+        | cat: -: Bad file descriptor
+        | cat: closing standard input: Bad file descriptor
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.3/report.txt
+✖ [RED2.4] >&- closes stdout: echo fails, shell continues
+      command  : echo hi >&-
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.4/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: echo: write error: write error
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.4/report.txt
+✔ [RED2.5] dup from unopened fd 7 fails, shell continues
+✖ [RED2.6] <> does not truncate an existing file
+      command  : : <> keep.txt
+               cat keep.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.6/report.txt
+✖ [RED2.7] redirection-only command creates the file, status 0
+      command  : > made.txt
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.7/report.txt
+✖ [RED2.8] failing redirection-only command: >0, shell continues
+      command  : > /nonexistent_red8/f
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.8/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: redirection failed: unable to open file: '/nonexistent_red8/f' expanded from '/nonexistent_red8/f': No such file or directory
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.8/report.txt
+✖ [RED2.9] heredoc input combined with > output
+      command  : cat <<EOF >hd.out
+               body line
+               EOF
+               cat hd.out
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.9/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.9/report.txt
+✖ [RED2.10] redirection inside a pipeline stage wins over the pipe
+      command  : echo a > redirf | cat
+               cat redirf
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.10/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.10/report.txt
+✖ [RED2.11] >> creates a missing file
+      command  : echo first >> new.txt
+               cat new.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.11/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.11/report.txt
+
+--- [semantics] here-document edges (2.7.4) ---
+✖ [HD2.1] partially quoted delimiter suppresses expansion
+      command  : cat <<E"O"F
+               $HOME literal
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.1/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.1/report.txt
+✖ [HD2.2] backslash protects $ in an unquoted heredoc body
+      command  : x=v
+               cat <<EOF
+               \$x and $x
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.2/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.2/report.txt
+✖ [HD2.3] <<- strips tabs but not spaces
+      command  : cat <<-EOF
+               	tabbed
+                 spaced
+               	EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.3/report.txt
+✖ [HD2.4] delimiter with leading space is body, not terminator
+      command  : cat <<EOF
+               a
+                EOF
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.4/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.4/report.txt
+✖ [HD2.5] quoted delimiter keeps cmd-sub literal
+      command  : cat <<'EOF'
+               $(echo x) `echo y`
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.5/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.5/report.txt
+✖ [HD2.6] backquote cmd-sub runs in an unquoted body
+      command  : cat <<EOF
+               `echo sub`
+               EOF
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.6/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.6/report.txt
+✖ [HD2.7] heredoc feeds a function invocation
+      command  : f() { cat; }
+               f <<EOF
+               fed
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.7/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.7/report.txt
+✖ [HD2.8] quotes in the body are literal data
+      command  : cat <<EOF
+               "dq" and 'sq'
+               EOF
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.8/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.8/report.txt
+
+--- [semantics] consequences of shell errors (2.8.1 table) ---
+✖ [ERRC.1] redirection error on special built-in aborts
+      command  : : > /nonexistent_errc1/f
+               echo after
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ERRC.1/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: redirection failed: unable to open file: '/nonexistent_errc1/f' expanded from '/nonexistent_errc1/f': No such file or directory
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ERRC.1/report.txt
+✖ [ERRC.2] redirection error on external continues
+      command  : echo x > /nonexistent_errc2/f
+               echo rc=$?
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ERRC.2/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: redirection failed: unable to open file: '/nonexistent_errc2/f' expanded from '/nonexistent_errc2/f': No such file or directory
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ERRC.2/report.txt
+✔ [ERRC.3] expansion error ${x?} aborts with the parameter named
+✔ [ERRC.4] readonly assignment prefix aborts, command not run
+✖ [ERRC.5] not-found in a pipeline stage: parent unaffected
+      command  : nosuchcmd_errc5 | cat
+               echo rc=$?
+      VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ERRC.5/valgrind.*.log
+      obtained stderr (filtered):
+        | /home/adouieb/Documents/minishell/minishell: nosuchcmd_errc5: command not found
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ERRC.5/report.txt
+
+--- [semantics] exit statuses (2.8.2) ---
+✔ [STA.1] signal death reports 128+n
+
+--- [semantics] simple-command semantics (2.9.1) ---
+✔ [ASG.1] duplicate assignment prefixes: last one wins
+✔ [ASG.2] all assignment prefixes reach the child environment
+✖ [ASG.3] redirection before the command name
+      command  : >pre.txt echo hi
+               cat pre.txt
+      VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASG.3/valgrind.*.log
+      log      : /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ASG.3/report.txt
+✔ [ASG.4] NAME=value after the command word is an argument
+✔ [ASG.5] PATH prefix changes the lookup of the command itself
+
+--- [semantics] grammar edges (2.10): newlines, reserved words, groups ---
+✔ [GRM.1] if / then / fi on separate lines
+✔ [GRM.2] for with newline before in
+✔ [GRM.3] case pattern with leading parenthesis
+✔ [GRM.4] unterminated brace group is a syntax error
+✔ [GRM.5] { and } as arguments are literal
+✔ [GRM.6] empty command between then and ; is a syntax error
+✔ [GRM.7] function definition with spaced parentheses
+✔ [GRM.8] reserved words as arguments stay literal
+
+--- [semantics] break / continue with n (2.15, pages @1791/@2006) ---
+✔ [LOOPN.1] break 2 exits both loops
+✔ [LOOPN.2] break with n larger than the nesting depth
+✔ [LOOPN.3] continue 2 resumes the outer loop
+✔ [LOOPN.4] continue with n larger than the nesting depth
+
+--- [semantics] shift (2.15, page @3118) ---
+✔ [SHIFT.1] shift defaults to n=1
+✔ [SHIFT.2] shift 2 renumbers the positionals
+✔ [SHIFT.3] shift 0 is a successful no-op
+✔ [SHIFT.4] shift $# leaves zero parameters
+✔ [SHIFT.5] shift beyond $# fails either lane
+
+--- [semantics] eval (2.15, page @2182) ---
+✔ [EVAL.1] eval joins its arguments into one command
+✔ [EVAL.2] eval with no arguments returns 0
+✔ [EVAL.3] eval propagates the command's status
+✔ [EVAL.4] eval executes a command built from variables
+
+--- [semantics] dot (2.15, page @2091) ---
+✔ [DOT.1] dot script runs in the current environment
+✔ [DOT.2] return stops the dot script with its status
+✔ [DOT.3] dot with a missing file aborts
+✔ [DOT.4] dot searches PATH for slash-free operands
+
+--- [semantics] return (2.15, page @2744) ---
+✔ [RET.1] return without operand keeps the last status
+
+--- [custom] custom cases ---
+✔ [CUSTOM.1] example: exact stdout
+✔ [CUSTOM.2] example: stdout contains
+✔ [CUSTOM.3] example: full API with a fixture file
+
+==================== SUMMARY ====================
+  custom     all 3 passed
+  words      17 failed / 88
+  semantics  22 failed / 56
+  options    13 failed / 74
+  builtins   5 failed / 112
+  ast        40 failed / 138
+  complex    29 failed / 42
+  ◌ 5 TD cases skipped (options not implemented; --td to run)
+  ○ 1 manual cases skipped
+
+✖ 126 / 513 tests failed
+failed IDs: OPT-C.1 OPT-C.2 OPT-C.3 OPT-C.4 OPT-C.5 OPT-C.6 OPT-C.7 PIPEFAIL.1 PIPEFAIL.2 PIPEFAIL.3 PIPEFAIL.4 PIPEFAIL.5 PIPEFAIL.6 WAIT.2 WAIT.3 WAIT.4 WAIT.5 WAIT.8 EXP.9 EXP.10 EXP.11 PIPE.1 PIPE.2 PIPE.3 PIPE.4 PIPE.7 PIPE.8 PIPE.9 ANDOR.7 ASYNC.2 ASYNC.3 ASYNC.4 IF.5 FUNC.9 REDIR.1 REDIR.2 REDIR.3 REDIR.4 REDIR.5 REDIR.6 REDIR.7 REDIR.8 REDIR.9 REDIR.10 REDIR.11 REDIR.12 REDIR.13 REDIR.14 REDIR.15 REDIR.16 HD.1 HD.2 HD.3 HD.4 HD.5 HD.6 HD.7 HD.9 NEST.1 NEST.2 NEST.3 NEST.4 NEST.5 NEST.6 NEST.7 NEST.8 NEST.9 NEST.10 NEST.13 NEST.14 NEST.17 MIX.1 MIX.2 MIX.3 MIX.4 MIX.5 MIX.6 MIX.7 MIX.8 MIX.9 MIX.10 MIX.11 STRESS.2 STRESS.3 STRESS.6 STRESS.7 STRESS.8 TOK.1 TOK.2 TOK.3 TOK.7 SPP.4 PEX.9 CSB.1 CSB.2 CSB.3 CSB.4 CSB.5 CSB.6 CSB.7 CSB.8 CSB.9 CSB.10 CSB.11 RED2.1 RED2.2 RED2.3 RED2.4 RED2.6 RED2.7 RED2.8 RED2.9 RED2.10 RED2.11 HD2.1 HD2.2 HD2.3 HD2.4 HD2.5 HD2.6 HD2.7 HD2.8 ERRC.1 ERRC.2 ERRC.5 ASG.3
+⚠ Logs kept in: /home/adouieb/Documents/minishell/tests/logs/posix_suite.2

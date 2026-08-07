@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SPP.9] "$*" joins with the first IFS character
+### SECTION ###
+[words] special and positional parameters (2.5)
+
+### COMMAND (pipe mode) ###
+IFS=:-
+set a b c
+echo "$*"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a:b:c
+
+### OBTAINED STDOUT ###
+a:b:c
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

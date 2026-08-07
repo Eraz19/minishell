@@ -1,0 +1,3 @@
+set -a
+NEWVAR_A1=exported_a1
+env

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[OPT-F.5] set -o noglob is the same option
+### SECTION ###
+[options] option -f / noglob (POSIX set -f)
+
+### COMMAND (pipe mode) ###
+set -o noglob
+echo *.zzz
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+*.zzz
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,3 @@
+XP_2=val2
+export XP_2
+env

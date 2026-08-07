@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[HD.2] unquoted delimiter: parameters expand in the body
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+V=inside
+cat <<EOF
+value=$V
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+value=inside
+
+### OBTAINED STDOUT ###
+value=inside
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

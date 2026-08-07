@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[EXP.13] double quotes suppress field splitting
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+V="a b c"
+set -- "$V"
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+1
+
+### OBTAINED STDOUT ###
+1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PEX.4] ${x=word} on unset assigns and substitutes
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+echo "[${u_pex4=w}][$u_pex4]"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[w][w]
+
+### OBTAINED STDOUT ###
+[w][w]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

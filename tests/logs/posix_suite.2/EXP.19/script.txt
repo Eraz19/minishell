@@ -1,0 +1,2 @@
+echo f?.q
+echo [fg]1.q

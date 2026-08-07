@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[RED2.4] >&- closes stdout: echo fails, shell continues
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+echo hi >&-
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=90
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: echo: write error: write error
+
+### VERDICT ###
+PASS

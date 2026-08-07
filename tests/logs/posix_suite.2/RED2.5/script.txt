@@ -1,0 +1,2 @@
+echo hi >&7
+echo rc=$?

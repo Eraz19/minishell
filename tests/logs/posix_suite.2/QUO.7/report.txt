@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[QUO.7] literal newline inside double quotes is kept
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo "l1
+l2"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+l1
+l2
+
+### OBTAINED STDOUT ###
+l1
+l2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

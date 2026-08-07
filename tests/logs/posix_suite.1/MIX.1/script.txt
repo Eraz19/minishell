@@ -1,0 +1,2 @@
+if true; then echo branch_out; fi > mid.txt
+cat mid.txt | tr a-z A-Z

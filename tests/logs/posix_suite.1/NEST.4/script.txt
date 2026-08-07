@@ -1,0 +1,1 @@
+for w in $(printf "a\nb\n"); do echo w=$w; done

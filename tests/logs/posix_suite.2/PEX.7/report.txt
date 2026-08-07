@@ -1,0 +1,30 @@
+### ID / LABEL ###
+[PEX.7] spec example: ${foo-bar}xyz} brace matching
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+foo=asdf
+echo ${foo-bar}xyz}
+foo=
+echo ${foo-bar}xyz}
+unset foo
+echo ${foo-bar}xyz}
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+asdfxyz}
+xyz}
+barxyz}
+
+### OBTAINED STDOUT ###
+asdfxyz}
+xyz}
+barxyz}
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

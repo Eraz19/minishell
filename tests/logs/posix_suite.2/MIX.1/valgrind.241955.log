@@ -1,0 +1,28 @@
+==241955== FILE DESCRIPTORS: 3 open (1 inherited) at exit.
+==241955== Open file descriptor 1: /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.1/stdout.txt
+==241955==    at 0x49B760B: dup2 (in /usr/lib64/libc.so.6)
+==241955==    by 0x400912: posix_dup2 (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x41B9F7: fd_restore_last_frame (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x413EAA: walk_command (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x425F73: walk_pipe_single_command (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x426394: walk_pipeline (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x412F04: walk_and_or (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x413189: walk_list (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x414295: walk (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x402EEE: runner_run (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x401B8F: shell_run (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x48D6680: (below main) (in /usr/lib64/libc.so.6)
+==241955== 
+==241955== Open file descriptor 0:
+==241955==    at 0x49B760B: dup2 (in /usr/lib64/libc.so.6)
+==241955==    by 0x400912: posix_dup2 (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x4261A6: walk_pipe_multiple_commands (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x42634C: walk_pipeline (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x412F04: walk_and_or (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x413189: walk_list (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x414295: walk (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x402EEE: runner_run (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x401B8F: shell_run (in /home/adouieb/Documents/minishell/minishell)
+==241955==    by 0x48D6680: (below main) (in /usr/lib64/libc.so.6)
+==241955== 
+==241955== 

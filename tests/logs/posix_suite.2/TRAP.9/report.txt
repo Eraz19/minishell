@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[TRAP.9] trap EXIT can be set via condition 0
+### SECTION ###
+[builtins] trap — special built-in, POSIX 2.14 trap
+
+### COMMAND (pipe mode) ###
+trap 'echo z' 0
+trap
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+trap -- 'echo z' EXIT
+z
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

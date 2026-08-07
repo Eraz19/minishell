@@ -1,0 +1,5 @@
+f() { cat <<EOF
+val=$(echo generated)
+EOF
+}
+f

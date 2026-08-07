@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-F.3] script not found -> 127 (POSIX sh exit status)
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell ./no_such_script.sh
+
+### EXIT STATUS (obtained) ###
+127
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: scanner: ./no_such_script.sh: file not found
+
+### VERDICT ###
+PASS

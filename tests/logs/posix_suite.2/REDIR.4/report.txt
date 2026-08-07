@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[REDIR.4] < feeds a file to stdin
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+cat < in.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+from_file
+
+### OBTAINED STDOUT ###
+from_file
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.4/valgrind.*.log

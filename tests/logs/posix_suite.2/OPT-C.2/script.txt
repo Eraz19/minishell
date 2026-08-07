@@ -1,0 +1,2 @@
+set -C
+echo fresh > new.txt

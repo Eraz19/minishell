@@ -1,0 +1,2 @@
+trap 'echo z' 0
+trap

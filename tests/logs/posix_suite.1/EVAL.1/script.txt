@@ -1,0 +1,2 @@
+eval echo a b
+echo rc=$?

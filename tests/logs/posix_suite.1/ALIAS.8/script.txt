@@ -1,0 +1,2 @@
+alias notcmd_8='SHOULD_NOT_EXPAND'
+echo notcmd_8

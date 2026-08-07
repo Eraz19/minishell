@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[IF.6] if status = executed branch's last command
+### SECTION ###
+[ast] if node (2.9.4.4): then / elif / else, status
+
+### COMMAND (pipe mode) ###
+if true; then sh -c "exit 5"; fi
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=5
+
+### OBTAINED STDOUT ###
+rc=5
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

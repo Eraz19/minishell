@@ -1,0 +1,3 @@
+cd sub
+echo "PWD=$PWD"
+echo "OLDPWD=$OLDPWD"

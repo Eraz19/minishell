@@ -1,0 +1,5 @@
+touch only_one.m8
+case $(echo *.m8) in
+	only_one.m8) echo matched > arm.txt;;
+esac
+cat arm.txt

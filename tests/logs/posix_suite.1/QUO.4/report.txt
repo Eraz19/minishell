@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[QUO.4] double quotes keep inner spacing around an expansion
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+V=v
+echo "a  b   $V"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a  b   v
+
+### OBTAINED STDOUT ###
+a  b   v
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

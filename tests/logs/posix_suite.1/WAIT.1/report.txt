@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[WAIT.1] wait with no children returns 0
+### SECTION ###
+[builtins] wait — POSIX wait utility (async pids, $!)
+
+### COMMAND (pipe mode) ###
+wait
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EXP.1] parameter expansion $var and ${var}
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+V=val
+echo $V ${V}
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+val val
+
+### OBTAINED STDOUT ###
+val val
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

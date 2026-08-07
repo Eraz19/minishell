@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[IF.4] elif chain picks the first true condition
+### SECTION ###
+[ast] if node (2.9.4.4): then / elif / else, status
+
+### COMMAND (pipe mode) ###
+if false; then echo a
+elif true; then echo b
+elif true; then echo c
+else echo d
+fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+b
+
+### OBTAINED STDOUT ###
+b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

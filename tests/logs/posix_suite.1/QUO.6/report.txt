@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[QUO.6] line continuation inside double quotes
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo "a\
+b"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+ab
+
+### OBTAINED STDOUT ###
+ab
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

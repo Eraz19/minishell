@@ -1,0 +1,9 @@
+countdown() {
+	if test "$1" = 1; then
+		echo lvl$1
+		countdown 2
+	elif test "$1" = 2; then
+		echo lvl$1
+	fi
+}
+countdown 1

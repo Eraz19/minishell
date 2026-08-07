@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[MIX.2] heredoc into a pipeline stage
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+cat <<EOF | sort
+b
+a
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+b
+
+### OBTAINED STDOUT ###
+a
+b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

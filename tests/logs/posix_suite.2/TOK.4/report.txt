@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[TOK.4] # inside a word is not a comment
+### SECTION ###
+[words] token recognition (2.3) + alias substitution (2.3.1)
+
+### COMMAND (pipe mode) ###
+echo a#b #this is a comment
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a#b
+
+### OBTAINED STDOUT ###
+a#b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

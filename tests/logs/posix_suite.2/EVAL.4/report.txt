@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EVAL.4] eval executes a command built from variables
+### SECTION ###
+[semantics] eval (2.15, page @2182)
+
+### COMMAND (pipe mode) ###
+c=echo
+eval "$c built"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+built
+
+### OBTAINED STDOUT ###
+built
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

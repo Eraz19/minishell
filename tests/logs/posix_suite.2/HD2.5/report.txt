@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[HD2.5] quoted delimiter keeps cmd-sub literal
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+cat <<'EOF'
+$(echo x) `echo y`
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$(echo x) `echo y`
+
+### OBTAINED STDOUT ###
+$(echo x) `echo y`
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.5/valgrind.*.log

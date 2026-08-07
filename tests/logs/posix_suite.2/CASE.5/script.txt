@@ -1,0 +1,2 @@
+case file9 in file?) echo qmark;; esac
+case prefix_rest in prefix_*) echo star;; esac

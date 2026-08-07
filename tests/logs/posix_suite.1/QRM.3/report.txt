@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[QRM.3] quoted empty strings survive as empty fields
+### SECTION ###
+[words] quote removal (2.6.7)
+
+### COMMAND (pipe mode) ###
+set -- "" '' ""''
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+3
+
+### OBTAINED STDOUT ###
+3
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

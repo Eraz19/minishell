@@ -1,0 +1,2 @@
+CL_6=plain
+echo $CL_6 rc=$?

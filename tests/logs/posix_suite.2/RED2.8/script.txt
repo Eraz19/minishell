@@ -1,0 +1,2 @@
+> /nonexistent_red8/f
+echo rc=$?

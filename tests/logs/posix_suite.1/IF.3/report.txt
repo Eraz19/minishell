@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[IF.3] else branch on false condition
+### SECTION ###
+[ast] if node (2.9.4.4): then / elif / else, status
+
+### COMMAND (pipe mode) ###
+if false; then echo yes; else echo no; fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+no
+
+### OBTAINED STDOUT ###
+no
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

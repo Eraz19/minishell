@@ -1,0 +1,7 @@
+V=live
+cat <<E1
+exp=$V
+E1
+cat <<'E2'
+raw=$V
+E2

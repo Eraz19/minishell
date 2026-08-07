@@ -1,0 +1,3 @@
+f8() { echo old; }
+f8() { echo new; }
+f8

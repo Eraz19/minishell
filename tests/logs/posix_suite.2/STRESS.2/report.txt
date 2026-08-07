@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[STRESS.2] pipeline where every stage is a compound command
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+{ echo b; echo a; } | (sort) | if true; then cat; fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+b
+
+### OBTAINED STDOUT ###
+a
+b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.2/valgrind.*.log

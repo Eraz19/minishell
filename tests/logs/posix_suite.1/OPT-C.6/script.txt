@@ -1,0 +1,3 @@
+set -C
+set +C
+echo clobbered > f.txt

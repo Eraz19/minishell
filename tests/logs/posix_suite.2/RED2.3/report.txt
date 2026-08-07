@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[RED2.3] <&- closes stdin, command fails, shell continues
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+cat <&-
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=1
+
+### OBTAINED STDERR (filtered) ###
+cat: -: Bad file descriptor
+cat: closing standard input: Bad file descriptor
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.3/valgrind.*.log

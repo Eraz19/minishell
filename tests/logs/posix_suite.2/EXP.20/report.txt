@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXP.20] pattern with no match stays literal (POSIX default)
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo *.nomatch_e20
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+*.nomatch_e20
+
+### OBTAINED STDOUT ###
+*.nomatch_e20
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

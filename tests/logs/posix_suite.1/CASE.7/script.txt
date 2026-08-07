@@ -1,0 +1,2 @@
+case none in a) echo a;; b) echo b;; esac
+echo rc=$?

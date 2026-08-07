@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[ECHO.8] echo -e '
+' makes a real newline
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo -e 'l1\nl2'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+l1
+l2
+
+### OBTAINED STDOUT ###
+l1
+l2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

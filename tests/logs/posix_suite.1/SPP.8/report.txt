@@ -1,0 +1,90 @@
+### ID / LABEL ###
+[SPP.8] "$@" with no positionals produces zero fields
+### SECTION ###
+[words] special and positional parameters (2.5)
+
+### COMMAND (pipe mode) ###
+set --
+/home/adouieb/Documents/minishell/tests/test_exec "$@"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+[TEST] ----------------------------------
+[TEST] argc => 1
+[TEST] ----------------------------------
+[TEST] argv[0] => [/home/adouieb/Documents/minishell/tests/test_exec]
+[TEST] ----------------------------------
+[TEST] envp[0] => [LOGNAME=adouieb]
+[TEST] envp[1] => [EDITOR=/usr/bin/nano]
+[TEST] envp[2] => [MANAGERPIDFDID=5398]
+[TEST] envp[3] => [MAKELEVEL=1]
+[TEST] envp[4] => [PTYXIS_VERSION=50.1]
+[TEST] envp[5] => [HOME=/home/adouieb]
+[TEST] envp[6] => [OLDPWD=/home/adouieb/Documents/minishell]
+[TEST] envp[7] => [XDG_SESSION_CLASS=user]
+[TEST] envp[8] => [USERNAME=adouieb]
+[TEST] envp[9] => [XDG_DATA_DIRS=/home/adouieb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/]
+[TEST] envp[10] => [MOZ_GMP_PATH=/usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed]
+[TEST] envp[11] => [SHLVL=2]
+[TEST] envp[12] => [HISTCONTROL=ignoredups]
+[TEST] envp[13] => [DISPLAY=:2]
+[TEST] envp[14] => [JOURNAL_STREAM=10:652997]
+[TEST] envp[15] => [MAIL=/var/spool/mail/adouieb]
+[TEST] envp[16] => [XDG_SESSION_TYPE=wayland]
+[TEST] envp[17] => [XDG_SESSION_EXTRA_DEVICE_ACCESS=render:accel]
+[TEST] envp[18] => [XDG_SESSION_DESKTOP=gnome]
+[TEST] envp[19] => [DEBUGINFOD_URLS=ima:enforcing https://debuginfod.fedoraproject.org/ ima:ignore ]
+[TEST] envp[20] => [XDG_MENU_PREFIX=gnome-]
+[TEST] envp[21] => [TERM=xterm-256color]
+[TEST] envp[22] => [XDG_CURRENT_DESKTOP=GNOME]
+[TEST] envp[23] => [MAKEFLAGS= --no-print-directory]
+[TEST] envp[24] => [LANG=en_US.UTF-8]
+[TEST] envp[25] => [MFLAGS=--no-print-directory]
+[TEST] envp[26] => [FLATPAK_TTY_PROGRESS=1]
+[TEST] envp[27] => [SYSTEMD_EXEC_PID=201495]
+[TEST] envp[28] => [PTYXIS_PROFILE=8c28747adc42fb12f3ea6c5e69e4e189]
+[TEST] envp[29] => [XDG_CACHE_HOME=/goinfre/adouieb/.cache]
+[TEST] envp[30] => [QT_IM_MODULE=ibus]
+[TEST] envp[31] => [LC_ALL=C]
+[TEST] envp[32] => [GNOME_SETUP_DISPLAY=unix:/tmp/.X11-unix/X3]
+[TEST] envp[33] => [XDG_RUNTIME_DIR=/run/user/44523220]
+[TEST] envp[34] => [XMODIFIERS=@im=ibus]
+[TEST] envp[35] => [INVOCATION_ID=8a0eddc1376d4966a099e1e96d3266b1]
+[TEST] envp[36] => [PWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/SPP.8]
+[TEST] envp[37] => [KRB5CCNAME=KCM:]
+[TEST] envp[38] => [SHELL=/bin/bash]
+[TEST] envp[39] => [WAYLAND_DISPLAY=wayland-0]
+[TEST] envp[40] => [SSH_AUTH_SOCK=/run/user/44523220/gcr/ssh]
+[TEST] envp[41] => [QT_IM_MODULES=wayland;ibus]
+[TEST] envp[42] => [MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-44523220.slice/user@44523220.service/app.slice/dbus-:1.2-org.gnome.Ptyxis@0.service/memory.pressure]
+[TEST] envp[43] => [_=/usr/bin/timeout]
+[TEST] envp[44] => [COLORTERM=truecolor]
+[TEST] envp[45] => [MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=]
+[TEST] envp[46] => [GDM_LANG=en_US.UTF-8]
+[TEST] envp[47] => [DESKTOP_SESSION=gnome]
+[TEST] envp[48] => [HOSTNAME=f6r13s12.paris.42.school]
+[TEST] envp[49] => [MAKE_TERMOUT=/dev/pts/1]
+[TEST] envp[50] => [XAUTHORITY=/run/user/44523220/.mutter-Xwaylandauth.Y8IZT3]
+[TEST] envp[51] => [MANAGERPID=197752]
+[TEST] envp[52] => [VTE_VERSION=8401]
+[TEST] envp[53] => [GDMSESSION=gnome]
+[TEST] envp[54] => [PATH=/home/adouieb/.local/funcheck/host:/usr/lib64/ccache:/usr/local/bin:/usr/bin]
+[TEST] envp[55] => [MAKE_TERMERR=/dev/pts/1]
+[TEST] envp[56] => [HISTSIZE=1000]
+[TEST] envp[57] => [USER=adouieb]
+[TEST] envp[58] => [FT_MAIL=adouieb@learner.42.tech]
+[TEST] envp[59] => [LESSOPEN=||/usr/bin/lesspipe.sh %s]
+[TEST] envp[60] => [DOCKER_HOST=unix:///run/user/44523220/podman/podman.sock]
+[TEST] envp[61] => [DEBUGINFOD_IMA_CERT_PATH=/etc/keys/ima:]
+[TEST] envp[62] => [DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/44523220/bus]
+[TEST] ----------------------------------
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[SET.4] set -- protects operands that look like options
+### SECTION ###
+[builtins] set — special built-in (positional parameters; options in suite 10)
+
+### COMMAND (pipe mode) ###
+set -- -f -x
+echo $1 $2
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+-f -x
+
+### OBTAINED STDOUT ###
+-f -x
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

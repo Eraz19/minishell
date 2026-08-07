@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[MIX.8] case on a cmd-sub over a glob, with redirected arm
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+touch only_one.m8
+case $(echo *.m8) in
+	only_one.m8) echo matched > arm.txt;;
+esac
+cat arm.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+matched
+
+### OBTAINED STDOUT ###
+matched
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.8/valgrind.*.log

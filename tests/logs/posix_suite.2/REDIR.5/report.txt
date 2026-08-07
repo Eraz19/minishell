@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[REDIR.5] < on a missing file: error, command not run, shell continues
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+cat < no_such_input.txt
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=92
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: redirection failed: unable to open file: 'no_such_input.txt' expanded from 'no_such_input.txt': No such file or directory
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.5/valgrind.*.log

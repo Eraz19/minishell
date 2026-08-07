@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-C.5] -c: next operand becomes $0
+### SECTION ###
+[options] invocation: -c command string (POSIX sh: -c)
+
+### COMMAND (argv mode) ###
+minishell -c echo $0 myname
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+myname
+
+### OBTAINED STDOUT ###
+myname
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PEX.12] ${x%.*} smallest vs ${x%%.*} largest suffix
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+x=a.b.c
+echo ${x%.*} ${x%%.*}
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a.b a
+
+### OBTAINED STDOUT ###
+a.b a
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

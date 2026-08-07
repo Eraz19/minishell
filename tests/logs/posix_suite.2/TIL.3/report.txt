@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[TIL.3] tilde expands in an assignment value
+### SECTION ###
+[words] tilde expansion edges (2.6.1)
+
+### COMMAND (pipe mode) ###
+HOME=/tmp
+d=~/sub
+echo $d
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/tmp/sub
+
+### OBTAINED STDOUT ###
+/tmp/sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

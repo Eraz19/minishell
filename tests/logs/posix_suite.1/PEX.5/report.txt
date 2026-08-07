@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[PEX.5] ${x?msg} on a null parameter is not an error
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+x=
+echo "[${x?msg}]"
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[]
+rc=0
+
+### OBTAINED STDOUT ###
+[]
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

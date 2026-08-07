@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[FSP.7] literal words are not subject to IFS
+### SECTION ###
+[words] field splitting (2.6.5): the delimiter algorithm
+
+### COMMAND (pipe mode) ###
+IFS=x
+set -- axb
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+1
+
+### OBTAINED STDOUT ###
+1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

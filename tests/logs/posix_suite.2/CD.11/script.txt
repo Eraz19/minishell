@@ -1,0 +1,4 @@
+CDPATH=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.11/elsewhere
+cd sub
+cd target
+pwd

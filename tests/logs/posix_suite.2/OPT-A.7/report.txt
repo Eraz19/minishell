@@ -1,0 +1,35 @@
+### ID / LABEL ###
+[OPT-A.7] set -o reports allexport on
+### SECTION ###
+[options] option -a / allexport (POSIX set -a)
+
+### COMMAND (pipe mode) ###
+set -a
+set -o
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+allexport	on
+errexit	off
+ignoreeof	off
+monitor	off
+noclobber	off
+noexec	off
+noglob	off
+nolog	off
+notify	off
+nounset	off
+pipefail	off
+verbose	off
+vi	off
+xtrace	off
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

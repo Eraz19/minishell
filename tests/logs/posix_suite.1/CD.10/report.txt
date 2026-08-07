@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[CD.10] cd .. resolves logically against PWD
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd a/b
+cd ..
+pwd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.10/a
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.10/a
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

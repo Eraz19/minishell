@@ -1,0 +1,6 @@
+for x in a b c; do
+	case $x in
+		a) echo first;;
+		c) echo last;;
+	esac
+done

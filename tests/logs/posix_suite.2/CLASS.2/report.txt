@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[CLASS.2] intrinsic built-in error does NOT abort (cd)
+### SECTION ###
+[builtins] built-in classification (POSIX 2.8.1 / 2.9.1)
+
+### COMMAND (pipe mode) ###
+cd /no/such/dir
+echo survived
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+survived
+
+### OBTAINED STDOUT ###
+survived
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: cd: /no/such/dir: No such file or directory
+/home/adouieb/Documents/minishell/minishell: cd: builtin error
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CASE.10] case status = executed arm's last command
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case go in go) sh -c "exit 6";; esac
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=6
+
+### OBTAINED STDOUT ###
+rc=6
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[UNTIL.2] until with an initially-true condition never runs, status 0
+### SECTION ###
+[ast] while / until node (2.9.4.5-6)
+
+### COMMAND (pipe mode) ###
+until true; do echo never; done
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

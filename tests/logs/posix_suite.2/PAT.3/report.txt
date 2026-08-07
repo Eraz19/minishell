@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PAT.3] * does not match a leading dot
+### SECTION ###
+[words] pathname expansion & pattern matching (2.6.6, 2.14)
+
+### COMMAND (pipe mode) ###
+echo *
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+visible
+
+### OBTAINED STDOUT ###
+visible
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

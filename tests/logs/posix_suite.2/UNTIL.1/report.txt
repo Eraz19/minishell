@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[UNTIL.1] until runs while the condition is false
+### SECTION ###
+[ast] while / until node (2.9.4.5-6)
+
+### COMMAND (pipe mode) ###
+until test -e made_u1; do
+	echo creating
+	touch made_u1
+done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+creating
+
+### OBTAINED STDOUT ###
+creating
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

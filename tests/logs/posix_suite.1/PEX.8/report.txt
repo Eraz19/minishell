@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PEX.8] unused default word is not evaluated
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+x=set
+echo ${x:-$(echo leaked > sidef)}
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+set
+
+### OBTAINED STDOUT ###
+set
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

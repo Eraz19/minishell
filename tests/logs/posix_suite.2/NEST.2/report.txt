@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[NEST.2] nested command substitutions
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+echo $(echo $(echo deepest))
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+deepest
+
+### OBTAINED STDOUT ###
+deepest
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.2/valgrind.*.log

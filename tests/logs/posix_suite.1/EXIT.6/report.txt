@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[EXIT.6] exit stops the script immediately
+### SECTION ###
+[builtins] exit — special built-in, POSIX 2.14 exit
+
+### COMMAND (pipe mode) ###
+echo before
+exit 7
+echo after
+
+### EXIT STATUS (obtained) ###
+7
+
+### EXPECTED STDOUT ###
+before
+
+### OBTAINED STDOUT ###
+before
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

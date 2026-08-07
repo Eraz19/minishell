@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CASE.3] first matching arm wins
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case x in x) echo one;; x) echo two;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one
+
+### OBTAINED STDOUT ###
+one
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

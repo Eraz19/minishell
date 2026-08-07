@@ -1,0 +1,2 @@
+echo ${u_pex6:?}
+echo after

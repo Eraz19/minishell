@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QUO.12] dollar-single-quotes: escaped quote stays inside
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo $'A\'B'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+A'B
+
+### OBTAINED STDOUT ###
+A'B
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

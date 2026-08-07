@@ -1,0 +1,1 @@
+A_asg2=1 B_asg2=2 sh -c 'echo $A_asg2$B_asg2'

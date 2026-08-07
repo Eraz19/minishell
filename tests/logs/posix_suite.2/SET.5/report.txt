@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[SET.5] positional parameters feed $@ expansion
+### SECTION ###
+[builtins] set — special built-in (positional parameters; options in suite 10)
+
+### COMMAND (pipe mode) ###
+set p q
+for a in "$@"; do echo [$a]; done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[p]
+[q]
+
+### OBTAINED STDOUT ###
+[p]
+[q]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

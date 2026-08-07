@@ -1,0 +1,1 @@
+true && (echo x | tr x y)

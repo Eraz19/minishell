@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXP.17] tilde with a suffix path
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo ~/sub
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/sub
+
+### OBTAINED STDOUT ###
+/home/adouieb/sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

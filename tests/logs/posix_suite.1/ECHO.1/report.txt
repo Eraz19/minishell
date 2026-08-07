@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ECHO.1] echo with no operand prints a single newline
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+
+
+### OBTAINED STDOUT ###
+
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

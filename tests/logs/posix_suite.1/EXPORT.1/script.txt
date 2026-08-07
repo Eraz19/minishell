@@ -1,0 +1,2 @@
+export XP_1=val1
+env

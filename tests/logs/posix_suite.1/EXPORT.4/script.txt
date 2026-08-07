@@ -1,0 +1,2 @@
+export XP_4=deep
+/home/adouieb/Documents/minishell/tests/test_exec

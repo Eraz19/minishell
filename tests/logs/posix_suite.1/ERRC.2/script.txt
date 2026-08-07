@@ -1,0 +1,2 @@
+echo x > /nonexistent_errc2/f
+echo rc=$?

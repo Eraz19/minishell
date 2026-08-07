@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ALIAS.1] define and use an alias
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias hi_1='echo aliased'
+hi_1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+aliased
+
+### OBTAINED STDOUT ###
+aliased
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

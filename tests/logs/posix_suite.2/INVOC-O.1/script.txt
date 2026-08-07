@@ -1,0 +1,1 @@
+minishell -Z -c echo no

@@ -1,0 +1,6 @@
+true &
+P1=$!
+sleep 0.05 &
+P2=$!
+wait $P1 $P2
+echo rc=$?

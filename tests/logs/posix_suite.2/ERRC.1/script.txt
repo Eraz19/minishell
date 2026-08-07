@@ -1,0 +1,2 @@
+: > /nonexistent_errc1/f
+echo after

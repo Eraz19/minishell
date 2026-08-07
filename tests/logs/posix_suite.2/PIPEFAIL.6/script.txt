@@ -1,0 +1,4 @@
+set -o pipefail
+set +o pipefail
+false | true
+echo rc=$?

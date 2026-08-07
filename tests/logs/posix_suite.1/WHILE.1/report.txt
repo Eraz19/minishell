@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[WHILE.1] while body runs while the condition is true
+### SECTION ###
+[ast] while / until node (2.9.4.5-6)
+
+### COMMAND (pipe mode) ###
+while true; do
+	echo iteration
+	break
+done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+iteration
+
+### OBTAINED STDOUT ###
+iteration
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

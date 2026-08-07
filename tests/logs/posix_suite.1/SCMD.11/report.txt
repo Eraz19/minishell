@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SCMD.11] ENOEXEC binary: diagnosed, no crash, shell continues
+### SECTION ###
+[ast] simple command (2.9.1): words, assignments, search order
+
+### COMMAND (pipe mode) ###
+./bin.bad
+echo survived
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+survived
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: ELF_not_really_elf_garbage: command not found
+
+### VERDICT ###
+PASS

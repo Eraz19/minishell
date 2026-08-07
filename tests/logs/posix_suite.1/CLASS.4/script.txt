@@ -1,0 +1,2 @@
+CL_4=temp true
+echo [${CL_4:-empty}]

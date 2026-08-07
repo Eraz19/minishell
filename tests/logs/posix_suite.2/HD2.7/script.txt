@@ -1,0 +1,4 @@
+f() { cat; }
+f <<EOF
+fed
+EOF

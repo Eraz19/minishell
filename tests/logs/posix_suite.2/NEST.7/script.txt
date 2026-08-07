@@ -1,0 +1,2 @@
+f() { echo piped_out > inner.txt; cat inner.txt; }
+f | cat

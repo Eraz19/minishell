@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[FSP.5] IFS= still removes a fully empty expansion field
+### SECTION ###
+[words] field splitting (2.6.5): the delimiter algorithm
+
+### COMMAND (pipe mode) ###
+IFS=
+e=
+set -- $e
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+0
+
+### OBTAINED STDOUT ###
+0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

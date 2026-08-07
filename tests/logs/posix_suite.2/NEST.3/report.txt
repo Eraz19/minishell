@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[NEST.3] cmd-sub inside an if condition
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+if test "$(echo yes)" = yes; then echo matched; fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+matched
+
+### OBTAINED STDOUT ###
+matched
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.3/valgrind.*.log

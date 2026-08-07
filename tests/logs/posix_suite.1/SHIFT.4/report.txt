@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SHIFT.4] shift $# leaves zero parameters
+### SECTION ###
+[semantics] shift (2.15, page @3118)
+
+### COMMAND (pipe mode) ###
+set a b c
+shift $#
+echo n=$#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+n=0
+
+### OBTAINED STDOUT ###
+n=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

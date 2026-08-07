@@ -1,0 +1,19 @@
+### ID / LABEL ###
+[ECHO.3] echo -n suppresses the trailing newline
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo -n abc
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+abc
+### OBTAINED STDOUT ###
+abc
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

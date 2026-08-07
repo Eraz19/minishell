@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EVAL.3] eval propagates the command's status
+### SECTION ###
+[semantics] eval (2.15, page @2182)
+
+### COMMAND (pipe mode) ###
+eval 'sh -c "exit 5"'
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=5
+
+### OBTAINED STDOUT ###
+rc=5
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[COLON.3] colon arguments are still expanded (side effects happen)
+### SECTION ###
+[builtins] colon (:) — special built-in, POSIX 2.14
+
+### COMMAND (pipe mode) ###
+: ${SIDE_C3:=assigned}
+echo $SIDE_C3
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+assigned
+
+### OBTAINED STDOUT ###
+assigned
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

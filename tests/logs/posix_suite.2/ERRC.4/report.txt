@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[ERRC.4] readonly assignment prefix aborts, command not run
+### SECTION ###
+[semantics] consequences of shell errors (2.8.1 table)
+
+### COMMAND (pipe mode) ###
+readonly r_errc4=1
+r_errc4=2 echo hi
+echo after
+
+### EXIT STATUS (obtained) ###
+17
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: r_errc4: readonly variable
+
+### VERDICT ###
+PASS

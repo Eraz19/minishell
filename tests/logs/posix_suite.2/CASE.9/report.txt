@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[CASE.9] ;& falls through to the next arm (Issue 8)
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case a in a) echo one ;& b) echo two ;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one
+two
+
+### OBTAINED STDOUT ###
+one
+two
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

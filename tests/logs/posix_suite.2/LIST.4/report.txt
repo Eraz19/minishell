@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[LIST.4] newline separates commands like ;
+### SECTION ###
+[ast] list node (2.9.3): sequential ; and async &
+
+### COMMAND (pipe mode) ###
+echo l1
+echo l2
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+l1
+l2
+
+### OBTAINED STDOUT ###
+l1
+l2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

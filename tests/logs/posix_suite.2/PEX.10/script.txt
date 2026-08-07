@@ -1,0 +1,4 @@
+set -- "${u_p10:-a b}"
+echo $#
+set -- ${u_p10:-a b}
+echo $#

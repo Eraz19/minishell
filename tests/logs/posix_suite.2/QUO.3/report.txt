@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QUO.3] single quotes make operators and $ literal
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo '$V `x` | ; & < > ( ) *'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$V `x` | ; & < > ( ) *
+
+### OBTAINED STDOUT ###
+$V `x` | ; & < > ( ) *
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

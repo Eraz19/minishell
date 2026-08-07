@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[SPP.2] $? is 0 at shell startup
+### SECTION ###
+[words] special and positional parameters (2.5)
+
+### COMMAND (pipe mode) ###
+echo $?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+0
+
+### OBTAINED STDOUT ###
+0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

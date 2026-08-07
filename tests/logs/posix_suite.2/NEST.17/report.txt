@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[NEST.17] loop over a pipeline of and-ors
+### SECTION ###
+[complex] nesting: control structures inside each other
+
+### COMMAND (pipe mode) ###
+for i in 1 2; do
+	false || echo rescued_$i
+done | cat
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rescued_1
+rescued_2
+
+### OBTAINED STDOUT ###
+rescued_1
+rescued_2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.17/valgrind.*.log

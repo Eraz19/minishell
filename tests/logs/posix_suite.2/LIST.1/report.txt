@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[LIST.1] semicolon runs both commands in order
+### SECTION ###
+[ast] list node (2.9.3): sequential ; and async &
+
+### COMMAND (pipe mode) ###
+echo one; echo two
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one
+two
+
+### OBTAINED STDOUT ###
+one
+two
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

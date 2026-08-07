@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[UNALIAS.2] unalias -a removes everything
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias a_u2='echo a'
+alias b_u2='echo b'
+unalias -a
+a_u2
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=127
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: a_u2: command not found
+
+### VERDICT ###
+PASS

@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[REDIR.6] 2> redirects stderr by fd number
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+ls no_such_entry_r6 2> err_r6.txt
+grep -c no_such_entry_r6 err_r6.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+1
+
+### OBTAINED STDOUT ###
+1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.6/valgrind.*.log

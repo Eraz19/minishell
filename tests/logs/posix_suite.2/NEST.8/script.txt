@@ -1,0 +1,5 @@
+f() { echo one_$(echo shot) > gen.txt; }
+for i in 1 2; do
+	f
+	cat gen.txt
+done

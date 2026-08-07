@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PIPE.4] pipeline status = last command (failure)
+### SECTION ###
+[ast] pipeline node (2.9.2): |, status, ! negation
+
+### COMMAND (pipe mode) ###
+true | false
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=1
+
+### OBTAINED STDOUT ###
+rc=1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

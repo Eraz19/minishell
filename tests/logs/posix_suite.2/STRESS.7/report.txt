@@ -1,0 +1,31 @@
+### ID / LABEL ###
+[STRESS.7] async loop + foreground loop interleaved via wait
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+for i in 1 2; do echo bg_$i >> bg.txt; done &
+for i in 1 2; do echo fg_$i >> fg.txt; done
+wait
+sort bg.txt fg.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+bg_1
+bg_2
+fg_1
+fg_2
+
+### OBTAINED STDOUT ###
+bg_1
+bg_2
+fg_1
+fg_2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/STRESS.7/valgrind.*.log

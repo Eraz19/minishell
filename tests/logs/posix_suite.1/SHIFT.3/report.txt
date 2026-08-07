@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SHIFT.3] shift 0 is a successful no-op
+### SECTION ###
+[semantics] shift (2.15, page @3118)
+
+### COMMAND (pipe mode) ###
+set a b
+shift 0
+echo rc=$? n=$# f=$1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0 n=2 f=a
+
+### OBTAINED STDOUT ###
+rc=0 n=2 f=a
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

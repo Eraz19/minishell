@@ -1,0 +1,1 @@
+minishell -e -c false; echo unreachable

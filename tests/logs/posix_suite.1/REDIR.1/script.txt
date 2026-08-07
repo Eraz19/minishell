@@ -1,0 +1,2 @@
+echo content > out_r1.txt
+cat out_r1.txt

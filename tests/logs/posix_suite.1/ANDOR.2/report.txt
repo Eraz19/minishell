@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ANDOR.2] && skips the right side on failure
+### SECTION ###
+[ast] and-or node (2.9.3): && ||
+
+### COMMAND (pipe mode) ###
+false && echo skipped
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=1
+
+### OBTAINED STDOUT ###
+rc=1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

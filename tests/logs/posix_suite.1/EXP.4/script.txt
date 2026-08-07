@@ -1,0 +1,2 @@
+echo ${NEW_E4:=made}
+echo $NEW_E4

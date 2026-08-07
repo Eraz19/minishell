@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PIPE.2] three-stage pipeline
+### SECTION ###
+[ast] pipeline node (2.9.2): |, status, ! negation
+
+### COMMAND (pipe mode) ###
+printf "b\na\n" | sort | head -1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+
+### OBTAINED STDOUT ###
+a
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

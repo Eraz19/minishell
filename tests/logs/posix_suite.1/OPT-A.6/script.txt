@@ -1,0 +1,1 @@
+minishell -a -c CMDLINE_A6=v; env

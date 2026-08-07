@@ -1,0 +1,2 @@
+/home/adouieb/Documents/minishell/minishell: cd: /home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.9/not_a_dir: Not a directory
+/home/adouieb/Documents/minishell/minishell: cd: builtin error

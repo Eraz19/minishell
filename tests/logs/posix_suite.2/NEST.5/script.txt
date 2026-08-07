@@ -1,0 +1,1 @@
+case $(echo key) in key) echo hit;; esac

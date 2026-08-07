@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[NEST.15] brace group inside if inside subshell
+### SECTION ###
+[complex] nesting: control structures inside each other
+
+### COMMAND (pipe mode) ###
+(if true; then { echo a; echo b; }; fi)
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+b
+
+### OBTAINED STDOUT ###
+a
+b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[MIX.5] alias expanding to a pipeline head
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+alias upper='tr a-z A-Z'
+echo mixed | upper
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+MIXED
+
+### OBTAINED STDOUT ###
+MIXED
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.5/valgrind.*.log

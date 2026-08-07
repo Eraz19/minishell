@@ -1,0 +1,3 @@
+cat <<E"O"F
+$HOME literal
+EOF

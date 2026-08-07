@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[DOT.1] dot script runs in the current environment
+### SECTION ###
+[semantics] dot (2.15, page @2091)
+
+### COMMAND (pipe mode) ###
+. ./lib.sh
+echo $v_dot1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+42
+
+### OBTAINED STDOUT ###
+42
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

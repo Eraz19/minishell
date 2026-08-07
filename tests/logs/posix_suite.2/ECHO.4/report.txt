@@ -1,0 +1,19 @@
+### ID / LABEL ###
+[ECHO.4] clustered/repeated -n flags (-nnn, -n -n)
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo -nnn one
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one
+### OBTAINED STDOUT ###
+one
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

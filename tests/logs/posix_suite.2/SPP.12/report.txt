@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[SPP.12] spec example: ${a}b-$ab-${1}0-${10}-$10
+### SECTION ###
+[words] special and positional parameters (2.5)
+
+### COMMAND (pipe mode) ###
+a=1
+set 2
+echo ${a}b-$ab-${1}0-${10}-$10
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+1b--20--20
+
+### OBTAINED STDOUT ###
+1b--20--20
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

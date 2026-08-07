@@ -1,0 +1,32 @@
+### ID / LABEL ###
+[NEST.14] heredoc on a loop inside a function
+### SECTION ###
+[complex] nesting: control structures inside each other
+
+### COMMAND (pipe mode) ###
+f() {
+	while true; do
+		cat
+		break
+	done <<EOF
+u
+v
+EOF
+}
+f
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+u
+v
+
+### OBTAINED STDOUT ###
+u
+v
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

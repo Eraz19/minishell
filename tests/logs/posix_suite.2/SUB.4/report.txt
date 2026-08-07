@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[SUB.4] cd inside a subshell does not move the parent
+### SECTION ###
+[ast] subshell node (2.9.4.3): ( ) isolation
+
+### COMMAND (pipe mode) ###
+(cd /)
+pwd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/SUB.4
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/SUB.4
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

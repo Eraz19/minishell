@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: 1BAD: invalid name

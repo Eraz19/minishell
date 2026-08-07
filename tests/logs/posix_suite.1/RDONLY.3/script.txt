@@ -1,0 +1,3 @@
+readonly RO_3=v
+unset RO_3
+echo not_reached

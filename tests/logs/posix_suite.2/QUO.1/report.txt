@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[QUO.1] backslash escapes $, backslash and dquote
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+V=nope
+echo \$V \\ \"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$V \ "
+
+### OBTAINED STDOUT ###
+$V \ "
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

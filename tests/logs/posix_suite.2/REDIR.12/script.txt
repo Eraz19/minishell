@@ -1,0 +1,2 @@
+if true; then echo branch; fi > if_r12.txt
+cat if_r12.txt

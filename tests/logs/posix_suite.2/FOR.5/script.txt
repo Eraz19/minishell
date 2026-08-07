@@ -1,0 +1,2 @@
+for x in a b last; do :; done
+echo $x

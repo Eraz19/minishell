@@ -1,0 +1,35 @@
+### ID / LABEL ###
+[SETOPT.4] toggling by flag is visible in set -o listing
+### SECTION ###
+[options] set: option management (set -o / +o listings)
+
+### COMMAND (pipe mode) ###
+set -C
+set -o
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+allexport	off
+errexit	off
+ignoreeof	off
+monitor	off
+noclobber	on
+noexec	off
+noglob	off
+nolog	off
+notify	off
+nounset	off
+pipefail	off
+verbose	off
+vi	off
+xtrace	off
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

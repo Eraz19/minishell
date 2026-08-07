@@ -1,0 +1,3 @@
+f() { if true; then sh -c "exit 8"; fi; }
+f
+echo rc=$?

@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[FUNC.2] defining a function produces no output and status 0
+### SECTION ###
+[ast] function definition node (2.9.5)
+
+### COMMAND (pipe mode) ###
+noop_f2() { echo never; }
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=0
+
+### OBTAINED STDOUT ###
+rc=0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

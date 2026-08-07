@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[CD.9] cd to a plain file -> error (ENOTDIR)
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd not_a_dir
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=93
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: cd: /home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/CD.9/not_a_dir: Not a directory
+/home/adouieb/Documents/minishell/minishell: cd: builtin error
+
+### VERDICT ###
+PASS

@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[FSP.1] a::b with IFS=: gives three fields, middle empty
+### SECTION ###
+[words] field splitting (2.6.5): the delimiter algorithm
+
+### COMMAND (pipe mode) ###
+x=a::b
+IFS=:
+set -- $x
+echo "$#" "[$1][$2][$3]"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+3 [a][][b]
+
+### OBTAINED STDOUT ###
+3 [a][][b]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

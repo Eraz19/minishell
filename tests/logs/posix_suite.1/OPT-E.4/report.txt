@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[OPT-E.4] set -e: ! negated failure does not exit
+### SECTION ###
+[options] option -e / errexit
+
+### COMMAND (pipe mode) ###
+set -e
+! false
+echo alive
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+alive
+
+### OBTAINED STDOUT ###
+alive
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

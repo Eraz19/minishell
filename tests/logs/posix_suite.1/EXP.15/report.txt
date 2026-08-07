@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EXP.15] double quotes keep $ expansion but not globbing
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+V=star
+echo "$V *"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+star *
+
+### OBTAINED STDOUT ###
+star *
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

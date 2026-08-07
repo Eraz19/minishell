@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ANDOR.1] && runs the right side on success
+### SECTION ###
+[ast] and-or node (2.9.3): && ||
+
+### COMMAND (pipe mode) ###
+true && echo ran
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+ran
+
+### OBTAINED STDOUT ###
+ran
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

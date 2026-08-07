@@ -1,0 +1,2 @@
+/home/adouieb/Documents/minishell/minishell: history: no valid history file path found: persistent history disabled
+/home/adouieb/Documents/minishell/minishell: cd: HOME: not found

@@ -1,0 +1,1 @@
+for x in one two three; do echo $x; done

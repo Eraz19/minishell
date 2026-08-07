@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[CD.8] cd with too many operands -> error
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd a b
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=91
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: cd: too many arguments: invalid usage
+
+### VERDICT ###
+PASS

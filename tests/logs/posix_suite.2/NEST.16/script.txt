@@ -1,0 +1,4 @@
+if true; then
+	late_f() { echo defined_late; }
+fi
+late_f

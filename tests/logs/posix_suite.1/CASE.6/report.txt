@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CASE.6] quoted pattern is literal (no glob)
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case "*" in "*") echo literal;; a) echo no;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+literal
+
+### OBTAINED STDOUT ###
+literal
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

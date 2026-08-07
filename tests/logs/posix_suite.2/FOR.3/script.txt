@@ -1,0 +1,2 @@
+L="p q"
+for x in $L r; do echo $x; done

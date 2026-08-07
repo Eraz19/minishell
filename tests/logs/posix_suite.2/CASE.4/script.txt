@@ -1,0 +1,1 @@
+case beta in alpha|beta) echo either;; esac

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-F.2] script operand: $0 = script path, $1.. = args
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell ./s.sh arg1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+./s.sh arg1
+
+### OBTAINED STDOUT ###
+./s.sh arg1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

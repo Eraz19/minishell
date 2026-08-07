@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[GRM.3] case pattern with leading parenthesis
+### SECTION ###
+[semantics] grammar edges (2.10): newlines, reserved words, groups
+
+### COMMAND (pipe mode) ###
+case x in (x) echo m ;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+m
+
+### OBTAINED STDOUT ###
+m
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

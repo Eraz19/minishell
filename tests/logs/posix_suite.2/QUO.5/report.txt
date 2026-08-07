@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[QUO.5] backslash in dquotes: special before $ and \, literal before a
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+echo "\$x \a \\ \""
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$x \a \ "
+
+### OBTAINED STDOUT ###
+$x \a \ "
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

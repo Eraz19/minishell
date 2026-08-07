@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[HD.6] empty heredoc body
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+cat <<EOF
+EOF
+echo after_hd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+after_hd
+
+### OBTAINED STDOUT ###
+after_hd
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD.6/valgrind.*.log

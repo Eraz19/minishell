@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[OPT-I.6] non-interactive: command-not-executable does not abort
+### SECTION ###
+[options] option -i / interactive (forced with -s -i on a pipe)
+
+### COMMAND (pipe mode) ###
+./noexec_i6.sh
+echo rc=$?
+echo survived
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=126
+survived
+
+### OBTAINED STDOUT ###
+rc=126
+survived
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: ./noexec_i6.sh: command not executable
+
+### VERDICT ###
+PASS

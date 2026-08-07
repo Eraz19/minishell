@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[SUB.5] nested subshells
+### SECTION ###
+[ast] subshell node (2.9.4.3): ( ) isolation
+
+### COMMAND (pipe mode) ###
+((echo deep))
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+deep
+
+### OBTAINED STDOUT ###
+deep
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

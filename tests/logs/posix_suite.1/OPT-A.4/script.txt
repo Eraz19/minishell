@@ -1,0 +1,4 @@
+set -a
+set +a
+LATEVAR_A4=nope
+env

@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[FSP.11] whitespace-only expansion vanishes
+### SECTION ###
+[words] field splitting (2.6.5): the delimiter algorithm
+
+### COMMAND (pipe mode) ###
+x="   "
+set -- $x
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+0
+
+### OBTAINED STDOUT ###
+0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

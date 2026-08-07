@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CASE.2] * default arm
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case zebra in apple) echo a;; *) echo default;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+default
+
+### OBTAINED STDOUT ###
+default
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

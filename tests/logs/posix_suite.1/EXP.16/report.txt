@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXP.16] tilde expansion to $HOME
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo ~
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb
+
+### OBTAINED STDOUT ###
+/home/adouieb
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

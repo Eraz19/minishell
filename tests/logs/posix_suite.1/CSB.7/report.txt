@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CSB.7] no field splitting in an assignment value
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+x=$(printf "a  b")
+echo "[$x]"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[a  b]
+
+### OBTAINED STDOUT ###
+[a  b]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

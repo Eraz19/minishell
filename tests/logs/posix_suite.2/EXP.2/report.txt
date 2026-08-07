@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXP.2] unset variable expands to nothing (not an error)
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo a${NOT_SET_E2}b
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+ab
+
+### OBTAINED STDOUT ###
+ab
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

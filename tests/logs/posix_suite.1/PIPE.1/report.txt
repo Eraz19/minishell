@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PIPE.1] two-stage pipeline passes data
+### SECTION ###
+[ast] pipeline node (2.9.2): |, status, ! negation
+
+### COMMAND (pipe mode) ###
+echo through | cat
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+through
+
+### OBTAINED STDOUT ###
+through
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

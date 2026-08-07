@@ -1,0 +1,18 @@
+### ID / LABEL ###
+[ECHO.10] echo -e '### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo -e 'ab\cZZZ'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+ab
+### OBTAINED STDOUT ###
+ab
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

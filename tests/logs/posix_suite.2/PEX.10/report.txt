@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[PEX.10] field count of quoted vs unquoted default word
+### SECTION ###
+[words] parameter expansion (2.6.2): unset-vs-null table, patterns
+
+### COMMAND (pipe mode) ###
+set -- "${u_p10:-a b}"
+echo $#
+set -- ${u_p10:-a b}
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+1
+2
+
+### OBTAINED STDOUT ###
+1
+2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

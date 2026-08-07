@@ -1,0 +1,4 @@
+cat <<EOF >hd.out
+body line
+EOF
+cat hd.out

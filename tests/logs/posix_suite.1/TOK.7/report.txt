@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[TOK.7] newline after | continues the pipeline
+### SECTION ###
+[words] token recognition (2.3) + alias substitution (2.3.1)
+
+### COMMAND (pipe mode) ###
+echo piped |
+cat
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+piped
+
+### OBTAINED STDOUT ###
+piped
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

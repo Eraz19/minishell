@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CSB.11] four-level nested $( )
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+echo $(echo $(echo $(echo $(echo deep4))))
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+deep4
+
+### OBTAINED STDOUT ###
+deep4
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

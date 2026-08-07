@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[FUNC.6] return N sets the function's status (POSIX special built-in)
+### SECTION ###
+[ast] function definition node (2.9.5)
+
+### COMMAND (pipe mode) ###
+ret_f6() { return 4; echo not_reached; }
+ret_f6
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=4
+
+### OBTAINED STDOUT ###
+rc=4
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

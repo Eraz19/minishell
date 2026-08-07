@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-O.2] -- ends option parsing (script named like an option dir)
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell -- ./s.sh
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+dashdash_ok
+
+### OBTAINED STDOUT ###
+dashdash_ok
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,27 @@
+### ID / LABEL ###
+[MIX.3] expansion result used as a redirection target inside a loop
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+for name in t1 t2; do
+	echo data_$name > out_$name.txt
+done
+cat out_t1.txt out_t2.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+data_t1
+data_t2
+
+### OBTAINED STDOUT ###
+data_t1
+data_t2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.3/valgrind.*.log

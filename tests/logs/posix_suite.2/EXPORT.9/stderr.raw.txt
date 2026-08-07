@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: warning: unspecified behaviour: POSIX: export: DESCRIPTION: When no arguments are given, the results are unspecified: implemented as: no-op

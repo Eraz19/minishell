@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[HD.1] basic heredoc body reaches the command
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+cat <<EOF
+line1
+line2
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+line1
+line2
+
+### OBTAINED STDOUT ###
+line1
+line2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

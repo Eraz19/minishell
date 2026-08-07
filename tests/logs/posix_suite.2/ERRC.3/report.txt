@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ERRC.3] expansion error ${x?} aborts with the parameter named
+### SECTION ###
+[semantics] consequences of shell errors (2.8.1 table)
+
+### COMMAND (pipe mode) ###
+echo ${u_errc3?custom_msg}
+echo after
+
+### EXIT STATUS (obtained) ###
+125
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: u_errc3: custom_msg: parameter null or not set
+
+### VERDICT ###
+PASS

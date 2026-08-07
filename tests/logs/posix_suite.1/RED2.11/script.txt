@@ -1,0 +1,2 @@
+echo first >> new.txt
+cat new.txt

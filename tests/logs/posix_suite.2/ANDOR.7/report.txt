@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ANDOR.7] && || with pipelines as operands
+### SECTION ###
+[ast] and-or node (2.9.3): && ||
+
+### COMMAND (pipe mode) ###
+echo a | grep -q a && echo found
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+found
+
+### OBTAINED STDOUT ###
+found
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/ANDOR.7/valgrind.*.log

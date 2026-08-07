@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[OPT-F.3] set +f re-enables globbing
+### SECTION ###
+[options] option -f / noglob (POSIX set -f)
+
+### COMMAND (pipe mode) ###
+set -f
+set +f
+echo *.glob
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a.glob
+
+### OBTAINED STDOUT ###
+a.glob
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

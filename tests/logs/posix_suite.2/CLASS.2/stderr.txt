@@ -1,0 +1,2 @@
+/home/adouieb/Documents/minishell/minishell: cd: /no/such/dir: No such file or directory
+/home/adouieb/Documents/minishell/minishell: cd: builtin error

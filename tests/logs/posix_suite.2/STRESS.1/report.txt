@@ -1,0 +1,28 @@
+### ID / LABEL ###
+[STRESS.1] 4-deep structure: while(for(if(case)))
+### SECTION ###
+[complex] stress: deeper combinations
+
+### COMMAND (pipe mode) ###
+while true; do
+	for i in hit miss; do
+		if true; then
+			case $i in hit) echo case_$i;; esac
+		fi
+	done
+	break
+done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+case_hit
+
+### OBTAINED STDOUT ###
+case_hit
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

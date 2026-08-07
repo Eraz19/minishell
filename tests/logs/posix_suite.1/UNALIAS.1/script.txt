@@ -1,0 +1,4 @@
+alias tmp_u1='echo x'
+unalias tmp_u1
+tmp_u1
+echo rc=$?

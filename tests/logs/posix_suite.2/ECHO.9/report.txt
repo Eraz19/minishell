@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ECHO.9] without -e escapes stay literal
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo 'a\tb'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a\tb
+
+### OBTAINED STDOUT ###
+a\tb
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

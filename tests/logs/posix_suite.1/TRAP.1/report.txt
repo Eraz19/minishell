@@ -1,0 +1,19 @@
+### ID / LABEL ###
+[TRAP.1] trap with no operands and no traps set prints nothing
+### SECTION ###
+[builtins] trap — special built-in, POSIX 2.14 trap
+
+### COMMAND (pipe mode) ###
+trap
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

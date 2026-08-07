@@ -1,0 +1,84 @@
+### ID / LABEL ###
+[OPT-A.2] without -a: plain assignment is NOT exported
+### SECTION ###
+[options] option -a / allexport (POSIX set -a)
+
+### COMMAND (pipe mode) ###
+NOEXP_A2=hidden
+env
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+LOGNAME=adouieb
+EDITOR=/usr/bin/nano
+MANAGERPIDFDID=5398
+MAKELEVEL=1
+PTYXIS_VERSION=50.1
+HOME=/home/adouieb
+OLDPWD=/home/adouieb/Documents/minishell
+XDG_SESSION_CLASS=user
+USERNAME=adouieb
+XDG_DATA_DIRS=/home/adouieb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/
+MOZ_GMP_PATH=/usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed
+SHLVL=2
+HISTCONTROL=ignoredups
+DISPLAY=:2
+JOURNAL_STREAM=10:652997
+MAIL=/var/spool/mail/adouieb
+XDG_SESSION_TYPE=wayland
+XDG_SESSION_EXTRA_DEVICE_ACCESS=render:accel
+XDG_SESSION_DESKTOP=gnome
+DEBUGINFOD_URLS=ima:enforcing https://debuginfod.fedoraproject.org/ ima:ignore 
+XDG_MENU_PREFIX=gnome-
+TERM=xterm-256color
+XDG_CURRENT_DESKTOP=GNOME
+MAKEFLAGS= --no-print-directory
+LANG=en_US.UTF-8
+MFLAGS=--no-print-directory
+FLATPAK_TTY_PROGRESS=1
+SYSTEMD_EXEC_PID=201495
+PTYXIS_PROFILE=8c28747adc42fb12f3ea6c5e69e4e189
+XDG_CACHE_HOME=/goinfre/adouieb/.cache
+QT_IM_MODULE=ibus
+LC_ALL=C
+GNOME_SETUP_DISPLAY=unix:/tmp/.X11-unix/X3
+XDG_RUNTIME_DIR=/run/user/44523220
+XMODIFIERS=@im=ibus
+INVOCATION_ID=8a0eddc1376d4966a099e1e96d3266b1
+PWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/OPT-A.2
+KRB5CCNAME=KCM:
+SHELL=/bin/bash
+WAYLAND_DISPLAY=wayland-0
+SSH_AUTH_SOCK=/run/user/44523220/gcr/ssh
+QT_IM_MODULES=wayland;ibus
+MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-44523220.slice/user@44523220.service/app.slice/dbus-:1.2-org.gnome.Ptyxis@0.service/memory.pressure
+_=/usr/bin/timeout
+COLORTERM=truecolor
+MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
+GDM_LANG=en_US.UTF-8
+DESKTOP_SESSION=gnome
+HOSTNAME=f6r13s12.paris.42.school
+MAKE_TERMOUT=/dev/pts/1
+XAUTHORITY=/run/user/44523220/.mutter-Xwaylandauth.Y8IZT3
+MANAGERPID=197752
+VTE_VERSION=8401
+GDMSESSION=gnome
+PATH=/home/adouieb/.local/funcheck/host:/usr/lib64/ccache:/usr/local/bin:/usr/bin
+MAKE_TERMERR=/dev/pts/1
+HISTSIZE=1000
+USER=adouieb
+FT_MAIL=adouieb@learner.42.tech
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+DOCKER_HOST=unix:///run/user/44523220/podman/podman.sock
+DEBUGINFOD_IMA_CERT_PATH=/etc/keys/ima:
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/44523220/bus
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

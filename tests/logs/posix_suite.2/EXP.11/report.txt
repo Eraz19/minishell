@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EXP.11] command substitution strips trailing newlines
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo [$(printf "x\n\n\n")]
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+[x]
+
+### OBTAINED STDOUT ###
+[x]
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.11/valgrind.*.log

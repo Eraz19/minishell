@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[ALIAS.2] alias with arguments appended after substitution
+### SECTION ###
+[builtins] alias / unalias — POSIX alias substitution
+
+### COMMAND (pipe mode) ###
+alias say_2='echo prefix'
+say_2 suffix
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+prefix suffix
+
+### OBTAINED STDOUT ###
+prefix suffix
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

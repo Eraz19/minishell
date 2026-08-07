@@ -1,0 +1,35 @@
+### ID / LABEL ###
+[SETOPT.2] set +o prints re-inputtable option commands
+### SECTION ###
+[options] set: option management (set -o / +o listings)
+
+### COMMAND (pipe mode) ###
+set -f
+set +o
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+set +o allexport
+set +o errexit
+set +o ignoreeof
+set +o monitor
+set +o noclobber
+set +o noexec
+set -o noglob
+set +o nolog
+set +o notify
+set +o nounset
+set +o pipefail
+set +o verbose
+set +o vi
+set +o xtrace
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

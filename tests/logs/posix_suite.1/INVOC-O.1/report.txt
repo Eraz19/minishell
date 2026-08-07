@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-O.1] invalid command-line option -> error
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell -Z -c echo no
+
+### EXIT STATUS (obtained) ###
+91
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: sh: Z: invalid option
+
+### VERDICT ###
+PASS

@@ -1,0 +1,31 @@
+### ID / LABEL ###
+[NEST.19] recursion terminated by a test
+### SECTION ###
+[complex] nesting: control structures inside each other
+
+### COMMAND (pipe mode) ###
+countdown() {
+	if test "$1" = 1; then
+		echo lvl$1
+		countdown 2
+	elif test "$1" = 2; then
+		echo lvl$1
+	fi
+}
+countdown 1
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+lvl1
+lvl2
+
+### OBTAINED STDOUT ###
+lvl1
+lvl2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

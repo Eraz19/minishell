@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[ASG.5] PATH prefix changes the lookup of the command itself
+### SECTION ###
+[semantics] simple-command semantics (2.9.1)
+
+### COMMAND (pipe mode) ###
+PATH=/nonexistent_asg5 ls
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=127
+
+### OBTAINED STDOUT ###
+rc=127
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: ls: command not found
+
+### VERDICT ###
+PASS

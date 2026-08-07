@@ -1,0 +1,19 @@
+### ID / LABEL ###
+[TOK.1] operator delimits a word without blanks (echo a>b)
+### SECTION ###
+[words] token recognition (2.3) + alias substitution (2.3.1)
+
+### COMMAND (pipe mode) ###
+echo a>b
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,4 @@
+IFS=
+e=
+set -- $e
+echo $#

@@ -1,0 +1,3 @@
+touch s1.src s2.src
+for f in *.src; do echo seen:$f >> report.txt; done
+cat report.txt

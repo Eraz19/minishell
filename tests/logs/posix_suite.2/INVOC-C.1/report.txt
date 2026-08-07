@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-C.1] -c runs the command string
+### SECTION ###
+[options] invocation: -c command string (POSIX sh: -c)
+
+### COMMAND (argv mode) ###
+minishell -c echo hello
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+hello
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

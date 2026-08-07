@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[EXP.12] field splitting on the expansion of an unquoted variable
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+V="a b c"
+set -- $V
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+3
+
+### OBTAINED STDOUT ###
+3
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

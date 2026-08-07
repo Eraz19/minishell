@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[HD.3] quoted delimiter: body is literal
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+cat <<'EOF'
+$HOME stays
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$HOME stays
+
+### OBTAINED STDOUT ###
+$HOME stays
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

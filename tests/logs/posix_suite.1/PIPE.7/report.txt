@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PIPE.7] builtin inside a pipeline
+### SECTION ###
+[ast] pipeline node (2.9.2): |, status, ! negation
+
+### COMMAND (pipe mode) ###
+echo builtin_data | cat
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+builtin_data
+
+### OBTAINED STDOUT ###
+builtin_data
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

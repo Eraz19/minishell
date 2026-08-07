@@ -1,0 +1,2 @@
+c=echo
+eval "$c built"

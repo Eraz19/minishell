@@ -1,0 +1,2 @@
+>pre.txt echo hi
+cat pre.txt

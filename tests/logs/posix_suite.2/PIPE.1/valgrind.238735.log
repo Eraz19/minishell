@@ -1,0 +1,14 @@
+==238735== FILE DESCRIPTORS: 3 open (2 inherited) at exit.
+==238735== Open file descriptor 1:
+==238735==    at 0x49B760B: dup2 (in /usr/lib64/libc.so.6)
+==238735==    by 0x400912: posix_dup2 (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x4261C9: walk_pipe_multiple_commands (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x42634C: walk_pipeline (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x412F04: walk_and_or (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x413189: walk_list (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x414295: walk (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x402EEE: runner_run (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x401B8F: shell_run (in /home/adouieb/Documents/minishell/minishell)
+==238735==    by 0x48D6680: (below main) (in /usr/lib64/libc.so.6)
+==238735== 
+==238735== 

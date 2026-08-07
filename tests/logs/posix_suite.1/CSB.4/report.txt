@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CSB.4] nested backquotes with backslash escapes
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+echo `echo \`echo deep\``
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+deep
+
+### OBTAINED STDOUT ###
+deep
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

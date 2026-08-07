@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CSB.10] double quotes nest independently inside "$( )"
+### SECTION ###
+[words] command substitution (2.6.3)
+
+### COMMAND (pipe mode) ###
+echo "$(echo "a  b")"
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a  b
+
+### OBTAINED STDOUT ###
+a  b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

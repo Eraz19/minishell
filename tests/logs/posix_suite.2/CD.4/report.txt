@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[CD.4] cd - goes to OLDPWD and prints the new directory
+### SECTION ###
+[builtins] cd — POSIX cd utility (HOME, -, CDPATH, -L/-P)
+
+### COMMAND (pipe mode) ###
+cd sub
+cd /home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.4
+cd -
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.4/sub
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/CD.4/sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

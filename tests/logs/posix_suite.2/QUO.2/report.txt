@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[QUO.2] line continuation splices a command name
+### SECTION ###
+[words] quoting (2.2): backslash, single-, double-, dollar-single-quotes
+
+### COMMAND (pipe mode) ###
+ec\
+ho spliced
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+spliced
+
+### OBTAINED STDOUT ###
+spliced
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

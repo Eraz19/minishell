@@ -1,0 +1,3 @@
+PV_8=outer
+echo x | PV_8=inner cat > /dev/null
+echo $PV_8

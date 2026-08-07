@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[SPP.1] $# counts positionals only
+### SECTION ###
+[words] special and positional parameters (2.5)
+
+### COMMAND (pipe mode) ###
+set a b c
+echo $#
+set --
+echo $#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+3
+0
+
+### OBTAINED STDOUT ###
+3
+0
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

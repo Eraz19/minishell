@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: u_pex6: parameter null or not set

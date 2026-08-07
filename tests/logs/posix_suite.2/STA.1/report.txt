@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[STA.1] signal death reports 128+n
+### SECTION ###
+[semantics] exit statuses (2.8.2)
+
+### COMMAND (pipe mode) ###
+sh -c 'kill -TERM $$'
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=143
+
+### OBTAINED STDOUT ###
+rc=143
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

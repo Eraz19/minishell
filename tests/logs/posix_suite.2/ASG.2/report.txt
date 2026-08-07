@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ASG.2] all assignment prefixes reach the child environment
+### SECTION ###
+[semantics] simple-command semantics (2.9.1)
+
+### COMMAND (pipe mode) ###
+A_asg2=1 B_asg2=2 sh -c 'echo $A_asg2$B_asg2'
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+12
+
+### OBTAINED STDOUT ###
+12
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

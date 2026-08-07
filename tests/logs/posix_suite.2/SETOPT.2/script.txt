@@ -1,0 +1,2 @@
+set -f
+set +o

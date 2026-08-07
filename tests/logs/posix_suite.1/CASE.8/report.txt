@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[CASE.8] case word is expanded
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+V=pick
+case $V in pick) echo expanded;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+expanded
+
+### OBTAINED STDOUT ###
+expanded
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

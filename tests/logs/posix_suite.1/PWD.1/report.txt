@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[PWD.1] pwd prints the current directory
+### SECTION ###
+[builtins] pwd — POSIX pwd utility (-L default, -P physical)
+
+### COMMAND (pipe mode) ###
+pwd
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.1
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,3 @@
+U_1=val
+unset U_1
+echo [${U_1:-gone}]

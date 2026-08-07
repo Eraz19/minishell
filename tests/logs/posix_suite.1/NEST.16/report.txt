@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[NEST.16] function defined inside an if, then called
+### SECTION ###
+[complex] nesting: control structures inside each other
+
+### COMMAND (pipe mode) ###
+if true; then
+	late_f() { echo defined_late; }
+fi
+late_f
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+defined_late
+
+### OBTAINED STDOUT ###
+defined_late
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

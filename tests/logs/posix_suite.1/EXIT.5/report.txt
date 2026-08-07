@@ -1,0 +1,20 @@
+### ID / LABEL ###
+[EXIT.5] exit -- 42 (leading -- is skipped)
+### SECTION ###
+[builtins] exit — special built-in, POSIX 2.14 exit
+
+### COMMAND (argv mode) ###
+minishell -c exit -- 42
+
+### EXIT STATUS (obtained) ###
+42
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

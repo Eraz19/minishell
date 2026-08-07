@@ -1,0 +1,87 @@
+### ID / LABEL ###
+[EXPORT.4] exported value reaches an external command's envp
+### SECTION ###
+[builtins] export — special built-in, POSIX 2.14 export
+
+### COMMAND (pipe mode) ###
+export XP_4=deep
+/home/adouieb/Documents/minishell/tests/test_exec
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+[TEST] ----------------------------------
+[TEST] argc => 1
+[TEST] ----------------------------------
+[TEST] argv[0] => [/home/adouieb/Documents/minishell/tests/test_exec]
+[TEST] ----------------------------------
+[TEST] envp[0] => [EDITOR=/usr/bin/nano]
+[TEST] envp[1] => [LOGNAME=adouieb]
+[TEST] envp[2] => [MANAGERPIDFDID=5398]
+[TEST] envp[3] => [PTYXIS_VERSION=50.1]
+[TEST] envp[4] => [HOME=/home/adouieb]
+[TEST] envp[5] => [OLDPWD=/home/adouieb/Documents/minishell]
+[TEST] envp[6] => [XDG_SESSION_CLASS=user]
+[TEST] envp[7] => [USERNAME=adouieb]
+[TEST] envp[8] => [MOZ_GMP_PATH=/usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed]
+[TEST] envp[9] => [XDG_DATA_DIRS=/home/adouieb/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/]
+[TEST] envp[10] => [HISTCONTROL=ignoredups]
+[TEST] envp[11] => [SHLVL=2]
+[TEST] envp[12] => [DISPLAY=:2]
+[TEST] envp[13] => [JOURNAL_STREAM=10:652997]
+[TEST] envp[14] => [XDG_SESSION_TYPE=wayland]
+[TEST] envp[15] => [MAIL=/var/spool/mail/adouieb]
+[TEST] envp[16] => [XDG_SESSION_EXTRA_DEVICE_ACCESS=render:accel]
+[TEST] envp[17] => [XDG_SESSION_DESKTOP=gnome]
+[TEST] envp[18] => [XDG_MENU_PREFIX=gnome-]
+[TEST] envp[19] => [DEBUGINFOD_URLS=ima:enforcing https://debuginfod.fedoraproject.org/ ima:ignore ]
+[TEST] envp[20] => [TERM=xterm-256color]
+[TEST] envp[21] => [XDG_CURRENT_DESKTOP=GNOME]
+[TEST] envp[22] => [LANG=en_US.UTF-8]
+[TEST] envp[23] => [FLATPAK_TTY_PROGRESS=1]
+[TEST] envp[24] => [PTYXIS_PROFILE=8c28747adc42fb12f3ea6c5e69e4e189]
+[TEST] envp[25] => [SYSTEMD_EXEC_PID=201495]
+[TEST] envp[26] => [XDG_CACHE_HOME=/goinfre/adouieb/.cache]
+[TEST] envp[27] => [QT_IM_MODULE=ibus]
+[TEST] envp[28] => [LC_ALL=C]
+[TEST] envp[29] => [LD_PRELOAD=]
+[TEST] envp[30] => [GNOME_SETUP_DISPLAY=unix:/tmp/.X11-unix/X3]
+[TEST] envp[31] => [XDG_RUNTIME_DIR=/run/user/44523220]
+[TEST] envp[32] => [XMODIFIERS=@im=ibus]
+[TEST] envp[33] => [INVOCATION_ID=8a0eddc1376d4966a099e1e96d3266b1]
+[TEST] envp[34] => [PWD=/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.2/EXPORT.4]
+[TEST] envp[35] => [KRB5CCNAME=KCM:]
+[TEST] envp[36] => [XP_4=deep]
+[TEST] envp[37] => [SHELL=/bin/bash]
+[TEST] envp[38] => [WAYLAND_DISPLAY=wayland-0]
+[TEST] envp[39] => [QT_IM_MODULES=wayland;ibus]
+[TEST] envp[40] => [SSH_AUTH_SOCK=/run/user/44523220/gcr/ssh]
+[TEST] envp[41] => [COLORTERM=truecolor]
+[TEST] envp[42] => [MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-44523220.slice/user@44523220.service/app.slice/dbus-:1.2-org.gnome.Ptyxis@0.service/memory.pressure]
+[TEST] envp[43] => [_=/usr/bin/timeout]
+[TEST] envp[44] => [MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=]
+[TEST] envp[45] => [DESKTOP_SESSION=gnome]
+[TEST] envp[46] => [GDM_LANG=en_US.UTF-8]
+[TEST] envp[47] => [HOSTNAME=f6r13s12.paris.42.school]
+[TEST] envp[48] => [XAUTHORITY=/run/user/44523220/.mutter-Xwaylandauth.Y8IZT3]
+[TEST] envp[49] => [VTE_VERSION=8401]
+[TEST] envp[50] => [MANAGERPID=197752]
+[TEST] envp[51] => [GDMSESSION=gnome]
+[TEST] envp[52] => [PATH=/home/adouieb/.local/funcheck/host:/usr/lib64/ccache:/usr/local/bin:/usr/bin]
+[TEST] envp[53] => [HISTSIZE=1000]
+[TEST] envp[54] => [USER=adouieb]
+[TEST] envp[55] => [FT_MAIL=adouieb@learner.42.tech]
+[TEST] envp[56] => [LESSOPEN=||/usr/bin/lesspipe.sh %s]
+[TEST] envp[57] => [DOCKER_HOST=unix:///run/user/44523220/podman/podman.sock]
+[TEST] envp[58] => [DEBUGINFOD_IMA_CERT_PATH=/etc/keys/ima:]
+[TEST] envp[59] => [DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/44523220/bus]
+[TEST] ----------------------------------
+
+### VERDICT ###
+PASS

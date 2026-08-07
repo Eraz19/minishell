@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[IF.7] multiline body with several commands
+### SECTION ###
+[ast] if node (2.9.4.4): then / elif / else, status
+
+### COMMAND (pipe mode) ###
+if true; then
+	echo first
+	echo second
+fi
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+first
+second
+
+### OBTAINED STDOUT ###
+first
+second
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

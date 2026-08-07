@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[HD2.1] partially quoted delimiter suppresses expansion
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+cat <<E"O"F
+$HOME literal
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$HOME literal
+
+### OBTAINED STDOUT ###
+$HOME literal
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

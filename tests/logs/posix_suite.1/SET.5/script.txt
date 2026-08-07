@@ -1,0 +1,2 @@
+set p q
+for a in "$@"; do echo [$a]; done

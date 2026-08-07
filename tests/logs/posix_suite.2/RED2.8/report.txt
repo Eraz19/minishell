@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[RED2.8] failing redirection-only command: >0, shell continues
+### SECTION ###
+[semantics] redirection edges (2.7): word expansion, fd ops, ordering
+
+### COMMAND (pipe mode) ###
+> /nonexistent_red8/f
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+rc=92
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: redirection failed: unable to open file: '/nonexistent_red8/f' expanded from '/nonexistent_red8/f': No such file or directory
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/RED2.8/valgrind.*.log

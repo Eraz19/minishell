@@ -1,0 +1,4 @@
+for i in 1 2; do echo bg_$i >> bg.txt; done &
+for i in 1 2; do echo fg_$i >> fg.txt; done
+wait
+sort bg.txt fg.txt

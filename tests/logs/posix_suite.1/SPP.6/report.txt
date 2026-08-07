@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[SPP.6] $$ is unchanged inside a subshell
+### SECTION ###
+[words] special and positional parameters (2.5)
+
+### COMMAND (pipe mode) ###
+p=$$
+( q=$$ ; [ "$q" = "$p" ] && echo same || echo diff )
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+same
+
+### OBTAINED STDOUT ###
+same
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

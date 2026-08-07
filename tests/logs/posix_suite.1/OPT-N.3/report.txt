@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[OPT-N.3] set -n mid-script stops executing the rest
+### SECTION ###
+[options] option -n / noexec (POSIX set -n)
+
+### COMMAND (pipe mode) ###
+echo before
+set -n
+echo after
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+before
+
+### OBTAINED STDOUT ###
+before
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

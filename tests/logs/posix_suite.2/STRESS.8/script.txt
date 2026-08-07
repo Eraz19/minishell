@@ -1,0 +1,2 @@
+f() { echo $(echo nested_f); }
+echo top:$(f)

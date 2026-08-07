@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-S.3] -s: operands become positional parameters
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell -s p1 p2
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+p1-p2
+
+### OBTAINED STDOUT ###
+p1-p2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

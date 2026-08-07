@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[HD2.2] backslash protects $ in an unquoted heredoc body
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+x=v
+cat <<EOF
+\$x and $x
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+$x and v
+
+### OBTAINED STDOUT ###
+$x and v
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.2/valgrind.*.log

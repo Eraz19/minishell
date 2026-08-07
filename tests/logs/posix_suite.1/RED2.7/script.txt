@@ -1,0 +1,2 @@
+> made.txt
+echo rc=$?

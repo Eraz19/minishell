@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[TRAP.4] trap - COND resets to default (listing empties)
+### SECTION ###
+[builtins] trap — special built-in, POSIX 2.14 trap
+
+### COMMAND (pipe mode) ###
+trap 'echo x' INT
+trap - INT
+trap
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[EXP.21] $$ expands to the shell pid (a number)
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo $$
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+230715
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

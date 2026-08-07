@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[OPT-E.3] set -e: failing if-condition does not exit
+### SECTION ###
+[options] option -e / errexit
+
+### COMMAND (pipe mode) ###
+set -e
+if false; then echo yes; fi
+echo alive
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+alive
+
+### OBTAINED STDOUT ###
+alive
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[OPT-E.2] set -e: failure in && / || does not exit
+### SECTION ###
+[options] option -e / errexit
+
+### COMMAND (pipe mode) ###
+set -e
+false || echo caught
+echo alive
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+caught
+alive
+
+### OBTAINED STDOUT ###
+caught
+alive
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

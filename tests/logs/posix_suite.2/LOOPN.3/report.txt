@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[LOOPN.3] continue 2 resumes the outer loop
+### SECTION ###
+[semantics] break / continue with n (2.15, pages @1791/@2006)
+
+### COMMAND (pipe mode) ###
+for i in 1 2; do for j in a b; do continue 2; echo inner; done; echo outer; done
+echo end
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+end
+
+### OBTAINED STDOUT ###
+end
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

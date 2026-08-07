@@ -1,0 +1,4 @@
+V_f7=start
+mut() { V_f7=changed; }
+mut
+echo $V_f7

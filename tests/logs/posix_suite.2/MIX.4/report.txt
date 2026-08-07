@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[MIX.4] glob feeding a for, writing per-file, checked by cat
+### SECTION ###
+[complex] mixing: redirections + heredocs + expansions + pipes
+
+### COMMAND (pipe mode) ###
+touch s1.src s2.src
+for f in *.src; do echo seen:$f >> report.txt; done
+cat report.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+seen:s1.src
+seen:s2.src
+
+### OBTAINED STDOUT ###
+seen:s1.src
+seen:s2.src
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/MIX.4/valgrind.*.log

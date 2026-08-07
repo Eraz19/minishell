@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ECHO.2] echo joins operands with single spaces
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo a b   c
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a b c
+
+### OBTAINED STDOUT ###
+a b c
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,10 @@
+f() {
+	while true; do
+		cat
+		break
+	done <<EOF
+u
+v
+EOF
+}
+f

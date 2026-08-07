@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: file descriptor is not open: 7 expanded from '7': redirection failed

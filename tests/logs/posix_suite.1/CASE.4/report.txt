@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[CASE.4] | pattern alternatives
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case beta in alpha|beta) echo either;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+either
+
+### OBTAINED STDOUT ###
+either
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

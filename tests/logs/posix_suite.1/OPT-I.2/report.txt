@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[OPT-I.2] interactive: shell survives command-not-found
+### SECTION ###
+[options] option -i / interactive (forced with -s -i on a pipe)
+
+### COMMAND (argv mode) ###
+minishell -s -i
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+survived
+
+### OBTAINED STDERR (filtered) ###
+$ no_such_cmd_xyz
+/home/adouieb/Documents/minishell/minishell: no_such_cmd_xyz: command not found
+$ echo survived
+$ 
+### VERDICT ###
+PASS

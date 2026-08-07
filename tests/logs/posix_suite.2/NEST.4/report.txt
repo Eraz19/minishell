@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[NEST.4] cmd-sub feeds a for word list
+### SECTION ###
+[complex] nesting: command substitution deep inside structures
+
+### COMMAND (pipe mode) ###
+for w in $(printf "a\nb\n"); do echo w=$w; done
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+w=a
+w=b
+
+### OBTAINED STDOUT ###
+w=a
+w=b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.4/valgrind.*.log

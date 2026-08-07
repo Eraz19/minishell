@@ -1,0 +1,3 @@
+unset IFS
+set a b c
+echo "$*"

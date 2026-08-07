@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[ECHO.6] unknown dash-word is an operand, not a flag
+### SECTION ###
+[builtins] echo — XBD/XCU echo utility
+
+### COMMAND (pipe mode) ###
+echo -zz
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+-zz
+
+### OBTAINED STDOUT ###
+-zz
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

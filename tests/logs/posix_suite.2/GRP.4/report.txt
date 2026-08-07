@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[GRP.4] group as an operand of &&
+### SECTION ###
+[ast] brace group node (2.9.4.1): { } shares the environment
+
+### COMMAND (pipe mode) ###
+true && { echo a; echo b; }
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a
+b
+
+### OBTAINED STDOUT ###
+a
+b
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

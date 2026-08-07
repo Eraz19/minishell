@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[HD2.6] backquote cmd-sub runs in an unquoted body
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+cat <<EOF
+`echo sub`
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+sub
+
+### OBTAINED STDOUT ###
+sub
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-F.1] script file operand is executed
+### SECTION ###
+[options] invocation: -s / stdin / script operand
+
+### COMMAND (argv mode) ###
+minishell ./s.sh
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+from_script
+
+### OBTAINED STDOUT ###
+from_script
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

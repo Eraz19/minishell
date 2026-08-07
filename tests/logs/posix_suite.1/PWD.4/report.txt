@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[PWD.4] pwd -L keeps the logical (symlinked) path
+### SECTION ###
+[builtins] pwd — POSIX pwd utility (-L default, -P physical)
+
+### COMMAND (pipe mode) ###
+cd link
+pwd -L
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.4/link
+
+### OBTAINED STDOUT ###
+/home/adouieb/Documents/minishell/tests/fixtures/posix_suite.1/PWD.4/link
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

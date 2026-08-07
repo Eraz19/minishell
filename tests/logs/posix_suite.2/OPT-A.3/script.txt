@@ -1,0 +1,4 @@
+OLDVAR_A3=before
+set -a
+OLDVAR_A3=after
+env

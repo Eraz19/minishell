@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[GRP.3] group status is the last command's
+### SECTION ###
+[ast] brace group node (2.9.4.1): { } shares the environment
+
+### COMMAND (pipe mode) ###
+{ true; false; }
+echo rc=$?
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+rc=1
+
+### OBTAINED STDOUT ###
+rc=1
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

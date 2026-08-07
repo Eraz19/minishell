@@ -1,0 +1,23 @@
+### ID / LABEL ###
+[HD.5] command substitution runs inside an unquoted heredoc
+### SECTION ###
+[ast] heredoc nodes (2.7.4): << and <<-
+
+### COMMAND (pipe mode) ###
+cat <<EOF
+sub=$(echo yes)
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+sub=yes
+
+### OBTAINED STDOUT ###
+sub=yes
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[UNSET.7] unset with no operand -> usage error
+### SECTION ###
+[builtins] unset — special built-in, POSIX 2.14 unset
+
+### COMMAND (pipe mode) ###
+unset
+
+### EXIT STATUS (obtained) ###
+91
+
+### EXPECTED STDOUT ###
+(no exact stdout expectation — see details)
+
+### OBTAINED STDOUT ###
+
+### OBTAINED STDERR (filtered) ###
+/home/adouieb/Documents/minishell/minishell: unset: [-f|-v] name...: invalid usage
+
+### VERDICT ###
+PASS

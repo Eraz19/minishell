@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[SET.2] set a b c replaces the positional parameters
+### SECTION ###
+[builtins] set — special built-in (positional parameters; options in suite 10)
+
+### COMMAND (pipe mode) ###
+set a b c
+echo $1:$2:$3:$#
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+a:b:c:3
+
+### OBTAINED STDOUT ###
+a:b:c:3
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

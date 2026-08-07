@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[NEST.13] for inside a function inside a pipeline
+### SECTION ###
+[complex] nesting: control structures inside each other
+
+### COMMAND (pipe mode) ###
+f() { for i in p q; do echo $i; done; }
+f | sort -r
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+q
+p
+
+### OBTAINED STDOUT ###
+q
+p
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/NEST.13/valgrind.*.log

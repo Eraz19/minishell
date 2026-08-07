@@ -1,0 +1,1 @@
+/home/adouieb/Documents/minishell/minishell: alias: no_such_alias_5: not found

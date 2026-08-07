@@ -1,0 +1,4 @@
+for name in t1 t2; do
+	echo data_$name > out_$name.txt
+done
+cat out_t1.txt out_t2.txt

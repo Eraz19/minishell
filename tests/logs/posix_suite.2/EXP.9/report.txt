@@ -1,0 +1,22 @@
+### ID / LABEL ###
+[EXP.9] command substitution $( )
+### SECTION ###
+[ast] expansions inside a simple command (2.6)
+
+### COMMAND (pipe mode) ###
+echo got:$(echo inner)
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+got:inner
+
+### OBTAINED STDOUT ###
+got:inner
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (leak+fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/EXP.9/valgrind.*.log

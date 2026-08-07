@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[CASE.5] glob patterns ? and *
+### SECTION ###
+[ast] case node (2.9.4.4): patterns, |, *, ;; and ;& (Issue 8)
+
+### COMMAND (pipe mode) ###
+case file9 in file?) echo qmark;; esac
+case prefix_rest in prefix_*) echo star;; esac
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+qmark
+star
+
+### OBTAINED STDOUT ###
+qmark
+star
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

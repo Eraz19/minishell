@@ -1,0 +1,2 @@
+./bin.bad
+echo survived

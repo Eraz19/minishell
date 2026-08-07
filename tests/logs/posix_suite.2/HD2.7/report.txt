@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[HD2.7] heredoc feeds a function invocation
+### SECTION ###
+[semantics] here-document edges (2.7.4)
+
+### COMMAND (pipe mode) ###
+f() { cat; }
+f <<EOF
+fed
+EOF
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+fed
+
+### OBTAINED STDOUT ###
+fed
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/HD2.7/valgrind.*.log

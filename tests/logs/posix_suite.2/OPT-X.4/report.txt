@@ -1,0 +1,24 @@
+### ID / LABEL ###
+[OPT-X.4] set +x stops tracing
+### SECTION ###
+[options] option -x / xtrace (POSIX set -x, PS4 prefix)
+
+### COMMAND (pipe mode) ###
+set -x
+set +x
+echo quiet
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+quiet
+
+### OBTAINED STDOUT ###
+quiet
+
+### OBTAINED STDERR (filtered) ###
++ set +x
+
+### VERDICT ###
+PASS

@@ -1,0 +1,26 @@
+### ID / LABEL ###
+[REDIR.3] >> appends
+### SECTION ###
+[ast] redirection nodes (2.7): > >> < <> >| <& >& fd prefixes
+
+### COMMAND (pipe mode) ###
+echo one >> f_r3.txt
+echo two >> f_r3.txt
+cat f_r3.txt
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one
+two
+
+### OBTAINED STDOUT ###
+one
+two
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+FAIL
+  - VALGRIND (fd): see /home/adouieb/Documents/minishell/tests/logs/posix_suite.2/REDIR.3/valgrind.*.log

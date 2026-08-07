@@ -1,0 +1,25 @@
+### ID / LABEL ###
+[LOOPCTL.2] continue skips to the next iteration
+### SECTION ###
+[ast] while / until node (2.9.4.5-6)
+
+### COMMAND (pipe mode) ###
+for i in a b; do
+	continue
+	echo $i
+done
+echo after
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+after
+
+### OBTAINED STDOUT ###
+after
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS

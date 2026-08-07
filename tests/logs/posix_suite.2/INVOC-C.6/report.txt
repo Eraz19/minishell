@@ -1,0 +1,21 @@
+### ID / LABEL ###
+[INVOC-C.6] -c: operands after $0 become $1 $2
+### SECTION ###
+[options] invocation: -c command string (POSIX sh: -c)
+
+### COMMAND (argv mode) ###
+minishell -c echo $1:$2:$# zero one two
+
+### EXIT STATUS (obtained) ###
+0
+
+### EXPECTED STDOUT ###
+one:two:2
+
+### OBTAINED STDOUT ###
+one:two:2
+
+### OBTAINED STDERR (filtered) ###
+
+### VERDICT ###
+PASS
