@@ -60,7 +60,9 @@ static inline t_error	dot_search_readable_file(
 		err.type = ERR_POSIX_CMD_NFOUND;
 	if (err.type)
 		return (err);
-	return (file_search(&path, filename, READABLE, out_file_path));
+	err = file_search(&path, filename, READABLE, out_file_path);
+	string_free(&path);
+	return (err);
 }
 
 static inline t_error	dot_execute(t_string *file_path, int *status)
