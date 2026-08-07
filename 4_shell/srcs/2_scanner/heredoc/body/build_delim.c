@@ -17,6 +17,7 @@ t_error	build_heredoc_delimiter(t_string *out, t_token *delim)
 	t_error	err;
 	int		exit_status;
 
+	exit_status = -1;
 	err = expand_token_merged(out, delim, &exit_status, EXP_QUOTE_REMOVAL);
 	if (err.type)
 		return (err);

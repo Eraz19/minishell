@@ -43,6 +43,7 @@ t_error	redirect_expand(t_redir *redir, int *exit_status)
 	t_exp_flag	flags;
 	t_error		err;
 
+	err.type = ERR_NO;
 	if (redir->operation == AST_REDIR_HEREDOC)
 	{
 		flags = expansion_flags_heredoc_body();
