@@ -19,6 +19,7 @@
 #define COND_PREFIX	": warning: unspecified behaviour: "
 #define IMPL_PREFIX	": implemented as: "
 #define UB_SUFFIX	"\" 🤪\n ╰──▶ UNDEFINED BEHAVIOUR 💣\n"
+#define LOOP_SUFFIX	" 😵‍💫\n ╰──▶ INFINITE LOOP 😵‍💫\n"
 
 #define ASCII_XAV	"                                                  =..==-==\
                        \n\
@@ -119,4 +120,11 @@ t_error	undefined_behaviour(const char *message)
 	(void)posix_write(STDERR_FILENO, message, str_len(message));
 	(void)posix_write(STDERR_FILENO, UB_SUFFIX, str_len(UB_SUFFIX));
 	return (error_print(error(ERR_UB), NULL, NULL));
+}
+
+t_error	error_infinite_loop(void)
+{
+	posix_write(STDERR_FILENO, ASCII_XAV, str_len(ASCII_XAV));
+	(void)posix_write(STDERR_FILENO, LOOP_SUFFIX, str_len(UB_SUFFIX));
+	return (error(ERR_VEOF));
 }

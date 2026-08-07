@@ -1,7 +1,6 @@
 # SUBMISSION
 
 - Norminette
-- `error_infinite_loop()`
 - check fonctions interdites
 - supprimer les non `.c`/`.h`
 - `wildcards` du Makefile
