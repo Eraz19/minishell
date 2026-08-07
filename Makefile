@@ -3,23 +3,8 @@ MAKEFLAGS			+= --no-print-directory
 NAME				:= minishell
 CC					:= cc
 DEPFLAGS			:= -MMD -MP
-CFLAGS				:= \
-	-Wall -Wextra -Wdeprecated -Werror -D_GNU_SOURCE \
-	-O2 \
-	-DDEBUG_PARSING -DDEBUG_AST -DDEBUG_CMD	# -DNDEBUG (disable assert())
-DEBUG_CFLAGS		:= \
-	-Wall -Wextra -Wdeprecated -Werror -D_GNU_SOURCE \
-	-O0 -g3 -fsanitize=address,undefined \
-	-DDEBUG_ERROR_TRACE \
-	-DDEBUG_LOGS \
-	-DDEBUG_ENV \
-	-DDEBUG_PARSING \
-	-DDEBUG_CST \
-	-DDEBUG_AST \
-	-DDEBUG_HISTORY \
-	-DDEBUG_CMD_SUB \
-	-DDEBUG_INSTANCES \
-	-DDEBUG_CMD
+CFLAGS				:= -Wall -Wextra -Wdeprecated -Werror -D_GNU_SOURCE -O2
+DEBUG_CFLAGS		:= -Wall -Wextra -Wdeprecated -Werror -D_GNU_SOURCE -O0 -g3 -fsanitize=address,undefined
 OBJ_DIR				:= obj
 
 # LIBFT (START)
@@ -28,24 +13,12 @@ LIBFT_INCLUDES		:= -I$(LIBFT_DIR)
 LIBFT				:= $(LIBFT_DIR)/libft.a
 # LIBFT (END)
 
-# LOGS (START)
-LOGS_DIR			:= logs
-LOGS_INCLUDES		:= \
-	$(LIBFT_INCLUDES) \
-	-I$(LOGS_DIR)
-LOGS_SRCS			:= $(wildcard $(LOGS_DIR)/*.c)
-LOGS_OBJS			:= $(LOGS_SRCS:%.c=$(OBJ_DIR)/%.o)
-LOGS_DEPS			:= $(LOGS_OBJS:.o=.d)
-# LOGS (END)
-
 # GRAMMAR (START)
 GRAM_DIR			:= 1_grammar
 GRAM_INCLUDES		:= \
 	$(LIBFT_INCLUDES) \
 	-I$(GRAM_DIR)/includes
-GRAM_SRCS			:= \
-	$(wildcard $(GRAM_DIR)/srcs/*.c) \
-	$(wildcard $(GRAM_DIR)/srcs/*/*.c)
+GRAM_SRCS			:= $(shell find $(GRAM_DIR)/srcs -type f -name '*.c' | sort)
 GRAM_OBJS			:= $(GRAM_SRCS:%.c=$(OBJ_DIR)/%.o)
 GRAM_DEPS			:= $(GRAM_OBJS:.o=.d)
 # GRAMMAR (END)
@@ -65,12 +38,9 @@ GEN_INCLUDES		:= \
 	-I$(GEN_DIR)/srcs/9_qualifiers \
 	-I$(GEN_DIR)/srcs/2_serialize \
 	-I$(GEN_DIR)/srcs/2_serialize/write_c_file
-GEN_SRCS			:= \
-	$(wildcard $(GEN_DIR)/srcs/*.c) \
-	$(wildcard $(GEN_DIR)/srcs/*/*.c) \
-	$(wildcard $(GEN_DIR)/srcs/*/*/*.c)
+GEN_SRCS			:= $(shell find $(GEN_DIR)/srcs -type f -name '*.c' | sort)
 GEN_CORE_OBJS		:= $(GEN_SRCS:%.c=$(OBJ_DIR)/%.o)
-GEN_OBJS			:= $(GEN_CORE_OBJS) $(GRAM_OBJS) $(LOGS_OBJS)
+GEN_OBJS			:= $(GEN_CORE_OBJS) $(GRAM_OBJS)
 GEN_DEPS			:= $(GEN_CORE_OBJS:.o=.d)
 # GENERATOR (END)
 
@@ -81,11 +51,11 @@ LR_TAB_GEN_DIR		:= $(LR_TAB_DIR)/2_generated
 LR_TAB_FILES		:= lr_tables.h lr_tables.c
 LR_TAB_GEN_FILES	:= $(addprefix $(LR_TAB_GEN_DIR)/,$(LR_TAB_FILES))
 LR_TAB_BASE_FILES	:= $(addprefix $(LR_TAB_BASE_DIR)/,$(LR_TAB_FILES))
-# LOGS_DIR was in find command
 LR_TAB_INPUTS		:= \
 	$(shell find $(GRAM_DIR) $(GEN_DIR) $(LIBFT_DIR)/src \
 		-type f \( -name '*.c' -o -name '*.h' \)) \
-	$(wildcard $(LIBFT_DIR)/*.h)
+	$(shell find $(LIBFT_DIR) -type f -name '*.h' \
+		! -path '$(LIBFT_DIR)/*/*')
 LR_TAB_MARKER		:= $(LR_TAB_GEN_DIR)/.generated
 LR_TAB_INCLUDES		:= \
 	$(GRAM_INCLUDES) \
@@ -104,20 +74,10 @@ READLINE_LIBS		:= -L$(READLINE_DIR)/lib -lreadline
 
 # SHELL (START)
 SHELL_DIR			:= 4_shell
-SHELL_SRCS			:= \
-	$(wildcard $(SHELL_DIR)/srcs/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*/*.c) \
-	$(wildcard $(SHELL_DIR)/srcs/*/*/*/*/*/*/*/*/*.c)
+SHELL_SRCS			:= $(shell find $(SHELL_DIR)/srcs -type f -name '*.c' | sort)
 SHELL_INCLUDES		:= \
 	$(LR_TAB_INCLUDES) \
 	$(LIBFT_INCLUDES) \
-	$(LOGS_INCLUDES) \
 	$(READLINE_INCLUDES) \
 	-I$(SHELL_DIR)/includes \
 	-I$(SHELL_DIR)/srcs/0_posix_helpers/ \
@@ -218,14 +178,15 @@ SHELL_INCLUDES		:= \
 	-I$(SHELL_DIR)/srcs/history/load_env \
 	-I$(SHELL_DIR)/srcs/redirector
 SHELL_CORE_OBJS		:= $(SHELL_SRCS:%.c=$(OBJ_DIR)/%.o)
-SHELL_OBJS			:= $(SHELL_CORE_OBJS) $(LR_TAB_OBJS) $(LOGS_OBJS)
+SHELL_OBJS			:= $(SHELL_CORE_OBJS) $(LR_TAB_OBJS)
 SHELL_DEPS			:= $(SHELL_CORE_OBJS:.o=.d)
 # SHELL (END)
 
 # TEST (START)
 TEST_CFLAGS			:= -Wall -Wextra -Wdeprecated -Werror -O2 -D_GNU_SOURCE
 TEST_DIR			:= ./tests
-TEST_SCRIPTS		:= $(wildcard $(TEST_DIR)/*.zsh)
+TEST_SCRIPTS		:= $(shell find $(TEST_DIR) -type f -name '*.zsh' \
+	! -path '$(TEST_DIR)/*/*' | sort)
 TEST_MAIN			:= $(TEST_DIR)/test_posix_suite.zsh
 TEST_FIXT_DIR		:= $(TEST_DIR)/fixtures
 TEST_LOGS_DIR		:= $(TEST_DIR)/logs
@@ -245,7 +206,6 @@ endef
 # BUILD MACRO (END)
 
 # INCLUDES SELECTION (START)
-$(LOGS_OBJS): BUILD_INCLUDES := $(LOGS_INCLUDES)
 $(GRAM_OBJS): BUILD_INCLUDES := $(GRAM_INCLUDES)
 $(GEN_CORE_OBJS): BUILD_INCLUDES := $(GEN_INCLUDES)
 $(LR_TAB_CORE_OBJS): BUILD_INCLUDES := $(LR_TAB_INCLUDES)
@@ -260,9 +220,6 @@ tables: _generate_tables
 
 # PRIVATE RULES (START)
 _force_libft:
-
-# _compile_logs:
-# 	$(call BUILD_SECTION,$(LOGS_OBJS),logs)
 
 _compile_grammar:
 	$(call BUILD_SECTION,$(GRAM_OBJS),grammar)
@@ -339,12 +296,11 @@ fclean: clean
 
 re: fclean all
 
--include $(wildcard $(LOGS_DEPS))
--include $(wildcard $(GRAM_DEPS))
--include $(wildcard $(GEN_DEPS))
--include $(wildcard $(LR_TAB_DEPS))
--include $(wildcard $(SHELL_DEPS))
+-include $(shell find $(GRAM_DEPS) -type f 2>/dev/null)
+-include $(shell find $(GEN_DEPS) -type f 2>/dev/null)
+-include $(shell find $(LR_TAB_DEPS) -type f 2>/dev/null)
+-include $(shell find $(SHELL_DEPS) -type f 2>/dev/null)
 
 .PHONY: all tables bonus debug test clean fclean re \
-	_force_libft _compile_logs _compile_grammar _compile_tables \
+	_force_libft _compile_grammar _compile_tables \
 	_build_generator _generate_tables _build_shell

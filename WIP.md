@@ -3,7 +3,7 @@
 - ✅ Norminette
 - ✅ check fonctions interdites
 - ✅ faire le `README`
-- `wildcards` du Makefile
+- ✅ `wildcards` du Makefile
 - supprimer les non `.c`/`.h`
 
 # NOW
