@@ -81,8 +81,9 @@ LR_TAB_GEN_DIR		:= $(LR_TAB_DIR)/2_generated
 LR_TAB_FILES		:= lr_tables.h lr_tables.c
 LR_TAB_GEN_FILES	:= $(addprefix $(LR_TAB_GEN_DIR)/,$(LR_TAB_FILES))
 LR_TAB_BASE_FILES	:= $(addprefix $(LR_TAB_BASE_DIR)/,$(LR_TAB_FILES))
+# LOGS_DIR was in find command
 LR_TAB_INPUTS		:= \
-	$(shell find $(GRAM_DIR) $(GEN_DIR) $(LOGS_DIR) $(LIBFT_DIR)/src \
+	$(shell find $(GRAM_DIR) $(GEN_DIR) $(LIBFT_DIR)/src \
 		-type f \( -name '*.c' -o -name '*.h' \)) \
 	$(wildcard $(LIBFT_DIR)/*.h)
 LR_TAB_MARKER		:= $(LR_TAB_GEN_DIR)/.generated
@@ -260,13 +261,13 @@ tables: _generate_tables
 # PRIVATE RULES (START)
 _force_libft:
 
-_compile_logs:
-	$(call BUILD_SECTION,$(LOGS_OBJS),logs)
+# _compile_logs:
+# 	$(call BUILD_SECTION,$(LOGS_OBJS),logs)
 
 _compile_grammar:
 	$(call BUILD_SECTION,$(GRAM_OBJS),grammar)
 
-_build_generator: $(LIBFT) _compile_logs _compile_grammar
+_build_generator: $(LIBFT) _compile_grammar # _compile_logs
 	$(call BUILD_SECTION,$(GEN_CORE_OBJS),generator)
 	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(GEN_NAME)
 
@@ -281,7 +282,7 @@ _generate_tables:
 _compile_tables: _generate_tables
 	$(call BUILD_SECTION,$(LR_TAB_CORE_OBJS),lr tables)
 
-_build_shell: $(LIBFT) _compile_logs _compile_tables
+_build_shell: $(LIBFT) _compile_tables # _compile_logs
 	$(call BUILD_SECTION,$(SHELL_CORE_OBJS),shell)
 	@$(MAKE) -s CFLAGS="$(CFLAGS)" $(NAME)
 # PRIVATE RULES (END)

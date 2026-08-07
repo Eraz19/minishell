@@ -58,7 +58,7 @@ t_error	shell_get_new_lexer(
 	return (err);
 }
 
-t_error	shell_get_new_scanner_priv(
+t_error	shell_get_new_scanner(
 			t_scanner **out_scanner_ptr,
 			t_scan_mode mode,
 			const char *input)
@@ -73,7 +73,7 @@ t_error	shell_get_new_scanner_priv(
 	return (err);
 }
 
-t_error	shell_get_new_parser_priv(
+t_error	shell_get_new_parser(
 			t_parser **out_parser_ptr,
 			t_scan_mode mode,
 			const char *input)
@@ -88,7 +88,7 @@ t_error	shell_get_new_parser_priv(
 	return (err);
 }
 
-t_error	shell_destroy_last_instance_priv(void)
+t_error	shell_destroy_last_instance(void)
 {
 	t_shell		*shell;
 	t_runner	*victim;
