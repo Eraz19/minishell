@@ -26,7 +26,8 @@ t_error	cmd_execute(t_cmd *cmd, bool path_is_temporary, int *exit_status)
 	}
 	if (cmd->entry.type == CMD_NONE)
 	{
-		*exit_status = 0;
+		if (exit_status < 0)
+			*exit_status = 0;
 		return (error(ERR_NO));
 	}
 	else if (cmd->entry.type == CMD_BUILTIN)

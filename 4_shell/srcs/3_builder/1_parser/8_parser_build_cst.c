@@ -67,6 +67,7 @@ static inline t_error	parser_try_continuation(
 {
 	const t_action	*action;
 	size_t			i;
+	t_error			err;
 
 	if (parser->lookahead_symbol != SYM_EOF)
 		return (parser_invalid_syntax());
@@ -75,7 +76,11 @@ static inline t_error	parser_try_continuation(
 	{
 		action = &parser->tables->actions[*lr_state_id * ACTION_COL_COUNT + i];
 		if (action->type != ACTION_ERROR)
-			return (parser_read_next_symbol(parser, true));
+		{
+			err = parser_read_next_symbol(parser, true);
+			if (err.type == ERR_EOF)
+				return (parser_invalid_syntax());
+		}
 		i++;
 	}
 	return (parser_invalid_syntax());
@@ -100,11 +105,7 @@ t_error	parser_build_cst(t_parser *parser)
 		if (action.type == ACTION_ACCEPT)
 			return (parser_accept(parser));
 		else if (action.type == ACTION_ERROR)
-		{
 			err = parser_try_continuation(parser, &lr_state_id);
-			if (err.type)
-				return (err);
-		}
 	}
 	return (err);
 }

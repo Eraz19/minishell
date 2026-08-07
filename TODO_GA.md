@@ -1,3 +1,9 @@
+# READ LINE BY LINE
+
+```bash
+printf 'read x\nfoo\necho $x' | ./minishell
+```
+
 # KEEP IN MIND
 
 - 💡 Les erreurs dépendent de l'opération qui a échouée:

@@ -55,6 +55,8 @@ t_error	runner_run(t_runner *runner)
 		runner_handle_error(runner, &err);
 		ast_root_free(&runner->ast_root);
 	}
+	if (err.type == ERR_EOF || err.type == ERR_VEOF)
+		err.type = ERR_NO;
 	return (err);
 }
 
