@@ -69,8 +69,6 @@ typedef enum e_sig_id
 	SIGWINCH_ID,
 	SIGUSR1_ID,
 	SIGUSR2_ID,
-	SIGKILL_ID,
-	SIGSTOP_ID,
 	SIG_ID_COUNT,
 	SIG_EXIT_ID
 }	t_sig_id;
