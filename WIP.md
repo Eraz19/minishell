@@ -1,3 +1,12 @@
+# SUBMISSION
+
+- Norminette
+- `error_infinite_loop()`
+- check fonctions interdites
+- supprimer les non `.c`/`.h`
+- `wildcards` du Makefile
+- faire le README
+
 # NOW
 
 - `tcgetattr()` avant de run une `utility` => Si la utility exit sur un signal => reset avec ` tcsetatt()`
@@ -70,13 +79,3 @@ peut **ou pas** expandre `x` en `echo ok`
 
 - regénérer **toute** la doc
 - créer une doc en ligne comme pour `libft`
-
-**FORK**
-
-- delete `assert()` calls
-- delete `logs` lib
-- delete `printf()` calls
-- delete `*_dump.c` files and `*_dump()` functions
-- delete `debug.h` and `debug.c`
-- delete all `DEBUG` sections
-- check all `TODO` comments
