@@ -131,6 +131,7 @@ The following references were used to understand and validate shell behavior:
 - Alfred V. Aho, Monica S. Lam, Ravi Sethi, and Jeffrey D. Ullman,
   *Compilers: Principles, Techniques, and Tools* — background for the LR parser
   and parser-table generation.
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - [Design chart](https://excalidraw.com/#room=01ba22c634c41561fdf2,vhhfkBWmOlkE0CxGHVoCBw)
 
 ### Use of AI
