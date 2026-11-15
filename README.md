@@ -15,12 +15,38 @@ When POSIX leaves a behaviour *unspecified*, the shell prints a warning that cit
 ### Repository layout
 
 ```text
-1_grammar/      POSIX grammar rules, symbols and token qualifiers
-2_generator/    LR(1) parser-table generator (builds lr_generator)
-3_lr_tables/    parser tables: 1_base/ (checked-in fallback), 2_generated/ (build output)
-4_shell/        the shell itself: scanner, parser, converter, expander, runner
-libft/          utility library and data structures (git submodule)
-tests/          POSIX behaviour test suite (zsh)
+minishell/
+├── 1_grammar/                 POSIX grammar rules, symbols and token qualifiers
+├── 2_generator/               LR(1) parser-table generator (builds lr_generator)
+├── 3_lr_tables/               LR parser tables
+│   ├── 1_base/                checked-in fallback tables
+│   └── 2_generated/           tables generated at build time
+├── 4_shell/                   the shell itself
+│   ├── includes/              public headers
+│   └── srcs/
+│       ├── 1_shell/           shell life cycle, subshells
+│       ├── 2_scanner/         reader, lexer, here-documents
+│       ├── 3_builder/         LR parser (CST) and CST → AST converter
+│       ├── 4_runner/          AST walker, pipelines, xtrace
+│       ├── builtins/          built-in utilities
+│       ├── cmd/               command resolution, PATH search, dispatch
+│       ├── cmd_sub/           command substitution
+│       ├── env/               options, parameters, variables, functions,
+│       │                      processes, signals, aliases, fds
+│       ├── expander/          word expansions
+│       ├── history/           interactive history
+│       ├── redirector/        redirections
+│       └── main.c
+├── docs/                      internal documentation and work notes
+├── libft/                     utility library and data structures (git submodule)
+├── tests/                     POSIX behaviour test suite (zsh)
+│   ├── suites/                test cases, grouped by theme, and the harness
+│   ├── test_posix_suite.zsh   main test runner
+│   ├── download_and_run_posix_suite.zsh
+│   │                          standalone launcher: downloads and runs the suite
+│   ├── test_exec.c            helper that prints its argv (built by the runner)
+│   └── readline.supp          valgrind suppressions for readline leaks
+└── Makefile
 ```
 
 ### How the shell works
@@ -267,7 +293,7 @@ For names whose behaviour POSIX leaves unspecified (`source`, `local`, `declare`
 
 ## Limitations
 
-The 42 subject allows only a small set of libc functions, so some parts of POSIX are emulated or left out:
+The 42 subject allows only a small set of libc functions, so some parts of POSIX are emulated or left out. The full list, including how unspecified POSIX behaviours are handled, is in [docs/1_reference/POSIX_COMPLIANCE.md](docs/1_reference/POSIX_COMPLIANCE.md); the rest of the internal documentation and work notes are in [docs/](docs/).
 
 - **Arithmetic expansion** `$((…))` is parsed but not evaluated.
 - **Job control** (`fg`, `bg`, `jobs`, process groups) is not available because `setpgid()`, `tcsetpgrp()` and `setsid()` are forbidden.
@@ -293,8 +319,8 @@ Suites: `options`, `builtins`, `ast`, `complex`, `words`, `semantics`, `custom` 
 To run the suite on a machine without the repository, download and run it as a standalone script:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Eraz19/minishell/submission/run_posix_suite.zsh | zsh
-curl -fsSL https://raw.githubusercontent.com/Eraz19/minishell/submission/run_posix_suite.zsh \
+curl -fsSL https://raw.githubusercontent.com/Eraz19/minishell/master/tests/download_and_run_posix_suite.zsh | zsh
+curl -fsSL https://raw.githubusercontent.com/Eraz19/minishell/master/tests/download_and_run_posix_suite.zsh \
   | zsh -s -- ./minishell --suite builtins --filter CD-
 ```
 

@@ -1,0 +1,47 @@
+# ---------------------------------------------------------------------------
+# Build outputs
+# ---------------------------------------------------------------------------
+/minishell
+/obj/
+*.o
+*.d
+*.a
+
+# LR table generator binary and the tables it generates at build time
+# (the checked-in fallback lives in 3_lr_tables/1_base/)
+/2_generator/lr_generator
+/3_lr_tables/2_generated/
+
+# Debug builds and crash/leak reports
+*.dSYM/
+vgcore.*
+valgrind*.log
+
+# ---------------------------------------------------------------------------
+# Tests
+# ---------------------------------------------------------------------------
+# Helper compiled from tests/test_exec.c by the test runner
+/tests/test_exec
+# Per-run work directories and reports
+/tests/fixtures/
+/tests/logs/
+# Suite downloaded by tests/download_and_run_posix_suite.zsh
+.minishell-posix-suite/
+
+# ---------------------------------------------------------------------------
+# Editors, tools and OS
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*~
+compile_commands.json
+.cache/
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# Legacy test scripts, kept locally only (replaced by tests/test_posix_suite.zsh)
+# ---------------------------------------------------------------------------
+/tests/test_expander.zsh
+/tests/posix_expander_test_cases.md
+/tests/test_error_system.zsh

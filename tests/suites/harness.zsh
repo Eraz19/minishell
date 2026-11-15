@@ -70,7 +70,7 @@ setopt NO_NOMATCH PIPE_FAIL
 : ${VG_TIMEOUT:=60}
 
 TEST_EXEC="${PROJECT_ROOT}/tests/test_exec"
-VG_SUPP="${PROJECT_ROOT}/readline.supp"
+VG_SUPP="${PROJECT_ROOT}/tests/readline.supp"
 OUTPUT_CAP_BLOCKS=2048          # ulimit -f unit = 512B blocks -> 1 MiB cap
 
 BLUE=$'\033[0;34m'

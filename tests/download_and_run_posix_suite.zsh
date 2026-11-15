@@ -5,7 +5,7 @@
 #
 # From the directory containing the minishell binary:
 #   curl -fsSL \
-#     https://raw.githubusercontent.com/Eraz19/minishell/submission/run_posix_suite.zsh \
+#     https://raw.githubusercontent.com/Eraz19/minishell/master/tests/download_and_run_posix_suite.zsh \
 #     | zsh -s -- [path/to/minishell] [test_posix_suite options]
 #
 # Examples:
@@ -18,7 +18,7 @@
 #
 # Optional environment overrides:
 #   MINISHELL_TEST_REPO      GitHub owner/repository (default: Eraz19/minishell)
-#   MINISHELL_TEST_REF       branch, tag or commit (default: submission)
+#   MINISHELL_TEST_REF       branch, tag or commit (default: master)
 #   MINISHELL_TEST_DIR       local download directory
 #   MINISHELL_TEST_BASE_URL  complete raw-content base URL (useful for mirrors)
 ###############################################################################
@@ -27,7 +27,7 @@ emulate -R zsh
 setopt ERR_EXIT NO_UNSET PIPE_FAIL
 
 typeset -r DEFAULT_REPO="Eraz19/minishell"
-typeset -r DEFAULT_REF="submission"
+typeset -r DEFAULT_REF="master"
 typeset -r DEFAULT_DIR="${PWD}/.minishell-posix-suite"
 
 typeset repo="${MINISHELL_TEST_REPO:-$DEFAULT_REPO}"
@@ -38,7 +38,7 @@ typeset minishell="./minishell"
 typeset staging=""
 
 typeset -ra suite_files=(
-	readline.supp
+	tests/readline.supp
 	tests/test_exec.c
 	tests/test_posix_suite.zsh
 	tests/suites/harness.zsh
