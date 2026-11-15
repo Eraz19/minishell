@@ -1,0 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _utils.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:44:04 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 17:44:05 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "loader_context_.h"
+
+bool	is_quoting_type(t_context context)
+{
+	return (context == CONTEXT_SQUOTE
+		|| context == CONTEXT_DQUOTE
+		|| context == CONTEXT_DOLLAR_SQUOTE
+		|| context == CONTEXT_HEREDOC);
+}
+
+bool	is_context_start(t_loader *loader, t_context_stack_item **item)
+{
+	if (loader->stack.len == 0)
+		return (false);
+	context_stack_get(&loader->stack, item, 0);
+	if (*item == NULL)
+		return (false);
+	return (loader->i == (*item)->start);
+}

@@ -96,16 +96,16 @@ setup_logs()
 	local n=1
 
 	mkdir -p "$LOG_ROOT" || exit 1
-	while [ -e "${LOG_ROOT}/test_expander.${n}" ]; do
+	while true; do
+		LOG_DIR="${LOG_ROOT}/test_expander.${n}"
+		mkdir "$LOG_DIR" 2>/dev/null && break
 		n=$((n + 1))
 	done
-	LOG_DIR="${LOG_ROOT}/test_expander.${n}"
-	mkdir -p "$LOG_DIR" || exit 1
 }
 
 setup_fixtures()
 {
-	rm -rf "$WORK_DIR"
+	WORK_DIR="${SCRIPT_DIR}/fixtures/test_expander.${LOG_DIR:t}"
 	mkdir -p "$WORK_DIR" || exit 1
 
 	cc "${SCRIPT_DIR}/test_exec.c" -o "${WORK_DIR}/test_exec" || {

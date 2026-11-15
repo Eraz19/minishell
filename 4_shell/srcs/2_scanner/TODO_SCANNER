@@ -1,0 +1,57 @@
+================================================================================
+TODO_SCANNER — full-coverage review of srcs/2_scanner (2026-07-29)
+Scope: all .c files + headers (scanner / lexer / heredoc / reader).
+Checked: leaks & ownership, POSIX.1-2024 logic, error handling vs the exit
+contract (scanner_error.c).
+STATUS 2026-07-29 EOD: every COV finding fixed and re-verified (final static
+pass: whole module compiles -Wall -Wextra clean except the two reader files
+pending the teammate's file_check merge) — remaining below are the two
+parked decisions. Runtime validation (alias splice, PS2 forwarding, leak
+check) pending the env/alias merge making the module linkable.
+================================================================================
+
+Alias implementation validation (input-stack representation) — DONE 07-29:
+	- push: validated (fresh relex, free+unbind before, COV-3 fix)
+	- pop: validated (two lanes: EOF relex / mid-construct splice)
+	- clean on lexer free and lexer clear: input_stack_free / pop-all loop
+
+--------------------------------------------------------------------------------
+[MINOR] COV-9 — known open design points (carried, not new)
+--------------------------------------------------------------------------------
+a) SCAN_MODE_AUTO is never resolved into FILE/STDIN/STRING (scanner.h TODO):
+   update_input_dispatch matches no lane and pushes an empty input -> silent
+   TOKEN_EOF. Resolve at startup or reject at scanner_load.
+b) Deferred to the expander refactor: prepare_str_for_expansion still targets
+   the removed lexer API (lexer_push_input / lexer_track_context /
+   lexer_remove_escaped_newlines / t_lexer_context_args, expander_.h:300) —
+   port it onto lexer_scan_word with a new-API str_context_rules (checklist
+   agreed 2026-07-29: heredoc_lex_body shape, quoting hook enabled, none
+   whitelist, no parser_clear).
+
+--------------------------------------------------------------------------------
+POSIX spot-checks that PASSED (for the record)
+--------------------------------------------------------------------------------
+- 2.3 rule order: EOI > operator-continue > quoting > expansion > new-operator
+  > blank > word-continue > comment > new-word; newline lexed as operator. OK
+- 2.2.1: unquoted \ consumes next char; \<newline> line continuation removed;
+  trailing \ at true end of input stays literal (documented lane).         OK
+- 2.2.2: no escapes inside '...'; `'\''` idiom closes correctly.            OK
+- 2.2.3: dquote backslash whitelist + \<newline> continuation inside "...". OK
+- Operators: << <<- >> <> <& >& >| && || ;; ;& ( ) newline; IO_NUMBER only
+  digits immediately before < or > (2.10.1 rule 5); <<- via DLESSDASH.      OK
+- 2.7.4 heredoc: tab-strip per line before delimiter compare (<<-), delimiter
+  matched against whole physical line, body kept raw (no expansion at
+  capture), delimiter line consumed not appended, missing delimiter ->
+  printed ERR_NO_DELIM absorbed to ERR_NO at the endpoint WITH the partial
+  body delivered (HD-14 verified FIXED by heredoc.c:13-16).                 OK
+- 2.3.1 alias gates: unquoted word + command-word position (LR probe) or
+  trailing-blank exemption (consumed on first check); lookup miss absorbed;
+  quoted words pass through untouched.                                      OK
+- Exit contract (scanner_error.c): NO/VEOF/LIBC pass unprinted*; POSIX band
+  passes with printed-flag guard; NO_DELIM -> ERR_NO; unprinted externals get
+  the frontier diagnostic. (*except the two deliberate context-poor LIBC
+  prints, reader_line.c:24/:34.)                                            OK
+- Leak sweep: input stack dup/push/pop, body_load/body_free, read_interactive
+  prompt+line, read_file fd paths, expand_alias push-failure hand-back,
+  lexer_scan_word context_item freeing — all clean except COV-5.
+================================================================================

@@ -1,0 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_read_heredoc.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:06:42 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 20:58:48 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "scanner.h"
+#include "parser.h"
+#include "parser_type.h"
+#include "parser_priv.h"
+#include "parser_here_stack.h"
+
+t_error	parser_read_heredoc(t_parser *parser)
+{
+	size_t		i;
+	t_cst_node	*io_here;
+	t_token		*delim;
+	bool		strip;
+	t_error		err;
+
+	err = error(ERR_NO);
+	if (parser->lookahead_raw_symbol != SYM_NEWLINE)
+		return (error(ERR_NO));
+	i = 0;
+	while (i < parser->here_stack.len)
+	{
+		io_here = parser_here_stack_get(&parser->here_stack, i);
+		delim = parser_get_token(parser, io_here->children[1]->tokens_start_id);
+		strip = io_here->children[0]->symbol == SYM_DLESSDASH;
+		err = scanner_read_heredoc(&parser->scanner, &io_here->heredoc_body,
+				delim, strip);
+		if (err.type)
+			return (err);
+		i++;
+	}
+	vector_clear(&parser->here_stack, NULL);
+	return (err);
+}

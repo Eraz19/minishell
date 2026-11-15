@@ -1,0 +1,78 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   _utils.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:47:04 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/05 23:23:53 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "env.h"
+#include "param_braced_.h"
+#include "param_expansion_.h"
+
+static t_word_item_opt	braced_result_opt(t_word_item_opt in)
+{
+	in.context = CONTEXT_NONE;
+	in.escaped = false;
+	in.is_expand_res = true;
+	return (in);
+}
+
+t_error	braced_push_value(
+			t_expander *expander,
+			const t_string *val,
+			t_word_item_opt opt)
+{
+	t_word	word_exp;
+
+	expander->err = from_str(&word_exp, val, braced_result_opt(opt));
+	if (expander->err.type)
+		return (expander->err);
+	if (!vector_merge(&expander->word_exp, &word_exp, expander->word_exp.len))
+		expander->err = error_sys();
+	return (word_free(&word_exp), expander->err);
+}
+
+t_error	braced_expect_close(t_expander *expander)
+{
+	t_word_item	item;
+
+	word_get(&item, &expander->word, 0);
+	if (item.c != '}')
+		return (expander->err = error(ERR_PARAM_BAD_SUBSTITUTION));
+	return (expander->err);
+}
+
+t_error	braced_lookup(t_expander *expander, const t_string *name, t_string *out)
+{
+	expander->err = env_get_from_const(name->data, out);
+	if (expander->err.type == ERR_VAR_NOT_FOUND)
+	{
+		if (param_nounset_error(expander, name->data).type)
+			return (expander->err);
+		if (!string_init(out, 0, "", -1))
+			return (expander->err = error_sys());
+		return (expander->err = error(ERR_NO));
+	}
+	if (expander->err.type)
+		return (expander->err);
+	if (out->data == NULL && !string_init(out, 0, "", -1))
+		return (expander->err = error_sys());
+	return (expander->err);
+}
+
+t_error	braced_finish(
+			t_expander *expander,
+			t_string *value,
+			t_word_item_opt opt)
+{
+	expander->err = braced_push_value(expander, value, opt);
+	string_free(value);
+	if (expander->err.type)
+		return (expander->err);
+	return (expander->err = word_remove(&expander->word, 0, 1));
+}

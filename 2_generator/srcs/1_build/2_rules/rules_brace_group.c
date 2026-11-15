@@ -1,0 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rules_brace_group.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:40:18 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 12:11:48 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "generator_rules_priv.h"
+
+/*
+brace_group      : Lbrace compound_list Rbrace
+                 ;
+*/
+void	rules_build_brace_group(t_rule *rules)
+{
+	rules[RULE_BRACE_GROUP_1].lhs = SYM_brace_group;
+	rules[RULE_BRACE_GROUP_1].rhs[0] = SYM_Lbrace;
+	rules[RULE_BRACE_GROUP_1].rhs[1] = SYM_compound_list;
+	rules[RULE_BRACE_GROUP_1].rhs[2] = SYM_Rbrace;
+	rules[RULE_BRACE_GROUP_1].rhs_len = 3;
+}

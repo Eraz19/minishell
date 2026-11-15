@@ -1,0 +1,135 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 12:23:38 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 19:11:53 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef SHELL_H
+# define SHELL_H
+
+# include <stdint.h>
+# include "env.h"
+# include "lexer.h"
+# include "history.h"
+# include "lr_tables.h"
+# include "runner_type.h"
+
+/**
+ * @struct s_shell
+ * @brief Aggregate state shared by the shell submodules.
+ *
+ * @var s_shell::alias Alias state managed by the alias submodule.
+ * @var s_shell::builder Parser and AST builder state managed by the builder
+ *                       submodule.
+ * @var s_shell::heredoc Here-document state managed by the heredoc submodule.
+ * @var s_shell::history Command history state managed by the history submodule.
+ * @var s_shell::params Global parameter state managed by the params submodule.
+ * @var s_shell::runner Command execution state managed by the runner submodule.
+ * @var s_shell::scanner Input scanner state managed by the scanner submodule.
+ */
+typedef struct s_shell
+{
+	bool		is_subshell;
+	t_lr_tables	lr_tables;
+	t_params	params;
+	t_runner	*runner;
+	t_runner	*last_runner;
+	t_history	history;
+}	t_shell;
+
+// TODO: replace by bool
+typedef enum e_subshell_mode
+{
+	SUBSHELL_NORMAL,
+	SUBSHELL_ASYNC_AND_OR
+}	t_subshell_mode;
+
+/* ************************************************************************* */
+/*                                LIFE_CYCLE                                 */
+/* ************************************************************************* */
+
+// TODO: doc
+void				shell_clear(void);
+
+/**
+ * @brief Frees the current global shell instance when one is registered.
+ *
+ * @note This is a no-op when @ref shell_get() returns @c NULL.
+ */
+void				shell_free_void(void);
+
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
+
+t_error				shell_get_new_lexer(
+						t_lexer **out_lexer_ptr,
+						t_scan_mode mode,
+						const char *input);
+t_error				shell_get_new_scanner(
+						t_scanner **out_scanner_ptr,
+						t_scan_mode mode,
+						const char *input);
+t_error				shell_get_new_parser(
+						t_parser **out_parser_ptr,
+						t_scan_mode mode,
+						const char *input);
+t_error				shell_get_new_runner(
+						t_runner **out_runner_ptr,
+						t_scan_mode mode,
+						const char *input);
+t_error				shell_destroy_last_instance(void);
+
+// TODO: doc
+t_error				shell_init_subshell(t_subshell_mode mode);
+
+// TODO: doc
+t_error				shell_is_subshell(bool *out);
+
+/**
+ * @brief Returns the current global shell instance.
+ *
+ * @return Shell state, or NULL when the shell is unavailable (borrowed).
+ */
+t_shell				*shell_get(void);
+
+/**
+ * @brief Returns the history state stored in the global shell.
+ *
+ * @return History state managed by the history submodule, or NULL
+ *         when the shell is unavailable. (borrowed)
+ */
+t_history			*shell_get_history(void);
+
+// TODO: doc
+const t_lr_tables	*shell_get_lr_tables(void);
+
+/**
+ * @brief Returns the shell name.
+ *
+ * @return Shell name, or the static default "minishell"
+ *         when the shell is unavailable. (borrowed, read-only)
+ */
+const char			*shell_get_name(void);
+
+/**
+ * @brief Returns the parameter state stored in the global shell.
+ *
+ * @return Params state managed by the params submodule, or NULL when
+ *         the shell is unavailable. (borrowed)
+ */
+t_params			*shell_get_params(void);
+
+int					shell_run(
+						int argc,
+						char **argv,
+						char **envp,
+						bool must_init);
+
+#endif

@@ -1,0 +1,7 @@
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   ...
+   obj:*/libreadline.so*
+}

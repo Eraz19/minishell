@@ -1,0 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cst.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 13:06:31 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 13:06:32 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef CST_H
+# define CST_H
+
+# include "error.h"
+# include "parser_item_stack_type.h"
+
+t_error	cst_node_new(
+			t_parser_item *lhs,
+			t_parser_item *rhs,
+			size_t rhs_len,
+			t_rule_id rule_id);
+void	cst_node_set_data(t_cst_node *node, void *data, t_cst_free_data free_f);
+void	cst_node_free(t_cst_node **node);
+
+#endif

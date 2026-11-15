@@ -1,0 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rules_compound_list.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 16:41:03 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/04 16:41:04 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "generator_rules_priv.h"
+
+static void	rules_build_compound_list_1(t_rule *rules);
+static void	rules_build_compound_list_2(t_rule *rules);
+
+/*
+compound_list    : linebreak term
+                 | linebreak term separator
+                 ;
+*/
+void	rules_build_compound_list(t_rule *rules)
+{
+	rules_build_compound_list_1(rules);
+	rules_build_compound_list_2(rules);
+}
+
+// compound_list -> linebreak term
+static void	rules_build_compound_list_1(t_rule *rules)
+{
+	rules[RULE_COMPOUND_LIST_1].lhs = SYM_compound_list;
+	rules[RULE_COMPOUND_LIST_1].rhs[0] = SYM_linebreak;
+	rules[RULE_COMPOUND_LIST_1].rhs[1] = SYM_term;
+	rules[RULE_COMPOUND_LIST_1].rhs_len = 2;
+}
+
+// compound_list -> linebreak term separator
+static void	rules_build_compound_list_2(t_rule *rules)
+{
+	rules[RULE_COMPOUND_LIST_2].lhs = SYM_compound_list;
+	rules[RULE_COMPOUND_LIST_2].rhs[0] = SYM_linebreak;
+	rules[RULE_COMPOUND_LIST_2].rhs[1] = SYM_term;
+	rules[RULE_COMPOUND_LIST_2].rhs[2] = SYM_separator;
+	rules[RULE_COMPOUND_LIST_2].rhs_len = 3;
+}

@@ -1,0 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_load.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 14:09:53 by gastesan          #+#    #+#             */
+/*   Updated: 2026/08/06 21:37:06 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "asm_stubs.h"
+#include "options.h"
+#include "specials.h"
+#include <stdlib.h>
+
+// @ret ERR_OPT_INVALID
+static t_error	specials_load_cmd_string(
+					t_specials *specials,
+					int argc,
+					char **argv,
+					size_t *operand_index)
+{
+	if ((size_t)argc < *operand_index + 1)
+		return (error_print(error(ERR_OPT_INVALID),
+				"-c needs an argument", NULL, NULL));
+	string_take(&specials->source, argv[(*operand_index)++], 0, -1);
+	if ((size_t)argc >= *operand_index + 1)
+		string_take(&specials->zero, argv[(*operand_index)++], 0, -1);
+	return (error(ERR_NO));
+}
+
+// @ret ERR_SHELL_NOT_FOUND / ERR_OPT_INVALID
+static t_error	specials_load_source_and_zero(
+					t_specials *specials,
+					int argc,
+					char **argv,
+					size_t *operand_index)
+{
+	bool	is_cmd_string;
+	bool	is_stdin;
+	t_error	err;
+
+	string_take(&specials->zero, argv[0], 0, -1);
+	err = option_is_active(OPT_CMD_STRING, &is_cmd_string);
+	if (err.type == ERR_NO)
+		err = option_is_active(OPT_STDIN_INPUT, &is_stdin);
+	if (err.type != ERR_NO || is_stdin == true)
+		return (err);
+	else if (is_cmd_string)
+		return (specials_load_cmd_string(specials, argc, argv, operand_index));
+	else if ((size_t)argc >= *operand_index + 1)
+	{
+		string_take(&specials->source, argv[(*operand_index)++], 0, -1);
+		specials->zero = specials->source;
+	}
+	return (err);
+}
+
+t_error	specials_load(
+			t_specials *specials,
+			int argc,
+			char **argv,
+			size_t *start_index)
+{
+	t_error	err;
+
+	err = specials_load_source_and_zero(specials, argc, argv, start_index);
+	if (err.type)
+		return (err);
+	specials->last_bg_pid = -1;
+	specials->last_status = EXIT_SUCCESS;
+	specials->pid = ft_getpid();
+	return (err);
+}

@@ -1,0 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tilde_expansion_.h                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adouieb <adouieb@student.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/04 17:48:06 by adouieb           #+#    #+#             */
+/*   Updated: 2026/08/04 18:53:40 by adouieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef TILDE_EXPANSION__H
+# define TILDE_EXPANSION__H
+
+# include "expander_.h"
+
+/** @defgroup expander_tilde Tilde expansion
+ *  @brief POSIX 2.6.1: replaces an unquoted tilde prefix with the home
+ *         directory of the current or named user.
+ */
+
+/* ************************************************************************* */
+/*                                    OPS                                    */
+/* ************************************************************************* */
+
+/**
+ * @ingroup expander_tilde
+ * @brief Replaces the tilde prefix with the resolved home directory, or
+ *        keeps it literal when any character of the prefix is quoted
+ *        (@c ERR_QUOTED_TILDE is consumed here, never escapes), when the
+ *        user is unknown, or when @c HOME is unset for a bare tilde.
+ *
+ * @param expander Expander state (borrowed).
+ * @return @c ERR_LIBC on allocation or password-file read failure;
+ *         @c ERR_INTERNAL (printed by the env module) if the shell
+ *         parameters are unavailable; @c ERR_NO on success (word
+ *         inconsistencies are caught by assertion).
+ */
+t_error	expand_user_path(t_expander *expander);
+
+/**
+ * @ingroup expander_tilde
+ * @brief Tells whether the current position starts a tilde expansion:
+ *        an unquoted tilde at the start of the word
+ *        (@c EXP_TILDE_NORMAL), or right after the @c '=' of an
+ *        assignment value (@c EXP_TILDE_ASSIGNMENT).
+ *
+ * @param expander Expander state (borrowed, read-only).
+ * @param current_item Item at the current position (borrowed, read-only).
+ */
+bool	is_tilde_expansion(t_expander *expander, t_word_item *current_item);
+
+/**
+ * @ingroup expander_tilde
+ * @brief Entry point of the tilde substitution, dispatching to
+ *        @ref expand_user_path.
+ *
+ * @param expander Expander state (borrowed).
+ * @return Same contract as @ref expand_user_path.
+ */
+t_error	tilde_expansion(t_expander *expander);
+
+#endif

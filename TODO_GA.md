@@ -1,3 +1,9 @@
+# READ LINE BY LINE
+
+```bash
+printf 'read x\nfoo\necho $x' | ./minishell
+```
+
 # KEEP IN MIND
 
 - 💡 Les erreurs dépendent de l'opération qui a échouée:
@@ -7,6 +13,12 @@
 
 # TODO
 
+- `reader`:
+	- Read line by line even in *non-interactive* mode
+```bash
+printf 'read x\nfoo' | ./minishell
+# piped into a script that reads — the read builtin gets the next line, proving no read-ahead.
+```
 - `builder`:
 	- Split `builder/parser/qualifiers/build_table.c` into multiple files
 - `signal`:
@@ -24,15 +36,15 @@
 	- ⚠️ `libft/vector` => Returns `false` on `libc` (`malloc`) failure **OR** `new_cap > SIZE_MAX / 2` !! (but `minishell` assumes `ERR_LIBC`!) => add `t_error` return type with `ERR_SIZE_MAX_REACHED` / `ERR_LIBC` value
 - `ft_pidtostring()` et `ft_ltostring()` pour éviter double alloc
 - **ALL REPO**:
+	- replace all `ERR_INDEX_OUT_OF_BOND`, etc by `error_print()` + `ERR_INTERNAL`
 	- use `print_unspecified_behaviour()`
-	- Move `t_tokens` from `runner` to `token` module ?
 	- `const` partout
 	- `inline` partout
 	- `assert` partout
 	- `out_` prefix de tous les args qui sont **générés** par une fonction (cf `C#` syntax)
 	- `ref_` prefix de tous les args qui sont **potentiellement modifiés** par une fonction (cf `C#` syntax)
 	- use `posix_write()` instead of `write()`
-	- use `posiw_open()` instead of `open()`
+	- use `posix_open()` instead of `open()`
 	- `errors`:
 		- rename `ERR_LIBC` -> `ERR_SYS`
 		- Ensure no `free()` / `libc` is done before `error_sys()`
@@ -43,35 +55,5 @@
 	- add doc + `make doc` / `github action`
 	- **include** prototype header
 	- ⚠️ don't call `undefined_behaviour()` when it's `unspecified`
-
----
-
-# TODO IF ON A QUE ÇA A FOUTRE
-
-- `params`:
-	- `variables`:
-		- Switch `t_vector`s to `t_hashmap`
-- `redirection`:
+- 😂 `redirection`:
 	- when `filename` expands to more than one field: redirect to one file per field
-- `parser`:
-	- move `qualifiers` to `lr_machine` to enable `parser_cmd_sub_init()` without `main_parser` argument
-
----
-
-## MATHS AND ARITHMETIC EXPANSIONS
-
-- [2.6.4 Arithmetic Expansion](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_06_04)
-- [1.1.2.1 Arithmetic Precision and Operations](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_01)
-- [1.1.2.2 Mathematical Functions](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap01.html#tag_18_01_02_02)
-
----
-
-# BEFORE SUBMIT
-
-- delete `assert()` calls
-- delete `logs` lib
-- delete `printf()` calls
-- delete `*_dump.c` files and `*_dump()` functions
-- delete `debug.h` and `debug.c`
-- delete all `DEBUG` sections
-- check all `TODO` comments

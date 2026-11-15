@@ -1,3 +1,151 @@
+# `bash` alias infinite loop 😈
+
+```bash
+alias alias_1='expanded `alias_1`'
+alias_1
+# bash et minishell n'infinite loop pas en fait (il doit y avoir un max de process children ??)
+```
+
+# nested alias
+
+```bash
+alias def='expanded'
+alias abc='def'
+abc
+```
+
+# `bash` infinite loop avoidance
+
+```bash
+# 1
+echo "cat << EOF" | bash --posix -i -o ignoreeof
+# 2
+echo "echo hello |" | bash --posix -i -o ignoreeof
+```
+
+# `-e` OPTION
+
+```bash
+echo "$(false)"
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+! true
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+false && echo no
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+true && false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+false || echo survived && false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+f()
+{
+    false
+    echo SHOULD NOT HAVE SURVIVED
+}
+
+f
+```
+
+```bash
+f()
+{
+    false
+    echo survived
+}
+
+f || echo SHOULD NOT HAVE SURVIVED
+```
+
+```bash
+false && echo no
+echo survived
+false
+echo SHOULD NOT HAVE SURVIVED
+```
+
+# NESTED FUNCTION DECLARATION
+
+Set hashmap initial cap to 1
+```
+foo()
+{
+	nested_1() { echo 1; }
+	nested_2() { echo 2; }
+	nested_3() { echo 3; }
+	nested_4() { echo 4; }
+	nested_5() { echo 5; }
+	nested_6() { echo 6; }
+	nested_7() { echo 7; }
+	nested_8() { echo 8; }
+	nested_9() { echo 9; }
+	nested_10() { echo 10; }
+}
+```
+
+# LEXICALY ENGLOBING LOOPS
+
+⚠️ POSIX unspecified
+```bash
+f() {
+  echo "  in f: before break"
+  break
+  echo "  in f: after break"
+}
+for i in 1 2; do
+  echo "loop i=$i: before f"
+  f
+  echo "loop i=$i: after f"
+done
+echo "after loop"
+
+rm -f /tmp/do_break
+foo() {
+  for j in 1 2; do
+    echo "break 2" >/tmp/do_break
+    echo "  sourcing /tmp/do_break, j=$j"
+    . /tmp/do_break
+    echo "  after dot, j=$j"
+  done
+}
+
+for i in 1 2; do
+  echo "running foo, i=$i"
+  foo
+  echo "after foo, i=$i"
+done
+rm -f /tmp/do_break
+```
+
+# WIP CMD SUB
+
+```bash
+$(echo (inside) after)
+```
+```bash
+before$(echo; (inside);
+after)end
+```
+
 # SIGNALS
 
 ```bash
@@ -59,6 +207,13 @@ VAR=$(true)$(false)
 echo "should be 1 => $?"
 VAR=$(false)$(true)$(false)
 echo "should be 1 => $?"
+```
+
+```bash
+VAR=value          => status 0
+VAR=$(true)        => status 0
+VAR=$(false)       => status 1
+VAR=${bad syntax}  => ERR_POSIX_EXPANSION
 ```
 
 ```bash
